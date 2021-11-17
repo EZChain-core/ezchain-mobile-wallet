@@ -91,3 +91,5 @@ app.*.map.json
 
 .vscode/
 .env
+
+*.g.dart
