@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wallet/avalanche/apis/common/rpc_request_wrapper.dart';
+import 'package:wallet/avalanche/common/rpc_request_wrapper.dart';
 
 part 'new_token.g.dart';
 
