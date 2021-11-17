@@ -14,15 +14,15 @@ part 'auth_api.g.dart';
 abstract class AuthApi {
   factory AuthApi(Dio dio) = _AuthApi;
 
-  @GET(authEndPoint)
+  @POST(authEndPoint)
   Future<RpcResponse<NewTokenResponse>> newToken(
       @Body() RpcRequest<NewTokenRequest> request);
 
-  @GET(authEndPoint)
+  @POST(authEndPoint)
   Future<RpcResponse<RevokeTokenResponse>> revokeToken(
       @Body() RpcRequest<RevokeTokenRequest> request);
 
-  @GET(authEndPoint)
+  @POST(authEndPoint)
   Future<RpcResponse<ChangePasswordResponse>> changePassword(
       @Body() RpcRequest<ChangePasswordRequest> request);
 }
