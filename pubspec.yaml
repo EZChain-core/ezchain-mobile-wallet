@@ -35,7 +35,6 @@ dependencies:
   json_annotation: ^4.3.0
   connectivity_plus: ^2.0.3
   url_launcher: ^6.0.13
-  qr_code_scanner: ^0.6.1
   modal_bottom_sheet: ^2.0.0
 
 dev_dependencies:
