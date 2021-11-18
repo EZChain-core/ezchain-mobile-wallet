@@ -1,12 +1,19 @@
+import 'dart:convert';
+
 import 'package:mock_web_server/mock_web_server.dart';
 import 'package:test/test.dart';
 import 'package:wallet/avalanche/apis/auth/model/change_password.dart';
+import 'package:wallet/avalanche/apis/auth/model/new_token.dart';
+import 'package:wallet/avalanche/apis/auth/model/revoke_token.dart';
 import 'package:wallet/avalanche/avalanche.dart';
 import 'package:wallet/avalanche/common/rpc_response.dart';
-import 'package:wallet/avalanche/utils/constants.dart';
 
 late MockWebServer _server;
 late Avalanche _avalanche;
+
+const _headers = {
+  "Content-Type": "application/json",
+};
 
 void main() {
   setUp(() async {
@@ -20,18 +27,55 @@ void main() {
     _server.shutdown();
   });
 
-  test("Kien Test", () async {
+  test("New Token Success", () async {
     _server.enqueue(
         httpCode: 200,
-        body: RpcResponse(result: ChangePasswordResponse(success: true), id: 1)
-            .toJson((value) => value.toJson()),
-        headers: {"Content-Type": "application/json"});
-    final response = await _avalanche.authApi.changePassword(
-        ChangePasswordRequest(
-                oldPassword: "oldPassword", newPassword: "newPassword")
-            .createRpcRequest(1));
+        body: json.encode(RpcResponse(result: NewTokenResponse(token: "123"))
+            .toJson((value) => value.toJson())),
+        headers: _headers);
 
-    print("response = $response");
-    // expect(response.data, {'data': true});
+    final response = await _avalanche.authApi.newToken(
+      NewTokenRequest(
+        password: "password",
+        endpoints: [],
+      ).toRpc(),
+    );
+
+    expect(response.result.token, "123");
+  });
+
+  test("Revoke Token Success", () async {
+    _server.enqueue(
+        httpCode: 200,
+        body: json.encode(
+            RpcResponse(result: RevokeTokenResponse(success: true))
+                .toJson((value) => value.toJson())),
+        headers: _headers);
+
+    final response = await _avalanche.authApi.revokeToken(
+      RevokeTokenRequest(
+        password: "password",
+        token: "token",
+      ).toRpc(),
+    );
+
+    expect(response.result.success, true);
+  });
+
+  test("Change Password Success", () async {
+    _server.enqueue(
+        httpCode: 200,
+        body: json.encode(
+            RpcResponse(result: ChangePasswordResponse(success: true))
+                .toJson((value) => value.toJson())),
+        headers: _headers);
+    final response = await _avalanche.authApi.changePassword(
+      ChangePasswordRequest(
+        oldPassword: "oldPassword",
+        newPassword: "newPassword",
+      ).toRpc(),
+    );
+
+    expect(response.result.success, true);
   });
 }

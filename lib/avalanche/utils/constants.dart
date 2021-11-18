@@ -1,5 +1,3 @@
-const String authEndPoint = "/ext/auth";
-
 const protocols = ["http", "https"];
 
 const int defaultNetworkID = 1;

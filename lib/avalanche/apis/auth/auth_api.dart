@@ -5,7 +5,6 @@ import 'package:wallet/avalanche/apis/auth/model/new_token.dart';
 import 'package:wallet/avalanche/apis/auth/model/revoke_token.dart';
 import 'package:wallet/avalanche/common/rpc_request.dart';
 import 'package:wallet/avalanche/common/rpc_response.dart';
-import 'package:wallet/avalanche/utils/constants.dart';
 
 part 'auth_api.g.dart';
 
@@ -14,15 +13,17 @@ part 'auth_api.g.dart';
 abstract class AuthApi {
   factory AuthApi(Dio dio) = _AuthApi;
 
-  @POST(authEndPoint)
+  static const endPoint = "/ext/auth";
+
+  @POST(endPoint)
   Future<RpcResponse<NewTokenResponse>> newToken(
       @Body() RpcRequest<NewTokenRequest> request);
 
-  @POST(authEndPoint)
+  @POST(endPoint)
   Future<RpcResponse<RevokeTokenResponse>> revokeToken(
       @Body() RpcRequest<RevokeTokenRequest> request);
 
-  @POST(authEndPoint)
+  @POST(endPoint)
   Future<RpcResponse<ChangePasswordResponse>> changePassword(
       @Body() RpcRequest<ChangePasswordRequest> request);
 }

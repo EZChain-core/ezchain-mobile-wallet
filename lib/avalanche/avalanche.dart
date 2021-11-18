@@ -33,6 +33,10 @@ class AvalancheCore implements Avalanche {
   @override
   AuthApi get authApi => _authApi;
 
+  int get rpcId => _rpcId;
+
+  var _rpcId = 1;
+
   AvalancheCore(
       {required this.host,
       required this.port,
@@ -52,15 +56,33 @@ class AvalancheCore implements Avalanche {
           baseUrl: url,
           connectTimeout: 5000,
           receiveTimeout: 5000,
-          contentType: "application/json"),
-    )..interceptors.add(PrettyDioLogger(
-        requestHeader: false,
-        requestBody: true,
-        responseBody: false,
-        responseHeader: false,
-        error: true,
-        compact: true,
-        maxWidth: 200));
+          contentType: "application/json;charset=UTF-8"),
+    )
+      ..interceptors.add(InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final request = options.data;
+          if (request is Map<String, dynamic>) {
+            request["jsonrpc"] = "2.0";
+            request["id"] = rpcId;
+          }
+          handler.next(options);
+        },
+        onResponse: (response, handler) async {
+          final statusCode = response.statusCode;
+          if (statusCode != null && statusCode >= 200 && statusCode < 300) {
+            _rpcId += 1;
+          }
+          handler.next(response);
+        },
+      ))
+      ..interceptors.add(PrettyDioLogger(
+          requestHeader: true,
+          requestBody: true,
+          responseBody: true,
+          responseHeader: true,
+          error: true,
+          compact: true,
+          maxWidth: 200));
 
     _authApi = AuthApi(dio);
   }

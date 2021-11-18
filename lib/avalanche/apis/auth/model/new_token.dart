@@ -15,7 +15,8 @@ class NewTokenRequest with RpcRequestWrapper<NewTokenRequest> {
     return "auth.newToken";
   }
 
-  factory NewTokenRequest.fromJson(Map<String, dynamic> json) => _$NewTokenRequestFromJson(json);
+  factory NewTokenRequest.fromJson(Map<String, dynamic> json) =>
+      _$NewTokenRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$NewTokenRequestToJson(this);
 }
