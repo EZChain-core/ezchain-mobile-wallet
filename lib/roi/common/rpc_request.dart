@@ -10,7 +10,7 @@ class RpcRequest<P> {
   @JsonKey(name: 'params')
   final P params;
 
-  RpcRequest({required this.method, required this.params});
+  const RpcRequest({required this.method, required this.params});
 
   factory RpcRequest.fromJson(
     Map<String, dynamic> json,

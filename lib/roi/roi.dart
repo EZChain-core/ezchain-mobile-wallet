@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:wallet/roi/apis/auth/auth_api.dart';
+import 'package:wallet/roi/apis/info/info_api.dart';
 import 'package:wallet/roi/apis/keystore/keystore_api.dart';
 import 'package:wallet/roi/utils/constants.dart';
 import 'package:wallet/roi/utils/helper_functions.dart';
@@ -13,6 +14,8 @@ abstract class ROI {
   AuthApi get authApi;
 
   KeystoreApi get keystoreApi;
+
+  InfoApi get infoApi;
 }
 
 class ROICore implements ROI {
@@ -32,6 +35,8 @@ class ROICore implements ROI {
 
   late KeystoreApi _keystoreApi;
 
+  late InfoApi _infoApi;
+
   @override
   Dio get dio => _dio;
 
@@ -41,17 +46,22 @@ class ROICore implements ROI {
   @override
   KeystoreApi get keystoreApi => _keystoreApi;
 
+  @override
+  InfoApi get infoApi => _infoApi;
+
   int get rpcId => _rpcId;
 
   var _rpcId = 1;
 
-  ROICore(
-      {required this.host,
-      required this.port,
-      this.protocol = "http",
-      this.networkId = defaultNetworkID,
-      this.hrp})
-      : assert(protocols.contains(protocol), "Error - Invalid protocol") {
+  ROICore({
+    required this.host,
+    required this.port,
+    this.protocol = "http",
+    this.networkId = defaultNetworkID,
+    this.hrp,
+    int connectTimeout = 5000,
+    int receiveTimeout = 5000,
+  }) : assert(protocols.contains(protocol), "Error - Invalid protocol") {
     final host = this.host.replaceAll(RegExp('[^A-Za-z0-9.]'), '');
     final hrp = this.hrp ?? getPreferredHRP(networkId);
     var url = "$protocol://$host";
@@ -62,8 +72,8 @@ class ROICore implements ROI {
     _dio = Dio(
       BaseOptions(
           baseUrl: url,
-          connectTimeout: 5000,
-          receiveTimeout: 5000,
+          connectTimeout: connectTimeout,
+          receiveTimeout: receiveTimeout,
           contentType: "application/json;charset=UTF-8"),
     )
       ..interceptors.add(InterceptorsWrapper(
@@ -84,15 +94,17 @@ class ROICore implements ROI {
         },
       ))
       ..interceptors.add(PrettyDioLogger(
-          requestHeader: true,
-          requestBody: true,
-          responseBody: true,
-          responseHeader: true,
-          error: true,
-          compact: true,
-          maxWidth: 200));
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: true,
+        error: true,
+        compact: true,
+        maxWidth: 200,
+      ));
 
     _authApi = AuthApi(dio);
     _keystoreApi = KeystoreApi(dio);
+    _infoApi = InfoApi(dio);
   }
 }
