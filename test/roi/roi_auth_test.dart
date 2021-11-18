@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:mock_web_server/mock_web_server.dart';
 import 'package:test/test.dart';
-import 'package:wallet/avalanche/apis/auth/model/change_password.dart';
-import 'package:wallet/avalanche/apis/auth/model/new_token.dart';
-import 'package:wallet/avalanche/apis/auth/model/revoke_token.dart';
-import 'package:wallet/avalanche/avalanche.dart';
-import 'package:wallet/avalanche/common/rpc_response.dart';
+import 'package:wallet/roi/apis/auth/model/change_password.dart';
+import 'package:wallet/roi/apis/auth/model/new_token.dart';
+import 'package:wallet/roi/apis/auth/model/revoke_token.dart';
+import 'package:wallet/roi/roi.dart';
+import 'package:wallet/roi/common/rpc_response.dart';
 
 late MockWebServer _server;
-late Avalanche _avalanche;
+late ROI _roi;
 
 const _headers = {
   "Content-Type": "application/json",
@@ -19,8 +19,7 @@ void main() {
   setUp(() async {
     _server = MockWebServer();
     await _server.start();
-    _avalanche =
-        AvalancheCore(host: _server.host, port: _server.port, protocol: "http");
+    _roi = ROICore(host: _server.host, port: _server.port, protocol: "http");
   });
 
   tearDown(() {
@@ -30,12 +29,13 @@ void main() {
   test("New Token Success", () async {
     _server.enqueue(
         httpCode: 200,
-        body: json.encode(RpcResponse(result: NewTokenResponse(token: "123"))
-            .toJson((value) => value.toJson())),
+        body: json.encode(
+            RpcResponse(result: const NewTokenResponse(token: "123"))
+                .toJson((value) => value.toJson())),
         headers: _headers);
 
-    final response = await _avalanche.authApi.newToken(
-      NewTokenRequest(
+    final response = await _roi.authApi.newToken(
+      const NewTokenRequest(
         password: "password",
         endpoints: [],
       ).toRpc(),
@@ -48,12 +48,12 @@ void main() {
     _server.enqueue(
         httpCode: 200,
         body: json.encode(
-            RpcResponse(result: RevokeTokenResponse(success: true))
+            RpcResponse(result: const RevokeTokenResponse(success: true))
                 .toJson((value) => value.toJson())),
         headers: _headers);
 
-    final response = await _avalanche.authApi.revokeToken(
-      RevokeTokenRequest(
+    final response = await _roi.authApi.revokeToken(
+      const RevokeTokenRequest(
         password: "password",
         token: "token",
       ).toRpc(),
@@ -66,11 +66,11 @@ void main() {
     _server.enqueue(
         httpCode: 200,
         body: json.encode(
-            RpcResponse(result: ChangePasswordResponse(success: true))
+            RpcResponse(result: const ChangePasswordResponse(success: true))
                 .toJson((value) => value.toJson())),
         headers: _headers);
-    final response = await _avalanche.authApi.changePassword(
-      ChangePasswordRequest(
+    final response = await _roi.authApi.changePassword(
+      const ChangePasswordRequest(
         oldPassword: "oldPassword",
         newPassword: "newPassword",
       ).toRpc(),

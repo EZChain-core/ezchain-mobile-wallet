@@ -1,18 +1,21 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:wallet/avalanche/apis/auth/auth_api.dart';
-import 'package:wallet/avalanche/utils/constants.dart';
-import 'package:wallet/avalanche/utils/helper_functions.dart';
+import 'package:wallet/roi/apis/auth/auth_api.dart';
+import 'package:wallet/roi/apis/keystore/keystore_api.dart';
+import 'package:wallet/roi/utils/constants.dart';
+import 'package:wallet/roi/utils/helper_functions.dart';
 
-abstract class Avalanche {
+abstract class ROI {
   @visibleForTesting
   Dio get dio;
 
   AuthApi get authApi;
+
+  KeystoreApi get keystoreApi;
 }
 
-class AvalancheCore implements Avalanche {
+class ROICore implements ROI {
   final String host;
 
   final int port;
@@ -27,17 +30,22 @@ class AvalancheCore implements Avalanche {
 
   late AuthApi _authApi;
 
+  late KeystoreApi _keystoreApi;
+
   @override
   Dio get dio => _dio;
 
   @override
   AuthApi get authApi => _authApi;
 
+  @override
+  KeystoreApi get keystoreApi => _keystoreApi;
+
   int get rpcId => _rpcId;
 
   var _rpcId = 1;
 
-  AvalancheCore(
+  ROICore(
       {required this.host,
       required this.port,
       this.protocol = "http",
@@ -85,5 +93,6 @@ class AvalancheCore implements Avalanche {
           maxWidth: 200));
 
     _authApi = AuthApi(dio);
+    _keystoreApi = KeystoreApi(dio);
   }
 }

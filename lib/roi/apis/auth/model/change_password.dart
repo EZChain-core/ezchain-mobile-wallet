@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wallet/avalanche/common/rpc_request_wrapper.dart';
+import 'package:wallet/roi/common/rpc_request_wrapper.dart';
 
 part 'change_password.g.dart';
 
@@ -8,7 +8,8 @@ class ChangePasswordRequest with RpcRequestWrapper<ChangePasswordRequest> {
   final String oldPassword;
   final String newPassword;
 
-  ChangePasswordRequest({required this.oldPassword, required this.newPassword});
+  const ChangePasswordRequest(
+      {required this.oldPassword, required this.newPassword});
 
   @override
   String method() {
@@ -25,7 +26,7 @@ class ChangePasswordRequest with RpcRequestWrapper<ChangePasswordRequest> {
 class ChangePasswordResponse {
   final bool success;
 
-  ChangePasswordResponse({required this.success});
+  const ChangePasswordResponse({required this.success});
 
   factory ChangePasswordResponse.fromJson(Map<String, dynamic> json) =>
       _$ChangePasswordResponseFromJson(json);

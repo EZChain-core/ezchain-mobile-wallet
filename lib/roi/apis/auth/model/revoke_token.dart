@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wallet/avalanche/common/rpc_request_wrapper.dart';
+import 'package:wallet/roi/common/rpc_request_wrapper.dart';
 
 part 'revoke_token.g.dart';
 
@@ -8,7 +8,7 @@ class RevokeTokenRequest with RpcRequestWrapper<RevokeTokenRequest> {
   final String password;
   final String token;
 
-  RevokeTokenRequest({required this.password, required this.token});
+  const RevokeTokenRequest({required this.password, required this.token});
 
   @override
   String method() {
@@ -25,7 +25,7 @@ class RevokeTokenRequest with RpcRequestWrapper<RevokeTokenRequest> {
 class RevokeTokenResponse {
   final bool success;
 
-  RevokeTokenResponse({required this.success});
+  const RevokeTokenResponse({required this.success});
 
   factory RevokeTokenResponse.fromJson(Map<String, dynamic> json) =>
       _$RevokeTokenResponseFromJson(json);
