@@ -13,11 +13,11 @@ class RpcResponse<R> {
   @JsonKey(name: 'id')
   final int id;
 
-  RpcResponse({required this.jsonRpc, required this.result, required this.id});
+  RpcResponse({this.jsonRpc = "2.0", required this.result, required this.id});
 
   factory RpcResponse.fromJson(
     Map<String, dynamic> json,
-    R Function(Object json) fromJsonR,
+    R Function(Object? json) fromJsonR,
   ) =>
       _$RpcResponseFromJson(json, fromJsonR);
 

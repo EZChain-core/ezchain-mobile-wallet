@@ -24,7 +24,7 @@ class RpcRequest<P> {
 
   factory RpcRequest.fromJson(
     Map<String, dynamic> json,
-    P Function(Object json) fromJsonP,
+    P Function(Object? json) fromJsonP,
   ) =>
       _$RpcRequestFromJson(json, fromJsonP);
 
