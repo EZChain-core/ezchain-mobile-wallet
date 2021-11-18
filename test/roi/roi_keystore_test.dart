@@ -32,7 +32,7 @@ void main() {
     _server.enqueue(
         httpCode: 200,
         body: json.encode(
-            RpcResponse(result: const CreateUserResponse(success: true))
+            const RpcResponse(result: CreateUserResponse(success: true))
                 .toJson((value) => value.toJson())),
         headers: _headers);
 
@@ -41,14 +41,14 @@ void main() {
           .toRpc(),
     );
 
-    expect(response.result.success, true);
+    expect(response.result?.success, true);
   });
 
   test("Delete User Success", () async {
     _server.enqueue(
         httpCode: 200,
         body: json.encode(
-            RpcResponse(result: const DeleteUserResponse(success: true))
+            const RpcResponse(result: DeleteUserResponse(success: true))
                 .toJson((value) => value.toJson())),
         headers: _headers);
 
@@ -57,15 +57,14 @@ void main() {
           .toRpc(),
     );
 
-    expect(response.result.success, true);
+    expect(response.result?.success, true);
   });
 
   test("Export User Success", () async {
     _server.enqueue(
         httpCode: 200,
-        body: json.encode(RpcResponse(
-                result:
-                    const ExportUserResponse(user: "user", encoding: "cb58"))
+        body: json.encode(const RpcResponse(
+                result: ExportUserResponse(user: "user", encoding: "cb58"))
             .toJson((value) => value.toJson())),
         headers: _headers);
 
@@ -74,15 +73,15 @@ void main() {
           .toRpc(),
     );
 
-    expect(response.result.user, "user");
-    expect(response.result.encoding, "cb58");
+    expect(response.result?.user, "user");
+    expect(response.result?.encoding, "cb58");
   });
 
   test("Import User Success", () async {
     _server.enqueue(
         httpCode: 200,
         body: json.encode(
-            RpcResponse(result: const ImportUserResponse(success: true))
+            const RpcResponse(result: ImportUserResponse(success: true))
                 .toJson((value) => value.toJson())),
         headers: _headers);
 
@@ -92,14 +91,14 @@ void main() {
           .toRpc(),
     );
 
-    expect(response.result.success, true);
+    expect(response.result?.success, true);
   });
 
   test("List Users Success", () async {
     _server.enqueue(
         httpCode: 200,
         body: json.encode(
-            RpcResponse(result: const ListUsersResponse(users: ["myUsername"]))
+            const RpcResponse(result: ListUsersResponse(users: ["myUsername"]))
                 .toJson((value) => value.toJson())),
         headers: _headers);
 
@@ -107,6 +106,6 @@ void main() {
       const ListUsersRequest().toRpc(),
     );
 
-    expect(response.result.users, ["myUsername"]);
+    expect(response.result?.users, ["myUsername"]);
   });
 }

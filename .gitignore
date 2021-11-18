@@ -93,3 +93,4 @@ app.*.map.json
 .env
 
 *.g.dart
+*.gr.dart

@@ -50,6 +50,16 @@ class Strings {
     return Localizations.of<Strings>(context, Strings);
   }
 
+  /// `ROI Wallet`
+  String get appName {
+    return Intl.message(
+      'ROI Wallet',
+      name: 'appName',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Welcome {name}`
   String pageHomeWelcome(Object name) {
     return Intl.message(

@@ -30,7 +30,7 @@ void main() {
     _server.enqueue(
         httpCode: 200,
         body: json.encode(
-            RpcResponse(result: const NewTokenResponse(token: "123"))
+            const RpcResponse(result: NewTokenResponse(token: "123"))
                 .toJson((value) => value.toJson())),
         headers: _headers);
 
@@ -41,14 +41,37 @@ void main() {
       ).toRpc(),
     );
 
-    expect(response.result.token, "123");
+    expect(response.result?.token, "123");
+  });
+
+  test("New Token Error", () async {
+    _server.enqueue(
+        httpCode: 200,
+        body: json.encode(const RpcResponse(
+                error: RpcError(
+                    code: -32600,
+                    message: "[Some error message here]",
+                    data:
+                        "[Object with additional information about the error]"))
+            .toJson((value) => value.toJson())),
+        headers: _headers);
+
+    final response = await _roi.authApi.newToken(
+      const NewTokenRequest(
+        password: "password",
+        endpoints: [],
+      ).toRpc(),
+    );
+
+    expect(response.result, null);
+    expect(response.error?.code, -32600);
   });
 
   test("Revoke Token Success", () async {
     _server.enqueue(
         httpCode: 200,
         body: json.encode(
-            RpcResponse(result: const RevokeTokenResponse(success: true))
+            const RpcResponse(result: RevokeTokenResponse(success: true))
                 .toJson((value) => value.toJson())),
         headers: _headers);
 
@@ -59,14 +82,14 @@ void main() {
       ).toRpc(),
     );
 
-    expect(response.result.success, true);
+    expect(response.result?.success, true);
   });
 
   test("Change Password Success", () async {
     _server.enqueue(
         httpCode: 200,
         body: json.encode(
-            RpcResponse(result: const ChangePasswordResponse(success: true))
+            const RpcResponse(result: ChangePasswordResponse(success: true))
                 .toJson((value) => value.toJson())),
         headers: _headers);
     final response = await _roi.authApi.changePassword(
@@ -76,6 +99,6 @@ void main() {
       ).toRpc(),
     );
 
-    expect(response.result.success, true);
+    expect(response.result?.success, true);
   });
 }

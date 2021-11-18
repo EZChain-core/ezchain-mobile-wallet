@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/splash/screen/splash.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -21,7 +20,7 @@ class WalletApp extends StatelessWidget {
       ],
       child: Consumer<WalletThemeProvider>(
         builder: (context, provider, child) => MaterialApp.router(
-          title: 'ROI Wallet',
+          title: Strings.current.appName,
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
           themeMode: provider.themeMode,
