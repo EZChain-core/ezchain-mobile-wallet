@@ -83,6 +83,9 @@ flutter_intl:
   class_name: Strings
   main_locale: en
 
+flutter_native_splash:
+  background_image: "assets/images/img_splash.png"
+
 ## Install derry from https://pub.dev/packages/derry and run derry build, derry watch, derry gen
 ## https://github.com/SimpleBoilerplates/Flutter/blob/master/derry.yaml
 ## scripts: derry.yaml
