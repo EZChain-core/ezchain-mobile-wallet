@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:elliptic/elliptic.dart';
 
 abstract class StandardKeyPair {
@@ -7,7 +9,7 @@ abstract class StandardKeyPair {
 
   void generateKey();
 
-  bool importKey();
+  bool importKey(List<int> bytes);
 
   void sign();
 
@@ -17,25 +19,41 @@ abstract class StandardKeyPair {
 
   String getPrivateKeyString();
 
-  String getPublicKeyString();
-
-  void getAddress();
+  Uint8List getAddress();
 
   String getAddressString();
 }
 
 abstract class StandardKeyChain<KPClass extends StandardKeyPair> {
+  final Map<String, KPClass> keys = {};
+
   KPClass makeKey();
 
-  void getAddresses();
+  KPClass importKey(String privateKey);
 
-  String getAddressStrings();
+  List<Uint8List> getAddresses() {
+    return keys.values.map((e) => e.getAddress()).toList();
+  }
 
-  void addKey(KPClass newKey);
+  List<String> getAddressStrings() {
+    return keys.values.map((e) => e.getAddressString()).toList();
+  }
 
-  bool removeKey(KPClass newKey);
+  void addKey(KPClass newKey) {
+    keys[newKey.getAddress().toString()] = newKey;
+  }
 
-  bool hasKey();
+  bool removeKey(KPClass key) {
+    final keyAddress = key.getAddress().toString();
+    final deletedKey = keys.remove(keyAddress);
+    return deletedKey != null;
+  }
 
-  KPClass getKey();
+  bool hasKey(Uint8List address) {
+    return keys.containsKey(address.toString());
+  }
+
+  KPClass? getKey(Uint8List address) {
+    return keys[address.toString()];
+  }
 }
