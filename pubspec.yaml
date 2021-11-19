@@ -37,6 +37,11 @@ dependencies:
   url_launcher: ^6.0.13
   modal_bottom_sheet: ^2.0.0
 
+  ## blockchain dependencies
+  fast_base58: ^0.2.1
+  elliptic: ^0.3.5
+  secp256k1: ^0.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

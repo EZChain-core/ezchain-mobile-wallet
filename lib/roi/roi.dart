@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:wallet/roi/apis/auth/auth_api.dart';
+import 'package:wallet/roi/apis/index/index_api_facade.dart';
 import 'package:wallet/roi/apis/info/info_api.dart';
 import 'package:wallet/roi/apis/keystore/keystore_api.dart';
 import 'package:wallet/roi/utils/constants.dart';
@@ -16,6 +17,8 @@ abstract class ROI {
   KeystoreApi get keystoreApi;
 
   InfoApi get infoApi;
+
+  IndexApiFacade get indexApiFacade;
 }
 
 class ROICore implements ROI {
@@ -37,6 +40,8 @@ class ROICore implements ROI {
 
   late InfoApi _infoApi;
 
+  late IndexApiFacade _indexApiFacade;
+
   @override
   Dio get dio => _dio;
 
@@ -48,6 +53,9 @@ class ROICore implements ROI {
 
   @override
   InfoApi get infoApi => _infoApi;
+
+  @override
+  IndexApiFacade get indexApiFacade => _indexApiFacade;
 
   int get rpcId => _rpcId;
 
@@ -106,5 +114,6 @@ class ROICore implements ROI {
     _authApi = AuthApi(dio);
     _keystoreApi = KeystoreApi(dio);
     _infoApi = InfoApi(dio);
+    _indexApiFacade = IndexApiFacade(dio: dio);
   }
 }
