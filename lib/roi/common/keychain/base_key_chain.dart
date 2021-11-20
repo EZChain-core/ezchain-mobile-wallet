@@ -9,15 +9,15 @@ abstract class StandardKeyPair {
 
   void generateKey();
 
-  bool importKey(List<int> bytes);
+  bool importKey(Uint8List privateKeyBytes);
 
-  void sign();
+  Uint8List sign(String message);
 
-  void recover();
-
-  bool verify();
+  bool verify(String message, Uint8List sign);
 
   String getPrivateKeyString();
+
+  String getPublicKeyString();
 
   Uint8List getAddress();
 

@@ -13,7 +13,7 @@ import 'package:wallet/roi/apis/info/model/is_bootstrapped.dart';
 import 'package:wallet/roi/apis/info/model/peers.dart';
 import 'package:wallet/roi/apis/info/model/uptime.dart';
 import 'package:wallet/roi/roi.dart';
-import 'package:wallet/roi/common/rpc_response.dart';
+import 'package:wallet/roi/common/rpc/rpc_response.dart';
 
 late MockWebServer _server;
 late ROI _roi;

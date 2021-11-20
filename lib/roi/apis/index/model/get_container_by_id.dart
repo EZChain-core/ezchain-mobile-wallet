@@ -1,16 +1,16 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wallet/roi/common/rpc_request_wrapper.dart';
+import 'package:wallet/roi/common/rpc/rpc_request_wrapper.dart';
 
 part 'get_container_by_id.g.dart';
 
 @JsonSerializable()
 class GetContainerByIdRequest with RpcRequestWrapper<GetContainerByIdRequest> {
-
   @JsonKey(name: "containerID")
   final String containerId;
   final String encoding;
 
-  const GetContainerByIdRequest({required this.containerId, required this.encoding});
+  const GetContainerByIdRequest(
+      {required this.containerId, required this.encoding});
 
   @override
   String method() {

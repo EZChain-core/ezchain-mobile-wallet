@@ -1,4 +1,4 @@
-import 'package:wallet/roi/common/rpc_request.dart';
+import 'package:wallet/roi/common/rpc/rpc_request.dart';
 
 abstract class RpcRequestWrapper<T> {
   String method();

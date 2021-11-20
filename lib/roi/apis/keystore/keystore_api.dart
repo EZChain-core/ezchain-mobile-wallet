@@ -5,8 +5,8 @@ import 'package:wallet/roi/apis/keystore/model/delete_user.dart';
 import 'package:wallet/roi/apis/keystore/model/export_user.dart';
 import 'package:wallet/roi/apis/keystore/model/import_user.dart';
 import 'package:wallet/roi/apis/keystore/model/list_users.dart';
-import 'package:wallet/roi/common/rpc_request.dart';
-import 'package:wallet/roi/common/rpc_response.dart';
+import 'package:wallet/roi/common/rpc/rpc_request.dart';
+import 'package:wallet/roi/common/rpc/rpc_response.dart';
 
 part 'keystore_api.g.dart';
 
