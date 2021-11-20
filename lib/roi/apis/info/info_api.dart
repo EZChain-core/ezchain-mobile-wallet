@@ -10,8 +10,8 @@ import 'package:wallet/roi/apis/info/model/get_tx_fee.dart';
 import 'package:wallet/roi/apis/info/model/is_bootstrapped.dart';
 import 'package:wallet/roi/apis/info/model/peers.dart';
 import 'package:wallet/roi/apis/info/model/uptime.dart';
-import 'package:wallet/roi/common/rpc_request.dart';
-import 'package:wallet/roi/common/rpc_response.dart';
+import 'package:wallet/roi/common/rpc/rpc_request.dart';
+import 'package:wallet/roi/common/rpc/rpc_response.dart';
 
 part 'info_api.g.dart';
 

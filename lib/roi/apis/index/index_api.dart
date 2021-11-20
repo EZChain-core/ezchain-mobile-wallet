@@ -6,8 +6,8 @@ import 'package:wallet/roi/apis/index/model/get_container_range.dart';
 import 'package:wallet/roi/apis/index/model/get_index.dart';
 import 'package:wallet/roi/apis/index/model/get_last_accepted.dart';
 import 'package:wallet/roi/apis/index/model/is_accepted.dart';
-import 'package:wallet/roi/common/rpc_request.dart';
-import 'package:wallet/roi/common/rpc_response.dart';
+import 'package:wallet/roi/common/rpc/rpc_request.dart';
+import 'package:wallet/roi/common/rpc/rpc_response.dart';
 
 part 'index_api.g.dart';
 

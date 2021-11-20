@@ -1,14 +1,16 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wallet/roi/common/rpc_request_wrapper.dart';
+import 'package:wallet/roi/common/rpc/rpc_request_wrapper.dart';
 
 part 'get_container_by_index.g.dart';
 
 @JsonSerializable()
-class GetContainerByIndexRequest with RpcRequestWrapper<GetContainerByIndexRequest> {
+class GetContainerByIndexRequest
+    with RpcRequestWrapper<GetContainerByIndexRequest> {
   final int index;
   final String encoding;
 
-  const GetContainerByIndexRequest({required this.index, required this.encoding});
+  const GetContainerByIndexRequest(
+      {required this.index, required this.encoding});
 
   @override
   String method() {
@@ -31,10 +33,10 @@ class GetContainerByIndexResponse {
 
   const GetContainerByIndexResponse(
       {required this.id,
-        required this.bytes,
-        required this.timestamp,
-        required this.encoding,
-        required this.index});
+      required this.bytes,
+      required this.timestamp,
+      required this.encoding,
+      required this.index});
 
   factory GetContainerByIndexResponse.fromJson(Map<String, dynamic> json) =>
       _$GetContainerByIndexResponseFromJson(json);

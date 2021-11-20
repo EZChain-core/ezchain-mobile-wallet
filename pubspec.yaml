@@ -39,11 +39,10 @@ dependencies:
 
   ## blockchain dependencies
   fast_base58: ^0.2.1
-  elliptic: ^0.3.5
-  secp256k1: ^0.3.0
-  crypto: ^3.0.1
   hash: ^1.0.4
   dart_bech32: ^2.0.0
+  elliptic: ^0.3.5
+  pointycastle: ^3.4.0
 
 dev_dependencies:
   flutter_test:

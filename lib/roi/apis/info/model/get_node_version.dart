@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wallet/roi/common/rpc_request_wrapper.dart';
+import 'package:wallet/roi/common/rpc/rpc_request_wrapper.dart';
 
 part 'get_node_version.g.dart';
 

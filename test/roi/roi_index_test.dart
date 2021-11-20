@@ -7,7 +7,7 @@ import 'package:wallet/roi/apis/auth/model/new_token.dart';
 import 'package:wallet/roi/apis/auth/model/revoke_token.dart';
 import 'package:wallet/roi/apis/index/model/get_last_accepted.dart';
 import 'package:wallet/roi/roi.dart';
-import 'package:wallet/roi/common/rpc_response.dart';
+import 'package:wallet/roi/common/rpc/rpc_response.dart';
 
 late MockWebServer _server;
 late ROI _roi;
@@ -46,6 +46,7 @@ void main() {
       const GetLastAcceptedRequest(encoding: "cb58").toRpc(),
     );
 
-    expect(response.result?.id, "6fXf5hncR8LXvwtM8iezFQBpK5cubV6y1dWgpJCcNyzGB1EzY");
+    expect(response.result?.id,
+        "6fXf5hncR8LXvwtM8iezFQBpK5cubV6y1dWgpJCcNyzGB1EzY");
   });
 }
