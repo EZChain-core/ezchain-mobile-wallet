@@ -1,11 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:elliptic/elliptic.dart';
+import 'package:wallet/roi/crypto/key_pair.dart';
 
 abstract class StandardKeyPair {
-  late PrivateKey privateKey;
-
-  late PublicKey publicKey;
+  late KeyPair keyPair;
 
   void generateKey();
 
@@ -24,6 +22,14 @@ abstract class StandardKeyPair {
   Uint8List getAddress();
 
   String getAddressString();
+
+  Uint8List get privateKeyBytes {
+    return keyPair.privateKey;
+  }
+
+  Uint8List get publicKeyBytes {
+    return keyPair.publicKey;
+  }
 }
 
 abstract class StandardKeyChain<KPClass extends StandardKeyPair> {

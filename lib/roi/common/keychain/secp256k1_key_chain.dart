@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:elliptic/elliptic.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:hash/hash.dart';
 import 'package:wallet/roi/common/keychain/base_key_chain.dart';
-import 'package:convert/convert.dart';
 import 'package:wallet/roi/crypto/ecdsa_signer.dart';
 import 'package:wallet/roi/crypto/secp256k1.dart' as secp256k1;
 import 'package:wallet/roi/utils/constants.dart';
@@ -13,15 +11,13 @@ import 'package:wallet/roi/utils/constants.dart';
 abstract class SECP256k1KeyPair extends StandardKeyPair {
   @override
   void generateKey() {
-    privateKey = secp256k1.generatePrivateKey();
-    publicKey = privateKey.publicKey;
+    keyPair = secp256k1.generateKeyPair();
   }
 
   @override
   bool importKey(Uint8List privateKeyBytes) {
     try {
-      privateKey = secp256k1.fromBytes(privateKeyBytes);
-      publicKey = privateKey.publicKey;
+      keyPair = secp256k1.fromPrivateKey(privateKeyBytes);
       return true;
     } catch (error) {
       return false;
@@ -47,7 +43,9 @@ abstract class SECP256k1KeyPair extends StandardKeyPair {
 
   @override
   Uint8List getAddress() {
-    return _addressFromPublicKey(publicKey);
+    var sha256 = SHA256();
+    var sha256Digest = sha256.update(publicKeyBytes).digest();
+    return RIPEMD160().update(sha256Digest).digest();
   }
 
   @override
@@ -58,20 +56,6 @@ abstract class SECP256k1KeyPair extends StandardKeyPair {
   @override
   String getPublicKeyString() {
     return Base58Encode(_addChecksum(publicKeyBytes));
-  }
-
-  Uint8List get privateKeyBytes {
-    return Uint8List.fromList(privateKey.bytes);
-  }
-
-  Uint8List get publicKeyBytes {
-    return Uint8List.fromList(hex.decode(publicKey.toCompressedHex()));
-  }
-
-  Uint8List _addressFromPublicKey(PublicKey publicKey) {
-    var sha256 = SHA256();
-    var sha256Digest = sha256.update(publicKeyBytes).digest();
-    return RIPEMD160().update(sha256Digest).digest();
   }
 
   Uint8List _addChecksum(Uint8List? bytes) {

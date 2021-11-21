@@ -27,11 +27,11 @@ void main() {
     final exists = keyChain.hasKey(addresses[0]);
     final keypair = keyChain.getKey(addresses[0])!;
 
-    final privateKey = keypair.privateKey;
-    final publicKey = keypair.publicKey;
+    final privateKey = keypair.privateKeyBytes;
+    final publicKey = keypair.publicKeyBytes;
 
-    print("privateKey = ${hex.encode(privateKey.bytes)}");
-    print("publicKey = ${publicKey.toCompressedHex()}");
+    print("privateKey = ${hex.encode(privateKey)}");
+    print("publicKey = ${hex.encode(publicKey)}");
 
     const message = "Han Trung Kien";
     final signature = keypair.sign(message);
