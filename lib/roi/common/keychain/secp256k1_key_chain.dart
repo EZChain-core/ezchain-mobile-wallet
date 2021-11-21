@@ -6,8 +6,8 @@ import 'package:fast_base58/fast_base58.dart';
 import 'package:hash/hash.dart';
 import 'package:wallet/roi/common/keychain/base_key_chain.dart';
 import 'package:convert/convert.dart';
+import 'package:wallet/roi/crypto/ecdsa_signer.dart';
 import 'package:wallet/roi/crypto/secp256k1.dart' as secp256k1;
-import 'package:wallet/roi/crypto/signature_options.dart';
 import 'package:wallet/roi/utils/constants.dart';
 
 abstract class SECP256k1KeyPair extends StandardKeyPair {
@@ -36,13 +36,13 @@ abstract class SECP256k1KeyPair extends StandardKeyPair {
 
   @override
   Uint8List recover(Uint8List hash, Uint8List signature) {
-    return secp256k1.recover(hash, SignatureOptions.fromSignature(signature));
+    return secp256k1.recover(hash, ROIECSignature.fromSignature(signature));
   }
 
   @override
   bool verify(String message, Uint8List signature) {
     return secp256k1.verify(Uint8List.fromList(utf8.encode(message)),
-        publicKeyBytes, SignatureOptions.fromSignature(signature));
+        publicKeyBytes, ROIECSignature.fromSignature(signature));
   }
 
   @override
