@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:convert/convert.dart';
 
 import 'package:elliptic/elliptic.dart';
 import "package:pointycastle/ecc/curves/secp256k1.dart";
@@ -14,6 +15,7 @@ import "package:pointycastle/digests/sha256.dart";
 // ignore: implementation_imports
 import 'package:pointycastle/src/utils.dart' as pointycastle_utils;
 import 'package:wallet/roi/crypto/ecdsa_signer.dart';
+import 'package:wallet/roi/crypto/key_pair.dart';
 
 /// https://github.com/bcgit/pc-dart
 /// https://github.com/shareven/wallet_hd/blob/master/lib/src/ecurve.dart
@@ -22,12 +24,21 @@ import 'package:wallet/roi/crypto/ecdsa_signer.dart';
 final ellipticCurve = getSecp256k1();
 final ECDomainParameters params = ECCurve_secp256k1();
 
-PrivateKey generatePrivateKey() {
-  return ellipticCurve.generatePrivateKey();
+KeyPair generateKeyPair() {
+  final privateKey = ellipticCurve.generatePrivateKey();
+  return _fromPrivateKey(privateKey);
 }
 
-PrivateKey fromBytes(Uint8List privateKeyBytes) {
-  return PrivateKey.fromBytes(ellipticCurve, privateKeyBytes);
+KeyPair fromPrivateKey(Uint8List privateKeyBytes) {
+  final privateKey = PrivateKey.fromBytes(ellipticCurve, privateKeyBytes);
+  return _fromPrivateKey(privateKey);
+}
+
+KeyPair _fromPrivateKey(PrivateKey privateKey) {
+  final publicKey = privateKey.publicKey;
+  return KeyPair(
+      privateKey: Uint8List.fromList(privateKey.bytes),
+      publicKey: Uint8List.fromList(hex.decode(publicKey.toCompressedHex())));
 }
 
 Uint8List sign(Uint8List messageHash, Uint8List privateKeyBytes) {
