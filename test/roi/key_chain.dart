@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:wallet/roi/common/keychain/roi_key_chain.dart';
 import 'package:convert/convert.dart';
+import 'package:wallet/roi/utils/constants.dart';
 
 void main() {
   setUp(() async {});
@@ -33,8 +34,19 @@ void main() {
     print("publicKey = ${publicKey.toCompressedHex()}");
 
     const message = "Han Trung Kien";
-    final sign = keypair.sign(message);
-    final isValid = keypair.verify(message, sign);
+    final signature = keypair.sign(message);
+    print("signature = ${hex.encode(signature)}");
+    print("recoverId = ${signature.sublist(64, 65).first}");
+    final recoveredPublicKey =
+        keypair.recover(Uint8List.fromList(utf8.encode(message)), signature);
+    print("recovered publicKey= ${hex.encode(recoveredPublicKey)}");
+
+    final isValid = keypair.verify(message, signature);
     print("valid = $isValid");
   });
 }
+
+// AVAX - Private Key
+// 527c09de91b4744cddb6b0166cccc18d65d5773a75279d0282fcb94e840860fb
+
+// PrivateKey-dKxUfhpmRUTRQzfvTAzGNwfvkj1PpUisVaXsMkNYTUhcNRqPo
