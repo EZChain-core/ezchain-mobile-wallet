@@ -13,7 +13,9 @@ abstract class StandardKeyPair {
 
   Uint8List sign(String message);
 
-  bool verify(String message, Uint8List sign);
+  Uint8List recover(Uint8List hash, Uint8List signature);
+
+  bool verify(String message, Uint8List signature);
 
   String getPrivateKeyString();
 

@@ -6,21 +6,21 @@ import 'package:fast_base58/fast_base58.dart';
 import 'package:hash/hash.dart';
 import 'package:wallet/roi/common/keychain/base_key_chain.dart';
 import 'package:convert/convert.dart';
-import 'package:wallet/roi/common/keychain/ecurve.dart' as ecurve;
-
-final _ec = getSecp256k1();
+import 'package:wallet/roi/crypto/secp256k1.dart' as secp256k1;
+import 'package:wallet/roi/crypto/signature_options.dart';
+import 'package:wallet/roi/utils/constants.dart';
 
 abstract class SECP256k1KeyPair extends StandardKeyPair {
   @override
   void generateKey() {
-    privateKey = _ec.generatePrivateKey();
+    privateKey = secp256k1.generatePrivateKey();
     publicKey = privateKey.publicKey;
   }
 
   @override
   bool importKey(Uint8List privateKeyBytes) {
     try {
-      privateKey = PrivateKey.fromBytes(_ec, privateKeyBytes);
+      privateKey = secp256k1.fromBytes(privateKeyBytes);
       publicKey = privateKey.publicKey;
       return true;
     } catch (error) {
@@ -30,14 +30,19 @@ abstract class SECP256k1KeyPair extends StandardKeyPair {
 
   @override
   Uint8List sign(String message) {
-    return ecurve.sign(
+    return secp256k1.sign(
         Uint8List.fromList(utf8.encode(message)), privateKeyBytes);
   }
 
   @override
-  bool verify(String message, Uint8List sign) {
-    return ecurve.verify(
-        Uint8List.fromList(utf8.encode(message)), publicKeyBytes, sign);
+  Uint8List recover(Uint8List hash, Uint8List signature) {
+    return secp256k1.recover(hash, SignatureOptions.fromSignature(signature));
+  }
+
+  @override
+  bool verify(String message, Uint8List signature) {
+    return secp256k1.verify(Uint8List.fromList(utf8.encode(message)),
+        publicKeyBytes, SignatureOptions.fromSignature(signature));
   }
 
   @override
@@ -47,7 +52,7 @@ abstract class SECP256k1KeyPair extends StandardKeyPair {
 
   @override
   String getPrivateKeyString() {
-    return "PrivateKey-${Base58Encode(_addChecksum(privateKeyBytes))}";
+    return "$privateKeyPrefix${Base58Encode(_addChecksum(privateKeyBytes))}";
   }
 
   @override
