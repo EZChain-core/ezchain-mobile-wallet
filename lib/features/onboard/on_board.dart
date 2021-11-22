@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/themes/buttons.dart';
 
 class OnBoardScreen extends StatefulWidget {
   const OnBoardScreen({Key? key}) : super(key: key);
@@ -18,17 +19,23 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextButton(
-              onPressed: () {
-                context.router.push(const AccessWalletOptionsRoute());
-              },
-              child: const Text('Access Wallet'),
+            SizedBox(
+              width: 164,
+              child: WalletMediumPrimaryButton(
+                text: "Access Wallet",
+                onPressed: () {
+                  context.router.push(const AccessWalletOptionsRoute());
+                },
+              ),
             ),
-            TextButton(
-              onPressed: () {
-                context.router.push(const CreateWalletRoute());
-              },
-              child: const Text('Create Wallet'),
+            SizedBox(
+              width: 164,
+              child: WalletMediumNoneButton(
+                text: "Create Wallet",
+                onPressed: () {
+                  context.router.push(const CreateWalletRoute());
+                },
+              ),
             ),
           ],
         ),
