@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="textPrimary_light">#000000</color>
+
+    <color name="text_light">#0C1527</color>
+    <color name="text90_light">#242C3D</color>
+    <color name="text80_light">#3D4452</color>
+    <color name="text70_light">#555B68</color>
+    <color name="text60_light">#6D737D</color>
+    <color name="text50_light">#868A93</color>
+    <color name="text40_light">#9EA1A9</color>
+    <color name="text30_light">#B6B9BE</color>
+    <color name="text20_light">#CED0D4</color>
+    <color name="text10_light">#E7E8E9</color>
+
+
+    <color name="primary_light">#F39E22</color>
+    <color name="primary110_light">#DB8E1F</color>
+    <color name="primary80_light">#F5B14E</color>
+    <color name="primary60_light">#F8C57A</color>
+    <color name="primary40_light">#FAD8A7</color>
+    <color name="primary20_light">#FDECD3</color>
+    <color name="primary10_light">#FEF5E9</color>
+
+    <color name="secondary_light">#1C315C</color>
+    <color name="secondary80_light">#495A7D</color>
+    <color name="secondary60_light">#77839D</color>
+    <color name="secondary40_light">#A4ADBE</color>
+    <color name="secondary20_light">#D2D6DE</color>
+    <color name="secondary10_light">#E8EAEF</color>
 </resources>

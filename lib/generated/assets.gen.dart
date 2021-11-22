@@ -17,10 +17,19 @@ class $AssetsEnvGen {
   String get envStaging => 'assets/env/.env.staging';
 }
 
+class $AssetsImagesGen {
+  const $AssetsImagesGen();
+
+  /// File path: assets/images/img_splash.png
+  AssetGenImage get imgSplash =>
+      const AssetGenImage('assets/images/img_splash.png');
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsEnvGen env = $AssetsEnvGen();
+  static const $AssetsImagesGen images = $AssetsImagesGen();
 }
 
 class AssetGenImage extends AssetImage {
