@@ -50,12 +50,12 @@ const networkNameToNetworkId = {
 
 const fallbackHRP = "custom";
 const fallbackNetworkName = "Custom Network";
-const fallbackEVMChainID = 43112;
+const fallbackEVMChainId = 43112;
 
-const defaultNetworkID = 1;
+const defaultNetworkId = 1;
 
-const platformChainID = "11111111111111111111111111111111LpoYY";
-const primaryNetworkID = "11111111111111111111111111111111LpoYY";
+const platformChainId = "11111111111111111111111111111111LpoYY";
+const primaryNetworkId = "11111111111111111111111111111111LpoYY";
 const xChainAlias = "X";
 const cChainAlias = "C";
 const pChainAlias = "P";
@@ -103,7 +103,7 @@ final n0X = X(
     creationTxFee: CENTIAVAX);
 
 final n0P = P(
-    blockchainID: platformChainID,
+    blockchainID: platformChainId,
     alias: pChainAlias,
     vm: pChainVMName,
     fee: MILLIAVAX,
@@ -141,7 +141,7 @@ final n1X = X(
     creationTxFee: CENTIAVAX);
 
 final n1P = P(
-    blockchainID: platformChainID,
+    blockchainID: platformChainId,
     avaxAssetID: avaxAssetID,
     alias: pChainAlias,
     vm: pChainVMName,
@@ -181,7 +181,7 @@ final n2X = X(
     creationTxFee: BigInt.from(0));
 
 final n2P = P(
-    blockchainID: platformChainID,
+    blockchainID: platformChainId,
     alias: pChainAlias,
     vm: pChainVMName,
     txFee: BigInt.from(0),
@@ -247,7 +247,7 @@ final n4X = X(
     creationTxFee: CENTIAVAX);
 
 final n4P = P(
-    blockchainID: platformChainID,
+    blockchainID: platformChainId,
     alias: pChainAlias,
     vm: pChainVMName,
     txFee: MILLIAVAX,
@@ -282,7 +282,7 @@ final n5X = X(
     creationTxFee: CENTIAVAX);
 
 final n5P = P(
-    blockchainID: platformChainID,
+    blockchainID: platformChainId,
     avaxAssetID: avaxAssetID,
     alias: pChainAlias,
     vm: pChainVMName,
@@ -322,7 +322,7 @@ final n12345X = n5X
   ..blockchainID = "2eNy1mUFdmaxXNj1eQHUe7Np4gju9sJsEtWQ4MX3ToiNKuADed"
   ..avaxAssetID = avaxAssetID;
 
-final n12345P = n5P..blockchainID = platformChainID;
+final n12345P = n5P..blockchainID = platformChainId;
 
 final n12345C = n5C
   ..blockchainID = "2CA6j5zYzasynPsFeNoqWkmTCt3VScMvXUZHbfDJ8k3oGzAPtU"

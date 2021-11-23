@@ -26,7 +26,7 @@ void main() {
   setUp(() async {
     _server = MockWebServer();
     await _server.start();
-    _roi = ROICore(host: _server.host, port: _server.port, protocol: "http");
+    _roi = ROI.create(host: _server.host, port: _server.port, protocol: "http");
   });
 
   tearDown(() {

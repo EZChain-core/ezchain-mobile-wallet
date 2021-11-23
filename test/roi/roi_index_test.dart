@@ -5,6 +5,7 @@ import 'package:test/test.dart';
 import 'package:wallet/roi/apis/auth/model/change_password.dart';
 import 'package:wallet/roi/apis/auth/model/new_token.dart';
 import 'package:wallet/roi/apis/auth/model/revoke_token.dart';
+import 'package:wallet/roi/apis/index/index_api.dart';
 import 'package:wallet/roi/apis/index/model/get_last_accepted.dart';
 import 'package:wallet/roi/roi.dart';
 import 'package:wallet/roi/common/rpc/rpc_response.dart';
@@ -20,7 +21,7 @@ void main() {
   setUp(() async {
     _server = MockWebServer();
     await _server.start();
-    _roi = ROICore(host: _server.host, port: _server.port, protocol: "http");
+    _roi = ROI.create(host: _server.host, port: _server.port, protocol: "http");
   });
 
   tearDown(() {
@@ -41,10 +42,11 @@ void main() {
             .toJson((value) => value.toJson())),
         headers: _headers);
 
-    final response =
-        await _roi.indexApiFacade.xChainTransactions.getLastAccepted(
-      const GetLastAcceptedRequest(encoding: "cb58").toRpc(),
-    );
+    final response = await _roi.indexApi
+        .get(IndexChainType.xChainTransactions)
+        .getLastAccepted(
+          const GetLastAcceptedRequest(encoding: "cb58").toRpc(),
+        );
 
     expect(response.result?.id,
         "6fXf5hncR8LXvwtM8iezFQBpK5cubV6y1dWgpJCcNyzGB1EzY");
