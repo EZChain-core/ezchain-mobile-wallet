@@ -1,5 +1,3 @@
-import 'package:dio/dio.dart';
-import 'package:retrofit/retrofit.dart';
 import 'package:wallet/roi/apis/info/model/get_blockchain_id.dart';
 import 'package:wallet/roi/apis/info/model/get_network_id.dart';
 import 'package:wallet/roi/apis/info/model/get_network_name.dart';
@@ -10,55 +8,112 @@ import 'package:wallet/roi/apis/info/model/get_tx_fee.dart';
 import 'package:wallet/roi/apis/info/model/is_bootstrapped.dart';
 import 'package:wallet/roi/apis/info/model/peers.dart';
 import 'package:wallet/roi/apis/info/model/uptime.dart';
+import 'package:wallet/roi/apis/info/rest/info_rest_client.dart';
+import 'package:wallet/roi/apis/roi_api.dart';
 import 'package:wallet/roi/common/rpc/rpc_request.dart';
 import 'package:wallet/roi/common/rpc/rpc_response.dart';
+import 'package:wallet/roi/roi.dart';
 
-part 'info_api.g.dart';
-
-/// https://docs.avax.network/build/avalanchego-apis/info-api
-@RestApi()
-abstract class InfoApi {
-  factory InfoApi(Dio dio) = _InfoApi;
-
-  static const endPoint = "/ext/info";
-
-  @POST(endPoint)
+abstract class InfoApi implements ROIApi {
   Future<RpcResponse<GetBlockchainIdResponse>> getBlockchainId(
-      @Body() RpcRequest<GetBlockchainIdRequest> request);
+      RpcRequest<GetBlockchainIdRequest> request);
 
-  @POST(endPoint)
   Future<RpcResponse<GetNetworkIdResponse>> getNetworkId(
-      @Body() RpcRequest<GetNetworkIdRequest> request);
+      RpcRequest<GetNetworkIdRequest> request);
 
-  @POST(endPoint)
   Future<RpcResponse<GetNetworkNameResponse>> getNetworkName(
-      @Body() RpcRequest<GetNetworkNameRequest> request);
+      RpcRequest<GetNetworkNameRequest> request);
 
-  @POST(endPoint)
   Future<RpcResponse<GetNodeIdResponse>> getNodeId(
-      @Body() RpcRequest<GetNodeIdRequest> request);
+      RpcRequest<GetNodeIdRequest> request);
 
-  @POST(endPoint)
   Future<RpcResponse<GetNodeIpResponse>> getNodeIp(
-      @Body() RpcRequest<GetNodeIpRequest> request);
+      RpcRequest<GetNodeIpRequest> request);
 
-  @POST(endPoint)
   Future<RpcResponse<GetNodeVersionResponse>> getNodeVersion(
-      @Body() RpcRequest<GetNodeVersionRequest> request);
+      RpcRequest<GetNodeVersionRequest> request);
 
-  @POST(endPoint)
   Future<RpcResponse<IsBootstrappedResponse>> isBootstrapped(
-      @Body() RpcRequest<IsBootstrappedRequest> request);
+      RpcRequest<IsBootstrappedRequest> request);
 
-  @POST(endPoint)
-  Future<RpcResponse<PeersResponse>> peers(
-      @Body() RpcRequest<PeersRequest> request);
+  Future<RpcResponse<PeersResponse>> peers(RpcRequest<PeersRequest> request);
 
-  @POST(endPoint)
   Future<RpcResponse<GetTxFeeResponse>> getTxFee(
-      @Body() RpcRequest<GetTxFeeRequest> request);
+      RpcRequest<GetTxFeeRequest> request);
 
-  @POST(endPoint)
+  Future<RpcResponse<UptimeResponse>> uptime(RpcRequest<UptimeRequest> request);
+
+  factory InfoApi.create({required ROINetwork roiNetwork}) {
+    return _InfoApiImpl(roiNetwork: roiNetwork);
+  }
+}
+
+class _InfoApiImpl implements InfoApi {
+  @override
+  ROINetwork roiNetwork;
+
+  late InfoRestClient _infoRestClient;
+
+  _InfoApiImpl({required this.roiNetwork}) {
+    _infoRestClient = InfoRestClient(roiNetwork.dio);
+  }
+
+  @override
+  Future<RpcResponse<GetBlockchainIdResponse>> getBlockchainId(
+      RpcRequest<GetBlockchainIdRequest> request) {
+    return _infoRestClient.getBlockchainId(request);
+  }
+
+  @override
+  Future<RpcResponse<GetNetworkIdResponse>> getNetworkId(
+      RpcRequest<GetNetworkIdRequest> request) {
+    return _infoRestClient.getNetworkId(request);
+  }
+
+  @override
+  Future<RpcResponse<GetNetworkNameResponse>> getNetworkName(
+      RpcRequest<GetNetworkNameRequest> request) {
+    return _infoRestClient.getNetworkName(request);
+  }
+
+  @override
+  Future<RpcResponse<GetNodeIdResponse>> getNodeId(
+      RpcRequest<GetNodeIdRequest> request) {
+    return _infoRestClient.getNodeId(request);
+  }
+
+  @override
+  Future<RpcResponse<GetNodeIpResponse>> getNodeIp(
+      RpcRequest<GetNodeIpRequest> request) {
+    return _infoRestClient.getNodeIp(request);
+  }
+
+  @override
+  Future<RpcResponse<GetNodeVersionResponse>> getNodeVersion(
+      RpcRequest<GetNodeVersionRequest> request) {
+    return _infoRestClient.getNodeVersion(request);
+  }
+
+  @override
+  Future<RpcResponse<GetTxFeeResponse>> getTxFee(
+      RpcRequest<GetTxFeeRequest> request) {
+    return _infoRestClient.getTxFee(request);
+  }
+
+  @override
+  Future<RpcResponse<IsBootstrappedResponse>> isBootstrapped(
+      RpcRequest<IsBootstrappedRequest> request) {
+    return _infoRestClient.isBootstrapped(request);
+  }
+
+  @override
+  Future<RpcResponse<PeersResponse>> peers(RpcRequest<PeersRequest> request) {
+    return _infoRestClient.peers(request);
+  }
+
+  @override
   Future<RpcResponse<UptimeResponse>> uptime(
-      @Body() RpcRequest<UptimeRequest> request);
+      RpcRequest<UptimeRequest> request) {
+    return _infoRestClient.uptime(request);
+  }
 }
