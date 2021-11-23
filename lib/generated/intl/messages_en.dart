@@ -24,7 +24,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "accessWalletOptionsCancel":
+            MessageLookupByLibrary.simpleMessage("Cancel"),
+        "accessWalletOptionsDontHaveWallet":
+            MessageLookupByLibrary.simpleMessage("Don’t have a wallet?"),
+        "accessWalletOptionsMnemonic":
+            MessageLookupByLibrary.simpleMessage("Mnemonic Key Phrase"),
+        "accessWalletOptionsPrivateKey":
+            MessageLookupByLibrary.simpleMessage("Private Key"),
+        "accessWalletOptionsTitle": MessageLookupByLibrary.simpleMessage(
+            "How do you want to access your wallet?"),
         "appName": MessageLookupByLibrary.simpleMessage("ROI Wallet"),
+        "onBoardAccessWallet":
+            MessageLookupByLibrary.simpleMessage("Access Wallet"),
+        "onBoardCreateWallet":
+            MessageLookupByLibrary.simpleMessage("Create Wallet"),
         "pageHomeWelcome": m0
       };
 }

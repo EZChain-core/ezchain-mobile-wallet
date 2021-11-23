@@ -28,4 +28,6 @@
     <color name="secondary40_light">#A4ADBE</color>
     <color name="secondary20_light">#D2D6DE</color>
     <color name="secondary10_light">#E8EAEF</color>
+
+    <color name="bg_light">#F8F8FB</color>
 </resources>

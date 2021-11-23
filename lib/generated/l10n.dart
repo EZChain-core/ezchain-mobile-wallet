@@ -69,6 +69,76 @@ class Strings {
       args: [name],
     );
   }
+
+  /// `Access Wallet`
+  String get onBoardAccessWallet {
+    return Intl.message(
+      'Access Wallet',
+      name: 'onBoardAccessWallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create Wallet`
+  String get onBoardCreateWallet {
+    return Intl.message(
+      'Create Wallet',
+      name: 'onBoardCreateWallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How do you want to access your wallet?`
+  String get accessWalletOptionsTitle {
+    return Intl.message(
+      'How do you want to access your wallet?',
+      name: 'accessWalletOptionsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Private Key`
+  String get accessWalletOptionsPrivateKey {
+    return Intl.message(
+      'Private Key',
+      name: 'accessWalletOptionsPrivateKey',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mnemonic Key Phrase`
+  String get accessWalletOptionsMnemonic {
+    return Intl.message(
+      'Mnemonic Key Phrase',
+      name: 'accessWalletOptionsMnemonic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Don’t have a wallet?`
+  String get accessWalletOptionsDontHaveWallet {
+    return Intl.message(
+      'Don’t have a wallet?',
+      name: 'accessWalletOptionsDontHaveWallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get accessWalletOptionsCancel {
+    return Intl.message(
+      'Cancel',
+      name: 'accessWalletOptionsCancel',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Strings> {
