@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:wallet/roi/apis/auth/auth_api.dart';
+import 'package:wallet/roi/apis/avm/avm_api.dart';
 import 'package:wallet/roi/apis/index/index_api.dart';
 import 'package:wallet/roi/apis/info/info_api.dart';
 import 'package:wallet/roi/apis/keystore/keystore_api.dart';
@@ -15,6 +16,8 @@ abstract class ROI {
   InfoApi get infoApi;
 
   IndexApi get indexApi;
+
+  AvmApi get avmApi;
 
   factory ROI.create({
     required String host,
@@ -41,7 +44,7 @@ abstract class ROINetwork {
 
   final int networkId;
 
-  String? hrp;
+  String hrp;
 
   final int connectTimeout;
 
@@ -58,7 +61,9 @@ abstract class ROINetwork {
   ROINetwork(this.host, this.port, this.protocol, this.networkId, this.hrp,
       this.connectTimeout, this.receiveTimeout)
       : assert(protocols.contains(protocol), "Error - Invalid protocol") {
-    hrp = hrp ?? getPreferredHRP(networkId);
+    if (hrp.isEmpty) {
+      hrp = getPreferredHRP(networkId);
+    }
     final host = this.host.replaceAll(RegExp('[^A-Za-z0-9.]'), '');
     var url = "$protocol://$host";
     if (port > 0) {
@@ -110,6 +115,8 @@ class _ROICore extends ROINetwork implements ROI {
 
   late IndexApi _indexApi;
 
+  late AvmApi _avmApi;
+
   @override
   AuthApi get authApi => _authApi;
 
@@ -121,6 +128,9 @@ class _ROICore extends ROINetwork implements ROI {
 
   @override
   IndexApi get indexApi => _indexApi;
+
+  @override
+  AvmApi get avmApi => _avmApi;
 
   _ROICore(
     String host,
@@ -153,5 +163,6 @@ class _ROICore extends ROINetwork implements ROI {
     _keystoreApi = KeyStoreApi.create(roiNetwork: this);
     _infoApi = InfoApi.create(roiNetwork: this);
     _indexApi = IndexApi.create(roiNetwork: this);
+    _avmApi = AvmApi.create(roiNetwork: this, blockChainId: xChainId);
   }
 }
