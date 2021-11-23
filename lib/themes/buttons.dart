@@ -103,6 +103,35 @@ class WalletMediumNoneButton extends StatelessWidget {
   }
 }
 
+class WalletSpecialNoneButton extends StatelessWidget {
+  final String text;
+
+  final VoidCallback? onPressed;
+
+  final VoidCallback? onLongPress;
+
+  const WalletSpecialNoneButton(
+      {required this.text, this.onPressed, this.onLongPress});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+        builder: (context, provider, child) => SizedBox(
+              height: wallet_button_medium_height,
+              child: TextButton(
+                child: Text(text,
+                    style: WalletBodyLargeTextStyle(
+                        color: provider.themeMode.primary)),
+                style: WalletButtonStyle(
+                    bgColor: Colors.transparent,
+                    buttonPadding: walletButtonMediumPadding),
+                onPressed: onPressed,
+                onLongPress: onLongPress,
+              ),
+            ));
+  }
+}
+
 class WalletButtonStyle extends ButtonStyle {
   final Color bgColor;
 
