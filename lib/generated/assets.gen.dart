@@ -22,6 +22,10 @@ class $AssetsEnvGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/ic_doc_outline_black.svg
+  SvgGenImage get icDocOutlineBlack =>
+      const SvgGenImage('assets/icons/ic_doc_outline_black.svg');
+
   /// File path: assets/icons/ic_key_outline_black.svg
   SvgGenImage get icKeyOutlineBlack =>
       const SvgGenImage('assets/icons/ic_key_outline_black.svg');
