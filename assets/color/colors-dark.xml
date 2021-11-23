@@ -28,4 +28,7 @@
     <color name="secondary40_dark">#A4ADBE</color>
     <color name="secondary20_dark">#D2D6DE</color>
     <color name="secondary10_dark">#E8EAEF</color>
+
+    <color name="bg_dark">#F8F8FB</color>
+
 </resources>

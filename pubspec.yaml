@@ -66,6 +66,8 @@ dependency_overrides:
 
 ## https://pub.dev/packages/flutter_gen
 flutter_gen:
+  integrations:
+    flutter_svg: true
   output: lib/generated/
   assets:
     enabled: true
@@ -84,6 +86,7 @@ flutter:
     - assets/env/.env.staging
     - assets/env/
     - assets/images/
+    - assets/icons/
 
   fonts:
     - family: BeVietnamPro

@@ -1,6 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/generated/assets.gen.dart';
+import 'package:wallet/generated/l10n.dart';
+import 'package:wallet/themes/colors.dart';
+import 'package:wallet/themes/theme.dart';
+import 'package:wallet/themes/typography.dart';
 
 class AccessWalletOptionsScreen extends StatefulWidget {
   const AccessWalletOptionsScreen({Key? key}) : super(key: key);
@@ -12,21 +18,72 @@ class AccessWalletOptionsScreen extends StatefulWidget {
 class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-              onPressed: () {
-                context.router.push(const AccessPrivateKeyRoute());
-              },
-              child: const Text('Private Key'),
-            ),
-          ],
-        ),
-      ),
-    );
+    return Consumer<WalletThemeProvider>(
+        builder: (context, provider, child) => Scaffold(
+              body: Center(
+                child: SafeArea(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16, right: 16, top: 20),
+                          child: Text(
+                            Strings.current.accessWalletOptionsTitle,
+                            style: WalletHeadlineMediumTextStyle(
+                              color: provider.themeMode.text,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 64,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: provider.themeMode.bg,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  context.router
+                                      .push(const AccessPrivateKeyRoute());
+                                },
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        Strings.current
+                                            .accessWalletOptionsPrivateKey,
+                                        style: WalletBodyLargeTextStyle(
+                                            color: provider.themeMode.text),
+                                      ),
+                                    ),
+                                    Assets.icons.icKeyOutlineBlack
+                                        .svg(width: 24, height: 24),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ));
   }
 }

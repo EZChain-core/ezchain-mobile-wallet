@@ -46,4 +46,6 @@ extension BaseColor on ThemeMode {
   Color get text20 => isDark ? ColorName.text20Dark : ColorName.text20Light;
 
   Color get text10 => isDark ? ColorName.text10Dark : ColorName.text10Light;
+
+  Color get bg => isDark ? ColorName.bgDark : ColorName.bgLight;
 }
