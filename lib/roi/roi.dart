@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:wallet/roi/apis/auth/auth_api.dart';
-import 'package:wallet/roi/apis/auth/auth_api_impl.dart';
-import 'package:wallet/roi/apis/index/index_api_facade.dart';
+import 'package:wallet/roi/apis/index/index_api.dart';
 import 'package:wallet/roi/apis/info/info_api.dart';
 import 'package:wallet/roi/apis/keystore/keystore_api.dart';
 import 'package:wallet/roi/utils/constants.dart';
@@ -11,11 +10,26 @@ import 'package:wallet/roi/utils/helper_functions.dart';
 abstract class ROI {
   AuthApi get authApi;
 
-  KeystoreApi get keystoreApi;
+  KeyStoreApi get keystoreApi;
 
   InfoApi get infoApi;
 
-  IndexApiFacade get indexApiFacade;
+  IndexApi get indexApi;
+
+  factory ROI.create({
+    required String host,
+    required int port,
+    required String protocol,
+    int networkId = defaultNetworkId,
+    String xChainId = "",
+    String cChainId = "",
+    String hrp = "",
+    int connectTimeout = 5000,
+    int receiveTimeout = 5000,
+  }) {
+    return _ROICore(host, port, protocol, networkId, xChainId, cChainId, hrp,
+        connectTimeout, receiveTimeout);
+  }
 }
 
 abstract class ROINetwork {
@@ -87,28 +101,28 @@ abstract class ROINetwork {
   }
 }
 
-class ROICore extends ROINetwork implements ROI {
+class _ROICore extends ROINetwork implements ROI {
   late AuthApi _authApi;
 
-  late KeystoreApi _keystoreApi;
+  late KeyStoreApi _keystoreApi;
 
   late InfoApi _infoApi;
 
-  late IndexApiFacade _indexApiFacade;
+  late IndexApi _indexApi;
 
   @override
   AuthApi get authApi => _authApi;
 
   @override
-  KeystoreApi get keystoreApi => _keystoreApi;
+  KeyStoreApi get keystoreApi => _keystoreApi;
 
   @override
   InfoApi get infoApi => _infoApi;
 
   @override
-  IndexApiFacade get indexApiFacade => _indexApiFacade;
+  IndexApi get indexApi => _indexApi;
 
-  ROICore(
+  _ROICore(
     String host,
     int port,
     String protocol,
@@ -135,9 +149,9 @@ class ROICore extends ROINetwork implements ROI {
       }
     }
 
-    _authApi = AuthApiImpl(roiNetwork: super);
-    _keystoreApi = KeystoreApi(dio);
-    _infoApi = InfoApi(dio);
-    _indexApiFacade = IndexApiFacade(dio: dio);
+    _authApi = AuthApi.create(roiNetwork: this);
+    _keystoreApi = KeyStoreApi.create(roiNetwork: this);
+    _infoApi = InfoApi.create(roiNetwork: this);
+    _indexApi = IndexApi.create(roiNetwork: this);
   }
 }
