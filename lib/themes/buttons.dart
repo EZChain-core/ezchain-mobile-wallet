@@ -4,12 +4,12 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-const wallet_button_radius = 8.0;
-const wallet_button_medium_height = 40.0;
-final EdgeInsetsGeometry walletButtonMediumPadding =
+const roiButtonRadius = 8.0;
+const roiButtonMediumHeight = 40.0;
+const EdgeInsetsGeometry roiButtonMediumPadding =
     EdgeInsets.only(left: 0, top: 8, right: 0, bottom: 8);
 
-class WalletButton extends StatelessWidget {
+class ROIButton extends StatelessWidget {
   final double height;
 
   final String text;
@@ -22,7 +22,7 @@ class WalletButton extends StatelessWidget {
 
   final VoidCallback? onLongPress;
 
-  const WalletButton(
+  const ROIButton(
       {required this.height,
       required this.text,
       required this.textStyle,
@@ -45,28 +45,28 @@ class WalletButton extends StatelessWidget {
   }
 }
 
-class WalletMediumPrimaryButton extends StatelessWidget {
+class ROIMediumPrimaryButton extends StatelessWidget {
   final String text;
 
   final VoidCallback? onPressed;
 
   final VoidCallback? onLongPress;
 
-  const WalletMediumPrimaryButton(
+  const ROIMediumPrimaryButton(
       {required this.text, this.onPressed, this.onLongPress});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
         builder: (context, provider, child) => SizedBox(
-              height: wallet_button_medium_height,
+          height: roiButtonMediumHeight,
               child: TextButton(
                 child: Text(text,
-                    style: WalletButtonTextStyle(
-                        color: provider.themeMode.text90)),
-                style: WalletButtonStyle(
+                    style:
+                        ROIButtonTextStyle(color: provider.themeMode.text90)),
+                style: ROIButtonStyle(
                     bgColor: provider.themeMode.primary,
-                    buttonPadding: walletButtonMediumPadding),
+                    buttonPadding: roiButtonMediumPadding),
                 onPressed: onPressed,
                 onLongPress: onLongPress,
               ),
@@ -74,28 +74,28 @@ class WalletMediumPrimaryButton extends StatelessWidget {
   }
 }
 
-class WalletMediumNoneButton extends StatelessWidget {
+class ROIMediumNoneButton extends StatelessWidget {
   final String text;
 
   final VoidCallback? onPressed;
 
   final VoidCallback? onLongPress;
 
-  const WalletMediumNoneButton(
+  const ROIMediumNoneButton(
       {required this.text, this.onPressed, this.onLongPress});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
         builder: (context, provider, child) => SizedBox(
-              height: wallet_button_medium_height,
+          height: roiButtonMediumHeight,
               child: TextButton(
                 child: Text(text,
-                    style: WalletButtonTextStyle(
-                        color: provider.themeMode.primary)),
-                style: WalletButtonStyle(
+                    style:
+                        ROIButtonTextStyle(color: provider.themeMode.primary)),
+                style: ROIButtonStyle(
                     bgColor: Colors.transparent,
-                    buttonPadding: walletButtonMediumPadding),
+                    buttonPadding: roiButtonMediumPadding),
                 onPressed: onPressed,
                 onLongPress: onLongPress,
               ),
@@ -103,28 +103,28 @@ class WalletMediumNoneButton extends StatelessWidget {
   }
 }
 
-class WalletSpecialNoneButton extends StatelessWidget {
+class ROISpecialNoneButton extends StatelessWidget {
   final String text;
 
   final VoidCallback? onPressed;
 
   final VoidCallback? onLongPress;
 
-  const WalletSpecialNoneButton(
+  const ROISpecialNoneButton(
       {required this.text, this.onPressed, this.onLongPress});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
         builder: (context, provider, child) => SizedBox(
-              height: wallet_button_medium_height,
+          height: roiButtonMediumHeight,
               child: TextButton(
                 child: Text(text,
-                    style: WalletBodyLargeTextStyle(
+                    style: ROIBodyLargeTextStyle(
                         color: provider.themeMode.primary)),
-                style: WalletButtonStyle(
+                style: ROIButtonStyle(
                     bgColor: Colors.transparent,
-                    buttonPadding: walletButtonMediumPadding),
+                    buttonPadding: roiButtonMediumPadding),
                 onPressed: onPressed,
                 onLongPress: onLongPress,
               ),
@@ -132,12 +132,12 @@ class WalletSpecialNoneButton extends StatelessWidget {
   }
 }
 
-class WalletButtonStyle extends ButtonStyle {
+class ROIButtonStyle extends ButtonStyle {
   final Color bgColor;
 
   final EdgeInsetsGeometry buttonPadding;
 
-  WalletButtonStyle({required this.bgColor, required this.buttonPadding})
+  ROIButtonStyle({required this.bgColor, required this.buttonPadding})
       : super(
             enableFeedback: false,
             padding:
@@ -145,6 +145,5 @@ class WalletButtonStyle extends ButtonStyle {
             backgroundColor: ButtonStyleButton.allOrNull<Color>(bgColor),
             shape: ButtonStyleButton.allOrNull<OutlinedBorder>(
                 RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(wallet_button_radius))));
+                    borderRadius: BorderRadius.circular(roiButtonRadius))));
 }

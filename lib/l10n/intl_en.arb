@@ -1,11 +1,13 @@
 {
   "appName": "ROI Wallet",
   "pageHomeWelcome": "Welcome {name}",
-  "onBoardAccessWallet": "Access Wallet",
+  "sharedPrivateKey": "Private Key",
+  "sharedAccessWallet": "Access Wallet",
+  "sharedCancel": "Cancel",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
-  "accessWalletOptionsPrivateKey": "Private Key",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",
   "accessWalletOptionsDontHaveWallet": "Don’t have a wallet?",
-  "accessWalletOptionsCancel": "Cancel"
+  "accessPrivateKeyYourPrivateKey": "Your Private Key",
+  "accessPrivateKeyYourPrivateKeyHint": "Type your private key"
 }

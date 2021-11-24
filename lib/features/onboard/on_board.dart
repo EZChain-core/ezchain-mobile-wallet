@@ -29,8 +29,8 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                 ),
                 SizedBox(
                   width: 164,
-                  child: WalletMediumPrimaryButton(
-                    text: Strings.current.onBoardAccessWallet,
+                  child: ROIMediumPrimaryButton(
+                    text: Strings.current.sharedAccessWallet,
                     onPressed: () {
                       context.router.push(const AccessWalletOptionsRoute());
                     },
@@ -39,7 +39,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                 const SizedBox(height: 4),
                 SizedBox(
                   width: 164,
-                  child: WalletMediumNoneButton(
+                  child: ROIMediumNoneButton(
                     text: Strings.current.onBoardCreateWallet,
                     onPressed: () {
                       context.router.push(const CreateWalletRoute());

@@ -30,5 +30,7 @@
     <color name="secondary10_dark">#E8EAEF</color>
 
     <color name="bg_dark">#F8F8FB</color>
+    <color name="border_dark">#E7E8E9</color>
+    <color name="border_active_dark">#F39E22</color>
 
 </resources>
