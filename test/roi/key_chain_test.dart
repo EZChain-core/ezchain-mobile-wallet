@@ -4,8 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:wallet/roi/common/keychain/roi_key_chain.dart';
-import 'package:convert/convert.dart';
-import 'package:wallet/roi/utils/constants.dart';
+import 'package:hex/hex.dart';
 
 void main() {
   setUp(() async {});
@@ -30,16 +29,16 @@ void main() {
     final privateKey = keypair.privateKeyBytes;
     final publicKey = keypair.publicKeyBytes;
 
-    print("privateKey = ${hex.encode(privateKey)}");
-    print("publicKey = ${hex.encode(publicKey)}");
+    print("privateKey = ${HEX.encode(privateKey)}");
+    print("publicKey = ${HEX.encode(publicKey)}");
 
     const message = "Han Trung Kien";
     final signature = keypair.sign(message);
-    print("signature = ${hex.encode(signature)}");
+    print("signature = ${HEX.encode(signature)}");
     print("recoverId = ${signature.sublist(64, 65).first}");
     final recoveredPublicKey =
         keypair.recover(Uint8List.fromList(utf8.encode(message)), signature);
-    print("recovered publicKey= ${hex.encode(recoveredPublicKey)}");
+    print("recovered publicKey= ${HEX.encode(recoveredPublicKey)}");
 
     final isValid = keypair.verify(message, signature);
     print("valid = $isValid");

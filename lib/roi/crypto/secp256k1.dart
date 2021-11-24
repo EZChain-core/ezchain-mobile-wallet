@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:convert/convert.dart';
+import 'package:hex/hex.dart';
 
 import 'package:elliptic/elliptic.dart';
 import "package:pointycastle/ecc/curves/secp256k1.dart";
@@ -38,7 +38,7 @@ KeyPair _fromPrivateKey(PrivateKey privateKey) {
   final publicKey = privateKey.publicKey;
   return KeyPair(
       privateKey: Uint8List.fromList(privateKey.bytes),
-      publicKey: Uint8List.fromList(hex.decode(publicKey.toCompressedHex())));
+      publicKey: Uint8List.fromList(HEX.decode(publicKey.toCompressedHex())));
 }
 
 Uint8List sign(Uint8List messageHash, Uint8List privateKeyBytes) {
