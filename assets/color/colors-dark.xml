@@ -33,4 +33,6 @@
     <color name="border_dark">#E7E8E9</color>
     <color name="border_active_dark">#F39E22</color>
 
+    <color name="red_dark">#EB5757</color>
+
 </resources>

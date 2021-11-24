@@ -24,6 +24,7 @@ class _AccessPrivateKeyScreenState extends State<AccessPrivateKeyScreen> {
         body: Center(
           child: SafeArea(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   flex: 2,
@@ -42,18 +43,23 @@ class _AccessPrivateKeyScreenState extends State<AccessPrivateKeyScreen> {
                   flex: 3,
                   child: Column(
                     children: [
-                      ROITextField(
-                        hint:
-                            Strings.current.accessPrivateKeyYourPrivateKeyHint,
-                        label: Strings.current.accessPrivateKeyYourPrivateKey,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: ROITextField(
+                          hint: Strings
+                              .current.accessPrivateKeyYourPrivateKeyHint,
+                          label: Strings.current.accessPrivateKeyYourPrivateKey,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       Stack(
                         children: [
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: SizedBox(
+                            child: Container(
                               width: 164,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               child: ROIMediumPrimaryButton(
                                 text: Strings.current.sharedAccessWallet,
                                 onPressed: () {
@@ -66,7 +72,7 @@ class _AccessPrivateKeyScreenState extends State<AccessPrivateKeyScreen> {
                             alignment: Alignment.centerRight,
                             child: Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                              const EdgeInsets.symmetric(horizontal: 16),
                               child: ROISpecialNoneButton(
                                 text: Strings.current.sharedCancel,
                                 onPressed: () {},

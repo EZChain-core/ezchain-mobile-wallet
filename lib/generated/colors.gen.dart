@@ -26,6 +26,9 @@ class ColorName {
   /// Color: #E7E8E9
   static const Color borderDark = Color(0xFFE7E8E9);
 
+  /// Color: #F39E22
+  static const Color borderErrorLight = Color(0xFFF39E22);
+
   /// Color: #E7E8E9
   static const Color borderLight = Color(0xFFE7E8E9);
 
@@ -70,6 +73,12 @@ class ColorName {
 
   /// Color: #F39E22
   static const Color primaryLight = Color(0xFFF39E22);
+
+  /// Color: #EB5757
+  static const Color redDark = Color(0xFFEB5757);
+
+  /// Color: #EB5757
+  static const Color redLight = Color(0xFFEB5757);
 
   /// Color: #E8EAEF
   static const Color secondary10Dark = Color(0xFFE8EAEF);

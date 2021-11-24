@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,13 +20,12 @@ class ROITextField extends StatelessWidget {
 
   final Widget? suffixIcon;
 
-  const ROITextField(
-      {Key? key,
-      required this.hint,
-      this.inputType,
-      this.label,
-      this.prefixIcon,
-      this.suffixIcon})
+  const ROITextField({Key? key,
+    required this.hint,
+    this.inputType,
+    this.label,
+    this.prefixIcon,
+    this.suffixIcon})
       : super(key: key);
 
   @override
@@ -33,6 +34,7 @@ class ROITextField extends StatelessWidget {
       builder: (context, provider, child) => SizedBox(
         width: double.infinity,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             label != null
                 ? Text(
@@ -46,10 +48,9 @@ class ROITextField extends StatelessWidget {
               style: ROIBodyLargeTextStyle(color: provider.themeMode.text),
               cursorColor: provider.themeMode.text,
               decoration: InputDecoration(
-                filled: true,
                 hintText: hint,
                 hintStyle:
-                    ROIBodyLargeTextStyle(color: provider.themeMode.text40),
+                ROIBodyLargeTextStyle(color: provider.themeMode.text40),
                 prefixIcon: prefixIcon,
                 suffixIcon: suffixIcon,
                 enabledBorder: OutlineInputBorder(
@@ -60,6 +61,10 @@ class ROITextField extends StatelessWidget {
                   borderRadius: roiBorder,
                   borderSide:
                       BorderSide(color: provider.themeMode.borderActive),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: roiBorder,
+                  borderSide: BorderSide(color: provider.themeMode.red),
                 ),
               ),
               keyboardType: inputType,

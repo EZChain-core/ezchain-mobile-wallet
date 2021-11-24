@@ -23,8 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(name) => "Welcome ${name}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) =>
-      <String, Function>{
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accessPrivateKeyYourPrivateKey":
             MessageLookupByLibrary.simpleMessage("Your Private Key"),
         "accessPrivateKeyYourPrivateKeyHint":
