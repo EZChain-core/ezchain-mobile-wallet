@@ -30,4 +30,6 @@
     <color name="secondary10_light">#E8EAEF</color>
 
     <color name="bg_light">#F8F8FB</color>
+    <color name="border_light">#E7E8E9</color>
+    <color name="border_active_light">#F39E22</color>
 </resources>
