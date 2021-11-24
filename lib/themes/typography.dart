@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wallet/generated/fonts.gen.dart';
 
-class WalletTextStyle extends TextStyle {
+class ROITextStyle extends TextStyle {
   final Color color;
 
   final double height;
@@ -12,7 +12,7 @@ class WalletTextStyle extends TextStyle {
 
   final FontWeight fontWeight;
 
-  const WalletTextStyle(
+  const ROITextStyle(
       {required this.color,
       required this.height,
       required this.fontSize,
@@ -21,10 +21,10 @@ class WalletTextStyle extends TextStyle {
       : super(fontFamily: fontFamily);
 }
 
-class WalletHeadlineMediumTextStyle extends WalletTextStyle {
+class ROIHeadlineMediumTextStyle extends ROITextStyle {
   final Color color;
 
-  const WalletHeadlineMediumTextStyle({required this.color})
+  const ROIHeadlineMediumTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 28,
@@ -32,10 +32,10 @@ class WalletHeadlineMediumTextStyle extends WalletTextStyle {
             fontWeight: FontWeight.w400);
 }
 
-class WalletHeadlineSmallTextStyle extends WalletTextStyle {
+class ROIHeadlineSmallTextStyle extends ROITextStyle {
   final Color color;
 
-  const WalletHeadlineSmallTextStyle({required this.color})
+  const ROIHeadlineSmallTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 24,
@@ -43,10 +43,10 @@ class WalletHeadlineSmallTextStyle extends WalletTextStyle {
             fontWeight: FontWeight.w400);
 }
 
-class WalletTitleLargeTextStyle extends WalletTextStyle {
+class ROITitleLargeTextStyle extends ROITextStyle {
   final Color color;
 
-  const WalletTitleLargeTextStyle({required this.color})
+  const ROITitleLargeTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 16,
@@ -54,10 +54,10 @@ class WalletTitleLargeTextStyle extends WalletTextStyle {
             fontWeight: FontWeight.w500);
 }
 
-class WalletTitleSmallTextStyle extends WalletTextStyle {
+class ROITitleSmallTextStyle extends ROITextStyle {
   final Color color;
 
-  const WalletTitleSmallTextStyle({required this.color})
+  const ROITitleSmallTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 12,
@@ -65,10 +65,10 @@ class WalletTitleSmallTextStyle extends WalletTextStyle {
             fontWeight: FontWeight.w500);
 }
 
-class WalletBodyLargeTextStyle extends WalletTextStyle {
+class ROIBodyLargeTextStyle extends ROITextStyle {
   final Color color;
 
-  const WalletBodyLargeTextStyle({required this.color})
+  const ROIBodyLargeTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 16,
@@ -76,10 +76,10 @@ class WalletBodyLargeTextStyle extends WalletTextStyle {
             fontWeight: FontWeight.w400);
 }
 
-class WalletBodyMediumTextStyle extends WalletTextStyle {
+class ROIBodyMediumTextStyle extends ROITextStyle {
   final Color color;
 
-  const WalletBodyMediumTextStyle({required this.color})
+  const ROIBodyMediumTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 14,
@@ -87,10 +87,10 @@ class WalletBodyMediumTextStyle extends WalletTextStyle {
             fontWeight: FontWeight.w400);
 }
 
-class WalletLabelMediumTextStyle extends WalletTextStyle {
+class ROILabelMediumTextStyle extends ROITextStyle {
   final Color color;
 
-  const WalletLabelMediumTextStyle({required this.color})
+  const ROILabelMediumTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 12,
@@ -98,10 +98,10 @@ class WalletLabelMediumTextStyle extends WalletTextStyle {
             fontWeight: FontWeight.w500);
 }
 
-class WalletLabelSmallTextStyle extends WalletTextStyle {
+class ROILabelSmallTextStyle extends ROITextStyle {
   final Color color;
 
-  const WalletLabelSmallTextStyle({required this.color})
+  const ROILabelSmallTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 10,
@@ -109,10 +109,10 @@ class WalletLabelSmallTextStyle extends WalletTextStyle {
             fontWeight: FontWeight.w500);
 }
 
-class WalletButtonTextStyle extends WalletTextStyle {
+class ROIButtonTextStyle extends ROITextStyle {
   final Color color;
 
-  const WalletButtonTextStyle({required this.color})
+  const ROIButtonTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 14,

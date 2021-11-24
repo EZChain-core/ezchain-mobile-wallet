@@ -34,7 +34,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                         const EdgeInsets.only(left: 16, right: 16, top: 20),
                     child: Text(
                       Strings.current.accessWalletOptionsTitle,
-                      style: WalletHeadlineMediumTextStyle(
+                      style: ROIHeadlineMediumTextStyle(
                         color: provider.themeMode.text,
                       ),
                     ),
@@ -64,8 +64,8 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  Strings.current.accessWalletOptionsPrivateKey,
-                                  style: WalletBodyLargeTextStyle(
+                                  Strings.current.sharedPrivateKey,
+                                  style: ROIBodyLargeTextStyle(
                                       color: provider.themeMode.text),
                                 ),
                               ),
@@ -98,7 +98,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                               Expanded(
                                 child: Text(
                                   Strings.current.accessWalletOptionsMnemonic,
-                                  style: WalletBodyLargeTextStyle(
+                                  style: ROIBodyLargeTextStyle(
                                       color: provider.themeMode.text),
                                 ),
                               ),
@@ -118,7 +118,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                         alignment: Alignment.centerLeft,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: WalletSpecialNoneButton(
+                          child: ROISpecialNoneButton(
                             text: Strings
                                 .current.accessWalletOptionsDontHaveWallet,
                             onPressed: () {},
@@ -129,8 +129,8 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                         alignment: Alignment.centerRight,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: WalletSpecialNoneButton(
-                            text: Strings.current.accessWalletOptionsCancel,
+                          child: ROISpecialNoneButton(
+                            text: Strings.current.sharedCancel,
                             onPressed: () {},
                           ),
                         ),

@@ -70,11 +70,31 @@ class Strings {
     );
   }
 
+  /// `Private Key`
+  String get sharedPrivateKey {
+    return Intl.message(
+      'Private Key',
+      name: 'sharedPrivateKey',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Access Wallet`
-  String get onBoardAccessWallet {
+  String get sharedAccessWallet {
     return Intl.message(
       'Access Wallet',
-      name: 'onBoardAccessWallet',
+      name: 'sharedAccessWallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get sharedCancel {
+    return Intl.message(
+      'Cancel',
+      name: 'sharedCancel',
       desc: '',
       args: [],
     );
@@ -100,16 +120,6 @@ class Strings {
     );
   }
 
-  /// `Private Key`
-  String get accessWalletOptionsPrivateKey {
-    return Intl.message(
-      'Private Key',
-      name: 'accessWalletOptionsPrivateKey',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Mnemonic Key Phrase`
   String get accessWalletOptionsMnemonic {
     return Intl.message(
@@ -130,11 +140,21 @@ class Strings {
     );
   }
 
-  /// `Cancel`
-  String get accessWalletOptionsCancel {
+  /// `Your Private Key`
+  String get accessPrivateKeyYourPrivateKey {
     return Intl.message(
-      'Cancel',
-      name: 'accessWalletOptionsCancel',
+      'Your Private Key',
+      name: 'accessPrivateKeyYourPrivateKey',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type your private key`
+  String get accessPrivateKeyYourPrivateKeyHint {
+    return Intl.message(
+      'Type your private key',
+      name: 'accessPrivateKeyYourPrivateKeyHint',
       desc: '',
       args: [],
     );
