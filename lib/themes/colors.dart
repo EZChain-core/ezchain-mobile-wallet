@@ -52,5 +52,7 @@ extension BaseColor on ThemeMode {
   Color get border => isDark ? ColorName.borderDark : ColorName.borderLight;
 
   Color get borderActive =>
-      isDark ? ColorName.borderActiveDark : ColorName.borderLight;
+      isDark ? ColorName.borderActiveDark : ColorName.borderActiveLight;
+
+  Color get red => isDark ? ColorName.redDark : ColorName.redLight;
 }
