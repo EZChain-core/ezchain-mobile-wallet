@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'dart:typed_data';
 import 'dart:convert';
 
-import 'package:wallet/roi/common/keychain/roi_key_chain.dart';
+import 'package:wallet/roi/roi.dart';
 import 'package:wallet/roi/utils/hdnode.dart';
 import 'package:wallet/roi/utils/mnemonic.dart';
 
@@ -30,32 +30,33 @@ const addrs = [
   "X-avax10agjetvj0a0vf6wtlh7s6ctr8ha8ch8km8z567"
 ];
 
-final keyChain = ROIKeyChain(chainId: "X", hrp: "avax");
+final roi = ROI.create(host: "localhost", port: 9650, protocol: "http");
+final keyChain = roi.avmApi.keyChain;
 
 void main() {
-  test("derive ", () {
+  test("derive", () {
     final hdNode = HDNode(from: seed);
     const path = "m/9000'/2614666'/4849181'/4660'/2'/1/3";
     final child = hdNode.derive(path);
     expect(child.privateExtendedKey, childXPriv);
   });
 
-  test("fromMasterSeedBuffer ", () {
+  test("fromMasterSeedBuffer", () {
     final hdNode = HDNode(from: Uint8List.fromList(utf8.encode(seed)));
     expect(hdNode.privateExtendedKey, xPriv);
   });
 
-  test("fromMasterSeedString ", () {
+  test("fromMasterSeedString", () {
     final hdNode = HDNode(from: seed);
     expect(hdNode.privateExtendedKey, xPriv);
   });
 
-  test("fromXPriv ", () {
+  test("fromXPriv", () {
     final hdNode = HDNode(from: xPriv);
     expect(hdNode.privateExtendedKey, xPriv);
   });
 
-  test("fromXPub ", () {
+  test("fromXPub", () {
     final hdNode = HDNode(from: xPub);
     expect(hdNode.publicExtendedKey, xPub);
   });
