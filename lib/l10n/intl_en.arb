@@ -9,5 +9,7 @@
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",
   "accessWalletOptionsDontHaveWallet": "Don’t have a wallet?",
   "accessPrivateKeyYourPrivateKey": "Your Private Key",
-  "accessPrivateKeyYourPrivateKeyHint": "Type your private key"
+  "accessPrivateKeyYourPrivateKeyHint": "Type your private key",
+  "accessMnemonicKeyTitle": "Mnemonic Key Phrase",
+  "accessMnemonicKeyDes": "Hit ‘SPACE’ after every successful word entry."
 }

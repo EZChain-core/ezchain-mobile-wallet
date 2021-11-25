@@ -159,6 +159,26 @@ class Strings {
       args: [],
     );
   }
+
+  /// `Mnemonic Key Phrase`
+  String get accessMnemonicKeyTitle {
+    return Intl.message(
+      'Mnemonic Key Phrase',
+      name: 'accessMnemonicKeyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hit ‘SPACE’ after every successful word entry.`
+  String get accessMnemonicKeyDes {
+    return Intl.message(
+      'Hit ‘SPACE’ after every successful word entry.',
+      name: 'accessMnemonicKeyDes',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Strings> {
