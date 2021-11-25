@@ -24,6 +24,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "accessMnemonicKeyDes": MessageLookupByLibrary.simpleMessage(
+            "Hit ‘SPACE’ after every successful word entry."),
+        "accessMnemonicKeyTitle":
+            MessageLookupByLibrary.simpleMessage("Mnemonic Key Phrase"),
         "accessPrivateKeyYourPrivateKey":
             MessageLookupByLibrary.simpleMessage("Your Private Key"),
         "accessPrivateKeyYourPrivateKeyHint":

@@ -90,7 +90,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                             ),
                           ),
                           onPressed: () {
-                            context.router.push(const AccessPrivateKeyRoute());
+                            context.router.push(const AccessMnemonicKeyRoute());
                           },
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -131,7 +131,9 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: ROISpecialNoneButton(
                             text: Strings.current.sharedCancel,
-                            onPressed: () {},
+                            onPressed: () {
+                              context.router.navigateBack();
+                            },
                           ),
                         ),
                       ),
