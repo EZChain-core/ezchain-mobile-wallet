@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:wallet/features/auth/access/mnemonic/access_mnemonic_key.dart';
 import 'package:wallet/features/auth/access/options/access_wallet_options.dart';
 import 'package:wallet/features/auth/access/private_key/access_private_key.dart';
 import 'package:wallet/features/auth/create/create_wallet.dart';
@@ -14,6 +15,7 @@ import 'package:wallet/features/splash/screen/splash.dart';
     AutoRoute(page: AccessWalletOptionsScreen),
     AutoRoute(page: CreateWalletScreen),
     AutoRoute(page: AccessPrivateKeyScreen),
+    AutoRoute(page: AccessMnemonicKeyScreen),
     dashboardRoutes,
   ],
 )
