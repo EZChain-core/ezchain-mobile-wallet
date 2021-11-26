@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:wallet/roi/utils/mnemonic.dart';
@@ -9,7 +8,7 @@ const m =
     "exhaust depend submit tornado unaware sleep kit lab edge artwork join faith fold sister silent bus prevent river wonder undo day hole tail donkey";
 
 void main() {
-  test("Mnemonic", () {
+  test("mnemonic", () {
     String randomMnemonic = mnemonic.generateMnemonic();
     expect(randomMnemonic.split(" ").length, 24);
   });
