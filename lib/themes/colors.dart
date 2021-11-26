@@ -27,6 +27,24 @@ extension BaseColor on ThemeMode {
   Color get primary10 =>
       isDark ? ColorName.primary10Dark : ColorName.primary10Light;
 
+  Color get secondary =>
+      isDark ? ColorName.secondaryDark : ColorName.secondaryLight;
+
+  Color get secondary80 =>
+      isDark ? ColorName.secondary80Dark : ColorName.secondary80Light;
+
+  Color get secondary60 =>
+      isDark ? ColorName.secondary60Dark : ColorName.secondary60Light;
+
+  Color get secondary40 =>
+      isDark ? ColorName.secondary40Dark : ColorName.secondary40Light;
+
+  Color get secondary20 =>
+      isDark ? ColorName.secondary20Dark : ColorName.secondary20Light;
+
+  Color get secondary10 =>
+      isDark ? ColorName.secondary10Dark : ColorName.secondary10Light;
+
   Color get text => isDark ? ColorName.textDark : ColorName.textLight;
 
   Color get text90 => isDark ? ColorName.text90Dark : ColorName.text90Light;

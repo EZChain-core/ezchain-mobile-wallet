@@ -100,6 +100,16 @@ class Strings {
     );
   }
 
+  /// `Confirm`
+  String get sharedConfirm {
+    return Intl.message(
+      'Confirm',
+      name: 'sharedConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -125,6 +135,16 @@ class Strings {
     return Intl.message(
       'Mnemonic Key Phrase',
       name: 'accessWalletOptionsMnemonic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Keystore File`
+  String get accessWalletOptionsKeystoreFile {
+    return Intl.message(
+      'Keystore File',
+      name: 'accessWalletOptionsKeystoreFile',
       desc: '',
       args: [],
     );
@@ -160,6 +180,16 @@ class Strings {
     );
   }
 
+  /// `Invalid Private Key`
+  String get accessPrivateKeyWarning {
+    return Intl.message(
+      'Invalid Private Key',
+      name: 'accessPrivateKeyWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Mnemonic Key Phrase`
   String get accessMnemonicKeyTitle {
     return Intl.message(
@@ -175,6 +205,56 @@ class Strings {
     return Intl.message(
       'Hit ‘SPACE’ after every successful word entry.',
       name: 'accessMnemonicKeyDes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid mnemonic phrase. Make sure your mnemonic is all lowercase.`
+  String get accessMnemonicKeyWarning {
+    return Intl.message(
+      'Invalid mnemonic phrase. Make sure your mnemonic is all lowercase.',
+      name: 'accessMnemonicKeyWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passphrase to restore`
+  String get createWalletPassphraseToRestore {
+    return Intl.message(
+      'Passphrase to restore',
+      name: 'createWalletPassphraseToRestore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yes, I kept them  safe`
+  String get createWalletKeptKey {
+    return Intl.message(
+      'Yes, I kept them  safe',
+      name: 'createWalletKeptKey',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Store this key phrase in a secure location. Anyone with this key phrase can access your ROIChain wallet. there is no way to recover lost key phrase`
+  String get createWalletDes {
+    return Intl.message(
+      'Store this key phrase in a secure location. Anyone with this key phrase can access your ROIChain wallet. there is no way to recover lost key phrase',
+      name: 'createWalletDes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm your passphrase backup`
+  String get createWalletConfirmDes {
+    return Intl.message(
+      'Confirm your passphrase backup',
+      name: 'createWalletConfirmDes',
       desc: '',
       args: [],
     );

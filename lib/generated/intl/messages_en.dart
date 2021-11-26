@@ -28,23 +28,38 @@ class MessageLookup extends MessageLookupByLibrary {
             "Hit ‘SPACE’ after every successful word entry."),
         "accessMnemonicKeyTitle":
             MessageLookupByLibrary.simpleMessage("Mnemonic Key Phrase"),
+        "accessMnemonicKeyWarning": MessageLookupByLibrary.simpleMessage(
+            "Invalid mnemonic phrase. Make sure your mnemonic is all lowercase."),
+        "accessPrivateKeyWarning":
+            MessageLookupByLibrary.simpleMessage("Invalid Private Key"),
         "accessPrivateKeyYourPrivateKey":
             MessageLookupByLibrary.simpleMessage("Your Private Key"),
         "accessPrivateKeyYourPrivateKeyHint":
             MessageLookupByLibrary.simpleMessage("Type your private key"),
         "accessWalletOptionsDontHaveWallet":
             MessageLookupByLibrary.simpleMessage("Don’t have a wallet?"),
+        "accessWalletOptionsKeystoreFile":
+            MessageLookupByLibrary.simpleMessage("Keystore File"),
         "accessWalletOptionsMnemonic":
             MessageLookupByLibrary.simpleMessage("Mnemonic Key Phrase"),
         "accessWalletOptionsTitle": MessageLookupByLibrary.simpleMessage(
             "How do you want to access your wallet?"),
         "appName": MessageLookupByLibrary.simpleMessage("ROI Wallet"),
+        "createWalletConfirmDes": MessageLookupByLibrary.simpleMessage(
+            "Confirm your passphrase backup"),
+        "createWalletDes": MessageLookupByLibrary.simpleMessage(
+            "Store this key phrase in a secure location. Anyone with this key phrase can access your ROIChain wallet. there is no way to recover lost key phrase"),
+        "createWalletKeptKey":
+            MessageLookupByLibrary.simpleMessage("Yes, I kept them  safe"),
+        "createWalletPassphraseToRestore":
+            MessageLookupByLibrary.simpleMessage("Passphrase to restore"),
         "onBoardCreateWallet":
             MessageLookupByLibrary.simpleMessage("Create Wallet"),
         "pageHomeWelcome": m0,
         "sharedAccessWallet":
             MessageLookupByLibrary.simpleMessage("Access Wallet"),
         "sharedCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "sharedConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "sharedPrivateKey": MessageLookupByLibrary.simpleMessage("Private Key")
       };
 }
