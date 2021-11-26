@@ -26,6 +26,10 @@ class $AssetsIconsGen {
   SvgGenImage get icDocOutlineBlack =>
       const SvgGenImage('assets/icons/ic_doc_outline_black.svg');
 
+  /// File path: assets/icons/ic_folder_ouline_black.svg
+  SvgGenImage get icFolderOulineBlack =>
+      const SvgGenImage('assets/icons/ic_folder_ouline_black.svg');
+
   /// File path: assets/icons/ic_key_outline_black.svg
   SvgGenImage get icKeyOutlineBlack =>
       const SvgGenImage('assets/icons/ic_key_outline_black.svg');
@@ -38,9 +42,17 @@ class $AssetsImagesGen {
   AssetGenImage get imgBgOnBoard =>
       const AssetGenImage('assets/images/img_bg_on_board.png');
 
+  /// File path: assets/images/img_private_key_wraning.png
+  AssetGenImage get imgPrivateKeyWraning =>
+      const AssetGenImage('assets/images/img_private_key_wraning.png');
+
   /// File path: assets/images/img_splash.png
   AssetGenImage get imgSplash =>
       const AssetGenImage('assets/images/img_splash.png');
+
+  /// File path: assets/images/img_warning.svg
+  SvgGenImage get imgWarning =>
+      const SvgGenImage('assets/images/img_warning.svg');
 }
 
 class Assets {

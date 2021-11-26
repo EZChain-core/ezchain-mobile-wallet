@@ -33,15 +33,16 @@ class ROIButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
-        builder: (context, provider, child) => SizedBox(
-              height: height,
-              child: TextButton(
-                child: Text(text, style: textStyle),
-                style: buttonStyle,
-                onPressed: onPressed,
-                onLongPress: onLongPress,
-              ),
-            ));
+      builder: (context, provider, child) => SizedBox(
+        height: height,
+        child: TextButton(
+          child: Text(text, style: textStyle),
+          style: buttonStyle,
+          onPressed: onPressed,
+          onLongPress: onLongPress,
+        ),
+      ),
+    );
   }
 }
 

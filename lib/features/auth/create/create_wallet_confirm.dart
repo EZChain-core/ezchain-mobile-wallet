@@ -10,8 +10,8 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-class CreateWalletScreen extends StatelessWidget {
-  const CreateWalletScreen({Key? key}) : super(key: key);
+class CreateWalletConfirmScreen extends StatelessWidget {
+  const CreateWalletConfirmScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class CreateWalletScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
                 child: Text(
-                  Strings.current.createWalletPassphraseToRestore,
+                  Strings.current.sharedConfirm,
                   style: ROIHeadlineMediumTextStyle(
                     color: provider.themeMode.text,
                   ),
@@ -33,7 +33,7 @@ class CreateWalletScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
                 child: Text(
-                  Strings.current.createWalletDes,
+                  Strings.current.createWalletConfirmDes,
                   style: ROIBodyLargeTextStyle(
                     color: provider.themeMode.text70,
                   ),
@@ -47,7 +47,7 @@ class CreateWalletScreen extends StatelessWidget {
                 ),
                 padding: const EdgeInsets.all(16),
                 margin: const EdgeInsets.only(
-                    left: 16, right: 16, top: 32, bottom: 64),
+                    left: 16, right: 16, top: 72, bottom: 64),
                 child: Wrap(
                     spacing: 10,
                     runSpacing: 10,
@@ -55,11 +55,11 @@ class CreateWalletScreen extends StatelessWidget {
               ),
               Center(
                 child: SizedBox(
-                  width: 211,
+                  width: 169,
                   child: ROIMediumPrimaryButton(
-                    text: Strings.current.createWalletKeptKey,
+                    text: Strings.current.sharedConfirm,
                     onPressed: () {
-                      context.router.push(const CreateWalletConfirmRoute());
+                      context.router.push(const DashboardRoute());
                     },
                   ),
                 ),

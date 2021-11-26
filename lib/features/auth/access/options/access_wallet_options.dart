@@ -27,119 +27,144 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 16, right: 16, top: 20),
-                    child: Text(
-                      Strings.current.accessWalletOptionsTitle,
-                      style: ROIHeadlineMediumTextStyle(
-                        color: provider.themeMode.text,
-                      ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
+                  child: Text(
+                    Strings.current.accessWalletOptionsTitle,
+                    style: ROIHeadlineMediumTextStyle(
+                      color: provider.themeMode.text,
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: 64,
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: provider.themeMode.bg,
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                            ),
-                          ),
-                          onPressed: () {
-                            context.router.push(const AccessPrivateKeyRoute());
-                          },
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  Strings.current.sharedPrivateKey,
-                                  style: ROIBodyLargeTextStyle(
-                                      color: provider.themeMode.text),
-                                ),
-                              ),
-                              Assets.icons.icKeyOutlineBlack
-                                  .svg(width: 24, height: 24),
-                            ],
+                const Spacer(flex: 3),
+                Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 64,
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: provider.themeMode.bg,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Container(
-                        width: double.infinity,
-                        height: 64,
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: provider.themeMode.bg,
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                            ),
-                          ),
-                          onPressed: () {
-                            context.router.push(const AccessMnemonicKeyRoute());
-                          },
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  Strings.current.accessWalletOptionsMnemonic,
-                                  style: ROIBodyLargeTextStyle(
-                                      color: provider.themeMode.text),
-                                ),
+                        onPressed: () {
+                          context.router.push(const AccessPrivateKeyRoute());
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                Strings.current.sharedPrivateKey,
+                                style: ROIBodyLargeTextStyle(
+                                    color: provider.themeMode.text),
                               ),
-                              Assets.icons.icDocOutlineBlack
-                                  .svg(width: 24, height: 24),
-                            ],
-                          ),
+                            ),
+                            Assets.icons.icKeyOutlineBlack
+                                .svg(width: 24, height: 24),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      width: double.infinity,
+                      height: 64,
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: provider.themeMode.bg,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                        ),
+                        onPressed: () {
+                          context.router.push(const AccessMnemonicKeyRoute());
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                Strings.current.accessWalletOptionsMnemonic,
+                                style: ROIBodyLargeTextStyle(
+                                    color: provider.themeMode.text),
+                              ),
+                            ),
+                            Assets.icons.icDocOutlineBlack
+                                .svg(width: 24, height: 24),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      width: double.infinity,
+                      height: 64,
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: provider.themeMode.bg,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                        ),
+                        onPressed: () {
+                          context.router.push(const AccessMnemonicKeyRoute());
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                Strings.current.accessWalletOptionsKeystoreFile,
+                                style: ROIBodyLargeTextStyle(
+                                    color: provider.themeMode.text),
+                              ),
+                            ),
+                            Assets.icons.icFolderOulineBlack
+                                .svg(width: 24, height: 24),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: ROISpecialNoneButton(
-                            text: Strings
-                                .current.accessWalletOptionsDontHaveWallet,
-                            onPressed: () {},
-                          ),
+                const Spacer(flex: 1),
+                Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: ROISpecialNoneButton(
+                          text:
+                              Strings.current.accessWalletOptionsDontHaveWallet,
+                          onPressed: () {},
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: ROISpecialNoneButton(
-                            text: Strings.current.sharedCancel,
-                            onPressed: () {
-                              context.router.navigateBack();
-                            },
-                          ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: ROISpecialNoneButton(
+                          text: Strings.current.sharedCancel,
+                          onPressed: () {
+                            context.router.navigateBack();
+                          },
                         ),
                       ),
-                    ],
-                  ),
-                )
+                    ),
+                  ],
+                ),
+                const Spacer(flex: 2),
               ],
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
@@ -9,16 +10,43 @@ import 'package:wallet/themes/inputs.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-class AccessPrivateKeyScreen extends StatefulWidget {
+class AccessPrivateKeyScreen extends StatelessWidget {
   const AccessPrivateKeyScreen({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _AccessPrivateKeyScreenState();
-}
-
-class _AccessPrivateKeyScreenState extends State<AccessPrivateKeyScreen> {
-  @override
   Widget build(BuildContext context) {
+    Future<void> _showWarningDialog() async {
+      return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return Consumer<WalletThemeProvider>(
+            builder: (context, provider, child) => Dialog(
+              insetPadding: const EdgeInsets.all(16),
+              child: SizedBox(
+                width: double.infinity,
+                height: 318,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Assets.images.imgPrivateKeyWraning
+                        .image(width: 130, height: 130),
+                    const SizedBox(height: 24),
+                    Text(
+                      Strings.current.accessPrivateKeyWarning,
+                      textAlign: TextAlign.center,
+                      style: ROIHeadlineSmallTextStyle(
+                          color: provider.themeMode.text70),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
+
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -29,63 +57,64 @@ class _AccessPrivateKeyScreenState extends State<AccessPrivateKeyScreen> {
                 flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
-                  child: Text(
-                    Strings.current.sharedPrivateKey,
-                    style: ROIHeadlineMediumTextStyle(
-                      color: provider.themeMode.text,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: ROITextField(
-                        hint:
-                            Strings.current.accessPrivateKeyYourPrivateKeyHint,
-                        label: Strings.current.accessPrivateKeyYourPrivateKey,
+                      child: Text(
+                        Strings.current.sharedPrivateKey,
+                        style: ROIHeadlineMediumTextStyle(
+                          color: provider.themeMode.text,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    Stack(
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Column(
                       children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            width: 164,
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: ROIMediumPrimaryButton(
-                              text: Strings.current.sharedAccessWallet,
-                              onPressed: () {
-                                context.router.push(const DashboardRoute());
-                              },
-                            ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: ROITextField(
+                            hint:
+                            Strings.current.accessPrivateKeyYourPrivateKeyHint,
+                            label: Strings.current.accessPrivateKeyYourPrivateKey,
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: ROISpecialNoneButton(
-                              text: Strings.current.sharedCancel,
-                              onPressed: () {
-                                context.router.navigateBack();
+                        const SizedBox(height: 16),
+                        Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                width: 164,
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: ROIMediumPrimaryButton(
+                                  text: Strings.current.sharedAccessWallet,
+                                  onPressed: () {
+                                    context.router.push(const DashboardRoute());
+                                    // _showWarningDialog();
                               },
+                                ),
+                              ),
                             ),
-                          ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: ROISpecialNoneButton(
+                                  text: Strings.current.sharedCancel,
+                                  onPressed: () {
+                                    context.router.pop();
+                              },
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
     );
   }
 }
