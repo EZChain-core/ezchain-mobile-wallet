@@ -59,16 +59,28 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                  width: double.infinity,
-                  height: 384,
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: provider.themeMode.bg),
-                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                height: 300,
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  style: ROIBodySmallTextStyle(color: provider.themeMode.text),
+                  cursorColor: provider.themeMode.text,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    // contentPadding: EdgeInsets.all(0),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide(color: provider.themeMode.border),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      borderSide:
+                          BorderSide(color: provider.themeMode.borderActive),
+                    ),
                   ),
-                  padding: const EdgeInsets.all(16),
-                  margin: const EdgeInsets.only(
-                      left: 16, right: 16, top: 44, bottom: 64),
-                  child: TextField()),
+                  keyboardType: TextInputType.multiline,
+                  textInputAction: TextInputAction.next,
+                ),
+              ),
               Stack(
                 children: [
                   Align(
