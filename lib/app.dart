@@ -8,12 +8,10 @@ import 'common/router.gr.dart';
 import 'generated/l10n.dart';
 
 class WalletApp extends StatelessWidget {
-  const WalletApp({Key? key}) : super(key: key);
+  final _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
-    final _appRouter = AppRouter();
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => WalletThemeProvider()),
