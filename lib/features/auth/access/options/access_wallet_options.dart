@@ -157,7 +157,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                         child: ROISpecialNoneButton(
                           text: Strings.current.sharedCancel,
                           onPressed: () {
-                            context.router.navigateBack();
+                            context.router.pop();
                           },
                         ),
                       ),

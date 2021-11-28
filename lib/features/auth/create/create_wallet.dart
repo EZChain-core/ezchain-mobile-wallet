@@ -74,6 +74,6 @@ class CreateWalletScreen extends StatelessWidget {
   List<ROIMnemonicText> _buildRandomMnemonicList() => Mnemonic.instance
       .generateMnemonic()
       .split(" ")
-      .mapIndexed((index, text) => ROIMnemonicText(text: '$index. $text'))
+      .mapIndexed((index, text) => ROIMnemonicText(text: '${index + 1}. $text'))
       .toList();
 }
