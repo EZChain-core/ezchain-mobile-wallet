@@ -19,6 +19,8 @@ abstract class ROI {
 
   AvmApi get avmApi;
 
+  String getHRP();
+
   factory ROI.create({
     required String host,
     required int port,
@@ -164,5 +166,10 @@ class _ROICore extends ROINetwork implements ROI {
     _infoApi = InfoApi.create(roiNetwork: this);
     _indexApi = IndexApi.create(roiNetwork: this);
     _avmApi = AvmApi.create(roiNetwork: this, blockChainId: xChainId);
+  }
+
+  @override
+  String getHRP() {
+    return hrp;
   }
 }

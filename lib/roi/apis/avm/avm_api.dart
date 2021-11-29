@@ -29,6 +29,8 @@ import 'package:wallet/roi/utils/constants.dart';
 abstract class AvmApi implements ROIApi {
   ROIKeyChain get keyChain;
 
+  ROIKeyChain newKeyChain();
+
   Future<RpcResponse<CreateAddressResponse>> createAddress(
       RpcRequest<CreateAddressRequest> request);
 
@@ -133,6 +135,12 @@ class _AvmApiImpl implements AvmApi {
     avmRestClient = AvmRestClient(dio, baseUrl: dio.options.baseUrl + endPoint);
     avmWalletRestClient = AvmWalletRestClient(dio,
         baseUrl: dio.options.baseUrl + "/ext/bc/X/wallet");
+  }
+
+  @override
+  ROIKeyChain newKeyChain() {
+    // TODO: implement newKeyChain
+    throw UnimplementedError();
   }
 
   @override
