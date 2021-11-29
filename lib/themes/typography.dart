@@ -13,15 +13,16 @@ class ROIMnemonicText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Container(
-          decoration: BoxDecoration(
-            border: Border.all(width: 1, color: provider.themeMode.secondary),
-            borderRadius: const BorderRadius.all(Radius.circular(16)),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Text(
-            text,
-            style: ROIBodySmallTextStyle(color: provider.themeMode.secondary),
-          )),
+        decoration: BoxDecoration(
+          border: Border.all(width: 1, color: provider.themeMode.secondary),
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Text(
+          text,
+          style: ROIBodySmallTextStyle(color: provider.themeMode.secondary),
+        ),
+      ),
     );
   }
 }
@@ -154,4 +155,15 @@ class ROIButtonTextStyle extends ROITextStyle {
             fontSize: 14,
             height: 24 / 14,
             fontWeight: FontWeight.w500);
+}
+
+class ROISemiBoldSmallTextStyle extends ROITextStyle {
+  final Color color;
+
+  const ROISemiBoldSmallTextStyle({required this.color})
+      : super(
+            color: color,
+            fontSize: 12,
+            height: 16 / 12,
+            fontWeight: FontWeight.w600);
 }

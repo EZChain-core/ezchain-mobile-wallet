@@ -181,4 +181,10 @@ class ColorName {
 
   /// Color: #0C1527
   static const Color textLight = Color(0xFF0C1527);
+
+  /// Color: #FFFFFF
+  static const Color whiteDark = Color(0xFFFFFFFF);
+
+  /// Color: #FFFFFF
+  static const Color whiteLight = Color(0xFFFFFFFF);
 }
