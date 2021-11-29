@@ -18,7 +18,7 @@ class WalletApp extends StatelessWidget {
       ],
       child: Consumer<WalletThemeProvider>(
         builder: (context, provider, child) => MaterialApp.router(
-          title: Strings.current.appName,
+          title: "Strings.current.appName",
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
           themeMode: provider.themeMode,

@@ -16,8 +16,9 @@ import 'package:wallet/features/auth/access/options/access_wallet_options.dart'
     as _i3;
 import 'package:wallet/features/auth/access/private_key/access_private_key.dart'
     as _i6;
+import 'package:wallet/features/auth/create/confirm/create_wallet_confirm.dart'
+    as _i5;
 import 'package:wallet/features/auth/create/create_wallet.dart' as _i4;
-import 'package:wallet/features/auth/create/create_wallet_confirm.dart' as _i5;
 import 'package:wallet/features/cross/cross.dart' as _i10;
 import 'package:wallet/features/dashboard/dashboard.dart' as _i8;
 import 'package:wallet/features/onboard/on_board.dart' as _i2;

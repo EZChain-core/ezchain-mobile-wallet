@@ -102,38 +102,6 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Container(
-                      width: double.infinity,
-                      height: 64,
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: provider.themeMode.bg,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                          ),
-                        ),
-                        onPressed: () {
-                          context.router.push(const AccessMnemonicKeyRoute());
-                        },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                Strings.current.accessWalletOptionsKeystoreFile,
-                                style: ROIBodyLargeTextStyle(
-                                    color: provider.themeMode.text),
-                              ),
-                            ),
-                            Assets.icons.icFolderOulineBlack
-                                .svg(width: 24, height: 24),
-                          ],
-                        ),
-                      ),
-                    ),
                   ],
                 ),
                 const Spacer(flex: 1),
