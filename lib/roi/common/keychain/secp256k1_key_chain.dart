@@ -6,6 +6,7 @@ import 'package:hash/hash.dart';
 import 'package:wallet/roi/common/keychain/base_key_chain.dart';
 import 'package:wallet/roi/crypto/ecdsa_signer.dart';
 import 'package:wallet/roi/crypto/secp256k1.dart' as secp256k1;
+import 'package:wallet/roi/utils/bindtools.dart';
 import 'package:wallet/roi/utils/constants.dart';
 
 abstract class SECP256k1KeyPair extends StandardKeyPair {
@@ -43,27 +44,23 @@ abstract class SECP256k1KeyPair extends StandardKeyPair {
 
   @override
   Uint8List getAddress() {
-    var sha256 = SHA256();
-    var sha256Digest = sha256.update(publicKeyBytes).digest();
-    return RIPEMD160().update(sha256Digest).digest();
+    return addressFromPublicKey(publicKeyBytes);
   }
 
   @override
   String getPrivateKeyString() {
-    return "$privateKeyPrefix${Base58Encode(_addChecksum(privateKeyBytes))}";
+    return "$privateKeyPrefix${cb58Encode(privateKeyBytes)}";
   }
 
   @override
   String getPublicKeyString() {
-    return Base58Encode(_addChecksum(publicKeyBytes));
+    return cb58Encode(publicKeyBytes);
   }
 
-  Uint8List _addChecksum(Uint8List? bytes) {
-    if (bytes == null) return Uint8List.fromList([]);
+  Uint8List addressFromPublicKey(Uint8List publicKey) {
     var sha256 = SHA256();
-    var hashSlice = sha256.update(bytes).digest();
-    hashSlice = hashSlice.sublist(28, hashSlice.length);
-    return Uint8List.fromList([...bytes, ...hashSlice]);
+    var sha256Digest = sha256.update(publicKey).digest();
+    return RIPEMD160().update(sha256Digest).digest();
   }
 }
 
