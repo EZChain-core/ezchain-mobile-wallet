@@ -38,13 +38,13 @@ class ROITextStyle extends TextStyle {
 
   final FontWeight fontWeight;
 
-  const ROITextStyle(
-      {required this.color,
-      required this.height,
-      required this.fontSize,
-      required this.fontWeight,
-      this.fontFamily = FontFamily.beVietnamPro})
-      : super(fontFamily: fontFamily);
+  const ROITextStyle({
+    required this.color,
+    required this.height,
+    required this.fontSize,
+    required this.fontWeight,
+    this.fontFamily = FontFamily.beVietnamPro,
+  }) : super(fontFamily: fontFamily);
 }
 
 class ROIHeadlineMediumTextStyle extends ROITextStyle {

@@ -259,6 +259,46 @@ class Strings {
       args: [],
     );
   }
+
+  /// `PIN code`
+  String get pinCodeTitle {
+    return Intl.message(
+      'PIN code',
+      name: 'pinCodeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set up your PIN code to unlock the wallet, confirm transactions and other activities tha require your permission`
+  String get pinCodeDes {
+    return Intl.message(
+      'Set up your PIN code to unlock the wallet, confirm transactions and other activities tha require your permission',
+      name: 'pinCodeDes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `PIN Code doesn’t match! Try Again`
+  String get pinCodeWrong {
+    return Intl.message(
+      'PIN Code doesn’t match! Try Again',
+      name: 'pinCodeWrong',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` or Set new PIN code`
+  String get pinCodeSetNewPin {
+    return Intl.message(
+      ' or Set new PIN code',
+      name: 'pinCodeSetNewPin',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Strings> {
