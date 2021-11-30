@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/utils/mnemonic.dart';
+import 'package:wallet/roi/sdk/utils/mnemonic.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';

@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'dart:typed_data';
 import 'dart:convert';
 
-import 'package:wallet/roi/roi.dart';
-import 'package:wallet/roi/utils/hdnode.dart';
-import 'package:wallet/roi/utils/mnemonic.dart';
+import 'package:wallet/roi/sdk/roi.dart';
+import 'package:wallet/roi/sdk/utils/hdnode.dart';
+import 'package:wallet/roi/sdk/utils/mnemonic.dart';
 
 const xPriv =
     "xprv9s21ZrQH143K4RH1nRkHwuVz3qGREBLobwUoUBowLDucQXm4do8jvz12agvjHrAwjJXtq9BZ87WBPUPScDBnjKvBKVQ5xbS7GQwJKW7vXLD";
