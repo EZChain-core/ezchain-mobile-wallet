@@ -4,6 +4,8 @@ import 'package:wallet/features/auth/access/options/access_wallet_options.dart';
 import 'package:wallet/features/auth/access/private_key/access_private_key.dart';
 import 'package:wallet/features/auth/create/create_wallet.dart';
 import 'package:wallet/features/auth/create/confirm/create_wallet_confirm.dart';
+import 'package:wallet/features/auth/pin/pin_code_confirm.dart';
+import 'package:wallet/features/auth/pin/pin_code_setup.dart';
 import 'package:wallet/features/dashboard/routes.dart';
 import 'package:wallet/features/onboard/on_board.dart';
 import 'package:wallet/features/splash/screen/splash.dart';
@@ -18,6 +20,8 @@ import 'package:wallet/features/splash/screen/splash.dart';
     AutoRoute(page: CreateWalletConfirmScreen),
     AutoRoute(page: AccessPrivateKeyScreen),
     AutoRoute(page: AccessMnemonicKeyScreen),
+    AutoRoute(page: PinCodeSetupScreen),
+    AutoRoute(page: PinCodeConfirmScreen),
     dashboardRoutes,
   ],
 )

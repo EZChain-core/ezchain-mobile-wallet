@@ -63,7 +63,7 @@ class CreateWalletConfirmScreen extends StatelessWidget {
 
     void _onClickConfirm() {
       if (phrase.equals(resultPhrase)) {
-        context.router.push(const DashboardRoute());
+        context.router.push(const PinCodeSetupRoute());
       } else {
         _showWarningDialog();
       }
@@ -79,41 +79,41 @@ class CreateWalletConfirmScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
                 child: Text(
                   Strings.current.sharedConfirm,
-                      style: ROIHeadlineMediumTextStyle(
-                        color: provider.themeMode.text,
-                      ),
-                    ),
+                  style: ROIHeadlineMediumTextStyle(
+                    color: provider.themeMode.text,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
-                    child: Text(
-                      Strings.current.createWalletConfirmDes,
-                      style: ROIBodyLargeTextStyle(
-                        color: provider.themeMode.text70,
-                      ),
-                    ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+                child: Text(
+                  Strings.current.createWalletConfirmDes,
+                  style: ROIBodyLargeTextStyle(
+                    color: provider.themeMode.text70,
                   ),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: provider.themeMode.bg,
-                      borderRadius: const BorderRadius.all(Radius.circular(16)),
-                    ),
-                    padding: const EdgeInsets.all(16),
-                    margin: const EdgeInsets.only(
-                        left: 16, right: 16, top: 72, bottom: 64),
-                    child: Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: _buildRandomMnemonicList()),
-                  ),
-                  Center(
-                    child: SizedBox(
-                      width: 169,
-                      child: ROIMediumPrimaryButton(
-                        text: Strings.current.sharedConfirm,
-                        onPressed: () {
-                          _onClickConfirm();
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: provider.themeMode.bg,
+                  borderRadius: const BorderRadius.all(Radius.circular(16)),
+                ),
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(
+                    left: 16, right: 16, top: 72, bottom: 64),
+                child: Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: _buildRandomMnemonicList()),
+              ),
+              Center(
+                child: SizedBox(
+                  width: 169,
+                  child: ROIMediumPrimaryButton(
+                    text: Strings.current.sharedConfirm,
+                    onPressed: () {
+                      _onClickConfirm();
                     },
                   ),
                 ),

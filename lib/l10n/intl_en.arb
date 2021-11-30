@@ -19,5 +19,9 @@
   "createWalletPassphraseToRestore": "Passphrase to restore",
   "createWalletKeptKey": "Yes, I kept them  safe",
   "createWalletDes": "Store this key phrase in a secure location. Anyone with this key phrase can access your ROIChain wallet. there is no way to recover lost key phrase",
-  "createWalletConfirmDes": "Confirm your passphrase backup"
+  "createWalletConfirmDes": "Confirm your passphrase backup",
+  "pinCodeTitle": "PIN code",
+  "pinCodeDes": "Set up your PIN code to unlock the wallet, confirm transactions and other activities tha require your permission",
+  "pinCodeWrong": "PIN Code doesn’t match! Try Again",
+  "pinCodeSetNewPin": " or Set new PIN code"
 }

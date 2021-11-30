@@ -60,7 +60,7 @@ class ROIMediumPrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
         builder: (context, provider, child) => SizedBox(
-          height: roiButtonMediumHeight,
+              height: roiButtonMediumHeight,
               child: TextButton(
                 child: Text(text,
                     style:

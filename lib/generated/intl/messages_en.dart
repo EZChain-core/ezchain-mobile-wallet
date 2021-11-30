@@ -8,6 +8,7 @@
 // ignore_for_file:prefer_single_quotes,comment_references, directives_ordering
 // ignore_for_file:annotate_overrides,prefer_generic_function_type_aliases
 // ignore_for_file:unused_import, file_names, avoid_escaping_inner_quotes
+// ignore_for_file:unnecessary_string_interpolations, unnecessary_string_escapes
 
 import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
@@ -55,6 +56,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "onBoardCreateWallet":
             MessageLookupByLibrary.simpleMessage("Create Wallet"),
         "pageHomeWelcome": m0,
+        "pinCodeDes": MessageLookupByLibrary.simpleMessage(
+            "Set up your PIN code to unlock the wallet, confirm transactions and other activities tha require your permission"),
+        "pinCodeSetNewPin":
+            MessageLookupByLibrary.simpleMessage(" or Set new PIN code"),
+        "pinCodeTitle": MessageLookupByLibrary.simpleMessage("PIN code"),
+        "pinCodeWrong": MessageLookupByLibrary.simpleMessage(
+            "PIN Code doesn’t match! Try Again"),
         "sharedAccessWallet":
             MessageLookupByLibrary.simpleMessage("Access Wallet"),
         "sharedCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
