@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:hex/hex.dart';
+import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 
-import 'package:pointycastle/export.dart';
 import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 import 'package:wallet/roi/sdk/crypto/secp256k1.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
@@ -9,6 +9,7 @@ import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:web3dart/credentials.dart';
 import 'package:web3dart/web3dart.dart';
+import 'package:sha3/sha3.dart';
 
 class EvmWallet {
   final Uint8List privateKey;
@@ -51,9 +52,14 @@ class EvmWallet {
     return _balance;
   }
 
-  Future<void> signEvm(dynamic tx) async {}
+  Future<Uint8List> signEvm(Transaction tx) async {
+    final credentials = EthPrivateKey.fromHex(getPrivateKeyHex());
+    return web3.signTransaction(credentials, tx);
+  }
 
-  Future<void> signC(dynamic tx) async {}
+  Future<EvmTx> signC(EvmUnsignedTx tx) async {
+    return tx.sign(getKeyChain());
+  }
 
   String _getPrivateKeyBech() {
     return "$privateKeyPrefix${cb58Encode(privateKey)}";
@@ -75,8 +81,9 @@ class EvmWallet {
 
   Uint8List _publicKeyToAddress(Uint8List publicKey) {
     assert(publicKey.length == 64);
-    const shaBytes = 256 ~/ 8;
-    final hashed = SHA3Digest(shaBytes * 8).process(publicKey);
-    return Uint8List.view(hashed.buffer, shaBytes - 20);
+    final hashed = SHA3(256, KECCAK_PADDING, 256).update(publicKey).digest();
+    final length = hashed.length;
+    return Uint8List.sublistView(
+        Uint8List.fromList(hashed), length - 20, length);
   }
 }

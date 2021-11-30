@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:fast_base58/fast_base58.dart';
 import 'package:hash/hash.dart';
 import 'package:wallet/roi/sdk/common/keychain/base_key_chain.dart';
 import 'package:wallet/roi/sdk/crypto/ecdsa_signer.dart';
