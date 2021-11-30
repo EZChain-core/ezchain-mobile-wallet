@@ -1,5 +1,8 @@
 import 'dart:typed_data';
 import 'package:hex/hex.dart';
+import 'package:wallet/roi/sdk/apis/avm/tx.dart';
+import 'package:wallet/roi/sdk/apis/evm/tx.dart';
+import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
 import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
@@ -7,6 +10,7 @@ import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/wallet.dart';
+import 'package:web3dart/web3dart.dart';
 
 class SingletonWallet extends WalletProvider implements UnsafeWallet {
   @override
@@ -54,23 +58,23 @@ class SingletonWallet extends WalletProvider implements UnsafeWallet {
   }
 
   @override
-  Future<void> signC(dynamic tx) async {
+  Future<EvmTx> signC(EvmUnsignedTx tx) async {
     return evmWallet.signC(tx);
   }
 
   @override
-  Future<void> signEvm(dynamic tx) async {
+  Future<Uint8List> signEvm(Transaction tx) async {
     return evmWallet.signEvm(tx);
   }
 
   @override
-  Future<void> signP(dynamic tx) async {
-
+  Future<PvmTx> signP(PvmUnsignedTx tx) async {
+    return tx.sign(_getKeyChainP());
   }
 
   @override
-  Future<void> signX(dynamic tx) async {
-
+  Future<AvmTx> signX(AvmUnsignedTx tx) async {
+    return tx.sign(_getKeyChainX());
   }
 
   @override

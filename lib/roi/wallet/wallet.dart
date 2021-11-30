@@ -1,4 +1,10 @@
+import 'dart:typed_data';
+
+import 'package:wallet/roi/sdk/apis/avm/tx.dart';
+import 'package:wallet/roi/sdk/apis/evm/tx.dart';
+import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
+import 'package:web3dart/web3dart.dart';
 
 abstract class UnsafeWallet {
   String getEvmPrivateKeyHex();
@@ -7,13 +13,13 @@ abstract class UnsafeWallet {
 abstract class WalletProvider {
   EvmWallet get evmWallet;
 
-  Future<void> signEvm(dynamic tx);
+  Future<Uint8List> signEvm(Transaction tx);
 
-  Future<void> signX(dynamic tx);
+  Future<AvmTx> signX(AvmUnsignedTx tx);
 
-  Future<void> signP(dynamic tx);
+  Future<PvmTx> signP(PvmUnsignedTx tx);
 
-  Future<void> signC(dynamic tx);
+  Future<EvmTx> signC(EvmUnsignedTx tx);
 
   String getAddressX();
 
