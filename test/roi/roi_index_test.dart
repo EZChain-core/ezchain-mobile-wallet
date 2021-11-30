@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:mock_web_server/mock_web_server.dart';
 import 'package:test/test.dart';
-import 'package:wallet/roi/apis/auth/model/change_password.dart';
-import 'package:wallet/roi/apis/auth/model/new_token.dart';
-import 'package:wallet/roi/apis/auth/model/revoke_token.dart';
-import 'package:wallet/roi/apis/index/index_api.dart';
-import 'package:wallet/roi/apis/index/model/get_last_accepted.dart';
-import 'package:wallet/roi/roi.dart';
-import 'package:wallet/roi/common/rpc/rpc_response.dart';
+import 'package:wallet/roi/sdk/apis/auth/model/change_password.dart';
+import 'package:wallet/roi/sdk/apis/auth/model/new_token.dart';
+import 'package:wallet/roi/sdk/apis/auth/model/revoke_token.dart';
+import 'package:wallet/roi/sdk/apis/index/index_api.dart';
+import 'package:wallet/roi/sdk/apis/index/model/get_last_accepted.dart';
+import 'package:wallet/roi/sdk/roi.dart';
+import 'package:wallet/roi/sdk/common/rpc/rpc_response.dart';
 
 late MockWebServer _server;
 late ROI _roi;

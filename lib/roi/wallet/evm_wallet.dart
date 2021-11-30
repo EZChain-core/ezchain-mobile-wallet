@@ -2,12 +2,13 @@ import 'dart:typed_data';
 import 'package:hex/hex.dart';
 
 import 'package:pointycastle/export.dart';
-import 'package:wallet/roi/common/keychain/roi_key_chain.dart';
-import 'package:wallet/roi/crypto/secp256k1.dart';
-import 'package:wallet/roi/utils/bindtools.dart';
-import 'package:wallet/roi/utils/constants.dart';
+import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
+import 'package:wallet/roi/sdk/crypto/secp256k1.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:web3dart/credentials.dart';
+import 'package:web3dart/web3dart.dart';
 
 class EvmWallet {
   final Uint8List privateKey;
@@ -46,13 +47,13 @@ class EvmWallet {
 
   Future<BigInt> updateBalance() async {
     final bal = await web3.getBalance(EthereumAddress.fromHex(_address));
-    _balance = bal.getInEther;
+    _balance = bal.getValueInUnitBI(EtherUnit.ether);
     return _balance;
   }
 
-  void signEVM() {}
+  Future<void> signEvm(dynamic tx) async {}
 
-  void signC() {}
+  Future<void> signC(dynamic tx) async {}
 
   String _getPrivateKeyBech() {
     return "$privateKeyPrefix${cb58Encode(privateKey)}";
