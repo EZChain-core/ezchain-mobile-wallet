@@ -1,3 +1,4 @@
+import 'package:wallet/roi/sdk/common/keychain/base_key_chain.dart';
 import 'package:wallet/roi/sdk/common/keychain/secp256k1_key_chain.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 
@@ -43,5 +44,10 @@ class ROIKeyChain extends SECP256k1KeyChain<ROIKeyPair> {
       addKey(keyPair);
     }
     return keyPair;
+  }
+
+  @override
+  ROIKeyChain union(StandardKeyChain<StandardKeyPair> keyChain) {
+    throw UnimplementedError();
   }
 }

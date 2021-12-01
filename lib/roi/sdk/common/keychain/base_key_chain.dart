@@ -39,6 +39,8 @@ abstract class StandardKeyChain<KPClass extends StandardKeyPair> {
 
   KPClass importKey(String privateKey);
 
+  StandardKeyChain union(StandardKeyChain keyChain);
+
   List<Uint8List> getAddresses() {
     return keys.values.map((e) => e.getAddress()).toList();
   }
