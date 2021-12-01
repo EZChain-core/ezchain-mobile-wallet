@@ -1,0 +1,5 @@
+const AVAX_TOKEN_INDEX = "9000";
+
+const AVAX_TOKEN_PATH = "m/44'/$AVAX_TOKEN_INDEX";
+
+const ETH_ACCOUNT_PATH = "m/44'/60'/0'";
