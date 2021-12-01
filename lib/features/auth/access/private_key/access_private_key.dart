@@ -57,64 +57,64 @@ class AccessPrivateKeyScreen extends StatelessWidget {
                 flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
-                      child: Text(
-                        Strings.current.sharedPrivateKey,
-                        style: ROIHeadlineMediumTextStyle(
-                          color: provider.themeMode.text,
-                        ),
-                      ),
+                  child: Text(
+                    Strings.current.sharedPrivateKey,
+                    style: ROIHeadlineMediumTextStyle(
+                      color: provider.themeMode.text,
                     ),
                   ),
-                  Expanded(
-                    flex: 3,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: ROITextField(
-                            hint:
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: ROITextField(
+                        hint:
                             Strings.current.accessPrivateKeyYourPrivateKeyHint,
-                            label: Strings.current.accessPrivateKeyYourPrivateKey,
+                        label: Strings.current.accessPrivateKeyYourPrivateKey,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            width: 164,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: ROIMediumPrimaryButton(
+                              text: Strings.current.sharedAccessWallet,
+                              onPressed: () {
+                                context.router.push(const DashboardRoute());
+                                // _showWarningDialog();
+                              },
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 16),
-                        Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                width: 164,
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                child: ROIMediumPrimaryButton(
-                                  text: Strings.current.sharedAccessWallet,
-                                  onPressed: () {
-                                    context.router.push(const DashboardRoute());
-                                    // _showWarningDialog();
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: ROISpecialNoneButton(
+                              text: Strings.current.sharedCancel,
+                              onPressed: () {
+                                context.router.pop();
                               },
-                                ),
-                              ),
                             ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                child: ROISpecialNoneButton(
-                                  text: Strings.current.sharedCancel,
-                                  onPressed: () {
-                                    context.router.pop();
-                              },
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
+        ),
+      ),
     );
   }
 }

@@ -89,7 +89,7 @@ class ROIMediumNoneButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
         builder: (context, provider, child) => SizedBox(
-          height: roiButtonMediumHeight,
+              height: roiButtonMediumHeight,
               child: TextButton(
                 child: Text(text,
                     style:
@@ -140,11 +140,14 @@ class ROIButtonStyle extends ButtonStyle {
 
   ROIButtonStyle({required this.bgColor, required this.buttonPadding})
       : super(
-            enableFeedback: false,
-            padding:
-                ButtonStyleButton.allOrNull<EdgeInsetsGeometry>(buttonPadding),
-            backgroundColor: ButtonStyleButton.allOrNull<Color>(bgColor),
-            shape: ButtonStyleButton.allOrNull<OutlinedBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(roiButtonRadius))));
+          enableFeedback: false,
+          padding:
+              ButtonStyleButton.allOrNull<EdgeInsetsGeometry>(buttonPadding),
+          backgroundColor: ButtonStyleButton.allOrNull<Color>(bgColor),
+          shape: ButtonStyleButton.allOrNull<OutlinedBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(roiButtonRadius),
+            ),
+          ),
+        );
 }

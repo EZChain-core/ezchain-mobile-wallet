@@ -93,28 +93,35 @@ class CreateWalletConfirmScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: provider.themeMode.bg,
-                  borderRadius: const BorderRadius.all(Radius.circular(16)),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: provider.themeMode.bg,
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                  ),
+                  margin: const EdgeInsets.only(left: 16, right: 16, top: 72),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
+                    child: Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: _buildRandomMnemonicList()),
+                  ),
                 ),
-                padding: const EdgeInsets.all(16),
-                margin: const EdgeInsets.only(
-                    left: 16, right: 16, top: 72, bottom: 64),
-                child: Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
-                    children: _buildRandomMnemonicList()),
               ),
-              Center(
-                child: SizedBox(
-                  width: 169,
-                  child: ROIMediumPrimaryButton(
-                    text: Strings.current.sharedConfirm,
-                    onPressed: () {
-                      _onClickConfirm();
-                    },
+              Expanded(
+                flex: 1,
+                child: Center(
+                  child: SizedBox(
+                    width: 169,
+                    child: ROIMediumPrimaryButton(
+                      text: Strings.current.sharedConfirm,
+                      onPressed: () {
+                        _onClickConfirm();
+                      },
+                    ),
                   ),
                 ),
               )
