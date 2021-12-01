@@ -71,45 +71,50 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, top: 44),
-                child: AccessMnemonicInput(
-                  onPhrasesChanged: (List<String> phrases) {
-                    mnemonicPhrase = phrases;
-                  },
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16, top: 44),
+                  child: AccessMnemonicInput(
+                    onPhrasesChanged: (List<String> phrases) {
+                      mnemonicPhrase = phrases;
+                    },
+                  ),
                 ),
               ),
-              const SizedBox(height: 64),
-              Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      width: 164,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: ROIMediumPrimaryButton(
-                        text: Strings.current.sharedAccessWallet,
-                        onPressed: () {
-                          _onClickAccess();
-                        },
-                          ),
+              Expanded(
+                flex: 1,
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        width: 164,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: ROIMediumPrimaryButton(
+                          text: Strings.current.sharedAccessWallet,
+                          onPressed: () {
+                            _onClickAccess();
+                          },
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: ROISpecialNoneButton(
-                            text: Strings.current.sharedCancel,
-                            onPressed: () {
-                              context.router.pop();
-                            },
-                          ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: ROISpecialNoneButton(
+                          text: Strings.current.sharedCancel,
+                          onPressed: () {
+                            context.router.pop();
+                          },
                         ),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
               ),
             ),
           ),

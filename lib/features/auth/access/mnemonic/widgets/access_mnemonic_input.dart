@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
@@ -22,10 +23,12 @@ class _AccessMnemonicInputState extends State<AccessMnemonicInput> {
   final inputController = TextEditingController();
   final phrase = <String>[];
   final space = ' ';
+  final focusNode = FocusNode();
 
   @override
   void dispose() {
     inputController.dispose();
+    focusNode.dispose();
     super.dispose();
   }
 
@@ -65,6 +68,10 @@ class _AccessMnemonicInputState extends State<AccessMnemonicInput> {
     widget.onPhrasesChanged(phrase);
   }
 
+  void _openKeyboard() {
+    focusNode.requestFocus();
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> _buildList() {
@@ -74,23 +81,31 @@ class _AccessMnemonicInputState extends State<AccessMnemonicInput> {
       });
       phraseWidgets.add(_MnemonicTextField(
         controller: inputController,
+        focusNode: focusNode,
       ));
       return phraseWidgets;
     }
 
     return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => Container(
-        width: double.infinity,
-        height: 300,
-        decoration: BoxDecoration(
-          border: Border.all(width: 1, color: provider.themeMode.border),
-          borderRadius: const BorderRadius.all(Radius.circular(16)),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: _buildList(),
+      builder: (context, provider, child) => GestureDetector(
+        onTap: () {
+          _openKeyboard();
+        },
+        child: Container(
+          width: double.infinity,
+          height: 384,
+          decoration: BoxDecoration(
+            border: Border.all(width: 1, color: provider.themeMode.border),
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: _buildList(),
+            ),
+          ),
         ),
       ),
     );
@@ -99,13 +114,15 @@ class _AccessMnemonicInputState extends State<AccessMnemonicInput> {
 
 class _MnemonicTextField extends StatelessWidget {
   final TextEditingController? controller;
+  final FocusNode? focusNode;
 
-  const _MnemonicTextField({Key? key, this.controller}) : super(key: key);
+  const _MnemonicTextField({Key? key, this.controller, this.focusNode})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => Container(
+      builder: (context, provider, child) => SizedBox(
         width: 90,
         height: 32,
         child: TextField(
@@ -120,6 +137,8 @@ class _MnemonicTextField extends StatelessWidget {
             ),
           ),
           keyboardType: TextInputType.text,
+          focusNode: focusNode,
+          autofocus: true,
         ),
       ),
     );

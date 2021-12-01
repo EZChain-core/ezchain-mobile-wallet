@@ -18,7 +18,11 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          Assets.images.imgBgOnBoard.image(),
+          SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            child: Assets.images.imgBgOnBoard.image(fit: BoxFit.cover),
+          ),
           Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
