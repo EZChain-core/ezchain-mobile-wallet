@@ -23,5 +23,9 @@
   "pinCodeTitle": "PIN code",
   "pinCodeDes": "Set up your PIN code to unlock the wallet, confirm transactions and other activities tha require your permission",
   "pinCodeWrong": "PIN Code doesn’t match! Try Again",
-  "pinCodeSetNewPin": " or Set new PIN code"
+  "pinCodeSetNewPin": " or Set new PIN code",
+  "dashboardWallet": "Wallet",
+  "dashboardCross": "Cross",
+  "dashboardEarn": "Earn",
+  "dashboardSetting": "Setting"
 }

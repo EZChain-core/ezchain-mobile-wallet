@@ -127,7 +127,9 @@ class _PinCodeInputState extends State<PinCodeInput> {
                     },
                     child: Padding(
                         padding: const EdgeInsets.all(1),
-                        child: Assets.icons.icBackspaceSecondary.svg()),
+                        child: Assets.icons.icBackspaceSecondary.svg(
+                          color: provider.themeMode.secondary
+                        )),
                   ),
                 ],
               ),

@@ -30,6 +30,10 @@ class $AssetsIconsGen {
   SvgGenImage get icDocOutlineBlack =>
       const SvgGenImage('assets/icons/ic_doc_outline_black.svg');
 
+  /// File path: assets/icons/ic_earn_outline.svg
+  SvgGenImage get icEarnOutline =>
+      const SvgGenImage('assets/icons/ic_earn_outline.svg');
+
   /// File path: assets/icons/ic_folder_ouline_black.svg
   SvgGenImage get icFolderOulineBlack =>
       const SvgGenImage('assets/icons/ic_folder_ouline_black.svg');
@@ -37,6 +41,18 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_key_outline_black.svg
   SvgGenImage get icKeyOutlineBlack =>
       const SvgGenImage('assets/icons/ic_key_outline_black.svg');
+
+  /// File path: assets/icons/ic_setting_outline.svg
+  SvgGenImage get icSettingOutline =>
+      const SvgGenImage('assets/icons/ic_setting_outline.svg');
+
+  /// File path: assets/icons/ic_two_arrow.svg
+  SvgGenImage get icTwoArrow =>
+      const SvgGenImage('assets/icons/ic_two_arrow.svg');
+
+  /// File path: assets/icons/ic_wallet_outline.svg
+  SvgGenImage get icWalletOutline =>
+      const SvgGenImage('assets/icons/ic_wallet_outline.svg');
 }
 
 class $AssetsImagesGen {

@@ -53,6 +53,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Yes, I kept them  safe"),
         "createWalletPassphraseToRestore":
             MessageLookupByLibrary.simpleMessage("Passphrase to restore"),
+        "dashboardCross": MessageLookupByLibrary.simpleMessage("Cross"),
+        "dashboardEarn": MessageLookupByLibrary.simpleMessage("Earn"),
+        "dashboardSetting": MessageLookupByLibrary.simpleMessage("Setting"),
+        "dashboardWallet": MessageLookupByLibrary.simpleMessage("Wallet"),
         "onBoardCreateWallet":
             MessageLookupByLibrary.simpleMessage("Create Wallet"),
         "pageHomeWelcome": m0,

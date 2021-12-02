@@ -299,6 +299,46 @@ class Strings {
       args: [],
     );
   }
+
+  /// `Wallet`
+  String get dashboardWallet {
+    return Intl.message(
+      'Wallet',
+      name: 'dashboardWallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cross`
+  String get dashboardCross {
+    return Intl.message(
+      'Cross',
+      name: 'dashboardCross',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Earn`
+  String get dashboardEarn {
+    return Intl.message(
+      'Earn',
+      name: 'dashboardEarn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Setting`
+  String get dashboardSetting {
+    return Intl.message(
+      'Setting',
+      name: 'dashboardSetting',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Strings> {

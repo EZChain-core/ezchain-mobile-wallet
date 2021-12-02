@@ -64,8 +64,10 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                                     color: provider.themeMode.text),
                               ),
                             ),
-                            Assets.icons.icKeyOutlineBlack
-                                .svg(width: 24, height: 24),
+                            Assets.icons.icKeyOutlineBlack.svg(
+                                width: 24,
+                                height: 24,
+                                color: provider.themeMode.text),
                           ],
                         ),
                       ),
@@ -96,8 +98,10 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                                     color: provider.themeMode.text),
                               ),
                             ),
-                            Assets.icons.icDocOutlineBlack
-                                .svg(width: 24, height: 24),
+                            Assets.icons.icDocOutlineBlack.svg(
+                                width: 24,
+                                height: 24,
+                                color: provider.themeMode.text),
                           ],
                         ),
                       ),

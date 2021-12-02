@@ -31,22 +31,22 @@ class CreateWalletScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
                 child: Text(
                   Strings.current.createWalletPassphraseToRestore,
-                      style: ROIHeadlineMediumTextStyle(
-                        color: provider.themeMode.text,
-                      ),
-                    ),
+                  style: ROIHeadlineMediumTextStyle(
+                    color: provider.themeMode.text,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
-                    child: Text(
-                      Strings.current.createWalletDes,
-                      style: ROIBodyLargeTextStyle(
-                        color: provider.themeMode.text70,
-                      ),
-                    ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+                child: Text(
+                  Strings.current.createWalletDes,
+                  style: ROIBodyLargeTextStyle(
+                    color: provider.themeMode.text70,
                   ),
-                  Container(
-                    width: double.infinity,
+                ),
+              ),
+              Container(
+                width: double.infinity,
                 decoration: BoxDecoration(
                   color: provider.themeMode.bg,
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
@@ -61,14 +61,14 @@ class CreateWalletScreen extends StatelessWidget {
                       children: _buildRandomMnemonicList()),
                 ),
               ),
-                  Center(
-                    child: SizedBox(
-                      width: 211,
-                      child: ROIMediumPrimaryButton(
-                        text: Strings.current.createWalletKeptKey,
-                        onPressed: () {
-                          context.router.push(const CreateWalletConfirmRoute());
-                        },
+              Center(
+                child: SizedBox(
+                  width: 211,
+                  child: ROIMediumPrimaryButton(
+                    text: Strings.current.createWalletKeptKey,
+                    onPressed: () {
+                      context.router.push(const CreateWalletConfirmRoute());
+                    },
                   ),
                 ),
               )
