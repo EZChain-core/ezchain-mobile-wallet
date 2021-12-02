@@ -46,7 +46,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                   child: ROIMediumNoneButton(
                     text: Strings.current.onBoardCreateWallet,
                     onPressed: () {
-                      context.router.push(const CreateWalletRoute());
+                      context.router.push(CreateWalletRoute());
                     },
                   ),
                 ),

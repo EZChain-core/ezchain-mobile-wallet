@@ -6,22 +6,26 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/di/di.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/sdk/utils/mnemonic.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
+import '../create_wallet_store.dart';
+
 class CreateWalletConfirmScreen extends StatelessWidget {
   const CreateWalletConfirmScreen({Key? key}) : super(key: key);
+
+  CreateWalletStore get _createWalletStore => getIt<CreateWalletStore>();
 
   @override
   Widget build(BuildContext context) {
     const sizeOfMnemonic = 24;
     const sizeOfRandomInputMnemonic = 4;
-    List<String> phrase = Mnemonic.instance.generateMnemonic().split(' ');
+    List<String> phrase = _createWalletStore.mnemonicPhrase;
 
     List<String> resultPhrase = List.from(phrase);
 
