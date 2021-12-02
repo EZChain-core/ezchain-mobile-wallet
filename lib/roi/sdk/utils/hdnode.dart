@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:hdkey/hdkey.dart';
-import 'package:fast_base58/fast_base58.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
 
 class HDNode {
@@ -41,7 +41,7 @@ class HDNode {
     _privateKey = _hdKey.privateKey;
     final privateKey = _privateKey;
     if (privateKey != null) {
-      _privateKeyCB58 = "$privateKeyPrefix${Base58Encode(privateKey)}";
+      _privateKeyCB58 = "$privateKeyPrefix${cb58Encode(privateKey)}";
     } else {
       _privateExtendedKey = null;
     }
