@@ -23,6 +23,8 @@ abstract class StandardKeyPair {
 
   String getAddressString();
 
+  StandardKeyPair clone();
+
   Uint8List get privateKeyBytes {
     return keyPair.privateKey;
   }
@@ -37,7 +39,9 @@ abstract class StandardKeyChain<KPClass extends StandardKeyPair> {
 
   KPClass makeKey();
 
-  KPClass importKey(String privateKey);
+  KPClass importKey(dynamic privateKey);
+
+  StandardKeyChain clone();
 
   StandardKeyChain union(StandardKeyChain keyChain);
 

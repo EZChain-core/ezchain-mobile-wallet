@@ -19,6 +19,8 @@ abstract class ROI {
 
   PvmApi get pvmApi;
 
+  int getNetworkId();
+
   String getHRP();
 
   void setAddress(String host, int port, String protocol);
@@ -134,7 +136,6 @@ abstract class ROINetwork {
 }
 
 class _ROICore extends ROINetwork implements ROI {
-
   late InfoApi _infoApi;
 
   late IndexApi _indexApi;
@@ -195,6 +196,11 @@ class _ROICore extends ROINetwork implements ROI {
   }
 
   @override
+  int getNetworkId() {
+    return networkId;
+  }
+
+  @override
   String getHRP() {
     return hrp;
   }
@@ -205,7 +211,9 @@ class _ROICore extends ROINetwork implements ROI {
   }
 
   @override
-  void setNetworkId(int networkId) {}
+  void setNetworkId(int networkId) {
+    changeNetworkId(networkId);
+  }
 
   @override
   void removeRequestConfig(String key) {

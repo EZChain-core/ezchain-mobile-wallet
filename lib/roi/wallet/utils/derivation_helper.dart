@@ -1,7 +1,7 @@
 import 'package:wallet/roi/wallet/utils/constants.dart';
 
 String getAccountPathAvalanche(int accountIndex) {
-  return "$AVAX_TOKEN_PATH/$accountIndex";
+  return "$AVAX_TOKEN_PATH/$accountIndex'";
 }
 
 String getAccountPathEVM(int accountIndex) {

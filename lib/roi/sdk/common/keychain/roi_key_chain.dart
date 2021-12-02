@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:wallet/roi/sdk/common/keychain/base_key_chain.dart';
 import 'package:wallet/roi/sdk/common/keychain/secp256k1_key_chain.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
@@ -13,6 +15,13 @@ class ROIKeyPair extends SECP256k1KeyPair {
   @override
   String getAddressString() {
     return addressToString(chainId, hrp, getAddress());
+  }
+
+  @override
+  ROIKeyPair clone() {
+    final newKeyPair = ROIKeyPair(chainId: chainId, hrp: hrp);
+    newKeyPair.importKey(privateKeyBytes);
+    return newKeyPair;
   }
 }
 
@@ -36,9 +45,15 @@ class ROIKeyChain extends SECP256k1KeyChain<ROIKeyPair> {
   }
 
   @override
-  ROIKeyPair importKey(String privateKey) {
+  ROIKeyPair importKey(dynamic privateKey) {
     final keyPair = ROIKeyPair(chainId: chainId, hrp: hrp);
-    final bytes = cb58Decode(privateKey.split("-")[1]);
+    var bytes = Uint8List.fromList([]);
+    if (privateKey is String) {
+      bytes = cb58Decode(privateKey.split("-")[1]);
+    } else if (privateKey is Uint8List) {
+      bytes = privateKey;
+    }
+    assert(bytes.isNotEmpty);
     final result = keyPair.importKey(bytes);
     if (result && !keys.containsKey(keyPair.getAddress().toString())) {
       addKey(keyPair);
@@ -47,7 +62,20 @@ class ROIKeyChain extends SECP256k1KeyChain<ROIKeyPair> {
   }
 
   @override
+  ROIKeyChain clone() {
+    final newKeyChain = ROIKeyChain(chainId: chainId, hrp: hrp);
+    for (final key in keys.keys) {
+      newKeyChain.addKey(keys[key]!.clone());
+    }
+    return newKeyChain;
+  }
+
+  @override
   ROIKeyChain union(StandardKeyChain<StandardKeyPair> keyChain) {
-    throw UnimplementedError();
+    final newKeyChain = keyChain.clone() as ROIKeyChain;
+    for (final key in keys.keys) {
+      newKeyChain.addKey(keys[key]!.clone());
+    }
+    return newKeyChain;
   }
 }
