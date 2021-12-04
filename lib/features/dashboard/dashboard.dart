@@ -37,24 +37,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 icon: Assets.icons.icWalletOutline.svg(),
                 activeIcon: Assets.icons.icWalletOutline
                     .svg(color: provider.themeMode.primary),
+                backgroundColor: provider.themeMode.white,
               ),
               BottomNavigationBarItem(
                 label: Strings.current.dashboardCross,
                 icon: Assets.icons.icTwoArrow.svg(),
                 activeIcon: Assets.icons.icTwoArrow
                     .svg(color: provider.themeMode.primary),
+                backgroundColor: provider.themeMode.white,
               ),
               BottomNavigationBarItem(
                 label: Strings.current.dashboardEarn,
                 icon: Assets.icons.icEarnOutline.svg(),
                 activeIcon: Assets.icons.icEarnOutline
                     .svg(color: provider.themeMode.primary),
+                backgroundColor: provider.themeMode.white,
               ),
               BottomNavigationBarItem(
                 label: Strings.current.dashboardSetting,
                 icon: Assets.icons.icSettingOutline.svg(),
                 activeIcon: Assets.icons.icSettingOutline
                     .svg(color: provider.themeMode.primary),
+                backgroundColor: provider.themeMode.white,
               ),
             ],
           );

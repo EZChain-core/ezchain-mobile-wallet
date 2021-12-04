@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:wallet/features/cross/cross.dart';
 import 'package:wallet/features/earn/earn.dart';
 import 'package:wallet/features/setting/setting.dart';
+import 'package:wallet/features/wallet/roi/wallet_roi_chain.dart';
+import 'package:wallet/features/wallet/token/wallet_token.dart';
 import 'package:wallet/features/wallet/wallet.dart';
 
 import 'dashboard.dart';

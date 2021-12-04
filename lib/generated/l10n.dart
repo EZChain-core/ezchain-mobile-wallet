@@ -110,6 +110,36 @@ class Strings {
     );
   }
 
+  /// `ROI Chain`
+  String get sharedROIChain {
+    return Intl.message(
+      'ROI Chain',
+      name: 'sharedROIChain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token`
+  String get sharedToken {
+    return Intl.message(
+      'Token',
+      name: 'sharedToken',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Balance`
+  String get sharedBalance {
+    return Intl.message(
+      'Balance',
+      name: 'sharedBalance',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
