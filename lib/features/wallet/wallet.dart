@@ -1,18 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wallet/features/wallet/roi/wallet_roi_chain.dart';
+import 'package:wallet/features/wallet/token/wallet_token.dart';
+import 'package:wallet/generated/assets.gen.dart';
+import 'package:wallet/generated/l10n.dart';
+import 'package:wallet/themes/colors.dart';
+import 'package:wallet/themes/theme.dart';
+import 'package:wallet/themes/typography.dart';
 
-class WalletScreen extends StatefulWidget {
+class WalletScreen extends StatelessWidget {
   const WalletScreen({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _WalletScreenState();
-}
-
-class _WalletScreenState extends State<WalletScreen> {
-  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('WalletScreen'),
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          body: Stack(
+            children: [
+              Assets.images.imgBgWallet.image(
+                width: double.infinity,
+                height: 188,
+                fit: BoxFit.cover
+              ),
+              Column(
+                children: [
+                  const SizedBox(height: 52),
+                  Container(
+                    height: 40,
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: provider.themeMode.midnightBlue,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: TabBar(
+                      // controller: _tabController,
+                      indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: provider.themeMode.secondary,
+                      ),
+                      labelStyle: ROITitleLargeTextStyle(
+                          color: provider.themeMode.primary),
+                      labelColor: provider.themeMode.primary,
+                      unselectedLabelStyle: ROITitleLargeTextStyle(
+                          color: provider.themeMode.secondary60),
+                      unselectedLabelColor: provider.themeMode.secondary60,
+                      tabs: [
+                        Tab(text: Strings.current.sharedROIChain),
+                        Tab(text: Strings.current.sharedToken),
+                      ],
+                    ),
+                  ),
+                  const Expanded(
+                    child: TabBarView(
+                      // controller: _tabController,
+                      children: [
+                        WalletROIChainScreen(),
+                        WalletTokenScreen(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -36,5 +36,6 @@
 
     <color name="red_light">#EB5757</color>
     <color name="white_light">#FFFFFF</color>
+    <color name="midnight_blue_light">#1A2849</color>
 
 </resources>
