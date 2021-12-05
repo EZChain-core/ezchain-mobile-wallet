@@ -75,4 +75,6 @@ extension BaseColor on ThemeMode {
   Color get red => isDark ? ColorName.redDark : ColorName.redLight;
 
   Color get white => isDark ? ColorName.whiteDark : ColorName.whiteLight;
+
+  Color get midnightBlue => isDark ? ColorName.midnightBlueDark : ColorName.midnightBlueLight;
 }
