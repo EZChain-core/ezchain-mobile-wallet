@@ -62,6 +62,14 @@ class $AssetsImagesGen {
   AssetGenImage get imgBgOnBoard =>
       const AssetGenImage('assets/images/img_bg_on_board.png');
 
+  /// File path: assets/images/img_bg_wallet.png
+  AssetGenImage get imgBgWallet =>
+      const AssetGenImage('assets/images/img_bg_wallet.png');
+
+  /// File path: assets/images/img_logo_roi.png
+  AssetGenImage get imgLogoRoi =>
+      const AssetGenImage('assets/images/img_logo_roi.png');
+
   /// File path: assets/images/img_private_key_wraning.png
   AssetGenImage get imgPrivateKeyWraning =>
       const AssetGenImage('assets/images/img_private_key_wraning.png');
