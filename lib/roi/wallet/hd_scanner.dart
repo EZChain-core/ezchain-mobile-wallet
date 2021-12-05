@@ -62,12 +62,12 @@ class HdScanner {
 
   Future<List<String>> getAllAddresses(String chainId) async {
     final upTo = index;
-    return await getAddressesInRange(0, upTo, chainId);
+    return await getAddressesInRange(0, upTo + 1, chainId);
   }
 
   List<String> getAllAddressesSync(String chainId) {
     final upTo = index;
-    return getAddressesInRangeSync(0, upTo, chainId);
+    return getAddressesInRangeSync(0, upTo + 1, chainId);
   }
 
   ROIKeyPair getKeyForIndexX(int index) {

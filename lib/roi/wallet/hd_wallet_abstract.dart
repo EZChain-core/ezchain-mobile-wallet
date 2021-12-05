@@ -66,7 +66,7 @@ abstract class HDWalletAbstract extends WalletProvider {
 
   @override
   List<String> getExternalAddressesXSync() {
-    return externalScan.getAllAddressesSync('P');
+    return externalScan.getAllAddressesSync('X');
   }
 
   @override
