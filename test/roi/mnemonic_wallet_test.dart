@@ -2,23 +2,36 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:wallet/roi/wallet/mnemonic_wallet.dart';
 
-const TEST_MNEMONIC =
-    'chimney noodle canyon tunnel sample stuff scan symbol sight club net own arrive cause suffer purity manage squirrel boost diesel bring cement father slide';
-
 void main() {
-  final wallet = MnemonicWallet(mnemonic: TEST_MNEMONIC);
+  final wallet = MnemonicWallet(
+      mnemonic:
+          "unaware click walnut alpha leopard pig attitude collect suit belt math sword token pupil matrix void ten vendor barrel bitter rather debris include moral");
+
   test("can return initial X address", () {
-    String addressX = wallet.getAddressX();
-    expect(addressX, 'X-avax19v8flm9qt2gv2tctztjjerlgs4k3vgjsfw8udh');
+    final addressX = wallet.getAddressX();
+    expect(addressX, 'X-avax1drhz4wmg2fcxgm6f2ypffl7stugezxr8uu0xqt');
   });
 
   test("can return initial P address", () {
-    String addressP = wallet.getAddressP();
-    expect(addressP, 'P-avax19v8flm9qt2gv2tctztjjerlgs4k3vgjsfw8udh');
+    final addressP = wallet.getAddressP();
+    expect(addressP, 'P-avax1drhz4wmg2fcxgm6f2ypffl7stugezxr8uu0xqt');
   });
 
   test("can return initial C address", () {
-    String addressC = wallet.getAddressC();
-    expect(addressC, '0x6a23c16777a3a194b2773df90feb8753a8e619ee');
+    final addressC = wallet.getAddressC();
+    expect(addressC, '0x39bcdb76dcc314dec0e68927eff08f86a5ccdc1f');
+  });
+
+  test("all X addresses", () {
+    final allAddressesX = wallet.getAllAddressesXSync();
+    expect(allAddressesX, [
+      "X-avax1drhz4wmg2fcxgm6f2ypffl7stugezxr8uu0xqt",
+      "X-avax1txyfeuea7uw0g8d7659dxxejcjz3zws25v7mhg"
+    ]);
+  });
+
+  test("all P addresses", () {
+    final allAddressesP = wallet.getAllAddressesPSync();
+    expect(allAddressesP, ["P-avax1drhz4wmg2fcxgm6f2ypffl7stugezxr8uu0xqt"]);
   });
 }
