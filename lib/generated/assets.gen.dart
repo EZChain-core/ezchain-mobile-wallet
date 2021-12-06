@@ -70,6 +70,10 @@ class $AssetsImagesGen {
   AssetGenImage get imgLogoRoi =>
       const AssetGenImage('assets/images/img_logo_roi.png');
 
+  /// File path: assets/images/img_onboard_one.png
+  AssetGenImage get imgOnboardOne =>
+      const AssetGenImage('assets/images/img_onboard_one.png');
+
   /// File path: assets/images/img_private_key_wraning.png
   AssetGenImage get imgPrivateKeyWraning =>
       const AssetGenImage('assets/images/img_private_key_wraning.png');
