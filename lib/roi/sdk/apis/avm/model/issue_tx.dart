@@ -7,9 +7,9 @@ part 'issue_tx.g.dart';
 class IssueTxRequest with RpcRequestWrapper<IssueTxRequest> {
   final String tx;
 
-  final String encoding;
+  final String? encoding;
 
-  const IssueTxRequest({required this.tx, required this.encoding});
+  const IssueTxRequest({required this.tx, this.encoding});
 
   @override
   String method() {

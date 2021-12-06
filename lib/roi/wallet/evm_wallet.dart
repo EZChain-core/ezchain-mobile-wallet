@@ -19,7 +19,7 @@ class EvmWallet {
   late String _address;
 
   BigInt get balance => _balance;
-  BigInt _balance = BigInt.from(0);
+  BigInt _balance = BigInt.zero;
 
   EvmWallet({required this.privateKey}) {
     publicKey = _privateKeyToPublicKey(privateKey);
@@ -54,7 +54,11 @@ class EvmWallet {
 
   Future<Uint8List> signEvm(Transaction tx) async {
     final credentials = EthPrivateKey.fromHex(getPrivateKeyHex());
-    return web3.signTransaction(credentials, tx);
+    var signed = await web3.signTransaction(credentials, tx);
+    if (tx.isEIP1559) {
+      signed = prependTransactionType(0x02, signed);
+    }
+    return signed;
   }
 
   Future<EvmTx> signC(EvmUnsignedTx tx) async {
@@ -72,7 +76,7 @@ class EvmWallet {
   }
 
   BigInt _decodeBigInt(List<int> bytes) {
-    BigInt result = BigInt.from(0);
+    BigInt result = BigInt.zero;
     for (int i = 0; i < bytes.length; i++) {
       result += BigInt.from(bytes[bytes.length - i - 1]) << (8 * i);
     }

@@ -10,6 +10,8 @@ import 'package:wallet/roi/sdk/apis/avm/model/issue_tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/wallet_issue_tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/rest/avm_rest_client.dart';
 import 'package:wallet/roi/sdk/apis/avm/rest/avm_wallet_rest_client.dart';
+import 'package:wallet/roi/sdk/apis/avm/tx.dart';
+import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/info/model/get_tx_fee.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';
 import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
@@ -18,8 +20,18 @@ import 'package:wallet/roi/sdk/common/rpc/rpc_response.dart';
 import 'package:wallet/roi/sdk/roi.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
+import 'package:wallet/roi/wallet/network/network.dart';
 
 abstract class AvmApi implements ROIChainApi {
+  Future<AvmUnsignedTx> buildBaseTx(
+      AvmUTXOSet utxoSet,
+      BigInt amount,
+      String assetId,
+      List<String> toAddresses,
+      List<String> fromAddresses,
+      List<String> changeAddresses,
+      Uint8List? memo);
+
   Future<RpcResponse<GetBalanceResponse>> getBalance(
       RpcRequest<GetBalanceRequest> request);
 
@@ -41,8 +53,7 @@ abstract class AvmApi implements ROIChainApi {
   Future<RpcResponse<ImportKeyResponse>> importKey(
       RpcRequest<ImportKeyRequest> request);
 
-  Future<RpcResponse<IssueTxResponse>> issueTx(
-      RpcRequest<IssueTxRequest> request);
+  Future<String> issueTx(AvmTx tx);
 
   Future<RpcResponse<WalletIssueTxResponse>> walletIssueTx(
       RpcRequest<WalletIssueTxRequest> request);
@@ -74,6 +85,8 @@ class _AvmApiImpl implements AvmApi {
   late AvmRestClient avmRestClient;
 
   late AvmWalletRestClient avmWalletRestClient;
+
+  BigInt? _txFee;
 
   _AvmApiImpl(
       {required this.roiNetwork,
@@ -131,6 +144,51 @@ class _AvmApiImpl implements AvmApi {
   }
 
   @override
+  Future<AvmUnsignedTx> buildBaseTx(
+      AvmUTXOSet utxoSet,
+      BigInt amount,
+      String assetId,
+      List<String> toAddresses,
+      List<String> fromAddresses,
+      List<String> changeAddresses,
+      Uint8List? memo,
+      {int threshold = 1}) async {
+    final to = toAddresses.map((e) => stringToAddress(e)).toList();
+    final from = fromAddresses.map((e) => stringToAddress(e)).toList();
+    final change = changeAddresses.map((e) => stringToAddress(e)).toList();
+
+    final builtUnsignedTx = utxoSet.buildBaseTx(
+        roiNetwork.networkId,
+        cb58Decode(blockChainId),
+        amount,
+        cb58Decode(assetId),
+        to,
+        from,
+        change,
+        _getTxFee(),
+        await _getAVAXAssetId(),
+        memo,
+        threshold: threshold);
+    if (!await _checkGooseEgg(builtUnsignedTx)) {
+      throw Exception("Error - AVMAPI.buildBaseTx:Failed Goose Egg Check");
+    }
+    return builtUnsignedTx;
+  }
+
+  Future<bool> _checkGooseEgg(AvmUnsignedTx utx, {BigInt? outTotal}) async {
+    outTotal ??= BigInt.zero;
+    final avaxAssetId = await _getAVAXAssetId();
+    final outputTotal =
+        outTotal > BigInt.zero ? outTotal : utx.getOutputTotal(avaxAssetId);
+    final fee = utx.getBurn(avaxAssetId);
+    if (fee <= ONEAVAX * BigInt.from(10) || fee <= outputTotal) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @override
   Future<RpcResponse<GetBalanceResponse>> getBalance(
       RpcRequest<GetBalanceRequest> request) {
     return avmRestClient.getBalance(request);
@@ -149,9 +207,8 @@ class _AvmApiImpl implements AvmApi {
   }
 
   @override
-  Future<RpcResponse<IssueTxResponse>> issueTx(
-      RpcRequest<IssueTxRequest> request) {
-    return avmRestClient.issueTx(request);
+  Future<String> issueTx(AvmTx tx) async {
+    return "";
   }
 
   @override
@@ -182,5 +239,28 @@ class _AvmApiImpl implements AvmApi {
   Future<RpcResponse<WalletIssueTxResponse>> walletIssueTx(
       RpcRequest<WalletIssueTxRequest> request) {
     return avmWalletRestClient.walletIssueTx(request);
+  }
+
+  Future<Uint8List?> _getAVAXAssetId({bool refresh = false}) async {
+    if (avaxAssetId == null || refresh) {
+      final response = await getAssetDescription(
+          const GetAssetDescriptionRequest(assetId: primaryAssetAlias).toRpc());
+      setAVAXAssetId(response.result?.assetId);
+    }
+    return avaxAssetId;
+  }
+
+  BigInt _getTxFee() {
+    _txFee ??= _getDefaultTxFee();
+    return _txFee!;
+  }
+
+  BigInt _getDefaultTxFee() {
+    final networkId = roiNetwork.networkId;
+    if (networks.containsKey(networkId)) {
+      return networks[networkId]!.x.creationTxFee;
+    } else {
+      return BigInt.zero;
+    }
   }
 }

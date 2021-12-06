@@ -177,15 +177,15 @@ final n2X = X(
     blockchainId: "4ktRjsAKxgMr2aEzv9SWmrU7Xk5FniHUrVCX4P1TZSfTLZWFM",
     alias: xChainAlias,
     vm: xChainVMName,
-    txFee: BigInt.from(0),
-    creationTxFee: BigInt.from(0));
+    txFee: BigInt.zero,
+    creationTxFee: BigInt.zero);
 
 final n2P = P(
     blockchainId: platformChainId,
     alias: pChainAlias,
     vm: pChainVMName,
-    txFee: BigInt.from(0),
-    creationTxFee: BigInt.from(0),
+    txFee: BigInt.zero,
+    creationTxFee: BigInt.zero,
     minConsumption: 0.1,
     maxConsumption: 0.12,
     maxStakingDuration: BigInt.from(31536000),
@@ -202,7 +202,7 @@ final n2C = C(
     blockchainId: "2mUYSXfLrDtigwbzj1LxKVsHwELghc5sisoXrzJwLqAAQHF4i",
     alias: cChainAlias,
     vm: cChainVMName,
-    gasPrice: BigInt.from(0));
+    gasPrice: BigInt.zero);
 // End Cascade
 
 // Start Denali
@@ -210,15 +210,15 @@ final n3X = X(
     blockchainId: "rrEWX7gc7D9mwcdrdBxBTdqh1a7WDVsMuadhTZgyXfFcRz45L",
     alias: xChainAlias,
     vm: xChainVMName,
-    txFee: BigInt.from(0),
-    creationTxFee: BigInt.from(0));
+    txFee: BigInt.zero,
+    creationTxFee: BigInt.zero);
 
 final n3P = P(
     blockchainId: "",
     alias: pChainAlias,
     vm: pChainVMName,
-    txFee: BigInt.from(0),
-    creationTxFee: BigInt.from(0),
+    txFee: BigInt.zero,
+    creationTxFee: BigInt.zero,
     minConsumption: 0.1,
     maxConsumption: 0.12,
     maxStakingDuration: BigInt.from(31536000),
@@ -235,7 +235,7 @@ final n3C = C(
     blockchainId: "zJytnh96Pc8rM337bBrtMvJDbEdDNjcXG3WkTNCiLp18ergm9",
     alias: cChainAlias,
     vm: cChainVMName,
-    gasPrice: BigInt.from(0));
+    gasPrice: BigInt.zero);
 // End Denali
 
 // Start Everest
