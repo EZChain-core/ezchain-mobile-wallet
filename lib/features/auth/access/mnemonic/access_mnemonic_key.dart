@@ -11,11 +11,14 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
+import 'access_mnemonic_key_store.dart';
+
 class AccessMnemonicKeyScreen extends StatelessWidget {
   const AccessMnemonicKeyScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final accessMnemonicKeyStore = AccessMnemonicKeyStore();
     const sizeOfMnemonic = 24;
     List<String> mnemonicPhrase = <String>[];
 
@@ -43,6 +46,8 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
       if (mnemonicPhrase.length != sizeOfMnemonic) {
         _showWarningDialog();
       } else {
+        String mnemonic = mnemonicPhrase.join(' ');
+        accessMnemonicKeyStore.accessWithMnemonicKey(mnemonic);
         context.router.push(const DashboardRoute());
       }
     }
@@ -57,10 +62,10 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
                 child: Text(
                   Strings.current.accessMnemonicKeyTitle,
-                      style: ROIHeadlineMediumTextStyle(
-                        color: provider.themeMode.text,
-                      ),
-                    ),
+                  style: ROIHeadlineMediumTextStyle(
+                    color: provider.themeMode.text,
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 58, top: 16),
@@ -115,9 +120,9 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
                 ),
               ),
             ],
-              ),
-            ),
           ),
+        ),
+      ),
     );
   }
 }
