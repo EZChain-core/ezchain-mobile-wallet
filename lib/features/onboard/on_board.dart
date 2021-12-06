@@ -17,25 +17,22 @@ class OnBoardScreen extends StatefulWidget {
 
 class _OnBoardScreenState extends State<OnBoardScreen> {
   final _controller = PageController();
-  int _currentIndex = 0;
+  int _pageSelectedIndex = 0;
 
-  createCircle(int index) {
-    return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => AnimatedContainer(
-        duration: const Duration(milliseconds: 100),
-        margin: const EdgeInsets.only(right: 4),
-        height: 16,
-        width: 16,
-        decoration: BoxDecoration(
-          color: _currentIndex == index
-              ? provider.themeMode.primary
-              : Colors.transparent,
-          border: Border.all(width: 1, color: provider.themeMode.primary),
-          borderRadius: BorderRadius.circular(60),
-        ),
-      ),
-    );
-  }
+  final _pageImages = <Widget>[
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 21),
+      child: Assets.images.imgOnboardOne.image(),
+    ),
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 21),
+      child: Assets.images.imgOnboardOne.image(),
+    ),
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 21),
+      child: Assets.images.imgOnboardOne.image(),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -59,30 +56,22 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                     controller: _controller,
                     onPageChanged: (value) {
                       setState(() {
-                        _currentIndex = value;
+                        _pageSelectedIndex = value;
                       });
                     },
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 21),
-                        child: Assets.images.imgOnboardOne.image(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 21),
-                        child: Assets.images.imgOnboardOne.image(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 21),
-                        child: Assets.images.imgOnboardOne.image(),
-                      ),
-                    ],
+                    children: _pageImages,
                   ),
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 24),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(3, (index) => createCircle(index)),
+                    children: List.generate(
+                      _pageImages.length,
+                      (index) => _DotIndicator(
+                        isSelected: index == _pageSelectedIndex,
+                      ),
+                    ),
                   ),
                 )
               ],
@@ -109,7 +98,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                   child: ROIMediumNoneButton(
                     text: Strings.current.onBoardCreateWallet,
                     onPressed: () {
-                      context.router.push(CreateWalletRoute());
+                      context.router.push(const CreateWalletRoute());
                     },
                   ),
                 ),
@@ -118,6 +107,29 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class _DotIndicator extends StatelessWidget {
+  final bool isSelected;
+
+  const _DotIndicator({Key? key, required this.isSelected}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        margin: const EdgeInsets.only(right: 4),
+        height: 16,
+        width: 16,
+        decoration: BoxDecoration(
+          color: isSelected ? provider.themeMode.primary : Colors.transparent,
+          border: Border.all(width: 1, color: provider.themeMode.primary),
+          shape: BoxShape.circle,
+        ),
       ),
     );
   }

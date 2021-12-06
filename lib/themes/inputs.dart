@@ -20,12 +20,16 @@ class ROITextField extends StatelessWidget {
 
   final Widget? suffixIcon;
 
-  const ROITextField({Key? key,
-    required this.hint,
-    this.inputType,
-    this.label,
-    this.prefixIcon,
-    this.suffixIcon})
+  final TextEditingController? controller;
+
+  const ROITextField(
+      {Key? key,
+      required this.hint,
+      this.inputType,
+      this.label,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.controller})
       : super(key: key);
 
   @override
@@ -47,10 +51,11 @@ class ROITextField extends StatelessWidget {
             TextField(
               style: ROIBodyLargeTextStyle(color: provider.themeMode.text),
               cursorColor: provider.themeMode.text,
+              controller: controller,
               decoration: InputDecoration(
                 hintText: hint,
                 hintStyle:
-                ROIBodyLargeTextStyle(color: provider.themeMode.text40),
+                    ROIBodyLargeTextStyle(color: provider.themeMode.text40),
                 prefixIcon: prefixIcon,
                 suffixIcon: suffixIcon,
                 enabledBorder: OutlineInputBorder(

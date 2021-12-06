@@ -27,7 +27,7 @@ class WalletTokenScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    '\$ 4.000.000',
+                    r'$ 4.000.000',
                     textAlign: TextAlign.end,
                     style: ROIHeadlineSmallTextStyle(
                         color: provider.themeMode.primary),
