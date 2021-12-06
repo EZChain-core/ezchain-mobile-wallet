@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/auth/access/private_key/access_private_key_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -15,6 +16,10 @@ class AccessPrivateKeyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final accessPrivateKeyStore = AccessPrivateKeyStore();
+
+    final privateKeyInputController = TextEditingController();
+
     Future<void> _showWarningDialog() async {
       return showDialog<void>(
         context: context,
@@ -47,6 +52,13 @@ class AccessPrivateKeyScreen extends StatelessWidget {
       );
     }
 
+    void _onClickAccess() {
+      accessPrivateKeyStore
+          .accessWithPrivateKey(privateKeyInputController.text);
+      context.router.push(const DashboardRoute());
+      // _showWarningDialog();
+    }
+
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -75,6 +87,7 @@ class AccessPrivateKeyScreen extends StatelessWidget {
                         hint:
                             Strings.current.accessPrivateKeyYourPrivateKeyHint,
                         label: Strings.current.accessPrivateKeyYourPrivateKey,
+                        controller: privateKeyInputController,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -88,8 +101,7 @@ class AccessPrivateKeyScreen extends StatelessWidget {
                             child: ROIMediumPrimaryButton(
                               text: Strings.current.sharedAccessWallet,
                               onPressed: () {
-                                context.router.push(const DashboardRoute());
-                                // _showWarningDialog();
+                                _onClickAccess();
                               },
                             ),
                           ),

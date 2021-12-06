@@ -30,7 +30,7 @@ class WalletROIChainScreen extends StatelessWidget {
                             color: provider.themeMode.primary),
                       ),
                       Text(
-                        '\$2.000.000.000',
+                        r'$2.000.000.000',
                         style: ROITitleLargeTextStyle(
                             color: provider.themeMode.white),
                       ),
