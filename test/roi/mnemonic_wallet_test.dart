@@ -3,9 +3,22 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wallet/roi/wallet/mnemonic_wallet.dart';
 
 void main() {
-  final wallet = MnemonicWallet(
-      mnemonic:
-          "unaware click walnut alpha leopard pig attitude collect suit belt math sword token pupil matrix void ten vendor barrel bitter rather debris include moral");
+  const mnemonic =
+      "unaware click walnut alpha leopard pig attitude collect suit belt math sword token pupil matrix void ten vendor barrel bitter rather debris include moral";
+  final wallet = MnemonicWallet(mnemonic: mnemonic);
+
+  test("isValid Mnemonic", () {
+    expect(MnemonicWallet.import(mnemonic) != null, true);
+  });
+
+  test("isInValid Mnemonic", () {
+    expect(
+        MnemonicWallet.import(mnemonic.replaceFirst("unaware", "kien")), null);
+  });
+
+  test("isInValid length Mnemonic", () {
+    expect(MnemonicWallet.import(mnemonic.substring(8)), null);
+  });
 
   test("can return initial X address", () {
     final addressX = wallet.getAddressX();

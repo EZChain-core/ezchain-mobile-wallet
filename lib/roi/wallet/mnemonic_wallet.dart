@@ -24,7 +24,6 @@ class MnemonicWallet extends HDWalletAbstract implements UnsafeWallet {
   final int accountIndex;
 
   MnemonicWallet({required this.mnemonic, this.accountIndex = 0}) {
-    assert(Mnemonic.instance.validateMnemonic(mnemonic));
     final seed = Mnemonic.instance.mnemonicToSeed(mnemonic);
     final hdNode = HDNode(from: seed);
     final accountKey = hdNode.derive(getAccountPathAvalanche(accountIndex));
@@ -39,8 +38,19 @@ class MnemonicWallet extends HDWalletAbstract implements UnsafeWallet {
     return MnemonicWallet(mnemonic: mnemonic);
   }
 
+  static MnemonicWallet? import(String mnemonic) {
+    if (!validateMnemonic(mnemonic)) return null;
+    return MnemonicWallet(mnemonic: mnemonic);
+  }
+
   static String generateMnemonicPhrase() {
     return Mnemonic.instance.generateMnemonic();
+  }
+
+  static bool validateMnemonic(String mnemonic) {
+    final words = mnemonic.split(" ");
+    if (words.length != 24) return false;
+    return Mnemonic.instance.validateMnemonic(mnemonic);
   }
 
   @override

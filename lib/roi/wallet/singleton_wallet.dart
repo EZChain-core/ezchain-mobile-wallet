@@ -34,6 +34,18 @@ class SingletonWallet extends WalletProvider implements UnsafeWallet {
     return SingletonWallet(privateKey: avmKeyStr);
   }
 
+  static SingletonWallet? access(String key) {
+    try {
+      return SingletonWallet.fromEvmKey(key);
+    } catch (e) {
+      try {
+        return SingletonWallet(privateKey: key);
+      } catch (e) {
+        return null;
+      }
+    }
+  }
+
   @override
   String getEvmPrivateKeyHex() {
     return evmWallet.getPrivateKeyHex();
