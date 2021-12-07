@@ -11,6 +11,9 @@ import 'package:web3dart/credentials.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:sha3/sha3.dart';
 
+// ignore: implementation_imports
+import 'package:pointycastle/src/utils.dart' as pointycastle_utils;
+
 class EvmWallet {
   final Uint8List privateKey;
   late Uint8List publicKey;
@@ -22,8 +25,8 @@ class EvmWallet {
   BigInt _balance = BigInt.zero;
 
   EvmWallet({required this.privateKey}) {
-    publicKey = _privateKeyToPublicKey(privateKey);
-    _address = '0x' + HEX.encode(_publicKeyToAddress(publicKey));
+    publicKey = privateKeyToPublicKey(privateKey);
+    _address = '0x' + HEX.encode(publicKeyToAddress(publicKey));
   }
 
   String getAddressBech32() {
@@ -69,25 +72,22 @@ class EvmWallet {
     return "$privateKeyPrefix${cb58Encode(privateKey)}";
   }
 
-  Uint8List _privateKeyToPublicKey(Uint8List privateKey) {
-    final privateKeyNum = _decodeBigInt(privateKey);
+  static Uint8List privateKeyToPublicKey(Uint8List privateKey) {
+    assert(privateKey.length == 32);
+    final privateKeyNum = pointycastle_utils.decodeBigInt(privateKey);
     final p = params.G * privateKeyNum;
     return Uint8List.view(p!.getEncoded(false).buffer, 1);
   }
 
-  BigInt _decodeBigInt(List<int> bytes) {
-    BigInt result = BigInt.zero;
-    for (int i = 0; i < bytes.length; i++) {
-      result += BigInt.from(bytes[bytes.length - i - 1]) << (8 * i);
-    }
-    return result;
-  }
-
-  Uint8List _publicKeyToAddress(Uint8List publicKey) {
+  static Uint8List publicKeyToAddress(Uint8List publicKey) {
     assert(publicKey.length == 64);
     final hashed = SHA3(256, KECCAK_PADDING, 256).update(publicKey).digest();
     final length = hashed.length;
     return Uint8List.sublistView(
         Uint8List.fromList(hashed), length - 20, length);
+  }
+
+  static Uint8List privateKeyToAddress(Uint8List privateKey) {
+    return publicKeyToAddress(privateKeyToPublicKey(privateKey));
   }
 }
