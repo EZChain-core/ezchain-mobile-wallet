@@ -7,8 +7,8 @@ class AccessPrivateKeyStore = _AccessPrivateKeyStore with _$AccessPrivateKeyStor
 abstract class _AccessPrivateKeyStore with Store {
 
   @action
-  void accessWithPrivateKey(String privateKey) {
-    final wallet = SingletonWallet(privateKey: privateKey);
-
+  bool accessWithPrivateKey(String privateKey) {
+    final wallet = SingletonWallet.access(privateKey);
+    return wallet != null;
   }
 }
