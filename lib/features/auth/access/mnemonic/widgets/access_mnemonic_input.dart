@@ -7,12 +7,11 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
 class AccessMnemonicInput extends StatefulWidget {
-  final List<String>? phrase;
 
   final Function(List<String> phrases) onPhrasesChanged;
 
   const AccessMnemonicInput(
-      {Key? key, this.phrase, required this.onPhrasesChanged})
+      {Key? key, required this.onPhrasesChanged})
       : super(key: key);
 
   @override
@@ -20,7 +19,7 @@ class AccessMnemonicInput extends StatefulWidget {
 }
 
 class _AccessMnemonicInputState extends State<AccessMnemonicInput> {
-  final inputController = TextEditingController();
+  final inputController = TextEditingController(text: 'unaware click walnut alpha leopard pig attitude collect suit belt math sword token pupil matrix void ten vendor barrel bitter rather debris include moral');
   final phrase = <String>[];
   final space = ' ';
   final focusNode = FocusNode();
@@ -35,9 +34,6 @@ class _AccessMnemonicInputState extends State<AccessMnemonicInput> {
   @override
   void initState() {
     super.initState();
-    if (widget.phrase != null) {
-      phrase.addAll(widget.phrase!);
-    }
     inputController.addListener(_handlePhrases);
   }
 

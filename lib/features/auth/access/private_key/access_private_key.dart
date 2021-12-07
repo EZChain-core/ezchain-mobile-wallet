@@ -18,7 +18,7 @@ class AccessPrivateKeyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final accessPrivateKeyStore = AccessPrivateKeyStore();
 
-    final privateKeyInputController = TextEditingController();
+    final privateKeyInputController = TextEditingController(text: 'PrivateKey-JaCCSxdoWfo3ao5KwenXrJjJR7cBTQ287G1C5qpv2hr2tCCdb');
 
     Future<void> _showWarningDialog() async {
       return showDialog<void>(
@@ -53,10 +53,13 @@ class AccessPrivateKeyScreen extends StatelessWidget {
     }
 
     void _onClickAccess() {
-      accessPrivateKeyStore
+      bool isSuccess = accessPrivateKeyStore
           .accessWithPrivateKey(privateKeyInputController.text);
-      context.router.push(const DashboardRoute());
-      // _showWarningDialog();
+      if (isSuccess) {
+        context.router.push(const DashboardRoute());
+      } else {
+        _showWarningDialog();
+      }
     }
 
     return Consumer<WalletThemeProvider>(

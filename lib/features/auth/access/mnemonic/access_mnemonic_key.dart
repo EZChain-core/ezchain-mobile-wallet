@@ -47,8 +47,13 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
         _showWarningDialog();
       } else {
         String mnemonic = mnemonicPhrase.join(' ');
-        accessMnemonicKeyStore.accessWithMnemonicKey(mnemonic);
-        context.router.push(const DashboardRoute());
+        final isSuccess =
+            accessMnemonicKeyStore.accessWithMnemonicKey(mnemonic);
+        if (isSuccess) {
+          context.router.push(const DashboardRoute());
+        } else {
+          _showWarningDialog();
+        }
       }
     }
 
