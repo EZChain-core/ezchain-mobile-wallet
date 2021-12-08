@@ -7,6 +7,7 @@ import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
+import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/wallet.dart';
@@ -29,8 +30,8 @@ class SingletonWallet extends WalletProvider implements UnsafeWallet {
   }
 
   factory SingletonWallet.fromEvmKey(String key) {
-    final keyBuff = cb58Encode(Uint8List.fromList(HEX.decode(key)));
-    final avmKeyStr = "$privateKeyPrefix$keyBuff";
+    final avmKeyStr =
+        bufferToPrivateKeyString(Uint8List.fromList(HEX.decode(key)));
     return SingletonWallet(privateKey: avmKeyStr);
   }
 
