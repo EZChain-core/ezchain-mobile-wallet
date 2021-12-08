@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:hdkey/hdkey.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
+import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 
 class HDNode {
   Uint8List? get publicKey => _publicKey;
@@ -41,7 +42,7 @@ class HDNode {
     _privateKey = _hdKey.privateKey;
     final privateKey = _privateKey;
     if (privateKey != null) {
-      _privateKeyCB58 = "$privateKeyPrefix${cb58Encode(privateKey)}";
+      _privateKeyCB58 = bufferToPrivateKeyString(privateKey);
     } else {
       _privateExtendedKey = null;
     }

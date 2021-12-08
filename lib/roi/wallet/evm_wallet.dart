@@ -6,6 +6,7 @@ import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 import 'package:wallet/roi/sdk/crypto/secp256k1.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
+import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:web3dart/credentials.dart';
 import 'package:web3dart/web3dart.dart';
@@ -69,7 +70,7 @@ class EvmWallet {
   }
 
   String _getPrivateKeyBech() {
-    return "$privateKeyPrefix${cb58Encode(privateKey)}";
+    return bufferToPrivateKeyString(privateKey);
   }
 
   static Uint8List privateKeyToPublicKey(Uint8List privateKey) {

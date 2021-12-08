@@ -58,14 +58,19 @@ bool isEthAddress(String address) {
   return false;
 }
 
+String bufferToB58(Uint8List bytes) => Base58Encode(bytes);
+
+Uint8List b58ToBuffer(String b58Str) =>
+    Uint8List.fromList(Base58Decode(b58Str));
+
 String cb58Encode(Uint8List bytes) {
   final x = addChecksum(bytes);
-  return Base58Encode(x);
+  return bufferToB58(x);
 }
 
 Uint8List cb58Decode(dynamic bytes) {
   if (bytes is String) {
-    bytes = Uint8List.fromList(Base58Decode(bytes));
+    bytes = b58ToBuffer(bytes);
   }
   if (validateChecksum(bytes)) {
     return bytes.sublist(0, bytes.length - 4);
