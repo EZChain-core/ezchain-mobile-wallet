@@ -122,7 +122,7 @@ class _DotIndicator extends StatelessWidget {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => AnimatedContainer(
         duration: const Duration(milliseconds: 100),
-        margin: const EdgeInsets.only(right: 4),
+        margin: const EdgeInsets.only(right: 18),
         height: 16,
         width: 16,
         decoration: BoxDecoration(
