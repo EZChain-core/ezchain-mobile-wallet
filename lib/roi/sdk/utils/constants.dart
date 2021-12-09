@@ -515,3 +515,38 @@ class NetWork {
     }
   }
 }
+
+/// Rules used when merging sets
+enum MergeRule {
+  intersection,
+  differenceSelf,
+  differenceNew,
+  symDifference,
+  union,
+  unionMinusNew,
+  unionMinusSelf,
+  ERROR,
+}
+
+extension on MergeRule {
+  String get rule {
+    switch (this) {
+      case MergeRule.intersection:
+        return "intersection";
+      case MergeRule.differenceSelf:
+        return "differenceSelf";
+      case MergeRule.differenceNew:
+        return "differenceNew";
+      case MergeRule.symDifference:
+        return "symDifference";
+      case MergeRule.union:
+        return "union";
+      case MergeRule.unionMinusNew:
+        return "unionMinusNew";
+      case MergeRule.unionMinusSelf:
+        return "unionMinusSelf";
+      case MergeRule.ERROR:
+        return "ERROR";
+    }
+  }
+}

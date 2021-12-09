@@ -50,7 +50,7 @@ class Serialization {
       case SerializedType.BN:
         return bufferToBigInt16(vb);
       case SerializedType.Buffer:
-        if (args.length == 1 && args.first is num) {
+        if (args.length == 1 && args.first is int) {
           vb = Uint8List.fromList(
               HEX.decode(HEX.encode(vb).padLeft(args.first * 2, "0")));
         }
@@ -87,7 +87,7 @@ class Serialization {
         return Uint8List.fromList(HEX.decode(value));
       case SerializedType.BN:
         final str = BigInt.parse(v, radix: 10).toRadixString(16);
-        if (args.length == 1 && args.first is num) {
+        if (args.length == 1 && args.first is int) {
           return Uint8List.fromList(
               HEX.decode(str.padLeft(args.first * 2, "0")));
         }
@@ -107,22 +107,22 @@ class Serialization {
       case SerializedType.base64:
         return base64Decode(v);
       case SerializedType.decimalString:
-        if (args.length == 1 && args.first is num) {}
+        if (args.length == 1 && args.first is int) {}
         final str = BigInt.parse(v, radix: 10).toRadixString(16);
-        if (args.length == 1 && args.first is num) {
+        if (args.length == 1 && args.first is int) {
           return Uint8List.fromList(
               HEX.decode(str.padLeft(args.first * 2, "0")));
         }
         return Uint8List.fromList(HEX.decode(str));
       case SerializedType.number:
         final str = BigInt.parse(v, radix: 10).toRadixString(16);
-        if (args.length == 1 && args.first is num) {
+        if (args.length == 1 && args.first is int) {
           return Uint8List.fromList(
               HEX.decode(str.padLeft(args.first * 2, "0")));
         }
         return Uint8List.fromList(HEX.decode(str));
       case SerializedType.utf8:
-        if (args.length == 1 && args.first is num) {
+        if (args.length == 1 && args.first is int) {
           final b = Uint8List(args.first);
           b.addAll(v);
           return b;

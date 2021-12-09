@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/common/output.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
 abstract class StandardUTXO extends Serializable {
@@ -8,22 +10,57 @@ abstract class StandardUTXO extends Serializable {
   var txId = Uint8List(32);
   var outputIdx = Uint8List(4);
   var assetId = Uint8List(32);
-  Output? output;
+  late Output output;
 
   StandardUTXO(
       {int codecId = 0,
       Uint8List? txId,
-      Uint8List? outputIdx,
+      dynamic outputIdx,
       Uint8List? assetId,
-      Output? output}) {}
+      required Output output}) {
+    this.codecId[0] = codecId;
+    if (txId != null) {
+      this.txId = txId;
+    }
+    if (outputIdx != null) {
+      if (outputIdx is int) {
+        this.outputIdx[0] = outputIdx;
+      } else if (outputIdx is Uint8List) {
+        this.outputIdx = outputIdx;
+      }
+    }
+    if (assetId != null) {
+      this.assetId == assetId;
+    }
+    this.output == output;
+  }
 
-  num fromBuffer(Uint8List bytes, num? offset);
+  int fromBuffer(Uint8List bytes, int? offset);
 
-  num fromString(String serialized);
+  int fromString(String serialized);
 
   String toString();
 
   StandardUTXO clone();
+
+  StandardUTXO create(int? codecID, Uint8List? txId, dynamic outputIdx,
+      Uint8List? assetId, Output? output);
+
+  getUTXOId() => bufferToB58(Uint8List.fromList([...txId, ...outputIdx]));
+
+  Uint8List toBuffer() {
+    final outBuff = output.toBuffer();
+    final outputIdBuffer = Uint8List(4);
+    outputIdBuffer[0] = output.getOutputId();
+    return Uint8List.fromList([
+      ...codecId,
+      ...txId,
+      ...outputIdx,
+      ...assetId,
+      ...outputIdBuffer,
+      ...outBuff
+    ]);
+  }
 
   @override
   String get _typeName => "StandardUTXO";
@@ -32,7 +69,7 @@ abstract class StandardUTXO extends Serializable {
   dynamic serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
     var fields = super.serialize(encoding: encoding);
     return {
-      "fields": fields,
+      ...fields,
       "codecId": Serialization.instance.encoder(codecId, encoding,
           SerializedType.Buffer, SerializedType.decimalString),
       "txId": Serialization.instance
@@ -41,7 +78,7 @@ abstract class StandardUTXO extends Serializable {
           SerializedType.Buffer, SerializedType.decimalString),
       "assetId": Serialization.instance.encoder(
           assetId, encoding, SerializedType.Buffer, SerializedType.cb58),
-      "output": output?.serialize(encoding: encoding)
+      "output": output.serialize(encoding: encoding)
     };
   }
 
@@ -63,4 +100,128 @@ abstract class StandardUTXO extends Serializable {
   }
 }
 
-abstract class StandardUTXOSet<UTXOClass extends StandardUTXO> {}
+abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
+    extends Serializable {
+  Map<String, UTXOClass> utxos = {};
+
+  Map<String, Map<String, BigInt>> addressUTXOs = {};
+
+  @override
+  String get _typeName => "StandardUTXOSet";
+
+  UTXOClass parseUTXO(UTXOClass utxo);
+
+  StandardUTXOSet clone();
+
+  StandardUTXOSet create({List<dynamic> args = const []});
+
+  @override
+  dynamic serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
+    var fields = super.serialize(encoding: encoding);
+    final utxos = {};
+    for (final utxoId in this.utxos.keys) {
+      final utxoIdCleaned = Serialization.instance.encoder(
+          utxoId, encoding, SerializedType.base58, SerializedType.base58);
+
+      utxos[utxoIdCleaned] = this.utxos[utxoId]!.serialize(encoding: encoding);
+    }
+    final addressUTXOs = {};
+    for (final address in this.addressUTXOs.keys) {
+      final addressCleaned = Serialization.instance.encoder(
+          address, encoding, SerializedType.hex, SerializedType.base58);
+
+      final utxoBalance = {};
+
+      for (final utxoId in this.addressUTXOs[address]!.keys) {
+        final utxoidCleaned = Serialization.instance.encoder(
+            utxoId, encoding, SerializedType.base58, SerializedType.base58);
+
+        utxoBalance[utxoidCleaned] = Serialization.instance.encoder(
+            this.addressUTXOs[address]![utxoId]!,
+            encoding,
+            SerializedType.BN,
+            SerializedType.decimalString);
+      }
+      addressUTXOs[addressCleaned] = utxoBalance;
+    }
+
+    return {...fields, "utxos": utxos, "addressUTXOs": addressUTXOs};
+  }
+
+  bool includes(UTXOClass utxo) {
+    throw UnimplementedError();
+  }
+
+  UTXOClass add(UTXOClass utxo, {bool overwrite = false}) {
+    throw UnimplementedError();
+  }
+
+  UTXOClass remove(UTXOClass utxo) {
+    throw UnimplementedError();
+  }
+
+  List<UTXOClass> removeArray(List<UTXOClass> utxo) {
+    throw UnimplementedError();
+  }
+
+  List<StandardUTXO> addArray(List<UTXOClass> utxos, {bool overwrite = false}) {
+    throw UnimplementedError();
+  }
+
+  UTXOClass getUTXO(String utxoId) {
+    throw UnimplementedError();
+  }
+
+  List<UTXOClass> getAllUTXOs(List<String> utxoId) {
+    throw UnimplementedError();
+  }
+
+  List<String> getAllUTXOStrings(List<String> utxoId) {
+    throw UnimplementedError();
+  }
+
+  List<String> getUTXOIds(List<Uint8List> addresses, {bool spendable = true}) {
+    throw UnimplementedError();
+  }
+
+  List<Uint8List> getAddresses() {
+    throw UnimplementedError();
+  }
+
+  BigInt getBalance(List<Uint8List> addresses, Uint8List assetId, BigInt asOf) {
+    throw UnimplementedError();
+  }
+
+  List<Uint8List> getAssetIds(List<Uint8List> addresses) {
+    throw UnimplementedError();
+  }
+
+  StandardUTXO filter(List<dynamic> args,
+      bool Function(UTXOClass utxo, List<dynamic> largs) lambda) {
+    throw UnimplementedError();
+  }
+
+  StandardUTXO merge(StandardUTXO utxoSet, List<String> hasUTXOIDs) {
+    throw UnimplementedError();
+  }
+
+  StandardUTXO intersection(StandardUTXO utxoSet) {
+    throw UnimplementedError();
+  }
+
+  StandardUTXO difference(StandardUTXO utxoSet) {
+    throw UnimplementedError();
+  }
+
+  StandardUTXO symDifference(StandardUTXO utxoSet) {
+    throw UnimplementedError();
+  }
+
+  StandardUTXO union(StandardUTXO utxoSet) {
+    throw UnimplementedError();
+  }
+
+  StandardUTXO mergeByRule(StandardUTXO utxoSet, MergeRule mergeRule) {
+    throw UnimplementedError();
+  }
+}
