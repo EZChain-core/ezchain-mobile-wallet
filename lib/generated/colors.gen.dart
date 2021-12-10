@@ -122,6 +122,18 @@ class ColorName {
   /// Color: #1C315C
   static const Color secondaryLight = Color(0xFF1C315C);
 
+  /// Color: #EB5757
+  static const Color stateDangerDark = Color(0xFFEB5757);
+
+  /// Color: #EB5757
+  static const Color stateDangerLight = Color(0xFFEB5757);
+
+  /// Color: #6FCF97
+  static const Color stateSuccessDark = Color(0xFF6FCF97);
+
+  /// Color: #6FCF97
+  static const Color stateSuccessLight = Color(0xFF6FCF97);
+
   /// Color: #E7E8E9
   static const Color text10Dark = Color(0xFFE7E8E9);
 

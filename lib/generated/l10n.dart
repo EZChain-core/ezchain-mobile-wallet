@@ -140,6 +140,76 @@ class Strings {
     );
   }
 
+  /// `X chain`
+  String get sharedXChain {
+    return Intl.message(
+      'X chain',
+      name: 'sharedXChain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `P chain`
+  String get sharedPChain {
+    return Intl.message(
+      'P chain',
+      name: 'sharedPChain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `C chain`
+  String get sharedCChain {
+    return Intl.message(
+      'C chain',
+      name: 'sharedCChain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send`
+  String get sharedSend {
+    return Intl.message(
+      'Send',
+      name: 'sharedSend',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Receive`
+  String get sharedReceive {
+    return Intl.message(
+      'Receive',
+      name: 'sharedReceive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Available`
+  String get sharedAvailable {
+    return Intl.message(
+      'Available',
+      name: 'sharedAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lock`
+  String get sharedLock {
+    return Intl.message(
+      'Lock',
+      name: 'sharedLock',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
