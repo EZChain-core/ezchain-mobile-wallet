@@ -80,6 +80,17 @@ class ROITitleLargeTextStyle extends ROITextStyle {
             fontWeight: FontWeight.w500);
 }
 
+class ROITitleMediumTextStyle extends ROITextStyle {
+  final Color color;
+
+  const ROITitleMediumTextStyle({required this.color})
+      : super(
+            color: color,
+            fontSize: 14,
+            height: 20 / 14,
+            fontWeight: FontWeight.w500);
+}
+
 class ROITitleSmallTextStyle extends ROITextStyle {
   final Color color;
 

@@ -22,6 +22,14 @@ class $AssetsEnvGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/ic_arrow_down.svg
+  SvgGenImage get icArrowDown =>
+      const SvgGenImage('assets/icons/ic_arrow_down.svg');
+
+  /// File path: assets/icons/ic_arrow_up.svg
+  SvgGenImage get icArrowUp =>
+      const SvgGenImage('assets/icons/ic_arrow_up.svg');
+
   /// File path: assets/icons/ic_backspace_secondary.svg
   SvgGenImage get icBackspaceSecondary =>
       const SvgGenImage('assets/icons/ic_backspace_secondary.svg');

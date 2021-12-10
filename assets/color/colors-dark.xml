@@ -29,6 +29,9 @@
     <color name="secondary20_dark">#D2D6DE</color>
     <color name="secondary10_dark">#E8EAEF</color>
 
+    <color name="state_success_dark">#6FCF97</color>
+    <color name="state_danger_dark">#EB5757</color>
+
     <color name="bg_dark">#F8F8FB</color>
     <color name="border_dark">#E7E8E9</color>
     <color name="border_active_dark">#F39E22</color>

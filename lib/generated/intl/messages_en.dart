@@ -8,6 +8,7 @@
 // ignore_for_file:prefer_single_quotes,comment_references, directives_ordering
 // ignore_for_file:annotate_overrides,prefer_generic_function_type_aliases
 // ignore_for_file:unused_import, file_names, avoid_escaping_inner_quotes
+// ignore_for_file:unnecessary_string_interpolations, unnecessary_string_escapes
 
 import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
@@ -68,11 +69,18 @@ class MessageLookup extends MessageLookupByLibrary {
             "PIN Code doesn’t match! Try Again"),
         "sharedAccessWallet":
             MessageLookupByLibrary.simpleMessage("Access Wallet"),
+        "sharedAvailable": MessageLookupByLibrary.simpleMessage("Available"),
         "sharedBalance": MessageLookupByLibrary.simpleMessage("Balance"),
+        "sharedCChain": MessageLookupByLibrary.simpleMessage("C chain"),
         "sharedCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "sharedConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "sharedLock": MessageLookupByLibrary.simpleMessage("Lock"),
+        "sharedPChain": MessageLookupByLibrary.simpleMessage("P chain"),
         "sharedPrivateKey": MessageLookupByLibrary.simpleMessage("Private Key"),
         "sharedROIChain": MessageLookupByLibrary.simpleMessage("ROI Chain"),
-        "sharedToken": MessageLookupByLibrary.simpleMessage("Token")
+        "sharedReceive": MessageLookupByLibrary.simpleMessage("Receive"),
+        "sharedSend": MessageLookupByLibrary.simpleMessage("Send"),
+        "sharedToken": MessageLookupByLibrary.simpleMessage("Token"),
+        "sharedXChain": MessageLookupByLibrary.simpleMessage("X chain")
       };
 }

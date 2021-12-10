@@ -65,6 +65,10 @@ extension BaseColor on ThemeMode {
 
   Color get text10 => isDark ? ColorName.text10Dark : ColorName.text10Light;
 
+  Color get stateSuccess => isDark ? ColorName.stateSuccessDark : ColorName.stateSuccessLight;
+
+  Color get stateDanger => isDark ? ColorName.stateDangerDark : ColorName.stateDangerLight;
+
   Color get bg => isDark ? ColorName.bgDark : ColorName.bgLight;
 
   Color get border => isDark ? ColorName.borderDark : ColorName.borderLight;
