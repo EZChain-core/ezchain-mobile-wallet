@@ -18,13 +18,15 @@ abstract class StandardUTXO extends Serializable {
       dynamic outputIdx,
       Uint8List? assetId,
       required Output output}) {
-    this.codecId[0] = codecId;
+    final byteData = ByteData(2)..setUint8(0, codecId);
+    this.codecId = byteData.buffer.asUint8List();
     if (txId != null) {
       this.txId = txId;
     }
     if (outputIdx != null) {
       if (outputIdx is int) {
-        this.outputIdx[0] = outputIdx;
+        final byteData = ByteData(4)..setUint32(0, outputIdx);
+        this.outputIdx = byteData.buffer.asUint8List();
       } else if (outputIdx is Uint8List) {
         this.outputIdx = outputIdx;
       }
@@ -50,8 +52,8 @@ abstract class StandardUTXO extends Serializable {
 
   Uint8List toBuffer() {
     final outBuff = output.toBuffer();
-    final outputIdBuffer = Uint8List(4);
-    outputIdBuffer[0] = output.getOutputId();
+    final byteData = ByteData(4)..setUint32(0, output.getOutputId());
+    final outputIdBuffer = byteData.buffer.asUint8List();
     return Uint8List.fromList([
       ...codecId,
       ...txId,
