@@ -6,7 +6,6 @@ import 'package:wallet/roi/sdk/common/keychain/base_key_chain.dart';
 import 'package:wallet/roi/sdk/crypto/ecdsa_signer.dart';
 import 'package:wallet/roi/sdk/crypto/secp256k1.dart' as secp256k1;
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
-import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 
 abstract class SECP256k1KeyPair extends StandardKeyPair {

@@ -1,4 +1,5 @@
-import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
+import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
+import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/hdnode.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
@@ -11,10 +12,10 @@ class HdScanner {
   final String changePath;
 
   final Map<int, HDNode> addressCache = {};
-  final Map<int, ROIKeyPair> keyCacheX = {};
-  final Map<int, ROIKeyPair> keyCacheP = {};
+  final Map<int, AvmKeyPair> keyCacheX = {};
+  final Map<int, PvmKeyPair> keyCacheP = {};
 
-  late ROIKeyPair _avmAddressFactory;
+  late AvmKeyPair _avmAddressFactory;
 
   int get index => _index;
 
@@ -23,7 +24,7 @@ class HdScanner {
   HdScanner({required this.accountKey, bool isInternal = false})
       : changePath = isInternal ? "1" : "0" {
     final hrp = getPreferredHRP(roi.getNetworkId());
-    _avmAddressFactory = ROIKeyPair(chainId: "X", hrp: hrp);
+    _avmAddressFactory = AvmKeyPair(chainId: "X", hrp: hrp);
   }
 
   void setIndex(int index) {
@@ -34,8 +35,8 @@ class HdScanner {
     return _index++;
   }
 
-  ROIKeyChain getKeyChainX() {
-    final keyChain = xChain.newKeyChain();
+  AvmKeyChain getKeyChainX() {
+    final keyChain = xChain.newKeyChain() as AvmKeyChain;
     for (int i = 0; i <= index; i++) {
       final key = getKeyForIndexX(i);
       keyChain.addKey(key);
@@ -43,8 +44,8 @@ class HdScanner {
     return keyChain;
   }
 
-  ROIKeyChain getKeyChainP() {
-    final keyChain = pChain.newKeyChain();
+  PvmKeyChain getKeyChainP() {
+    final keyChain = pChain.newKeyChain() as PvmKeyChain;
     for (int i = 0; i <= index; i++) {
       final key = getKeyForIndexP(i);
       keyChain.addKey(key);
@@ -70,22 +71,22 @@ class HdScanner {
     return getAddressesInRangeSync(0, upTo + 1, chainId);
   }
 
-  ROIKeyPair getKeyForIndexX(int index) {
+  AvmKeyPair getKeyForIndexX(int index) {
     final cache = keyCacheX[index];
     if (cache != null) return cache;
     final hdKey = _getHdKeyForIndex(index);
     final keyChain = xChain.newKeyChain();
-    final keyPair = keyChain.importKey(hdKey.privateKey!);
+    final keyPair = keyChain.importKey(hdKey.privateKey!) as AvmKeyPair;
     keyCacheX[index] = keyPair;
     return keyPair;
   }
 
-  ROIKeyPair getKeyForIndexP(int index) {
-    final cache = keyCacheX[index];
+  PvmKeyPair getKeyForIndexP(int index) {
+    final cache = keyCacheP[index];
     if (cache != null) return cache;
     final hdKey = _getHdKeyForIndex(index);
     final keyChain = pChain.newKeyChain();
-    final keyPair = keyChain.importKey(hdKey.privateKey!);
+    final keyPair = keyChain.importKey(hdKey.privateKey!) as PvmKeyPair;
     keyCacheP[index] = keyPair;
     return keyPair;
   }

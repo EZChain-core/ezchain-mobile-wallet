@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:wallet/roi/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';
-import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 import 'package:wallet/roi/sdk/roi.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
@@ -21,9 +21,9 @@ class _EvmApiImpl implements EvmApi {
   ROINetwork roiNetwork;
 
   @override
-  ROIKeyChain get keyChain => _keyChain;
+  EvmKeyChain get keyChain => _keyChain;
 
-  late ROIKeyChain _keyChain;
+  late EvmKeyChain _keyChain;
 
   String blockChainId;
 
@@ -43,16 +43,16 @@ class _EvmApiImpl implements EvmApi {
     } else {
       alias = blockChainId;
     }
-    _keyChain = ROIKeyChain(chainId: alias, hrp: roiNetwork.hrp);
+    _keyChain = EvmKeyChain(chainId: alias, hrp: roiNetwork.hrp);
   }
 
   @override
-  ROIKeyChain newKeyChain() {
+  EvmKeyChain newKeyChain() {
     final alias = getBlockchainAlias();
     if (alias == null) {
-      _keyChain = ROIKeyChain(chainId: blockChainId, hrp: roiNetwork.hrp);
+      _keyChain = EvmKeyChain(chainId: blockChainId, hrp: roiNetwork.hrp);
     } else {
-      _keyChain = ROIKeyChain(chainId: alias, hrp: roiNetwork.hrp);
+      _keyChain = EvmKeyChain(chainId: alias, hrp: roiNetwork.hrp);
     }
     return keyChain;
   }
