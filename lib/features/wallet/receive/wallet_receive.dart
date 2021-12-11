@@ -1,3 +1,4 @@
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +25,9 @@ class WalletReceiveScreen extends StatelessWidget {
                 children: [
                   ROIAppBar(
                     title: Strings.current.sharedReceive,
-                    onPressed: () => {},
+                    onPressed: () {
+                      context.router.pop();
+                    },
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16),
@@ -138,8 +141,8 @@ class WalletReceiveScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 16, bottom: 4),
                     child: Text(
                       Strings.current.walletReceiveSetAmount,
-                      style:
-                          ROITitleLargeTextStyle(color: provider.themeMode.text60),
+                      style: ROITitleLargeTextStyle(
+                          color: provider.themeMode.text60),
                     ),
                   )
                 ],

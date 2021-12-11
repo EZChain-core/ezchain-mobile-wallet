@@ -50,7 +50,7 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
         final isSuccess =
             accessMnemonicKeyStore.accessWithMnemonicKey(mnemonic);
         if (isSuccess) {
-          context.router.push(const DashboardRoute());
+          context.router.replaceAll([const DashboardRoute()]);
         } else {
           _showWarningDialog();
         }
