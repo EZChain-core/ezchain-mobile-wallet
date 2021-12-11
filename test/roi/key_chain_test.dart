@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 import 'package:hex/hex.dart';

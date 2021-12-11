@@ -92,3 +92,32 @@ Uint8List addChecksum(Uint8List buff) {
   hashSlice = hashSlice.sublist(28, hashSlice.length);
   return Uint8List.fromList([...buff, ...hashSlice]);
 }
+
+BigInt fromBufferToBN(Uint8List buff) {
+  return BigInt.parse(HEX.encode(buff), radix: 16);
+}
+
+Uint8List fromBNToBuffer(BigInt bn, {int? length}) {
+  final byteData = bigIntToByteData(bn);
+  final list = byteData.buffer.asUint8List();
+  if (length != null) {
+    final x = length - list.length;
+    final padLeft = [];
+    for (int i = 0; i < x; i++) {
+      padLeft.insert(0, 0);
+    }
+    return Uint8List.fromList([...padLeft, ...list]);
+  } else {
+    return list;
+  }
+}
+
+ByteData bigIntToByteData(BigInt bigInt) {
+  final data = ByteData((bigInt.bitLength / 8).ceil());
+  var _bigInt = bigInt;
+  for (var i = 1; i <= data.lengthInBytes; i++) {
+    data.setUint8(data.lengthInBytes - i, _bigInt.toUnsigned(8).toInt());
+    _bigInt = _bigInt >> 8;
+  }
+  return data;
+}

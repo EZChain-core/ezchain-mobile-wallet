@@ -35,3 +35,7 @@ BigInt bufferToBigInt16(Uint8List buff) {
   }
   return BigInt.parse(hex, radix: 16);
 }
+
+BigInt unixNow() {
+  return BigInt.from(DateTime.now().toUtc().millisecondsSinceEpoch / 1000);
+}

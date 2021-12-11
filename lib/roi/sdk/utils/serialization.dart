@@ -11,7 +11,7 @@ abstract class Serializable {
 
   int? get _typeId;
 
-  int? get _codecId;
+  int get _codecId;
 
   dynamic serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
     return {
@@ -32,6 +32,14 @@ abstract class Serializable {
       assert(fields["codecId"] is int);
       assert(fields["codecId"] == "codecId");
     }
+  }
+
+  String getTypeName() {
+    return _typeName;
+  }
+
+  int getCodecId() {
+    return _codecId;
   }
 }
 
@@ -56,7 +64,7 @@ class Serialization {
         }
         return vb;
       case SerializedType.bech32:
-        return addressToString(args.first, args[1], vb);
+        return addressToString(args[0], args[1], vb);
       case SerializedType.nodeID:
         return bufferToNodeIDString(vb);
       case SerializedType.privateKey:
@@ -86,7 +94,7 @@ class Serialization {
         }
         return Uint8List.fromList(HEX.decode(value));
       case SerializedType.BN:
-        final str = BigInt.parse(v, radix: 10).toRadixString(16);
+        final str = (v as BigInt).toRadixString(16);
         if (args.length == 1 && args.first is int) {
           return Uint8List.fromList(
               HEX.decode(str.padLeft(args.first * 2, "0")));
@@ -95,7 +103,8 @@ class Serialization {
       case SerializedType.Buffer:
         return v;
       case SerializedType.bech32:
-        return stringToAddress(v, hrp: args[0]);
+        final hrp = args.isEmpty ? null : args[0];
+        return stringToAddress(v, hrp: hrp);
       case SerializedType.nodeID:
         return nodeIDStringToBuffer(v);
       case SerializedType.privateKey:
@@ -115,7 +124,7 @@ class Serialization {
         }
         return Uint8List.fromList(HEX.decode(str));
       case SerializedType.number:
-        final str = BigInt.parse(v, radix: 10).toRadixString(16);
+        final str = BigInt.parse(v.toString(), radix: 10).toRadixString(16);
         if (args.length == 1 && args.first is int) {
           return Uint8List.fromList(
               HEX.decode(str.padLeft(args.first * 2, "0")));
