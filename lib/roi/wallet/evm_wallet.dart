@@ -1,11 +1,10 @@
 import 'dart:typed_data';
 import 'package:hex/hex.dart';
+import 'package:wallet/roi/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 
-import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 import 'package:wallet/roi/sdk/crypto/secp256k1.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
-import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:web3dart/credentials.dart';
@@ -31,7 +30,7 @@ class EvmWallet {
   }
 
   String getAddressBech32() {
-    final keyPair = ROIKeyPair(chainId: "C", hrp: roi.getHRP());
+    final keyPair = EvmKeyPair(chainId: "C", hrp: roi.getHRP());
     final address = keyPair.addressFromPublicKey(publicKey);
     return addressToString("C", roi.getHRP(), address);
   }
@@ -40,14 +39,14 @@ class EvmWallet {
     return HEX.encode(privateKey);
   }
 
-  ROIKeyChain getKeyChain() {
-    return ROIKeyChain(chainId: "C", hrp: roi.getHRP())
+  EvmKeyChain getKeyChain() {
+    return EvmKeyChain(chainId: "C", hrp: roi.getHRP())
       ..importKey(_getPrivateKeyBech());
   }
 
-  ROIKeyPair getKeyPair() {
-    final keyChain = ROIKeyChain(chainId: "C", hrp: roi.getHRP());
-    return keyChain.importKey(_getPrivateKeyBech());
+  EvmKeyPair getKeyPair() {
+    final keyChain = EvmKeyChain(chainId: "C", hrp: roi.getHRP());
+    return keyChain.importKey(_getPrivateKeyBech()) as EvmKeyPair;
   }
 
   Future<BigInt> updateBalance() async {

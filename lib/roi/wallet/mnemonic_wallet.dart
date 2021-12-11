@@ -1,9 +1,11 @@
 import 'dart:typed_data';
 
+import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
+import 'package:wallet/roi/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
+import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
-import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 import 'package:wallet/roi/sdk/utils/hdnode.dart';
 import 'package:wallet/roi/sdk/utils/mnemonic.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
@@ -79,7 +81,7 @@ class MnemonicWallet extends HDWalletAbstract implements UnsafeWallet {
   }
 
   String getEvmAddressBech() {
-    final keyPair = ROIKeyPair(chainId: "C", hrp: roi.getHRP());
+    final keyPair = EvmKeyPair(chainId: "C", hrp: roi.getHRP());
     keyPair.importKey(ethAccountKey.publicKey!);
     return keyPair.getAddressString();
   }
@@ -88,13 +90,13 @@ class MnemonicWallet extends HDWalletAbstract implements UnsafeWallet {
     return evmWallet.address;
   }
 
-  ROIKeyChain _getKeyChainX() {
+  AvmKeyChain _getKeyChainX() {
     final internal = internalScan.getKeyChainX();
     final external = internalScan.getKeyChainX();
-    return internal.union(external);
+    return internal.union(external) as AvmKeyChain;
   }
 
-  ROIKeyChain _getKeyChainP() {
+  PvmKeyChain _getKeyChainP() {
     return externalScan.getKeyChainP();
   }
 }

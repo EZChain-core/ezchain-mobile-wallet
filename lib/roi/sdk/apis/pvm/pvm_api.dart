@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';
-import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 import 'package:wallet/roi/sdk/roi.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
@@ -21,9 +21,9 @@ class _PvmApiImpl implements PvmApi {
   ROINetwork roiNetwork;
 
   @override
-  ROIKeyChain get keyChain => _keyChain;
+  PvmKeyChain get keyChain => _keyChain;
 
-  late ROIKeyChain _keyChain;
+  late PvmKeyChain _keyChain;
 
   String blockChainId;
 
@@ -43,16 +43,16 @@ class _PvmApiImpl implements PvmApi {
     } else {
       alias = blockChainId;
     }
-    _keyChain = ROIKeyChain(chainId: alias, hrp: roiNetwork.hrp);
+    _keyChain = PvmKeyChain(chainId: alias, hrp: roiNetwork.hrp);
   }
 
   @override
-  ROIKeyChain newKeyChain() {
+  PvmKeyChain newKeyChain() {
     final alias = getBlockchainAlias();
     if (alias == null) {
-      _keyChain = ROIKeyChain(chainId: blockChainId, hrp: roiNetwork.hrp);
+      _keyChain = PvmKeyChain(chainId: blockChainId, hrp: roiNetwork.hrp);
     } else {
-      _keyChain = ROIKeyChain(chainId: alias, hrp: roiNetwork.hrp);
+      _keyChain = PvmKeyChain(chainId: alias, hrp: roiNetwork.hrp);
     }
     return keyChain;
   }

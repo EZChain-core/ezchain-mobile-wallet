@@ -1,12 +1,13 @@
 import 'dart:typed_data';
 import 'package:hex/hex.dart';
+import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
+import 'package:wallet/roi/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
+import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
-import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
-import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
@@ -65,7 +66,7 @@ class SingletonWallet extends WalletProvider implements UnsafeWallet {
   }
 
   String getEvmAddressBech() {
-    final keyPair = ROIKeyPair(chainId: "C", hrp: roi.getHRP());
+    final keyPair = EvmKeyPair(chainId: "C", hrp: roi.getHRP());
     keyPair.importKey(_keyBuff);
     return keyPair.getAddressString();
   }
@@ -145,11 +146,15 @@ class SingletonWallet extends WalletProvider implements UnsafeWallet {
     return [getAddressX()];
   }
 
-  ROIKeyChain _getKeyChainX() {
-    return xChain.newKeyChain()..importKey(_privateKey);
+  AvmKeyChain _getKeyChainX() {
+    final avmKeyChain = xChain.newKeyChain() as AvmKeyChain;
+    avmKeyChain.importKey(_privateKey);
+    return avmKeyChain;
   }
 
-  ROIKeyChain _getKeyChainP() {
-    return pChain.newKeyChain()..importKey(_privateKey);
+  PvmKeyChain _getKeyChainP() {
+    final pvmKeyChain = pChain.newKeyChain() as PvmKeyChain;
+    pvmKeyChain.importKey(_privateKey);
+    return pvmKeyChain;
   }
 }
