@@ -100,12 +100,16 @@ class ROIMediumNoneButton extends StatelessWidget {
               height: roiButtonMediumHeight,
               child: TextButton(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (iconLeft != null) iconLeft!,
                     if (iconLeft != null) const SizedBox(width: 8),
-                    Text(text,
-                        style: ROIButtonTextStyle(
-                            color: provider.themeMode.primary)),
+                    Text(
+                      text,
+                      style:
+                          ROIButtonTextStyle(color: provider.themeMode.primary),
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
                 style: ROIButtonStyle(

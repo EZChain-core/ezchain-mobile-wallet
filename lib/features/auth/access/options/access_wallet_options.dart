@@ -118,7 +118,9 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                         child: ROISpecialNoneButton(
                           text:
                               Strings.current.accessWalletOptionsDontHaveWallet,
-                          onPressed: () {},
+                          onPressed: () {
+                            context.router.push(const CreateWalletRoute());
+                          },
                         ),
                       ),
                     ),

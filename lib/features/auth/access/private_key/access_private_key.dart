@@ -56,7 +56,7 @@ class AccessPrivateKeyScreen extends StatelessWidget {
       bool isSuccess = accessPrivateKeyStore
           .accessWithPrivateKey(privateKeyInputController.text);
       if (isSuccess) {
-        context.router.push(const DashboardRoute());
+        context.router.replaceAll([const DashboardRoute()]);
       } else {
         _showWarningDialog();
       }
