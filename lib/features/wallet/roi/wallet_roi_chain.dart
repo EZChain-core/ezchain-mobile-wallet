@@ -1,5 +1,7 @@
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
@@ -69,7 +71,9 @@ class WalletROIChainScreen extends StatelessWidget {
                       _WalletButton(
                         text: Strings.current.sharedReceive,
                         icon: Assets.icons.icArrowDown.svg(),
-                        onPressed: () {},
+                        onPressed: () {
+                          context.router.push(const WalletReceiveRoute());
+                        },
                       ),
                     ],
                   ),

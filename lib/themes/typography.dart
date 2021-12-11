@@ -27,6 +27,29 @@ class ROIMnemonicText extends StatelessWidget {
   }
 }
 
+class ROIChainLabelText extends StatelessWidget {
+  final String text;
+
+  const ROIChainLabelText({Key? key, required this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          color: provider.themeMode.primary,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        child: Text(
+          text,
+          style: ROITitleMediumTextStyle(color: provider.themeMode.text90),
+        ),
+      ),
+    );
+  }
+}
+
 class ROITextStyle extends TextStyle {
   final Color color;
 

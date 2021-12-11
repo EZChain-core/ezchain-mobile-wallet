@@ -26,6 +26,10 @@ class $AssetsIconsGen {
   SvgGenImage get icArrowDown =>
       const SvgGenImage('assets/icons/ic_arrow_down.svg');
 
+  /// File path: assets/icons/ic_arrow_left_white.svg
+  SvgGenImage get icArrowLeftWhite =>
+      const SvgGenImage('assets/icons/ic_arrow_left_white.svg');
+
   /// File path: assets/icons/ic_arrow_up.svg
   SvgGenImage get icArrowUp =>
       const SvgGenImage('assets/icons/ic_arrow_up.svg');
@@ -37,6 +41,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_change_pin.svg
   SvgGenImage get icChangePin =>
       const SvgGenImage('assets/icons/ic_change_pin.svg');
+
+  /// File path: assets/icons/ic_copy_primary.svg
+  SvgGenImage get icCopyPrimary =>
+      const SvgGenImage('assets/icons/ic_copy_primary.svg');
 
   /// File path: assets/icons/ic_doc_outline_black.svg
   SvgGenImage get icDocOutlineBlack =>
@@ -62,6 +70,9 @@ class $AssetsIconsGen {
   SvgGenImage get icQuestion =>
       const SvgGenImage('assets/icons/ic_question.svg');
 
+  /// File path: assets/icons/ic_roi.svg
+  SvgGenImage get icRoi => const SvgGenImage('assets/icons/ic_roi.svg');
+
   /// File path: assets/icons/ic_security.svg
   SvgGenImage get icSecurity =>
       const SvgGenImage('assets/icons/ic_security.svg');
@@ -69,6 +80,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_setting_outline.svg
   SvgGenImage get icSettingOutline =>
       const SvgGenImage('assets/icons/ic_setting_outline.svg');
+
+  /// File path: assets/icons/ic_share_primary.svg
+  SvgGenImage get icSharePrimary =>
+      const SvgGenImage('assets/icons/ic_share_primary.svg');
 
   /// File path: assets/icons/ic_touch_id.svg
   SvgGenImage get icTouchId =>
@@ -97,6 +112,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/img_logo_roi.png
   AssetGenImage get imgLogoRoi =>
       const AssetGenImage('assets/images/img_logo_roi.png');
+
+  /// File path: assets/images/img_logo_roi_secondary.png
+  AssetGenImage get imgLogoRoiSecondary =>
+      const AssetGenImage('assets/images/img_logo_roi_secondary.png');
 
   /// File path: assets/images/img_onboard_one.png
   AssetGenImage get imgOnboardOne =>

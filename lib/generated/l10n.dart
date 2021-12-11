@@ -210,6 +210,26 @@ class Strings {
     );
   }
 
+  /// `Copy`
+  String get sharedCopy {
+    return Intl.message(
+      'Copy',
+      name: 'sharedCopy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share`
+  String get sharedShare {
+    return Intl.message(
+      'Share',
+      name: 'sharedShare',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -485,6 +505,46 @@ class Strings {
     return Intl.message(
       'Touch ID',
       name: 'settingTouchId',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send only `
+  String get walletReceiveSendOnly {
+    return Intl.message(
+      'Send only ',
+      name: 'walletReceiveSendOnly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bitcoin(BTC)`
+  String get walletReceiveBitcoin {
+    return Intl.message(
+      'Bitcoin(BTC)',
+      name: 'walletReceiveBitcoin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` to this address\nSending any other coins my result in permanent loss`
+  String get walletReceiveToThis {
+    return Intl.message(
+      ' to this address\nSending any other coins my result in permanent loss',
+      name: 'walletReceiveToThis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set Amount`
+  String get walletReceiveSetAmount {
+    return Intl.message(
+      'Set Amount',
+      name: 'walletReceiveSetAmount',
       desc: '',
       args: [],
     );
