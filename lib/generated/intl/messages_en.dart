@@ -82,13 +82,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedCChain": MessageLookupByLibrary.simpleMessage("C chain"),
         "sharedCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "sharedConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "sharedCopy": MessageLookupByLibrary.simpleMessage("Copy"),
         "sharedLock": MessageLookupByLibrary.simpleMessage("Lock"),
         "sharedPChain": MessageLookupByLibrary.simpleMessage("P chain"),
         "sharedPrivateKey": MessageLookupByLibrary.simpleMessage("Private Key"),
         "sharedROIChain": MessageLookupByLibrary.simpleMessage("ROI Chain"),
         "sharedReceive": MessageLookupByLibrary.simpleMessage("Receive"),
         "sharedSend": MessageLookupByLibrary.simpleMessage("Send"),
+        "sharedShare": MessageLookupByLibrary.simpleMessage("Share"),
         "sharedToken": MessageLookupByLibrary.simpleMessage("Token"),
-        "sharedXChain": MessageLookupByLibrary.simpleMessage("X chain")
+        "sharedXChain": MessageLookupByLibrary.simpleMessage("X chain"),
+        "walletReceiveBitcoin":
+            MessageLookupByLibrary.simpleMessage("Bitcoin(BTC)"),
+        "walletReceiveSendOnly":
+            MessageLookupByLibrary.simpleMessage("Send only "),
+        "walletReceiveSetAmount":
+            MessageLookupByLibrary.simpleMessage("Set Amount"),
+        "walletReceiveToThis": MessageLookupByLibrary.simpleMessage(
+            " to this address\nSending any other coins my result in permanent loss")
       };
 }

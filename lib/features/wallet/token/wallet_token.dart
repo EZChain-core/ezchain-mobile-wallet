@@ -96,20 +96,7 @@ class _WalletTokenItem extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(4)),
-                          color: provider.themeMode.primary,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
-                        child: Text(
-                          token.type,
-                          style: ROITitleMediumTextStyle(
-                              color: provider.themeMode.text90),
-                        ),
-                      )
+                      ROIChainLabelText(text: token.type)
                     ],
                   ),
                   const SizedBox(height: 4),

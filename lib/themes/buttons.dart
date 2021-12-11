@@ -78,12 +78,20 @@ class ROIMediumPrimaryButton extends StatelessWidget {
 class ROIMediumNoneButton extends StatelessWidget {
   final String text;
 
+  final Widget? iconLeft;
+
+  final EdgeInsetsGeometry? padding;
+
   final VoidCallback? onPressed;
 
   final VoidCallback? onLongPress;
 
   const ROIMediumNoneButton(
-      {required this.text, this.onPressed, this.onLongPress});
+      {required this.text,
+      this.iconLeft,
+      this.onPressed,
+      this.onLongPress,
+      this.padding});
 
   @override
   Widget build(BuildContext context) {
@@ -91,12 +99,18 @@ class ROIMediumNoneButton extends StatelessWidget {
         builder: (context, provider, child) => SizedBox(
               height: roiButtonMediumHeight,
               child: TextButton(
-                child: Text(text,
-                    style:
-                        ROIButtonTextStyle(color: provider.themeMode.primary)),
+                child: Row(
+                  children: [
+                    if (iconLeft != null) iconLeft!,
+                    if (iconLeft != null) const SizedBox(width: 8),
+                    Text(text,
+                        style: ROIButtonTextStyle(
+                            color: provider.themeMode.primary)),
+                  ],
+                ),
                 style: ROIButtonStyle(
                     bgColor: Colors.transparent,
-                    buttonPadding: roiButtonMediumPadding),
+                    buttonPadding: padding ?? roiButtonMediumPadding),
                 onPressed: onPressed,
                 onLongPress: onLongPress,
               ),
@@ -118,7 +132,7 @@ class ROISpecialNoneButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
         builder: (context, provider, child) => SizedBox(
-          height: roiButtonMediumHeight,
+              height: roiButtonMediumHeight,
               child: TextButton(
                 child: Text(text,
                     style: ROIBodyLargeTextStyle(
