@@ -67,6 +67,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "pinCodeTitle": MessageLookupByLibrary.simpleMessage("PIN code"),
         "pinCodeWrong": MessageLookupByLibrary.simpleMessage(
             "PIN Code doesn’t match! Try Again"),
+        "settingAboutRoi":
+            MessageLookupByLibrary.simpleMessage("About Roi Chain"),
+        "settingChangePin": MessageLookupByLibrary.simpleMessage("Change PIN"),
+        "settingGeneral":
+            MessageLookupByLibrary.simpleMessage("General Setting"),
+        "settingTouchId": MessageLookupByLibrary.simpleMessage("Touch ID"),
+        "settingWalletSecurity":
+            MessageLookupByLibrary.simpleMessage("Wallet Security"),
         "sharedAccessWallet":
             MessageLookupByLibrary.simpleMessage("Access Wallet"),
         "sharedAvailable": MessageLookupByLibrary.simpleMessage("Available"),

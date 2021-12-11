@@ -37,5 +37,10 @@
   "dashboardWallet": "Wallet",
   "dashboardCross": "Cross",
   "dashboardEarn": "Earn",
-  "dashboardSetting": "Setting"
+  "dashboardSetting": "Setting",
+  "settingChangePin": "Change PIN",
+  "settingWalletSecurity": "Wallet Security",
+  "settingGeneral": "General Setting",
+  "settingAboutRoi": "About Roi Chain",
+  "settingTouchId": "Touch ID"
 }
