@@ -34,6 +34,10 @@ class $AssetsIconsGen {
   SvgGenImage get icBackspaceSecondary =>
       const SvgGenImage('assets/icons/ic_backspace_secondary.svg');
 
+  /// File path: assets/icons/ic_change_pin.svg
+  SvgGenImage get icChangePin =>
+      const SvgGenImage('assets/icons/ic_change_pin.svg');
+
   /// File path: assets/icons/ic_doc_outline_black.svg
   SvgGenImage get icDocOutlineBlack =>
       const SvgGenImage('assets/icons/ic_doc_outline_black.svg');
@@ -46,13 +50,29 @@ class $AssetsIconsGen {
   SvgGenImage get icFolderOulineBlack =>
       const SvgGenImage('assets/icons/ic_folder_ouline_black.svg');
 
+  /// File path: assets/icons/ic_general_setting.svg
+  SvgGenImage get icGeneralSetting =>
+      const SvgGenImage('assets/icons/ic_general_setting.svg');
+
   /// File path: assets/icons/ic_key_outline_black.svg
   SvgGenImage get icKeyOutlineBlack =>
       const SvgGenImage('assets/icons/ic_key_outline_black.svg');
 
+  /// File path: assets/icons/ic_question.svg
+  SvgGenImage get icQuestion =>
+      const SvgGenImage('assets/icons/ic_question.svg');
+
+  /// File path: assets/icons/ic_security.svg
+  SvgGenImage get icSecurity =>
+      const SvgGenImage('assets/icons/ic_security.svg');
+
   /// File path: assets/icons/ic_setting_outline.svg
   SvgGenImage get icSettingOutline =>
       const SvgGenImage('assets/icons/ic_setting_outline.svg');
+
+  /// File path: assets/icons/ic_touch_id.svg
+  SvgGenImage get icTouchId =>
+      const SvgGenImage('assets/icons/ic_touch_id.svg');
 
   /// File path: assets/icons/ic_two_arrow.svg
   SvgGenImage get icTwoArrow =>
