@@ -1,8 +1,10 @@
 import 'dart:typed_data';
+import 'package:hex/hex.dart';
 
 import 'package:wallet/roi/sdk/common/output.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
+import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
 abstract class StandardUTXO extends Serializable {
@@ -12,21 +14,22 @@ abstract class StandardUTXO extends Serializable {
   var assetId = Uint8List(32);
   late Output output;
 
+  @override
+  String get _typeName => "StandardUTXO";
+
   StandardUTXO(
       {int codecId = 0,
       Uint8List? txId,
       dynamic outputIdx,
       Uint8List? assetId,
       required Output output}) {
-    final byteData = ByteData(2)..setUint8(0, codecId);
-    this.codecId = byteData.buffer.asUint8List();
+    this.codecId.buffer.asByteData().setUint8(0, codecId);
     if (txId != null) {
       this.txId = txId;
     }
     if (outputIdx != null) {
       if (outputIdx is int) {
-        final byteData = ByteData(4)..setUint32(0, outputIdx);
-        this.outputIdx = byteData.buffer.asUint8List();
+        this.outputIdx.buffer.asByteData().setUint32(0, outputIdx);
       } else if (outputIdx is Uint8List) {
         this.outputIdx = outputIdx;
       }
@@ -37,35 +40,17 @@ abstract class StandardUTXO extends Serializable {
     this.output == output;
   }
 
-  int fromBuffer(Uint8List bytes, int? offset);
+  int fromBuffer(Uint8List bytes, {int? offset});
 
   int fromString(String serialized);
 
+  @override
   String toString();
 
   StandardUTXO clone();
 
   StandardUTXO create(int? codecID, Uint8List? txId, dynamic outputIdx,
       Uint8List? assetId, Output? output);
-
-  getUTXOId() => bufferToB58(Uint8List.fromList([...txId, ...outputIdx]));
-
-  Uint8List toBuffer() {
-    final outBuff = output.toBuffer();
-    final byteData = ByteData(4)..setUint32(0, output.getOutputId());
-    final outputIdBuffer = byteData.buffer.asUint8List();
-    return Uint8List.fromList([
-      ...codecId,
-      ...txId,
-      ...outputIdx,
-      ...assetId,
-      ...outputIdBuffer,
-      ...outBuff
-    ]);
-  }
-
-  @override
-  String get _typeName => "StandardUTXO";
 
   @override
   dynamic serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
@@ -100,6 +85,35 @@ abstract class StandardUTXO extends Serializable {
         fields["assetId"], encoding, SerializedType.cb58, SerializedType.Buffer,
         args: [32]);
   }
+
+  int getCodecId() => codecId.buffer.asByteData().getInt8(0);
+
+  Uint8List getCodecIdBuffer() => codecId;
+
+  Uint8List getTxId() => txId;
+
+  Uint8List getOutputIdx() => outputIdx;
+
+  Uint8List getAssetId() => assetId;
+
+  String getUTXOId() =>
+      bufferToB58(Uint8List.fromList([...txId, ...outputIdx]));
+
+  Output getOutput() => output;
+
+  Uint8List toBuffer() {
+    final outBuff = output.toBuffer();
+    final outputIdBuffer = Uint8List(4);
+    outputIdBuffer.buffer.asByteData().setUint32(0, output.getOutputId());
+    return Uint8List.fromList([
+      ...codecId,
+      ...txId,
+      ...outputIdx,
+      ...assetId,
+      ...outputIdBuffer,
+      ...outBuff
+    ]);
+  }
 }
 
 abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
@@ -111,7 +125,7 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
   @override
   String get _typeName => "StandardUTXOSet";
 
-  UTXOClass parseUTXO(UTXOClass utxo);
+  UTXOClass parseUTXO(dynamic utxo);
 
   StandardUTXOSet clone();
 
@@ -135,10 +149,10 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
       final utxoBalance = {};
 
       for (final utxoId in this.addressUTXOs[address]!.keys) {
-        final utxoidCleaned = Serialization.instance.encoder(
+        final utxoIdCleaned = Serialization.instance.encoder(
             utxoId, encoding, SerializedType.base58, SerializedType.base58);
 
-        utxoBalance[utxoidCleaned] = Serialization.instance.encoder(
+        utxoBalance[utxoIdCleaned] = Serialization.instance.encoder(
             this.addressUTXOs[address]![utxoId]!,
             encoding,
             SerializedType.BN,
@@ -150,80 +164,259 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
     return {...fields, "utxos": utxos, "addressUTXOs": addressUTXOs};
   }
 
-  bool includes(UTXOClass utxo) {
-    throw UnimplementedError();
+  bool includes(dynamic utxo) {
+    try {
+      final utxoX = parseUTXO(utxo);
+      final utxoId = utxoX.getUTXOId();
+      return utxos.keys.contains(utxoId);
+    } catch (e) {
+      return false;
+    }
   }
 
-  UTXOClass add(UTXOClass utxo, {bool overwrite = false}) {
-    throw UnimplementedError();
+  UTXOClass? add(dynamic utxo, {bool overwrite = false}) {
+    final UTXOClass utxovar;
+    try {
+      utxovar = parseUTXO(utxo);
+    } catch (e) {
+      return null;
+    }
+    final utxoId = utxovar.getUTXOId();
+    if (!utxos.keys.contains(utxoId) || overwrite) {
+      utxos[utxoId] = utxovar;
+      final addresses = utxovar.getOutput().getAddresses();
+      final lockTime = utxovar.getOutput().getLockTime();
+      for (int i = 0; i < addresses.length; i++) {
+        final address = HEX.encode(addresses[i]);
+        if (!addressUTXOs.keys.contains(address)) {
+          addressUTXOs[address] = {};
+        }
+        addressUTXOs[address]![utxoId] = lockTime;
+      }
+      return utxovar;
+    }
+    return null;
   }
 
-  UTXOClass remove(UTXOClass utxo) {
-    throw UnimplementedError();
+  List<UTXOClass> addArray(List<dynamic> utxos, {bool overwrite = false}) {
+    final added = <UTXOClass>[];
+    for (int i = 0; i < utxos.length; i++) {
+      final result = add(utxos[i], overwrite: overwrite);
+      if (result != null) {
+        added.add(result);
+      }
+    }
+    return added;
   }
 
-  List<UTXOClass> removeArray(List<UTXOClass> utxo) {
-    throw UnimplementedError();
+  UTXOClass? remove(dynamic utxo) {
+    final UTXOClass utxoVar;
+    try {
+      utxoVar = parseUTXO(utxo);
+    } catch (e) {
+      return null;
+    }
+    final utxoId = utxoVar.getUTXOId();
+    if (!utxos.keys.contains(utxoId)) return null;
+    utxos.remove(utxoId);
+    final addresses = addressUTXOs.keys.toList();
+    for (int i = 0; i < addresses.length; i++) {
+      final utxos = addressUTXOs[addresses[i]];
+      if (utxos != null && utxos.keys.contains(utxoId)) {
+        utxos.remove(utxoId);
+      }
+    }
+    return utxoVar;
   }
 
-  List<StandardUTXO> addArray(List<UTXOClass> utxos, {bool overwrite = false}) {
-    throw UnimplementedError();
+  List<UTXOClass> removeArray(List<dynamic> utxo) {
+    final removed = <UTXOClass>[];
+    for (int i = 0; i < utxos.length; i++) {
+      final result = remove(utxos[i]);
+      if (result != null) {
+        removed.add(result);
+      }
+    }
+    return removed;
   }
 
-  UTXOClass getUTXO(String utxoId) {
-    throw UnimplementedError();
+  UTXOClass? getUTXO(String utxoId) => utxos[utxoId];
+
+  List<UTXOClass> getAllUTXOs({List<String>? utxoIds}) {
+    final results = <UTXOClass>[];
+    if (utxoIds != null) {
+      for (int i = 0; i < utxoIds.length; i++) {
+        final utxoId = utxoIds[i];
+        final utxo = utxos[utxoId];
+        if (utxos.keys.contains(utxoId) &&
+            utxo != null &&
+            !results.contains(utxo)) {
+          results.add(utxo);
+        }
+      }
+    } else {
+      results.addAll(utxos.values);
+    }
+    return results;
   }
 
-  List<UTXOClass> getAllUTXOs(List<String> utxoId) {
-    throw UnimplementedError();
+  List<String> getAllUTXOStrings({List<String>? utxoIds}) {
+    final results = <String>[];
+    final utxos = this.utxos.keys;
+    if (utxoIds != null) {
+      for (int i = 0; i < utxoIds.length; i++) {
+        final utxoId = utxoIds[i];
+        if (utxos.contains(utxoId)) {
+          results.add(this.utxos[utxoId].toString());
+        }
+      }
+    } else {
+      for (final u in utxos) {
+        results.add(this.utxos[u].toString());
+      }
+    }
+    return results;
   }
 
-  List<String> getAllUTXOStrings(List<String> utxoId) {
-    throw UnimplementedError();
-  }
-
-  List<String> getUTXOIds(List<Uint8List> addresses, {bool spendable = true}) {
-    throw UnimplementedError();
+  List<String> getUTXOIds({List<Uint8List>? addresses, bool spendable = true}) {
+    if (addresses != null) {
+      final results = <String>[];
+      final now = unixNow();
+      for (int i = 0; i < addresses.length; i++) {
+        final address = HEX.encode(addresses[i]);
+        if (addressUTXOs.containsKey(address)) {
+          final entries = addressUTXOs[address]!;
+          for (final utxoId in entries.keys) {
+            if ((results.contains(utxoId) &&
+                    spendable &&
+                    entries[utxoId]! <= now) ||
+                !spendable) {
+              results.add(utxoId);
+            }
+          }
+        }
+      }
+      return results;
+    }
+    return utxos.keys.toList();
   }
 
   List<Uint8List> getAddresses() {
-    throw UnimplementedError();
+    return addressUTXOs.keys
+        .map((e) => Uint8List.fromList(HEX.decode(e)))
+        .toList();
   }
 
-  BigInt getBalance(List<Uint8List> addresses, Uint8List assetId, BigInt asOf) {
-    throw UnimplementedError();
+  BigInt getBalance(List<Uint8List> addresses, dynamic assetId,
+      {BigInt? asOf}) {
+    final utxoIds = getUTXOIds(addresses: addresses);
+    final utxos = getAllUTXOs(utxoIds: utxoIds);
+    var spend = BigInt.from(0);
+    final Uint8List asset;
+    if (assetId is String) {
+      asset = cb58Decode(assetId);
+    } else {
+      asset = assetId;
+    }
+    for (int i = 0; i < utxos.length; i++) {
+      final u = utxos[i];
+      if (u.getOutput() is StandardAmountOutput &&
+          HEX.encode(u.getAssetId()) == HEX.encode(asset) &&
+          u.getOutput().meetsThreshold(addresses, asOf: asOf)) {
+        spend = spend + (u.getOutput() as StandardAmountOutput).getAmount();
+      }
+    }
+    return spend;
   }
 
-  List<Uint8List> getAssetIds(List<Uint8List> addresses) {
-    throw UnimplementedError();
+  List<Uint8List> getAssetIds({List<Uint8List>? addresses}) {
+    final results = <Uint8List>[];
+    final utxoIds = getUTXOIds(addresses: addresses);
+    for (int i = 0; i < utxoIds.length; i++) {
+      final utxoId = utxoIds[i];
+      if (utxos.keys.contains(utxoId)) {
+        results.add(utxos[utxoId]!.getAssetId());
+      }
+    }
+    return results;
   }
 
-  StandardUTXO filter(List<dynamic> args,
+  StandardUTXOSet filter(List<dynamic> args,
       bool Function(UTXOClass utxo, List<dynamic> largs) lambda) {
-    throw UnimplementedError();
+    final newSet = clone();
+    final utxos = getAllUTXOs();
+    for (int i = 0; i < utxos.length; i++) {
+      final u = utxos[i];
+      if (lambda(u, args)) {
+        newSet.remove(u);
+      }
+    }
+    return newSet;
   }
 
-  StandardUTXO merge(StandardUTXO utxoSet, List<String> hasUTXOIDs) {
-    throw UnimplementedError();
+  StandardUTXOSet merge(StandardUTXOSet<UTXOClass> utxoSet,
+      {List<String>? hasUTXOIDs}) {
+    final results = create();
+    final utxos1 = getAllUTXOs(utxoIds: hasUTXOIDs);
+    final utxos2 = utxoSet.getAllUTXOs(utxoIds: hasUTXOIDs);
+    process(UTXOClass utxo) => {results.add(utxo)};
+    utxos1.forEach(process);
+    utxos2.forEach(process);
+    return results;
   }
 
-  StandardUTXO intersection(StandardUTXO utxoSet) {
-    throw UnimplementedError();
+  StandardUTXOSet intersection(StandardUTXOSet<UTXOClass> utxoSet) {
+    final us1 = getUTXOIds();
+    final us2 = utxoSet.getUTXOIds();
+    final result = us1.where((element) => us2.contains(element)).toList();
+    return merge(utxoSet, hasUTXOIDs: result);
   }
 
-  StandardUTXO difference(StandardUTXO utxoSet) {
-    throw UnimplementedError();
+  StandardUTXOSet difference(StandardUTXOSet<UTXOClass> utxoSet) {
+    final us1 = getUTXOIds();
+    final us2 = utxoSet.getUTXOIds();
+    final result = us1.where((element) => !us2.contains(element)).toList();
+    return merge(utxoSet, hasUTXOIDs: result);
   }
 
-  StandardUTXO symDifference(StandardUTXO utxoSet) {
-    throw UnimplementedError();
+  StandardUTXOSet symDifference(StandardUTXOSet<UTXOClass> utxoSet) {
+    final us1 = getUTXOIds();
+    final us2 = utxoSet.getUTXOIds();
+    final result1 = us1.where((element) => !us2.contains(element));
+    final result2 = us2.where((element) => !us1.contains(element));
+    final result = [...result1, ...result2];
+    return merge(utxoSet, hasUTXOIDs: result);
   }
 
-  StandardUTXO union(StandardUTXO utxoSet) {
-    throw UnimplementedError();
+  StandardUTXOSet union(StandardUTXOSet<UTXOClass> utxoSet) {
+    return merge(utxoSet);
   }
 
-  StandardUTXO mergeByRule(StandardUTXO utxoSet, MergeRule mergeRule) {
-    throw UnimplementedError();
+  StandardUTXOSet mergeByRule(
+      StandardUTXOSet<UTXOClass> utxoSet, MergeRule mergeRule) {
+    switch (mergeRule) {
+      case MergeRule.intersection:
+        return intersection(utxoSet);
+      case MergeRule.differenceSelf:
+        return difference(utxoSet);
+      case MergeRule.differenceNew:
+        return utxoSet.difference(this);
+      case MergeRule.symDifference:
+        return symDifference(utxoSet);
+      case MergeRule.union:
+        return union(utxoSet);
+      case MergeRule.unionMinusNew:
+        {
+          final uSet = union(utxoSet);
+          return uSet.difference(utxoSet);
+        }
+      case MergeRule.unionMinusSelf:
+        {
+          final uSet = union(utxoSet);
+          return uSet.difference(this);
+        }
+      case MergeRule.ERROR:
+        throw Exception("Error - StandardUTXOSet.mergeByRule: bad MergeRule");
+    }
   }
 }
