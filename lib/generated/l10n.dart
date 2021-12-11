@@ -439,6 +439,56 @@ class Strings {
       args: [],
     );
   }
+
+  /// `Change PIN`
+  String get settingChangePin {
+    return Intl.message(
+      'Change PIN',
+      name: 'settingChangePin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wallet Security`
+  String get settingWalletSecurity {
+    return Intl.message(
+      'Wallet Security',
+      name: 'settingWalletSecurity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `General Setting`
+  String get settingGeneral {
+    return Intl.message(
+      'General Setting',
+      name: 'settingGeneral',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About Roi Chain`
+  String get settingAboutRoi {
+    return Intl.message(
+      'About Roi Chain',
+      name: 'settingAboutRoi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Touch ID`
+  String get settingTouchId {
+    return Intl.message(
+      'Touch ID',
+      name: 'settingTouchId',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Strings> {
