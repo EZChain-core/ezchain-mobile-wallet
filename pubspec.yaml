@@ -47,6 +47,7 @@ dependencies:
   hdkey: ^0.0.1
   web3dart: ^2.3.3
   sha3: ^0.2.0
+  flutter_switch: ^0.3.2
 
 dev_dependencies:
   flutter_test:
