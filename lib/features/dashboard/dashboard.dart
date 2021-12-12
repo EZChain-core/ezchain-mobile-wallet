@@ -25,12 +25,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           EarnRoute(),
           SettingRoute(),
         ],
+        homeIndex: 0,
         bottomNavigationBuilder: (_, tabsRouter) {
           return BottomNavigationBar(
             currentIndex: tabsRouter.activeIndex,
             selectedItemColor: provider.themeMode.primary,
             unselectedItemColor: provider.themeMode.text40,
             onTap: tabsRouter.setActiveIndex,
+            type: BottomNavigationBarType.fixed,
             items: [
               BottomNavigationBarItem(
                 label: Strings.current.dashboardWallet,

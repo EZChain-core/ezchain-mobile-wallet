@@ -35,6 +35,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   navigate() {
-    context.router.push(const OnBoardRoute());
+    context.router.replaceAll([const OnBoardRoute()]);
   }
 }
