@@ -63,6 +63,7 @@ class ROIMediumPrimaryButton extends StatelessWidget {
               height: roiButtonMediumHeight,
               child: TextButton(
                 child: Text(text,
+                    textAlign: TextAlign.center,
                     style:
                         ROIButtonTextStyle(color: provider.themeMode.text90)),
                 style: ROIButtonStyle(

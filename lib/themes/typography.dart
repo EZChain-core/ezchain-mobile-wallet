@@ -53,8 +53,6 @@ class ROIChainLabelText extends StatelessWidget {
 class ROITextStyle extends TextStyle {
   final Color color;
 
-  final double height;
-
   final double fontSize;
 
   final String fontFamily;
@@ -63,7 +61,6 @@ class ROITextStyle extends TextStyle {
 
   const ROITextStyle({
     required this.color,
-    required this.height,
     required this.fontSize,
     required this.fontWeight,
     this.fontFamily = FontFamily.beVietnamPro,
@@ -77,7 +74,6 @@ class ROIHeadlineMediumTextStyle extends ROITextStyle {
       : super(
             color: color,
             fontSize: 28,
-            height: 36 / 28,
             fontWeight: FontWeight.w400);
 }
 
@@ -88,7 +84,6 @@ class ROIHeadlineSmallTextStyle extends ROITextStyle {
       : super(
             color: color,
             fontSize: 24,
-            height: 32 / 24,
             fontWeight: FontWeight.w400);
 }
 
@@ -99,7 +94,6 @@ class ROITitleLargeTextStyle extends ROITextStyle {
       : super(
             color: color,
             fontSize: 16,
-            height: 24 / 16,
             fontWeight: FontWeight.w500);
 }
 
@@ -110,7 +104,6 @@ class ROITitleMediumTextStyle extends ROITextStyle {
       : super(
             color: color,
             fontSize: 14,
-            height: 20 / 14,
             fontWeight: FontWeight.w500);
 }
 
@@ -121,7 +114,6 @@ class ROITitleSmallTextStyle extends ROITextStyle {
       : super(
             color: color,
             fontSize: 12,
-            height: 16 / 12,
             fontWeight: FontWeight.w500);
 }
 
@@ -132,7 +124,6 @@ class ROIBodyLargeTextStyle extends ROITextStyle {
       : super(
             color: color,
             fontSize: 16,
-            height: 24 / 16,
             fontWeight: FontWeight.w400);
 }
 
@@ -143,7 +134,6 @@ class ROIBodyMediumTextStyle extends ROITextStyle {
       : super(
             color: color,
             fontSize: 14,
-            height: 20 / 14,
             fontWeight: FontWeight.w400);
 }
 
@@ -154,7 +144,6 @@ class ROIBodySmallTextStyle extends ROITextStyle {
       : super(
             color: color,
             fontSize: 12,
-            height: 16 / 12,
             fontWeight: FontWeight.w400);
 }
 
@@ -165,7 +154,6 @@ class ROILabelMediumTextStyle extends ROITextStyle {
       : super(
             color: color,
             fontSize: 12,
-            height: 16 / 12,
             fontWeight: FontWeight.w500);
 }
 
@@ -176,7 +164,6 @@ class ROILabelSmallTextStyle extends ROITextStyle {
       : super(
             color: color,
             fontSize: 10,
-            height: 16 / 10,
             fontWeight: FontWeight.w500);
 }
 
@@ -187,7 +174,6 @@ class ROIButtonTextStyle extends ROITextStyle {
       : super(
             color: color,
             fontSize: 14,
-            height: 24 / 14,
             fontWeight: FontWeight.w500);
 }
 
@@ -198,6 +184,5 @@ class ROISemiBoldSmallTextStyle extends ROITextStyle {
       : super(
             color: color,
             fontSize: 12,
-            height: 16 / 12,
             fontWeight: FontWeight.w600);
 }
