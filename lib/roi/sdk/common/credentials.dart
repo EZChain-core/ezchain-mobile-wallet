@@ -7,7 +7,7 @@ class SigIdx extends NBytes {
   var source = Uint8List(20);
 
   @override
-  String get _typeName => "SigIdx";
+  String get typeName => "SigIdx";
 
   SigIdx() : super(bytes: Uint8List(4), bSize: 4);
 
@@ -42,7 +42,7 @@ class SigIdx extends NBytes {
 
 class Signature extends NBytes {
   @override
-  String get _typeName => "Signature";
+  String get typeName => "Signature";
 
   Signature() : super(bytes: Uint8List(65), bSize: 65);
 
@@ -56,7 +56,7 @@ abstract class Credential extends Serializable {
   final List<Signature> sigArray;
 
   @override
-  String get _typeName => "Credential";
+  String get typeName => "Credential";
 
   Credential({this.sigArray = const []});
 
@@ -64,7 +64,9 @@ abstract class Credential extends Serializable {
 
   Credential clone();
 
-  Credential select(int id);
+  Credential create({List<dynamic> args = const []});
+
+  Credential select(int id, {List<dynamic> args = const []});
 
   @override
   serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {

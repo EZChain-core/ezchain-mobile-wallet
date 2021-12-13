@@ -39,3 +39,9 @@ BigInt bufferToBigInt16(Uint8List buff) {
 BigInt unixNow() {
   return BigInt.from(DateTime.now().toUtc().millisecondsSinceEpoch / 1000);
 }
+
+extension IterableExtension<T> on Iterable<T> {
+  T? getOrNull(int index) {
+    return index > 0 && index < length ? elementAt(index) : null;
+  }
+}

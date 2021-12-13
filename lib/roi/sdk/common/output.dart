@@ -8,7 +8,7 @@ import 'package:wallet/roi/sdk/utils/serialization.dart';
 
 class Address extends NBytes {
   @override
-  String get _typeName => "Address";
+  String get typeName => "Address";
 
   Address() : super(bytes: Uint8List(20), bSize: 20);
 
@@ -56,7 +56,7 @@ class OutputOwners extends Serializable {
   List<Address> addresses = [];
 
   @override
-  String get _typeName => "OutputOwners";
+  String get typeName => "OutputOwners";
 
   OutputOwners({BigInt? lockTime, int? threshold, List<Uint8List>? addresses}) {
     if (addresses != null) {
@@ -230,7 +230,7 @@ class OutputOwners extends Serializable {
 
 abstract class Output extends OutputOwners {
   @override
-  String get _typeName => "Output";
+  String get typeName => "Output";
 
   Output({BigInt? lockTime, int? threshold, List<Uint8List>? addresses})
       : super(lockTime: lockTime, threshold: threshold, addresses: addresses);
@@ -239,18 +239,24 @@ abstract class Output extends OutputOwners {
 
   Output clone();
 
+  Output create({List<dynamic> args = const []});
+
   Output select(int id, {List<dynamic> args = const []});
 
   StandardTransferableOutput makeTransferable(Uint8List assetId);
 }
 
 abstract class StandardParseableOutput extends Serializable {
-  final Output output;
+  late Output output;
 
   @override
-  String get _typeName => "StandardParseableOutput";
+  String get typeName => "StandardParseableOutput";
 
-  StandardParseableOutput({required this.output});
+  StandardParseableOutput({Output? output}) {
+    if (output != null) {
+      this.output = output;
+    }
+  }
 
   int fromBuffer(Uint8List bytes, {int? offset});
 
@@ -284,12 +290,12 @@ abstract class StandardParseableOutput extends Serializable {
 }
 
 abstract class StandardTransferableOutput extends StandardParseableOutput {
-  Uint8List assetId;
+  late Uint8List assetId;
 
   @override
-  String get _typeName => "StandardTransferableOutput";
+  String get typeName => "StandardTransferableOutput";
 
-  StandardTransferableOutput({required this.assetId, required Output output})
+  StandardTransferableOutput({Uint8List? assetId, Output? output})
       : super(output: output);
 
   @override
@@ -324,13 +330,13 @@ abstract class StandardAmountOutput extends Output {
   var amountValue = BigInt.from(0);
 
   @override
-  String get _typeName => "StandardAmountOutput";
+  String get typeName => "StandardAmountOutput";
 
   StandardAmountOutput(
       {BigInt? amount,
+      List<Uint8List>? addresses,
       BigInt? lockTime,
-      int? threshold,
-      List<Uint8List>? addresses})
+      int? threshold})
       : super(lockTime: lockTime, threshold: threshold, addresses: addresses) {
     if (amount != null) {
       amountValue = amount;
@@ -380,7 +386,7 @@ abstract class BaseNFTOutput extends Output {
   var groupId = Uint8List(4);
 
   @override
-  String get _typeName => "BaseNFTOutput";
+  String get typeName => "BaseNFTOutput";
 
   @override
   serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {

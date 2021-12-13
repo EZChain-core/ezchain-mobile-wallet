@@ -4,13 +4,14 @@ import 'package:hex/hex.dart';
 import 'package:wallet/roi/sdk/common/credentials.dart';
 import 'package:wallet/roi/sdk/common/input.dart';
 import 'package:wallet/roi/sdk/common/keychain/base_key_chain.dart';
+import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 import 'package:wallet/roi/sdk/common/output.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
-abstract class StandardBaseTx<KPClass extends StandardKeyPair,
-    KCClass extends StandardKeyChain<KPClass>> extends Serializable {
+abstract class StandardBaseTx<KPClass extends ROIKeyPair,
+    KCClass extends ROIKeyChain> extends Serializable {
   var networkId = Uint8List(4);
   var blockchainId = Uint8List(32);
   var numOuts = Uint8List(4);
@@ -20,7 +21,7 @@ abstract class StandardBaseTx<KPClass extends StandardKeyPair,
   var memo = Uint8List(0);
 
   @override
-  String get _typeName => "StandardBaseTx";
+  String get typeName => "StandardBaseTx";
 
   StandardBaseTx(
       {int networkId = defaultNetworkId,
@@ -121,16 +122,16 @@ abstract class StandardBaseTx<KPClass extends StandardKeyPair,
 }
 
 abstract class StandardUnsignedTx<
-    KPClass extends StandardKeyPair,
-    KCClass extends StandardKeyChain<KPClass>,
+    KPClass extends ROIKeyPair,
+    KCClass extends ROIKeyChain,
     SBTx extends StandardBaseTx<KPClass, KCClass>> extends Serializable {
-  @override
-  var codecId = 0;
+  var txCodecId = 0;
   final SBTx transaction;
 
-  String get _typeName => "StandardUnsignedTx";
+  @override
+  String get typeName => "StandardUnsignedTx";
 
-  StandardUnsignedTx(this.codecId, this.transaction);
+  StandardUnsignedTx(this.txCodecId, this.transaction);
 
   SBTx getTransaction();
 
@@ -144,7 +145,7 @@ abstract class StandardUnsignedTx<
     final fields = super.serialize(encoding: encoding);
     return {
       ...fields,
-      "codecId": Serialization.instance.encoder(codecId, encoding,
+      "txCodecId": Serialization.instance.encoder(txCodecId, encoding,
           SerializedType.number, SerializedType.decimalString,
           args: [2]),
       "transaction": transaction.serialize(encoding: encoding)
@@ -154,11 +155,12 @@ abstract class StandardUnsignedTx<
   @override
   void deserialize(fields, SerializedEncoding encoding) {
     super.deserialize(fields, encoding);
-    codecId = Serialization.instance.decoder(fields["codecId"], encoding,
+    txCodecId = Serialization.instance.decoder(fields["txCodecId"], encoding,
         SerializedType.decimalString, SerializedType.number);
   }
 
-  int getCodecId() => codecId;
+  @override
+  int getTxCodecId() => txCodecId;
 
   Uint8List getCodecIdBuffer() {
     return Uint8List(2)..buffer.asByteData().setUint16(0, codecId);
@@ -198,7 +200,7 @@ abstract class StandardUnsignedTx<
 
   Uint8List toBuffer() {
     final codecBuff = Uint8List(2);
-    codecBuff.buffer.asByteData().setUint16(0, transaction.getCodecId());
+    codecBuff.buffer.asByteData().setUint16(0, transaction.getTxCodecId());
     final txType = Uint8List(4);
     txType.buffer.asByteData().setUint32(0, transaction.getTxType());
     final baseBuff = transaction.toBuffer();
@@ -207,14 +209,15 @@ abstract class StandardUnsignedTx<
 }
 
 abstract class StandardTx<
-    KPClass extends StandardKeyPair,
-    KCClass extends StandardKeyChain<KPClass>,
+    KPClass extends ROIKeyPair,
+    KCClass extends ROIKeyChain,
     SUBTx extends StandardUnsignedTx<KPClass, KCClass,
         StandardBaseTx<KPClass, KCClass>>> extends Serializable {
   final SUBTx unsignedTx;
   final List<Credential> credentials;
 
-  String get _typeName => "StandardTx";
+  @override
+  String get typeName => "StandardTx";
 
   StandardTx({required this.unsignedTx, required this.credentials});
 
@@ -245,7 +248,7 @@ abstract class StandardTx<
 
   Uint8List toBuffer() {
     final tx = unsignedTx.getTransaction();
-    final codecId = tx.getCodecId();
+    final codecId = tx.getTxCodecId();
     final txBuff = unsignedTx.toBuffer();
     final credLen = Uint8List(4);
     credLen.buffer.asByteData().setUint32(0, credentials.length);

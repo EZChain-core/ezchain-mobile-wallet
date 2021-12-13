@@ -176,6 +176,7 @@ class _AvmApiImpl implements AvmApi {
   Future<bool> _checkGooseEgg(AvmUnsignedTx utx, {BigInt? outTotal}) async {
     outTotal ??= BigInt.zero;
     final avaxAssetId = await _getAVAXAssetId();
+    if (avaxAssetId == null) return false;
     final outputTotal =
         outTotal > BigInt.zero ? outTotal : utx.getOutputTotal(avaxAssetId);
     final fee = utx.getBurn(avaxAssetId);

@@ -5,7 +5,7 @@ import 'package:wallet/roi/sdk/utils/serialization.dart';
 
 abstract class NBytes extends Serializable {
   @override
-  String get _typeName => "NBytes";
+  String get typeName => "NBytes";
 
   var _bytes = Uint8List.fromList([]);
   var _bSize = 0;
