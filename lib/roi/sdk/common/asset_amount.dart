@@ -67,18 +67,25 @@ abstract class StandardAssetAmountDestination<
     TO extends StandardTransferableOutput,
     TI extends StandardTransferableInput> {
   final _amounts = <AssetAmount>[];
-  final List<Uint8List> destinations;
-  final List<Uint8List> senders;
-  final List<Uint8List> changeAddresses;
+  final List<Uint8List> destinations = [];
+  final List<Uint8List> senders = [];
+  final List<Uint8List> changeAddresses = [];
   final _amountKey = {};
   final _inputs = <TI>[];
   final _outputs = <TO>[];
   final _change = <TO>[];
 
   StandardAssetAmountDestination(
-      {required this.destinations,
-      required this.senders,
-      required this.changeAddresses});
+      {List<Uint8List> destinations = const [],
+      List<Uint8List> senders = const [],
+      List<Uint8List> changeAddresses = const []}) {
+    this.destinations.clear();
+    this.destinations.addAll(destinations);
+    this.senders.clear();
+    this.senders.addAll(senders);
+    this.changeAddresses.clear();
+    this.changeAddresses.addAll(changeAddresses);
+  }
 
   void addAssetAmount(Uint8List assetId, BigInt amount, BigInt burn) {
     final aa = AssetAmount(assetId: assetId, amount: amount, burn: burn);

@@ -25,9 +25,12 @@ abstract class SECP256k1KeyPair extends StandardKeyPair {
   }
 
   @override
-  Uint8List sign(String message) {
-    return secp256k1.sign(
-        Uint8List.fromList(utf8.encode(message)), privateKeyBytes);
+  Uint8List sign(dynamic message) {
+    if (message is String) {
+      message = Uint8List.fromList(utf8.encode(message));
+    }
+    if (message is! Uint8List) throw Exception();
+    return secp256k1.sign(message, privateKeyBytes);
   }
 
   @override
@@ -36,9 +39,13 @@ abstract class SECP256k1KeyPair extends StandardKeyPair {
   }
 
   @override
-  bool verify(String message, Uint8List signature) {
-    return secp256k1.verify(Uint8List.fromList(utf8.encode(message)),
-        publicKeyBytes, ROIECSignature.fromSignature(signature));
+  bool verify(dynamic message, Uint8List signature) {
+    if (message is String) {
+      message = Uint8List.fromList(utf8.encode(message));
+    }
+    if (message is! Uint8List) throw Exception();
+    return secp256k1.verify(
+        message, publicKeyBytes, ROIECSignature.fromSignature(signature));
   }
 
   @override

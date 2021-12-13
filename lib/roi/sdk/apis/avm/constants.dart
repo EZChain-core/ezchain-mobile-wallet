@@ -1,0 +1,75 @@
+const int LATESTCODEC = 0;
+
+const int SECPFXID = 0;
+
+const int NFTFXID = 1;
+
+const int SECPMINTOUTPUTID = 6;
+
+const int SECPMINTOUTPUTID_CODECONE = 65537;
+
+const int SECPXFEROUTPUTID = 7;
+
+const int SECPXFEROUTPUTID_CODECONE = 65538;
+
+const int NFTXFEROUTPUTID = 11;
+
+const int NFTXFEROUTPUTID_CODECONE = 131073;
+
+const int NFTMINTOUTPUTID = 10;
+
+const int NFTMINTOUTPUTID_CODECONE = 131072;
+
+const int SECPINPUTID = 5;
+
+const int SECPINPUTID_CODECONE = 65536;
+
+const int SECPMINTOPID = 8;
+
+const int SECPMINTOPID_CODECONE = 65539;
+
+const int NFTMINTOPID = 12;
+
+const int NFTMINTOPID_CODECONE = 131074;
+
+const int NFTXFEROPID = 13;
+
+const int NFTXFEROPID_CODECONE = 131075;
+
+const int BASETX = 0;
+
+const int BASETX_CODECONE = 0;
+
+const int CREATEASSETTX = 1;
+
+const int CREATEASSETTX_CODECONE = 1;
+
+const int OPERATIONTX = 2;
+
+const int OPERATIONTX_CODECONE = 2;
+
+const int IMPORTTX = 3;
+
+const int IMPORTTX_CODECONE = 3;
+
+const int EXPORTTX = 4;
+
+const int EXPORTTX_CODECONE = 4;
+
+const int SECPCREDENTIAL = 9;
+
+const int SECPCREDENTIAL_CODECONE = 65540;
+
+const int NFTCREDENTIAL = 14;
+
+const int NFTCREDENTIAL_CODECONE = 131076;
+
+const int ASSETIDLEN = 32;
+
+const int BLOCKCHAINIDLEN = 32;
+
+const int SYMBOLMAXLEN = 4;
+
+const int ASSETNAMELEN = 128;
+
+const int ADDRESSLENGTH = 20;

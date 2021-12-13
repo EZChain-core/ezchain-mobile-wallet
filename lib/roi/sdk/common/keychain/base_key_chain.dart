@@ -9,11 +9,11 @@ abstract class StandardKeyPair {
 
   bool importKey(Uint8List privateKeyBytes);
 
-  Uint8List sign(String message);
+  Uint8List sign(dynamic message);
 
   Uint8List recover(Uint8List hash, Uint8List signature);
 
-  bool verify(String message, Uint8List signature);
+  bool verify(dynamic message, Uint8List signature);
 
   String getPrivateKeyString();
 

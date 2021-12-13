@@ -9,13 +9,15 @@ abstract class Input extends Serializable {
   var sigIdxs = <SigIdx>[];
 
   @override
-  String get _typeName => "Input";
+  String get typeName => "Input";
 
   int getInputId();
 
   int getCredentialId();
 
   Input clone();
+
+  Input create({List<dynamic> args = const []});
 
   Input select(int id, {List<dynamic> args = const []});
 
@@ -102,12 +104,16 @@ abstract class Input extends Serializable {
 }
 
 abstract class StandardParseableInput extends Serializable {
-  final Input input;
+  late Input input;
 
-  StandardParseableInput(this.input);
+  StandardParseableInput({Input? input}) {
+    if (input != null) {
+      this.input = input;
+    }
+  }
 
   @override
-  String get _typeName => "StandardParseableInput";
+  String get typeName => "StandardParseableInput";
 
   int fromBuffer(Uint8List bytes, {int? offset});
 
@@ -146,11 +152,11 @@ abstract class StandardTransferableInput extends StandardParseableInput {
   var assetId = Uint8List(32);
 
   @override
-  String get _typeName => "StandardTransferableInput";
+  String get typeName => "StandardTransferableInput";
 
-  StandardTransferableInput(Input input,
-      {Uint8List? txId, Uint8List? outputIdx, Uint8List? assetId})
-      : super(input) {
+  StandardTransferableInput(
+      {Input? input, Uint8List? txId, Uint8List? outputIdx, Uint8List? assetId})
+      : super(input: input) {
     if (txId != null) {
       this.txId = txId;
     }
@@ -190,6 +196,7 @@ abstract class StandardTransferableInput extends StandardParseableInput {
         args: [32]);
   }
 
+  @override
   String toString() => bufferToB58(toBuffer());
 
   Uint8List getTxId() => txId;
@@ -199,10 +206,12 @@ abstract class StandardTransferableInput extends StandardParseableInput {
   String getUTXOId() =>
       bufferToB58(Uint8List.fromList([...txId, ...outputIdx]));
 
+  @override
   Input getInput() => input;
 
   Uint8List getAssetId() => assetId;
 
+  @override
   Uint8List toBuffer() {
     final parseableBuff = super.toBuffer();
     return Uint8List.fromList(
@@ -215,7 +224,7 @@ abstract class StandardAmountInput extends Input {
   var amountValue = BigInt.from(0);
 
   @override
-  String get _typeName => "StandardAmountInput";
+  String get typeName => "StandardAmountInput";
 
   StandardAmountInput({BigInt? amount}) {
     if (amount != null) {

@@ -8,22 +8,22 @@ import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
 abstract class StandardUTXO extends Serializable {
-  var codecId = Uint8List(2);
+  var codecIdBuff = Uint8List(2);
   var txId = Uint8List(32);
   var outputIdx = Uint8List(4);
   var assetId = Uint8List(32);
   late Output output;
 
   @override
-  String get _typeName => "StandardUTXO";
+  String get typeName => "StandardUTXO";
 
   StandardUTXO(
       {int codecId = 0,
       Uint8List? txId,
       dynamic outputIdx,
       Uint8List? assetId,
-      required Output output}) {
-    this.codecId.buffer.asByteData().setUint8(0, codecId);
+      Output? output}) {
+    codecIdBuff.buffer.asByteData().setUint8(0, codecId);
     if (txId != null) {
       this.txId = txId;
     }
@@ -37,7 +37,9 @@ abstract class StandardUTXO extends Serializable {
     if (assetId != null) {
       this.assetId == assetId;
     }
-    this.output == output;
+    if (output != null) {
+      this.output == output;
+    }
   }
 
   int fromBuffer(Uint8List bytes, {int? offset});
@@ -49,15 +51,12 @@ abstract class StandardUTXO extends Serializable {
 
   StandardUTXO clone();
 
-  StandardUTXO create(int? codecID, Uint8List? txId, dynamic outputIdx,
-      Uint8List? assetId, Output? output);
-
   @override
   dynamic serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
     var fields = super.serialize(encoding: encoding);
     return {
       ...fields,
-      "codecId": Serialization.instance.encoder(codecId, encoding,
+      "codecIdBuff": Serialization.instance.encoder(codecIdBuff, encoding,
           SerializedType.Buffer, SerializedType.decimalString),
       "txId": Serialization.instance
           .encoder(txId, encoding, SerializedType.Buffer, SerializedType.cb58),
@@ -72,8 +71,8 @@ abstract class StandardUTXO extends Serializable {
   @override
   void deserialize(dynamic fields, SerializedEncoding encoding) {
     super.deserialize(fields, encoding);
-    codecId = Serialization.instance.decoder(fields["fields"], encoding,
-        SerializedType.decimalString, SerializedType.Buffer,
+    codecIdBuff = Serialization.instance.decoder(fields["codecIdBuff"],
+        encoding, SerializedType.decimalString, SerializedType.Buffer,
         args: [2]);
     txId = Serialization.instance.decoder(
         fields["txId"], encoding, SerializedType.cb58, SerializedType.Buffer,
@@ -86,9 +85,9 @@ abstract class StandardUTXO extends Serializable {
         args: [32]);
   }
 
-  int getCodecId() => codecId.buffer.asByteData().getInt8(0);
+  int getTxCodecId() => codecIdBuff.buffer.asByteData().getInt8(0);
 
-  Uint8List getCodecIdBuffer() => codecId;
+  Uint8List getCodecIdBuffer() => codecIdBuff;
 
   Uint8List getTxId() => txId;
 
@@ -106,7 +105,7 @@ abstract class StandardUTXO extends Serializable {
     final outputIdBuffer = Uint8List(4);
     outputIdBuffer.buffer.asByteData().setUint32(0, output.getOutputId());
     return Uint8List.fromList([
-      ...codecId,
+      ...codecIdBuff,
       ...txId,
       ...outputIdx,
       ...assetId,
@@ -123,7 +122,7 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
   Map<String, Map<String, BigInt>> addressUTXOs = {};
 
   @override
-  String get _typeName => "StandardUTXOSet";
+  String get typeName => "StandardUTXOSet";
 
   UTXOClass parseUTXO(dynamic utxo);
 

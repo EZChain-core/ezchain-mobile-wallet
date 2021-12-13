@@ -7,23 +7,23 @@ import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 const SERIALIZATIONVERSION = 0;
 
 abstract class Serializable {
-  String get _typeName;
+  String typeName = "";
 
-  int? get _typeId;
+  int typeId = -1;
 
-  int get _codecId;
+  int codecId = -1;
 
   dynamic serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
     return {
-      "typeName": _typeName,
-      "typeId": _typeId,
-      "codecId": _codecId,
+      "typeName": typeName,
+      "typeId": typeId,
+      "codecId": codecId,
     };
   }
 
   void deserialize(dynamic fields, SerializedEncoding encoding) {
     assert(fields["typeName"] is String);
-    assert(fields["typeName"] == _typeName);
+    assert(fields["typeName"] == typeName);
     if (fields["typeId"] != null) {
       assert(fields["typeId"] is int);
       assert(fields["typeId"] == "typeId");
@@ -35,11 +35,11 @@ abstract class Serializable {
   }
 
   String getTypeName() {
-    return _typeName;
+    return typeName;
   }
 
-  int getCodecId() {
-    return _codecId;
+  int getTxCodecId() {
+    return codecId;
   }
 }
 
@@ -103,7 +103,7 @@ class Serialization {
       case SerializedType.Buffer:
         return v;
       case SerializedType.bech32:
-        final hrp = args.isEmpty ? null : args[0];
+        final hrp = args.getOrNull(0);
         return stringToAddress(v, hrp: hrp);
       case SerializedType.nodeID:
         return nodeIDStringToBuffer(v);
@@ -166,7 +166,7 @@ class Serialization {
 
   Serialized serialize(Serializable serialize, String vm,
       SerializedEncoding encoding, String? notes) {
-    notes ??= serialize._typeName;
+    notes ??= serialize.typeName;
     return Serialized(
         vm: vm,
         encoding: encoding,
