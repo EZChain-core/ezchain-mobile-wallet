@@ -73,6 +73,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_roi.svg
   SvgGenImage get icRoi => const SvgGenImage('assets/icons/ic_roi.svg');
 
+  /// File path: assets/icons/ic_scan_barcode.svg
+  SvgGenImage get icScanBarcode =>
+      const SvgGenImage('assets/icons/ic_scan_barcode.svg');
+
   /// File path: assets/icons/ic_security.svg
   SvgGenImage get icSecurity =>
       const SvgGenImage('assets/icons/ic_security.svg');

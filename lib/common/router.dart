@@ -10,6 +10,7 @@ import 'package:wallet/features/dashboard/routes.dart';
 import 'package:wallet/features/onboard/on_board.dart';
 import 'package:wallet/features/splash/screen/splash.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
+import 'package:wallet/features/wallet/send/x_chain/wallet_send_x_chain.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Screen,Route',
@@ -24,6 +25,7 @@ import 'package:wallet/features/wallet/receive/wallet_receive.dart';
     AutoRoute(page: PinCodeSetupScreen),
     AutoRoute(page: PinCodeConfirmScreen),
     AutoRoute(page: WalletReceiveScreen),
+    AutoRoute(page: WalletSendXChainScreen),
     dashboardRoutes,
   ],
 )

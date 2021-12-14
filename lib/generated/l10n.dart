@@ -230,6 +230,106 @@ class Strings {
     );
   }
 
+  /// `Total`
+  String get sharedTotal {
+    return Intl.message(
+      'Total',
+      name: 'sharedTotal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transaction fee`
+  String get sharedTransactionFee {
+    return Intl.message(
+      'Transaction fee',
+      name: 'sharedTransactionFee',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set amount`
+  String get sharedSetAmount {
+    return Intl.message(
+      'Set amount',
+      name: 'sharedSetAmount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send to`
+  String get sharedSendTo {
+    return Intl.message(
+      'Send to',
+      name: 'sharedSendTo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amount`
+  String get sharedAmount {
+    return Intl.message(
+      'Amount',
+      name: 'sharedAmount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send Transaction`
+  String get sharedSendTransaction {
+    return Intl.message(
+      'Send Transaction',
+      name: 'sharedSendTransaction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transaction Sent`
+  String get sharedTransactionSent {
+    return Intl.message(
+      'Transaction Sent',
+      name: 'sharedTransactionSent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start Again`
+  String get sharedStartAgain {
+    return Intl.message(
+      'Start Again',
+      name: 'sharedStartAgain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Memo`
+  String get sharedMemo {
+    return Intl.message(
+      'Memo',
+      name: 'sharedMemo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paste Address`
+  String get sharedPasteAddress {
+    return Intl.message(
+      'Paste Address',
+      name: 'sharedPasteAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -545,6 +645,16 @@ class Strings {
     return Intl.message(
       'Set Amount',
       name: 'walletReceiveSetAmount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Memo(optional)`
+  String get walletSendMemo {
+    return Intl.message(
+      'Memo(optional)',
+      name: 'walletSendMemo',
       desc: '',
       args: [],
     );
