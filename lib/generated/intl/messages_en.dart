@@ -77,6 +77,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Wallet Security"),
         "sharedAccessWallet":
             MessageLookupByLibrary.simpleMessage("Access Wallet"),
+        "sharedAmount": MessageLookupByLibrary.simpleMessage("Amount"),
         "sharedAvailable": MessageLookupByLibrary.simpleMessage("Available"),
         "sharedBalance": MessageLookupByLibrary.simpleMessage("Balance"),
         "sharedCChain": MessageLookupByLibrary.simpleMessage("C chain"),
@@ -84,13 +85,26 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "sharedCopy": MessageLookupByLibrary.simpleMessage("Copy"),
         "sharedLock": MessageLookupByLibrary.simpleMessage("Lock"),
+        "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
         "sharedPChain": MessageLookupByLibrary.simpleMessage("P chain"),
+        "sharedPasteAddress":
+            MessageLookupByLibrary.simpleMessage("Paste Address"),
         "sharedPrivateKey": MessageLookupByLibrary.simpleMessage("Private Key"),
         "sharedROIChain": MessageLookupByLibrary.simpleMessage("ROI Chain"),
         "sharedReceive": MessageLookupByLibrary.simpleMessage("Receive"),
         "sharedSend": MessageLookupByLibrary.simpleMessage("Send"),
+        "sharedSendTo": MessageLookupByLibrary.simpleMessage("Send to"),
+        "sharedSendTransaction":
+            MessageLookupByLibrary.simpleMessage("Send Transaction"),
+        "sharedSetAmount": MessageLookupByLibrary.simpleMessage("Set amount"),
         "sharedShare": MessageLookupByLibrary.simpleMessage("Share"),
+        "sharedStartAgain": MessageLookupByLibrary.simpleMessage("Start Again"),
         "sharedToken": MessageLookupByLibrary.simpleMessage("Token"),
+        "sharedTotal": MessageLookupByLibrary.simpleMessage("Total"),
+        "sharedTransactionFee":
+            MessageLookupByLibrary.simpleMessage("Transaction fee"),
+        "sharedTransactionSent":
+            MessageLookupByLibrary.simpleMessage("Transaction Sent"),
         "sharedXChain": MessageLookupByLibrary.simpleMessage("X chain"),
         "walletReceiveBitcoin":
             MessageLookupByLibrary.simpleMessage("Bitcoin(BTC)"),
@@ -99,6 +113,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "walletReceiveSetAmount":
             MessageLookupByLibrary.simpleMessage("Set Amount"),
         "walletReceiveToThis": MessageLookupByLibrary.simpleMessage(
-            " to this address\nSending any other coins my result in permanent loss")
+            " to this address\nSending any other coins my result in permanent loss"),
+        "walletSendMemo": MessageLookupByLibrary.simpleMessage("Memo(optional)")
       };
 }

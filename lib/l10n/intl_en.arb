@@ -17,6 +17,16 @@
   "sharedLock": "Lock",
   "sharedCopy": "Copy",
   "sharedShare": "Share",
+  "sharedTotal": "Total",
+  "sharedTransactionFee": "Transaction fee",
+  "sharedSetAmount": "Set amount",
+  "sharedSendTo": "Send to",
+  "sharedAmount": "Amount",
+  "sharedSendTransaction": "Send Transaction",
+  "sharedTransactionSent": "Transaction Sent",
+  "sharedStartAgain": "Start Again",
+  "sharedMemo": "Memo",
+  "sharedPasteAddress": "Paste Address",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",
@@ -48,5 +58,6 @@
   "walletReceiveSendOnly": "Send only ",
   "walletReceiveBitcoin": "Bitcoin(BTC)",
   "walletReceiveToThis": " to this address\nSending any other coins my result in permanent loss",
-  "walletReceiveSetAmount": "Set Amount"
+  "walletReceiveSetAmount": "Set Amount",
+  "walletSendMemo": "Memo(optional)"
 }

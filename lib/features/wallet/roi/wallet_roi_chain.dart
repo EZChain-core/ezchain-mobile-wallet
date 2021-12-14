@@ -65,7 +65,9 @@ class WalletROIChainScreen extends StatelessWidget {
                       _WalletButton(
                         text: Strings.current.sharedSend,
                         icon: Assets.icons.icArrowUp.svg(),
-                        onPressed: () {},
+                        onPressed: () {
+                          context.router.push(const WalletSendXChainRoute());
+                        },
                       ),
                       const SizedBox(width: 8),
                       _WalletButton(
