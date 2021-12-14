@@ -123,9 +123,17 @@ ByteData bigIntToByteData(BigInt bigInt) {
 }
 
 Uint8List hexDecode(String encoded) {
-  return Uint8List.fromList(HEX.decode(encoded));
+  try {
+    return Uint8List.fromList(HEX.decode(encoded));
+  } catch (e) {
+    return Uint8List.fromList([]);
+  }
 }
 
 String hexEncode(Uint8List input) {
-  return HEX.encode(input);
+  try {
+    return HEX.encode(input);
+  } catch (e) {
+    return "";
+  }
 }

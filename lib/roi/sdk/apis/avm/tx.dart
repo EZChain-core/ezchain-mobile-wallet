@@ -8,6 +8,7 @@ import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/roi/sdk/common/credentials.dart';
 import 'package:wallet/roi/sdk/common/keychain/base_key_chain.dart';
 import 'package:wallet/roi/sdk/common/tx.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
 AvmBaseTx selectTxClass(int inputId, {Map<String, dynamic> args = const {}}) {
@@ -28,7 +29,8 @@ class AvmUnsignedTx
       : super(transaction: transaction, codecId: txCodecId);
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     transaction = selectTxClass(fields["transaction"]["typeId"]);
     transaction.deserialize(fields["transaction"], encoding: encoding);
@@ -72,7 +74,8 @@ class AvmTx extends StandardTx<AvmKeyPair, AvmKeyChain, AvmUnsignedTx> {
       : super(unsignedTx: unsignedTx, credentials: credentials);
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     unsignedTx = AvmUnsignedTx();
     unsignedTx.deserialize(fields["unsignedTx"], encoding: encoding);
