@@ -2,14 +2,13 @@ import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/apis/avm/constants.dart';
 import 'package:wallet/roi/sdk/common/input.dart';
-import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
-Input selectInputClass(int inputId, {List<dynamic> args = const []}) {
+Input selectInputClass(int inputId, {Map<String, dynamic> args = const {}}) {
   switch (inputId) {
     case SECPINPUTID:
     case SECPINPUTID_CODECONE:
-      return AvmSECPTransferInput(amount: args.getOrNull(0));
+      return AvmSECPTransferInput.fromArgs(args);
     default:
       throw Exception("Error - SelectOutputClass: unknown inputId = $inputId");
   }
@@ -24,10 +23,10 @@ class AvmTransferableInput extends StandardTransferableInput {
       : super(input: input, txId: txId, outputIdx: outputIdx, assetId: assetId);
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     input = selectInputClass(fields["input"]["typeId"]);
-    input.deserialize(fields["input"], encoding);
+    input.deserialize(fields["input"], encoding: encoding);
   }
 
   @override
@@ -51,7 +50,7 @@ abstract class AvmAmountInput extends StandardAmountInput {
   AvmAmountInput({BigInt? amount}) : super(amount: amount);
 
   @override
-  Input select(int id, {List<dynamic> args = const []}) {
+  Input select(int id, {Map<String, dynamic> args = const {}}) {
     return selectInputClass(id, args: args);
   }
 }
@@ -60,13 +59,13 @@ class AvmSECPTransferInput extends AvmAmountInput {
   @override
   String get typeName => "SECPTransferInput";
 
-  @override
-  int get codecId => LATESTCODEC;
+  AvmSECPTransferInput({BigInt? amount}) : super(amount: amount){
+    setCodecId(LATESTCODEC);
+  }
 
-  @override
-  int get typeId => codecId == 0 ? SECPINPUTID : SECPINPUTID_CODECONE;
-
-  AvmSECPTransferInput({BigInt? amount}) : super(amount: amount);
+  factory AvmSECPTransferInput.fromArgs(Map<String, dynamic> args) {
+    return AvmSECPTransferInput(amount: args["amount"]);
+  }
 
   @override
   Input clone() {
@@ -74,27 +73,28 @@ class AvmSECPTransferInput extends AvmAmountInput {
   }
 
   @override
-  Input create({List args = const []}) {
-    return AvmSECPTransferInput(amount: args.getOrNull(0));
+  Input create({Map<String, dynamic> args = const {}}) {
+    return AvmSECPTransferInput.fromArgs(args);
   }
 
+  @override
   void setCodecId(int codecId) {
     if (codecId != 0 && codecId != 1) {
       throw Exception(
           "Error - SECPTransferInput.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
     }
-    super.codecId = codecId;
-    super.typeId = codecId == 0 ? SECPINPUTID : SECPINPUTID_CODECONE;
+    super.setCodecId(codecId);
+    super.setTypeId(codecId == 0 ? SECPINPUTID : SECPINPUTID_CODECONE);
   }
 
   @override
-  int getInputId() => typeId;
+  int getInputId() => super.getTypeId();
 
   @override
   int getCredentialId() {
-    if (codecId == 0) {
+    if (super.getCodecId() == 0) {
       return SECPCREDENTIAL;
-    } else if (codecId == 1) {
+    } else if (super.getCodecId() == 1) {
       return SECPCREDENTIAL_CODECONE;
     } else {
       throw Exception();

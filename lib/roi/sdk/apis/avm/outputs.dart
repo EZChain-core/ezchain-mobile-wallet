@@ -2,18 +2,13 @@ import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/apis/avm/constants.dart';
 import 'package:wallet/roi/sdk/common/output.dart';
-import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
-Output selectOutputClass(int outputId, {List<dynamic> args = const []}) {
+Output selectOutputClass(int outputId, {Map<String, dynamic> args = const {}}) {
   switch (outputId) {
     case SECPXFEROUTPUTID:
     case SECPXFEROUTPUTID_CODECONE:
-      return AvmSECPTransferOutput(
-          amount: args.getOrNull(0),
-          lockTime: args.getOrNull(1),
-          threshold: args.getOrNull(2),
-          addresses: args.getOrNull(3));
+      return AvmSECPTransferOutput.fromArgs(args);
     default:
       throw Exception(
           "Error - SelectOutputClass: unknown outputId = $outputId");
@@ -28,10 +23,10 @@ class AvmTransferableOutput extends StandardTransferableOutput {
   String get typeName => "TransferableOutput";
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     output = selectOutputClass(fields["output"]["typeId"]);
-    output.deserialize(fields["output"], encoding);
+    output.deserialize(fields["output"], encoding: encoding);
   }
 
   @override
@@ -67,20 +62,14 @@ abstract class AvmAmountOutput extends StandardAmountOutput {
   }
 
   @override
-  Output select(int id, {List args = const []}) {
-    return selectOutputClass(id);
+  Output select(int id, {Map<String, dynamic> args = const {}}) {
+    return selectOutputClass(id, args: args);
   }
 }
 
 class AvmSECPTransferOutput extends AvmAmountOutput {
   @override
   String get typeName => "SECPTransferOutput";
-
-  @override
-  int get codecId => LATESTCODEC;
-
-  @override
-  int get typeId => codecId == 0 ? SECPXFEROUTPUTID : SECPXFEROUTPUTID_CODECONE;
 
   AvmSECPTransferOutput(
       {BigInt? amount,
@@ -91,15 +80,40 @@ class AvmSECPTransferOutput extends AvmAmountOutput {
             amount: amount,
             addresses: addresses,
             lockTime: lockTime,
-            threshold: threshold);
+            threshold: threshold) {
+    setCodecId(LATESTCODEC);
+  }
 
+  factory AvmSECPTransferOutput.fromArgs(Map<String, dynamic> args) {
+    return AvmSECPTransferOutput(
+        amount: args["amount"],
+        lockTime: args["lockTime"],
+        threshold: args["threshold"],
+        addresses: args["addresses"]);
+  }
+
+  static Map<String, dynamic> createArgs(
+      {BigInt? amount,
+      List<Uint8List>? addresses,
+      BigInt? lockTime,
+      int? threshold}) {
+    return {
+      "amount": amount,
+      "addresses": addresses,
+      "lockTime": lockTime,
+      "threshold": threshold
+    };
+  }
+
+  @override
   void setCodecId(int codecId) {
     if (codecId != 0 && codecId != 1) {
       throw Exception(
           "Error - SECPTransferOutput.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
     }
-    super.codecId = codecId;
-    super.typeId = codecId == 0 ? SECPXFEROUTPUTID : SECPXFEROUTPUTID_CODECONE;
+    super.setCodecId(codecId);
+    super
+        .setTypeId(codecId == 0 ? SECPXFEROUTPUTID : SECPXFEROUTPUTID_CODECONE);
   }
 
   @override
@@ -108,14 +122,10 @@ class AvmSECPTransferOutput extends AvmAmountOutput {
   }
 
   @override
-  Output create({List<dynamic> args = const []}) {
-    return AvmSECPTransferOutput(
-        amount: args.getOrNull(0),
-        lockTime: args.getOrNull(1),
-        threshold: args.getOrNull(2),
-        addresses: args.getOrNull(3));
+  Output create({Map<String, dynamic> args = const {}}) {
+    return AvmSECPTransferOutput.fromArgs(args);
   }
 
   @override
-  int getOutputId() => typeId;
+  int getOutputId() => super.getTypeId();
 }

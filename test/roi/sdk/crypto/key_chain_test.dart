@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:test/test.dart';
 
 import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
-import 'package:hex/hex.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart';
 
 void main() {
   final keyChain = ROIKeyChain(chainId: "X", hrp: "avax");
@@ -28,7 +28,7 @@ void main() {
 
   test("privateKeyHex", () {
     final privateKey = keypair.privateKeyBytes;
-    expect(HEX.encode(privateKey), privateKeyHex);
+    expect(hexEncode(privateKey), privateKeyHex);
   });
 
   test("publicKeyString", () {
@@ -38,7 +38,7 @@ void main() {
 
   test("publicKeyHex", () {
     final publicKey = keypair.publicKeyBytes;
-    expect(HEX.encode(publicKey), publicKeyHex);
+    expect(hexEncode(publicKey), publicKeyHex);
   });
 
   test("addressStrings", () {
@@ -50,14 +50,14 @@ void main() {
   final signature = keypair.sign(message);
 
   test("signature", () {
-    expect(HEX.encode(signature),
+    expect(hexEncode(signature),
         "4831d5b60028083529fed1d7ba2c23f71c6eaed1465c88b1a222c6f7873909977b17d78848fa8aeab5e8ed9434a2cc9f505197d797f1456b66b3fcce83c3175b00");
   });
 
   test("recovered publicKey", () {
     final recoveredPublicKey =
         keypair.recover(Uint8List.fromList(utf8.encode(message)), signature);
-    expect(HEX.encode(recoveredPublicKey), publicKeyHex);
+    expect(hexEncode(recoveredPublicKey), publicKeyHex);
   });
 
   test("verify signature", () {

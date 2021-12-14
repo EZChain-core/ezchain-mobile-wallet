@@ -32,8 +32,8 @@ abstract class NBytes extends Serializable {
   }
 
   @override
-  void deserialize(dynamic fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     _bSize = Serialization.instance.decoder(fields["bSize"], encoding,
         SerializedType.decimalString, SerializedType.number,
         args: [4]);

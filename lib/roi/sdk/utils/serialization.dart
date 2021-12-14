@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:hex/hex.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 
@@ -9,28 +8,28 @@ const SERIALIZATIONVERSION = 0;
 abstract class Serializable {
   String typeName = "";
 
-  int typeId = -1;
+  var _typeId = -1;
 
-  int codecId = -1;
+  var _codecId = -1;
 
   dynamic serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
     return {
       "typeName": typeName,
-      "typeId": typeId,
-      "codecId": codecId,
+      "typeId": _typeId,
+      "codecId": _codecId,
     };
   }
 
-  void deserialize(dynamic fields, SerializedEncoding encoding) {
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
     assert(fields["typeName"] is String);
     assert(fields["typeName"] == typeName);
     if (fields["typeId"] != null) {
       assert(fields["typeId"] is int);
-      assert(fields["typeId"] == "typeId");
+      assert(fields["typeId"] == _typeId);
     }
     if (fields["codecId"] != null) {
       assert(fields["codecId"] is int);
-      assert(fields["codecId"] == "codecId");
+      assert(fields["codecId"] == _codecId);
     }
   }
 
@@ -38,8 +37,20 @@ abstract class Serializable {
     return typeName;
   }
 
-  int getTxCodecId() {
-    return codecId;
+  int getCodecId() {
+    return _codecId;
+  }
+
+  void setCodecId(int codecId) {
+    _codecId = codecId;
+  }
+
+  int getTypeId() {
+    return _typeId;
+  }
+
+  void setTypeId(int typeId) {
+    _typeId = typeId;
   }
 }
 
@@ -54,13 +65,13 @@ class Serialization {
       {List<dynamic> args = const []}) {
     switch (type) {
       case SerializedType.hex:
-        return HEX.encode(vb);
+        return hexEncode(vb);
       case SerializedType.BN:
         return bufferToBigInt16(vb);
       case SerializedType.Buffer:
         if (args.length == 1 && args.first is int) {
           vb = Uint8List.fromList(
-              HEX.decode(HEX.encode(vb).padLeft(args.first * 2, "0")));
+              hexDecode(hexEncode(vb).padLeft(args.first * 2, "0")));
         }
         return vb;
       case SerializedType.bech32:
@@ -78,7 +89,7 @@ class Serialization {
       case SerializedType.decimalString:
         return bufferToBigInt16(vb).toRadixString(10);
       case SerializedType.number:
-        return bufferToBigInt16(vb).toDouble();
+        return bufferToBigInt16(vb).toInt();
       case SerializedType.utf8:
         return utf8.decode(vb);
     }
@@ -92,14 +103,14 @@ class Serialization {
         if (value.startsWith("0x")) {
           value = value.substring(2);
         }
-        return Uint8List.fromList(HEX.decode(value));
+        return Uint8List.fromList(hexDecode(value));
       case SerializedType.BN:
         final str = (v as BigInt).toRadixString(16);
         if (args.length == 1 && args.first is int) {
           return Uint8List.fromList(
-              HEX.decode(str.padLeft(args.first * 2, "0")));
+              hexDecode(str.padLeft(args.first * 2, "0")));
         }
-        return Uint8List.fromList(HEX.decode(str));
+        return Uint8List.fromList(hexDecode(str));
       case SerializedType.Buffer:
         return v;
       case SerializedType.bech32:
@@ -120,16 +131,16 @@ class Serialization {
         final str = BigInt.parse(v, radix: 10).toRadixString(16);
         if (args.length == 1 && args.first is int) {
           return Uint8List.fromList(
-              HEX.decode(str.padLeft(args.first * 2, "0")));
+              hexDecode(str.padLeft(args.first * 2, "0")));
         }
-        return Uint8List.fromList(HEX.decode(str));
+        return Uint8List.fromList(hexDecode(str));
       case SerializedType.number:
         final str = BigInt.parse(v.toString(), radix: 10).toRadixString(16);
         if (args.length == 1 && args.first is int) {
           return Uint8List.fromList(
-              HEX.decode(str.padLeft(args.first * 2, "0")));
+              hexDecode(str.padLeft(args.first * 2, "0")));
         }
-        return Uint8List.fromList(HEX.decode(str));
+        return Uint8List.fromList(hexDecode(str));
       case SerializedType.utf8:
         if (args.length == 1 && args.first is int) {
           final b = Uint8List(args.first);
@@ -176,7 +187,7 @@ class Serialization {
   }
 
   void deserialize(Serialized input, Serializable output) {
-    output.deserialize(input.fields, input.encoding);
+    output.deserialize(input.fields, encoding: input.encoding);
   }
 }
 

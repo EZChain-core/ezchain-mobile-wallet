@@ -1,8 +1,8 @@
 import 'dart:typed_data';
-import 'package:hex/hex.dart';
 
 import 'package:wallet/roi/sdk/common/input.dart';
 import 'package:wallet/roi/sdk/common/output.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart';
 
 class AssetAmount {
   final Uint8List assetId;
@@ -26,7 +26,7 @@ class AssetAmount {
 
   Uint8List getAssetId() => assetId;
 
-  String getAssetIdString() => HEX.encode(assetId);
+  String getAssetIdString() => hexEncode(assetId);
 
   BigInt getAmount() => _amount;
 
