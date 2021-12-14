@@ -31,19 +31,20 @@ abstract class ROI {
 
   void removeRequestConfig(String key);
 
-  factory ROI.create({
-    required String host,
-    required int port,
-    required String protocol,
-    int networkId = defaultNetworkId,
-    String xChainId = "",
-    String cChainId = "",
-    String hrp = "",
-    int connectTimeout = 5000,
-    int receiveTimeout = 5000,
-  }) {
+  factory ROI.create(
+      {required String host,
+      required int port,
+      required String protocol,
+      int networkId = defaultNetworkId,
+      String xChainId = "",
+      String cChainId = "",
+      String hrp = "",
+      int connectTimeout = 5000,
+      int receiveTimeout = 5000,
+      bool skipInit = false}) {
     return _ROICore(host, port, protocol, networkId, xChainId, cChainId, hrp,
-        connectTimeout, receiveTimeout);
+        connectTimeout, receiveTimeout,
+        skipInit: skipInit);
   }
 }
 
@@ -162,16 +163,17 @@ class _ROICore extends ROINetwork implements ROI {
   PvmApi get pvmApi => _pvmApi;
 
   _ROICore(
-    String host,
-    int port,
-    String protocol,
-    int networkId,
-    String xChainId,
-    String cChainId,
-    String hrp,
-    int connectTimeout,
-    int receiveTimeout,
-  ) : super(host, port, protocol, networkId, hrp, connectTimeout,
+      String host,
+      int port,
+      String protocol,
+      int networkId,
+      String xChainId,
+      String cChainId,
+      String hrp,
+      int connectTimeout,
+      int receiveTimeout,
+      {bool skipInit = false})
+      : super(host, port, protocol, networkId, hrp, connectTimeout,
             receiveTimeout) {
     if (xChainId.isEmpty || xChainId.toLowerCase() == "x") {
       if (networks.containsKey(networkId)) {
@@ -187,12 +189,13 @@ class _ROICore extends ROINetwork implements ROI {
         cChainId = networks[12345]!.c.blockchainId;
       }
     }
-
-    _infoApi = InfoApi.create(roiNetwork: this);
-    _indexApi = IndexApi.create(roiNetwork: this);
-    _avmApi = AvmApi.create(roiNetwork: this, blockChainId: xChainId);
-    _evmApi = EvmApi.create(roiNetwork: this, blockChainId: cChainId);
-    _pvmApi = PvmApi.create(roiNetwork: this);
+    if (!skipInit) {
+      _infoApi = InfoApi.create(roiNetwork: this);
+      _indexApi = IndexApi.create(roiNetwork: this);
+      _avmApi = AvmApi.create(roiNetwork: this, blockChainId: xChainId);
+      _evmApi = EvmApi.create(roiNetwork: this, blockChainId: cChainId);
+      _pvmApi = PvmApi.create(roiNetwork: this);
+    }
   }
 
   @override

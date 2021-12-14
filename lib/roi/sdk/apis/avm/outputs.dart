@@ -23,7 +23,8 @@ class AvmTransferableOutput extends StandardTransferableOutput {
   String get typeName => "TransferableOutput";
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     output = selectOutputClass(fields["output"]["typeId"]);
     output.deserialize(fields["output"], encoding: encoding);
@@ -36,6 +37,7 @@ class AvmTransferableOutput extends StandardTransferableOutput {
     offset += ASSETIDLEN;
     final outputId =
         bytes.sublist(offset, offset + 4).buffer.asByteData().getUint32(0);
+    offset += 4;
     output = selectOutputClass(outputId);
     return output.fromBuffer(bytes, offset: offset);
   }

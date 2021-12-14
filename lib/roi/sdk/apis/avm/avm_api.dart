@@ -36,8 +36,7 @@ abstract class AvmApi implements ROIChainApi {
   Future<RpcResponse<GetAllBalancesResponse>> getAllBalances(
       RpcRequest<GetAllBalancesRequest> request);
 
-  Future<RpcResponse<GetAssetDescriptionResponse>> getAssetDescription(
-      RpcRequest<GetAssetDescriptionRequest> request);
+  Future<Uint8List?> getAVAXAssetId({bool refresh = false});
 
   Future<RpcResponse<GetTxStatusResponse>> getTxStatus(
       RpcRequest<GetTxStatusRequest> request);
@@ -164,7 +163,7 @@ class _AvmApiImpl implements AvmApi {
         from,
         change,
         _getTxFee(),
-        await _getAVAXAssetId(),
+        await getAVAXAssetId(),
         memo,
         threshold: threshold);
     if (!await _checkGooseEgg(builtUnsignedTx)) {
@@ -175,7 +174,7 @@ class _AvmApiImpl implements AvmApi {
 
   Future<bool> _checkGooseEgg(AvmUnsignedTx utx, {BigInt? outTotal}) async {
     outTotal ??= BigInt.zero;
-    final avaxAssetId = await _getAVAXAssetId();
+    final avaxAssetId = await getAVAXAssetId();
     if (avaxAssetId == null) return false;
     final outputTotal =
         outTotal > BigInt.zero ? outTotal : utx.getOutputTotal(avaxAssetId);
@@ -200,9 +199,13 @@ class _AvmApiImpl implements AvmApi {
   }
 
   @override
-  Future<RpcResponse<GetAssetDescriptionResponse>> getAssetDescription(
-      RpcRequest<GetAssetDescriptionRequest> request) {
-    return avmRestClient.getAssetDescription(request);
+  Future<Uint8List?> getAVAXAssetId({bool refresh = false}) async {
+    if (avaxAssetId == null || refresh) {
+      final response = await avmRestClient.getAssetDescription(
+          const GetAssetDescriptionRequest(assetId: primaryAssetAlias).toRpc());
+      setAVAXAssetId(response.result?.assetId);
+    }
+    return avaxAssetId;
   }
 
   @override
@@ -238,15 +241,6 @@ class _AvmApiImpl implements AvmApi {
   Future<RpcResponse<WalletIssueTxResponse>> walletIssueTx(
       RpcRequest<WalletIssueTxRequest> request) {
     return avmWalletRestClient.walletIssueTx(request);
-  }
-
-  Future<Uint8List?> _getAVAXAssetId({bool refresh = false}) async {
-    if (avaxAssetId == null || refresh) {
-      final response = await getAssetDescription(
-          const GetAssetDescriptionRequest(assetId: primaryAssetAlias).toRpc());
-      setAVAXAssetId(response.result?.assetId);
-    }
-    return avaxAssetId;
   }
 
   BigInt _getTxFee() {
