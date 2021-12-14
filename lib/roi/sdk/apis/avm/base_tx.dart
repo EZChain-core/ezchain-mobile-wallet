@@ -2,9 +2,9 @@ import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/apis/avm/constants.dart';
 import 'package:wallet/roi/sdk/apis/avm/credentials.dart';
-import 'package:wallet/roi/sdk/apis/avm/input.dart';
+import 'package:wallet/roi/sdk/apis/avm/inputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
-import 'package:wallet/roi/sdk/apis/avm/output.dart';
+import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/common/credentials.dart';
 import 'package:wallet/roi/sdk/common/input.dart';
@@ -13,18 +13,11 @@ import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 import 'package:wallet/roi/sdk/common/output.dart';
 import 'package:wallet/roi/sdk/common/tx.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
-import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
 class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
   @override
   String get typeName => "AvmBaseTx";
-
-  @override
-  int get codecId => LATESTCODEC;
-
-  @override
-  int get typeId => codecId == 0 ? BASETX : BASETX_CODECONE;
 
   AvmBaseTx(
       {int networkId = defaultNetworkId,
@@ -37,16 +30,27 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
             blockchainId: blockchainId,
             outs: outs,
             ins: ins,
-            memo: memo);
+            memo: memo) {
+    setCodecId(LATESTCODEC);
+  }
+
+  factory AvmBaseTx.fromArgs(Map<String, dynamic> args) {
+    return AvmBaseTx(
+        networkId: args["networkId"],
+        blockchainId: args["blockchainId"],
+        outs: args["outs"],
+        ins: args["ins"],
+        memo: args["memo"]);
+  }
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     outs = (fields["outs"] as List<AvmTransferableOutput>)
-        .map((o) => AvmTransferableOutput()..deserialize(o, encoding))
+        .map((o) => AvmTransferableOutput()..deserialize(o, encoding: encoding))
         .toList();
     ins = (fields["ins"] as List<AvmTransferableInput>)
-        .map((i) => AvmTransferableInput()..deserialize(i, encoding))
+        .map((i) => AvmTransferableInput()..deserialize(i, encoding: encoding))
         .toList();
     numOuts = Serialization.instance.decoder(
         outs.length.toString(),
@@ -64,7 +68,7 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
 
   @override
   int getTxType() {
-    return typeId;
+    return super.getTypeId();
   }
 
   @override
@@ -88,19 +92,13 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
   }
 
   @override
-  AvmBaseTx create({List args = const []}) {
-    return AvmBaseTx(
-      networkId: args.getOrNull(0),
-      blockchainId: args.getOrNull(1),
-      outs: args.getOrNull(2),
-      ins: args.getOrNull(3),
-      memo: args.getOrNull(4),
-    );
+  AvmBaseTx create({Map<String, dynamic> args = const {}}) {
+    return AvmBaseTx.fromArgs(args);
   }
 
   @override
   StandardBaseTx<ROIKeyPair, ROIKeyChain> select(int id,
-      {List args = const []}) {
+      {Map<String, dynamic> args = const {}}) {
     return selectTxClass(id, args: args);
   }
 
@@ -121,6 +119,16 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
       signs.add(credential);
     }
     return signs;
+  }
+
+  @override
+  void setCodecId(int codecId) {
+    if (codecId != 0 && codecId != 1) {
+      throw Exception(
+          "Error - BaseTx.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
+    }
+    super.setCodecId(codecId);
+    super.setTypeId(codecId == 0 ? BASETX : BASETX_CODECONE);
   }
 
   int fromBuffer(Uint8List bytes, {int offset = 0}) {
@@ -151,14 +159,5 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
     memo = bytes.sublist(offset, offset + memoLength);
     offset += memoLength;
     return offset;
-  }
-
-  void setCodecId(int codecId) {
-    if (codecId != 0 && codecId != 1) {
-      throw Exception(
-          "Error - BaseTx.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
-    }
-    super.codecId = codecId;
-    super.typeId = codecId == 0 ? BASETX : BASETX_CODECONE;
   }
 }

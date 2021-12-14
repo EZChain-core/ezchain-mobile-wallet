@@ -1,6 +1,6 @@
 import 'dart:typed_data';
-import 'package:hex/hex.dart';
 import 'package:test/test.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
@@ -204,7 +204,7 @@ void main() {
       final decoded = serialization.decoder(
           str, encoding, SerializedType.decimalString, SerializedType.Buffer,
           args: [1]);
-      expect(HEX.encode(decoded), HEX.encode(denomination));
+      expect(hexEncode(decoded), hexEncode(denomination));
     });
   });
 }

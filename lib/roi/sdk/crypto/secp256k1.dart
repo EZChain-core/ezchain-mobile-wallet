@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:hex/hex.dart';
 
 import 'package:elliptic/elliptic.dart';
 import "package:pointycastle/ecc/curves/secp256k1.dart";
@@ -16,6 +15,7 @@ import "package:pointycastle/digests/sha256.dart";
 import 'package:pointycastle/src/utils.dart' as pointycastle_utils;
 import 'package:wallet/roi/sdk/crypto/ecdsa_signer.dart';
 import 'package:wallet/roi/sdk/crypto/key_pair.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart';
 
 /// https://github.com/bcgit/pc-dart
 /// https://github.com/shareven/wallet_hd/blob/master/lib/src/ecurve.dart
@@ -38,7 +38,7 @@ KeyPair _fromPrivateKey(PrivateKey privateKey) {
   final publicKey = privateKey.publicKey;
   return KeyPair(
       privateKey: Uint8List.fromList(privateKey.bytes),
-      publicKey: Uint8List.fromList(HEX.decode(publicKey.toCompressedHex())));
+      publicKey: Uint8List.fromList(hexDecode(publicKey.toCompressedHex())));
 }
 
 Uint8List sign(Uint8List messageHash, Uint8List privateKeyBytes) {

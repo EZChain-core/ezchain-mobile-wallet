@@ -14,7 +14,7 @@ Uint8List stringToAddress(String address, {String? hrp}) {
   if (address.substring(0, 2) == "0x") {
     // ETH-style address
     if (isEthAddress(address)) {
-      Uint8List.fromList(HEX.decode(address.substring(2)));
+      Uint8List.fromList(hexDecode(address.substring(2)));
     } else {
       throw Exception("Error - Invalid address");
     }
@@ -94,7 +94,7 @@ Uint8List addChecksum(Uint8List buff) {
 }
 
 BigInt fromBufferToBN(Uint8List buff) {
-  return BigInt.parse(HEX.encode(buff), radix: 16);
+  return BigInt.parse(hexEncode(buff), radix: 16);
 }
 
 Uint8List fromBNToBuffer(BigInt bn, {int? length}) {
@@ -120,4 +120,12 @@ ByteData bigIntToByteData(BigInt bigInt) {
     _bigInt = _bigInt >> 8;
   }
   return data;
+}
+
+Uint8List hexDecode(String encoded) {
+  return Uint8List.fromList(HEX.decode(encoded));
+}
+
+String hexEncode(Uint8List input) {
+  return HEX.encode(input);
 }

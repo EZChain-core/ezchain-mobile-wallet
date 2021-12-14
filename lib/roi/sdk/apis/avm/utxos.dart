@@ -1,9 +1,8 @@
 import 'dart:typed_data';
-import 'package:hex/hex.dart';
 import 'package:wallet/roi/sdk/apis/avm/base_tx.dart';
 
-import 'package:wallet/roi/sdk/apis/avm/input.dart';
-import 'package:wallet/roi/sdk/apis/avm/output.dart';
+import 'package:wallet/roi/sdk/apis/avm/inputs.dart';
+import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/common/asset_amount.dart';
 import 'package:wallet/roi/sdk/common/output.dart';
@@ -30,10 +29,10 @@ class AvmUTXO extends StandardUTXO {
             output: output);
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     output = selectOutputClass(fields["output"]["typeId"]);
-    output.deserialize(fields["output"], encoding);
+    output.deserialize(fields["output"], encoding: encoding);
   }
 
   @override
@@ -49,6 +48,7 @@ class AvmUTXO extends StandardUTXO {
     offset += 32;
     final outputId =
         bytes.sublist(offset, offset + 4).buffer.asByteData().getUint32(0);
+    offset += 4;
     output = selectOutputClass(outputId);
     return output.fromBuffer(bytes, offset: offset);
   }
@@ -86,23 +86,22 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
   String get typeName => "AvmUTXOSet";
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
-    final utxos = {};
-    for (final utxoId in fields["utxos"]) {
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
+    final Map<String, AvmUTXO> utxos = {};
+    for (final utxoId in (fields["utxos"] as Map<String, dynamic>).keys) {
       final utxoIdCleaned = Serialization.instance.decoder(
           utxoId, encoding, SerializedType.base58, SerializedType.base58);
 
       utxos["$utxoIdCleaned"] = AvmUTXO();
-      (utxos["$utxoIdCleaned"] as AvmUTXO)
-          .deserialize(fields["utxos"][utxoId], encoding);
+      (utxos["$utxoIdCleaned"] as AvmUTXO).deserialize(fields["utxos"][utxoId], encoding: encoding);
     }
-    final addressUTXOs = {};
-    for (final address in fields["addressUTXOs"]) {
+    final Map<String, Map<String, BigInt>> addressUTXOs = {};
+    for (final address in (fields["addressUTXOs"] as Map<String, dynamic>).keys) {
       final addressCleaned = Serialization.instance
           .decoder(address, encoding, SerializedType.cb58, SerializedType.hex);
-      final utxoBalance = {};
-      for (final utxoId in fields["addressUTXOs"][address]) {
+      final Map<String, BigInt> utxoBalance = {};
+      for (final utxoId in (fields["addressUTXOs"][address] as Map<String, dynamic>).keys) {
         final utxoIdCleaned = Serialization.instance.decoder(
             utxoId, encoding, SerializedType.base58, SerializedType.base58);
 
@@ -114,8 +113,8 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
       }
       addressUTXOs[addressCleaned] = utxoBalance;
     }
-    this.utxos = utxos as Map<String, AvmUTXO>;
-    this.addressUTXOs = addressUTXOs as Map<String, Map<String, BigInt>>;
+    this.utxos = utxos;
+    this.addressUTXOs = addressUTXOs;
   }
 
   AvmUTXO parseUTXO(dynamic utxo) {
@@ -132,7 +131,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
   }
 
   @override
-  StandardUTXOSet<StandardUTXO> create({List<dynamic> args = const []}) {
+  StandardUTXOSet<StandardUTXO> create({Map<String, dynamic> args = const {}}) {
     return AvmUTXOSet();
   }
 
@@ -161,7 +160,6 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
     asOf ??= unixNow();
     lockTime ??= BigInt.zero;
     if (threshold > toAddresses.length) {
-      /* istanbul ignore next */
       throw Exception(
           "Error - UTXOSet.buildBaseTx: threshold is greater than number of addresses");
     }
@@ -174,7 +172,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
         senders: fromAddresses,
         changeAddresses: changeAddresses);
 
-    if (HEX.encode(assetId) == HEX.encode(feeAssetID)) {
+    if (hexEncode(assetId) == hexEncode(feeAssetID)) {
       aad.addAssetAmount(assetId, amount, fee ?? BigInt.zero);
     } else {
       aad.addAssetAmount(assetId, amount, BigInt.zero);
@@ -198,7 +196,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
         ins: ins,
         memo: memo);
 
-    return AvmUnsignedTx(baseTx);
+    return AvmUnsignedTx(transaction: baseTx);
   }
 
   void getMinimumSpendable(
@@ -212,7 +210,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
 
     for (int i = 0; i < utxoArray.length && !aad.canComplete(); i++) {
       final u = utxoArray[i];
-      final assetKey = HEX.encode(u.getAssetId());
+      final assetKey = hexEncode(u.getAssetId());
       final fromAddresses = aad.getSenders();
       if (u.getOutput() is AvmAmountOutput &&
           aad.assetExists(assetKey) &&
@@ -259,17 +257,22 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
       final amount = assetAmount.getAmount();
       if (amount > BigInt.zero) {
         final spendOut = selectOutputClass(outIds[assetKey],
-                args: [amount, aad.getDestinations(), lockTime, threshold])
-            as AvmAmountOutput;
+            args: AvmSECPTransferOutput.createArgs(
+                amount: amount,
+                addresses: aad.getDestinations(),
+                lockTime: lockTime,
+                threshold: threshold)) as AvmAmountOutput;
 
-        final xferout = AvmTransferableOutput(
+        final xFerOut = AvmTransferableOutput(
             assetId: assetAmount.getAssetId(), output: spendOut);
-        aad.addChange(xferout);
+        aad.addChange(xFerOut);
       }
       final change = assetAmount.getChange();
       if (change > BigInt.zero) {
         final changeOut = selectOutputClass(outIds[assetKey],
-            args: [amount, aad.getDestinations()]) as AvmAmountOutput;
+            args: AvmSECPTransferOutput.createArgs(
+                amount: amount,
+                addresses: aad.getDestinations())) as AvmAmountOutput;
         final chgXFerOut = AvmTransferableOutput(
             assetId: assetAmount.getAssetId(), output: changeOut);
         aad.addChange(chgXFerOut);

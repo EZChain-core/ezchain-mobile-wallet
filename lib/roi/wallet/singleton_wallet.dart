@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:hex/hex.dart';
 import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/apis/evm/key_chain.dart';
@@ -32,7 +31,7 @@ class SingletonWallet extends WalletProvider implements UnsafeWallet {
 
   factory SingletonWallet.fromEvmKey(String key) {
     final avmKeyStr =
-        bufferToPrivateKeyString(Uint8List.fromList(HEX.decode(key)));
+        bufferToPrivateKeyString(Uint8List.fromList(hexDecode(key)));
     return SingletonWallet(privateKey: avmKeyStr);
   }
 

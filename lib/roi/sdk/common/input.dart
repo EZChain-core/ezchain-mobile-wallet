@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/common/credentials.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
 abstract class Input extends Serializable {
@@ -17,9 +18,9 @@ abstract class Input extends Serializable {
 
   Input clone();
 
-  Input create({List<dynamic> args = const []});
+  Input create({Map<String, dynamic> args = const {}});
 
-  Input select(int id, {List<dynamic> args = const []});
+  Input select(int id, {Map<String, dynamic> args = const {}});
 
   @override
   serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
@@ -31,10 +32,10 @@ abstract class Input extends Serializable {
   }
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     sigIdxs = (fields["sigIdxs"] as List)
-        .map((e) => SigIdx()..deserialize(e, encoding))
+        .map((e) => SigIdx()..deserialize(e, encoding: encoding))
         .toList();
     sigCount.buffer.asByteData().setUint32(0, sigIdxs.length);
   }
@@ -86,19 +87,12 @@ abstract class Input extends Serializable {
       final aBuff = a.toBuffer();
 
       final bOutId = Uint8List(4);
-      aOutId.buffer.asByteData().setUint32(0, b.getInputId());
+      bOutId.buffer.asByteData().setUint32(0, b.getInputId());
       final bBuff = b.toBuffer();
 
       final aSort = Uint8List.fromList([...aOutId, ...aBuff]);
       final bSort = Uint8List.fromList([...bOutId, ...bBuff]);
-
-      final aSortBuff = aSort.buffer.asByteData().getUint32(0);
-      final bSortBuff = bSort.buffer.asByteData().getUint32(0);
-      if (aSortBuff == bSortBuff) {
-        return 0;
-      } else {
-        return aSortBuff > bSortBuff ? 1 : -1;
-      }
+      return compare(aSort, bSort);
     };
   }
 }
@@ -135,13 +129,7 @@ abstract class StandardParseableInput extends Serializable {
   static int Function(StandardParseableInput a, StandardParseableInput b)
       comparator() {
     return (a, b) {
-      final aBuff = a.toBuffer().buffer.asByteData().getUint32(0);
-      final bBuff = b.toBuffer().buffer.asByteData().getUint32(0);
-      if (aBuff == bBuff) {
-        return 0;
-      } else {
-        return aBuff > bBuff ? 1 : -1;
-      }
+      return compare(a.toBuffer(), b.toBuffer());
     };
   }
 }
@@ -183,8 +171,8 @@ abstract class StandardTransferableInput extends StandardParseableInput {
   }
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     txId = Serialization.instance.decoder(fields["txId"], encoding,
         SerializedType.decimalString, SerializedType.Buffer,
         args: [4]);
@@ -245,8 +233,8 @@ abstract class StandardAmountInput extends Input {
   }
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     amount = Serialization.instance.decoder(fields["amount"], encoding,
         SerializedType.decimalString, SerializedType.Buffer,
         args: [8]);

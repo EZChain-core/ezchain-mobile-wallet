@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:hex/hex.dart';
 
 import 'package:wallet/roi/sdk/common/nbytes.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
@@ -38,13 +37,7 @@ class Address extends NBytes {
 
   static int Function(Address a, Address b) comparator() {
     return (a, b) {
-      final aBuff = a.toBuffer().buffer.asByteData().getUint32(0);
-      final bBuff = b.toBuffer().buffer.asByteData().getUint32(0);
-      if (aBuff == bBuff) {
-        return 0;
-      } else {
-        return aBuff > bBuff ? 1 : -1;
-      }
+      return compare(a.toBuffer(), b.toBuffer());
     };
   }
 }
@@ -63,8 +56,8 @@ class OutputOwners extends Serializable {
       final addrs = <Address>[];
       for (int i = 0; i < addresses.length; i++) {
         final address = Address();
-        address.fromBuffer(addresses[i]);
-        addrs[i] = address;
+        addrs.add(address);
+        addrs[i].fromBuffer(addresses[i]);
       }
       this.addresses = addrs;
       this.addresses.sort(Address.comparator());
@@ -89,13 +82,13 @@ class OutputOwners extends Serializable {
       "threshold": Serialization.instance.encoder(threshold, encoding,
           SerializedType.Buffer, SerializedType.decimalString,
           args: [4]),
-      "addresses": addresses.map((e) => e.serialize(encoding: encoding))
+      "addresses": addresses.map((e) => e.serialize(encoding: encoding)).toList()
     };
   }
 
   @override
-  void deserialize(dynamic fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     lockTime = Serialization.instance.decoder(fields["lockTime"], encoding,
         SerializedType.decimalString, SerializedType.Buffer,
         args: [8]);
@@ -103,7 +96,7 @@ class OutputOwners extends Serializable {
         SerializedType.decimalString, SerializedType.Buffer,
         args: [4]);
     addresses = (fields["addresses"] as List<dynamic>)
-        .map((e) => Address()..deserialize(e, encoding))
+        .map((e) => Address()..deserialize(e, encoding: encoding))
         .toList();
     numAddress.buffer.asByteData().setUint32(0, addresses.length);
   }
@@ -127,8 +120,8 @@ class OutputOwners extends Serializable {
 
   int getAddressIdx(Uint8List address) {
     for (int i = 0; i < addresses.length; i++) {
-      final address1 = HEX.encode(addresses[i].toBuffer());
-      final address2 = HEX.encode(address);
+      final address1 = hexEncode(addresses[i].toBuffer());
+      final address2 = hexEncode(address);
       if (address1 == address2) return i;
     }
     return -1;
@@ -165,8 +158,8 @@ class OutputOwners extends Serializable {
       for (int j = 0;
           j < addresses.length && qualified.length < threshold;
           j++) {
-        final address1 = HEX.encode(addresses[j]);
-        final address2 = HEX.encode(this.addresses[i].toBuffer());
+        final address1 = hexEncode(addresses[j]);
+        final address2 = hexEncode(this.addresses[i].toBuffer());
         if (address1 == address2) {
           qualified.add(addresses[j]);
         }
@@ -211,19 +204,13 @@ class OutputOwners extends Serializable {
       final aBuff = a.toBuffer();
 
       final bOutId = Uint8List(4);
-      aOutId.buffer.asByteData().setUint32(0, b.getOutputId());
+      bOutId.buffer.asByteData().setUint32(0, b.getOutputId());
       final bBuff = b.toBuffer();
 
       final aSort = Uint8List.fromList([...aOutId, ...aBuff]);
       final bSort = Uint8List.fromList([...bOutId, ...bBuff]);
 
-      final aSortBuff = aSort.buffer.asByteData().getUint32(0);
-      final bSortBuff = bSort.buffer.asByteData().getUint32(0);
-      if (aSortBuff == bSortBuff) {
-        return 0;
-      } else {
-        return aSortBuff > bSortBuff ? 1 : -1;
-      }
+      return compare(aSort, bSort);
     };
   }
 }
@@ -239,9 +226,9 @@ abstract class Output extends OutputOwners {
 
   Output clone();
 
-  Output create({List<dynamic> args = const []});
+  Output create({Map<String, dynamic> args = const {}});
 
-  Output select(int id, {List<dynamic> args = const []});
+  Output select(int id, {Map<String, dynamic> args = const {}});
 
   StandardTransferableOutput makeTransferable(Uint8List assetId);
 }
@@ -278,13 +265,7 @@ abstract class StandardParseableOutput extends Serializable {
   static int Function(StandardParseableOutput a, StandardParseableOutput b)
       comparator() {
     return (a, b) {
-      final aBuff = a.toBuffer().buffer.asByteData().getUint32(0);
-      final bBuff = b.toBuffer().buffer.asByteData().getUint32(0);
-      if (aBuff == bBuff) {
-        return 0;
-      } else {
-        return aBuff > bBuff ? 1 : -1;
-      }
+      return compare(a.toBuffer(), b.toBuffer());
     };
   }
 }
@@ -296,7 +277,11 @@ abstract class StandardTransferableOutput extends StandardParseableOutput {
   String get typeName => "StandardTransferableOutput";
 
   StandardTransferableOutput({Uint8List? assetId, Output? output})
-      : super(output: output);
+      : super(output: output) {
+    if (assetId != null) {
+      this.assetId = assetId;
+    }
+  }
 
   @override
   serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
@@ -309,8 +294,8 @@ abstract class StandardTransferableOutput extends StandardParseableOutput {
   }
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     assetId = Serialization.instance.decoder(
         fields["assetId"], encoding, SerializedType.cb58, SerializedType.Buffer,
         args: [32]);
@@ -356,8 +341,8 @@ abstract class StandardAmountOutput extends Output {
   }
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     amount = Serialization.instance.decoder(fields["amount"], encoding,
         SerializedType.decimalString, SerializedType.Buffer,
         args: [8]);
@@ -400,8 +385,8 @@ abstract class BaseNFTOutput extends Output {
   }
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     groupId = Serialization.instance.decoder(fields["groupId"], encoding,
         SerializedType.decimalString, SerializedType.Buffer,
         args: [4]);

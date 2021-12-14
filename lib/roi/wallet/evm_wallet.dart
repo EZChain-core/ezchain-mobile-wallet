@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:hex/hex.dart';
 import 'package:wallet/roi/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 
@@ -26,7 +25,7 @@ class EvmWallet {
 
   EvmWallet({required this.privateKey}) {
     publicKey = privateKeyToPublicKey(privateKey);
-    _address = '0x' + HEX.encode(publicKeyToAddress(publicKey));
+    _address = '0x' + hexEncode(publicKeyToAddress(publicKey));
   }
 
   String getAddressBech32() {
@@ -36,7 +35,7 @@ class EvmWallet {
   }
 
   String getPrivateKeyHex() {
-    return HEX.encode(privateKey);
+    return hexEncode(privateKey);
   }
 
   EvmKeyChain getKeyChain() {

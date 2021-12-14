@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:hex/hex.dart';
 
 import 'package:wallet/roi/sdk/common/output.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
@@ -35,10 +34,10 @@ abstract class StandardUTXO extends Serializable {
       }
     }
     if (assetId != null) {
-      this.assetId == assetId;
+      this.assetId = assetId;
     }
     if (output != null) {
-      this.output == output;
+      this.output = output;
     }
   }
 
@@ -69,8 +68,9 @@ abstract class StandardUTXO extends Serializable {
   }
 
   @override
-  void deserialize(dynamic fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     codecIdBuff = Serialization.instance.decoder(fields["codecIdBuff"],
         encoding, SerializedType.decimalString, SerializedType.Buffer,
         args: [2]);
@@ -85,7 +85,8 @@ abstract class StandardUTXO extends Serializable {
         args: [32]);
   }
 
-  int getTxCodecId() => codecIdBuff.buffer.asByteData().getInt8(0);
+  @override
+  int getCodecId() => codecIdBuff.buffer.asByteData().getInt8(0);
 
   Uint8List getCodecIdBuffer() => codecIdBuff;
 
@@ -128,24 +129,23 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
 
   StandardUTXOSet clone();
 
-  StandardUTXOSet create({List<dynamic> args = const []});
+  StandardUTXOSet create({Map<String, dynamic> args = const {}});
 
   @override
   dynamic serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
     var fields = super.serialize(encoding: encoding);
-    final utxos = {};
+    final Map<String, dynamic> utxos = {};
     for (final utxoId in this.utxos.keys) {
       final utxoIdCleaned = Serialization.instance.encoder(
           utxoId, encoding, SerializedType.base58, SerializedType.base58);
-
       utxos[utxoIdCleaned] = this.utxos[utxoId]!.serialize(encoding: encoding);
     }
-    final addressUTXOs = {};
+    final Map<String, dynamic> addressUTXOs = {};
     for (final address in this.addressUTXOs.keys) {
       final addressCleaned = Serialization.instance.encoder(
           address, encoding, SerializedType.hex, SerializedType.base58);
 
-      final utxoBalance = {};
+      final Map<String, dynamic> utxoBalance = {};
 
       for (final utxoId in this.addressUTXOs[address]!.keys) {
         final utxoIdCleaned = Serialization.instance.encoder(
@@ -186,7 +186,7 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
       final addresses = utxovar.getOutput().getAddresses();
       final lockTime = utxovar.getOutput().getLockTime();
       for (int i = 0; i < addresses.length; i++) {
-        final address = HEX.encode(addresses[i]);
+        final address = hexEncode(addresses[i]);
         if (!addressUTXOs.keys.contains(address)) {
           addressUTXOs[address] = {};
         }
@@ -228,7 +228,7 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
     return utxoVar;
   }
 
-  List<UTXOClass> removeArray(List<dynamic> utxo) {
+  List<UTXOClass> removeArray(List<dynamic> utxos) {
     final removed = <UTXOClass>[];
     for (int i = 0; i < utxos.length; i++) {
       final result = remove(utxos[i]);
@@ -282,7 +282,7 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
       final results = <String>[];
       final now = unixNow();
       for (int i = 0; i < addresses.length; i++) {
-        final address = HEX.encode(addresses[i]);
+        final address = hexEncode(addresses[i]);
         if (addressUTXOs.containsKey(address)) {
           final entries = addressUTXOs[address]!;
           for (final utxoId in entries.keys) {
@@ -302,7 +302,7 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
 
   List<Uint8List> getAddresses() {
     return addressUTXOs.keys
-        .map((e) => Uint8List.fromList(HEX.decode(e)))
+        .map((e) => Uint8List.fromList(hexDecode(e)))
         .toList();
   }
 
@@ -320,7 +320,7 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
     for (int i = 0; i < utxos.length; i++) {
       final u = utxos[i];
       if (u.getOutput() is StandardAmountOutput &&
-          HEX.encode(u.getAssetId()) == HEX.encode(asset) &&
+          hexEncode(u.getAssetId()) == hexEncode(asset) &&
           u.getOutput().meetsThreshold(addresses, asOf: asOf)) {
         spend = spend + (u.getOutput() as StandardAmountOutput).getAmount();
       }

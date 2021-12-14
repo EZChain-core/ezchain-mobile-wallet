@@ -22,8 +22,8 @@ class SigIdx extends NBytes {
   }
 
   @override
-  void deserialize(dynamic fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     source = Serialization.instance.decoder(
         fields["source"], encoding, SerializedType.Buffer, SerializedType.hex);
   }
@@ -64,9 +64,9 @@ abstract class Credential extends Serializable {
 
   Credential clone();
 
-  Credential create({List<dynamic> args = const []});
+  Credential create({Map<String, dynamic> args = const {}});
 
-  Credential select(int id, {List<dynamic> args = const []});
+  Credential select(int id, {Map<String, dynamic> args = const {}});
 
   @override
   serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
@@ -78,10 +78,10 @@ abstract class Credential extends Serializable {
   }
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     final sigArray = (fields["sigArray"] as List)
-        .map((e) => Signature()..deserialize(e, encoding))
+        .map((e) => Signature()..deserialize(e, encoding: encoding))
         .toList();
     this.sigArray.clear();
     this.sigArray.addAll(sigArray);
@@ -93,11 +93,11 @@ abstract class Credential extends Serializable {
   }
 
   int fromBuffer(Uint8List bytes, {int offset = 0}) {
-    final siglen =
+    final sigLen =
         bytes.sublist(offset, offset + 4).buffer.asByteData().getUint32(0);
     offset += 4;
     sigArray.clear();
-    for (int i = 0; i < siglen; i++) {
+    for (int i = 0; i < sigLen; i++) {
       final sig = Signature()..fromBuffer(bytes, offset: offset);
       sigArray.add(sig);
     }
@@ -105,9 +105,9 @@ abstract class Credential extends Serializable {
   }
 
   Uint8List toBuffer() {
-    final siglen = Uint8List(4);
-    siglen.buffer.asByteData().setInt32(0, sigArray.length);
-    final barr = <Uint8List>[siglen];
+    final sigLen = Uint8List(4);
+    sigLen.buffer.asByteData().setInt32(0, sigArray.length);
+    final barr = <Uint8List>[sigLen];
     for (int i = 0; i < sigArray.length; i++) {
       final sigBuff = sigArray[i].toBuffer();
       barr.add(sigBuff);

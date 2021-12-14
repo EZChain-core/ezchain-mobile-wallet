@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:hex/hex.dart';
 
 import 'package:wallet/roi/sdk/common/credentials.dart';
 import 'package:wallet/roi/sdk/common/input.dart';
@@ -56,9 +55,9 @@ abstract class StandardBaseTx<KPClass extends ROIKeyPair,
 
   StandardBaseTx clone();
 
-  StandardBaseTx create({List<dynamic> args = const []});
+  StandardBaseTx create({Map<String, dynamic> args = const {}});
 
-  StandardBaseTx select(int id, {List<dynamic> args = const []});
+  StandardBaseTx select(int id, {Map<String, dynamic> args = const {}});
 
   @override
   serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
@@ -77,8 +76,8 @@ abstract class StandardBaseTx<KPClass extends ROIKeyPair,
   }
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
     networkId = Serialization.instance.decoder(fields["networkId"], encoding,
         SerializedType.decimalString, SerializedType.Buffer,
         args: [4]);
@@ -113,9 +112,9 @@ abstract class StandardBaseTx<KPClass extends ROIKeyPair,
       final b = ins[i].toBuffer();
       barr.add(b);
     }
-    final memolen = Uint8List(4);
-    memolen.buffer.asByteData().setUint32(0, memo.length);
-    barr.add(memolen);
+    final memoLen = Uint8List(4);
+    memoLen.buffer.asByteData().setUint32(0, memo.length);
+    barr.add(memoLen);
     barr.add(memo);
     return Uint8List.fromList(barr.expand((element) => element).toList());
   }
@@ -125,13 +124,17 @@ abstract class StandardUnsignedTx<
     KPClass extends ROIKeyPair,
     KCClass extends ROIKeyChain,
     SBTx extends StandardBaseTx<KPClass, KCClass>> extends Serializable {
-  var txCodecId = 0;
-  final SBTx transaction;
+  var codecId = 0;
+  late SBTx transaction;
 
   @override
   String get typeName => "StandardUnsignedTx";
 
-  StandardUnsignedTx(this.txCodecId, this.transaction);
+  StandardUnsignedTx({SBTx? transaction, this.codecId = 0}) {
+    if (transaction != null) {
+      this.transaction = transaction;
+    }
+  }
 
   SBTx getTransaction();
 
@@ -145,7 +148,7 @@ abstract class StandardUnsignedTx<
     final fields = super.serialize(encoding: encoding);
     return {
       ...fields,
-      "txCodecId": Serialization.instance.encoder(txCodecId, encoding,
+      "codecId": Serialization.instance.encoder(codecId, encoding,
           SerializedType.number, SerializedType.decimalString,
           args: [2]),
       "transaction": transaction.serialize(encoding: encoding)
@@ -153,14 +156,14 @@ abstract class StandardUnsignedTx<
   }
 
   @override
-  void deserialize(fields, SerializedEncoding encoding) {
-    super.deserialize(fields, encoding);
-    txCodecId = Serialization.instance.decoder(fields["txCodecId"], encoding,
+  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+    super.deserialize(fields, encoding: encoding);
+    codecId = Serialization.instance.decoder(fields["txCodecId"], encoding,
         SerializedType.decimalString, SerializedType.number);
   }
 
   @override
-  int getTxCodecId() => txCodecId;
+  int getCodecId() => codecId;
 
   Uint8List getCodecIdBuffer() {
     return Uint8List(2)..buffer.asByteData().setUint16(0, codecId);
@@ -168,12 +171,12 @@ abstract class StandardUnsignedTx<
 
   BigInt getInputTotal(Uint8List assetId) {
     final ins = getTransaction().getIns();
-    final aIdHex = HEX.encode(assetId);
+    final aIdHex = hexEncode(assetId);
     var total = BigInt.from(0);
     for (int i = 0; i < ins.length; i++) {
       final input = ins[i];
       if (input.getInput() is StandardAmountInput &&
-          aIdHex == HEX.encode(input.getAssetId())) {
+          aIdHex == hexEncode(input.getAssetId())) {
         total = total + (input.getInput() as StandardAmountInput).getAmount();
       }
     }
@@ -182,12 +185,12 @@ abstract class StandardUnsignedTx<
 
   BigInt getOutputTotal(Uint8List assetId) {
     final outs = getTransaction().getTotalOuts();
-    final aIdHex = HEX.encode(assetId);
+    final aIdHex = hexEncode(assetId);
     var total = BigInt.from(0);
     for (int i = 0; i < outs.length; i++) {
       final output = outs[i];
       if (output.getOutput() is StandardAmountOutput &&
-          aIdHex == HEX.encode(output.getAssetId())) {
+          aIdHex == hexEncode(output.getAssetId())) {
         total = total + (output.getOutput() as StandardAmountInput).getAmount();
       }
     }
@@ -200,7 +203,7 @@ abstract class StandardUnsignedTx<
 
   Uint8List toBuffer() {
     final codecBuff = Uint8List(2);
-    codecBuff.buffer.asByteData().setUint16(0, transaction.getTxCodecId());
+    codecBuff.buffer.asByteData().setUint16(0, transaction.getCodecId());
     final txType = Uint8List(4);
     txType.buffer.asByteData().setUint32(0, transaction.getTxType());
     final baseBuff = transaction.toBuffer();
@@ -213,8 +216,8 @@ abstract class StandardTx<
     KCClass extends ROIKeyChain,
     SUBTx extends StandardUnsignedTx<KPClass, KCClass,
         StandardBaseTx<KPClass, KCClass>>> extends Serializable {
-  final SUBTx unsignedTx;
-  final List<Credential> credentials;
+  SUBTx unsignedTx;
+  List<Credential> credentials;
 
   @override
   String get typeName => "StandardTx";
@@ -248,7 +251,7 @@ abstract class StandardTx<
 
   Uint8List toBuffer() {
     final tx = unsignedTx.getTransaction();
-    final codecId = tx.getTxCodecId();
+    final codecId = tx.getCodecId();
     final txBuff = unsignedTx.toBuffer();
     final credLen = Uint8List(4);
     credLen.buffer.asByteData().setUint32(0, credentials.length);

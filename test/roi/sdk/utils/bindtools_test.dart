@@ -1,10 +1,9 @@
 import 'dart:typed_data';
 import 'package:test/test.dart';
-import 'package:hex/hex.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 
 const hexstr = "00112233445566778899aabbccddeeff";
-final buff = Uint8List.fromList(HEX.decode(hexstr));
+final buff = Uint8List.fromList(hexDecode(hexstr));
 
 void main() {
   test("fromBufferToBN", () {
@@ -19,9 +18,9 @@ void main() {
     final b2 = fromBNToBuffer(bn2, length: buff.length);
 
     expect(b1.length, buff.length - 1);
-    expect(HEX.encode(b1), hexstr.substring(2));
+    expect(hexEncode(b1), hexstr.substring(2));
 
     expect(b2.length, buff.length);
-    expect(HEX.encode(b2), hexstr);
+    expect(hexEncode(b2), hexstr);
   });
 }
