@@ -5,6 +5,7 @@ import 'package:wallet/roi/sdk/apis/avm/model/get_all_balances.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/get_asset_description.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/get_balance.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/get_tx_status.dart';
+import 'package:wallet/roi/sdk/apis/avm/model/get_utxos.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/import_key.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/issue_tx.dart';
 import 'package:wallet/roi/sdk/apis/info/model/get_tx_fee.dart';
@@ -17,6 +18,10 @@ part 'avm_rest_client.g.dart';
 @RestApi()
 abstract class AvmRestClient {
   factory AvmRestClient(Dio dio, {String baseUrl}) = _AvmRestClient;
+
+  @POST("/")
+  Future<RpcResponse<GetUTXOsResponse>> getUTXOs(
+      @Body() RpcRequest<GetUTXOsRequest> request);
 
   @POST("/")
   Future<RpcResponse<GetBalanceResponse>> getBalance(

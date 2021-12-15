@@ -1,21 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
-import 'package:wallet/roi/sdk/apis/avm/model/get_address_txs.dart';
-import 'package:wallet/roi/sdk/apis/avm/model/get_all_balances.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/get_asset_description.dart';
-import 'package:wallet/roi/sdk/apis/avm/model/get_balance.dart';
-import 'package:wallet/roi/sdk/apis/avm/model/get_tx_status.dart';
-import 'package:wallet/roi/sdk/apis/avm/model/import_key.dart';
-import 'package:wallet/roi/sdk/apis/avm/model/wallet_issue_tx.dart';
+import 'package:wallet/roi/sdk/apis/avm/model/get_utxos.dart';
 import 'package:wallet/roi/sdk/apis/avm/rest/avm_rest_client.dart';
 import 'package:wallet/roi/sdk/apis/avm/rest/avm_wallet_rest_client.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
-import 'package:wallet/roi/sdk/apis/info/model/get_tx_fee.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';
-import 'package:wallet/roi/sdk/common/rpc/rpc_request.dart';
-import 'package:wallet/roi/sdk/common/rpc/rpc_response.dart';
 import 'package:wallet/roi/sdk/roi.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
@@ -30,30 +22,14 @@ abstract class AvmApi implements ROIChainApi {
       List<String> changeAddresses,
       Uint8List? memo);
 
-  Future<RpcResponse<GetBalanceResponse>> getBalance(
-      RpcRequest<GetBalanceRequest> request);
+  Future<GetUTXOsResponse> getUTXOs(List<String> addresses,
+      {String? sourceChain, int limit = 0, GetUTXOsStartIndex? startIndex});
 
-  Future<RpcResponse<GetAllBalancesResponse>> getAllBalances(
-      RpcRequest<GetAllBalancesRequest> request);
+  Future<GetAssetDescriptionResponse> getAssetDescription(String assetId);
 
   Future<Uint8List?> getAVAXAssetId({bool refresh = false});
 
-  Future<RpcResponse<GetTxStatusResponse>> getTxStatus(
-      RpcRequest<GetTxStatusRequest> request);
-
-  Future<RpcResponse<GetAddressTxsResponse>> getAddressTxs(
-      RpcRequest<GetAddressTxsRequest> request);
-
-  Future<RpcResponse<GetTxFeeResponse>> getTx(
-      RpcRequest<GetTxFeeRequest> request);
-
-  Future<RpcResponse<ImportKeyResponse>> importKey(
-      RpcRequest<ImportKeyRequest> request);
-
   Future<String> issueTx(AvmTx tx);
-
-  Future<RpcResponse<WalletIssueTxResponse>> walletIssueTx(
-      RpcRequest<WalletIssueTxRequest> request);
 
   factory AvmApi.create(
       {required ROINetwork roiNetwork,
@@ -187,23 +163,33 @@ class _AvmApiImpl implements AvmApi {
   }
 
   @override
-  Future<RpcResponse<GetBalanceResponse>> getBalance(
-      RpcRequest<GetBalanceRequest> request) {
-    return avmRestClient.getBalance(request);
+  Future<GetUTXOsResponse> getUTXOs(List<String> addresses,
+      {String? sourceChain,
+      int limit = 0,
+      GetUTXOsStartIndex? startIndex}) async {
+    final request = GetUTXOsRequest(
+            addresses: addresses,
+            sourceChain: sourceChain,
+            limit: limit,
+            startIndex: startIndex)
+        .toRpc();
+    final response = await avmRestClient.getUTXOs(request);
+    return response.result!;
   }
 
   @override
-  Future<RpcResponse<GetAllBalancesResponse>> getAllBalances(
-      RpcRequest<GetAllBalancesRequest> request) {
-    return avmRestClient.getAllBalances(request);
+  Future<GetAssetDescriptionResponse> getAssetDescription(
+      String assetId) async {
+    final response = await avmRestClient.getAssetDescription(
+        const GetAssetDescriptionRequest(assetId: primaryAssetAlias).toRpc());
+    return response.result!;
   }
 
   @override
   Future<Uint8List?> getAVAXAssetId({bool refresh = false}) async {
     if (avaxAssetId == null || refresh) {
-      final response = await avmRestClient.getAssetDescription(
-          const GetAssetDescriptionRequest(assetId: primaryAssetAlias).toRpc());
-      setAVAXAssetId(response.result?.assetId);
+      final response = await getAssetDescription(primaryAssetAlias);
+      setAVAXAssetId(response.assetId);
     }
     return avaxAssetId;
   }
@@ -211,36 +197,6 @@ class _AvmApiImpl implements AvmApi {
   @override
   Future<String> issueTx(AvmTx tx) async {
     return "";
-  }
-
-  @override
-  Future<RpcResponse<GetAddressTxsResponse>> getAddressTxs(
-      RpcRequest<GetAddressTxsRequest> request) {
-    return avmRestClient.getAddressTxs(request);
-  }
-
-  @override
-  Future<RpcResponse<GetTxFeeResponse>> getTx(
-      RpcRequest<GetTxFeeRequest> request) {
-    return avmRestClient.getTx(request);
-  }
-
-  @override
-  Future<RpcResponse<GetTxStatusResponse>> getTxStatus(
-      RpcRequest<GetTxStatusRequest> request) {
-    return avmRestClient.getTxStatus(request);
-  }
-
-  @override
-  Future<RpcResponse<ImportKeyResponse>> importKey(
-      RpcRequest<ImportKeyRequest> request) {
-    return avmRestClient.importKey(request);
-  }
-
-  @override
-  Future<RpcResponse<WalletIssueTxResponse>> walletIssueTx(
-      RpcRequest<WalletIssueTxRequest> request) {
-    return avmWalletRestClient.walletIssueTx(request);
   }
 
   BigInt _getTxFee() {

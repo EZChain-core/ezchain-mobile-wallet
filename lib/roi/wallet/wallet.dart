@@ -4,8 +4,11 @@ import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/wait_tx_utils.dart';
+import 'package:wallet/roi/wallet/asset/assets.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
+import 'package:wallet/roi/wallet/helpers/utxo_helper.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -16,7 +19,7 @@ abstract class UnsafeWallet {
 abstract class WalletProvider {
   EvmWallet get evmWallet;
 
-  final utxosX = AvmUTXOSet();
+  AvmUTXOSet utxosX = AvmUTXOSet();
 
   Future<Uint8List> signEvm(Transaction tx);
 
@@ -73,4 +76,22 @@ abstract class WalletProvider {
     await waitTxX(txId);
     return txId;
   }
+
+  Future<AvmUTXOSet> updateUtxosX() async {
+    final addresses = await getAllAddressesX();
+    utxosX = await avmGetAllUTXOs(addresses: addresses);
+    await _updateUnknownAssetsX();
+    await _updateBalanceX();
+    return utxosX;
+  }
+
+  Future<void> _updateUnknownAssetsX() async {
+    final utxos = utxosX.getAllUTXOs();
+    final assetIds =
+        utxos.map((utxo) => cb58Encode(utxo.getAssetId())).toSet().toList();
+    final futures = assetIds.map((id) => getAssetDescription(id));
+    await Future.wait(futures);
+  }
+
+  Future<void> _updateBalanceX() async {}
 }

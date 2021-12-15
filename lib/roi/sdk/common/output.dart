@@ -332,7 +332,7 @@ abstract class StandardAmountOutput extends Output {
       : super(lockTime: lockTime, threshold: threshold, addresses: addresses) {
     if (amount != null) {
       amountValue = amount;
-      this.amount = fromBNToBuffer(amount);
+      this.amount = fromBNToBuffer(amount, length: 8);
     }
   }
 
