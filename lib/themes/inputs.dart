@@ -25,6 +25,8 @@ class ROITextField extends StatelessWidget {
 
   final TextEditingController? controller;
 
+  final ValueChanged<String>? onChanged;
+
   const ROITextField(
       {Key? key,
       required this.hint,
@@ -32,7 +34,9 @@ class ROITextField extends StatelessWidget {
       this.label,
       this.prefixIcon,
       this.suffixIcon,
-      this.controller, this.maxLines})
+      this.controller,
+      this.maxLines,
+      this.onChanged})
       : super(key: key);
 
   @override
@@ -55,6 +59,7 @@ class ROITextField extends StatelessWidget {
               style: ROIBodyLargeTextStyle(color: provider.themeMode.text),
               cursorColor: provider.themeMode.text,
               controller: controller,
+              onChanged: onChanged,
               maxLines: maxLines,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(12),
@@ -102,6 +107,8 @@ class ROIAmountTextField extends StatelessWidget {
 
   final VoidCallback? onSuffixPressed;
 
+  final ValueChanged<String>? onChanged;
+
   const ROIAmountTextField(
       {Key? key,
       this.hint,
@@ -110,7 +117,8 @@ class ROIAmountTextField extends StatelessWidget {
       this.controller,
       this.onSuffixPressed,
       this.prefixText,
-      this.suffixText})
+      this.suffixText,
+      this.onChanged})
       : super(key: key);
 
   @override
@@ -134,6 +142,7 @@ class ROIAmountTextField extends StatelessWidget {
                 style: ROITitleLargeTextStyle(color: provider.themeMode.text),
                 cursorColor: provider.themeMode.text,
                 controller: controller,
+                onChanged: onChanged,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                   hintText: hint,
@@ -208,6 +217,8 @@ class ROIAddressTextField extends StatelessWidget {
 
   final VoidCallback? onSuffixPressed;
 
+  final ValueChanged<String>? onChanged;
+
   const ROIAddressTextField({
     Key? key,
     this.hint,
@@ -215,6 +226,7 @@ class ROIAddressTextField extends StatelessWidget {
     this.label,
     this.controller,
     this.onSuffixPressed,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -237,6 +249,7 @@ class ROIAddressTextField extends StatelessWidget {
                 style: ROITitleLargeTextStyle(color: provider.themeMode.text),
                 cursorColor: provider.themeMode.text,
                 controller: controller,
+                onChanged: onChanged,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                   hintText: hint,

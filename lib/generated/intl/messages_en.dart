@@ -114,6 +114,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Set Amount"),
         "walletReceiveToThis": MessageLookupByLibrary.simpleMessage(
             " to this address\nSending any other coins my result in permanent loss"),
+        "walletSendGasGWEI": MessageLookupByLibrary.simpleMessage("GWEI"),
+        "walletSendGasLimit": MessageLookupByLibrary.simpleMessage("Gas Limit"),
+        "walletSendGasLimitNote": MessageLookupByLibrary.simpleMessage(
+            "Gas Limit will be automatically calculated after you click Confirm."),
+        "walletSendGasPrice": MessageLookupByLibrary.simpleMessage("Gas Price"),
+        "walletSendGasPriceGWEI":
+            MessageLookupByLibrary.simpleMessage("Gas Price (GWEI)"),
+        "walletSendGasPriceNote": MessageLookupByLibrary.simpleMessage(
+            "Adjusted automatically according to network load."),
         "walletSendMemo": MessageLookupByLibrary.simpleMessage("Memo(optional)")
       };
 }

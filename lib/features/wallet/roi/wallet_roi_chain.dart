@@ -44,76 +44,34 @@ class WalletROIChainScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 40),
-            Container(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: provider.themeMode.bg,
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        Strings.current.sharedXChain,
-                        style: ROIHeadlineSmallTextStyle(
-                            color: provider.themeMode.text),
-                      ),
-                      const Spacer(),
-                      _WalletButton(
-                        text: Strings.current.sharedSend,
-                        icon: Assets.icons.icArrowUp.svg(),
-                        onPressed: () {
-                          context.router.push(const WalletSendXChainRoute());
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                      _WalletButton(
-                        text: Strings.current.sharedReceive,
-                        icon: Assets.icons.icArrowDown.svg(),
-                        onPressed: () {
-                          context.router.push(const WalletReceiveRoute());
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        Strings.current.sharedAvailable,
-                        style: ROITitleMediumTextStyle(
-                            color: provider.themeMode.secondary60),
-                      ),
-                      Text(
-                        '8.000.000.000 ROI',
-                        style: ROITitleMediumTextStyle(
-                            color: provider.themeMode.text),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        Strings.current.sharedLock,
-                        style: ROITitleMediumTextStyle(
-                            color: provider.themeMode.secondary60),
-                      ),
-                      Text(
-                        '0 ROI',
-                        style: ROITitleMediumTextStyle(
-                            color: provider.themeMode.text),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            )
+            _WalletChainWidget(
+              chain: Strings.current.sharedXChain,
+              availableRoi: 8000000,
+              lockRoi: 0,
+              onSendPressed: () =>
+                  context.router.push(const WalletSendXChainRoute()),
+              onReceivePressed: () =>
+                  context.router.push(const WalletReceiveRoute()),
+            ),
+            const SizedBox(height: 12),
+            _WalletChainWidget(
+              chain: Strings.current.sharedPChain,
+              availableRoi: 8000000,
+              lockRoi: 0,
+              hasSend: false,
+              onReceivePressed: () =>
+                  context.router.push(const WalletReceiveRoute()),
+            ),
+            const SizedBox(height: 12),
+            _WalletChainWidget(
+              chain: Strings.current.sharedCChain,
+              availableRoi: 8000000,
+              lockRoi: 0,
+              onSendPressed: () =>
+                  context.router.push(const WalletSendCChainRoute()),
+              onReceivePressed: () =>
+                  context.router.push(const WalletReceiveRoute()),
+            ),
           ],
         ),
       ),
@@ -124,7 +82,7 @@ class WalletROIChainScreen extends StatelessWidget {
 class _WalletButton extends StatelessWidget {
   final String text;
   final Widget icon;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const _WalletButton(
       {Key? key,
@@ -153,6 +111,99 @@ class _WalletButton extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _WalletChainWidget extends StatelessWidget {
+  final String chain;
+  final double availableRoi;
+  final double lockRoi;
+  final bool? hasSend;
+  final VoidCallback? onSendPressed;
+  final VoidCallback? onReceivePressed;
+
+  const _WalletChainWidget(
+      {Key? key,
+      required this.chain,
+      required this.availableRoi,
+      required this.lockRoi,
+      this.hasSend,
+      this.onSendPressed,
+      this.onReceivePressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => Container(
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: provider.themeMode.bg,
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+        ),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  chain,
+                  style:
+                      ROIHeadlineSmallTextStyle(color: provider.themeMode.text),
+                ),
+                const Spacer(),
+                if (hasSend != false)
+                  _WalletButton(
+                    text: Strings.current.sharedSend,
+                    icon: Assets.icons.icArrowUp.svg(),
+                    onPressed: onSendPressed,
+                  ),
+                const SizedBox(width: 8),
+                _WalletButton(
+                  text: Strings.current.sharedReceive,
+                  icon: Assets.icons.icArrowDown.svg(),
+                  onPressed: onReceivePressed,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  Strings.current.sharedAvailable,
+                  style: ROITitleMediumTextStyle(
+                      color: provider.themeMode.secondary60),
+                ),
+                Text(
+                  '$availableRoi ROI',
+                  style:
+                      ROITitleMediumTextStyle(color: provider.themeMode.text),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  Strings.current.sharedLock,
+                  style: ROITitleMediumTextStyle(
+                      color: provider.themeMode.secondary60),
+                ),
+                Text(
+                  '$lockRoi ROI',
+                  style:
+                      ROITitleMediumTextStyle(color: provider.themeMode.text),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

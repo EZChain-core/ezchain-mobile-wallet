@@ -42,7 +42,7 @@ class Strings {
   static Strings of(BuildContext context) {
     final instance = Strings.maybeOf(context);
     assert(instance != null,
-        'No instance of Strings present in the widgets tree. Did you add Strings.delegate in localizationsDelegates?');
+        'No instance of Strings present in the widget tree. Did you add Strings.delegate in localizationsDelegates?');
     return instance!;
   }
 
@@ -655,6 +655,66 @@ class Strings {
     return Intl.message(
       'Memo(optional)',
       name: 'walletSendMemo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Price`
+  String get walletSendGasPrice {
+    return Intl.message(
+      'Gas Price',
+      name: 'walletSendGasPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Price (GWEI)`
+  String get walletSendGasPriceGWEI {
+    return Intl.message(
+      'Gas Price (GWEI)',
+      name: 'walletSendGasPriceGWEI',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `GWEI`
+  String get walletSendGasGWEI {
+    return Intl.message(
+      'GWEI',
+      name: 'walletSendGasGWEI',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Adjusted automatically according to network load.`
+  String get walletSendGasPriceNote {
+    return Intl.message(
+      'Adjusted automatically according to network load.',
+      name: 'walletSendGasPriceNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Limit`
+  String get walletSendGasLimit {
+    return Intl.message(
+      'Gas Limit',
+      name: 'walletSendGasLimit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Limit will be automatically calculated after you click Confirm.`
+  String get walletSendGasLimitNote {
+    return Intl.message(
+      'Gas Limit will be automatically calculated after you click Confirm.',
+      name: 'walletSendGasLimitNote',
       desc: '',
       args: [],
     );
