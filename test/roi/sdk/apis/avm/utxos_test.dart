@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:test/test.dart';
+import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
 void main() {
@@ -193,6 +195,85 @@ void main() {
         for (int i = 0; i < utxos.length; i++) {
           expect(uids.contains(utxos[i].getUTXOId()), true);
         }
+      });
+
+      test("getAllUTXOs", () {
+        final allutxos = set.getAllUTXOs();
+        final ustrs = <String>[];
+        for (int i = 0; i < allutxos.length; i++) {
+          ustrs.add(allutxos[i].toString());
+        }
+        for (int i = 0; i < utxostrs.length; i++) {
+          expect(ustrs.contains(utxostrs[i]), true);
+        }
+        final uids = set.getUTXOIds();
+        final allutxos2 = set.getAllUTXOs(utxoIds: uids);
+        final ustrs2 = <String>[];
+        for (int i = 0; i < allutxos.length; i++) {
+          ustrs2.add(allutxos2[i].toString());
+        }
+        for (int i = 0; i < utxostrs.length; i++) {
+          expect(ustrs2.contains(utxostrs[i]), true);
+        }
+      });
+
+      test("getUTXOIDs By Address", () {
+        var utxoids = <String>[];
+        utxoids = set.getUTXOIds(addresses: [addrs[0]]);
+        expect(utxoids.length, 1);
+        utxoids = set.getUTXOIds(addresses: addrs);
+        expect(utxoids.length, 3);
+        utxoids = set.getUTXOIds(addresses: addrs, spendable: false);
+        expect(utxoids.length, 3);
+      });
+
+      test("getAllUTXOStrings", () {
+        final ustrs = set.getAllUTXOStrings();
+        for (int i = 0; i < utxostrs.length; i++) {
+          expect(ustrs.contains(utxostrs[i]), true);
+        }
+        final uids = set.getUTXOIds();
+        final ustrs2 = set.getAllUTXOStrings(utxoIds: uids);
+        for (int i = 0; i < utxostrs.length; i++) {
+          expect(ustrs2.contains(utxostrs[i]), true);
+        }
+      });
+
+      test("getAddresses", () {
+        expect(set.getAddresses()..sortBuffer(), addrs..sortBuffer());
+      });
+
+      test("getBalance", () {
+        var balance1 = BigInt.zero;
+        var balance2 = BigInt.zero;
+        for (int i = 0; i < utxos.length; i++) {
+          final assetId = utxos[i].getAssetId();
+          balance1 += set.getBalance(addrs, assetId);
+          balance2 += (utxos[i].getOutput() as AvmAmountOutput).getAmount();
+        }
+        expect(balance1, BigInt.from(59925));
+        expect(balance2, BigInt.from(19975));
+
+        balance1 = BigInt.zero;
+        balance2 = BigInt.zero;
+        final now = unixNow();
+        for (int i = 0; i < utxos.length; i++) {
+          final assetId = cb58Encode(utxos[i].getAssetId());
+          balance1 = balance1 + set.getBalance(addrs, assetId, asOf: now);
+          balance2 =
+              balance2 + (utxos[i].getOutput() as AvmAmountOutput).getAmount();
+        }
+        expect(balance1, BigInt.from(59925));
+        expect(balance2, BigInt.from(19975));
+      });
+
+      test("getAssetIDs", () {
+        final assetIds = set.getAssetIds();
+        for (int i = 0; i < utxos.length; i++) {
+          expect(assetIds.contains(utxos[i].getAssetId()), true);
+        }
+        final addresses = set.getAddresses();
+        expect(set.getAssetIds(addresses: addresses), set.getAssetIds());
       });
     });
   });

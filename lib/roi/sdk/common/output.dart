@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/common/nbytes.dart';
@@ -82,12 +83,14 @@ class OutputOwners extends Serializable {
       "threshold": Serialization.instance.encoder(threshold, encoding,
           SerializedType.Buffer, SerializedType.decimalString,
           args: [4]),
-      "addresses": addresses.map((e) => e.serialize(encoding: encoding)).toList()
+      "addresses":
+          addresses.map((e) => e.serialize(encoding: encoding)).toList()
     };
   }
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     lockTime = Serialization.instance.decoder(fields["lockTime"], encoding,
         SerializedType.decimalString, SerializedType.Buffer,
@@ -173,11 +176,11 @@ class OutputOwners extends Serializable {
     offset += 8;
     threshold = bytes.sublist(offset, offset + 4);
     offset += 4;
-    numAddress = bytes.sublist(offset, offset + 4);
+    this.numAddress = bytes.sublist(offset, offset + 4);
     offset += 4;
-    final tempNumAddress = numAddress.buffer.asByteData().getUint32(0);
+    final numAddress = this.numAddress.buffer.asByteData().getUint32(0);
     addresses = [];
-    for (int i = 0; i < tempNumAddress; i++) {
+    for (int i = 0; i < numAddress; i++) {
       final address = Address();
       offset = address.fromBuffer(bytes, offset: offset);
       addresses.add(address);
@@ -194,6 +197,7 @@ class OutputOwners extends Serializable {
       final b = addresses[i].toBuffer();
       barr.add(b);
     }
+
     return Uint8List.fromList(barr.expand((element) => element).toList());
   }
 
@@ -255,8 +259,10 @@ abstract class StandardParseableOutput extends Serializable {
 
   Uint8List toBuffer() {
     final outBuff = output.toBuffer();
+
     final outId = Uint8List(4);
     outId.buffer.asByteData().setUint32(0, output.getOutputId());
+
     return Uint8List.fromList([...outId, ...outBuff]);
   }
 
@@ -294,7 +300,8 @@ abstract class StandardTransferableOutput extends StandardParseableOutput {
   }
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     assetId = Serialization.instance.decoder(
         fields["assetId"], encoding, SerializedType.cb58, SerializedType.Buffer,
@@ -341,7 +348,8 @@ abstract class StandardAmountOutput extends Output {
   }
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     amount = Serialization.instance.decoder(fields["amount"], encoding,
         SerializedType.decimalString, SerializedType.Buffer,
@@ -385,7 +393,8 @@ abstract class BaseNFTOutput extends Output {
   }
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     groupId = Serialization.instance.decoder(fields["groupId"], encoding,
         SerializedType.decimalString, SerializedType.Buffer,
