@@ -3,23 +3,7 @@ import 'dart:typed_data';
 import 'package:test/test.dart';
 
 void main() {
-
-  final test = TestImpl();
-  test.test();
-
-  print("kien = ${test.getKien()}");
-}
-
-abstract class Test {
-  var kien = 0;
-
-  int getKien() {
-    return kien;
-  }
-}
-
-class TestImpl extends Test {
-  void test() {
-    super.kien = 1;
-  }
+  var ids = ["1", "4", "4", "4", "5", "6", "6"];
+  var distinctIds = ids.toSet().toList();
+  print("distinctIds = $distinctIds");
 }
