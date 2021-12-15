@@ -113,7 +113,7 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: ROISpecialNoneButton(
+                        child: ROIBodyLargeNoneButton(
                           text: Strings.current.sharedCancel,
                           onPressed: () {
                             context.router.pop();

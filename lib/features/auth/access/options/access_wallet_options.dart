@@ -115,7 +115,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: ROISpecialNoneButton(
+                        child: ROIBodyLargeNoneButton(
                           text:
                               Strings.current.accessWalletOptionsDontHaveWallet,
                           onPressed: () {
@@ -128,7 +128,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                       alignment: Alignment.centerRight,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: ROISpecialNoneButton(
+                        child: ROIBodyLargeNoneButton(
                           text: Strings.current.sharedCancel,
                           onPressed: () {
                             context.router.pop();
