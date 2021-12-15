@@ -1,6 +1,8 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/wallet/send/x_chain/wallet_send_x_chain_confirm.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -99,7 +101,19 @@ class WalletSendXChainScreen extends StatelessWidget {
                           text: Strings.current.sharedConfirm,
                           width: 185,
                           padding: const EdgeInsets.symmetric(),
-                          onPressed: () => {},
+                          onPressed: () => {
+                            context.router.push(
+                              WalletSendXChainConfirmRoute(
+                                walletViewData: WalletSendXChainViewData(
+                                  "2Z5ozYCLDqxZqDAJggm9eSH8dNVfVdfhp4bJ4Y3DvZXzqobzm1",
+                                  'Send to ABC wallet',
+                                  '1000 ROI',
+                                  '0.02 ROI',
+                                  '1000.02 ROI',
+                                ),
+                              ),
+                            ),
+                          },
                         )
                       ],
                     ),

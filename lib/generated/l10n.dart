@@ -42,7 +42,7 @@ class Strings {
   static Strings of(BuildContext context) {
     final instance = Strings.maybeOf(context);
     assert(instance != null,
-        'No instance of Strings present in the widget tree. Did you add Strings.delegate in localizationsDelegates?');
+        'No instance of Strings present in the widgets tree. Did you add Strings.delegate in localizationsDelegates?');
     return instance!;
   }
 
