@@ -58,31 +58,78 @@ class ROIMediumPrimaryButton extends StatelessWidget {
   final VoidCallback? onLongPress;
 
   const ROIMediumPrimaryButton(
-      {required this.text, this.onPressed, this.onLongPress, this.padding, this.width});
+      {required this.text,
+      this.onPressed,
+      this.onLongPress,
+      this.padding,
+      this.width});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
-        builder: (context, provider, child) => SizedBox(
-              height: roiButtonMediumHeight,
-              width: width,
-              child: TextButton(
-                child: Text(text,
-                    textAlign: TextAlign.center,
-                    style:
-                        ROIButtonTextStyle(color: provider.themeMode.text90)),
-                style: ROIButtonStyle(
-                    bgColor: provider.themeMode.primary,
-                    buttonPadding: padding ?? roiButtonMediumPadding),
-                onPressed: onPressed,
-                onLongPress: onLongPress,
-              ),
-            ));
+      builder: (context, provider, child) => SizedBox(
+        height: roiButtonMediumHeight,
+        width: width,
+        child: TextButton(
+          child: Text(text,
+              textAlign: TextAlign.center,
+              style: ROIButtonTextStyle(color: provider.themeMode.text90)),
+          style: ROIButtonStyle(
+              bgColor: provider.themeMode.primary,
+              buttonPadding: padding ?? roiButtonMediumPadding),
+          onPressed: onPressed,
+          onLongPress: onLongPress,
+        ),
+      ),
+    );
+  }
+}
+
+class ROIMediumSuccessButton extends StatelessWidget {
+  final String text;
+
+  final double? width;
+
+  final EdgeInsetsGeometry? padding;
+
+  final VoidCallback? onPressed;
+
+  final VoidCallback? onLongPress;
+
+  const ROIMediumSuccessButton(
+      {required this.text,
+      this.onPressed,
+      this.onLongPress,
+      this.padding,
+      this.width});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => SizedBox(
+        height: roiButtonMediumHeight,
+        width: width,
+        child: TextButton(
+          child: Text(text,
+              textAlign: TextAlign.center,
+              style: ROIButtonTextStyle(color: provider.themeMode.white)),
+          style: ROIButtonStyle(
+              bgColor: provider.themeMode.stateSuccess,
+              buttonPadding: padding ?? roiButtonMediumPadding),
+          onPressed: onPressed,
+          onLongPress: onLongPress,
+        ),
+      ),
+    );
   }
 }
 
 class ROIMediumNoneButton extends StatelessWidget {
   final String text;
+
+  final Color? textColor;
+
+  final double? width;
 
   final Widget? iconLeft;
 
@@ -97,13 +144,16 @@ class ROIMediumNoneButton extends StatelessWidget {
       this.iconLeft,
       this.onPressed,
       this.onLongPress,
-      this.padding});
+      this.padding,
+      this.textColor,
+      this.width});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
         builder: (context, provider, child) => SizedBox(
               height: roiButtonMediumHeight,
+              width: width,
               child: TextButton(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -112,8 +162,8 @@ class ROIMediumNoneButton extends StatelessWidget {
                     if (iconLeft != null) const SizedBox(width: 8),
                     Text(
                       text,
-                      style:
-                          ROIButtonTextStyle(color: provider.themeMode.primary),
+                      style: ROIButtonTextStyle(
+                          color: textColor ?? provider.themeMode.primary),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -128,14 +178,14 @@ class ROIMediumNoneButton extends StatelessWidget {
   }
 }
 
-class ROISpecialNoneButton extends StatelessWidget {
+class ROIBodyLargeNoneButton extends StatelessWidget {
   final String text;
 
   final VoidCallback? onPressed;
 
   final VoidCallback? onLongPress;
 
-  const ROISpecialNoneButton(
+  const ROIBodyLargeNoneButton(
       {required this.text, this.onPressed, this.onLongPress});
 
   @override

@@ -659,6 +659,66 @@ class Strings {
       args: [],
     );
   }
+
+  /// `Gas Price`
+  String get walletSendGasPrice {
+    return Intl.message(
+      'Gas Price',
+      name: 'walletSendGasPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Price (GWEI)`
+  String get walletSendGasPriceGWEI {
+    return Intl.message(
+      'Gas Price (GWEI)',
+      name: 'walletSendGasPriceGWEI',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `GWEI`
+  String get walletSendGasGWEI {
+    return Intl.message(
+      'GWEI',
+      name: 'walletSendGasGWEI',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Adjusted automatically according to network load.`
+  String get walletSendGasPriceNote {
+    return Intl.message(
+      'Adjusted automatically according to network load.',
+      name: 'walletSendGasPriceNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Limit`
+  String get walletSendGasLimit {
+    return Intl.message(
+      'Gas Limit',
+      name: 'walletSendGasLimit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Limit will be automatically calculated after you click Confirm.`
+  String get walletSendGasLimitNote {
+    return Intl.message(
+      'Gas Limit will be automatically calculated after you click Confirm.',
+      name: 'walletSendGasLimitNote',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Strings> {
