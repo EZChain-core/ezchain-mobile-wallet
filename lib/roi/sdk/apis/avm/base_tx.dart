@@ -36,7 +36,7 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
 
   factory AvmBaseTx.fromArgs(Map<String, dynamic> args) {
     return AvmBaseTx(
-        networkId: args["networkId"],
+        networkId: args["networkId"] ?? defaultNetworkId,
         blockchainId: args["blockchainId"],
         outs: args["outs"],
         ins: args["ins"],
@@ -44,7 +44,8 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
   }
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     outs = (fields["outs"] as List<AvmTransferableOutput>)
         .map((o) => AvmTransferableOutput()..deserialize(o, encoding: encoding))
@@ -141,8 +142,8 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
     final outCount = numOuts.buffer.asByteData().getUint32(0);
     outs.clear();
     for (int i = 0; i < outCount; i++) {
-      final xFerOut = AvmTransferableOutput()
-        ..fromBuffer(bytes, offset: offset);
+      final xFerOut = AvmTransferableOutput();
+      offset = xFerOut.fromBuffer(bytes, offset: offset);
       outs.add(xFerOut);
     }
     numIns = bytes.sublist(offset, offset + 4);
@@ -150,7 +151,8 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
     final inCount = numIns.buffer.asByteData().getUint32(0);
     ins.clear();
     for (int i = 0; i < inCount; i++) {
-      final xFerIn = AvmTransferableInput()..fromBuffer(bytes, offset: offset);
+      final xFerIn = AvmTransferableInput();
+      offset = xFerIn.fromBuffer(bytes, offset: offset);
       ins.add(xFerIn);
     }
     final memoLength =

@@ -37,9 +37,9 @@ abstract class StandardBaseTx<KPClass extends ROIKeyPair,
     }
     if (ins != null && outs != null) {
       numOuts.buffer.asByteData().setUint32(0, outs.length);
-      outs.sort(StandardParseableOutput.comparator());
+      this.outs = outs..sort(StandardParseableOutput.comparator());
       numIns.buffer.asByteData().setUint32(0, ins.length);
-      ins.sort(StandardParseableInput.comparator());
+      this.ins = ins..sort(StandardParseableInput.comparator());
     }
   }
 
@@ -76,7 +76,8 @@ abstract class StandardBaseTx<KPClass extends ROIKeyPair,
   }
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     networkId = Serialization.instance.decoder(fields["networkId"], encoding,
         SerializedType.decimalString, SerializedType.Buffer,
@@ -91,9 +92,9 @@ abstract class StandardBaseTx<KPClass extends ROIKeyPair,
   @override
   String toString() => bufferToB58(toBuffer());
 
-  int getNetworkID() => networkId.buffer.asByteData().getUint32(0);
+  int getNetworkId() => networkId.buffer.asByteData().getUint32(0);
 
-  Uint8List getBlockchainID() => blockchainId;
+  Uint8List getBlockchainId() => blockchainId;
 
   Uint8List getMemo() => memo;
 
@@ -156,7 +157,8 @@ abstract class StandardUnsignedTx<
   }
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     codecId = Serialization.instance.decoder(fields["txCodecId"], encoding,
         SerializedType.decimalString, SerializedType.number);

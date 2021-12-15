@@ -286,7 +286,7 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
         if (addressUTXOs.containsKey(address)) {
           final entries = addressUTXOs[address]!;
           for (final utxoId in entries.keys) {
-            if ((results.contains(utxoId) &&
+            if ((!results.contains(utxoId) &&
                     spendable &&
                     entries[utxoId]! <= now) ||
                 !spendable) {
@@ -322,7 +322,7 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
       if (u.getOutput() is StandardAmountOutput &&
           hexEncode(u.getAssetId()) == hexEncode(asset) &&
           u.getOutput().meetsThreshold(addresses, asOf: asOf)) {
-        spend = spend + (u.getOutput() as StandardAmountOutput).getAmount();
+        spend += (u.getOutput() as StandardAmountOutput).getAmount();
       }
     }
     return spend;
@@ -334,7 +334,10 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
     for (int i = 0; i < utxoIds.length; i++) {
       final utxoId = utxoIds[i];
       if (utxos.keys.contains(utxoId)) {
-        results.add(utxos[utxoId]!.getAssetId());
+        final assetId = utxos[utxoId]!.getAssetId();
+        if (!results.contains(assetId)) {
+          results.add(assetId);
+        }
       }
     }
     return results;
