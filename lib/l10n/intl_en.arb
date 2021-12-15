@@ -59,5 +59,11 @@
   "walletReceiveBitcoin": "Bitcoin(BTC)",
   "walletReceiveToThis": " to this address\nSending any other coins my result in permanent loss",
   "walletReceiveSetAmount": "Set Amount",
-  "walletSendMemo": "Memo(optional)"
+  "walletSendMemo": "Memo(optional)",
+  "walletSendGasPrice": "Gas Price",
+  "walletSendGasPriceGWEI": "Gas Price (GWEI)",
+  "walletSendGasGWEI": "GWEI",
+  "walletSendGasPriceNote": "Adjusted automatically according to network load.",
+  "walletSendGasLimit": "Gas Limit",
+  "walletSendGasLimitNote": "Gas Limit will be automatically calculated after you click Confirm."
 }

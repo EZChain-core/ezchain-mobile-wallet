@@ -1,6 +1,7 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -11,7 +12,7 @@ import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
 class WalletSendXChainConfirmScreen extends StatelessWidget {
-  final WalletSendXChainViewData walletViewData;
+  final WalletSendXChainTransactionViewData walletViewData;
 
   const WalletSendXChainConfirmScreen({Key? key, required this.walletViewData})
       : super(key: key);
@@ -27,7 +28,7 @@ class WalletSendXChainConfirmScreen extends StatelessWidget {
               ROIAppBar(
                 title: Strings.current.sharedSend,
                 onPressed: () {
-                  context.router.pop();
+                  context.router.replaceAll([const DashboardRoute()]);
                 },
               ),
               Expanded(
@@ -68,19 +69,19 @@ class WalletSendXChainConfirmScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedAmount,
-                        content: walletViewData.amount,
+                        content: '${walletViewData.amount} ROI',
                       ),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedTransactionFee,
-                        content: walletViewData.fee,
+                        content: '${walletViewData.fee} ROI',
                       ),
                       const SizedBox(height: 8),
                       ROIDashedLine(color: provider.themeMode.text10),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedTotal,
-                        content: walletViewData.total,
+                        content: '${walletViewData.total} ROI',
                         leftColor: provider.themeMode.text,
                         rightColor: provider.themeMode.stateSuccess,
                       ),
@@ -117,7 +118,7 @@ class WalletSendXChainConfirmScreen extends StatelessWidget {
                           width: 82,
                           text: Strings.current.sharedCancel,
                           textColor: provider.themeMode.text90,
-                          onPressed: () {},
+                          onPressed: context.router.pop,
                         ),
                       const SizedBox(height: 45),
                     ],
@@ -132,13 +133,13 @@ class WalletSendXChainConfirmScreen extends StatelessWidget {
   }
 }
 
-class WalletSendXChainViewData {
+class WalletSendXChainTransactionViewData {
   final String address;
   final String memo;
-  final String amount;
-  final String fee;
-  final String total;
+  final double amount;
+  final double fee;
+  final double total;
 
-  WalletSendXChainViewData(
-      this.address, this.memo, this.amount, this.fee, this.total);
+  WalletSendXChainTransactionViewData(this.address, this.memo, this.amount, this.fee, this.total);
+
 }
