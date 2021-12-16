@@ -49,7 +49,7 @@ class WalletROIChainScreen extends StatelessWidget {
               availableRoi: 8000000,
               lockRoi: 0,
               onSendPressed: () =>
-                  context.router.push(const WalletSendXChainRoute()),
+                  context.router.push(const WalletSendAvmRoute()),
               onReceivePressed: () =>
                   context.router.push(const WalletReceiveRoute()),
             ),
@@ -68,7 +68,7 @@ class WalletROIChainScreen extends StatelessWidget {
               availableRoi: 8000000,
               lockRoi: 0,
               onSendPressed: () =>
-                  context.router.push(const WalletSendCChainRoute()),
+                  context.router.push(const WalletSendEvmRoute()),
               onReceivePressed: () =>
                   context.router.push(const WalletReceiveRoute()),
             ),
