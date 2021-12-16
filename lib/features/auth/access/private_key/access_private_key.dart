@@ -18,7 +18,8 @@ class AccessPrivateKeyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final accessPrivateKeyStore = AccessPrivateKeyStore();
 
-    final privateKeyInputController = TextEditingController(text: 'PrivateKey-JaCCSxdoWfo3ao5KwenXrJjJR7cBTQ287G1C5qpv2hr2tCCdb');
+    final privateKeyInputController = TextEditingController(
+        text: 'PrivateKey-JaCCSxdoWfo3ao5KwenXrJjJR7cBTQ287G1C5qpv2hr2tCCdb');
 
     Future<void> _showWarningDialog() async {
       return showDialog<void>(

@@ -10,9 +10,6 @@ import 'package:web3dart/credentials.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:sha3/sha3.dart';
 
-// ignore: implementation_imports
-import 'package:pointycastle/src/utils.dart' as pointycastle_utils;
-
 class EvmWallet {
   final Uint8List privateKey;
   late Uint8List publicKey;
@@ -73,9 +70,17 @@ class EvmWallet {
 
   static Uint8List privateKeyToPublicKey(Uint8List privateKey) {
     assert(privateKey.length == 32);
-    final privateKeyNum = pointycastle_utils.decodeBigInt(privateKey);
+    final privateKeyNum = decodeBigInt(privateKey);
     final p = params.G * privateKeyNum;
     return Uint8List.view(p!.getEncoded(false).buffer, 1);
+  }
+
+  static BigInt decodeBigInt(List<int> bytes) {
+    BigInt result = BigInt.from(0);
+    for (int i = 0; i < bytes.length; i++) {
+      result += BigInt.from(bytes[bytes.length - i - 1]) << (8 * i);
+    }
+    return result;
   }
 
   static Uint8List publicKeyToAddress(Uint8List publicKey) {

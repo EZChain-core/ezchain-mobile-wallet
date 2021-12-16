@@ -19,39 +19,39 @@ part 'avm_rest_client.g.dart';
 abstract class AvmRestClient {
   factory AvmRestClient(Dio dio, {String baseUrl}) = _AvmRestClient;
 
-  @POST("/")
+  @POST("")
   Future<RpcResponse<GetUTXOsResponse>> getUTXOs(
       @Body() RpcRequest<GetUTXOsRequest> request);
 
-  @POST("/")
+  @POST("")
   Future<RpcResponse<GetBalanceResponse>> getBalance(
       @Body() RpcRequest<GetBalanceRequest> request);
 
-  @POST("/")
+  @POST("")
   Future<RpcResponse<GetAllBalancesResponse>> getAllBalances(
       @Body() RpcRequest<GetAllBalancesRequest> request);
 
-  @POST("/")
+  @POST("")
   Future<RpcResponse<GetAssetDescriptionResponse>> getAssetDescription(
       @Body() RpcRequest<GetAssetDescriptionRequest> request);
 
-  @POST("/")
+  @POST("")
   Future<RpcResponse<GetAddressTxsResponse>> getAddressTxs(
       @Body() RpcRequest<GetAddressTxsRequest> request);
 
-  @POST("/")
+  @POST("")
   Future<RpcResponse<GetTxFeeResponse>> getTx(
       @Body() RpcRequest<GetTxFeeRequest> request);
 
-  @POST("/")
+  @POST("")
   Future<RpcResponse<GetTxStatusResponse>> getTxStatus(
       @Body() RpcRequest<GetTxStatusRequest> request);
 
-  @POST("/")
+  @POST("")
   Future<RpcResponse<ImportKeyResponse>> importKey(
       @Body() RpcRequest<ImportKeyRequest> request);
 
-  @POST("/")
+  @POST("")
   Future<RpcResponse<IssueTxResponse>> issueTx(
       @Body() RpcRequest<IssueTxRequest> request);
 }

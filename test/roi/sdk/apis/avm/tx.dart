@@ -98,7 +98,7 @@ void main() {
       avaxAssetID = (await api.getAVAXAssetId())!;
     });
 
-    tearDown(() {
+    tearDownAll(() {
       _server.shutdown();
     });
 

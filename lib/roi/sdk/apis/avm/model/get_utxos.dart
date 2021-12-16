@@ -10,14 +10,14 @@ class GetUTXOsRequest with RpcRequestWrapper<GetUTXOsRequest> {
   final int? limit;
   final GetUTXOsStartIndex? startIndex;
   final String? sourceChain;
-  final String? encoding;
+  final String encoding;
 
   GetUTXOsRequest(
       {required this.addresses,
       this.limit,
       this.startIndex,
       this.sourceChain,
-      this.encoding});
+      this.encoding = "cb58"});
 
   @override
   String method() {
@@ -45,7 +45,7 @@ class GetUTXOsStartIndex {
 
 @JsonSerializable()
 class GetUTXOsResponse {
-  final int numFetched;
+  final String numFetched;
   final List<String> utxos;
   final GetUTXOsEndIndex endIndex;
   final String? sourceChain;

@@ -1,6 +1,21 @@
 import 'package:wallet/roi/sdk/utils/constants.dart';
 
-final defaultConfig = mainNetConfig;
+final defaultConfig = roiNetConfig;
+
+final roiNetConfig = NetworkConfig(
+  rawUrl: 'https://testnet-api.roichain.net',
+  apiProtocol: 'https',
+  apiIp: 'testnet-api.roichain.net',
+  apiPort: 443,
+  explorerURL: 'https://explorerapi.roichain.net',
+  explorerSiteURL: 'https://explorer.roichain.net',
+  networkId: 5,
+  xChainId: "UM7LzqqdhmyoLLwXRJxTDWXzhP9ZNm4nCA1dtX6M6dWe4tcew",
+  pChainId: "11111111111111111111111111111111LpoYY",
+  cChainId: "yH8D7ThNJkxmtkuv2jgBa4P1Rn3Qpr4pPr7QYNfcdoS6k6HWp",
+  evmChainId: 0xa869,
+  avaxId: "2b5EBv57UhJ5QbcApsgpmr3NiQoqed3w15xKqmm1GQ1JytPtZ2",
+);
 
 final mainNetConfig = NetworkConfig(
   rawUrl: 'https://api.avax.network',
