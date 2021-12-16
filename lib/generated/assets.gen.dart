@@ -129,6 +129,10 @@ class $AssetsImagesGen {
   AssetGenImage get imgPrivateKeyWraning =>
       const AssetGenImage('assets/images/img_private_key_wraning.png');
 
+  /// File path: assets/images/img_send_chain_error.svg
+  SvgGenImage get imgSendChainError =>
+      const SvgGenImage('assets/images/img_send_chain_error.svg');
+
   /// File path: assets/images/img_splash.png
   AssetGenImage get imgSplash =>
       const AssetGenImage('assets/images/img_splash.png');
