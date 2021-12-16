@@ -1,15 +1,19 @@
 import 'dart:typed_data';
 
+import 'package:wallet/roi/sdk/apis/avm/constants.dart';
+import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/wait_tx_utils.dart';
 import 'package:wallet/roi/wallet/asset/assets.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
 import 'package:wallet/roi/wallet/helpers/utxo_helper.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
+import 'package:wallet/roi/wallet/types/types.dart';
 import 'package:web3dart/web3dart.dart';
 
 abstract class UnsafeWallet {
@@ -20,6 +24,8 @@ abstract class WalletProvider {
   EvmWallet get evmWallet;
 
   AvmUTXOSet utxosX = AvmUTXOSet();
+
+  WalletBalanceX balanceX = {};
 
   Future<Uint8List> signEvm(Transaction tx);
 
@@ -59,6 +65,8 @@ abstract class WalletProvider {
 
   List<String> getAllAddressesPSync();
 
+  void emitBalanceChangeX() {}
+
   Future<String> sendAvaxX(String to, BigInt amount, {String? memo}) async {
     final froms = await getAllAddressesX();
     final changeAddress = getChangeAddressX();
@@ -93,5 +101,53 @@ abstract class WalletProvider {
     await Future.wait(futures);
   }
 
-  Future<void> _updateBalanceX() async {}
+  Future<WalletBalanceX> _updateBalanceX() async {
+    final utxos = utxosX.getAllUTXOs();
+    final now = unixNow();
+
+    final WalletBalanceX balanceX = {};
+
+    for (int i = 0; i < utxos.length; i++) {
+      final utxo = utxos[i];
+      final out = utxo.getOutput();
+      final type = out.getOutputId();
+      if (type != SECPXFEROUTPUTID) continue;
+      final lockTime = out.getLockTime();
+      final amount = (out as AvmAmountOutput).getAmount();
+      final assetIdBuff = utxo.getAssetId();
+      final assetId = cb58Encode(assetIdBuff);
+
+      var asset = balanceX[assetId];
+
+      if (asset == null) {
+        final assetInfo = await getAssetDescription(assetId);
+        asset = AssetBalanceX(
+            locked: BigInt.zero, unlocked: BigInt.zero, meta: assetInfo);
+      }
+
+      if (lockTime <= now) {
+        asset.unlocked += amount;
+      } else {
+        asset.locked += amount;
+      }
+      balanceX[assetId] = asset;
+    }
+    final avaxId = activeNetwork.avaxId;
+
+    if (!balanceX.containsKey(avaxId) && avaxId != null) {
+      final assetInfo = await getAssetDescription(avaxId);
+      balanceX[avaxId] = AssetBalanceX(
+          locked: BigInt.zero, unlocked: BigInt.zero, meta: assetInfo);
+    }
+
+    this.balanceX = balanceX;
+
+    emitBalanceChangeX();
+
+    return balanceX;
+  }
+
+  WalletBalanceX getBalanceX() {
+    return balanceX;
+  }
 }

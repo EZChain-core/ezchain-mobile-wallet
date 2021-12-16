@@ -27,7 +27,7 @@ Future<AvmUTXOSet> avmGetAllUTXOsForAddresses(
 
   final utxoSet = response.getUTXOs();
   final nextEndIndex = response.endIndex;
-  final length = response.numFetched;
+  final length = int.parse(response.numFetched);
 
   if (length > 1024) {
     final subUtxos = await avmGetAllUTXOsForAddresses(

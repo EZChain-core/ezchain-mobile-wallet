@@ -25,7 +25,7 @@ abstract class AvmApi implements ROIChainApi {
   Future<GetUTXOsResponse> getUTXOs(List<String> addresses,
       {String? sourceChain, int limit = 0, GetUTXOsStartIndex? startIndex});
 
-  Future<GetAssetDescriptionResponse> getAssetDescription(String assetId);
+  Future<GetAssetDescriptionResponse?> getAssetDescription(String assetId);
 
   Future<Uint8List?> getAVAXAssetId({bool refresh = false});
 
@@ -178,18 +178,18 @@ class _AvmApiImpl implements AvmApi {
   }
 
   @override
-  Future<GetAssetDescriptionResponse> getAssetDescription(
+  Future<GetAssetDescriptionResponse?> getAssetDescription(
       String assetId) async {
     final response = await avmRestClient.getAssetDescription(
-        const GetAssetDescriptionRequest(assetId: primaryAssetAlias).toRpc());
-    return response.result!;
+        GetAssetDescriptionRequest(assetId: assetId).toRpc());
+    return response.result;
   }
 
   @override
   Future<Uint8List?> getAVAXAssetId({bool refresh = false}) async {
     if (avaxAssetId == null || refresh) {
       final response = await getAssetDescription(primaryAssetAlias);
-      setAVAXAssetId(response.assetId);
+      setAVAXAssetId(response?.assetId);
     }
     return avaxAssetId;
   }

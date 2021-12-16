@@ -81,7 +81,7 @@ abstract class ROINetwork {
   }
 
   void changeAddress(String host, int port, String protocol) {
-    final host = this.host.replaceAll(RegExp('[^A-Za-z0-9.]'), '');
+    final host = this.host.replaceAll(RegExp('[^A-Za-z0-9.-]'), '');
     var url = "$protocol://$host";
     if (port > 0) {
       url += ":$port";
@@ -91,8 +91,7 @@ abstract class ROINetwork {
       BaseOptions(
           baseUrl: url,
           connectTimeout: connectTimeout,
-          receiveTimeout: receiveTimeout,
-          contentType: "application/json;charset=UTF-8"),
+          receiveTimeout: receiveTimeout),
     )
       ..interceptors.add(InterceptorsWrapper(
         onRequest: (options, handler) async {
