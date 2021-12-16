@@ -274,16 +274,16 @@ final n4C = C(
 
 // Start Fuji
 final n5X = X(
-    blockchainId: "2JVSBoinj9C2J33VntvzYtVJNZdN2NKiwwKjcumHUWEb5DbBrm",
-    avaxAssetId: "U8iRqJoiJm8xZHAacmvYyZVwqQx6uDNtQeP3CQ6fcgQk3JqnK",
+    blockchainId: "UM7LzqqdhmyoLLwXRJxTDWXzhP9ZNm4nCA1dtX6M6dWe4tcew",
+    avaxAssetId: "2b5EBv57UhJ5QbcApsgpmr3NiQoqed3w15xKqmm1GQ1JytPtZ2",
     alias: xChainAlias,
     vm: xChainVMName,
     txFee: MILLIAVAX,
     creationTxFee: CENTIAVAX);
 
 final n5P = P(
-    blockchainId: platformChainId,
-    avaxAssetId: avaxAssetId,
+    blockchainId: "11111111111111111111111111111111LpoYY",
+    avaxAssetId: "2b5EBv57UhJ5QbcApsgpmr3NiQoqed3w15xKqmm1GQ1JytPtZ2",
     alias: pChainAlias,
     vm: pChainVMName,
     txFee: MILLIAVAX,
@@ -314,7 +314,7 @@ final n5C = C(
     gasPrice: GWEI * BigInt.from(225),
     minGasPrice: GWEI * BigInt.from(25),
     maxGasPrice: GWEI * BigInt.from(1000),
-    chainId: 43113);
+    chainId: 0xa869);
 // End Fuji
 
 // Start local network
@@ -386,11 +386,17 @@ final networks = {
       "11111111111111111111111111111111LpoYY": n4P,
     },
   ),
-  5: NetWork(c: n5C, x: n5X, p: n5P, hrp: networkIdToHRP[5]!, keys: {
-    "yH8D7ThNJkxmtkuv2jgBa4P1Rn3Qpr4pPr7QYNfcdoS6k6HWp": n5C,
-    "2JVSBoinj9C2J33VntvzYtVJNZdN2NKiwwKjcumHUWEb5DbBrm": n5X,
-    "11111111111111111111111111111111LpoYY": n5P,
-  }),
+  5: NetWork(
+    c: n5C,
+    x: n5X,
+    p: n5P,
+    hrp: networkIdToHRP[5]!,
+    keys: {
+      "yH8D7ThNJkxmtkuv2jgBa4P1Rn3Qpr4pPr7QYNfcdoS6k6HWp": n5C,
+      "2JVSBoinj9C2J33VntvzYtVJNZdN2NKiwwKjcumHUWEb5DbBrm": n5X,
+      "11111111111111111111111111111111LpoYY": n5P,
+    },
+  ),
   12345: NetWork(
     c: n12345C,
     x: n12345X,
