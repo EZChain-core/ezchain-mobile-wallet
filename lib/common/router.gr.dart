@@ -8,8 +8,8 @@
 // AutoRouteGenerator
 // **************************************************************************
 
-import 'package:auto_route/auto_route.dart' as _i19;
-import 'package:flutter/material.dart' as _i20;
+import 'package:auto_route/auto_route.dart' as _i20;
+import 'package:flutter/material.dart' as _i21;
 import 'package:wallet/features/auth/access/mnemonic/access_mnemonic_key.dart'
     as _i7;
 import 'package:wallet/features/auth/access/options/access_wallet_options.dart'
@@ -21,161 +21,170 @@ import 'package:wallet/features/auth/create/confirm/create_wallet_confirm.dart'
 import 'package:wallet/features/auth/create/create_wallet.dart' as _i4;
 import 'package:wallet/features/auth/pin/pin_code_confirm.dart' as _i9;
 import 'package:wallet/features/auth/pin/pin_code_setup.dart' as _i8;
-import 'package:wallet/features/cross/cross.dart' as _i16;
-import 'package:wallet/features/dashboard/dashboard.dart' as _i14;
-import 'package:wallet/features/earn/earn.dart' as _i17;
+import 'package:wallet/features/cross/cross.dart' as _i17;
+import 'package:wallet/features/dashboard/dashboard.dart' as _i15;
+import 'package:wallet/features/earn/earn.dart' as _i18;
 import 'package:wallet/features/onboard/on_board.dart' as _i2;
-import 'package:wallet/features/setting/setting.dart' as _i18;
+import 'package:wallet/features/setting/setting.dart' as _i19;
 import 'package:wallet/features/splash/screen/splash.dart' as _i1;
 import 'package:wallet/features/wallet/receive/wallet_receive.dart' as _i10;
-import 'package:wallet/features/wallet/send/c_chain/wallet_send_c_chain.dart'
-    as _i13;
-import 'package:wallet/features/wallet/send/x_chain/wallet_send_x_chain.dart'
-    as _i11;
-import 'package:wallet/features/wallet/send/x_chain/wallet_send_x_chain_confirm.dart'
+import 'package:wallet/features/wallet/send/avm/wallet_send_avm.dart' as _i11;
+import 'package:wallet/features/wallet/send/avm/wallet_send_avm_confirm.dart'
     as _i12;
-import 'package:wallet/features/wallet/wallet.dart' as _i15;
+import 'package:wallet/features/wallet/send/evm/wallet_send_evm.dart' as _i13;
+import 'package:wallet/features/wallet/send/evm/wallet_send_evm_confirm.dart'
+    as _i14;
+import 'package:wallet/features/wallet/wallet.dart' as _i16;
 
-class AppRouter extends _i19.RootStackRouter {
-  AppRouter([_i20.GlobalKey<_i20.NavigatorState>? navigatorKey])
+class AppRouter extends _i20.RootStackRouter {
+  AppRouter([_i21.GlobalKey<_i21.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i19.PageFactory> pagesMap = {
+  final Map<String, _i20.PageFactory> pagesMap = {
     SplashRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
+      return _i20.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i1.SplashScreen());
     },
     OnBoardRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
+      return _i20.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i2.OnBoardScreen());
     },
     AccessWalletOptionsRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
+      return _i20.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i3.AccessWalletOptionsScreen());
     },
     CreateWalletRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
+      return _i20.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i4.CreateWalletScreen());
     },
     CreateWalletConfirmRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
+      return _i20.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i5.CreateWalletConfirmScreen());
     },
     AccessPrivateKeyRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
+      return _i20.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i6.AccessPrivateKeyScreen());
     },
     AccessMnemonicKeyRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
+      return _i20.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i7.AccessMnemonicKeyScreen());
     },
     PinCodeSetupRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
+      return _i20.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i8.PinCodeSetupScreen());
     },
     PinCodeConfirmRoute.name: (routeData) {
       final args = routeData.argsAs<PinCodeConfirmRouteArgs>();
-      return _i19.AdaptivePage<dynamic>(
+      return _i20.AdaptivePage<dynamic>(
           routeData: routeData, child: _i9.PinCodeConfirmScreen(pin: args.pin));
     },
     WalletReceiveRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
+      return _i20.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i10.WalletReceiveScreen());
     },
-    WalletSendXChainRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i11.WalletSendXChainScreen());
+    WalletSendAvmRoute.name: (routeData) {
+      return _i20.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i11.WalletSendAvmScreen());
     },
-    WalletSendXChainConfirmRoute.name: (routeData) {
-      final args = routeData.argsAs<WalletSendXChainConfirmRouteArgs>();
-      return _i19.AdaptivePage<dynamic>(
+    WalletSendAvmConfirmRoute.name: (routeData) {
+      final args = routeData.argsAs<WalletSendAvmConfirmRouteArgs>();
+      return _i20.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i12.WalletSendXChainConfirmScreen(
-              key: args.key, walletViewData: args.walletViewData));
+          child: _i12.WalletSendAvmConfirmScreen(
+              key: args.key, transactionInfo: args.transactionInfo));
     },
-    WalletSendCChainRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i13.WalletSendCChainScreen());
+    WalletSendEvmRoute.name: (routeData) {
+      return _i20.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i13.WalletSendEvmScreen());
+    },
+    WalletSendEvmConfirmRoute.name: (routeData) {
+      final args = routeData.argsAs<WalletSendEvmConfirmRouteArgs>();
+      return _i20.AdaptivePage<dynamic>(
+          routeData: routeData,
+          child: _i14.WalletSendEvmConfirmScreen(
+              key: args.key, transactionInfo: args.transactionInfo));
     },
     DashboardRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i14.DashboardScreen());
+      return _i20.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i15.DashboardScreen());
     },
     WalletRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i15.WalletScreen());
+      return _i20.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i16.WalletScreen());
     },
     CrossRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i16.CrossScreen());
+      return _i20.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i17.CrossScreen());
     },
     EarnRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i17.EarnScreen());
+      return _i20.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i18.EarnScreen());
     },
     SettingRoute.name: (routeData) {
-      return _i19.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i18.SettingScreen());
+      return _i20.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i19.SettingScreen());
     }
   };
 
   @override
-  List<_i19.RouteConfig> get routes => [
-        _i19.RouteConfig('/#redirect',
+  List<_i20.RouteConfig> get routes => [
+        _i20.RouteConfig('/#redirect',
             path: '/', redirectTo: '/splash', fullMatch: true),
-        _i19.RouteConfig(SplashRoute.name, path: '/splash'),
-        _i19.RouteConfig(OnBoardRoute.name, path: '/onboard'),
-        _i19.RouteConfig(AccessWalletOptionsRoute.name,
+        _i20.RouteConfig(SplashRoute.name, path: '/splash'),
+        _i20.RouteConfig(OnBoardRoute.name, path: '/onboard'),
+        _i20.RouteConfig(AccessWalletOptionsRoute.name,
             path: '/access-wallet-options-screen'),
-        _i19.RouteConfig(CreateWalletRoute.name, path: '/create-wallet-screen'),
-        _i19.RouteConfig(CreateWalletConfirmRoute.name,
+        _i20.RouteConfig(CreateWalletRoute.name, path: '/create-wallet-screen'),
+        _i20.RouteConfig(CreateWalletConfirmRoute.name,
             path: '/create-wallet-confirm-screen'),
-        _i19.RouteConfig(AccessPrivateKeyRoute.name,
+        _i20.RouteConfig(AccessPrivateKeyRoute.name,
             path: '/access-private-key-screen'),
-        _i19.RouteConfig(AccessMnemonicKeyRoute.name,
+        _i20.RouteConfig(AccessMnemonicKeyRoute.name,
             path: '/access-mnemonic-key-screen'),
-        _i19.RouteConfig(PinCodeSetupRoute.name,
+        _i20.RouteConfig(PinCodeSetupRoute.name,
             path: '/pin-code-setup-screen'),
-        _i19.RouteConfig(PinCodeConfirmRoute.name,
+        _i20.RouteConfig(PinCodeConfirmRoute.name,
             path: '/pin-code-confirm-screen'),
-        _i19.RouteConfig(WalletReceiveRoute.name,
+        _i20.RouteConfig(WalletReceiveRoute.name,
             path: '/wallet-receive-screen'),
-        _i19.RouteConfig(WalletSendXChainRoute.name,
-            path: '/wallet-send-xchain-screen'),
-        _i19.RouteConfig(WalletSendXChainConfirmRoute.name,
-            path: '/wallet-send-xchain-confirm-screen'),
-        _i19.RouteConfig(WalletSendCChainRoute.name,
-            path: '/wallet-send-cchain-screen'),
-        _i19.RouteConfig(DashboardRoute.name, path: '/dashboard', children: [
-          _i19.RouteConfig(WalletRoute.name,
+        _i20.RouteConfig(WalletSendAvmRoute.name,
+            path: '/wallet-send-avm-screen'),
+        _i20.RouteConfig(WalletSendAvmConfirmRoute.name,
+            path: '/wallet-send-avm-confirm-screen'),
+        _i20.RouteConfig(WalletSendEvmRoute.name,
+            path: '/wallet-send-evm-screen'),
+        _i20.RouteConfig(WalletSendEvmConfirmRoute.name,
+            path: '/wallet-send-evm-confirm-screen'),
+        _i20.RouteConfig(DashboardRoute.name, path: '/dashboard', children: [
+          _i20.RouteConfig(WalletRoute.name,
               path: 'wallet', parent: DashboardRoute.name),
-          _i19.RouteConfig(CrossRoute.name,
+          _i20.RouteConfig(CrossRoute.name,
               path: 'cross', parent: DashboardRoute.name),
-          _i19.RouteConfig(EarnRoute.name,
+          _i20.RouteConfig(EarnRoute.name,
               path: 'earn', parent: DashboardRoute.name),
-          _i19.RouteConfig(SettingRoute.name,
+          _i20.RouteConfig(SettingRoute.name,
               path: 'setting', parent: DashboardRoute.name)
         ])
       ];
 }
 
 /// generated route for [_i1.SplashScreen]
-class SplashRoute extends _i19.PageRouteInfo<void> {
+class SplashRoute extends _i20.PageRouteInfo<void> {
   const SplashRoute() : super(name, path: '/splash');
 
   static const String name = 'SplashRoute';
 }
 
 /// generated route for [_i2.OnBoardScreen]
-class OnBoardRoute extends _i19.PageRouteInfo<void> {
+class OnBoardRoute extends _i20.PageRouteInfo<void> {
   const OnBoardRoute() : super(name, path: '/onboard');
 
   static const String name = 'OnBoardRoute';
 }
 
 /// generated route for [_i3.AccessWalletOptionsScreen]
-class AccessWalletOptionsRoute extends _i19.PageRouteInfo<void> {
+class AccessWalletOptionsRoute extends _i20.PageRouteInfo<void> {
   const AccessWalletOptionsRoute()
       : super(name, path: '/access-wallet-options-screen');
 
@@ -183,14 +192,14 @@ class AccessWalletOptionsRoute extends _i19.PageRouteInfo<void> {
 }
 
 /// generated route for [_i4.CreateWalletScreen]
-class CreateWalletRoute extends _i19.PageRouteInfo<void> {
+class CreateWalletRoute extends _i20.PageRouteInfo<void> {
   const CreateWalletRoute() : super(name, path: '/create-wallet-screen');
 
   static const String name = 'CreateWalletRoute';
 }
 
 /// generated route for [_i5.CreateWalletConfirmScreen]
-class CreateWalletConfirmRoute extends _i19.PageRouteInfo<void> {
+class CreateWalletConfirmRoute extends _i20.PageRouteInfo<void> {
   const CreateWalletConfirmRoute()
       : super(name, path: '/create-wallet-confirm-screen');
 
@@ -198,7 +207,7 @@ class CreateWalletConfirmRoute extends _i19.PageRouteInfo<void> {
 }
 
 /// generated route for [_i6.AccessPrivateKeyScreen]
-class AccessPrivateKeyRoute extends _i19.PageRouteInfo<void> {
+class AccessPrivateKeyRoute extends _i20.PageRouteInfo<void> {
   const AccessPrivateKeyRoute()
       : super(name, path: '/access-private-key-screen');
 
@@ -206,7 +215,7 @@ class AccessPrivateKeyRoute extends _i19.PageRouteInfo<void> {
 }
 
 /// generated route for [_i7.AccessMnemonicKeyScreen]
-class AccessMnemonicKeyRoute extends _i19.PageRouteInfo<void> {
+class AccessMnemonicKeyRoute extends _i20.PageRouteInfo<void> {
   const AccessMnemonicKeyRoute()
       : super(name, path: '/access-mnemonic-key-screen');
 
@@ -214,14 +223,14 @@ class AccessMnemonicKeyRoute extends _i19.PageRouteInfo<void> {
 }
 
 /// generated route for [_i8.PinCodeSetupScreen]
-class PinCodeSetupRoute extends _i19.PageRouteInfo<void> {
+class PinCodeSetupRoute extends _i20.PageRouteInfo<void> {
   const PinCodeSetupRoute() : super(name, path: '/pin-code-setup-screen');
 
   static const String name = 'PinCodeSetupRoute';
 }
 
 /// generated route for [_i9.PinCodeConfirmScreen]
-class PinCodeConfirmRoute extends _i19.PageRouteInfo<PinCodeConfirmRouteArgs> {
+class PinCodeConfirmRoute extends _i20.PageRouteInfo<PinCodeConfirmRouteArgs> {
   PinCodeConfirmRoute({required String pin})
       : super(name,
             path: '/pin-code-confirm-screen',
@@ -242,87 +251,113 @@ class PinCodeConfirmRouteArgs {
 }
 
 /// generated route for [_i10.WalletReceiveScreen]
-class WalletReceiveRoute extends _i19.PageRouteInfo<void> {
+class WalletReceiveRoute extends _i20.PageRouteInfo<void> {
   const WalletReceiveRoute() : super(name, path: '/wallet-receive-screen');
 
   static const String name = 'WalletReceiveRoute';
 }
 
-/// generated route for [_i11.WalletSendXChainScreen]
-class WalletSendXChainRoute extends _i19.PageRouteInfo<void> {
-  const WalletSendXChainRoute()
-      : super(name, path: '/wallet-send-xchain-screen');
+/// generated route for [_i11.WalletSendAvmScreen]
+class WalletSendAvmRoute extends _i20.PageRouteInfo<void> {
+  const WalletSendAvmRoute() : super(name, path: '/wallet-send-avm-screen');
 
-  static const String name = 'WalletSendXChainRoute';
+  static const String name = 'WalletSendAvmRoute';
 }
 
-/// generated route for [_i12.WalletSendXChainConfirmScreen]
-class WalletSendXChainConfirmRoute
-    extends _i19.PageRouteInfo<WalletSendXChainConfirmRouteArgs> {
-  WalletSendXChainConfirmRoute(
-      {_i20.Key? key,
-      required _i12.WalletSendXChainTransactionViewData walletViewData})
+/// generated route for [_i12.WalletSendAvmConfirmScreen]
+class WalletSendAvmConfirmRoute
+    extends _i20.PageRouteInfo<WalletSendAvmConfirmRouteArgs> {
+  WalletSendAvmConfirmRoute(
+      {_i21.Key? key,
+      required _i12.WalletSendAvmTransactionViewData transactionInfo})
       : super(name,
-            path: '/wallet-send-xchain-confirm-screen',
-            args: WalletSendXChainConfirmRouteArgs(
-                key: key, walletViewData: walletViewData));
+            path: '/wallet-send-avm-confirm-screen',
+            args: WalletSendAvmConfirmRouteArgs(
+                key: key, transactionInfo: transactionInfo));
 
-  static const String name = 'WalletSendXChainConfirmRoute';
+  static const String name = 'WalletSendAvmConfirmRoute';
 }
 
-class WalletSendXChainConfirmRouteArgs {
-  const WalletSendXChainConfirmRouteArgs(
-      {this.key, required this.walletViewData});
+class WalletSendAvmConfirmRouteArgs {
+  const WalletSendAvmConfirmRouteArgs(
+      {this.key, required this.transactionInfo});
 
-  final _i20.Key? key;
+  final _i21.Key? key;
 
-  final _i12.WalletSendXChainTransactionViewData walletViewData;
+  final _i12.WalletSendAvmTransactionViewData transactionInfo;
 
   @override
   String toString() {
-    return 'WalletSendXChainConfirmRouteArgs{key: $key, walletViewData: $walletViewData}';
+    return 'WalletSendAvmConfirmRouteArgs{key: $key, transactionInfo: $transactionInfo}';
   }
 }
 
-/// generated route for [_i13.WalletSendCChainScreen]
-class WalletSendCChainRoute extends _i19.PageRouteInfo<void> {
-  const WalletSendCChainRoute()
-      : super(name, path: '/wallet-send-cchain-screen');
+/// generated route for [_i13.WalletSendEvmScreen]
+class WalletSendEvmRoute extends _i20.PageRouteInfo<void> {
+  const WalletSendEvmRoute() : super(name, path: '/wallet-send-evm-screen');
 
-  static const String name = 'WalletSendCChainRoute';
+  static const String name = 'WalletSendEvmRoute';
 }
 
-/// generated route for [_i14.DashboardScreen]
-class DashboardRoute extends _i19.PageRouteInfo<void> {
-  const DashboardRoute({List<_i19.PageRouteInfo>? children})
+/// generated route for [_i14.WalletSendEvmConfirmScreen]
+class WalletSendEvmConfirmRoute
+    extends _i20.PageRouteInfo<WalletSendEvmConfirmRouteArgs> {
+  WalletSendEvmConfirmRoute(
+      {_i21.Key? key,
+      required _i14.WalletSendEvmTransactionViewData transactionInfo})
+      : super(name,
+            path: '/wallet-send-evm-confirm-screen',
+            args: WalletSendEvmConfirmRouteArgs(
+                key: key, transactionInfo: transactionInfo));
+
+  static const String name = 'WalletSendEvmConfirmRoute';
+}
+
+class WalletSendEvmConfirmRouteArgs {
+  const WalletSendEvmConfirmRouteArgs(
+      {this.key, required this.transactionInfo});
+
+  final _i21.Key? key;
+
+  final _i14.WalletSendEvmTransactionViewData transactionInfo;
+
+  @override
+  String toString() {
+    return 'WalletSendEvmConfirmRouteArgs{key: $key, transactionInfo: $transactionInfo}';
+  }
+}
+
+/// generated route for [_i15.DashboardScreen]
+class DashboardRoute extends _i20.PageRouteInfo<void> {
+  const DashboardRoute({List<_i20.PageRouteInfo>? children})
       : super(name, path: '/dashboard', initialChildren: children);
 
   static const String name = 'DashboardRoute';
 }
 
-/// generated route for [_i15.WalletScreen]
-class WalletRoute extends _i19.PageRouteInfo<void> {
+/// generated route for [_i16.WalletScreen]
+class WalletRoute extends _i20.PageRouteInfo<void> {
   const WalletRoute() : super(name, path: 'wallet');
 
   static const String name = 'WalletRoute';
 }
 
-/// generated route for [_i16.CrossScreen]
-class CrossRoute extends _i19.PageRouteInfo<void> {
+/// generated route for [_i17.CrossScreen]
+class CrossRoute extends _i20.PageRouteInfo<void> {
   const CrossRoute() : super(name, path: 'cross');
 
   static const String name = 'CrossRoute';
 }
 
-/// generated route for [_i17.EarnScreen]
-class EarnRoute extends _i19.PageRouteInfo<void> {
+/// generated route for [_i18.EarnScreen]
+class EarnRoute extends _i20.PageRouteInfo<void> {
   const EarnRoute() : super(name, path: 'earn');
 
   static const String name = 'EarnRoute';
 }
 
-/// generated route for [_i18.SettingScreen]
-class SettingRoute extends _i19.PageRouteInfo<void> {
+/// generated route for [_i19.SettingScreen]
+class SettingRoute extends _i20.PageRouteInfo<void> {
   const SettingRoute() : super(name, path: 'setting');
 
   static const String name = 'SettingRoute';

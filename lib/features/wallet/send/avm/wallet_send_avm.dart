@@ -2,8 +2,8 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/wallet/send/avm/wallet_send_avm_confirm.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
-import 'package:wallet/features/wallet/send/x_chain/wallet_send_x_chain_confirm.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -13,17 +13,27 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
-class WalletSendCChainScreen extends StatelessWidget {
-  const WalletSendCChainScreen({Key? key}) : super(key: key);
+class WalletSendAvmScreen extends StatelessWidget {
+  const WalletSendAvmScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     TextEditingController addressController = TextEditingController();
     TextEditingController amountController = TextEditingController();
-    TextEditingController gasPriceController = TextEditingController();
+    TextEditingController momoController = TextEditingController();
 
     void _onClickConfirm() {
-
+      context.router.push(
+        WalletSendAvmConfirmRoute(
+          transactionInfo: WalletSendAvmTransactionViewData(
+            addressController.text,
+            momoController.text,
+            double.tryParse(amountController.text) ?? 0,
+            0.01,
+            2.01,
+          ),
+        ),
+      );
     }
 
     return Consumer<WalletThemeProvider>(
@@ -53,7 +63,7 @@ class WalletSendCChainScreen extends StatelessWidget {
                                   color: provider.themeMode.text),
                             ),
                             const SizedBox(width: 16),
-                            const ROIChainLabelText(text: 'C-Chain'),
+                            const ROIChainLabelText(text: 'X-Chain'),
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -72,41 +82,10 @@ class WalletSendCChainScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         ROITextField(
-                          label: Strings.current.walletSendGasPriceGWEI,
-                          hint: '0',
-                          controller: gasPriceController,
-                        ),
-                        const SizedBox(height: 4),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Text(
-                            Strings.current.walletSendGasPriceNote,
-                            style: ROILabelMediumTextStyle(
-                                color: provider.themeMode.text40),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              Strings.current.walletSendGasLimit,
-                              style: ROITitleLargeTextStyle(
-                                  color: provider.themeMode.text60),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              Strings.current.walletSendGasLimitNote,
-                              style: ROILabelMediumTextStyle(
-                                  color: provider.themeMode.text40),
-                            ),
-                          ],
-                        ),
-                        ROITextField(
-                          label: Strings.current.walletSendGasLimit,
-                          hint: '0',
-                          controller: gasPriceController,
-                          inputType: TextInputType.number,
+                          label: Strings.current.walletSendMemo,
+                          hint: Strings.current.sharedMemo,
+                          maxLines: 3,
+                          controller: momoController,
                         ),
                         const SizedBox(height: 16),
                         WalletSendHorizontalText(
@@ -120,7 +99,7 @@ class WalletSendCChainScreen extends StatelessWidget {
                           content: '--',
                           rightColor: provider.themeMode.text60,
                         ),
-                        const SizedBox(height: 100),
+                        const SizedBox(height: 157),
                         ROIMediumPrimaryButton(
                           text: Strings.current.sharedConfirm,
                           width: 185,

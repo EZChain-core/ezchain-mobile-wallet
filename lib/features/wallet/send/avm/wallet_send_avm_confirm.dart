@@ -11,10 +11,10 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
-class WalletSendXChainConfirmScreen extends StatelessWidget {
-  final WalletSendXChainTransactionViewData walletViewData;
+class WalletSendAvmConfirmScreen extends StatelessWidget {
+  final WalletSendAvmTransactionViewData transactionInfo;
 
-  const WalletSendXChainConfirmScreen({Key? key, required this.walletViewData})
+  const WalletSendAvmConfirmScreen({Key? key, required this.transactionInfo})
       : super(key: key);
 
   @override
@@ -57,31 +57,31 @@ class WalletSendXChainConfirmScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       WalletSendVerticalText(
                         title: Strings.current.sharedSendTo,
-                        content: walletViewData.address,
+                        content: transactionInfo.address,
                         hasDivider: true,
                       ),
                       const SizedBox(height: 8),
                       WalletSendVerticalText(
                         title: Strings.current.sharedMemo,
-                        content: walletViewData.memo,
+                        content: transactionInfo.memo,
                         hasDivider: true,
                       ),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedAmount,
-                        content: '${walletViewData.amount} ROI',
+                        content: '${transactionInfo.amount} ROI',
                       ),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedTransactionFee,
-                        content: '${walletViewData.fee} ROI',
+                        content: '${transactionInfo.fee} ROI',
                       ),
                       const SizedBox(height: 8),
                       ROIDashedLine(color: provider.themeMode.text10),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedTotal,
-                        content: '${walletViewData.total} ROI',
+                        content: '${transactionInfo.total} ROI',
                         leftColor: provider.themeMode.text,
                         rightColor: provider.themeMode.stateSuccess,
                       ),
@@ -102,7 +102,7 @@ class WalletSendXChainConfirmScreen extends StatelessWidget {
                                 horizontal: 64,
                                 vertical: 8,
                               ),
-                              onPressed: () {},
+                              onPressed: context.router.pop,
                             )
                           : ROIMediumSuccessButton(
                               text: Strings.current.sharedSendTransaction,
@@ -133,13 +133,13 @@ class WalletSendXChainConfirmScreen extends StatelessWidget {
   }
 }
 
-class WalletSendXChainTransactionViewData {
+class WalletSendAvmTransactionViewData {
   final String address;
   final String memo;
   final double amount;
   final double fee;
   final double total;
 
-  WalletSendXChainTransactionViewData(this.address, this.memo, this.amount, this.fee, this.total);
+  WalletSendAvmTransactionViewData(this.address, this.memo, this.amount, this.fee, this.total);
 
 }
