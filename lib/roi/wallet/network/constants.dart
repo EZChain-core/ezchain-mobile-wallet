@@ -1,21 +1,6 @@
 import 'package:wallet/roi/sdk/utils/constants.dart';
 
-final defaultConfig = roiNetConfig;
-
-final roiNetConfig = NetworkConfig(
-  rawUrl: 'https://testnet-api.roichain.net',
-  apiProtocol: 'https',
-  apiIp: 'testnet-api.roichain.net',
-  apiPort: 443,
-  explorerURL: 'https://explorerapi.roichain.net',
-  explorerSiteURL: 'https://explorer.roichain.net',
-  networkId: 5,
-  xChainId: "UM7LzqqdhmyoLLwXRJxTDWXzhP9ZNm4nCA1dtX6M6dWe4tcew",
-  pChainId: "11111111111111111111111111111111LpoYY",
-  cChainId: "yH8D7ThNJkxmtkuv2jgBa4P1Rn3Qpr4pPr7QYNfcdoS6k6HWp",
-  evmChainId: 0xa869,
-  avaxId: "2b5EBv57UhJ5QbcApsgpmr3NiQoqed3w15xKqmm1GQ1JytPtZ2",
-);
+final defaultConfig = testNetConfig;
 
 final mainNetConfig = NetworkConfig(
   rawUrl: 'https://api.avax.network',
@@ -33,18 +18,18 @@ final mainNetConfig = NetworkConfig(
 );
 
 final testNetConfig = NetworkConfig(
-  rawUrl: 'https://api.avax-test.network',
+  rawUrl: 'https://testnet-api.roichain.net',
   apiProtocol: 'https',
-  apiIp: 'api.avax-test.network',
+  apiIp: 'testnet-api.roichain.net',
   apiPort: 443,
-  explorerURL: 'https://explorerapi.avax-test.network',
-  explorerSiteURL: 'https://explorer.avax-test.network',
+  explorerURL: 'https://explorerapi.roichain.net',
+  explorerSiteURL: 'https://explorer.roichain.net',
   networkId: 5,
   xChainId: networks[5]!.x.blockchainId,
   pChainId: networks[5]!.p.blockchainId,
   cChainId: networks[5]!.c.blockchainId,
   evmChainId: networks[5]!.c.chainId,
-  avaxId: networks[5]!.x.avaxAssetId,
+  avaxId: "2b5EBv57UhJ5QbcApsgpmr3NiQoqed3w15xKqmm1GQ1JytPtZ2",
 );
 
 final localNetConfig = NetworkConfig(
