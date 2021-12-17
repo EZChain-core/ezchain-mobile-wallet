@@ -70,6 +70,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "settingAboutRoi":
             MessageLookupByLibrary.simpleMessage("About Roi Chain"),
         "settingChangePin": MessageLookupByLibrary.simpleMessage("Change PIN"),
+        "settingConfirmNewPin":
+            MessageLookupByLibrary.simpleMessage("Please confirm new PIN"),
+        "settingEnterNewPin":
+            MessageLookupByLibrary.simpleMessage("Please enter new PIN"),
+        "settingEnterOldPin":
+            MessageLookupByLibrary.simpleMessage("Please enter old PIN"),
         "settingGeneral":
             MessageLookupByLibrary.simpleMessage("General Setting"),
         "settingTouchId": MessageLookupByLibrary.simpleMessage("Touch ID"),

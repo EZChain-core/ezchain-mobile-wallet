@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // getBalanceX();
+    getBalanceX();
 
     return Scaffold(
       body: SizedBox(
