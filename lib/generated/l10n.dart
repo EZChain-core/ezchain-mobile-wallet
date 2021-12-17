@@ -719,6 +719,16 @@ class Strings {
       args: [],
     );
   }
+
+  /// `Invalid C Chain address. Make sure your address begins with "0x" or "C-0x"`
+  String get walletSendCChainErrorAddress {
+    return Intl.message(
+      'Invalid C Chain address. Make sure your address begins with "0x" or "C-0x"',
+      name: 'walletSendCChainErrorAddress',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Strings> {

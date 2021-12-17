@@ -22,39 +22,11 @@ class AccessPrivateKeyScreen extends StatelessWidget {
     final privateKeyInputController = TextEditingController(
         text: 'PrivateKey-JaCCSxdoWfo3ao5KwenXrJjJR7cBTQ287G1C5qpv2hr2tCCdb');
 
-    Future<void> _showWarningDialog() async {
-      return context.showWarningDialog(
-          Assets.images.imgPrivateKeyWraning.image(width: 130, height: 130),
-          Strings.current.accessPrivateKeyWarning);
-      // return showDialog<void>(
-      //   context: context,
-      //   builder: (BuildContext context) {
-      //     return Consumer<WalletThemeProvider>(
-      //       builder: (context, provider, child) => Dialog(
-      //         insetPadding: const EdgeInsets.all(16),
-      //         child: SizedBox(
-      //           width: double.infinity,
-      //           height: 318,
-      //           child: Column(
-      //             crossAxisAlignment: CrossAxisAlignment.center,
-      //             mainAxisAlignment: MainAxisAlignment.center,
-      //             children: [
-      //               Assets.images.imgPrivateKeyWraning
-      //                   .image(width: 130, height: 130),
-      //               const SizedBox(height: 24),
-      //               Text(
-      //                 Strings.current.accessPrivateKeyWarning,
-      //                 textAlign: TextAlign.center,
-      //                 style: ROIHeadlineSmallTextStyle(
-      //                     color: provider.themeMode.text70),
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-      //       ),
-      //     );
-      //   },
-      // );
+    void _showWarningDialog() {
+      context.showWarningDialog(
+        Assets.images.imgPrivateKeyWraning.image(width: 130, height: 130),
+        Strings.current.accessPrivateKeyWarning,
+      );
     }
 
     void _onClickAccess() {

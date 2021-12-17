@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/auth/access/mnemonic/widgets/access_mnemonic_input.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -22,23 +23,10 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
     const sizeOfMnemonic = 24;
     List<String> mnemonicPhrase = <String>[];
 
-    Future<void> _showWarningDialog() async {
-      return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return Consumer<WalletThemeProvider>(
-            builder: (context, provider, child) => AlertDialog(
-              insetPadding: const EdgeInsets.all(16),
-              title: Assets.images.imgWarning.svg(width: 130, height: 130),
-              content: Text(
-                Strings.current.accessMnemonicKeyWarning,
-                textAlign: TextAlign.center,
-                style:
-                    ROIHeadlineSmallTextStyle(color: provider.themeMode.text70),
-              ),
-            ),
-          );
-        },
+    void _showWarningDialog() {
+      context.showWarningDialog(
+        Assets.images.imgWarning.svg(width: 130, height: 130),
+        Strings.current.accessMnemonicKeyWarning,
       );
     }
 
