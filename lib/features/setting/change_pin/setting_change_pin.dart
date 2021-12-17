@@ -50,11 +50,3 @@ class SettingChangePinScreen extends StatelessWidget {
   }
 }
 
-enum _SettingChangePinState {
-  oldPin,
-  oldPinError,
-  newPin,
-  confirmPin,
-  confirmPin,
-
-}
