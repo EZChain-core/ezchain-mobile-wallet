@@ -610,6 +610,36 @@ class Strings {
     );
   }
 
+  /// `Please enter old PIN`
+  String get settingEnterOldPin {
+    return Intl.message(
+      'Please enter old PIN',
+      name: 'settingEnterOldPin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter new PIN`
+  String get settingEnterNewPin {
+    return Intl.message(
+      'Please enter new PIN',
+      name: 'settingEnterNewPin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please confirm new PIN`
+  String get settingConfirmNewPin {
+    return Intl.message(
+      'Please confirm new PIN',
+      name: 'settingConfirmNewPin',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Send only `
   String get walletReceiveSendOnly {
     return Intl.message(

@@ -10,15 +10,22 @@ abstract class _WalletRoiChainStore with Store {
   WalletRoiChainBalanceViewData balanceX =
       WalletRoiChainBalanceViewData(BigInt.zero, BigInt.zero);
 
+  @observable
+  WalletRoiChainBalanceViewData balanceP =
+      WalletRoiChainBalanceViewData(BigInt.zero, BigInt.zero);
+
+  @observable
+  WalletRoiChainBalanceViewData balanceC =
+      WalletRoiChainBalanceViewData(BigInt.zero, BigInt.zero);
+
   @action
   getBalanceX() async {
     final wallet = SingletonWallet(
         privateKey:
             "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
     final utxos = await wallet.updateUtxosX();
-    final balanceX = wallet.getBalanceX();
-    balanceX.forEach((k, v) =>
-        print("asset_id = $k, locked = ${v.locked}, unlocked = ${v.unlocked}"));
+    wallet.getBalanceX().forEach((_, balance) => balanceX =
+        WalletRoiChainBalanceViewData(balance.unlocked, balance.locked));
   }
 }
 
