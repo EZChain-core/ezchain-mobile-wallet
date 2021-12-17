@@ -1,6 +1,7 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -19,6 +20,7 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(

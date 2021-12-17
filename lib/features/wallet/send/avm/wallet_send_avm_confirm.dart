@@ -1,6 +1,7 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -20,6 +21,18 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isSuccess = false;
+
+    void _showWarningDialog() {
+      context.showWarningDialog(
+        Assets.images.imgSendChainError.svg(width: 130, height: 130),
+        Strings.current.walletSendCChainErrorAddress,
+      );
+    }
+
+    void _onClickSendTransaction() {
+      _showWarningDialog();
+    }
+
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -110,7 +123,7 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                                 horizontal: 64,
                                 vertical: 8,
                               ),
-                              onPressed: () {},
+                              onPressed: _onClickSendTransaction,
                             ),
                       const SizedBox(height: 4),
                       if (!isSuccess)

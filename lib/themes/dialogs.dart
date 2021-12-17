@@ -21,15 +21,21 @@ class ROIWarningDialog extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
+              const SizedBox(height: 36),
               image,
               const SizedBox(height: 24),
-              Text(
-                content,
-                textAlign: TextAlign.center,
-                style:
-                    ROIHeadlineSmallTextStyle(color: provider.themeMode.text70),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(
+                  content,
+                  textAlign: TextAlign.center,
+                  style: ROIHeadlineSmallTextStyle(
+                      color: provider.themeMode.text70),
+                ),
               ),
+              const SizedBox(height: 36),
             ],
           ),
         ),

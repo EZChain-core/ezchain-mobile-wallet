@@ -114,6 +114,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Set Amount"),
         "walletReceiveToThis": MessageLookupByLibrary.simpleMessage(
             " to this address\nSending any other coins my result in permanent loss"),
+        "walletSendCChainErrorAddress": MessageLookupByLibrary.simpleMessage(
+            "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\""),
         "walletSendGasGWEI": MessageLookupByLibrary.simpleMessage("GWEI"),
         "walletSendGasLimit": MessageLookupByLibrary.simpleMessage("Gas Limit"),
         "walletSendGasLimitNote": MessageLookupByLibrary.simpleMessage(
