@@ -1,7 +1,9 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/wallet/roi/wallet_roi_chain_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
@@ -13,6 +15,9 @@ class WalletROIChainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final walletRoiChainStore = WalletRoiChainStore();
+    walletRoiChainStore.getBalanceX();
+
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         backgroundColor: Colors.transparent,
@@ -44,34 +49,37 @@ class WalletROIChainScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 40),
-            _WalletChainWidget(
-              chain: Strings.current.sharedXChain,
-              availableRoi: 8000000,
-              lockRoi: 0,
-              onSendPressed: () =>
-                  context.router.push(const WalletSendAvmRoute()),
-              onReceivePressed: () =>
-                  context.router.push(const WalletReceiveRoute()),
-            ),
+            Observer(
+                builder: (_) => _WalletChainWidget(
+                      chain: Strings.current.sharedXChain,
+                      availableRoi: walletRoiChainStore.balanceX.available,
+                      lockRoi: walletRoiChainStore.balanceX.lock,
+                      onSendPressed: () =>
+                          context.router.push(const WalletSendAvmRoute()),
+                      onReceivePressed: () =>
+                          context.router.push(const WalletReceiveRoute()),
+                    )),
             const SizedBox(height: 12),
-            _WalletChainWidget(
-              chain: Strings.current.sharedPChain,
-              availableRoi: 8000000,
-              lockRoi: 0,
-              hasSend: false,
-              onReceivePressed: () =>
-                  context.router.push(const WalletReceiveRoute()),
-            ),
+            Observer(
+                builder: (_) => _WalletChainWidget(
+                      chain: Strings.current.sharedPChain,
+                      availableRoi: walletRoiChainStore.balanceP.available,
+                      lockRoi: walletRoiChainStore.balanceP.lock,
+                      hasSend: false,
+                      onReceivePressed: () =>
+                          context.router.push(const WalletReceiveRoute()),
+                    )),
             const SizedBox(height: 12),
-            _WalletChainWidget(
-              chain: Strings.current.sharedCChain,
-              availableRoi: 8000000,
-              lockRoi: 0,
-              onSendPressed: () =>
-                  context.router.push(const WalletSendEvmRoute()),
-              onReceivePressed: () =>
-                  context.router.push(const WalletReceiveRoute()),
-            ),
+            Observer(
+                builder: (_) => _WalletChainWidget(
+                      chain: Strings.current.sharedCChain,
+                      availableRoi: walletRoiChainStore.balanceC.available,
+                      lockRoi: walletRoiChainStore.balanceC.lock,
+                      onSendPressed: () =>
+                          context.router.push(const WalletSendEvmRoute()),
+                      onReceivePressed: () =>
+                          context.router.push(const WalletReceiveRoute()),
+                    )),
           ],
         ),
       ),
@@ -119,8 +127,8 @@ class _WalletButton extends StatelessWidget {
 
 class _WalletChainWidget extends StatelessWidget {
   final String chain;
-  final double availableRoi;
-  final double lockRoi;
+  final BigInt availableRoi;
+  final BigInt lockRoi;
   final bool? hasSend;
   final VoidCallback? onSendPressed;
   final VoidCallback? onReceivePressed;

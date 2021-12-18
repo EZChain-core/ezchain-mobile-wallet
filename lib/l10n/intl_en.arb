@@ -55,6 +55,9 @@
   "settingGeneral": "General Setting",
   "settingAboutRoi": "About Roi Chain",
   "settingTouchId": "Touch ID",
+  "settingEnterOldPin": "Please enter old PIN",
+  "settingEnterNewPin": "Please enter new PIN",
+  "settingConfirmNewPin": "Please confirm new PIN",
   "walletReceiveSendOnly": "Send only ",
   "walletReceiveBitcoin": "Bitcoin(BTC)",
   "walletReceiveToThis": " to this address\nSending any other coins my result in permanent loss",
@@ -65,5 +68,6 @@
   "walletSendGasGWEI": "GWEI",
   "walletSendGasPriceNote": "Adjusted automatically according to network load.",
   "walletSendGasLimit": "Gas Limit",
-  "walletSendGasLimitNote": "Gas Limit will be automatically calculated after you click Confirm."
+  "walletSendGasLimitNote": "Gas Limit will be automatically calculated after you click Confirm.",
+  "walletSendCChainErrorAddress": "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\""
 }

@@ -610,6 +610,36 @@ class Strings {
     );
   }
 
+  /// `Please enter old PIN`
+  String get settingEnterOldPin {
+    return Intl.message(
+      'Please enter old PIN',
+      name: 'settingEnterOldPin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter new PIN`
+  String get settingEnterNewPin {
+    return Intl.message(
+      'Please enter new PIN',
+      name: 'settingEnterNewPin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please confirm new PIN`
+  String get settingConfirmNewPin {
+    return Intl.message(
+      'Please confirm new PIN',
+      name: 'settingConfirmNewPin',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Send only `
   String get walletReceiveSendOnly {
     return Intl.message(
@@ -715,6 +745,16 @@ class Strings {
     return Intl.message(
       'Gas Limit will be automatically calculated after you click Confirm.',
       name: 'walletSendGasLimitNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid C Chain address. Make sure your address begins with "0x" or "C-0x"`
+  String get walletSendCChainErrorAddress {
+    return Intl.message(
+      'Invalid C Chain address. Make sure your address begins with "0x" or "C-0x"',
+      name: 'walletSendCChainErrorAddress',
       desc: '',
       args: [],
     );

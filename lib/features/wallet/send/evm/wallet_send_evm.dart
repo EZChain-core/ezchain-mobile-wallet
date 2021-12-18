@@ -1,6 +1,7 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/wallet/send/evm/wallet_send_evm_confirm.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
@@ -24,6 +25,13 @@ class WalletSendEvmScreen extends StatelessWidget {
 
     void _onClickConfirm() {
 
+    }
+
+    void _showWarningDialog() {
+      context.showWarningDialog(
+        Assets.images.imgSendChainError.svg(width: 130, height: 130),
+        Strings.current.walletSendCChainErrorAddress,
+      );
     }
 
     void _onClickSendTransaction() {
