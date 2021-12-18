@@ -58,8 +58,7 @@ class AvmUnsignedTx
   AvmTx sign(AvmKeyChain kc) {
     final txBuff = toBuffer();
     final msg = SHA256().update(txBuff).digest();
-    final signatures =
-        transaction.sign(msg, kc as StandardKeyChain<AvmKeyPair>);
+    final signatures = transaction.sign(msg, kc);
     return AvmTx(unsignedTx: this, credentials: signatures);
   }
 }
@@ -68,9 +67,7 @@ class AvmTx extends StandardTx<AvmKeyPair, AvmKeyChain, AvmUnsignedTx> {
   @override
   String get typeName => "AvmTx";
 
-  AvmTx(
-      {required AvmUnsignedTx unsignedTx,
-      required List<Credential> credentials})
+  AvmTx({AvmUnsignedTx? unsignedTx, List<Credential>? credentials})
       : super(unsignedTx: unsignedTx, credentials: credentials);
 
   @override

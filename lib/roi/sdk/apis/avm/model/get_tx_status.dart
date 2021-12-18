@@ -23,12 +23,27 @@ class GetTxStatusRequest with RpcRequestWrapper<GetTxStatusRequest> {
 
 @JsonSerializable()
 class GetTxStatusResponse {
-  final String status;
+  final TxStatus status;
+  final String? reason;
 
-  const GetTxStatusResponse({required this.status});
+  const GetTxStatusResponse({required this.status, this.reason});
 
   factory GetTxStatusResponse.fromJson(Map<String, dynamic> json) =>
       _$GetTxStatusResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$GetTxStatusResponseToJson(this);
+}
+
+enum TxStatus {
+  @JsonValue("Accepted")
+  accepted,
+
+  @JsonValue("Processing")
+  processing,
+
+  @JsonValue("Rejected")
+  rejected,
+
+  @JsonValue("Unknown")
+  unknown,
 }

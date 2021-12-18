@@ -81,4 +81,14 @@ class _EvmApiImpl implements EvmApi {
   void setBlockchainAlias(String alias) {
     blockchainAlias = alias;
   }
+
+  @override
+  String addressFromBuffer(Uint8List address) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Uint8List parseAddress(String address) {
+    throw UnimplementedError();
+  }
 }

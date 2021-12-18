@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 import 'package:wallet/roi/sdk/roi.dart';
 
@@ -6,7 +8,6 @@ abstract class ROIApi {
 }
 
 abstract class ROIChainApi implements ROIApi {
-
   ROIKeyChain get keyChain;
 
   ROIKeyChain newKeyChain();
@@ -18,4 +19,8 @@ abstract class ROIChainApi implements ROIApi {
   void refreshBlockchainId(String blockChainId);
 
   void setAVAXAssetId(String? avaxAssetId);
+
+  String addressFromBuffer(Uint8List address);
+
+  Uint8List parseAddress(String address);
 }

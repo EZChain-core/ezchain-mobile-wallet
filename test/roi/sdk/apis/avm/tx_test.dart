@@ -4,15 +4,17 @@ import 'dart:typed_data';
 import 'package:hash/hash.dart';
 import 'package:mock_web_server/mock_web_server.dart';
 import 'package:test/test.dart';
-import 'package:wallet/roi/sdk/apis/avm/avm_api.dart';
+import 'package:wallet/roi/sdk/apis/avm/api.dart';
 import 'package:wallet/roi/sdk/apis/avm/base_tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/constants.dart';
+import 'package:wallet/roi/sdk/apis/avm/credentials.dart';
 import 'package:wallet/roi/sdk/apis/avm/inputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/get_asset_description.dart';
 import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
+import 'package:wallet/roi/sdk/common/credentials.dart';
 import 'package:wallet/roi/sdk/common/rpc/rpc_response.dart';
 import 'package:wallet/roi/sdk/roi.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
@@ -199,6 +201,7 @@ void main() {
           blockchainId: blockchainID,
           outs: outputs,
           ins: inputs);
+
       final txu = AvmUnsignedTx(transaction: baseTx);
       final txins = txu.getTransaction().getIns();
       final txouts = txu.getTransaction().getOuts();
@@ -232,6 +235,52 @@ void main() {
 
       expect(hexEncode(txunew.toBuffer()), hexEncode(txu.toBuffer()));
       expect(txunew.toString(), txu.toString());
+    });
+
+    test("Creation Tx1 with asof, locktime, threshold", () {
+      final txu = set.buildBaseTx(
+        netid,
+        blockchainID,
+        BigInt.from(9000),
+        assetID,
+        addrs3,
+        addrs1,
+        changeAddresses: addrs1,
+        asOf: unixNow(),
+        lockTime: unixNow() + BigInt.from(50),
+        threshold: 1,
+      );
+
+      final tx = txu.sign(keymgr1);
+      final tx2 = AvmTx();
+      tx2.fromString(tx.toString());
+
+      expect(hexEncode(tx2.toBuffer()), hexEncode(tx.toBuffer()));
+      expect(tx2.toString(), tx.toString());
+    });
+
+    test("Creation Tx2 without asof, locktime, threshold", () {
+      final txu = set.buildBaseTx(
+        netid,
+        blockchainID,
+        BigInt.from(9000),
+        assetID,
+        addrs3,
+        addrs1,
+        changeAddresses: addrs1,
+      );
+
+      final txu2 = AvmUnsignedTx();
+      txu2.fromBuffer(txu.toBuffer());
+      expect(hexEncode(txu2.toBuffer()), hexEncode(txu.toBuffer()));
+
+      final tx = txu.sign(keymgr1);
+      final tx2 = AvmTx();
+      final txBuffer = tx.toBuffer();
+      tx2.fromBuffer(txBuffer);
+
+      expect(hexEncode(tx2.toBuffer()), hexEncode(tx.toBuffer()));
+      expect(tx2.toString(), tx.toString());
     });
   });
 }

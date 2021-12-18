@@ -318,16 +318,49 @@ final n5C = C(
 // End Fuji
 
 // Start local network
-final n12345X = n5X
-  ..blockchainId = "2eNy1mUFdmaxXNj1eQHUe7Np4gju9sJsEtWQ4MX3ToiNKuADed"
-  ..avaxAssetId = avaxAssetId;
+final n12345X = X(
+    blockchainId: "2eNy1mUFdmaxXNj1eQHUe7Np4gju9sJsEtWQ4MX3ToiNKuADed",
+    avaxAssetId: avaxAssetId,
+    alias: xChainAlias,
+    vm: xChainVMName,
+    txFee: MILLIAVAX,
+    creationTxFee: CENTIAVAX);
 
-final n12345P = n5P..blockchainId = platformChainId;
+final n12345P = P(
+    blockchainId: platformChainId,
+    avaxAssetId: "2b5EBv57UhJ5QbcApsgpmr3NiQoqed3w15xKqmm1GQ1JytPtZ2",
+    alias: pChainAlias,
+    vm: pChainVMName,
+    txFee: MILLIAVAX,
+    creationTxFee: CENTIAVAX,
+    minConsumption: 0.1,
+    maxConsumption: 0.12,
+    maxStakingDuration: BigInt.from(31536000),
+    maxSupply: BigInt.from(720000000) * ONEAVAX,
+    minStake: ONEAVAX,
+    minStakeDuration: 24 * 60 * 60,
+    //one day
+    maxStakeDuration: 365 * 24 * 60 * 60,
+    // one year
+    minDelegationStake: ONEAVAX,
+    minDelegationFee: BigInt.from(2));
 
-final n12345C = n5C
-  ..blockchainId = "2CA6j5zYzasynPsFeNoqWkmTCt3VScMvXUZHbfDJ8k3oGzAPtU"
-  ..avaxAssetId = avaxAssetId
-  ..chainId = 43112;
+final n12345C = C(
+    blockchainId: "2CA6j5zYzasynPsFeNoqWkmTCt3VScMvXUZHbfDJ8k3oGzAPtU",
+    avaxAssetId: avaxAssetId,
+    alias: cChainAlias,
+    vm: cChainVMName,
+    txBytesGas: 1,
+    costPerSignature: 1000,
+// DEPRECATED - txFee
+// WILL BE REMOVED IN NEXT MAJOR VERSION BUMP
+    txFee: MILLIAVAX,
+// DEPRECATED - gasPrice
+// WILL BE REMOVED IN NEXT MAJOR VERSION BUMP
+    gasPrice: GWEI * BigInt.from(225),
+    minGasPrice: GWEI * BigInt.from(25),
+    maxGasPrice: GWEI * BigInt.from(1000),
+    chainId: 43112);
 // End local network
 
 final networks = {
@@ -459,7 +492,7 @@ class X {
 }
 
 class P {
-  String blockchainId;
+  final String blockchainId;
   final String alias;
   final String vm;
   final BigInt? creationTxFee;

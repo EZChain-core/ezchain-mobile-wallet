@@ -17,12 +17,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    startTimer();
+    // startTimer();
   }
 
   @override
   Widget build(BuildContext context) {
-    // getBalanceX();
+    getBalanceX();
 
     return Scaffold(
       body: SizedBox(
@@ -49,5 +49,10 @@ class _SplashScreenState extends State<SplashScreen> {
     final balanceX = wallet.getBalanceX();
     balanceX.forEach((k, v) =>
         print("asset_id = $k, locked = ${v.locked}, unlocked = ${v.unlocked}"));
+
+    // PrivateKey-JaCCSxdoWfo3ao5KwenXrJjJR7cBTQ287G1C5qpv2hr2tCCdb
+    final txId = await wallet.sendAvaxX(
+        "X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad", BigInt.from(2000));
+    print("txId = $txId");
   }
 }

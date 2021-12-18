@@ -81,4 +81,14 @@ class _PvmApiImpl implements PvmApi {
   void setBlockchainAlias(String alias) {
     blockchainAlias = alias;
   }
+
+  @override
+  String addressFromBuffer(Uint8List address) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Uint8List parseAddress(String address) {
+    throw UnimplementedError();
+  }
 }

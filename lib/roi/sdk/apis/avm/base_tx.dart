@@ -12,6 +12,7 @@ import 'package:wallet/roi/sdk/common/keychain/base_key_chain.dart';
 import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 import 'package:wallet/roi/sdk/common/output.dart';
 import 'package:wallet/roi/sdk/common/tx.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
@@ -104,7 +105,7 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
   }
 
   @override
-  List<Credential> sign(Uint8List msg, StandardKeyChain<AvmKeyPair> kc) {
+  List<Credential> sign(Uint8List msg, AvmKeyChain kc) {
     final signs = <Credential>[];
     for (int i = 0; i < ins.length; i++) {
       final input = ins[i];
