@@ -1,16 +1,20 @@
 import 'dart:typed_data';
 
+import 'package:wallet/roi/sdk/apis/avm/constants.dart';
 import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/get_asset_description.dart';
+import 'package:wallet/roi/sdk/apis/avm/model/get_tx_status.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/get_utxos.dart';
+import 'package:wallet/roi/sdk/apis/avm/model/issue_tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/rest/avm_rest_client.dart';
 import 'package:wallet/roi/sdk/apis/avm/rest/avm_wallet_rest_client.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';
 import 'package:wallet/roi/sdk/roi.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart' as bindtools;
 import 'package:wallet/roi/sdk/utils/constants.dart';
+import 'package:wallet/roi/sdk/utils/serialization.dart';
 
 abstract class AvmApi implements ROIChainApi {
   Future<AvmUnsignedTx> buildBaseTx(
@@ -20,16 +24,20 @@ abstract class AvmApi implements ROIChainApi {
       List<String> toAddresses,
       List<String> fromAddresses,
       List<String> changeAddresses,
-      Uint8List? memo);
+      {Uint8List? memo});
 
   Future<GetUTXOsResponse> getUTXOs(List<String> addresses,
       {String? sourceChain, int limit = 0, GetUTXOsStartIndex? startIndex});
 
-  Future<GetAssetDescriptionResponse?> getAssetDescription(String assetId);
+  Future<GetAssetDescriptionResponse> getAssetDescription(String assetId);
 
   Future<Uint8List?> getAVAXAssetId({bool refresh = false});
 
   Future<String> issueTx(AvmTx tx);
+
+  Future<GetTxStatusResponse> getTxStatus(String txId);
+
+  BigInt getTxFee();
 
   factory AvmApi.create(
       {required ROINetwork roiNetwork,
@@ -108,12 +116,32 @@ class _AvmApiImpl implements AvmApi {
 
   @override
   void setAVAXAssetId(String? avaxAssetId) {
-    this.avaxAssetId = cb58Decode(avaxAssetId);
+    this.avaxAssetId = bindtools.cb58Decode(avaxAssetId);
   }
 
   @override
   void setBlockchainAlias(String alias) {
     blockchainAlias = alias;
+  }
+
+  @override
+  Uint8List parseAddress(String address) {
+    final alias = getBlockchainAlias();
+    return bindtools.parseAddress(address, blockChainId,
+        alias: alias, addressLength: ADDRESSLENGTH);
+  }
+
+  @override
+  String addressFromBuffer(Uint8List address) {
+    final chainId = getBlockchainAlias() ?? blockChainId;
+    return Serialization.instance.bufferToType(address, SerializedType.bech32,
+        args: [chainId, roiNetwork.hrp]);
+  }
+
+  @override
+  BigInt getTxFee() {
+    _txFee ??= _getDefaultTxFee();
+    return _txFee!;
   }
 
   @override
@@ -124,23 +152,25 @@ class _AvmApiImpl implements AvmApi {
       List<String> toAddresses,
       List<String> fromAddresses,
       List<String> changeAddresses,
-      Uint8List? memo,
-      {int threshold = 1}) async {
-    final to = toAddresses.map((e) => stringToAddress(e)).toList();
-    final from = fromAddresses.map((e) => stringToAddress(e)).toList();
-    final change = changeAddresses.map((e) => stringToAddress(e)).toList();
+      {Uint8List? memo,
+      int threshold = 1}) async {
+    final to = toAddresses.map((e) => bindtools.stringToAddress(e)).toList();
+    final from =
+        fromAddresses.map((e) => bindtools.stringToAddress(e)).toList();
+    final change =
+        changeAddresses.map((e) => bindtools.stringToAddress(e)).toList();
 
     final builtUnsignedTx = utxoSet.buildBaseTx(
         roiNetwork.networkId,
-        cb58Decode(blockChainId),
+        bindtools.cb58Decode(blockChainId),
         amount,
-        cb58Decode(assetId),
+        bindtools.cb58Decode(assetId),
         to,
         from,
-        change,
-        _getTxFee(),
-        await getAVAXAssetId(),
-        memo,
+        changeAddresses: change,
+        fee: getTxFee(),
+        feeAssetId: await getAVAXAssetId(),
+        memo: memo,
         threshold: threshold);
     if (!await _checkGooseEgg(builtUnsignedTx)) {
       throw Exception("Error - AVMAPI.buildBaseTx:Failed Goose Egg Check");
@@ -178,38 +208,41 @@ class _AvmApiImpl implements AvmApi {
   }
 
   @override
-  Future<GetAssetDescriptionResponse?> getAssetDescription(
+  Future<GetAssetDescriptionResponse> getAssetDescription(
       String assetId) async {
     final response = await avmRestClient.getAssetDescription(
         GetAssetDescriptionRequest(assetId: assetId).toRpc());
-    return response.result;
+    return response.result!;
   }
 
   @override
   Future<Uint8List?> getAVAXAssetId({bool refresh = false}) async {
     if (avaxAssetId == null || refresh) {
-      final response = await getAssetDescription(primaryAssetAlias);
-      setAVAXAssetId(response?.assetId);
+      try {
+        final response = await getAssetDescription(primaryAssetAlias);
+        setAVAXAssetId(response.assetId);
+      } catch (e) {}
     }
     return avaxAssetId;
   }
 
   @override
   Future<String> issueTx(AvmTx tx) async {
-    return "";
+    final transaction = tx.toString();
+    final request = IssueTxRequest(tx: transaction).toRpc();
+    final response = await avmRestClient.issueTx(request);
+    return response.result!.txId;
   }
 
-  BigInt _getTxFee() {
-    _txFee ??= _getDefaultTxFee();
-    return _txFee!;
+  @override
+  Future<GetTxStatusResponse> getTxStatus(String txId) async {
+    final request = GetTxStatusRequest(txId: txId).toRpc();
+    final response = await avmRestClient.getTxStatus(request);
+    return response.result!;
   }
 
   BigInt _getDefaultTxFee() {
     final networkId = roiNetwork.networkId;
-    if (networks.containsKey(networkId)) {
-      return networks[networkId]!.x.creationTxFee;
-    } else {
-      return BigInt.zero;
-    }
+    return networks[networkId]?.x.txFee ?? BigInt.zero;
   }
 }

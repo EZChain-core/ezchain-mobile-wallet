@@ -51,7 +51,7 @@ abstract class StandardBaseTx<KPClass extends ROIKeyPair,
 
   List<StandardTransferableOutput> getTotalOuts();
 
-  List<Credential> sign(Uint8List msg, StandardKeyChain<KPClass> kc);
+  List<Credential> sign(Uint8List msg, KCClass kc);
 
   StandardBaseTx clone();
 
@@ -179,7 +179,7 @@ abstract class StandardUnsignedTx<
       final input = ins[i];
       if (input.getInput() is StandardAmountInput &&
           aIdHex == hexEncode(input.getAssetId())) {
-        total = total + (input.getInput() as StandardAmountInput).getAmount();
+        total += (input.getInput() as StandardAmountInput).getAmount();
       }
     }
     return total;
@@ -193,7 +193,7 @@ abstract class StandardUnsignedTx<
       final output = outs[i];
       if (output.getOutput() is StandardAmountOutput &&
           aIdHex == hexEncode(output.getAssetId())) {
-        total = total + (output.getOutput() as StandardAmountInput).getAmount();
+        total += (output.getOutput() as StandardAmountOutput).getAmount();
       }
     }
     return total;
@@ -218,13 +218,20 @@ abstract class StandardTx<
     KCClass extends ROIKeyChain,
     SUBTx extends StandardUnsignedTx<KPClass, KCClass,
         StandardBaseTx<KPClass, KCClass>>> extends Serializable {
-  SUBTx unsignedTx;
-  List<Credential> credentials;
+  late SUBTx unsignedTx;
+  List<Credential> credentials = [];
 
   @override
   String get typeName => "StandardTx";
 
-  StandardTx({required this.unsignedTx, required this.credentials});
+  StandardTx({SUBTx? unsignedTx, List<Credential>? credentials}) {
+    if (unsignedTx != null) {
+      this.unsignedTx = unsignedTx;
+    }
+    if (credentials != null) {
+      this.credentials = credentials;
+    }
+  }
 
   int fromBuffer(Uint8List bytes, {int? offset});
 

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/apis/avm/constants.dart';
@@ -8,12 +9,12 @@ import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
-import 'package:wallet/roi/sdk/utils/wait_tx_utils.dart';
 import 'package:wallet/roi/wallet/asset/assets.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
 import 'package:wallet/roi/wallet/helpers/utxo_helper.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/types/types.dart';
+import 'package:wallet/roi/wallet/utils/wait_tx_utils.dart';
 import 'package:web3dart/web3dart.dart';
 
 abstract class UnsafeWallet {
@@ -68,19 +69,31 @@ abstract class WalletProvider {
   void emitBalanceChangeX() {}
 
   Future<String> sendAvaxX(String to, BigInt amount, {String? memo}) async {
-    final froms = await getAllAddressesX();
-    final changeAddress = getChangeAddressX();
-    final avaxId = activeNetwork.avaxId!;
     final Uint8List? memoBuff;
     if (memo != null) {
-      memoBuff = Uint8List.fromList([]);
+      memoBuff = Uint8List.fromList(utf8.encode(memo));
     } else {
       memoBuff = null;
     }
+    final froms = await getAllAddressesX();
+    final changeAddress = getChangeAddressX();
+    final utxoSet = utxosX;
     final tx = await xChain.buildBaseTx(
-        utxosX, amount, avaxId, [to], froms, [changeAddress], memoBuff);
+      utxoSet,
+      amount,
+      activeNetwork.avaxId!,
+      [to],
+      froms,
+      [changeAddress],
+      memo: memoBuff,
+    );
     final signedTx = await signX(tx);
-    final txId = await xChain.issueTx(signedTx);
+    final String txId;
+    try {
+      txId = await xChain.issueTx(signedTx);
+    } catch (e) {
+      throw Exception("txId cannot be null");
+    }
     await waitTxX(txId);
     return txId;
   }

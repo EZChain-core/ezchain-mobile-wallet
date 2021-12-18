@@ -29,7 +29,7 @@ final testNetConfig = NetworkConfig(
   pChainId: networks[5]!.p.blockchainId,
   cChainId: networks[5]!.c.blockchainId,
   evmChainId: networks[5]!.c.chainId,
-  avaxId: "2b5EBv57UhJ5QbcApsgpmr3NiQoqed3w15xKqmm1GQ1JytPtZ2",
+  avaxId: networks[5]!.x.avaxAssetId,
 );
 
 final localNetConfig = NetworkConfig(

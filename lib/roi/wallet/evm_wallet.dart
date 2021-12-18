@@ -3,6 +3,7 @@ import 'package:wallet/roi/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 
 import 'package:wallet/roi/sdk/crypto/secp256k1.dart';
+import 'package:wallet/roi/sdk/utils/bigint.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
@@ -73,14 +74,6 @@ class EvmWallet {
     final privateKeyNum = decodeBigInt(privateKey);
     final p = params.G * privateKeyNum;
     return Uint8List.view(p!.getEncoded(false).buffer, 1);
-  }
-
-  static BigInt decodeBigInt(List<int> bytes) {
-    BigInt result = BigInt.from(0);
-    for (int i = 0; i < bytes.length; i++) {
-      result += BigInt.from(bytes[bytes.length - i - 1]) << (8 * i);
-    }
-    return result;
   }
 
   static Uint8List publicKeyToAddress(Uint8List publicKey) {

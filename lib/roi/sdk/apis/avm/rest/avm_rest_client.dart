@@ -6,7 +6,6 @@ import 'package:wallet/roi/sdk/apis/avm/model/get_asset_description.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/get_balance.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/get_tx_status.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/get_utxos.dart';
-import 'package:wallet/roi/sdk/apis/avm/model/import_key.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/issue_tx.dart';
 import 'package:wallet/roi/sdk/apis/info/model/get_tx_fee.dart';
 import 'package:wallet/roi/sdk/common/rpc/rpc_request.dart';
@@ -40,16 +39,12 @@ abstract class AvmRestClient {
       @Body() RpcRequest<GetAddressTxsRequest> request);
 
   @POST("")
-  Future<RpcResponse<GetTxFeeResponse>> getTx(
+  Future<RpcResponse<GetTxFeeResponse>> getTxFee(
       @Body() RpcRequest<GetTxFeeRequest> request);
 
   @POST("")
   Future<RpcResponse<GetTxStatusResponse>> getTxStatus(
       @Body() RpcRequest<GetTxStatusRequest> request);
-
-  @POST("")
-  Future<RpcResponse<ImportKeyResponse>> importKey(
-      @Body() RpcRequest<ImportKeyRequest> request);
 
   @POST("")
   Future<RpcResponse<IssueTxResponse>> issueTx(

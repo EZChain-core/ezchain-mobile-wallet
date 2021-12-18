@@ -22,7 +22,8 @@ class SigIdx extends NBytes {
   }
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     source = Serialization.instance.decoder(
         fields["source"], encoding, SerializedType.Buffer, SerializedType.hex);
@@ -53,12 +54,10 @@ class Signature extends NBytes {
 }
 
 abstract class Credential extends Serializable {
-  final List<Signature> sigArray;
+  List<Signature> sigArray = [];
 
   @override
   String get typeName => "Credential";
-
-  Credential({this.sigArray = const []});
 
   int getCredentialId();
 
@@ -73,18 +72,18 @@ abstract class Credential extends Serializable {
     final fields = super.serialize(encoding: encoding);
     return {
       ...fields,
-      "sigArray": sigArray.map((e) => e.serialize(encoding: encoding))
+      "sigArray": sigArray.map((e) => e.serialize(encoding: encoding)).toList()
     };
   }
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     final sigArray = (fields["sigArray"] as List)
         .map((e) => Signature()..deserialize(e, encoding: encoding))
         .toList();
-    this.sigArray.clear();
-    this.sigArray.addAll(sigArray);
+    this.sigArray = sigArray;
   }
 
   int addSignature(Signature signature) {
@@ -98,7 +97,8 @@ abstract class Credential extends Serializable {
     offset += 4;
     sigArray.clear();
     for (int i = 0; i < sigLen; i++) {
-      final sig = Signature()..fromBuffer(bytes, offset: offset);
+      final sig = Signature();
+      offset = sig.fromBuffer(bytes, offset: offset);
       sigArray.add(sig);
     }
     return offset;

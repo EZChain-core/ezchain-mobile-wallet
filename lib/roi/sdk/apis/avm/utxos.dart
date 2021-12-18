@@ -29,7 +29,8 @@ class AvmUTXO extends StandardUTXO {
             output: output);
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     output = selectOutputClass(fields["output"]["typeId"]);
     output.deserialize(fields["output"], encoding: encoding);
@@ -86,7 +87,8 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
   String get typeName => "AvmUTXOSet";
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     final Map<String, AvmUTXO> utxos = {};
     for (final utxoId in (fields["utxos"] as Map<String, dynamic>).keys) {
@@ -94,14 +96,17 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
           utxoId, encoding, SerializedType.base58, SerializedType.base58);
 
       utxos["$utxoIdCleaned"] = AvmUTXO();
-      (utxos["$utxoIdCleaned"] as AvmUTXO).deserialize(fields["utxos"][utxoId], encoding: encoding);
+      (utxos["$utxoIdCleaned"] as AvmUTXO)
+          .deserialize(fields["utxos"][utxoId], encoding: encoding);
     }
     final Map<String, Map<String, BigInt>> addressUTXOs = {};
-    for (final address in (fields["addressUTXOs"] as Map<String, dynamic>).keys) {
+    for (final address
+        in (fields["addressUTXOs"] as Map<String, dynamic>).keys) {
       final addressCleaned = Serialization.instance
           .decoder(address, encoding, SerializedType.cb58, SerializedType.hex);
       final Map<String, BigInt> utxoBalance = {};
-      for (final utxoId in (fields["addressUTXOs"][address] as Map<String, dynamic>).keys) {
+      for (final utxoId
+          in (fields["addressUTXOs"][address] as Map<String, dynamic>).keys) {
         final utxoIdCleaned = Serialization.instance.decoder(
             utxoId, encoding, SerializedType.base58, SerializedType.base58);
 
@@ -150,11 +155,11 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
       Uint8List assetId,
       List<Uint8List> toAddresses,
       List<Uint8List> fromAddresses,
-      List<Uint8List>? changeAddresses,
+      {List<Uint8List>? changeAddresses,
       BigInt? fee,
-      Uint8List? feeAssetID,
+      Uint8List? feeAssetId,
       Uint8List? memo,
-      {BigInt? asOf,
+      BigInt? asOf,
       BigInt? lockTime,
       int threshold = 1}) {
     asOf ??= unixNow();
@@ -165,19 +170,19 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
     }
 
     changeAddresses ??= toAddresses;
-    feeAssetID ??= assetId;
+    feeAssetId ??= assetId;
 
     final aad = AvmAssetAmountDestination(
         destinations: toAddresses,
         senders: fromAddresses,
         changeAddresses: changeAddresses);
 
-    if (hexEncode(assetId) == hexEncode(feeAssetID)) {
+    if (hexEncode(assetId) == hexEncode(feeAssetId)) {
       aad.addAssetAmount(assetId, amount, fee ?? BigInt.zero);
     } else {
       aad.addAssetAmount(assetId, amount, BigInt.zero);
-      if (_feeCheck(fee, feeAssetID)) {
-        aad.addAssetAmount(feeAssetID, BigInt.zero, fee ?? BigInt.zero);
+      if (_feeCheck(fee, feeAssetId)) {
+        aad.addAssetAmount(feeAssetId, BigInt.zero, fee ?? BigInt.zero);
       }
     }
 
@@ -265,13 +270,13 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
 
         final xFerOut = AvmTransferableOutput(
             assetId: assetAmount.getAssetId(), output: spendOut);
-        aad.addChange(xFerOut);
+        aad.addOutput(xFerOut);
       }
       final change = assetAmount.getChange();
       if (change > BigInt.zero) {
         final changeOut = selectOutputClass(outIds[assetKey],
             args: AvmSECPTransferOutput.createArgs(
-                amount: amount,
+                amount: change,
                 addresses: aad.getDestinations())) as AvmAmountOutput;
         final chgXFerOut = AvmTransferableOutput(
             assetId: assetAmount.getAssetId(), output: changeOut);

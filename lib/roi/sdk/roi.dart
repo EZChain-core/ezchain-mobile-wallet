@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:wallet/roi/sdk/apis/avm/avm_api.dart';
+import 'package:wallet/roi/sdk/apis/avm/api.dart';
 import 'package:wallet/roi/sdk/apis/evm/evm_api.dart';
 import 'package:wallet/roi/sdk/apis/index/index_api.dart';
 import 'package:wallet/roi/sdk/apis/info/info_api.dart';

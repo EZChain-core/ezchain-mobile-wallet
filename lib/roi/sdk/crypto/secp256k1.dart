@@ -15,6 +15,7 @@ import "package:pointycastle/digests/sha256.dart";
 import 'package:pointycastle/src/utils.dart' as pointycastle_utils;
 import 'package:wallet/roi/sdk/crypto/ecdsa_signer.dart';
 import 'package:wallet/roi/sdk/crypto/key_pair.dart';
+import 'package:wallet/roi/sdk/utils/bigint.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 
 /// https://github.com/bcgit/pc-dart
@@ -55,10 +56,9 @@ Uint8List sign(Uint8List messageHash, Uint8List privateKeyBytes) {
   }
 
   Uint8List buffer = Uint8List(ROIECSignature.signatureSize);
+  buffer.setRange(0, ROIECSignature.rEnd, encodeBigInt(sig.r));
   buffer.setRange(
-      0, ROIECSignature.rEnd, pointycastle_utils.encodeBigInt(sig.r));
-  buffer.setRange(ROIECSignature.rEnd, ROIECSignature.sEnd,
-      pointycastle_utils.encodeBigInt(sig.s));
+      ROIECSignature.rEnd, ROIECSignature.sEnd, encodeBigInt(sig.s));
 
   buffer.setRange(
       ROIECSignature.sEnd, ROIECSignature.signatureSize, [sig.recoveryId]);
@@ -80,7 +80,7 @@ Uint8List recover(Uint8List hash, ROIECSignature signature) {
   final ECPoint? ecPoint = R * n;
   if (ecPoint == null || !ecPoint.isInfinity) return Uint8List.fromList([]);
 
-  final e = pointycastle_utils.decodeBigInt(hash);
+  final e = decodeBigInt(hash);
 
   final eInv = (BigInt.zero - e) % n;
   final rInv = signature.r.modInverse(n);
@@ -102,7 +102,7 @@ bool verify(
 
 ECPoint _decompressKey(BigInt xBN, bool yBit, ECCurve c) {
   List<int> x9IntegerToBytes(BigInt s, int qLength) {
-    final bytes = pointycastle_utils.encodeBigInt(s);
+    final bytes = encodeBigInt(s);
     if (qLength < bytes.length) {
       return bytes.sublist(0, bytes.length - qLength);
     } else if (qLength > bytes.length) {
