@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/auth/access/private_key/access_private_key_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -21,35 +22,10 @@ class AccessPrivateKeyScreen extends StatelessWidget {
     final privateKeyInputController = TextEditingController(
         text: 'PrivateKey-JaCCSxdoWfo3ao5KwenXrJjJR7cBTQ287G1C5qpv2hr2tCCdb');
 
-    Future<void> _showWarningDialog() async {
-      return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return Consumer<WalletThemeProvider>(
-            builder: (context, provider, child) => Dialog(
-              insetPadding: const EdgeInsets.all(16),
-              child: SizedBox(
-                width: double.infinity,
-                height: 318,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Assets.images.imgPrivateKeyWraning
-                        .image(width: 130, height: 130),
-                    const SizedBox(height: 24),
-                    Text(
-                      Strings.current.accessPrivateKeyWarning,
-                      textAlign: TextAlign.center,
-                      style: ROIHeadlineSmallTextStyle(
-                          color: provider.themeMode.text70),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
+    void _showWarningDialog() {
+      context.showWarningDialog(
+        Assets.images.imgPrivateKeyWraning.image(width: 130, height: 130),
+        Strings.current.accessPrivateKeyWarning,
       );
     }
 

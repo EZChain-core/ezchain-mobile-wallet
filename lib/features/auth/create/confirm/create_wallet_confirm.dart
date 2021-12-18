@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -45,23 +46,10 @@ class CreateWalletConfirmScreen extends StatelessWidget {
           .toList();
     }
 
-    Future<void> _showWarningDialog() async {
-      return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return Consumer<WalletThemeProvider>(
-            builder: (context, provider, child) => AlertDialog(
-              insetPadding: const EdgeInsets.all(16),
-              title: Assets.images.imgWarning.svg(width: 130, height: 130),
-              content: Text(
-                Strings.current.accessMnemonicKeyWarning,
-                textAlign: TextAlign.center,
-                style:
-                    ROIHeadlineSmallTextStyle(color: provider.themeMode.text70),
-              ),
-            ),
-          );
-        },
+    void _showWarningDialog() {
+      context.showWarningDialog(
+        Assets.images.imgWarning.svg(width: 130, height: 130),
+        Strings.current.accessMnemonicKeyWarning,
       );
     }
 

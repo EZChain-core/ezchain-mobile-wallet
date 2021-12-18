@@ -1,7 +1,9 @@
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
@@ -21,7 +23,7 @@ class SettingScreen extends StatelessWidget {
               _SettingItem(
                 text: Strings.current.settingChangePin,
                 icon: Assets.icons.icChangePin.svg(),
-                onPressed: () => {},
+                onPressed: () => context.router.push(const SettingChangePinRoute()),
               ),
               _SettingItem(
                 text: Strings.current.settingWalletSecurity,

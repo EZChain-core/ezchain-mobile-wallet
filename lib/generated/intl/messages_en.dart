@@ -70,6 +70,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "settingAboutRoi":
             MessageLookupByLibrary.simpleMessage("About Roi Chain"),
         "settingChangePin": MessageLookupByLibrary.simpleMessage("Change PIN"),
+        "settingConfirmNewPin":
+            MessageLookupByLibrary.simpleMessage("Please confirm new PIN"),
+        "settingEnterNewPin":
+            MessageLookupByLibrary.simpleMessage("Please enter new PIN"),
+        "settingEnterOldPin":
+            MessageLookupByLibrary.simpleMessage("Please enter old PIN"),
         "settingGeneral":
             MessageLookupByLibrary.simpleMessage("General Setting"),
         "settingTouchId": MessageLookupByLibrary.simpleMessage("Touch ID"),
@@ -114,6 +120,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Set Amount"),
         "walletReceiveToThis": MessageLookupByLibrary.simpleMessage(
             " to this address\nSending any other coins my result in permanent loss"),
+        "walletSendCChainErrorAddress": MessageLookupByLibrary.simpleMessage(
+            "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\""),
         "walletSendGasGWEI": MessageLookupByLibrary.simpleMessage("GWEI"),
         "walletSendGasLimit": MessageLookupByLibrary.simpleMessage("Gas Limit"),
         "walletSendGasLimitNote": MessageLookupByLibrary.simpleMessage(
