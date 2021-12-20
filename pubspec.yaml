@@ -36,6 +36,7 @@ dependencies:
   connectivity_plus: ^2.0.3
   url_launcher: ^6.0.13
   modal_bottom_sheet: ^2.0.0
+  flutter_switch: ^0.3.2
 
   ## crypto dependencies
   fast_base58: ^0.2.1
@@ -47,7 +48,7 @@ dependencies:
   hdkey: ^0.0.1
   web3dart: ^2.3.3
   sha3: ^0.2.0
-  flutter_switch: ^0.3.2
+  eventify: ^1.0.0
 
 dev_dependencies:
   flutter_test:

@@ -64,9 +64,9 @@ class OutputOwners extends Serializable {
       this.addresses.sort(Address.comparator());
       numAddress.buffer.asByteData().setUint32(0, this.addresses.length);
     }
-    if (threshold != null) {
-      this.threshold.buffer.asByteData().setUint32(0, threshold);
-    }
+
+    this.threshold.buffer.asByteData().setUint32(0, threshold ??= 1);
+
     if (lockTime != null) {
       this.lockTime = fromBNToBuffer(lockTime, length: 8);
     }

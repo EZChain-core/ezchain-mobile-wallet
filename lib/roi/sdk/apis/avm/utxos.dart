@@ -189,7 +189,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
     final ins = <AvmTransferableInput>[];
     final outs = <AvmTransferableOutput>[];
 
-    getMinimumSpendable(aad, asOf, lockTime, threshold: threshold);
+    _getMinimumSpendable(aad, asOf, lockTime, threshold: threshold);
 
     ins.addAll(aad.getInputs());
     outs.addAll(aad.getAllOutputs());
@@ -204,7 +204,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
     return AvmUnsignedTx(transaction: baseTx);
   }
 
-  void getMinimumSpendable(
+  void _getMinimumSpendable(
       AvmAssetAmountDestination aad, BigInt? asOf, BigInt? lockTime,
       {int threshold = 1}) {
     asOf ??= unixNow();
