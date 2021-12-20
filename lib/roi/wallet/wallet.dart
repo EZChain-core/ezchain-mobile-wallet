@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:eventify/eventify.dart';
 import 'package:wallet/roi/sdk/apis/avm/constants.dart';
 import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
@@ -27,6 +28,8 @@ abstract class WalletProvider {
   AvmUTXOSet utxosX = AvmUTXOSet();
 
   WalletBalanceX balanceX = {};
+
+  EventEmitter emitter = EventEmitter();
 
   Future<Uint8List> signEvm(Transaction tx);
 
@@ -65,6 +68,14 @@ abstract class WalletProvider {
   Future<List<String>> getAllAddressesP();
 
   List<String> getAllAddressesPSync();
+
+  void on(WalletEventType event) {}
+
+  void off(WalletEventType event) {}
+
+  void emit(WalletEventType event, dynamic args) {
+    // emitter.emit(event.type);
+  }
 
   void emitBalanceChangeX() {}
 

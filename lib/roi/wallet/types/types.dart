@@ -16,3 +16,25 @@ class AssetBalanceX extends AssetBalanceRawX {
 }
 
 typedef WalletBalanceX = Map<String, AssetBalanceX>;
+
+enum WalletEventType {
+  addressChanged,
+  balanceChangedX,
+  balanceChangedP,
+  balanceChangedC
+}
+
+extension on WalletEventType {
+  String get type {
+    switch (this) {
+      case WalletEventType.addressChanged:
+        return "addressChanged";
+      case WalletEventType.balanceChangedX:
+        return "balanceChangedX";
+      case WalletEventType.balanceChangedP:
+        return "balanceChangedP";
+      case WalletEventType.balanceChangedC:
+        return "balanceChangedC";
+    }
+  }
+}

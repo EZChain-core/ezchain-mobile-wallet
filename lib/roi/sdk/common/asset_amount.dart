@@ -47,9 +47,9 @@ class AssetAmount {
       throw Exception(
           "Error - AssetAmount.spendAmount: attempted to spend excess funds");
     }
-    _spent = _spent + amt;
+    _spent += amt;
     if (stakeableLocked) {
-      _stakeableLockSpent = _stakeableLockSpent + amt;
+      _stakeableLockSpent += amt;
     }
     final total = _amount + _burn;
     if (_spent >= total) {
