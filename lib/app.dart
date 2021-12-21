@@ -5,10 +5,12 @@ import 'package:provider/provider.dart';
 import 'package:wallet/themes/theme.dart';
 
 import 'common/router.gr.dart';
+import 'di/di.dart';
 import 'generated/l10n.dart';
 
 class WalletApp extends StatelessWidget {
-  final _appRouter = AppRouter();
+
+  final appRouter = getIt<AppRouter>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +35,10 @@ class WalletApp extends StatelessWidget {
           locale: provider.locale,
           debugShowCheckedModeBanner: false,
           routerDelegate: AutoRouterDelegate(
-            _appRouter,
+            appRouter,
             navigatorObservers: () => [AutoRouteObserver()],
           ),
-          routeInformationParser: _appRouter.defaultRouteParser(),
+          routeInformationParser: appRouter.defaultRouteParser(),
         ),
       ),
     );
