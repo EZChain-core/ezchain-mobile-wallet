@@ -1,7 +1,9 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/auth/pin/widgets/pin_code_input.dart';
+import 'package:wallet/features/setting/change_pin/setting_change_pin_store.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
@@ -13,6 +15,8 @@ class SettingChangePinScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settingChangePinStore = SettingChangePinStore();
+
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -28,16 +32,55 @@ class SettingChangePinScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      Strings.current.settingEnterOldPin,
-                      style: ROIBodyLargeTextStyle(
-                          color: provider.themeMode.text70),
+                    const Spacer(flex: 1),
+                    Observer(
+                      builder: (_) => Text(
+                        settingChangePinStore.state.errorMessage(),
+                        style: ROIBodyMediumTextStyle(
+                            color: provider.themeMode.stateDanger),
+                      ),
+                    ),
+                    Observer(
+                      builder: (_) => Text(
+                        settingChangePinStore.state.title(),
+                        style: ROIBodyLargeTextStyle(
+                            color: provider.themeMode.text70),
+                      ),
                     ),
                     const SizedBox(height: 16),
-                    PinCodeInput(
-                      onSuccess: (String pin) {
-
-                      },
+                    Expanded(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 80),
+                        child: PinCodeInput(
+                          onSuccess: (String pin) {
+                            settingChangePinStore.state.maybeWhen(
+                              oldPin: () =>
+                                  settingChangePinStore.verifyOldPin(pin),
+                              newPin: () =>
+                                  settingChangePinStore.setNewPin(pin),
+                              confirmNewPin: () {
+                                  settingChangePinStore.verifyNewPin(pin);
+                              },
+                              orElse: () {},
+                            );
+                          },
+                          onChanged: () {
+                            settingChangePinStore.state.maybeWhen(
+                              oldPinError: () {
+                                settingChangePinStore.transitionState(
+                                    const SettingChangePinState.oldPin());
+                              },
+                              confirmNewPinError: () {
+                                settingChangePinStore.transitionState(
+                                    const SettingChangePinState
+                                        .confirmNewPin());
+                              },
+                              orElse: () {},
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -49,4 +92,3 @@ class SettingChangePinScreen extends StatelessWidget {
     );
   }
 }
-

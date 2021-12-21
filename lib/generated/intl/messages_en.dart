@@ -72,12 +72,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "settingChangePin": MessageLookupByLibrary.simpleMessage("Change PIN"),
         "settingConfirmNewPin":
             MessageLookupByLibrary.simpleMessage("Please confirm new PIN"),
+        "settingConfirmNewPinWrong":
+            MessageLookupByLibrary.simpleMessage("PIN Code doesn’t match!"),
         "settingEnterNewPin":
             MessageLookupByLibrary.simpleMessage("Please enter new PIN"),
         "settingEnterOldPin":
             MessageLookupByLibrary.simpleMessage("Please enter old PIN"),
         "settingGeneral":
             MessageLookupByLibrary.simpleMessage("General Setting"),
+        "settingOldPinWrong":
+            MessageLookupByLibrary.simpleMessage("PIN Code Wrong!"),
         "settingTouchId": MessageLookupByLibrary.simpleMessage("Touch ID"),
         "settingWalletSecurity":
             MessageLookupByLibrary.simpleMessage("Wallet Security"),
