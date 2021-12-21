@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+import 'package:wallet/common/router.gr.dart';
 
 import 'di.config.dart';
 
@@ -22,4 +23,12 @@ void resetGetIt<T extends Object>({
     instanceName: instanceName,
     disposingFunction: disposingFunction,
   );
+}
+
+
+@module
+abstract class DIModule {
+
+  @singleton
+  AppRouter get appRouter => AppRouter();
 }

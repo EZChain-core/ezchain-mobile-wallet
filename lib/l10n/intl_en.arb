@@ -58,6 +58,8 @@
   "settingEnterOldPin": "Please enter old PIN",
   "settingEnterNewPin": "Please enter new PIN",
   "settingConfirmNewPin": "Please confirm new PIN",
+  "settingOldPinWrong": "PIN Code Wrong!",
+  "settingConfirmNewPinWrong": "PIN Code doesn’t match!",
   "walletReceiveSendOnly": "Send only ",
   "walletReceiveBitcoin": "Bitcoin(BTC)",
   "walletReceiveToThis": " to this address\nSending any other coins my result in permanent loss",

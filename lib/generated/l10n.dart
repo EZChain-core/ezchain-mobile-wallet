@@ -640,6 +640,26 @@ class Strings {
     );
   }
 
+  /// `PIN Code Wrong!`
+  String get settingOldPinWrong {
+    return Intl.message(
+      'PIN Code Wrong!',
+      name: 'settingOldPinWrong',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `PIN Code doesn’t match!`
+  String get settingConfirmNewPinWrong {
+    return Intl.message(
+      'PIN Code doesn’t match!',
+      name: 'settingConfirmNewPinWrong',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Send only `
   String get walletReceiveSendOnly {
     return Intl.message(
