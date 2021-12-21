@@ -18,12 +18,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // startTimer();
+    startTimer();
   }
 
   @override
   Widget build(BuildContext context) {
-    getBalanceX();
+    // getBalanceX();
 
     return Scaffold(
       body: SizedBox(
