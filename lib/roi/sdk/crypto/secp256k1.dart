@@ -12,7 +12,6 @@ import 'package:pointycastle/macs/hmac.dart';
 import "package:pointycastle/digests/sha256.dart";
 
 // ignore: implementation_imports
-import 'package:pointycastle/src/utils.dart' as pointycastle_utils;
 import 'package:wallet/roi/sdk/crypto/ecdsa_signer.dart';
 import 'package:wallet/roi/sdk/crypto/key_pair.dart';
 import 'package:wallet/roi/sdk/utils/bigint.dart';
@@ -45,7 +44,7 @@ KeyPair _fromPrivateKey(PrivateKey privateKey) {
 Uint8List sign(Uint8List messageHash, Uint8List privateKeyBytes) {
   final digest = SHA256Digest();
   final signer = ROIECDSASigner(null, HMac(digest, 64));
-  final d = pointycastle_utils.decodeBigIntWithSign(1, privateKeyBytes);
+  final d = decodeBigInt(privateKeyBytes);
   final key = ECPrivateKey(d, params);
   signer.init(true, PrivateKeyParameter(key));
   var sig = signer.generateSignature(messageHash) as ROIECSignature;

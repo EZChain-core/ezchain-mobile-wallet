@@ -53,11 +53,10 @@ class _SplashScreenState extends State<SplashScreen> {
         "asset_id = $k, locked = ${v.lockedDecimal}, unlocked = ${v.unlockedDecimal}"));
 
     // PrivateKey-JaCCSxdoWfo3ao5KwenXrJjJR7cBTQ287G1C5qpv2hr2tCCdb
-    // final txId = await wallet.sendAvaxX(
-    //     "X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad",
-    //     bnToDecimalAvaxX(BigInt.from(3333)).toBigInt());
+    final txId = await wallet.sendAvaxX(
+        "X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad", numberToBNAvaxX(100));
     // // final txId = await wallet.sendAvaxX(
     // //     "X-fuji1vag7ck7uagf3h7y784sa8ujxu5z8ct5hr9d4ud", BigInt.from(100));
-    // print("txId = $txId");
+    print("txId = $txId");
   }
 }
