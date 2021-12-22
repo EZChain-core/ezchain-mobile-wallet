@@ -117,6 +117,10 @@ class $AssetsImagesGen {
   AssetGenImage get imgLogoRoi =>
       const AssetGenImage('assets/images/img_logo_roi.png');
 
+  /// File path: assets/images/img_logo_roi_about.png
+  AssetGenImage get imgLogoRoiAbout =>
+      const AssetGenImage('assets/images/img_logo_roi_about.png');
+
   /// File path: assets/images/img_logo_roi_secondary.png
   AssetGenImage get imgLogoRoiSecondary =>
       const AssetGenImage('assets/images/img_logo_roi_secondary.png');

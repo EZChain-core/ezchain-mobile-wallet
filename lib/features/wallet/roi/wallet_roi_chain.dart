@@ -127,8 +127,8 @@ class _WalletButton extends StatelessWidget {
 
 class _WalletChainWidget extends StatelessWidget {
   final String chain;
-  final BigInt availableRoi;
-  final BigInt lockRoi;
+  final String availableRoi;
+  final String lockRoi;
   final bool? hasSend;
   final VoidCallback? onSendPressed;
   final VoidCallback? onReceivePressed;

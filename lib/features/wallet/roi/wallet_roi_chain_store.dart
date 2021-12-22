@@ -8,15 +8,15 @@ class WalletRoiChainStore = _WalletRoiChainStore with _$WalletRoiChainStore;
 abstract class _WalletRoiChainStore with Store {
   @observable
   WalletRoiChainBalanceViewData balanceX =
-      WalletRoiChainBalanceViewData(BigInt.zero, BigInt.zero);
+      WalletRoiChainBalanceViewData('0', '0');
 
   @observable
   WalletRoiChainBalanceViewData balanceP =
-      WalletRoiChainBalanceViewData(BigInt.zero, BigInt.zero);
+      WalletRoiChainBalanceViewData('0', '0');
 
   @observable
   WalletRoiChainBalanceViewData balanceC =
-      WalletRoiChainBalanceViewData(BigInt.zero, BigInt.zero);
+      WalletRoiChainBalanceViewData('0', '0');
 
   @action
   getBalanceX() async {
@@ -25,13 +25,13 @@ abstract class _WalletRoiChainStore with Store {
             "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
     final utxos = await wallet.updateUtxosX();
     wallet.getBalanceX().forEach((_, balance) => balanceX =
-        WalletRoiChainBalanceViewData(balance.unlocked, balance.locked));
+        WalletRoiChainBalanceViewData(balance.unlockedDecimal, balance.lockedDecimal));
   }
 }
 
 class WalletRoiChainBalanceViewData {
-  final BigInt available;
-  final BigInt lock;
+  final String available;
+  final String lock;
 
   WalletRoiChainBalanceViewData(this.available, this.lock);
 }
