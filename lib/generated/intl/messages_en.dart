@@ -68,7 +68,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "pinCodeWrong": MessageLookupByLibrary.simpleMessage(
             "PIN Code doesn’t match! Try Again"),
         "settingAboutRoi":
-            MessageLookupByLibrary.simpleMessage("About Roi Chain"),
+            MessageLookupByLibrary.simpleMessage("About RoiChain"),
         "settingChangePin": MessageLookupByLibrary.simpleMessage("Change PIN"),
         "settingConfirmNewPin":
             MessageLookupByLibrary.simpleMessage("Please confirm new PIN"),
@@ -80,6 +80,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please enter old PIN"),
         "settingGeneral":
             MessageLookupByLibrary.simpleMessage("General Setting"),
+        "settingGeneralDeactivateAccount":
+            MessageLookupByLibrary.simpleMessage("Deactivate Account"),
+        "settingGeneralRemoveWallet":
+            MessageLookupByLibrary.simpleMessage("Remove Wallet"),
         "settingOldPinWrong":
             MessageLookupByLibrary.simpleMessage("PIN Code Wrong!"),
         "settingTouchId": MessageLookupByLibrary.simpleMessage("Touch ID"),
@@ -94,6 +98,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "sharedConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "sharedCopy": MessageLookupByLibrary.simpleMessage("Copy"),
+        "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
+        "sharedLanguage": MessageLookupByLibrary.simpleMessage("Language"),
         "sharedLock": MessageLookupByLibrary.simpleMessage("Lock"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
         "sharedPChain": MessageLookupByLibrary.simpleMessage("P chain"),
