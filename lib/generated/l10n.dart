@@ -330,6 +330,26 @@ class Strings {
     );
   }
 
+  /// `Language`
+  String get sharedLanguage {
+    return Intl.message(
+      'Language',
+      name: 'sharedLanguage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Currency`
+  String get sharedCurrency {
+    return Intl.message(
+      'Currency',
+      name: 'sharedCurrency',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -590,10 +610,10 @@ class Strings {
     );
   }
 
-  /// `About Roi Chain`
+  /// `About RoiChain`
   String get settingAboutRoi {
     return Intl.message(
-      'About Roi Chain',
+      'About RoiChain',
       name: 'settingAboutRoi',
       desc: '',
       args: [],
@@ -655,6 +675,26 @@ class Strings {
     return Intl.message(
       'PIN Code doesn’t match!',
       name: 'settingConfirmNewPinWrong',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deactivate Account`
+  String get settingGeneralDeactivateAccount {
+    return Intl.message(
+      'Deactivate Account',
+      name: 'settingGeneralDeactivateAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove Wallet`
+  String get settingGeneralRemoveWallet {
+    return Intl.message(
+      'Remove Wallet',
+      name: 'settingGeneralRemoveWallet',
       desc: '',
       args: [],
     );

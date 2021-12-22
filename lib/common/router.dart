@@ -8,7 +8,9 @@ import 'package:wallet/features/auth/pin/pin_code_confirm.dart';
 import 'package:wallet/features/auth/pin/pin_code_setup.dart';
 import 'package:wallet/features/dashboard/routes.dart';
 import 'package:wallet/features/onboard/on_board.dart';
+import 'package:wallet/features/setting/about/setting_about.dart';
 import 'package:wallet/features/setting/change_pin/setting_change_pin.dart';
+import 'package:wallet/features/setting/general/setting_general.dart';
 import 'package:wallet/features/splash/screen/splash.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
 import 'package:wallet/features/wallet/send/avm/wallet_send_avm.dart';
@@ -34,6 +36,8 @@ import 'package:wallet/features/wallet/send/evm/wallet_send_evm_confirm.dart';
     AutoRoute(page: WalletSendEvmScreen),
     AutoRoute(page: WalletSendEvmConfirmScreen),
     AutoRoute(page: SettingChangePinScreen),
+    AutoRoute(page: SettingGeneralScreen),
+    AutoRoute(page: SettingAboutScreen),
     dashboardRoutes,
   ],
 )
