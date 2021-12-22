@@ -169,6 +169,8 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
           "Error - UTXOSet.buildBaseTx: threshold is greater than number of addresses");
     }
 
+    assert(amount > BigInt.zero);
+
     changeAddresses ??= toAddresses;
     feeAssetId ??= assetId;
 
@@ -186,25 +188,19 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
       }
     }
 
-    final ins = <AvmTransferableInput>[];
-    final outs = <AvmTransferableOutput>[];
-
-    _getMinimumSpendable(aad, asOf, lockTime, threshold: threshold);
-
-    ins.addAll(aad.getInputs());
-    outs.addAll(aad.getAllOutputs());
+    getMinimumSpendable(aad, asOf, lockTime, threshold: threshold);
 
     final baseTx = AvmBaseTx(
         networkId: networkId,
         blockchainId: blockchainId,
-        outs: outs,
-        ins: ins,
+        outs: aad.getAllOutputs(),
+        ins: aad.getInputs(),
         memo: memo);
 
     return AvmUnsignedTx(transaction: baseTx);
   }
 
-  void _getMinimumSpendable(
+  void getMinimumSpendable(
       AvmAssetAmountDestination aad, BigInt? asOf, BigInt? lockTime,
       {int threshold = 1}) {
     asOf ??= unixNow();
