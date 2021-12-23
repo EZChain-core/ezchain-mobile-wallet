@@ -1,12 +1,20 @@
 import 'dart:typed_data';
 
+import 'package:wallet/roi/sdk/apis/evm/constants.dart';
 import 'package:wallet/roi/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';
 import 'package:wallet/roi/sdk/roi.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
+import 'package:wallet/roi/sdk/utils/serialization.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart' as bindtools;
 
 abstract class EvmApi implements ROIChainApi {
+
+  Future<String> getBaseFee();
+
+  Future<String> getMaxPriorityFeePerGas();
+
   factory EvmApi.create(
       {required ROINetwork roiNetwork,
       String endPoint = "/ext/bc/C/avax",
@@ -84,11 +92,25 @@ class _EvmApiImpl implements EvmApi {
 
   @override
   String addressFromBuffer(Uint8List address) {
-    throw UnimplementedError();
+    final chainId = getBlockchainAlias() ?? blockChainId;
+    return Serialization.instance.bufferToType(address, SerializedType.bech32,
+        args: [chainId, roiNetwork.hrp]);
   }
 
   @override
   Uint8List parseAddress(String address) {
+    final alias = getBlockchainAlias();
+    return bindtools.parseAddress(address, blockChainId,
+        alias: alias, addressLength: ADDRESSLENGTH);
+  }
+
+  @override
+  Future<String> getBaseFee() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String> getMaxPriorityFeePerGas() {
     throw UnimplementedError();
   }
 }
