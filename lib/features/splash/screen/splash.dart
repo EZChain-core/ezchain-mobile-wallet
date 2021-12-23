@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/generated/assets.gen.dart';
+import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
@@ -21,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // startTimer();
+    startTimer();
   }
 
   @override
@@ -66,10 +67,13 @@ class _SplashScreenState extends State<SplashScreen> {
       // Lấy balance X
       await wallet.updateUtxosX();
 
+      const to = "X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad";
+
+      assert(validateAddressX(to));
+
       // Gửi AvaxX
       // phải dùng numberToBNAvaxX để convert
-      final txId = await wallet.sendAvaxX(
-          "X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad", numberToBNAvaxX(10));
+      final txId = await wallet.sendAvaxX(to, numberToBNAvaxX(10));
       print("txId = $txId");
     } catch (e) {
       print(e);
@@ -109,6 +113,8 @@ class _SplashScreenState extends State<SplashScreen> {
     print("gasPrice = $gasPrice");
 
     const to = "0xd30a9f6645a73f67b7850b9304b6a3172dda75bf";
+
+    assert(validateAddressEvm(to));
 
     // phải dùng numberToBNAvaxC để convert
     final amount = numberToBNAvaxC(1);
