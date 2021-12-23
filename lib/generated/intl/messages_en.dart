@@ -86,6 +86,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Remove Wallet"),
         "settingOldPinWrong":
             MessageLookupByLibrary.simpleMessage("PIN Code Wrong!"),
+        "settingSecurityWalletAddress":
+            MessageLookupByLibrary.simpleMessage("Wallet Address"),
         "settingTouchId": MessageLookupByLibrary.simpleMessage("Touch ID"),
         "settingWalletSecurity":
             MessageLookupByLibrary.simpleMessage("Wallet Security"),

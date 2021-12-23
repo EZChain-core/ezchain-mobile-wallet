@@ -700,6 +700,16 @@ class Strings {
     );
   }
 
+  /// `Wallet Address`
+  String get settingSecurityWalletAddress {
+    return Intl.message(
+      'Wallet Address',
+      name: 'settingSecurityWalletAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Send only `
   String get walletReceiveSendOnly {
     return Intl.message(

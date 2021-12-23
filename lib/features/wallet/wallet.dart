@@ -36,7 +36,6 @@ class WalletScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: TabBar(
-                      // controller: _tabController,
                       indicator: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: provider.themeMode.secondary,
@@ -55,7 +54,6 @@ class WalletScreen extends StatelessWidget {
                   ),
                   const Expanded(
                     child: TabBarView(
-                      // controller: _tabController,
                       children: [
                         WalletROIChainScreen(),
                         WalletTokenScreen(),

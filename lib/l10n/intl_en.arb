@@ -64,6 +64,7 @@
   "settingConfirmNewPinWrong": "PIN Code doesn’t match!",
   "settingGeneralDeactivateAccount": "Deactivate Account",
   "settingGeneralRemoveWallet": "Remove Wallet",
+  "settingSecurityWalletAddress": "Wallet Address",
   "walletReceiveSendOnly": "Send only ",
   "walletReceiveBitcoin": "Bitcoin(BTC)",
   "walletReceiveToThis": " to this address\nSending any other coins my result in permanent loss",

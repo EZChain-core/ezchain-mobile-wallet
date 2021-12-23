@@ -28,7 +28,7 @@ class SettingScreen extends StatelessWidget {
               SettingItem(
                 text: Strings.current.settingWalletSecurity,
                 icon: Assets.icons.icSecurity.svg(),
-                onPressed: () => {},
+                onPressed: () => context.router.push(const SettingSecurityRoute()),
               ),
               SettingItem(
                 text: Strings.current.settingGeneral,
