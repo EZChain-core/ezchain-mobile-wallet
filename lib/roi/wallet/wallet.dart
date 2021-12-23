@@ -14,7 +14,7 @@ import 'package:wallet/roi/wallet/asset/assets.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
 import 'package:wallet/roi/wallet/helpers/utxo_helper.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
-import 'package:wallet/roi/wallet/types/types.dart';
+import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/wait_tx_utils.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -69,15 +69,33 @@ abstract class WalletProvider {
 
   List<String> getAllAddressesPSync();
 
-  void on(WalletEventType event) {}
-
-  void off(WalletEventType event) {}
-
-  void emit(WalletEventType event, dynamic args) {
-    // emitter.emit(event.type);
+  void on(WalletEventType event, EventCallback callback) {
+    emitter.on(event.type, null, callback);
   }
 
-  void emitBalanceChangeX() {}
+  void off(WalletEventType event, EventCallback callback) {
+    emitter.removeListener(event.type, callback);
+  }
+
+  void emit(WalletEventType event, dynamic args) {
+    emitter.emit(event.type, null, args);
+  }
+
+  void emitAddressChange() {
+    emit(WalletEventType.addressChanged, "emitAddressChange Test");
+  }
+
+  void emitBalanceChangeX() {
+    emit(WalletEventType.balanceChangedX, balanceX);
+  }
+
+  void emitBalanceChangeP() {
+    emit(WalletEventType.balanceChangedP, "emitBalanceChangeP Test");
+  }
+
+  void emitBalanceChangeC() {
+    emit(WalletEventType.balanceChangedC, "emitBalanceChangeC Test");
+  }
 
   Future<String> sendAvaxX(String to, BigInt amount, {String? memo}) async {
     final Uint8List? memoBuff;
@@ -106,6 +124,7 @@ abstract class WalletProvider {
       throw Exception("txId cannot be null");
     }
     await waitTxX(txId);
+    updateUtxosX();
     return txId;
   }
 
