@@ -2,7 +2,9 @@ import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/apis/evm/constants.dart';
 import 'package:wallet/roi/sdk/apis/evm/key_chain.dart';
+import 'package:wallet/roi/sdk/apis/evm/rest/evm_rest_client.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';
+import 'package:wallet/roi/sdk/common/rpc/rpc_request.dart';
 import 'package:wallet/roi/sdk/roi.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
@@ -10,14 +12,13 @@ import 'package:wallet/roi/sdk/utils/serialization.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart' as bindtools;
 
 abstract class EvmApi implements ROIChainApi {
-
   Future<String> getBaseFee();
 
   Future<String> getMaxPriorityFeePerGas();
 
   factory EvmApi.create(
       {required ROINetwork roiNetwork,
-      String endPoint = "/ext/bc/C/avax",
+      String endPoint = "/ext/bc/C/rpc",
       String blockChainId = ""}) {
     return _EvmApiImpl(
         roiNetwork: roiNetwork, endPoint: endPoint, blockChainId: blockChainId);
@@ -39,6 +40,8 @@ class _EvmApiImpl implements EvmApi {
 
   Uint8List? avaxAssetId;
 
+  late EvmRestClient evmRestClient;
+
   _EvmApiImpl(
       {required this.roiNetwork,
       required String endPoint,
@@ -52,6 +55,8 @@ class _EvmApiImpl implements EvmApi {
       alias = blockChainId;
     }
     _keyChain = EvmKeyChain(chainId: alias, hrp: roiNetwork.hrp);
+    final dio = roiNetwork.dio;
+    evmRestClient = EvmRestClient(dio, baseUrl: dio.options.baseUrl + endPoint);
   }
 
   @override
@@ -105,12 +110,16 @@ class _EvmApiImpl implements EvmApi {
   }
 
   @override
-  Future<String> getBaseFee() {
-    throw UnimplementedError();
+  Future<String> getBaseFee() async {
+    const request = RpcRequest(method: "eth_baseFee", params: []);
+    final response = await evmRestClient.getEthBaseFee(request);
+    return response.result!;
   }
 
   @override
-  Future<String> getMaxPriorityFeePerGas() {
-    throw UnimplementedError();
+  Future<String> getMaxPriorityFeePerGas() async {
+    const request = RpcRequest(method: "eth_maxPriorityFeePerGas", params: []);
+    final response = await evmRestClient.getEthMaxPriorityFeePerGas(request);
+    return response.result!;
   }
 }

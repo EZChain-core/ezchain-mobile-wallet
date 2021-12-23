@@ -29,6 +29,10 @@ Uint8List privateKeyStringToBuffer(String pk) {
 
 BigInt bufferToBigInt16(Uint8List buff) {
   var hex = hexEncode(buff);
+  return stringToBigInt16(hex);
+}
+
+BigInt stringToBigInt16(String hex) {
   if (hex.startsWith("0x")) {
     hex = hex.substring(2);
   }

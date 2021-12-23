@@ -46,10 +46,6 @@ abstract class WalletProvider {
 
   String getAddressP();
 
-  String getAddressC();
-
-  String getEvmAddressBech();
-
   Future<List<String>> getExternalAddressesX();
 
   List<String> getExternalAddressesXSync();
@@ -96,6 +92,14 @@ abstract class WalletProvider {
 
   void emitBalanceChangeC() {
     emit(WalletEventType.balanceChangedC, getBalanceC());
+  }
+
+  String getAddressC() {
+    return evmWallet.getAddress();
+  }
+
+  String getEvmAddressBech() {
+    return evmWallet.getAddressBech32();
   }
 
   Future<String> sendAvaxX(String to, BigInt amount, {String? memo}) async {
@@ -204,6 +208,20 @@ abstract class WalletProvider {
     final txId = await issueEvmTx(tx);
     await updateAvaxBalanceC();
     return txId;
+  }
+
+  Future<BigInt> estimateGas(String to, String data) async {
+    final from = EthereumAddress.fromHex(getAddressC());
+    return await web3.estimateGas(
+        sender: from,
+        to: EthereumAddress.fromHex(to),
+        data: Uint8List.fromList(utf8.encode(data)));
+  }
+
+  Future<BigInt> estimateAvaxGasLimit(
+      String to, BigInt amount, BigInt gasPrice) async {
+    final from = getAddressC();
+    return await estimateAvaxGas(from, to, amount, gasPrice);
   }
 
   Future<String> issueEvmTx(Transaction tx) async {
