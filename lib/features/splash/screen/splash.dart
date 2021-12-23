@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     // interactAvaxX();
-    // interactAvaxP
+    // interactAvaxP();
     // interactAvaxC();
 
     return Scaffold(
@@ -94,7 +94,7 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       await wallet.updateAvaxBalanceC();
 
-      final txId =  await  wallet.sendAvaxC("0xd30a9f6645a73f67b7850b9304b6a3172dda75bf", numberToBNAvaxC(11), BigInt.from(31), 21032);
+      final txId =  await  wallet.sendAvaxC("0xd30a9f6645a73f67b7850b9304b6a3172dda75bf", numberToBNAvaxC(1), BigInt.from(31), 21032);
       print("txId = $txId");
     } catch(e){
       print(e);

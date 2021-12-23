@@ -9,6 +9,8 @@ Future<Transaction> buildEvmTransferNativeTx(String from, String to,
     BigInt amount, BigInt gasPrice, int gasLimit) async {
   final etherFromAddress = EthereumAddress.fromHex(from);
   final nonce = await web3.getTransactionCount(etherFromAddress);
+  final a = await  web3.getGasPrice();
+  print("a = ${a.getValueInUnitBI(EtherUnit.gwei)}");
   return Transaction(
     from: etherFromAddress,
     to: EthereumAddress.fromHex(to),
