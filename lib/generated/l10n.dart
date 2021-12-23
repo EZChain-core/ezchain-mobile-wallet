@@ -350,6 +350,16 @@ class Strings {
     );
   }
 
+  /// `Passphrase`
+  String get sharedPassphrase {
+    return Intl.message(
+      'Passphrase',
+      name: 'sharedPassphrase',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -705,6 +715,26 @@ class Strings {
     return Intl.message(
       'Wallet Address',
       name: 'settingSecurityWalletAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Never disclose this key. Anyone with your private keys can steal any assets held in your wallet.`
+  String get settingSecurityPrivateKeyNote {
+    return Intl.message(
+      'Never disclose this key. Anyone with your private keys can steal any assets held in your wallet.',
+      name: 'settingSecurityPrivateKeyNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `C Chain Private Key`
+  String get settingSecurityCPrivateKey {
+    return Intl.message(
+      'C Chain Private Key',
+      name: 'settingSecurityCPrivateKey',
       desc: '',
       args: [],
     );

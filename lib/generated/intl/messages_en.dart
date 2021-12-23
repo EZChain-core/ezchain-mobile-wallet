@@ -86,6 +86,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Remove Wallet"),
         "settingOldPinWrong":
             MessageLookupByLibrary.simpleMessage("PIN Code Wrong!"),
+        "settingSecurityCPrivateKey":
+            MessageLookupByLibrary.simpleMessage("C Chain Private Key"),
+        "settingSecurityPrivateKeyNote": MessageLookupByLibrary.simpleMessage(
+            "Never disclose this key. Anyone with your private keys can steal any assets held in your wallet."),
         "settingSecurityWalletAddress":
             MessageLookupByLibrary.simpleMessage("Wallet Address"),
         "settingTouchId": MessageLookupByLibrary.simpleMessage("Touch ID"),
@@ -105,6 +109,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedLock": MessageLookupByLibrary.simpleMessage("Lock"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
         "sharedPChain": MessageLookupByLibrary.simpleMessage("P chain"),
+        "sharedPassphrase": MessageLookupByLibrary.simpleMessage("Passphrase"),
         "sharedPasteAddress":
             MessageLookupByLibrary.simpleMessage("Paste Address"),
         "sharedPrivateKey": MessageLookupByLibrary.simpleMessage("Private Key"),
