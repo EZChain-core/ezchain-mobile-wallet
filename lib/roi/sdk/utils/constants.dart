@@ -567,7 +567,7 @@ enum MergeRule {
   ERROR,
 }
 
-extension on MergeRule {
+extension MergeRuleString on MergeRule {
   String get rule {
     switch (this) {
       case MergeRule.intersection:

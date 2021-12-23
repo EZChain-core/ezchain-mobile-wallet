@@ -273,7 +273,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
         final changeOut = selectOutputClass(outIds[assetKey],
             args: AvmSECPTransferOutput.createArgs(
                 amount: change,
-                addresses: aad.getDestinations())) as AvmAmountOutput;
+                addresses: aad.getChangeAddresses())) as AvmAmountOutput;
         final chgXFerOut = AvmTransferableOutput(
             assetId: assetAmount.getAssetId(), output: changeOut);
         aad.addChange(chgXFerOut);

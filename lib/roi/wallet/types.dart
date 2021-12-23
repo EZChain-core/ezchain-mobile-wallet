@@ -29,7 +29,7 @@ enum WalletEventType {
   balanceChangedC
 }
 
-extension on WalletEventType {
+extension WalletEventTypeString on WalletEventType {
   String get type {
     switch (this) {
       case WalletEventType.addressChanged:
