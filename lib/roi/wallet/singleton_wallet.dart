@@ -61,7 +61,7 @@ class SingletonWallet extends WalletProvider implements UnsafeWallet {
   }
 
   String getAddressC() {
-    return evmWallet.address;
+    return evmWallet.getAddress();
   }
 
   String getEvmAddressBech() {

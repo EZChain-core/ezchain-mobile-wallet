@@ -55,9 +55,9 @@ Uint8List sign(Uint8List messageHash, Uint8List privateKeyBytes) {
   }
 
   Uint8List buffer = Uint8List(ROIECSignature.signatureSize);
-  buffer.setRange(0, ROIECSignature.rEnd, encodeBigInt(sig.r));
+  buffer.setRange(0, ROIECSignature.rEnd, encodeBigInt(sig.r, length: ROIECSignature.rEnd));
   buffer.setRange(
-      ROIECSignature.rEnd, ROIECSignature.sEnd, encodeBigInt(sig.s));
+      ROIECSignature.rEnd, ROIECSignature.sEnd, encodeBigInt(sig.s, length: ROIECSignature.sEnd - ROIECSignature.rEnd));
 
   buffer.setRange(
       ROIECSignature.sEnd, ROIECSignature.signatureSize, [sig.recoveryId]);

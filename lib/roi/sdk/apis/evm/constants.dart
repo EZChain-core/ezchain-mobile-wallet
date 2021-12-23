@@ -1,0 +1,15 @@
+const SECPCREDENTIAL = 9;
+
+const IMPORTTX = 0;
+
+const EXPORTTX = 1;
+
+const SECPINPUTID = 5;
+
+const ASSETIDLEN = 32;
+
+const SECPXFEROUTPUTID = 7;
+
+const LATESTCODEC = 0;
+
+const ADDRESSLENGTH = 20;

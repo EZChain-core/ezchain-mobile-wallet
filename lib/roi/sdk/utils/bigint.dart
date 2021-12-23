@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:wallet/roi/sdk/utils/constants.dart';
+
 /// https://github.com/ethereumdart/ethereum_util/blob/master/lib/src/bigint.dart
 final BigInt _byteMask = BigInt.from(0xff);
 
@@ -38,4 +40,14 @@ Uint8List encodeBigInt(BigInt input,
 enum Endian {
   be,
   // FIXME: le
+}
+
+BigInt min(BigInt value1, BigInt value2) {
+  if (value1 < value2) {
+    return value1;
+  } else if (value1 > value2) {
+    return value2;
+  } else {
+    return value1;
+  }
 }

@@ -7,6 +7,9 @@ import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
 
 abstract class PvmApi implements ROIChainApi {
+
+  BigInt getTxFee();
+
   factory PvmApi.create(
       {required ROINetwork roiNetwork, String endPoint = "/ext/bc/P"}) {
     return _PvmApiImpl(
@@ -89,6 +92,12 @@ class _PvmApiImpl implements PvmApi {
 
   @override
   Uint8List parseAddress(String address) {
+    throw UnimplementedError();
+  }
+
+  @override
+  BigInt getTxFee() {
+    // TODO: implement getTxFee
     throw UnimplementedError();
   }
 }
