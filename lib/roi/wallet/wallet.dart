@@ -12,6 +12,7 @@ import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/asset/assets.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
+import 'package:wallet/roi/wallet/helpers/tx_helper.dart';
 import 'package:wallet/roi/wallet/helpers/utxo_helper.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/types.dart';
@@ -94,7 +95,7 @@ abstract class WalletProvider {
   }
 
   void emitBalanceChangeC() {
-    emit(WalletEventType.balanceChangedC, "emitBalanceChangeC Test");
+    emit(WalletEventType.balanceChangedC, getBalanceC());
   }
 
   Future<String> sendAvaxX(String to, BigInt amount, {String? memo}) async {
@@ -192,5 +193,35 @@ abstract class WalletProvider {
 
   WalletBalanceX getBalanceX() {
     return balanceX;
+  }
+
+  Future<String> sendAvaxC(
+      String to, BigInt amount, BigInt gasPrice, int gasLimit) async {
+    assert(amount > BigInt.zero);
+    final fromAddress = getAddressC();
+    final tx = await buildEvmTransferNativeTx(
+        fromAddress, to, amount, gasPrice, gasLimit);
+    final txId = await issueEvmTx(tx);
+    await updateAvaxBalanceC();
+    return txId;
+  }
+
+  Future<String> issueEvmTx(Transaction tx) async {
+    final signedTx = await signEvm(tx);
+    final txHash = await web3.sendRawTransaction(signedTx);
+    return await waitTxEvm(txHash);
+  }
+
+  Future<BigInt> updateAvaxBalanceC() async {
+    final balOld = evmWallet.getBalance();
+    final balNew = await evmWallet.updateBalance();
+    if (balOld != balNew) {
+      emitBalanceChangeC();
+    }
+    return balNew;
+  }
+
+  WalletBalanceC getBalanceC() {
+    return WalletBalanceC(balance: evmWallet.getBalance());
   }
 }

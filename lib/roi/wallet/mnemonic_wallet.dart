@@ -87,7 +87,7 @@ class MnemonicWallet extends HDWalletAbstract implements UnsafeWallet {
   }
 
   String getAddressC() {
-    return evmWallet.address;
+    return evmWallet.getAddress();
   }
 
   AvmKeyChain _getKeyChainX() {
