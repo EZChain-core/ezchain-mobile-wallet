@@ -15,15 +15,21 @@ class EvmWallet {
   final Uint8List privateKey;
   late Uint8List publicKey;
 
-  String get address => _address;
   late String _address;
 
-  BigInt get balance => _balance;
   BigInt _balance = BigInt.zero;
 
   EvmWallet({required this.privateKey}) {
     publicKey = privateKeyToPublicKey(privateKey);
     _address = '0x' + hexEncode(publicKeyToAddress(publicKey));
+  }
+
+  BigInt getBalance() {
+    return _balance;
+  }
+
+  String getAddress() {
+    return _address;
   }
 
   String getAddressBech32() {
@@ -48,13 +54,14 @@ class EvmWallet {
 
   Future<BigInt> updateBalance() async {
     final bal = await web3.getBalance(EthereumAddress.fromHex(_address));
-    _balance = bal.getValueInUnitBI(EtherUnit.ether);
+    _balance = bal.getValueInUnitBI(EtherUnit.wei);
     return _balance;
   }
 
   Future<Uint8List> signEvm(Transaction tx) async {
     final credentials = EthPrivateKey.fromHex(getPrivateKeyHex());
-    var signed = await web3.signTransaction(credentials, tx);
+    final chainId = await web3.getChainId();
+    var signed = await web3.signTransaction(credentials, tx, chainId: chainId.toInt());
     if (tx.isEIP1559) {
       signed = prependTransactionType(0x02, signed);
     }

@@ -24,7 +24,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // getBalanceX();
+    // interactAvaxX();
+    // interactAvaxP
+    // interactAvaxC();
 
     return Scaffold(
       body: SizedBox(
@@ -43,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
     context.router.replaceAll([const OnBoardRoute()]);
   }
 
-  getBalanceX() async {
+  interactAvaxX() async {
     final wallet = SingletonWallet(
         privateKey:
             "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
@@ -67,6 +69,34 @@ class _SplashScreenState extends State<SplashScreen> {
           "X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad", numberToBNAvaxX(10));
       print("txId = $txId");
     } catch (e) {
+      print(e);
+    }
+  }
+
+  interactAvaxP() async {
+
+  }
+
+  interactAvaxC() async {
+    final wallet = SingletonWallet(
+        privateKey:
+            "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
+
+    wallet.on(WalletEventType.balanceChangedC, (event, context) {
+      final eventName = event.eventName;
+      final eventData = event.eventData;
+      if (eventName == WalletEventType.balanceChangedC.type &&
+          eventData is WalletBalanceC) {
+        print("balance C: balance = ${eventData.balance}, balanceDecimal = ${eventData.balanceDecimal}");
+      }
+    });
+
+    try {
+      await wallet.updateAvaxBalanceC();
+
+      final txId =  await  wallet.sendAvaxC("0xd30a9f6645a73f67b7850b9304b6a3172dda75bf", numberToBNAvaxC(11), BigInt.from(31), 21032);
+      print("txId = $txId");
+    } catch(e){
       print(e);
     }
   }
