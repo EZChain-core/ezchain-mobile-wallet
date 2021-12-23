@@ -221,7 +221,7 @@ enum SerializedType {
   utf8
 }
 
-extension on SerializedType {
+extension SerializedTypeString on SerializedType {
   String get type {
     switch (this) {
       case SerializedType.hex:
@@ -263,7 +263,7 @@ enum SerializedEncoding {
   display,
 }
 
-extension on SerializedEncoding {
+extension SerializedEncodingString on SerializedEncoding {
   String get type {
     switch (this) {
       case SerializedEncoding.hex:

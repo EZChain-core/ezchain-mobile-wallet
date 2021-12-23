@@ -89,7 +89,12 @@ String decimalToLocaleString(Decimal bigValue, {int decimals = 9}) {
         remainderStr = remainderStr.substring(0, remainderStr.length - 1);
         lastChar = remainderStr[remainderStr.length - 1];
       }
-      final trimmed = remainderStr.substring(0, decimals);
+      final String trimmed;
+      if (decimals >= remainderStr.length) {
+        trimmed = remainderStr;
+      } else {
+        trimmed = remainderStr.substring(0, decimals);
+      }
       return "$wholeStr.$trimmed";
     } catch (e) {
       return wholeStr;

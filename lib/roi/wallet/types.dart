@@ -22,6 +22,14 @@ class AssetBalanceX extends AssetBalanceRawX {
 
 typedef WalletBalanceX = Map<String, AssetBalanceX>;
 
+class WalletBalanceC {
+  final BigInt balance;
+
+  WalletBalanceC({required this.balance});
+
+  String get balanceDecimal => bnToAvaxC(balance);
+}
+
 enum WalletEventType {
   addressChanged,
   balanceChangedX,
@@ -29,7 +37,7 @@ enum WalletEventType {
   balanceChangedC
 }
 
-extension on WalletEventType {
+extension WalletEventTypeString on WalletEventType {
   String get type {
     switch (this) {
       case WalletEventType.addressChanged:
