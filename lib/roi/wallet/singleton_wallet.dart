@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
-import 'package:wallet/roi/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
@@ -58,16 +57,6 @@ class SingletonWallet extends WalletProvider implements UnsafeWallet {
 
   String getAddressP() {
     return _getKeyChainP().getAddressStrings().first;
-  }
-
-  String getAddressC() {
-    return evmWallet.getAddress();
-  }
-
-  String getEvmAddressBech() {
-    final keyPair = EvmKeyPair(chainId: "C", hrp: roi.getHRP());
-    keyPair.importKey(_keyBuff);
-    return keyPair.getAddressString();
   }
 
   @override

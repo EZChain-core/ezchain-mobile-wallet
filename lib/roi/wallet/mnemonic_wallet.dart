@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
-import 'package:wallet/roi/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
@@ -10,7 +9,6 @@ import 'package:wallet/roi/sdk/utils/hdnode.dart';
 import 'package:wallet/roi/sdk/utils/mnemonic.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
 import 'package:wallet/roi/wallet/hd_wallet_abstract.dart';
-import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/utils/derivation_helper.dart';
 import 'package:wallet/roi/wallet/wallet.dart';
 import 'package:web3dart/web3dart.dart';
@@ -78,16 +76,6 @@ class MnemonicWallet extends HDWalletAbstract implements UnsafeWallet {
   @override
   Future<AvmTx> signX(AvmUnsignedTx tx) async {
     return tx.sign(_getKeyChainX());
-  }
-
-  String getEvmAddressBech() {
-    final keyPair = EvmKeyPair(chainId: "C", hrp: roi.getHRP());
-    keyPair.importKey(ethAccountKey.publicKey!);
-    return keyPair.getAddressString();
-  }
-
-  String getAddressC() {
-    return evmWallet.getAddress();
   }
 
   AvmKeyChain _getKeyChainX() {

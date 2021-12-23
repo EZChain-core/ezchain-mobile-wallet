@@ -4,9 +4,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/generated/assets.gen.dart';
+import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:web3dart/web3dart.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -19,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    startTimer();
+    // startTimer();
   }
 
   @override
@@ -27,7 +29,6 @@ class _SplashScreenState extends State<SplashScreen> {
     // interactAvaxX();
     // interactAvaxP();
     // interactAvaxC();
-
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
@@ -45,6 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
     context.router.replaceAll([const OnBoardRoute()]);
   }
 
+  /// don't delete: to Address of PrivateKey-JaCCSxdoWfo3ao5KwenXrJjJR7cBTQ287G1C5qpv2hr2tCCdb
   interactAvaxX() async {
     final wallet = SingletonWallet(
         privateKey:
@@ -60,11 +62,12 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     });
 
-    // dont delete: to Address of PrivateKey-JaCCSxdoWfo3ao5KwenXrJjJR7cBTQ287G1C5qpv2hr2tCCdb
-
     try {
+      // Lấy balance X
       await wallet.updateUtxosX();
 
+      // Gửi AvaxX
+      // phải dùng numberToBNAvaxX để convert
       final txId = await wallet.sendAvaxX(
           "X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad", numberToBNAvaxX(10));
       print("txId = $txId");
@@ -73,9 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  interactAvaxP() async {
-
-  }
+  interactAvaxP() async {}
 
   interactAvaxC() async {
     final wallet = SingletonWallet(
@@ -87,16 +88,42 @@ class _SplashScreenState extends State<SplashScreen> {
       final eventData = event.eventData;
       if (eventName == WalletEventType.balanceChangedC.type &&
           eventData is WalletBalanceC) {
-        print("balance C: balance = ${eventData.balance}, balanceDecimal = ${eventData.balanceDecimal}");
+        print(
+            "balance C: balance = ${eventData.balance}, balanceDecimal = ${eventData.balanceDecimal}");
       }
     });
 
+    // Lấy balance C
     try {
       await wallet.updateAvaxBalanceC();
+    } catch (e) {
+      print(e);
+      return;
+    }
 
-      final txId =  await  wallet.sendAvaxC("0xd30a9f6645a73f67b7850b9304b6a3172dda75bf", numberToBNAvaxC(1), BigInt.from(31), 21032);
+    // Gửi AvaxC
+    // Bước 1 lấy Gas Price (là con số 31 ở web wallet)
+    final adjustGasPrice = await getAdjustedGasPrice();
+    final gasPrice = EtherAmount.fromUnitAndValue(EtherUnit.wei, adjustGasPrice)
+        .getValueInUnitBI(EtherUnit.gwei);
+    print("gasPrice = $gasPrice");
+
+    const to = "0xd30a9f6645a73f67b7850b9304b6a3172dda75bf";
+
+    // phải dùng numberToBNAvaxC để convert
+    final amount = numberToBNAvaxC(1);
+
+    // Ở web wallet sau khi fill amount và address sẽ chuyển sang confirm
+    // Confirm sẽ get Gas Limit
+    final gasLimit = await wallet.estimateAvaxGasLimit(to, amount, gasPrice);
+    print("gasLimit = $gasLimit");
+
+    // Xác nhận gửi AvaxC
+    try {
+      final txId =
+          await wallet.sendAvaxC(to, amount, gasPrice, gasLimit.toInt());
       print("txId = $txId");
-    } catch(e){
+    } catch (e) {
       print(e);
     }
   }

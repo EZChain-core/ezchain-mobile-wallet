@@ -7,7 +7,6 @@ import 'package:wallet/roi/sdk/apis/avm/model/get_tx_status.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/get_utxos.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/issue_tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/rest/avm_rest_client.dart';
-import 'package:wallet/roi/sdk/apis/avm/rest/avm_wallet_rest_client.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';
@@ -65,8 +64,6 @@ class _AvmApiImpl implements AvmApi {
 
   late AvmRestClient avmRestClient;
 
-  late AvmWalletRestClient avmWalletRestClient;
-
   BigInt? _txFee;
 
   _AvmApiImpl(
@@ -84,8 +81,6 @@ class _AvmApiImpl implements AvmApi {
     _keyChain = AvmKeyChain(chainId: alias, hrp: roiNetwork.hrp);
     final dio = roiNetwork.dio;
     avmRestClient = AvmRestClient(dio, baseUrl: dio.options.baseUrl + endPoint);
-    avmWalletRestClient = AvmWalletRestClient(dio,
-        baseUrl: dio.options.baseUrl + "/ext/bc/X/wallet");
   }
 
   @override
