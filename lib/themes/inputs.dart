@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
@@ -10,12 +11,14 @@ import 'package:wallet/themes/typography.dart';
 
 const roiBorder = BorderRadius.all(Radius.circular(8));
 
-class ROITextField extends StatelessWidget {
+class ROITextField extends StatefulWidget {
   final String hint;
 
   final TextInputType? inputType;
 
   final String? label;
+
+  final String? error;
 
   final Widget? prefixIcon;
 
@@ -36,8 +39,37 @@ class ROITextField extends StatelessWidget {
       this.suffixIcon,
       this.controller,
       this.maxLines,
-      this.onChanged})
+      this.onChanged,
+      this.error})
       : super(key: key);
+
+  @override
+  State<ROITextField> createState() => _ROITextFieldState();
+}
+
+class _ROITextFieldState extends State<ROITextField> {
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    _hasError = widget.error != null;
+    if (widget.controller != null) {
+      widget.controller?.addListener(() {
+        if (_hasError) {
+          setState(() {
+            _hasError = false;
+          });
+        }
+      });
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.controller?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,42 +79,58 @@ class ROITextField extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            label != null
-                ? Text(
-                    label!,
-                    style: ROITitleLargeTextStyle(
-                        color: provider.themeMode.text60),
-                  )
-                : const SizedBox.shrink(),
+            Stack(
+              children: [
+                if (widget.label != null)
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      widget.label!,
+                      style: ROITitleLargeTextStyle(
+                          color: provider.themeMode.text60),
+                    ),
+                  ),
+                if (_hasError)
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Text(
+                      widget.error!,
+                      style: ROILabelMediumTextStyle(
+                          color: provider.themeMode.stateDanger),
+                    ),
+                  ),
+              ],
+            ),
             const SizedBox(height: 4),
             TextField(
               style: ROIBodyLargeTextStyle(color: provider.themeMode.text),
               cursorColor: provider.themeMode.text,
-              controller: controller,
-              onChanged: onChanged,
-              maxLines: maxLines,
+              controller: widget.controller,
+              onChanged: widget.onChanged,
+              maxLines: widget.maxLines,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(12),
-                hintText: hint,
+                hintText: widget.hint,
                 hintStyle:
                     ROIBodyLargeTextStyle(color: provider.themeMode.text40),
-                prefixIcon: prefixIcon,
-                suffixIcon: suffixIcon,
+                prefixIcon: widget.prefixIcon,
+                suffixIcon: widget.suffixIcon,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: roiBorder,
-                  borderSide: BorderSide(color: provider.themeMode.border),
+                  borderSide: BorderSide(
+                      color: _hasError
+                          ? provider.themeMode.red
+                          : provider.themeMode.border),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: roiBorder,
-                  borderSide:
-                      BorderSide(color: provider.themeMode.borderActive),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: roiBorder,
-                  borderSide: BorderSide(color: provider.themeMode.red),
+                  borderSide: BorderSide(
+                      color: _hasError
+                          ? provider.themeMode.red
+                          : provider.themeMode.borderActive),
                 ),
               ),
-              keyboardType: inputType,
+              keyboardType: widget.inputType,
               textInputAction: TextInputAction.next,
             )
           ],
@@ -98,6 +146,8 @@ class ROIAmountTextField extends StatefulWidget {
   final TextInputType? inputType;
 
   final String? label;
+
+  final String? error;
 
   final String? prefixText;
 
@@ -120,7 +170,9 @@ class ROIAmountTextField extends StatefulWidget {
       this.onSuffixPressed,
       this.prefixText,
       this.suffixText,
-      this.onChanged, this.rateUsd})
+      this.onChanged,
+      this.rateUsd,
+      this.error})
       : super(key: key);
 
   @override
@@ -128,24 +180,65 @@ class ROIAmountTextField extends StatefulWidget {
 }
 
 class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
+  double _usdValue = 0;
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    widget.controller?.addListener(() {
+      if (widget.rateUsd != null) {
+        String text = widget.controller!.text;
+        final amount = double.tryParse(text) ?? 0;
+        setState(() {
+          _usdValue = widget.rateUsd! * amount;
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.controller?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final hasBottomText = widget.prefixText != null || widget.suffixText != null;
-    // final amount =
-    // final usdValue = widget.rateUsd != null ? (widget.rateUsd * ( ? 0) : null
+    _hasError = widget.error != null;
+    final hasBottomText =
+        widget.prefixText != null || widget.suffixText != null;
+    final hasTopText = widget.label != null || _hasError;
+
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (widget.label != null)
-              Text(
-                widget.label!,
-                style: ROITitleLargeTextStyle(color: provider.themeMode.text60),
-              ),
-            if (widget.label != null) const SizedBox(height: 4),
+            Stack(
+              children: [
+                if (widget.label != null)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      widget.label!,
+                      style: ROITitleLargeTextStyle(
+                          color: provider.themeMode.text60),
+                    ),
+                  ),
+                if (_hasError)
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Text(
+                      widget.error!,
+                      style: ROILabelMediumTextStyle(
+                          color: provider.themeMode.stateDanger),
+                    ),
+                  ),
+              ],
+            ),
+            if (hasTopText) const SizedBox(height: 4),
             SizedBox(
               height: 48,
               child: TextField(
@@ -169,16 +262,17 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: roiBorder,
-                    borderSide: BorderSide(color: provider.themeMode.border),
+                    borderSide: BorderSide(
+                        color: _hasError
+                            ? provider.themeMode.red
+                            : provider.themeMode.border),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: roiBorder,
-                    borderSide:
-                        BorderSide(color: provider.themeMode.borderActive),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: roiBorder,
-                    borderSide: BorderSide(color: provider.themeMode.red),
+                    borderSide: BorderSide(
+                        color: _hasError
+                            ? provider.themeMode.red
+                            : provider.themeMode.borderActive),
                   ),
                 ),
                 keyboardType: widget.inputType ?? TextInputType.number,
@@ -191,17 +285,33 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (widget.prefixText != null || widget.rateUsd != null)
-                    Text(
-                      widget.prefixText! ?? '\$ ',
-                      style: ROILabelMediumTextStyle(
-                          color: provider.themeMode.text60),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        widget.prefixText ?? '\$ $_usdValue',
+                        maxLines: 1,
+                        textAlign: TextAlign.start,
+                        overflow: TextOverflow.fade,
+                        softWrap: false,
+                        style: ROILabelMediumTextStyle(
+                            color: provider.themeMode.text60),
+                      ),
                     ),
-                  if (widget.suffixText != null)
-                    Text(
-                      widget.suffixText!,
-                      style: ROILabelMediumTextStyle(
-                          color: provider.themeMode.text60),
+                  if (widget.suffixText != null) ...[
+                    const SizedBox(width: 4),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        widget.suffixText!,
+                        maxLines: 1,
+                        softWrap: false,
+                        overflow: TextOverflow.fade,
+                        textAlign: TextAlign.end,
+                        style: ROILabelMediumTextStyle(
+                            color: provider.themeMode.text60),
+                      ),
                     ),
+                  ]
                 ],
               )
             ],
@@ -219,6 +329,8 @@ class ROIAddressTextField extends StatelessWidget {
 
   final String? label;
 
+  final String? error;
+
   final TextEditingController? controller;
 
   final VoidCallback? onSuffixPressed;
@@ -233,6 +345,7 @@ class ROIAddressTextField extends StatelessWidget {
     this.controller,
     this.onSuffixPressed,
     this.onChanged,
+    this.error,
   }) : super(key: key);
 
   @override
