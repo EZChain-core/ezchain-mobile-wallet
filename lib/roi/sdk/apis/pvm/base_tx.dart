@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 
-import 'package:wallet/roi/sdk/apis/avm/constants.dart';
-import 'package:wallet/roi/sdk/apis/avm/credentials.dart';
-import 'package:wallet/roi/sdk/apis/avm/inputs.dart';
-import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
-import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
-import 'package:wallet/roi/sdk/apis/avm/tx.dart';
+import 'package:wallet/roi/sdk/apis/pvm/constants.dart';
+import 'package:wallet/roi/sdk/apis/pvm/credentials.dart';
+import 'package:wallet/roi/sdk/apis/pvm/inputs.dart';
+import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
+import 'package:wallet/roi/sdk/apis/pvm/outputs.dart';
+import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
 import 'package:wallet/roi/sdk/common/credentials.dart';
 import 'package:wallet/roi/sdk/common/input.dart';
 import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
@@ -14,11 +14,11 @@ import 'package:wallet/roi/sdk/common/tx.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
-class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
+class PvmBaseTx extends StandardBaseTx<PvmKeyPair, PvmKeyChain> {
   @override
-  String get typeName => "AvmBaseTx";
+  String get typeName => "PvmBaseTx";
 
-  AvmBaseTx(
+  PvmBaseTx(
       {int networkId = defaultNetworkId,
       Uint8List? blockchainId,
       List<StandardTransferableOutput>? outs,
@@ -30,11 +30,11 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
             outs: outs,
             ins: ins,
             memo: memo) {
-    setCodecId(LATESTCODEC);
+    setCodecId(CREATESUBNETTX);
   }
 
-  factory AvmBaseTx.fromArgs(Map<String, dynamic> args) {
-    return AvmBaseTx(
+  factory PvmBaseTx.fromArgs(Map<String, dynamic> args) {
+    return PvmBaseTx(
         networkId: args["networkId"] ?? defaultNetworkId,
         blockchainId: args["blockchainId"],
         outs: args["outs"],
@@ -46,11 +46,11 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
   void deserialize(dynamic fields,
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
-    outs = (fields["outs"] as List<AvmTransferableOutput>)
-        .map((o) => AvmTransferableOutput()..deserialize(o, encoding: encoding))
+    outs = (fields["outs"] as List<PvmTransferableOutput>)
+        .map((o) => PvmTransferableOutput()..deserialize(o, encoding: encoding))
         .toList();
-    ins = (fields["ins"] as List<AvmTransferableInput>)
-        .map((i) => AvmTransferableInput()..deserialize(i, encoding: encoding))
+    ins = (fields["ins"] as List<PvmTransferableInput>)
+        .map((i) => PvmTransferableInput()..deserialize(i, encoding: encoding))
         .toList();
     numOuts = Serialization.instance.decoder(
         outs.length.toString(),
@@ -68,21 +68,21 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
 
   @override
   int getTxType() {
-    return super.getTypeId();
+    return BASETX;
   }
 
   @override
-  List<AvmTransferableOutput> getOuts() {
-    return outs as List<AvmTransferableOutput>;
+  List<PvmTransferableOutput> getOuts() {
+    return outs as List<PvmTransferableOutput>;
   }
 
   @override
-  List<AvmTransferableInput> getIns() {
-    return ins as List<AvmTransferableInput>;
+  List<PvmTransferableInput> getIns() {
+    return ins as List<PvmTransferableInput>;
   }
 
   @override
-  List<AvmTransferableOutput> getTotalOuts() {
+  List<PvmTransferableOutput> getTotalOuts() {
     return getOuts();
   }
 
@@ -92,8 +92,8 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
   }
 
   @override
-  AvmBaseTx create({Map<String, dynamic> args = const {}}) {
-    return AvmBaseTx.fromArgs(args);
+  PvmBaseTx create({Map<String, dynamic> args = const {}}) {
+    return PvmBaseTx.fromArgs(args);
   }
 
   @override
@@ -103,7 +103,7 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
   }
 
   @override
-  List<Credential> sign(Uint8List msg, AvmKeyChain kc) {
+  List<Credential> sign(Uint8List msg, PvmKeyChain kc) {
     final signs = <Credential>[];
     for (int i = 0; i < ins.length; i++) {
       final input = ins[i];
@@ -121,16 +121,6 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
     return signs;
   }
 
-  @override
-  void setCodecId(int codecId) {
-    if (codecId != 0 && codecId != 1) {
-      throw Exception(
-          "Error - BaseTx.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
-    }
-    super.setCodecId(codecId);
-    super.setTypeId(codecId == 0 ? BASETX : BASETX_CODECONE);
-  }
-
   int fromBuffer(Uint8List bytes, {int offset = 0}) {
     networkId = bytes.sublist(offset, offset + 4);
     offset += 4;
@@ -141,7 +131,7 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
     final outCount = numOuts.buffer.asByteData().getUint32(0);
     outs.clear();
     for (int i = 0; i < outCount; i++) {
-      final xFerOut = AvmTransferableOutput();
+      final xFerOut = PvmTransferableOutput();
       offset = xFerOut.fromBuffer(bytes, offset: offset);
       outs.add(xFerOut);
     }
@@ -150,7 +140,7 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
     final inCount = numIns.buffer.asByteData().getUint32(0);
     ins.clear();
     for (int i = 0; i < inCount; i++) {
-      final xFerIn = AvmTransferableInput();
+      final xFerIn = PvmTransferableInput();
       offset = xFerIn.fromBuffer(bytes, offset: offset);
       ins.add(xFerIn);
     }

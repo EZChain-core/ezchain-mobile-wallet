@@ -22,13 +22,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    startTimer();
+    // startTimer();
   }
 
   @override
   Widget build(BuildContext context) {
     // interactAvaxX();
-    // interactAvaxP();
+    interactAvaxP();
     // interactAvaxC();
     return Scaffold(
       body: SizedBox(
@@ -80,7 +80,27 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  interactAvaxP() async {}
+  interactAvaxP() async {
+    final wallet = SingletonWallet(
+        privateKey:
+            "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
+
+    wallet.on(WalletEventType.balanceChangedP, (event, context) {
+      final eventName = event.eventName;
+      final eventData = event.eventData;
+      if (eventName == WalletEventType.balanceChangedP.type &&
+          eventData is WalletBalanceP) {
+        print(
+            "balance C: locked = ${eventData.lockedDecimal}, unlocked = ${eventData.unlockedDecimal}, lockedStakeable = ${eventData.lockedStakeableDecimal}");
+      }
+    });
+
+    try {
+      await wallet.updateUtxosP();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   interactAvaxC() async {
     final wallet = SingletonWallet(
