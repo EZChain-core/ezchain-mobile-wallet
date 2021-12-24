@@ -1,8 +1,10 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/wallet/send/avm/wallet_send_avm_confirm.dart';
+import 'package:wallet/features/wallet/send/avm/wallet_send_avm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -18,16 +20,19 @@ class WalletSendAvmScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController addressController = TextEditingController();
-    TextEditingController amountController = TextEditingController();
-    TextEditingController momoController = TextEditingController();
+    final walletSendAvmStore = WalletSendAvmStore();
+    walletSendAvmStore.getBalanceX();
+    final addressController = TextEditingController(
+        text: 'X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad');
+    final amountController = TextEditingController();
+    final memoController = TextEditingController();
 
     void _onClickConfirm() {
       context.router.push(
         WalletSendAvmConfirmRoute(
           transactionInfo: WalletSendAvmTransactionViewData(
             addressController.text,
-            momoController.text,
+            memoController.text,
             double.tryParse(amountController.text) ?? 0,
             0.01,
             2.01,
@@ -73,19 +78,27 @@ class WalletSendAvmScreen extends StatelessWidget {
                           controller: addressController,
                         ),
                         const SizedBox(height: 16),
-                        ROIAmountTextField(
-                          label: Strings.current.sharedSetAmount,
-                          hint: '0.0',
-                          suffixText: 'Ballance: 1000',
-                          prefixText: r'$ 8.778',
-                          controller: amountController,
+                        Observer(
+                          builder: (_) => ROIAmountTextField(
+                            label: Strings.current.sharedSetAmount,
+                            hint: '0.0',
+                            suffixText:
+                                'Balance: ${walletSendAvmStore.balanceX}',
+                            prefixText: r'$ 0',
+                            controller: amountController,
+                            onSuffixPressed: () {
+                              amountController.text = walletSendAvmStore
+                                  .balanceX
+                                  .replaceAll(',', '');
+                            },
+                          ),
                         ),
                         const SizedBox(height: 16),
                         ROITextField(
                           label: Strings.current.walletSendMemo,
                           hint: Strings.current.sharedMemo,
                           maxLines: 3,
-                          controller: momoController,
+                          controller: memoController,
                         ),
                         const SizedBox(height: 16),
                         WalletSendHorizontalText(

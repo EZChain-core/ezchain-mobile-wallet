@@ -26,6 +26,11 @@ abstract class _WalletRoiChainStore with Store {
     final utxos = await wallet.updateUtxosX();
     wallet.getBalanceX().forEach((_, balance) => balanceX =
         WalletRoiChainBalanceViewData(balance.unlockedDecimal, balance.lockedDecimal));
+
+    await wallet.updateAvaxBalanceC();
+    balanceC =
+        WalletRoiChainBalanceViewData(wallet.getBalanceC().balanceDecimal, '0');
+
   }
 }
 
