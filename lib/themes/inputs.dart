@@ -92,7 +92,7 @@ class ROITextField extends StatelessWidget {
   }
 }
 
-class ROIAmountTextField extends StatelessWidget {
+class ROIAmountTextField extends StatefulWidget {
   final String? hint;
 
   final TextInputType? inputType;
@@ -109,6 +109,8 @@ class ROIAmountTextField extends StatelessWidget {
 
   final ValueChanged<String>? onChanged;
 
+  final double? rateUsd;
+
   const ROIAmountTextField(
       {Key? key,
       this.hint,
@@ -118,34 +120,42 @@ class ROIAmountTextField extends StatelessWidget {
       this.onSuffixPressed,
       this.prefixText,
       this.suffixText,
-      this.onChanged})
+      this.onChanged, this.rateUsd})
       : super(key: key);
 
   @override
+  State<ROIAmountTextField> createState() => _ROIAmountTextFieldState();
+}
+
+class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
+
+  @override
   Widget build(BuildContext context) {
-    final hasBottomText = prefixText != null || suffixText != null;
+    final hasBottomText = widget.prefixText != null || widget.suffixText != null;
+    // final amount =
+    // final usdValue = widget.rateUsd != null ? (widget.rateUsd * ( ? 0) : null
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (label != null)
+            if (widget.label != null)
               Text(
-                label!,
+                widget.label!,
                 style: ROITitleLargeTextStyle(color: provider.themeMode.text60),
               ),
-            if (label != null) const SizedBox(height: 4),
+            if (widget.label != null) const SizedBox(height: 4),
             SizedBox(
               height: 48,
               child: TextField(
                 style: ROITitleLargeTextStyle(color: provider.themeMode.text),
                 cursorColor: provider.themeMode.text,
-                controller: controller,
-                onChanged: onChanged,
+                controller: widget.controller,
+                onChanged: widget.onChanged,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                  hintText: hint,
+                  hintText: widget.hint,
                   hintStyle:
                       ROITitleLargeTextStyle(color: provider.themeMode.text40),
                   suffixIcon: IconButton(
@@ -155,7 +165,7 @@ class ROIAmountTextField extends StatelessWidget {
                       style: ROITitleLargeTextStyle(
                           color: provider.themeMode.text40),
                     ),
-                    onPressed: () {},
+                    onPressed: widget.onSuffixPressed,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: roiBorder,
@@ -171,34 +181,30 @@ class ROIAmountTextField extends StatelessWidget {
                     borderSide: BorderSide(color: provider.themeMode.red),
                   ),
                 ),
-                keyboardType: inputType ?? TextInputType.number,
+                keyboardType: widget.inputType ?? TextInputType.number,
                 textInputAction: TextInputAction.next,
               ),
             ),
-            if (hasBottomText) const SizedBox(height: 4),
-            if (hasBottomText)
-              Stack(
+            if (hasBottomText) ...[
+              const SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (prefixText != null)
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        prefixText!,
-                        style: ROILabelMediumTextStyle(
-                            color: provider.themeMode.text60),
-                      ),
+                  if (widget.prefixText != null || widget.rateUsd != null)
+                    Text(
+                      widget.prefixText! ?? '\$ ',
+                      style: ROILabelMediumTextStyle(
+                          color: provider.themeMode.text60),
                     ),
-                  if (suffixText != null)
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        suffixText!,
-                        style: ROILabelMediumTextStyle(
-                            color: provider.themeMode.text60),
-                      ),
+                  if (widget.suffixText != null)
+                    Text(
+                      widget.suffixText!,
+                      style: ROILabelMediumTextStyle(
+                          color: provider.themeMode.text60),
                     ),
                 ],
               )
+            ],
           ],
         ),
       ),
