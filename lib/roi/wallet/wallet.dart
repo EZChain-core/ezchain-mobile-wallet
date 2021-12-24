@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:eventify/eventify.dart';
-import 'package:wallet/roi/sdk/apis/avm/constants.dart';
+import 'package:wallet/roi/sdk/apis/avm/constants.dart' as avmConstants;
 import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
+import 'package:wallet/roi/sdk/apis/pvm/constants.dart' as pvmConstants;
+import 'package:wallet/roi/sdk/apis/pvm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
+import 'package:wallet/roi/sdk/apis/pvm/utxos.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/asset/assets.dart';
@@ -27,6 +30,7 @@ abstract class WalletProvider {
   EvmWallet get evmWallet;
 
   AvmUTXOSet utxosX = AvmUTXOSet();
+  PvmUTXOSet utxosP = PvmUTXOSet();
 
   WalletBalanceX balanceX = {};
 
@@ -87,7 +91,7 @@ abstract class WalletProvider {
   }
 
   void emitBalanceChangeP() {
-    emit(WalletEventType.balanceChangedP, "emitBalanceChangeP Test");
+    emit(WalletEventType.balanceChangedP, getBalanceP());
   }
 
   void emitBalanceChangeC() {
@@ -159,7 +163,7 @@ abstract class WalletProvider {
       final utxo = utxos[i];
       final out = utxo.getOutput();
       final type = out.getOutputId();
-      if (type != SECPXFEROUTPUTID) continue;
+      if (type != avmConstants.SECPXFEROUTPUTID) continue;
       final lockTime = out.getLockTime();
       final amount = (out as AvmAmountOutput).getAmount();
       final assetIdBuff = utxo.getAssetId();
@@ -241,5 +245,48 @@ abstract class WalletProvider {
 
   WalletBalanceC getBalanceC() {
     return WalletBalanceC(balance: evmWallet.getBalance());
+  }
+
+  Future<dynamic> updateUtxosP() async {
+    final addresses = await getAllAddressesP();
+    utxosP = await pvmGetAllUTXOs(addresses: addresses);
+
+    emitBalanceChangeP();
+
+    return utxosP;
+  }
+
+  WalletBalanceP getBalanceP() {
+    var unlocked = BigInt.zero;
+    var locked = BigInt.zero;
+    var lockedStakeable = BigInt.zero;
+
+    final utxos = utxosP.getAllUTXOs();
+    final now = unixNow();
+
+    for (var i = 0; i < utxos.length; i++) {
+      final utxo = utxos[i];
+      final out = utxo.getOutput();
+      final type = out.getOutputId();
+      final amount = (out as PvmAmountOutput).getAmount();
+      if (type == pvmConstants.STAKEABLELOCKOUTID) {
+        final lockTime = (out as PvmStakeableLockOut).getStakeableLockTime();
+        if (lockTime <= now) {
+          unlocked += amount;
+        } else {
+          lockedStakeable += amount;
+        }
+      } else {
+        final lockTime = out.getLockTime();
+        if (lockTime <= now) {
+          unlocked += amount;
+        } else {
+          locked += amount;
+        }
+      }
+    }
+
+    return WalletBalanceP(
+        unlocked: unlocked, locked: locked, lockedStakeable: lockedStakeable);
   }
 }

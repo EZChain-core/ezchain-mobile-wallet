@@ -188,7 +188,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
       }
     }
 
-    getMinimumSpendable(aad, asOf, lockTime, threshold: threshold);
+    getMinimumSpendable(aad, asOf: asOf, lockTime: lockTime, threshold: threshold);
 
     final baseTx = AvmBaseTx(
         networkId: networkId,
@@ -200,9 +200,8 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
     return AvmUnsignedTx(transaction: baseTx);
   }
 
-  void getMinimumSpendable(
-      AvmAssetAmountDestination aad, BigInt? asOf, BigInt? lockTime,
-      {int threshold = 1}) {
+  void getMinimumSpendable(AvmAssetAmountDestination aad,
+      {BigInt? asOf, BigInt? lockTime, int threshold = 1}) {
     asOf ??= unixNow();
     lockTime ??= BigInt.zero;
 

@@ -20,7 +20,7 @@ class AvmTransferableOutput extends StandardTransferableOutput {
       : super(assetId: assetId, output: output);
 
   @override
-  String get typeName => "TransferableOutput";
+  String get typeName => "AvmTransferableOutput";
 
   @override
   void deserialize(dynamic fields,
@@ -45,7 +45,7 @@ class AvmTransferableOutput extends StandardTransferableOutput {
 
 abstract class AvmAmountOutput extends StandardAmountOutput {
   @override
-  String get typeName => "AmountOutput";
+  String get typeName => "AvmAmountOutput";
 
   AvmAmountOutput(
       {BigInt? amount,
@@ -71,7 +71,7 @@ abstract class AvmAmountOutput extends StandardAmountOutput {
 
 class AvmSECPTransferOutput extends AvmAmountOutput {
   @override
-  String get typeName => "SECPTransferOutput";
+  String get typeName => "AvmSECPTransferOutput";
 
   AvmSECPTransferOutput(
       {BigInt? amount,

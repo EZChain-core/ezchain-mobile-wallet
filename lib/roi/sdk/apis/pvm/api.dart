@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_utxos.dart';
+import 'package:wallet/roi/sdk/apis/pvm/rest/pvm_rest_client.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';
 import 'package:wallet/roi/sdk/roi.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
@@ -9,6 +11,9 @@ import 'package:wallet/roi/sdk/utils/constants.dart';
 abstract class PvmApi implements ROIChainApi {
 
   BigInt getTxFee();
+
+  Future<GetUTXOsResponse> getUTXOs(List<String> addresses,
+      {String? sourceChain, int limit = 0, GetUTXOsStartIndex? startIndex});
 
   factory PvmApi.create(
       {required ROINetwork roiNetwork, String endPoint = "/ext/bc/P"}) {
@@ -34,6 +39,10 @@ class _PvmApiImpl implements PvmApi {
 
   Uint8List? avaxAssetId;
 
+  BigInt? _txFee;
+
+  late PvmRestClient pvmRestClient;
+
   _PvmApiImpl(
       {required this.roiNetwork,
       required String endPoint,
@@ -47,6 +56,8 @@ class _PvmApiImpl implements PvmApi {
       alias = blockChainId;
     }
     _keyChain = PvmKeyChain(chainId: alias, hrp: roiNetwork.hrp);
+    final dio = roiNetwork.dio;
+    pvmRestClient = PvmRestClient(dio, baseUrl: dio.options.baseUrl + endPoint);
   }
 
   @override
@@ -97,7 +108,24 @@ class _PvmApiImpl implements PvmApi {
 
   @override
   BigInt getTxFee() {
-    // TODO: implement getTxFee
-    throw UnimplementedError();
+    _txFee ??= _getDefaultTxFee();
+    return _txFee!;
+  }
+
+  @override
+  Future<GetUTXOsResponse> getUTXOs(List<String> addresses, {String? sourceChain, int limit = 0, GetUTXOsStartIndex? startIndex}) async{
+    final request = GetUTXOsRequest(
+        addresses: addresses,
+        sourceChain: sourceChain,
+        limit: limit,
+        startIndex: startIndex)
+        .toRpc();
+    final response = await pvmRestClient.getUTXOs(request);
+    return response.result!;
+  }
+
+  BigInt _getDefaultTxFee() {
+    final networkId = roiNetwork.networkId;
+    return networks[networkId]?.p.txFee ?? BigInt.zero;
   }
 }

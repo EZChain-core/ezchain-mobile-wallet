@@ -16,7 +16,7 @@ Input selectInputClass(int inputId, {Map<String, dynamic> args = const {}}) {
 
 class AvmTransferableInput extends StandardTransferableInput {
   @override
-  String get typeName => "TransferableInput";
+  String get typeName => "AvmTransferableInput";
 
   AvmTransferableInput(
       {Input? input, Uint8List? txId, Uint8List? outputIdx, Uint8List? assetId})
@@ -57,7 +57,7 @@ abstract class AvmAmountInput extends StandardAmountInput {
 
 class AvmSECPTransferInput extends AvmAmountInput {
   @override
-  String get typeName => "SECPTransferInput";
+  String get typeName => "AvmSECPTransferInput";
 
   AvmSECPTransferInput({BigInt? amount}) : super(amount: amount){
     setCodecId(LATESTCODEC);

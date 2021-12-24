@@ -30,6 +30,23 @@ class WalletBalanceC {
   String get balanceDecimal => bnToAvaxC(balance);
 }
 
+class WalletBalanceP {
+  BigInt locked = BigInt.zero;
+  BigInt unlocked = BigInt.zero;
+  BigInt lockedStakeable = BigInt.zero;
+
+  WalletBalanceP(
+      {required this.locked,
+      required this.unlocked,
+      required this.lockedStakeable});
+
+  String get lockedDecimal => bnToAvaxP(locked);
+
+  String get unlockedDecimal => bnToAvaxP(unlocked);
+
+  String get lockedStakeableDecimal => bnToAvaxP(lockedStakeable);
+}
+
 enum WalletEventType {
   addressChanged,
   balanceChangedX,
