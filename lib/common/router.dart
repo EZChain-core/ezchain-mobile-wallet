@@ -15,9 +15,9 @@ import 'package:wallet/features/setting/security/setting_security.dart';
 import 'package:wallet/features/splash/screen/splash.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
 import 'package:wallet/features/wallet/send/avm/wallet_send_avm.dart';
-import 'package:wallet/features/wallet/send/avm/wallet_send_avm_confirm.dart';
+import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.dart';
 import 'package:wallet/features/wallet/send/evm/wallet_send_evm.dart';
-import 'package:wallet/features/wallet/send/evm/wallet_send_evm_confirm.dart';
+import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Screen,Route',

@@ -2,6 +2,7 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
+import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
 part 'wallet_send_avm_store.g.dart';
 
@@ -37,12 +38,12 @@ abstract class _WalletSendAvmStore with Store {
   @action
   bool validate(String address, double amount) {
     final isAddressValid = validateAddressX(address);
-    final isAmountValid = balanceXDouble > amount;
+    final isAmountValid = balanceXDouble > amount && amount > 0;
     if(!isAddressValid) {
       addressError = Strings.current.sharedInvalidAddress;
     }
     if(!isAmountValid) {
-      amountError = Strings.current.sharedInvalidAddress;
+      amountError = Strings.current.sharedInvalidAmount;
     }
     return isAddressValid && isAmountValid;
   }
@@ -51,6 +52,13 @@ abstract class _WalletSendAvmStore with Store {
   removeAmountError() {
     if(amountError != null) {
       amountError = null;
+    }
+  }
+
+  @action
+  removeAddressError() {
+    if(addressError != null) {
+      addressError = null;
     }
   }
 }

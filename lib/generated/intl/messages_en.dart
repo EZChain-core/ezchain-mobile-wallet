@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(name) => "Welcome ${name}";
 
+  static String m1(balance) => "Balance: ${balance}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accessMnemonicKeyDes": MessageLookupByLibrary.simpleMessage(
@@ -50,7 +52,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "createWalletDes": MessageLookupByLibrary.simpleMessage(
             "Store this key phrase in a secure location. Anyone with this key phrase can access your ROIChain wallet. there is no way to recover lost key phrase"),
         "createWalletKeptKey":
-            MessageLookupByLibrary.simpleMessage("Yes, I kept them  safe"),
+            MessageLookupByLibrary.simpleMessage("Yes, I kept them safe"),
         "createWalletPassphraseToRestore":
             MessageLookupByLibrary.simpleMessage("Passphrase to restore"),
         "dashboardCross": MessageLookupByLibrary.simpleMessage("Cross"),
@@ -107,6 +109,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
         "sharedInvalidAddress":
             MessageLookupByLibrary.simpleMessage("Invalid Address"),
+        "sharedInvalidAmount":
+            MessageLookupByLibrary.simpleMessage("Invalid Amount"),
         "sharedLanguage": MessageLookupByLibrary.simpleMessage("Language"),
         "sharedLock": MessageLookupByLibrary.simpleMessage("Lock"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
@@ -139,6 +143,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Set Amount"),
         "walletReceiveToThis": MessageLookupByLibrary.simpleMessage(
             " to this address\nSending any other coins my result in permanent loss"),
+        "walletSendBalance": m1,
         "walletSendCChainErrorAddress": MessageLookupByLibrary.simpleMessage(
             "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\""),
         "walletSendGasGWEI": MessageLookupByLibrary.simpleMessage("GWEI"),

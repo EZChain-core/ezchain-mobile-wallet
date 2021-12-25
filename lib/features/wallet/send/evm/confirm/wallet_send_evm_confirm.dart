@@ -106,8 +106,8 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
                           vertical: 8,
                         ),
                         onPressed: () {
-                          context.router.pop();
-                          context.router.replace(const WalletSendEvmRoute());
+                          context.router.popUntilRoot();
+                          context.pushRoute(const WalletSendEvmRoute());
                         },
                       ),
                       const SizedBox(height: 45),
