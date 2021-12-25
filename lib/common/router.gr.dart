@@ -33,12 +33,12 @@ import 'package:wallet/features/setting/security/setting_security.dart' as _i18;
 import 'package:wallet/features/setting/setting.dart' as _i23;
 import 'package:wallet/features/splash/screen/splash.dart' as _i1;
 import 'package:wallet/features/wallet/receive/wallet_receive.dart' as _i10;
-import 'package:wallet/features/wallet/send/avm/wallet_send_avm.dart' as _i11;
-import 'package:wallet/features/wallet/send/avm/wallet_send_avm_confirm.dart'
+import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.dart'
     as _i12;
-import 'package:wallet/features/wallet/send/evm/wallet_send_evm.dart' as _i13;
-import 'package:wallet/features/wallet/send/evm/wallet_send_evm_confirm.dart'
+import 'package:wallet/features/wallet/send/avm/wallet_send_avm.dart' as _i11;
+import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.dart'
     as _i14;
+import 'package:wallet/features/wallet/send/evm/wallet_send_evm.dart' as _i13;
 import 'package:wallet/features/wallet/wallet.dart' as _i20;
 
 class AppRouter extends _i24.RootStackRouter {

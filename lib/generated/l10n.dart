@@ -370,6 +370,16 @@ class Strings {
     );
   }
 
+  /// `Invalid Amount`
+  String get sharedInvalidAmount {
+    return Intl.message(
+      'Invalid Amount',
+      name: 'sharedInvalidAmount',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -490,10 +500,10 @@ class Strings {
     );
   }
 
-  /// `Yes, I kept them  safe`
+  /// `Yes, I kept them safe`
   String get createWalletKeptKey {
     return Intl.message(
-      'Yes, I kept them  safe',
+      'Yes, I kept them safe',
       name: 'createWalletKeptKey',
       desc: '',
       args: [],
@@ -797,6 +807,16 @@ class Strings {
       name: 'walletSendMemo',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `Balance: {balance}`
+  String walletSendBalance(Object balance) {
+    return Intl.message(
+      'Balance: $balance',
+      name: 'walletSendBalance',
+      desc: '',
+      args: [balance],
     );
   }
 

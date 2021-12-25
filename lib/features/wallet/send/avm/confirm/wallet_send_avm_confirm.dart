@@ -1,8 +1,10 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -20,7 +22,7 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isSuccess = false;
+    final walletSendAvmStore = WalletSendAvmConfirmStore();
 
     void _showWarningDialog() {
       context.showWarningDialog(
@@ -30,7 +32,9 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
     }
 
     void _onClickSendTransaction() {
-      _showWarningDialog();
+      walletSendAvmStore.sendAvm(
+          transactionInfo.address, transactionInfo.amount);
+      // _showWarningDialog();
     }
 
     return Consumer<WalletThemeProvider>(
@@ -99,40 +103,50 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                         rightColor: provider.themeMode.stateSuccess,
                       ),
                       const Spacer(),
-                      if (isSuccess)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            Strings.current.sharedTransactionSent,
-                            style: ROIBodyMediumTextStyle(
-                                color: provider.themeMode.stateSuccess),
-                          ),
-                        ),
-                      isSuccess
-                          ? ROIMediumSuccessButton(
-                              text: Strings.current.sharedStartAgain,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 64,
-                                vertical: 8,
+                      Observer(
+                        builder: (_) => Column(
+                          children: [
+                            if (walletSendAvmStore.sendSuccess)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: Text(
+                                  Strings.current.sharedTransactionSent,
+                                  style: ROIBodyMediumTextStyle(
+                                      color: provider.themeMode.stateSuccess),
+                                ),
                               ),
-                              onPressed: context.router.pop,
-                            )
-                          : ROIMediumSuccessButton(
-                              text: Strings.current.sharedSendTransaction,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 64,
-                                vertical: 8,
+                            walletSendAvmStore.sendSuccess
+                                ? ROIMediumSuccessButton(
+                                    text: Strings.current.sharedStartAgain,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 64,
+                                      vertical: 8,
+                                    ),
+                                    onPressed: () {
+                                      context.router.popUntilRoot();
+                                      context.pushRoute(
+                                          const WalletSendAvmRoute());
+                                    },
+                                  )
+                                : ROIMediumSuccessButton(
+                                    text: Strings.current.sharedSendTransaction,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 64,
+                                      vertical: 8,
+                                    ),
+                                    onPressed: _onClickSendTransaction,
+                                  ),
+                            const SizedBox(height: 4),
+                            if (!walletSendAvmStore.sendSuccess)
+                              ROIMediumNoneButton(
+                                width: 82,
+                                text: Strings.current.sharedCancel,
+                                textColor: provider.themeMode.text90,
+                                onPressed: context.router.pop,
                               ),
-                              onPressed: _onClickSendTransaction,
-                            ),
-                      const SizedBox(height: 4),
-                      if (!isSuccess)
-                        ROIMediumNoneButton(
-                          width: 82,
-                          text: Strings.current.sharedCancel,
-                          textColor: provider.themeMode.text90,
-                          onPressed: context.router.pop,
+                          ],
                         ),
+                      ),
                       const SizedBox(height: 45),
                     ],
                   ),
@@ -153,6 +167,6 @@ class WalletSendAvmTransactionViewData {
   final double fee;
   final double total;
 
-  WalletSendAvmTransactionViewData(this.address, this.memo, this.amount, this.fee, this.total);
-
+  WalletSendAvmTransactionViewData(
+      this.address, this.memo, this.amount, this.fee, this.total);
 }

@@ -30,6 +30,8 @@ class ROITextField extends StatefulWidget {
 
   final ValueChanged<String>? onChanged;
 
+  final bool? enabled;
+
   const ROITextField(
       {Key? key,
       required this.hint,
@@ -40,7 +42,8 @@ class ROITextField extends StatefulWidget {
       this.controller,
       this.maxLines,
       this.onChanged,
-      this.error})
+      this.error,
+      this.enabled})
       : super(key: key);
 
   @override
@@ -92,7 +95,7 @@ class _ROITextFieldState extends State<ROITextField> {
                   ),
                 if (_hasError)
                   Align(
-                    alignment: Alignment.topRight,
+                    alignment: Alignment.bottomRight,
                     child: Text(
                       widget.error!,
                       style: ROILabelMediumTextStyle(
@@ -104,6 +107,7 @@ class _ROITextFieldState extends State<ROITextField> {
             const SizedBox(height: 4),
             TextField(
               style: ROIBodyLargeTextStyle(color: provider.themeMode.text),
+              enabled: widget.enabled,
               cursorColor: provider.themeMode.text,
               controller: widget.controller,
               onChanged: widget.onChanged,
@@ -128,6 +132,10 @@ class _ROITextFieldState extends State<ROITextField> {
                       color: _hasError
                           ? provider.themeMode.red
                           : provider.themeMode.borderActive),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: roiBorder,
+                  borderSide: BorderSide(color: provider.themeMode.border),
                 ),
               ),
               keyboardType: widget.inputType,
@@ -216,25 +224,21 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 if (widget.label != null)
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.label!,
-                      style: ROITitleLargeTextStyle(
-                          color: provider.themeMode.text60),
-                    ),
+                  Text(
+                    widget.label!,
+                    style: ROITitleLargeTextStyle(
+                        color: provider.themeMode.text60),
                   ),
+                const Spacer(),
                 if (_hasError)
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Text(
-                      widget.error!,
-                      style: ROILabelMediumTextStyle(
-                          color: provider.themeMode.stateDanger),
-                    ),
+                  Text(
+                    widget.error!,
+                    style: ROILabelMediumTextStyle(
+                        color: provider.themeMode.stateDanger),
                   ),
               ],
             ),
@@ -350,17 +354,32 @@ class ROIAddressTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _hasError = error != null;
+    print('builddddd');
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (label != null)
-              Text(
-                label!,
-                style: ROITitleLargeTextStyle(color: provider.themeMode.text60),
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (label != null)
+                  Text(
+                    label!,
+                    style: ROITitleLargeTextStyle(
+                        color: provider.themeMode.text60),
+                  ),
+                const Spacer(),
+                if (_hasError)
+                  Text(
+                    error!,
+                    style: ROILabelMediumTextStyle(
+                        color: provider.themeMode.stateDanger),
+                  ),
+              ],
+            ),
             if (label != null) const SizedBox(height: 4),
             SizedBox(
               height: 48,
@@ -390,16 +409,17 @@ class ROIAddressTextField extends StatelessWidget {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: roiBorder,
-                    borderSide: BorderSide(color: provider.themeMode.border),
+                    borderSide: BorderSide(
+                        color: _hasError
+                            ? provider.themeMode.red
+                            : provider.themeMode.border),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: roiBorder,
-                    borderSide:
-                        BorderSide(color: provider.themeMode.borderActive),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: roiBorder,
-                    borderSide: BorderSide(color: provider.themeMode.red),
+                    borderSide: BorderSide(
+                        color: _hasError
+                            ? provider.themeMode.red
+                            : provider.themeMode.borderActive),
                   ),
                 ),
                 keyboardType: inputType ?? TextInputType.text,

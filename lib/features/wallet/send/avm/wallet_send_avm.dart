@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
-import 'package:wallet/features/wallet/send/avm/wallet_send_avm_confirm.dart';
+import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.dart';
 import 'package:wallet/features/wallet/send/avm/wallet_send_avm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -76,21 +76,27 @@ class WalletSendAvmScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 16),
-                        ROIAddressTextField(
-                          label: Strings.current.sharedSendTo,
-                          hint: Strings.current.sharedPasteAddress,
-                          controller: addressController,
+                        Observer(
+                          builder: (_) => ROIAddressTextField(
+                            label: Strings.current.sharedSendTo,
+                            hint: Strings.current.sharedPasteAddress,
+                            controller: addressController,
+                            error: walletSendAvmStore.addressError,
+                            onChanged: (_) =>
+                                walletSendAvmStore.removeAddressError(),
+                          ),
                         ),
                         const SizedBox(height: 16),
                         Observer(
                           builder: (_) => ROIAmountTextField(
                             label: Strings.current.sharedSetAmount,
                             hint: '0.0',
-                            suffixText:
-                                'Balance: ${walletSendAvmStore.balanceX}',
+                            suffixText: Strings.current
+                                .walletSendBalance(walletSendAvmStore.balanceX),
                             rateUsd: walletSendAvmStore.rateAvax,
                             error: walletSendAvmStore.amountError,
-                            onChanged: walletSendAvmStore.removeAmountError(),
+                            onChanged: (_) =>
+                                walletSendAvmStore.removeAmountError(),
                             controller: amountController,
                             onSuffixPressed: () {
                               amountController.text = walletSendAvmStore
