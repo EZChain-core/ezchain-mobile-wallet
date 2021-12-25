@@ -113,13 +113,17 @@ class _EvmApiImpl implements EvmApi {
   Future<String> getBaseFee() async {
     const request = RpcRequest(method: "eth_baseFee", params: []);
     final response = await evmRestClient.getEthBaseFee(request);
-    return response.result!;
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result;
   }
 
   @override
   Future<String> getMaxPriorityFeePerGas() async {
     const request = RpcRequest(method: "eth_maxPriorityFeePerGas", params: []);
     final response = await evmRestClient.getEthMaxPriorityFeePerGas(request);
-    return response.result!;
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result;
   }
 }

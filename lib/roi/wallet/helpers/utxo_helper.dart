@@ -1,4 +1,5 @@
 import 'package:wallet/roi/sdk/apis/avm/model/get_utxos.dart' as avmUTXOs;
+import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_utxos.dart' as pvmUTXOs;
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/pvm/utxos.dart';
@@ -49,7 +50,7 @@ Future<PvmUTXOSet> pvmGetAllUTXOs({List<String> addresses = const []}) async {
 
     final newSet = await pvmGetAllUTXOsForAddresses(addresses: chunk);
     return newSet.merge(await pvmGetAllUTXOs(addresses: remainingChunk))
-    as PvmUTXOSet;
+        as PvmUTXOSet;
   }
 }
 
@@ -68,9 +69,30 @@ Future<PvmUTXOSet> pvmGetAllUTXOsForAddresses(
   final length = int.parse(response.numFetched);
 
   if (length > 1024) {
-    final subUtxos = await pvmGetAllUTXOsForAddresses(addresses: addresses, endIndex: nextEndIndex);
+    final subUtxos = await pvmGetAllUTXOsForAddresses(
+        addresses: addresses, endIndex: nextEndIndex);
     return utxoSet.merge(subUtxos) as PvmUTXOSet;
   }
 
   return utxoSet;
+}
+
+Future<GetStakeResponse> getStakeForAddresses(List<String> addresses) async {
+  if (addresses.length <= 256) {
+    return await pChain.getStake(addresses);
+  } else {
+    final chunk = addresses.sublist(0, 256);
+    final remainingChunk = addresses.sublist(256);
+
+    final chunkData = await pChain.getStake(chunk);
+    final chunkStake = chunkData.staked;
+    final chunkUtxos = chunkData.stakedOutputs;
+
+    final next = await getStakeForAddresses(remainingChunk);
+
+    final finalStaked = chunkStake + next.staked;
+    final finalStakedOutputs = [...chunkUtxos, ...next.stakedOutputs];
+    return GetStakeResponse(
+        staked: finalStaked, stakedOutputs: finalStakedOutputs);
+  }
 }

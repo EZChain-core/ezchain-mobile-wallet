@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/pvm/utxos.dart';
 import 'package:wallet/roi/sdk/common/rpc/rpc_request_wrapper.dart';
 

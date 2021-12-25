@@ -199,7 +199,9 @@ class _AvmApiImpl implements AvmApi {
             startIndex: startIndex)
         .toRpc();
     final response = await avmRestClient.getUTXOs(request);
-    return response.result!;
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result;
   }
 
   @override
@@ -207,7 +209,9 @@ class _AvmApiImpl implements AvmApi {
       String assetId) async {
     final response = await avmRestClient.getAssetDescription(
         GetAssetDescriptionRequest(assetId: assetId).toRpc());
-    return response.result!;
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result;
   }
 
   @override
@@ -226,14 +230,18 @@ class _AvmApiImpl implements AvmApi {
     final transaction = tx.toString();
     final request = IssueTxRequest(tx: transaction).toRpc();
     final response = await avmRestClient.issueTx(request);
-    return response.result!.txId;
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result.txId;
   }
 
   @override
   Future<GetTxStatusResponse> getTxStatus(String txId) async {
     final request = GetTxStatusRequest(txId: txId).toRpc();
     final response = await avmRestClient.getTxStatus(request);
-    return response.result!;
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result;
   }
 
   BigInt _getDefaultTxFee() {

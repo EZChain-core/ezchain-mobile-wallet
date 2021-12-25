@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:dio/dio.dart';
 
 const COINGECKO_URL =
@@ -14,4 +15,9 @@ Future<num> getAvaxPrice() async {
   final avalanche = response.data?["avalanche-2"];
   final usd = avalanche["usd"] as num;
   return usd;
+}
+
+Future<Decimal> getAvaxPriceDecimal() async {
+  final price = await getAvaxPrice();
+  return Decimal.tryParse(price.toString()) ?? Decimal.zero;
 }

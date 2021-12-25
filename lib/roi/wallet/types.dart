@@ -1,7 +1,23 @@
+import 'package:decimal/decimal.dart';
 import 'package:wallet/roi/wallet/asset/types.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
-abstract class AssetBalanceRawX {
+class AvaxBalance {
+  final AssetBalanceRawX x;
+  final AssetBalanceP p;
+  final BigInt c;
+
+  AvaxBalance({required this.x, required this.p, required this.c});
+
+  Decimal get totalDecimal =>
+      bnToDecimalAvaxX(x.unlocked) +
+      bnToDecimalAvaxP(p.unlocked) +
+      bnToDecimalAvaxC(c);
+
+  String get total => decimalToLocaleString(totalDecimal);
+}
+
+class AssetBalanceRawX {
   BigInt locked = BigInt.zero;
   BigInt unlocked = BigInt.zero;
 
@@ -22,20 +38,12 @@ class AssetBalanceX extends AssetBalanceRawX {
 
 typedef WalletBalanceX = Map<String, AssetBalanceX>;
 
-class WalletBalanceC {
-  final BigInt balance;
-
-  WalletBalanceC({required this.balance});
-
-  String get balanceDecimal => bnToAvaxC(balance);
-}
-
-class WalletBalanceP {
+class AssetBalanceP {
   BigInt locked = BigInt.zero;
   BigInt unlocked = BigInt.zero;
   BigInt lockedStakeable = BigInt.zero;
 
-  WalletBalanceP(
+  AssetBalanceP(
       {required this.locked,
       required this.unlocked,
       required this.lockedStakeable});
@@ -45,6 +53,14 @@ class WalletBalanceP {
   String get unlockedDecimal => bnToAvaxP(unlocked);
 
   String get lockedStakeableDecimal => bnToAvaxP(lockedStakeable);
+}
+
+class WalletBalanceC {
+  final BigInt balance;
+
+  WalletBalanceC({required this.balance});
+
+  String get balanceDecimal => bnToAvaxC(balance);
 }
 
 enum WalletEventType {
