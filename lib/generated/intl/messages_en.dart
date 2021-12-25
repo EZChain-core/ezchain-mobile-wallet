@@ -105,6 +105,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "sharedCopy": MessageLookupByLibrary.simpleMessage("Copy"),
         "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
+        "sharedInvalidAddress":
+            MessageLookupByLibrary.simpleMessage("Invalid Address"),
         "sharedLanguage": MessageLookupByLibrary.simpleMessage("Language"),
         "sharedLock": MessageLookupByLibrary.simpleMessage("Lock"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
