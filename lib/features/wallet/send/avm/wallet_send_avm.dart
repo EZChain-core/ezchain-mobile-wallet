@@ -28,17 +28,21 @@ class WalletSendAvmScreen extends StatelessWidget {
     final memoController = TextEditingController();
 
     void _onClickConfirm() {
-      context.router.push(
-        WalletSendAvmConfirmRoute(
-          transactionInfo: WalletSendAvmTransactionViewData(
-            addressController.text,
-            memoController.text,
-            double.tryParse(amountController.text) ?? 0,
-            0.01,
-            2.01,
+      final address = addressController.text;
+      final amount = double.tryParse(amountController.text) ?? 0;
+      if (walletSendAvmStore.validate(address, amount)) {
+        context.router.push(
+          WalletSendAvmConfirmRoute(
+            transactionInfo: WalletSendAvmTransactionViewData(
+              address,
+              memoController.text,
+              amount,
+              0.01,
+              2.01,
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
 
     return Consumer<WalletThemeProvider>(
@@ -84,7 +88,9 @@ class WalletSendAvmScreen extends StatelessWidget {
                             hint: '0.0',
                             suffixText:
                                 'Balance: ${walletSendAvmStore.balanceX}',
-                            prefixText: r'$ 0',
+                            rateUsd: walletSendAvmStore.rateAvax,
+                            error: walletSendAvmStore.amountError,
+                            onChanged: walletSendAvmStore.removeAmountError(),
                             controller: amountController,
                             onSuffixPressed: () {
                               amountController.text = walletSendAvmStore

@@ -360,6 +360,16 @@ class Strings {
     );
   }
 
+  /// `Invalid Address`
+  String get sharedInvalidAddress {
+    return Intl.message(
+      'Invalid Address',
+      name: 'sharedInvalidAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
