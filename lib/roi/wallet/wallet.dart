@@ -8,6 +8,7 @@ import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/constants.dart' as pvmConstants;
+import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/utxos.dart';
@@ -203,6 +204,11 @@ abstract class WalletProvider {
     return balanceX;
   }
 
+  AssetBalanceRawX getAvaxBalanceX() {
+    return getBalanceX()[activeNetwork.avaxId] ??
+        AssetBalanceRawX(locked: BigInt.zero, unlocked: BigInt.zero);
+  }
+
   Future<String> sendAvaxC(
       String to, BigInt amount, BigInt gasPrice, int gasLimit) async {
     assert(amount > BigInt.zero);
@@ -256,7 +262,7 @@ abstract class WalletProvider {
     return utxosP;
   }
 
-  WalletBalanceP getBalanceP() {
+  AssetBalanceP getBalanceP() {
     var unlocked = BigInt.zero;
     var locked = BigInt.zero;
     var lockedStakeable = BigInt.zero;
@@ -286,7 +292,20 @@ abstract class WalletProvider {
       }
     }
 
-    return WalletBalanceP(
+    return AssetBalanceP(
         unlocked: unlocked, locked: locked, lockedStakeable: lockedStakeable);
+  }
+
+  AvaxBalance getAvaxBalance() {
+    return AvaxBalance(
+      x: getAvaxBalanceX(),
+      p: getBalanceP(),
+      c: getBalanceC().balance,
+    );
+  }
+
+  Future<GetStakeResponse> getStake() async {
+    final addresses = await getAllAddressesP();
+    return await getStakeForAddresses(addresses);
   }
 }

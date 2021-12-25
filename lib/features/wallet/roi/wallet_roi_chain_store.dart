@@ -9,7 +9,7 @@ class WalletRoiChainStore = _WalletRoiChainStore with _$WalletRoiChainStore;
 abstract class _WalletRoiChainStore with Store {
   final wallet = SingletonWallet(
       privateKey:
-      "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
+          "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
 
   @observable
   WalletRoiChainBalanceViewData balanceX =
@@ -25,7 +25,6 @@ abstract class _WalletRoiChainStore with Store {
 
   @action
   getBalanceX() async {
-
     wallet.on(WalletEventType.balanceChangedX, (event, context) {
       final eventName = event.eventName;
       final eventData = event.eventData;
@@ -42,7 +41,7 @@ abstract class _WalletRoiChainStore with Store {
       final eventName = event.eventName;
       final eventData = event.eventData;
       if (eventName == WalletEventType.balanceChangedP.type &&
-          eventData is WalletBalanceP) {
+          eventData is AssetBalanceP) {
         balanceP = WalletRoiChainBalanceViewData(
             eventData.unlockedDecimal, eventData.lockedDecimal);
       }
@@ -58,8 +57,7 @@ abstract class _WalletRoiChainStore with Store {
       final eventData = event.eventData;
       if (eventName == WalletEventType.balanceChangedC.type &&
           eventData is WalletBalanceC) {
-        balanceC =
-            WalletRoiChainBalanceViewData(eventData.balanceDecimal, '0');
+        balanceC = WalletRoiChainBalanceViewData(eventData.balanceDecimal, '0');
       }
     });
     await wallet.updateAvaxBalanceC();

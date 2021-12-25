@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_utxos.dart';
 import 'package:wallet/roi/sdk/apis/pvm/rest/pvm_rest_client.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';
@@ -9,11 +10,12 @@ import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
 
 abstract class PvmApi implements ROIChainApi {
-
   BigInt getTxFee();
 
   Future<GetUTXOsResponse> getUTXOs(List<String> addresses,
       {String? sourceChain, int limit = 0, GetUTXOsStartIndex? startIndex});
+
+  Future<GetStakeResponse> getStake(List<String> addresses);
 
   factory PvmApi.create(
       {required ROINetwork roiNetwork, String endPoint = "/ext/bc/P"}) {
@@ -113,15 +115,29 @@ class _PvmApiImpl implements PvmApi {
   }
 
   @override
-  Future<GetUTXOsResponse> getUTXOs(List<String> addresses, {String? sourceChain, int limit = 0, GetUTXOsStartIndex? startIndex}) async{
+  Future<GetUTXOsResponse> getUTXOs(List<String> addresses,
+      {String? sourceChain,
+      int limit = 0,
+      GetUTXOsStartIndex? startIndex}) async {
     final request = GetUTXOsRequest(
-        addresses: addresses,
-        sourceChain: sourceChain,
-        limit: limit,
-        startIndex: startIndex)
+            addresses: addresses,
+            sourceChain: sourceChain,
+            limit: limit,
+            startIndex: startIndex)
         .toRpc();
     final response = await pvmRestClient.getUTXOs(request);
-    return response.result!;
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result;
+  }
+
+  @override
+  Future<GetStakeResponse> getStake(List<String> addresses) async {
+    final request = GetStakeRequest(addresses: addresses).toRpc();
+    final response = await pvmRestClient.getStake(request);
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result;
   }
 
   BigInt _getDefaultTxFee() {
