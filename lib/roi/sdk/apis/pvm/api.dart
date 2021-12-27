@@ -1,21 +1,50 @@
 import 'dart:typed_data';
 
+import 'package:wallet/roi/sdk/apis/pvm/constants.dart';
 import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_staking_assset_id.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_tx_status.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_utxos.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/issue_tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/rest/pvm_rest_client.dart';
+import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
+import 'package:wallet/roi/sdk/apis/pvm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';
 import 'package:wallet/roi/sdk/roi.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
+import 'package:wallet/roi/sdk/utils/helper_functions.dart';
+import 'package:wallet/roi/sdk/utils/serialization.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart' as bindtools;
 
 abstract class PvmApi implements ROIChainApi {
   BigInt getTxFee();
+
+  Future<PvmUnsignedTx> buildImportTx(
+      PvmUTXOSet utxoSet,
+      List<String> ownerAddresses,
+      String sourceChain,
+      List<String> toAddresses,
+      List<String> fromAddresses,
+      {List<String>? changeAddresses,
+      Uint8List? memo,
+      BigInt? asOf,
+      BigInt? lockTime,
+      int threshold = 1});
+
+  Future<String> issueTx(PvmTx tx);
 
   Future<GetUTXOsResponse> getUTXOs(List<String> addresses,
       {String? sourceChain, int limit = 0, GetUTXOsStartIndex? startIndex});
 
   Future<GetStakeResponse> getStake(List<String> addresses);
+
+  Future<Uint8List?> getAVAXAssetId({bool refresh = false});
+
+  Future<GetStakingAssetIdResponse> getStakingAssetId({String? subnetId});
+
+  Future<GetTxStatusResponse> getTxStatus(String txId);
 
   factory PvmApi.create(
       {required ROINetwork roiNetwork, String endPoint = "/ext/bc/P"}) {
@@ -89,6 +118,9 @@ class _PvmApiImpl implements PvmApi {
   }
 
   @override
+  String getBlockchainId() => blockChainId;
+
+  @override
   void setAVAXAssetId(String? avaxAssetId) {
     this.avaxAssetId = cb58Decode(avaxAssetId);
   }
@@ -100,18 +132,53 @@ class _PvmApiImpl implements PvmApi {
 
   @override
   String addressFromBuffer(Uint8List address) {
-    throw UnimplementedError();
+    final chainId = getBlockchainAlias() ?? blockChainId;
+    return Serialization.instance.bufferToType(address, SerializedType.bech32,
+        args: [chainId, roiNetwork.hrp]);
   }
 
   @override
   Uint8List parseAddress(String address) {
-    throw UnimplementedError();
+    final alias = getBlockchainAlias();
+    return bindtools.parseAddress(address, blockChainId,
+        alias: alias, addressLength: ADDRESSLENGTH);
   }
 
   @override
   BigInt getTxFee() {
     _txFee ??= _getDefaultTxFee();
     return _txFee!;
+  }
+
+  @override
+  Future<Uint8List?> getAVAXAssetId({bool refresh = false}) async {
+    if (avaxAssetId == null || refresh) {
+      try {
+        final response = await getStakingAssetId();
+        setAVAXAssetId(response.assetId);
+      } catch (e) {}
+    }
+    return avaxAssetId;
+  }
+
+  @override
+  Future<GetStakingAssetIdResponse> getStakingAssetId(
+      {String? subnetId}) async {
+    final request = GetStakingAssetIdRequest(subnetId: subnetId).toRpc();
+    final response = await pvmRestClient.getStakingAssetId(request);
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result;
+  }
+
+  @override
+  Future<String> issueTx(PvmTx tx) async {
+    final transaction = tx.toString();
+    final request = IssueTxRequest(tx: transaction).toRpc();
+    final response = await pvmRestClient.issueTx(request);
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result.txId;
   }
 
   @override
@@ -140,8 +207,85 @@ class _PvmApiImpl implements PvmApi {
     return result;
   }
 
+  @override
+  Future<GetTxStatusResponse> getTxStatus(String txId) async {
+    final request = GetTxStatusRequest(txId: txId).toRpc();
+    final response = await pvmRestClient.getTxStatus(request);
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result;
+  }
+
+  @override
+  Future<PvmUnsignedTx> buildImportTx(
+      PvmUTXOSet utxoSet,
+      List<String> ownerAddresses,
+      String sourceChain,
+      List<String> toAddresses,
+      List<String> fromAddresses,
+      {List<String>? changeAddresses,
+      Uint8List? memo,
+      BigInt? asOf,
+      BigInt? lockTime,
+      int threshold = 1}) async {
+    asOf ??= unixNow();
+    lockTime ??= BigInt.zero;
+
+    final to = toAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    final from =
+        fromAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    final List<Uint8List>? change;
+    if (changeAddresses == null) {
+      change = null;
+    } else {
+      change =
+          changeAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    }
+
+    final atomicUTXOs =
+        (await getUTXOs(ownerAddresses, sourceChain: sourceChain)).getUTXOs();
+
+    final avaxAssetId = await getAVAXAssetId();
+
+    final atomics = atomicUTXOs.getAllUTXOs();
+
+    final buildUnsignedTx = utxoSet.buildImportTx(
+      roiNetwork.networkId,
+      bindtools.cb58Decode(blockChainId),
+      atomics,
+      to,
+      from,
+      changeAddresses: change,
+      sourceChain: bindtools.cb58Decode(sourceChain),
+      fee: getTxFee(),
+      feeAssetId: avaxAssetId,
+      memo: memo,
+      asOf: asOf,
+      lockTime: lockTime,
+      threshold: threshold,
+    );
+    if (!await _checkGooseEgg(buildUnsignedTx)) {
+      throw Exception("Error - AVMAPI.buildBaseTx:Failed Goose Egg Check");
+    }
+    return buildUnsignedTx;
+  }
+
   BigInt _getDefaultTxFee() {
     final networkId = roiNetwork.networkId;
     return networks[networkId]?.p.txFee ?? BigInt.zero;
+  }
+
+  Future<bool> _checkGooseEgg(PvmUnsignedTx utx, {BigInt? outTotal}) async {
+    outTotal ??= BigInt.zero;
+    final avaxAssetId = await getAVAXAssetId();
+    if (avaxAssetId == null) return false;
+    final outputTotal =
+        outTotal > BigInt.zero ? outTotal : utx.getOutputTotal(avaxAssetId);
+    final fee = utx.getBurn(avaxAssetId);
+    if (fee <= ONEAVAX * BigInt.from(10) || fee <= outputTotal) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

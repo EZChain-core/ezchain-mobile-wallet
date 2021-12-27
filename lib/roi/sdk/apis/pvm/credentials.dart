@@ -7,7 +7,8 @@ Credential selectCredentialClass(int inputId,
     case SECPCREDENTIAL:
       return PvmSECPCredential();
     default:
-      throw Exception("Error - SelectOutputClass: unknown inputId = $inputId");
+      throw Exception(
+          "Error - SelectCredentialClass: unknown inputId = $inputId");
   }
 }
 
@@ -15,13 +16,14 @@ class PvmSECPCredential extends Credential {
   @override
   String get typeName => "PvmSECPCredential";
 
-  PvmSECPCredential() {
-    setCodecId(SECPCREDENTIAL);
+  @override
+  int getTypeId() {
+    return SECPCREDENTIAL;
   }
 
   @override
   int getCredentialId() {
-    return super.getTypeId();
+    return getTypeId();
   }
 
   @override

@@ -1,9 +1,11 @@
-import 'package:wallet/roi/sdk/apis/avm/model/get_utxos.dart' as avmUTXOs;
+import 'package:wallet/roi/sdk/apis/avm/model/get_utxos.dart' as avm_utxos;
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
-import 'package:wallet/roi/sdk/apis/pvm/model/get_utxos.dart' as pvmUTXOs;
+import 'package:wallet/roi/sdk/apis/pvm/model/get_utxos.dart' as pvm_utxos;
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/pvm/utxos.dart';
+import 'package:wallet/roi/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
+import 'package:wallet/roi/wallet/types.dart';
 
 Future<AvmUTXOSet> avmGetAllUTXOs({List<String> addresses = const []}) async {
   if (addresses.length < 1024) {
@@ -21,7 +23,7 @@ Future<AvmUTXOSet> avmGetAllUTXOs({List<String> addresses = const []}) async {
 Future<AvmUTXOSet> avmGetAllUTXOsForAddresses(
     {List<String> addresses = const [], dynamic endIndex}) async {
   assert(addresses.length <= 1024, "Maximum length of addresses is 1024");
-  final avmUTXOs.GetUTXOsResponse response;
+  final avm_utxos.GetUTXOsResponse response;
   if (endIndex != null) {
     response = await xChain.getUTXOs(addresses);
   } else {
@@ -57,7 +59,7 @@ Future<PvmUTXOSet> pvmGetAllUTXOs({List<String> addresses = const []}) async {
 Future<PvmUTXOSet> pvmGetAllUTXOsForAddresses(
     {List<String> addresses = const [], dynamic endIndex}) async {
   assert(addresses.length <= 1024, "Maximum length of addresses is 1024");
-  final pvmUTXOs.GetUTXOsResponse response;
+  final pvm_utxos.GetUTXOsResponse response;
   if (endIndex != null) {
     response = await pChain.getUTXOs(addresses);
   } else {
@@ -94,5 +96,24 @@ Future<GetStakeResponse> getStakeForAddresses(List<String> addresses) async {
     final finalStakedOutputs = [...chunkUtxos, ...next.stakedOutputs];
     return GetStakeResponse(
         staked: finalStaked, stakedOutputs: finalStakedOutputs);
+  }
+}
+
+Future<PvmUTXOSet> platformGetAtomicUTXOs(
+    List<String> addresses, ExportChainsP sourceChain) async {
+  final sourceChainId = chainIdFromAlias(sourceChain.value);
+  if (addresses.length < 1024) {
+    return (await pChain.getUTXOs(addresses, sourceChain: sourceChainId))
+        .getUTXOs();
+  } else {
+    final selection = addresses.sublist(0, 1024);
+    final remaining = addresses.sublist(1024);
+    var utxoSet = (await pChain.getUTXOs(selection, sourceChain: sourceChainId))
+        .getUTXOs();
+    if (remaining.isNotEmpty) {
+      final nextSet = await platformGetAtomicUTXOs(remaining, sourceChain);
+      utxoSet = utxoSet.merge(nextSet) as PvmUTXOSet;
+    }
+    return utxoSet;
   }
 }

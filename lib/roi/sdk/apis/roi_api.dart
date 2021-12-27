@@ -14,6 +14,8 @@ abstract class ROIChainApi implements ROIApi {
 
   String? getBlockchainAlias();
 
+  String getBlockchainId();
+
   void setBlockchainAlias(String alias);
 
   void refreshBlockchainId(String blockChainId);

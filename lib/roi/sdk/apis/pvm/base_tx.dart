@@ -29,9 +29,7 @@ class PvmBaseTx extends StandardBaseTx<PvmKeyPair, PvmKeyChain> {
             blockchainId: blockchainId,
             outs: outs,
             ins: ins,
-            memo: memo) {
-    setCodecId(CREATESUBNETTX);
-  }
+            memo: memo);
 
   factory PvmBaseTx.fromArgs(Map<String, dynamic> args) {
     return PvmBaseTx(
@@ -69,6 +67,11 @@ class PvmBaseTx extends StandardBaseTx<PvmKeyPair, PvmKeyChain> {
   @override
   int getTxType() {
     return BASETX;
+  }
+
+  @override
+  int getTypeId() {
+    return CREATESUBNETTX;
   }
 
   @override

@@ -49,7 +49,7 @@ class PvmParseableOutput extends StandardParseableOutput {
   @override
   String get typeName => "PvmParseableOutput";
 
-  PvmParseableOutput({Output? output}): super(output: output);
+  PvmParseableOutput({Output? output}) : super(output: output);
 
   @override
   void deserialize(fields,
@@ -125,9 +125,7 @@ class PvmSECPTransferOutput extends PvmAmountOutput {
             amount: amount,
             addresses: addresses,
             lockTime: lockTime,
-            threshold: threshold) {
-    setCodecId(SECPXFEROUTPUTID);
-  }
+            threshold: threshold);
 
   factory PvmSECPTransferOutput.fromArgs(Map<String, dynamic> args) {
     return PvmSECPTransferOutput(
@@ -148,7 +146,12 @@ class PvmSECPTransferOutput extends PvmAmountOutput {
   }
 
   @override
-  int getOutputId() => super.getTypeId();
+  int getTypeId() {
+    return SECPXFEROUTPUTID;
+  }
+
+  @override
+  int getOutputId() => getTypeId();
 }
 
 class PvmStakeableLockOut extends PvmAmountOutput {
@@ -170,7 +173,6 @@ class PvmStakeableLockOut extends PvmAmountOutput {
             addresses: addresses,
             lockTime: lockTime,
             threshold: threshold) {
-    setCodecId(STAKEABLELOCKOUTID);
     if (stakeableLockTime != null) {
       this.stakeableLockTime = fromBNToBuffer(stakeableLockTime);
     }
@@ -249,8 +251,13 @@ class PvmStakeableLockOut extends PvmAmountOutput {
   }
 
   @override
+  int getTypeId() {
+    return STAKEABLELOCKOUTID;
+  }
+
+  @override
   int getOutputId() {
-    return super.getTypeId();
+    return getTypeId();
   }
 
   @override
@@ -284,6 +291,7 @@ class PvmStakeableLockOut extends PvmAmountOutput {
     return transferableOutput;
   }
 
+  @override
   PvmTransferableOutput makeTransferable(Uint8List assetId) {
     return PvmTransferableOutput(assetId: assetId, output: this);
   }

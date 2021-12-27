@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/apis/pvm/constants.dart';
 import 'package:wallet/roi/sdk/apis/pvm/base_tx.dart';
+import 'package:wallet/roi/sdk/apis/pvm/import_tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/inputs.dart';
 import 'package:wallet/roi/sdk/apis/pvm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
@@ -123,6 +124,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
     this.addressUTXOs = addressUTXOs;
   }
 
+  @override
   PvmUTXO parseUTXO(dynamic utxo) {
     final pvmUTXO = PvmUTXO();
     if (utxo is String) {
@@ -189,7 +191,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       }
     }
 
-    getMinimumSpendable(aad,
+    _getMinimumSpendable(aad,
         asOf: asOf, lockTime: lockTime, threshold: threshold);
 
     final baseTx = PvmBaseTx(
@@ -200,6 +202,105 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
         memo: memo);
 
     return PvmUnsignedTx(transaction: baseTx);
+  }
+
+  PvmUnsignedTx buildImportTx(
+      int networkId,
+      Uint8List blockchainId,
+      List<PvmUTXO> atomics,
+      List<Uint8List> toAddresses,
+      List<Uint8List> fromAddresses,
+      {List<Uint8List>? changeAddresses,
+      Uint8List? sourceChain,
+      BigInt? fee,
+      Uint8List? feeAssetId,
+      Uint8List? memo,
+      BigInt? asOf,
+      BigInt? lockTime,
+      int threshold = 1}) {
+    var ins = <PvmTransferableInput>[];
+    var outs = <PvmTransferableOutput>[];
+    fee ??= BigInt.zero;
+    final importIns = <PvmTransferableInput>[];
+    var feePaid = BigInt.zero;
+    final feeAssetStr = feeAssetId == null ? null : hexEncode(feeAssetId);
+
+    for (int i = 0; i < atomics.length; i++) {
+      final utxo = atomics[i];
+      final assetId = utxo.getAssetId();
+      final output = utxo.getOutput() as PvmAmountOutput;
+      final amt = output.getAmount();
+      var inFeeAmount = amt;
+      final assetStr = hexEncode(assetId);
+      if (feeAssetId != null &&
+          fee > BigInt.zero &&
+          feePaid > fee &&
+          assetStr == feeAssetStr) {
+        feePaid += inFeeAmount;
+        if (feePaid >= fee) {
+          inFeeAmount = feePaid - fee;
+          feePaid = fee;
+        } else {
+          inFeeAmount = BigInt.zero;
+        }
+      }
+      final txId = utxo.getTxId();
+      final outputIdx = utxo.getOutputIdx();
+      final input = PvmSECPTransferInput(amount: amt);
+      final xFerIn = PvmTransferableInput(
+          txId: txId, outputIdx: outputIdx, assetId: assetId, input: input);
+      final from = output.getAddresses();
+      final spenders = output.getSpenders(from, asOf: asOf);
+      for (int j = 0; j < spenders.length; j++) {
+        final spender = spenders[j];
+        final idx = output.getAddressIdx(spender);
+        if (idx == -1) {
+          throw Exception(
+              "Error - UTXOSet.buildImportTx: no such address in output: $spender");
+        }
+        xFerIn.getInput().addSignatureIdx(idx, spender);
+      }
+      importIns.add(xFerIn);
+      if (inFeeAmount > BigInt.zero) {
+        final spendOut = selectOutputClass(output.getOutputId(),
+            args: PvmAmountOutput.createArgs(
+                amount: inFeeAmount,
+                addresses: toAddresses,
+                lockTime: lockTime,
+                threshold: threshold)) as PvmAmountOutput;
+        final xFerOut =
+            PvmTransferableOutput(assetId: assetId, output: spendOut);
+        outs.add(xFerOut);
+      }
+    }
+
+    final feeRemaining = fee - feePaid;
+
+    if (feeRemaining > BigInt.zero &&
+        feeAssetId != null &&
+        _feeCheck(feeRemaining, feeAssetId) &&
+        changeAddresses != null) {
+      final aad = PvmAssetAmountDestination(
+          destinations: toAddresses,
+          senders: fromAddresses,
+          changeAddresses: changeAddresses);
+      aad.addAssetAmount(feeAssetId, BigInt.zero, feeRemaining);
+      _getMinimumSpendable(aad,
+          asOf: asOf, lockTime: lockTime, threshold: threshold);
+      ins = aad.getInputs();
+      outs = aad.getOutputs();
+    }
+
+    final importTx = PvmImportTx(
+        networkId: networkId,
+        blockchainId: blockchainId,
+        outs: outs,
+        ins: ins,
+        memo: memo,
+        sourceChain: sourceChain,
+        importIns: importIns);
+
+    return PvmUnsignedTx(transaction: importTx);
   }
 
   List<PvmUTXO> getConsumableUXTO({BigInt? asOf, bool stakeable = false}) {
@@ -213,7 +314,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
     }).toList();
   }
 
-  void getMinimumSpendable(PvmAssetAmountDestination aad,
+  void _getMinimumSpendable(PvmAssetAmountDestination aad,
       {BigInt? asOf,
       BigInt? lockTime,
       int threshold = 1,
@@ -246,7 +347,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       utxoArray = tmpUTXOArray;
     }
 
-    final outs = <String, dynamic>{};
+    final outs = <String, Map<String, List<PvmAmountOutput>>>{};
 
     for (int i = 0; i < utxoArray.length; i++) {
       final utxo = utxoArray[i];
@@ -263,7 +364,10 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       final assetAmount = aad.getAssetAmount(assetKey);
       if (assetAmount.isFinished()) return;
       if (!outs.keys.contains(assetKey)) {
-        outs[assetKey] = {"lockedStakeable": [], "unlocked": []};
+        outs[assetKey] = {
+          "lockedStakeable": <PvmAmountOutput>[],
+          "unlocked": <PvmAmountOutput>[]
+        };
       }
       final amount = output.getAmount();
       PvmAmountInput input = PvmSECPTransferInput(amount: amount);
@@ -281,10 +385,10 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       assetAmount.spendAmount(amount, stakeableLocked: locked);
 
       if (locked) {
-        (outs[assetKey]["lockedStakeable"] as List<PvmAmountOutput>)
+        (outs[assetKey]!["lockedStakeable"] as List<PvmAmountOutput>)
             .add(output);
       } else {
-        (outs[assetKey]["unlocked"] as List<PvmAmountOutput>).add(output);
+        (outs[assetKey]!["unlocked"] as List<PvmAmountOutput>).add(output);
       }
 
       final spenders = output.getSpenders(fromAddresses, asOf: asOf);
@@ -319,7 +423,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       final assetKey = assetAmount.getAssetIdString();
 
       final lockedOutputs =
-          outs[assetKey]["lockedStakeable"] as List<PvmStakeableLockOut>;
+          outs[assetKey]!["lockedStakeable"] as List<PvmStakeableLockOut>;
       for (int i = 0; i < lockedOutputs.length; i++) {
         final lockedOutput = lockedOutputs[i];
         final stakeableLockTime = lockedOutput.getStakeableLockTime();
@@ -400,7 +504,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
     }
   }
 
-  bool _feeCheck(BigInt? fee, Uint8List feeAssetId) {
+  bool _feeCheck(BigInt? fee, Uint8List? feeAssetId) {
     return fee != null && fee > BigInt.zero && feeAssetId is Uint8List;
   }
 }

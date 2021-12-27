@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_staking_assset_id.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_tx_status.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_utxos.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/issue_tx.dart';
 import 'package:wallet/roi/sdk/common/rpc/rpc_request.dart';
 import 'package:wallet/roi/sdk/common/rpc/rpc_response.dart';
 
@@ -19,4 +22,16 @@ abstract class PvmRestClient {
   @POST("")
   Future<RpcResponse<GetStakeResponse>> getStake(
       @Body() RpcRequest<GetStakeRequest> request);
+
+  @POST("")
+  Future<RpcResponse<GetStakingAssetIdResponse>> getStakingAssetId(
+      @Body() RpcRequest<GetStakingAssetIdRequest> request);
+
+  @POST("")
+  Future<RpcResponse<IssueTxResponse>> issueTx(
+      @Body() RpcRequest<IssueTxRequest> request);
+
+  @POST("")
+  Future<RpcResponse<GetTxStatusResponse>> getTxStatus(
+      @Body() RpcRequest<GetTxStatusRequest> request);
 }

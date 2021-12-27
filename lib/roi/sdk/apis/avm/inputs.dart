@@ -10,7 +10,7 @@ Input selectInputClass(int inputId, {Map<String, dynamic> args = const {}}) {
     case SECPINPUTID_CODECONE:
       return AvmSECPTransferInput.fromArgs(args);
     default:
-      throw Exception("Error - SelectOutputClass: unknown inputId = $inputId");
+      throw Exception("Error - SelectInputClass: unknown inputId = $inputId");
   }
 }
 
@@ -23,7 +23,8 @@ class AvmTransferableInput extends StandardTransferableInput {
       : super(input: input, txId: txId, outputIdx: outputIdx, assetId: assetId);
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     input = selectInputClass(fields["input"]["typeId"]);
     input.deserialize(fields["input"], encoding: encoding);
@@ -59,7 +60,7 @@ class AvmSECPTransferInput extends AvmAmountInput {
   @override
   String get typeName => "AvmSECPTransferInput";
 
-  AvmSECPTransferInput({BigInt? amount}) : super(amount: amount){
+  AvmSECPTransferInput({BigInt? amount}) : super(amount: amount) {
     setCodecId(LATESTCODEC);
   }
 

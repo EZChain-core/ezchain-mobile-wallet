@@ -11,8 +11,10 @@ import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
+import 'package:wallet/roi/wallet/utils/fee_utils.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 import 'package:wallet/roi/wallet/utils/price_utils.dart';
+import 'package:wallet/themes/buttons.dart';
 import 'package:web3dart/web3dart.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -28,15 +30,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    wallet = SingletonWallet(
-        privateKey:
-            "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
-    wallet.on(WalletEventType.balanceChangedX, _handleCallback);
-    wallet.on(WalletEventType.balanceChangedP, _handleCallback);
-    wallet.on(WalletEventType.balanceChangedC, _handleCallback);
-    updateX();
-    updateP();
-    updateC();
+    // wallet = SingletonWallet(
+    //     privateKey:
+    //         "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
+    // wallet.on(WalletEventType.balanceChangedX, _handleCallback);
+    // wallet.on(WalletEventType.balanceChangedP, _handleCallback);
+    // wallet.on(WalletEventType.balanceChangedC, _handleCallback);
+    // updateX();
+    // updateP();
+    // updateC();
     startTimer();
   }
 
@@ -49,6 +51,20 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Assets.images.imgSplash.image(fit: BoxFit.cover),
       ),
     );
+    // return Scaffold(
+    //   body: Container(
+    //     alignment: Alignment.center,
+    //     child: SizedBox(
+    //       width: 164,
+    //       child: ROIMediumPrimaryButton(
+    //         text: "Test",
+    //         onPressed: () {
+    //           exportXToP();
+    //         },
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   startTimer() {
@@ -80,22 +96,22 @@ class _SplashScreenState extends State<SplashScreen> {
       print(
           "balanceC: balance = ${eventData.balance}, balanceDecimal = ${eventData.balanceDecimal}");
     }
-    final avaxBalance = wallet.getAvaxBalance();
-    final totalAvaxBalanceDecimal = avaxBalance.totalDecimal;
-
-    final staked = await wallet.getStake();
-    final stakedDecimal = bnToDecimalAvaxP(staked.stakedBI);
-
-    final totalDecimal = totalAvaxBalanceDecimal + stakedDecimal;
-    final totalString = decimalToLocaleString(totalDecimal);
-    print("total ROI = $totalString");
-
-    final avaxPrice = await getAvaxPriceDecimal();
-    print("1 ROI = ${decimalToLocaleString(avaxPrice, decimals: 2)}");
-
-    final totalUsd = totalDecimal * avaxPrice;
-    final totalUsdString = decimalToLocaleString(totalUsd, decimals: 2);
-    print("totalUsd = $totalUsdString");
+    // final avaxBalance = wallet.getAvaxBalance();
+    // final totalAvaxBalanceDecimal = avaxBalance.totalDecimal;
+    //
+    // final staked = await wallet.getStake();
+    // final stakedDecimal = bnToDecimalAvaxP(staked.stakedBI);
+    //
+    // final totalDecimal = totalAvaxBalanceDecimal + stakedDecimal;
+    // final totalString = decimalToLocaleString(totalDecimal);
+    // print("total ROI = $totalString");
+    //
+    // final avaxPrice = await getAvaxPriceDecimal();
+    // print("1 ROI = ${decimalToLocaleString(avaxPrice, decimals: 2)}");
+    //
+    // final totalUsd = totalDecimal * avaxPrice;
+    // final totalUsdString = decimalToLocaleString(totalUsd, decimals: 2);
+    // print("totalUsd = $totalUsdString");
   }
 
   /// don't delete: to Address of PrivateKey-JaCCSxdoWfo3ao5KwenXrJjJR7cBTQ287G1C5qpv2hr2tCCdb
@@ -179,5 +195,19 @@ class _SplashScreenState extends State<SplashScreen> {
     } catch (e) {
       print(e);
     }
+  }
+
+  exportXToP() async {
+    // try {
+    // final exportFee = getTxFeeX();
+    // final importFee = getTxFeeP();
+    // final amount = numberToBNAvaxX(1) + exportFee;
+    // final exportTxId = await wallet.exportXChain(amount, ExportChainsX.P);
+    // print("exportTxId = $exportTxId");
+    final importTxId = await wallet.importP(ExportChainsP.X);
+    print("importTxId = $importTxId");
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 }
