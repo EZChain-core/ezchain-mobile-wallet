@@ -3,6 +3,7 @@ import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:wallet/roi/wallet/utils/price_utils.dart';
 
 part 'wallet_send_avm_store.g.dart';
 
@@ -17,7 +18,7 @@ abstract class _WalletSendAvmStore with Store {
   String balanceX = '0';
 
   @observable
-  double rateAvax = 127.3;
+  double avaxPrice = 0;
 
   @observable
   String? addressError;
@@ -33,6 +34,8 @@ abstract class _WalletSendAvmStore with Store {
     wallet
         .getBalanceX()
         .forEach((_, balance) => {balanceX = balance.unlockedDecimal});
+
+    avaxPrice = (await getAvaxPrice()).toDouble();
   }
 
   @action

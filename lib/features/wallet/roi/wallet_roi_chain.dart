@@ -16,7 +16,7 @@ class WalletROIChainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final walletRoiChainStore = WalletRoiChainStore();
-    walletRoiChainStore.getBalanceX();
+    walletRoiChainStore.fetchData();
 
     Future<void> _refresh() {
       walletRoiChainStore.refresh();
@@ -39,15 +39,21 @@ class WalletROIChainScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          '24.000.000.000 ROI',
-                          style: ROIHeadlineSmallTextStyle(
-                              color: provider.themeMode.primary),
+                        Observer(
+                          builder: (_) => Text(
+                            '${walletRoiChainStore.totalRoi} ROI',
+                            style: ROIHeadlineSmallTextStyle(
+                                color: provider.themeMode.primary),
+                            maxLines: 1,
+                          ),
                         ),
-                        Text(
-                          r'$2.000.000.000',
-                          style: ROITitleLargeTextStyle(
-                              color: provider.themeMode.white),
+                        Observer(
+                          builder: (_) => Text(
+                            '\$ ${walletRoiChainStore.totalUsd}',
+                            style: ROITitleLargeTextStyle(
+                                color: provider.themeMode.white),
+                            maxLines: 1,
+                          ),
                         ),
                       ],
                     ),
@@ -150,7 +156,8 @@ class _WalletButton extends StatelessWidget {
 class _WalletChainWidget extends StatelessWidget {
   final String chain;
   final String availableRoi;
-  final String lockRoi;
+  final String? lockRoi;
+  final String? lockStakeableRoi;
   final bool? hasSend;
   final VoidCallback? onSendPressed;
   final VoidCallback? onReceivePressed;
@@ -159,10 +166,11 @@ class _WalletChainWidget extends StatelessWidget {
       {Key? key,
       required this.chain,
       required this.availableRoi,
-      required this.lockRoi,
+      this.lockRoi,
       this.hasSend,
       this.onSendPressed,
-      this.onReceivePressed})
+      this.onReceivePressed,
+      this.lockStakeableRoi})
       : super(key: key);
 
   @override
@@ -218,7 +226,7 @@ class _WalletChainWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            Row(
+            if(lockRoi != null) Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -230,6 +238,21 @@ class _WalletChainWidget extends StatelessWidget {
                   '$lockRoi ROI',
                   style:
                       ROITitleMediumTextStyle(color: provider.themeMode.text),
+                ),
+              ],
+            ),
+            if(lockStakeableRoi != null) Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  Strings.current.sharedLockStakeable,
+                  style: ROITitleMediumTextStyle(
+                      color: provider.themeMode.secondary60),
+                ),
+                Text(
+                  '$lockStakeableRoi ROI',
+                  style:
+                  ROITitleMediumTextStyle(color: provider.themeMode.text),
                 ),
               ],
             ),

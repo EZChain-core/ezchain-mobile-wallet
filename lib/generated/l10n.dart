@@ -210,6 +210,16 @@ class Strings {
     );
   }
 
+  /// `Lock Stakeable`
+  String get sharedLockStakeable {
+    return Intl.message(
+      'Lock Stakeable',
+      name: 'sharedLockStakeable',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Copy`
   String get sharedCopy {
     return Intl.message(
@@ -800,10 +810,10 @@ class Strings {
     );
   }
 
-  /// `Memo(optional)`
+  /// `Memo (optional)`
   String get walletSendMemo {
     return Intl.message(
-      'Memo(optional)',
+      'Memo (optional)',
       name: 'walletSendMemo',
       desc: '',
       args: [],

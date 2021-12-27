@@ -1,6 +1,10 @@
+import 'package:eventify/eventify.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
+import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:wallet/roi/wallet/utils/price_utils.dart';
 
 part 'wallet_roi_chain_store.g.dart';
 
@@ -13,71 +17,112 @@ abstract class _WalletRoiChainStore with Store {
 
   @observable
   WalletRoiChainBalanceViewData balanceX =
-      WalletRoiChainBalanceViewData('0', '0');
+      WalletRoiChainBalanceViewData('0', '0', null);
 
   @observable
   WalletRoiChainBalanceViewData balanceP =
-      WalletRoiChainBalanceViewData('0', '0');
+      WalletRoiChainBalanceViewData('0', '0', '0');
 
   @observable
   WalletRoiChainBalanceViewData balanceC =
-      WalletRoiChainBalanceViewData('0', '0');
+      WalletRoiChainBalanceViewData('0', null, null);
+
+  @observable
+  String totalRoi = "";
+
+  @observable
+  String totalUsd = "";
 
   @action
-  getBalanceX() async {
-    wallet.on(WalletEventType.balanceChangedX, (event, context) {
-      final eventName = event.eventName;
-      final eventData = event.eventData;
-      if (eventName == WalletEventType.balanceChangedX.type &&
-          eventData is WalletBalanceX) {
-        eventData.forEach((k, balance) => balanceX =
-            WalletRoiChainBalanceViewData(
-                balance.unlockedDecimal, balance.lockedDecimal));
-      }
-    });
-    await wallet.updateUtxosX();
-
-    wallet.on(WalletEventType.balanceChangedP, (event, context) {
-      final eventName = event.eventName;
-      final eventData = event.eventData;
-      if (eventName == WalletEventType.balanceChangedP.type &&
-          eventData is AssetBalanceP) {
-        balanceP = WalletRoiChainBalanceViewData(
-            eventData.unlockedDecimal, eventData.lockedDecimal);
-      }
-    });
-    try {
-      await wallet.updateUtxosP();
-    } catch (e) {
-      print(e);
-    }
-
-    wallet.on(WalletEventType.balanceChangedC, (event, context) {
-      final eventName = event.eventName;
-      final eventData = event.eventData;
-      if (eventName == WalletEventType.balanceChangedC.type &&
-          eventData is WalletBalanceC) {
-        balanceC = WalletRoiChainBalanceViewData(eventData.balanceDecimal, '0');
-      }
-    });
-    await wallet.updateAvaxBalanceC();
+  fetchData() async {
+    wallet.on(WalletEventType.balanceChangedX, _handleCallback);
+    wallet.on(WalletEventType.balanceChangedP, _handleCallback);
+    wallet.on(WalletEventType.balanceChangedC, _handleCallback);
+    _updateX();
+    _updateP();
+    _updateC();
   }
 
   @action
   refresh() async {
-    await wallet.updateUtxosX();
+    _updateX();
+    _updateP();
+    _updateC();
+    _fetchTotal();
+  }
+
+  _fetchTotal() async {
+    final avaxBalance = wallet.getAvaxBalance();
+    final totalAvaxBalanceDecimal = avaxBalance.totalDecimal;
+
+    final staked = await wallet.getStake();
+    final stakedDecimal = bnToDecimalAvaxP(staked.stakedBI);
+
+    final totalDecimal = totalAvaxBalanceDecimal + stakedDecimal;
+    totalRoi = decimalToLocaleString(totalDecimal);
+
+    final avaxPrice = await getAvaxPriceDecimal();
+
+    final totalUsdNumber = totalDecimal * avaxPrice;
+    totalUsd = decimalToLocaleString(totalUsdNumber, decimals: 2);
+  }
+
+  _handleCallback(Event event, Object? context) async {
+    final eventName = event.eventName;
+    final eventData = event.eventData;
+    if (eventName == WalletEventType.balanceChangedX.type &&
+        eventData is WalletBalanceX) {
+      final x = eventData[activeNetwork.avaxId];
+      if (x != null) {
+        balanceX = WalletRoiChainBalanceViewData(
+                x.unlockedDecimal, x.lockedDecimal, null);
+      }
+    }
+    if (eventName == WalletEventType.balanceChangedP.type &&
+        eventData is AssetBalanceP) {
+      balanceP = WalletRoiChainBalanceViewData(
+          eventData.unlockedDecimal, eventData.lockedDecimal, eventData.lockedStakeableDecimal);
+    }
+    if (eventName == WalletEventType.balanceChangedC.type &&
+        eventData is WalletBalanceC) {
+      balanceC = WalletRoiChainBalanceViewData(eventData.balanceDecimal, null, null);
+    }
+
+    _fetchTotal();
+  }
+
+  _updateX() async {
+    try {
+      await wallet.updateUtxosX();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  _updateP() async {
     try {
       await wallet.updateUtxosP();
     } catch (e) {
       print(e);
     }
-    await wallet.updateAvaxBalanceC();
+  }
+
+  _updateC() async {
+    try {
+      await wallet.updateAvaxBalanceC();
+    } catch (e) {
+      print(e);
+      return;
+    }
   }
 }
 
 class WalletRoiChainBalanceViewData {
   final String available;
-  final String lock;
+  final String? lock;
+  final String? lockStakeable;
 
-  WalletRoiChainBalanceViewData(this.available, this.lock);
+
+  WalletRoiChainBalanceViewData(this.available, this.lock, this.lockStakeable);
+
 }

@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
     updateX();
     updateP();
     updateC();
-    // startTimer();
+    startTimer();
   }
 
   @override
