@@ -113,6 +113,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invalid Amount"),
         "sharedLanguage": MessageLookupByLibrary.simpleMessage("Language"),
         "sharedLock": MessageLookupByLibrary.simpleMessage("Lock"),
+        "sharedLockStakeable":
+            MessageLookupByLibrary.simpleMessage("Lock Stakeable"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
         "sharedPChain": MessageLookupByLibrary.simpleMessage("P chain"),
         "sharedPassphrase": MessageLookupByLibrary.simpleMessage("Passphrase"),
@@ -155,6 +157,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Gas Price (GWEI)"),
         "walletSendGasPriceNote": MessageLookupByLibrary.simpleMessage(
             "Adjusted automatically according to network load."),
-        "walletSendMemo": MessageLookupByLibrary.simpleMessage("Memo(optional)")
+        "walletSendMemo":
+            MessageLookupByLibrary.simpleMessage("Memo (optional)")
       };
 }

@@ -107,7 +107,7 @@ class WalletSendEvmScreen extends StatelessWidget {
                                     suffixText: Strings.current
                                         .walletSendBalance(
                                         walletSendEvmStore.balanceC),
-                                    rateUsd: walletSendEvmStore.rateAvax,
+                                    rateUsd: walletSendEvmStore.avaxPrice,
                                     error: walletSendEvmStore.amountError,
                                     onChanged: (_) =>
                                         walletSendEvmStore.removeAmountError(),
