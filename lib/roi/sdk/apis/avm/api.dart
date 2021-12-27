@@ -13,6 +13,7 @@ import 'package:wallet/roi/sdk/apis/roi_api.dart';
 import 'package:wallet/roi/sdk/roi.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart' as bindtools;
 import 'package:wallet/roi/sdk/utils/constants.dart';
+import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
 abstract class AvmApi implements ROIChainApi {
@@ -24,6 +25,19 @@ abstract class AvmApi implements ROIChainApi {
       List<String> fromAddresses,
       List<String> changeAddresses,
       {Uint8List? memo});
+
+  Future<AvmUnsignedTx> buildExportTx(
+      AvmUTXOSet utxoSet,
+      BigInt amount,
+      dynamic destinationChain,
+      List<String> toAddresses,
+      List<String> fromAddresses,
+      {List<String>? changeAddresses,
+      Uint8List? memo,
+      BigInt? asOf,
+      BigInt? lockTime,
+      int threshold = 1,
+      String? assetId});
 
   Future<GetUTXOsResponse> getUTXOs(List<String> addresses,
       {String? sourceChain, int limit = 0, GetUTXOsStartIndex? startIndex});
@@ -110,6 +124,9 @@ class _AvmApiImpl implements AvmApi {
   }
 
   @override
+  String getBlockchainId() => blockChainId;
+
+  @override
   void setAVAXAssetId(String? avaxAssetId) {
     this.avaxAssetId = bindtools.cb58Decode(avaxAssetId);
   }
@@ -155,7 +172,7 @@ class _AvmApiImpl implements AvmApi {
     final change =
         changeAddresses.map((e) => bindtools.stringToAddress(e)).toList();
 
-    final builtUnsignedTx = utxoSet.buildBaseTx(
+    final buildUnsignedTx = utxoSet.buildBaseTx(
         roiNetwork.networkId,
         bindtools.cb58Decode(blockChainId),
         amount,
@@ -167,8 +184,87 @@ class _AvmApiImpl implements AvmApi {
         feeAssetId: await getAVAXAssetId(),
         memo: memo,
         threshold: threshold);
-    if (!await _checkGooseEgg(builtUnsignedTx)) {
+    if (!await _checkGooseEgg(buildUnsignedTx)) {
       throw Exception("Error - AVMAPI.buildBaseTx:Failed Goose Egg Check");
+    }
+    return buildUnsignedTx;
+  }
+
+  @override
+  Future<AvmUnsignedTx> buildExportTx(
+      AvmUTXOSet utxoSet,
+      BigInt amount,
+      dynamic destinationChain,
+      List<String> toAddresses,
+      List<String> fromAddresses,
+      {List<String>? changeAddresses,
+      Uint8List? memo,
+      BigInt? asOf,
+      BigInt? lockTime,
+      int threshold = 1,
+      String? assetId}) async {
+    asOf ??= unixNow();
+    lockTime ??= BigInt.zero;
+
+    final prefixes = <String, bool>{};
+    for (var address in toAddresses) {
+      prefixes[address.split("-")[0]] = true;
+    }
+    if (prefixes.keys.length != 1) {
+      throw Exception(
+          "Error - AVMAPI.buildExportTx: To addresses must have the same chainID prefix.");
+    }
+
+    if (destinationChain == null) {
+      throw Exception(
+          "Error - AVMAPI.buildExportTx: Destination ChainID is undefined.");
+    } else if (destinationChain is String) {
+      destinationChain = bindtools.cb58Decode(destinationChain);
+    }
+    if (destinationChain is! Uint8List) {
+      throw Exception(
+          "Error - AVMAPI.buildExportTx: Invalid destinationChain type: ${destinationChain.runtimeType}");
+    }
+
+    if (destinationChain.length != 32) {
+      throw Exception(
+          "Error - AVMAPI.buildExportTx: Destination ChainID must be 32 bytes in length.");
+    }
+
+    final to = toAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    final from =
+        fromAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    final List<Uint8List>? change;
+    if (changeAddresses == null) {
+      change = null;
+    } else {
+      change =
+          changeAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    }
+
+    final avaxAssetId = await getAVAXAssetId();
+    if (avaxAssetId != null) {
+      assetId = bindtools.cb58Encode(avaxAssetId);
+    }
+
+    final builtUnsignedTx = utxoSet.buildExportTx(
+        roiNetwork.networkId,
+        bindtools.cb58Decode(blockChainId),
+        amount,
+        bindtools.cb58Decode(assetId),
+        destinationChain,
+        to,
+        from,
+        changeAddresses: change,
+        fee: getTxFee(),
+        feeAssetId: avaxAssetId,
+        memo: memo,
+        asOf: asOf,
+        lockTime: lockTime,
+        threshold: threshold);
+
+    if (!await _checkGooseEgg(builtUnsignedTx)) {
+      throw Exception("Error - AVMAPI.buildExportTx:Failed Goose Egg Check");
     }
     return builtUnsignedTx;
   }

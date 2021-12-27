@@ -8,7 +8,8 @@ Credential selectCredentialClass(int inputId,
     case SECPCREDENTIAL_CODECONE:
       return AvmSECPCredential();
     default:
-      throw Exception("Error - SelectOutputClass: unknown inputId = $inputId");
+      throw Exception(
+          "Error - SelectCredentialClass: unknown inputId = $inputId");
   }
 }
 

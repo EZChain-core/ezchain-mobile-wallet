@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:wallet/roi/sdk/apis/avm/base_tx.dart';
+import 'package:wallet/roi/sdk/apis/avm/export_tx.dart';
 
 import 'package:wallet/roi/sdk/apis/avm/inputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
@@ -122,6 +123,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
     this.addressUTXOs = addressUTXOs;
   }
 
+  @override
   AvmUTXO parseUTXO(dynamic utxo) {
     final avmUTXO = AvmUTXO();
     if (utxo is String) {
@@ -188,7 +190,8 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
       }
     }
 
-    getMinimumSpendable(aad, asOf: asOf, lockTime: lockTime, threshold: threshold);
+    _getMinimumSpendable(aad,
+        asOf: asOf, lockTime: lockTime, threshold: threshold);
 
     final baseTx = AvmBaseTx(
         networkId: networkId,
@@ -200,7 +203,60 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
     return AvmUnsignedTx(transaction: baseTx);
   }
 
-  void getMinimumSpendable(AvmAssetAmountDestination aad,
+  AvmUnsignedTx buildExportTx(
+      int networkId,
+      Uint8List blockchainId,
+      BigInt amount,
+      Uint8List assetId,
+      Uint8List destinationChain,
+      List<Uint8List> toAddresses,
+      List<Uint8List> fromAddresses,
+      {List<Uint8List>? changeAddresses,
+      BigInt? fee,
+      Uint8List? feeAssetId,
+      Uint8List? memo,
+      BigInt? asOf,
+      BigInt? lockTime,
+      int threshold = 1}) {
+    asOf ??= unixNow();
+    lockTime ??= BigInt.zero;
+
+    changeAddresses ??= toAddresses;
+
+    assert(amount > BigInt.zero);
+
+    feeAssetId ??= assetId;
+
+    final aad = AvmAssetAmountDestination(
+        destinations: toAddresses,
+        senders: fromAddresses,
+        changeAddresses: changeAddresses);
+
+    if (hexEncode(assetId) == hexEncode(feeAssetId)) {
+      aad.addAssetAmount(assetId, amount, fee ?? BigInt.zero);
+    } else {
+      aad.addAssetAmount(assetId, amount, BigInt.zero);
+      if (_feeCheck(fee, feeAssetId)) {
+        aad.addAssetAmount(feeAssetId, BigInt.zero, fee ?? BigInt.zero);
+      }
+    }
+
+    _getMinimumSpendable(aad,
+        asOf: asOf, lockTime: lockTime, threshold: threshold);
+
+    final exportTx = AvmExportTx(
+        networkId: networkId,
+        blockchainId: blockchainId,
+        outs: aad.getChangeOutputs(),
+        ins: aad.getInputs(),
+        memo: memo,
+        destinationChain: destinationChain,
+        exportOuts: aad.getOutputs());
+
+    return AvmUnsignedTx(transaction: exportTx);
+  }
+
+  void _getMinimumSpendable(AvmAssetAmountDestination aad,
       {BigInt? asOf, BigInt? lockTime, int threshold = 1}) {
     asOf ??= unixNow();
     lockTime ??= BigInt.zero;
@@ -280,7 +336,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
     }
   }
 
-  bool _feeCheck(BigInt? fee, Uint8List feeAssetId) {
+  bool _feeCheck(BigInt? fee, Uint8List? feeAssetId) {
     return fee != null && fee > BigInt.zero && feeAssetId is Uint8List;
   }
 }

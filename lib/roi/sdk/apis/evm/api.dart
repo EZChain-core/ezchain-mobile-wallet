@@ -86,6 +86,9 @@ class _EvmApiImpl implements EvmApi {
   }
 
   @override
+  String getBlockchainId() => blockChainId;
+
+  @override
   void setAVAXAssetId(String? avaxAssetId) {
     this.avaxAssetId = cb58Decode(avaxAssetId);
   }

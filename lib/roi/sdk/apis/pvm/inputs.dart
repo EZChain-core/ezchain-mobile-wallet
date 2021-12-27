@@ -12,7 +12,7 @@ Input selectInputClass(int inputId, {Map<String, dynamic> args = const {}}) {
     case STAKEABLELOCKINID:
       return PvmStakeableLockIn.fromArgs(args);
     default:
-      throw Exception("Error - SelectOutputClass: unknown inputId = $inputId");
+      throw Exception("Error - SelectInputClass: unknown inputId = $inputId");
   }
 }
 
@@ -20,7 +20,7 @@ class PvmParseableInput extends StandardParseableInput {
   @override
   String get typeName => "PvmParseableInput";
 
-  PvmParseableInput({Input? input}): super(input: input);
+  PvmParseableInput({Input? input}) : super(input: input);
 
   @override
   void deserialize(fields,
@@ -87,9 +87,7 @@ class PvmSECPTransferInput extends PvmAmountInput {
   @override
   String get typeName => "PvmSECPTransferInput";
 
-  PvmSECPTransferInput({BigInt? amount}) : super(amount: amount) {
-    setCodecId(SECPINPUTID);
-  }
+  PvmSECPTransferInput({BigInt? amount}) : super(amount: amount);
 
   factory PvmSECPTransferInput.fromArgs(Map<String, dynamic> args) {
     return PvmSECPTransferInput(amount: args["amount"]);
@@ -106,7 +104,12 @@ class PvmSECPTransferInput extends PvmAmountInput {
   }
 
   @override
-  int getInputId() => super.getTypeId();
+  int getTypeId() {
+    return SECPINPUTID;
+  }
+
+  @override
+  int getInputId() => getTypeId();
 
   @override
   int getCredentialId() {
@@ -126,7 +129,6 @@ class PvmStakeableLockIn extends PvmAmountInput {
       BigInt? stakeableLockTime,
       PvmParseableInput? transferableInput})
       : super(amount: amount) {
-    setCodecId(STAKEABLELOCKINID);
     if (stakeableLockTime != null) {
       this.stakeableLockTime = fromBNToBuffer(stakeableLockTime, length: 8);
     }
@@ -193,7 +195,7 @@ class PvmStakeableLockIn extends PvmAmountInput {
   void _synchronize() {
     final input = transferableInput.getInput() as PvmAmountInput;
     sigIdxs = input.getSigIdxs();
-    sigCount =  Uint8List(4);
+    sigCount = Uint8List(4);
     sigCount.buffer.asByteData().setUint32(0, sigIdxs.length);
     amount = fromBNToBuffer(input.getAmount(), length: 8);
     amountValue = input.getAmount();
@@ -208,8 +210,13 @@ class PvmStakeableLockIn extends PvmAmountInput {
   }
 
   @override
+  int getTypeId() {
+    return STAKEABLELOCKINID;
+  }
+
+  @override
   int getInputId() {
-    return super.getTypeId();
+    return getTypeId();
   }
 
   @override

@@ -2,6 +2,38 @@ import 'package:decimal/decimal.dart';
 import 'package:wallet/roi/wallet/asset/types.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
+enum ChainAlias { X, P }
+
+enum ExportChainsX { P, C }
+
+extension ExportChainsXString on ExportChainsX {
+  String get value {
+    switch (this) {
+      case ExportChainsX.P:
+        return "P";
+      case ExportChainsX.C:
+        return "C";
+    }
+  }
+}
+
+enum ExportChainsP { X, C }
+
+extension ExportChainsPString on ExportChainsP {
+  String get value {
+    switch (this) {
+      case ExportChainsP.X:
+        return "X";
+      case ExportChainsP.C:
+        return "C";
+    }
+  }
+}
+
+enum ExportChainsC { X, P }
+
+enum HdChainType { X, P }
+
 class AvaxBalance {
   final AssetBalanceRawX x;
   final AssetBalanceP p;

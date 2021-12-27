@@ -4,6 +4,7 @@ import 'package:hash/hash.dart';
 import 'package:wallet/roi/sdk/apis/avm/base_tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/constants.dart';
 import 'package:wallet/roi/sdk/apis/avm/credentials.dart';
+import 'package:wallet/roi/sdk/apis/avm/export_tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/roi/sdk/common/credentials.dart';
 import 'package:wallet/roi/sdk/common/tx.dart';
@@ -13,8 +14,10 @@ AvmBaseTx selectTxClass(int inputId, {Map<String, dynamic> args = const {}}) {
   switch (inputId) {
     case BASETX:
       return AvmBaseTx.fromArgs(args);
+    case EXPORTTX:
+      return AvmExportTx.fromArgs(args);
     default:
-      throw Exception("Error - SelectOutputClass: unknown inputId = $inputId");
+      throw Exception("Error - SelectTxClass: unknown inputId = $inputId");
   }
 }
 

@@ -1,4 +1,8 @@
+import 'package:wallet/roi/sdk/apis/avm/tx.dart';
+import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
+import 'package:wallet/roi/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
+import 'package:wallet/roi/wallet/types.dart';
 import 'package:web3dart/web3dart.dart';
 
 Future<Transaction> buildEvmTransferNativeTx(String from, String to,
@@ -28,4 +32,18 @@ Future<BigInt> estimateAvaxGas(
   } catch (e) {
     return BigInt.from(21000);
   }
+}
+
+Future<AvmUnsignedTx> buildAvmExportTransaction(
+    ExportChainsX destinationChain,
+    AvmUTXOSet utxoSet,
+    List<String> fromAddresses,
+    String toAddress,
+    BigInt amount, // export amount + fee
+    String sourceChangeAddress) async {
+  final destinationChainId = chainIdFromAlias(destinationChain.value);
+
+  return await xChain.buildExportTx(
+      utxoSet, amount, destinationChainId, [toAddress], fromAddresses,
+      changeAddresses: [sourceChangeAddress]);
 }
