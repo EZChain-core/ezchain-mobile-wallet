@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wallet/roi/sdk/common/rpc/rpc_request_wrapper.dart';
 
-part 'get_staking_assset_id.g.dart';
+part 'get_staking_asset_id.g.dart';
 
 @JsonSerializable()
 class GetStakingAssetIdRequest

@@ -7,7 +7,7 @@ import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
-import 'package:wallet/roi/sdk/apis/pvm/constants.dart' as pvm_constants;
+import 'package:wallet/roi/sdk/apis/pvm/constants.dart' as pvmConstants;
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
@@ -309,7 +309,7 @@ abstract class WalletProvider {
       final out = utxo.getOutput();
       final type = out.getOutputId();
       final amount = (out as PvmAmountOutput).getAmount();
-      if (type == pvm_constants.STAKEABLELOCKOUTID) {
+      if (type == pvmConstants.STAKEABLELOCKOUTID) {
         final lockTime = (out as PvmStakeableLockOut).getStakeableLockTime();
         if (lockTime <= now) {
           unlocked += amount;
@@ -354,11 +354,11 @@ abstract class WalletProvider {
         .getAddresses()
         .map((address) => addressToString("P", hrp, address))
         .toList();
-    final ownerAddrs = utxoAddresses;
+    final ownerAddresses = utxoAddresses;
     toAddress ??= walletAddressP;
     final sourceChainId = chainIdFromAlias(sourceChain.value);
     final unsignedTx = await pChain.buildImportTx(
-        utxoSet, ownerAddrs, sourceChainId, [toAddress], ownerAddrs,
+        utxoSet, ownerAddresses, sourceChainId, [toAddress], ownerAddresses,
         changeAddresses: [walletAddressP]);
     final signedTx = await signP(unsignedTx);
     final String txId;

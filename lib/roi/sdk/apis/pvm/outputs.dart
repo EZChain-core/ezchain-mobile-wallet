@@ -71,7 +71,7 @@ class PvmParseableOutput extends StandardParseableOutput {
 
 abstract class PvmAmountOutput extends StandardAmountOutput {
   @override
-  String get typeName => "AmountOutput";
+  String get typeName => "PvmAmountOutput";
 
   PvmAmountOutput(
       {BigInt? amount,

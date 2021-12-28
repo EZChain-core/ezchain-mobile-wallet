@@ -8,9 +8,9 @@ const SERIALIZATIONVERSION = 0;
 abstract class Serializable {
   String typeName = "";
 
-  var _typeId = -1;
+  var _typeId = 0;
 
-  var _codecId = -1;
+  var _codecId = 0;
 
   dynamic serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
     return {
@@ -20,7 +20,8 @@ abstract class Serializable {
     };
   }
 
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     assert(fields["typeName"] is String);
     assert(fields["typeName"] == typeName);
     if (fields["typeId"] != null) {

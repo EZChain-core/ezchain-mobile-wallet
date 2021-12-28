@@ -198,16 +198,16 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   exportXToP() async {
-    // try {
-    // final exportFee = getTxFeeX();
-    // final importFee = getTxFeeP();
-    // final amount = numberToBNAvaxX(1) + exportFee;
-    // final exportTxId = await wallet.exportXChain(amount, ExportChainsX.P);
-    // print("exportTxId = $exportTxId");
-    final importTxId = await wallet.importP(ExportChainsP.X);
-    print("importTxId = $importTxId");
-    // } catch (e) {
-    //   print(e);
-    // }
+    try {
+      final exportFee = getTxFeeX();
+      final importFee = getTxFeeP();
+      final amount = numberToBNAvaxX(1) + exportFee;
+      final exportTxId = await wallet.exportXChain(amount, ExportChainsX.P);
+      print("exportTxId = $exportTxId");
+      final importTxId = await wallet.importP(ExportChainsP.X);
+      print("importTxId = $importTxId");
+    } catch (e) {
+      print(e);
+    }
   }
 }

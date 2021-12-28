@@ -75,6 +75,9 @@ class PvmTransferableInput extends StandardTransferableInput {
 }
 
 abstract class PvmAmountInput extends StandardAmountInput {
+  @override
+  String get typeName => "PvmAmountInput";
+
   PvmAmountInput({BigInt? amount}) : super(amount: amount);
 
   @override

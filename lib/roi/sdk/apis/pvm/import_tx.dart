@@ -17,8 +17,9 @@ class PvmImportTx extends PvmBaseTx {
   @override
   String get typeName => "PvmImportTx";
 
-  late Uint8List sourceChain;
-  late List<PvmTransferableInput> importIns;
+  Uint8List sourceChain = Uint8List(32);
+  List<PvmTransferableInput> importIns = [];
+  Uint8List importNumIns = Uint8List(4);
 
   PvmImportTx(
       {int networkId = defaultNetworkId,
@@ -75,7 +76,7 @@ class PvmImportTx extends PvmBaseTx {
     importIns = (fields["importIns"] as List<dynamic>)
         .map((e) => PvmTransferableInput()..deserialize(e, encoding: encoding))
         .toList();
-    numIns.buffer.asByteData().setUint32(0, importIns.length);
+    importNumIns.buffer.asByteData().setUint32(0, importIns.length);
   }
 
   @override
@@ -113,24 +114,24 @@ class PvmImportTx extends PvmBaseTx {
 
   @override
   int fromBuffer(Uint8List bytes, {int offset = 0}) {
-    offset = super.fromBuffer(bytes);
+    offset = super.fromBuffer(bytes, offset: offset);
     sourceChain = bytes.sublist(offset, offset + 32);
     offset += 32;
-    numIns = bytes.sublist(offset, offset + 4);
+    importNumIns = bytes.sublist(offset, offset + 4);
     offset += 4;
-    final numInsNumber = numIns.buffer.asByteData().getUint32(0);
+    final numInsNumber = importNumIns.buffer.asByteData().getUint32(0);
     for (int i = 0; i < numInsNumber; i++) {
-      final anOut = PvmTransferableInput();
-      offset = anOut.fromBuffer(bytes, offset: offset);
-      importIns.add(anOut);
+      final anIn = PvmTransferableInput();
+      offset = anIn.fromBuffer(bytes, offset: offset);
+      importIns.add(anIn);
     }
     return offset;
   }
 
   @override
   Uint8List toBuffer() {
-    numOuts.buffer.asByteData().setUint32(0, importIns.length);
-    final barr = [super.toBuffer(), sourceChain, numOuts];
+    importNumIns.buffer.asByteData().setUint32(0, importIns.length);
+    final barr = [super.toBuffer(), sourceChain, importNumIns];
     importIns.sort(StandardParseableInput.comparator());
     for (int i = 0; i < importIns.length; i++) {
       barr.add(importIns[i].toBuffer());
