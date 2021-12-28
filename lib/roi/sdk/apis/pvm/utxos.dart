@@ -234,7 +234,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       final assetStr = hexEncode(assetId);
       if (feeAssetId != null &&
           fee > BigInt.zero &&
-          feePaid > fee &&
+          feePaid < fee &&
           assetStr == feeAssetStr) {
         feePaid += inFeeAmount;
         if (feePaid >= fee) {

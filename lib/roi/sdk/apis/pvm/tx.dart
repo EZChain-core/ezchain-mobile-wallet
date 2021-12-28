@@ -81,7 +81,7 @@ class PvmTx extends StandardTx<PvmKeyPair, PvmKeyChain, PvmUnsignedTx> {
     for (int i = 0;
         i < (fields["credentials"] as List<Credential>).length;
         i++) {
-      final cred = selectCredentialClass(fields["credentials"][i]["typeIo"]);
+      final cred = selectCredentialClass(fields["credentials"][i]["typeId"]);
       cred.deserialize(fields["credentials"][i], encoding: encoding);
       credentials.add(cred);
     }

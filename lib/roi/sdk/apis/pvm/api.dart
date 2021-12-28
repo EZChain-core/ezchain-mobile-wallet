@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:wallet/roi/sdk/apis/pvm/constants.dart';
 import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
-import 'package:wallet/roi/sdk/apis/pvm/model/get_staking_assset_id.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_staking_asset_id.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_tx_status.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_utxos.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/issue_tx.dart';

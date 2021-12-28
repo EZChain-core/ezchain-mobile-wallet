@@ -50,18 +50,10 @@ class PvmBaseTx extends StandardBaseTx<PvmKeyPair, PvmKeyChain> {
     ins = (fields["ins"] as List<PvmTransferableInput>)
         .map((i) => PvmTransferableInput()..deserialize(i, encoding: encoding))
         .toList();
-    numOuts = Serialization.instance.decoder(
-        outs.length.toString(),
-        SerializedEncoding.display,
-        SerializedType.decimalString,
-        SerializedType.Buffer,
-        args: [4]);
-    numIns = Serialization.instance.decoder(
-        ins.length.toString(),
-        SerializedEncoding.display,
-        SerializedType.decimalString,
-        SerializedType.Buffer,
-        args: [4]);
+    numOuts = Uint8List(4);
+    numOuts.buffer.asByteData().setUint32(0, outs.length);
+    numIns = Uint8List(4);
+    numIns.buffer.asByteData().setUint32(0, ins.length);
   }
 
   @override

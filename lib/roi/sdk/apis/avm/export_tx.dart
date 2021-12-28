@@ -14,8 +14,9 @@ class AvmExportTx extends AvmBaseTx {
   @override
   String get typeName => "AvmExportTx";
 
-  late Uint8List destinationChain;
-  late List<AvmTransferableOutput> exportOuts;
+  Uint8List destinationChain = Uint8List(32);
+  List<AvmTransferableOutput> exportOuts = [];
+  Uint8List exportNumOuts = Uint8List(4);
 
   AvmExportTx(
       {int networkId = defaultNetworkId,
@@ -76,7 +77,7 @@ class AvmExportTx extends AvmBaseTx {
     exportOuts = (fields["exportOuts"] as List<dynamic>)
         .map((e) => AvmTransferableOutput()..deserialize(e, encoding: encoding))
         .toList();
-    numOuts.buffer.asByteData().setUint32(0, exportOuts.length);
+    exportNumOuts.buffer.asByteData().setUint32(0, exportOuts.length);
   }
 
   @override
@@ -119,12 +120,12 @@ class AvmExportTx extends AvmBaseTx {
 
   @override
   int fromBuffer(Uint8List bytes, {int offset = 0}) {
-    offset = super.fromBuffer(bytes);
+    offset = super.fromBuffer(bytes, offset: offset);
     destinationChain = bytes.sublist(offset, offset + 32);
     offset += 32;
-    numOuts = bytes.sublist(offset, offset + 4);
+    exportNumOuts = bytes.sublist(offset, offset + 4);
     offset += 4;
-    final numOutsNumber = numOuts.buffer.asByteData().getUint32(0);
+    final numOutsNumber = exportNumOuts.buffer.asByteData().getUint32(0);
     for (int i = 0; i < numOutsNumber; i++) {
       final anOut = AvmTransferableOutput();
       offset = anOut.fromBuffer(bytes, offset: offset);
@@ -135,8 +136,8 @@ class AvmExportTx extends AvmBaseTx {
 
   @override
   Uint8List toBuffer() {
-    numOuts.buffer.asByteData().setUint32(0, exportOuts.length);
-    final barr = [super.toBuffer(), destinationChain, numOuts];
+    exportNumOuts.buffer.asByteData().setUint32(0, exportOuts.length);
+    final barr = [super.toBuffer(), destinationChain, exportNumOuts];
     exportOuts.sort(StandardParseableOutput.comparator());
     for (int i = 0; i < exportOuts.length; i++) {
       barr.add(exportOuts[i].toBuffer());
