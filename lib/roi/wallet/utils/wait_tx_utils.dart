@@ -42,7 +42,7 @@ Future<String> waitTxP(String txId, {int tryCount = 10}) async {
   if (txStatus == PvmTxStatus.TxStatus.unknown ||
       txStatus == PvmTxStatus.TxStatus.processing) {
     return Future.delayed(const Duration(seconds: 1),
-        () => waitTxX(txId, tryCount: tryCount - 1));
+        () => waitTxP(txId, tryCount: tryCount - 1));
   } else if (txStatus == PvmTxStatus.TxStatus.dropped) {
     throw Exception(reason);
   } else if (txStatus == PvmTxStatus.TxStatus.committed) {
