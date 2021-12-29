@@ -176,7 +176,10 @@ abstract class WalletProvider {
       if (asset == null) {
         final assetInfo = await getAssetDescription(assetId);
         asset = AssetBalanceX(
-            locked: BigInt.zero, unlocked: BigInt.zero, meta: assetInfo);
+          locked: BigInt.zero,
+          unlocked: BigInt.zero,
+          meta: assetInfo,
+        );
       }
 
       if (lockTime <= now) {
@@ -191,7 +194,10 @@ abstract class WalletProvider {
     if (!balanceX.containsKey(avaxId) && avaxId != null) {
       final assetInfo = await getAssetDescription(avaxId);
       balanceX[avaxId] = AssetBalanceX(
-          locked: BigInt.zero, unlocked: BigInt.zero, meta: assetInfo);
+        locked: BigInt.zero,
+        unlocked: BigInt.zero,
+        meta: assetInfo,
+      );
     }
 
     this.balanceX = balanceX;
@@ -225,8 +231,14 @@ abstract class WalletProvider {
     final fromAddresses = await getAllAddressesX();
     final changeAddress = getChangeAddressX();
     final utxos = utxosX;
-    final exportTx = await buildAvmExportTransaction(destinationChain, utxos,
-        fromAddresses, destinationAddress, amount, changeAddress);
+    final exportTx = await buildAvmExportTransaction(
+      destinationChain,
+      utxos,
+      fromAddresses,
+      destinationAddress,
+      amount,
+      changeAddress,
+    );
 
     final signedTx = await signX(exportTx);
 
@@ -248,7 +260,12 @@ abstract class WalletProvider {
     assert(amount > BigInt.zero);
     final fromAddress = getAddressC();
     final tx = await buildEvmTransferNativeTx(
-        fromAddress, to, amount, gasPrice, gasLimit);
+      fromAddress,
+      to,
+      amount,
+      gasPrice,
+      gasLimit,
+    );
     final txId = await issueEvmTx(tx);
     await updateAvaxBalanceC();
     return txId;
@@ -343,7 +360,8 @@ abstract class WalletProvider {
     return await getStakeForAddresses(addresses);
   }
 
-  Future<String> importP(ExportChainsP sourceChain, {String? toAddress}) async {
+  Future<String> importPChain(ExportChainsP sourceChain,
+      {String? toAddress}) async {
     final utxoSet = await getAtomicUTXOsP(sourceChain);
     if (utxoSet.getAllUTXOs().isEmpty) {
       throw Exception("Nothing to import.");
@@ -358,8 +376,13 @@ abstract class WalletProvider {
     toAddress ??= walletAddressP;
     final sourceChainId = chainIdFromAlias(sourceChain.value);
     final unsignedTx = await pChain.buildImportTx(
-        utxoSet, ownerAddresses, sourceChainId, [toAddress], ownerAddresses,
-        changeAddresses: [walletAddressP]);
+      utxoSet,
+      ownerAddresses,
+      sourceChainId,
+      [toAddress],
+      ownerAddresses,
+      changeAddresses: [walletAddressP],
+    );
     final signedTx = await signP(unsignedTx);
     final String txId;
     try {
