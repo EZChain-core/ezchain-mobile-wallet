@@ -16,11 +16,13 @@ import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/asset/assets.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
+import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
 import 'package:wallet/roi/wallet/helpers/tx_helper.dart';
 import 'package:wallet/roi/wallet/helpers/utxo_helper.dart';
 import 'package:wallet/roi/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/types.dart';
+import 'package:wallet/roi/wallet/utils/number_utils.dart';
 import 'package:wallet/roi/wallet/utils/wait_tx_utils.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -255,6 +257,45 @@ abstract class WalletProvider {
     return txId;
   }
 
+  Future<String> importXChain(ExportChainsX sourceChain) async {
+    final utxoSet = await getAtomicUTXOsX(sourceChain);
+    if (utxoSet.getAllUTXOs().isEmpty) {
+      throw Exception("Nothing to import.");
+    }
+    final xToAddress = getAddressX();
+    final hrp = roi.getHRP();
+    final utxoAddresses = utxoSet
+        .getAddresses()
+        .map((address) => addressToString("X", hrp, address))
+        .toList();
+    final fromAddresses = utxoAddresses;
+    final ownerAddresses = utxoAddresses;
+    final sourceChainId = chainIdFromAlias(sourceChain.value);
+    final unsignedTx = await xChain.buildImportTx(
+      utxoSet,
+      ownerAddresses,
+      sourceChainId,
+      [xToAddress],
+      fromAddresses,
+      changeAddresses: [xToAddress],
+    );
+    final signedTx = await signX(unsignedTx);
+    final String txId;
+    try {
+      txId = await xChain.issueTx(signedTx);
+    } catch (e) {
+      throw Exception("txId cannot be null");
+    }
+    await waitTxX(txId);
+    await updateUtxosX();
+    return txId;
+  }
+
+  Future<AvmUTXOSet> getAtomicUTXOsX(ExportChainsX sourceChain) async {
+    final addresses = await getAllAddressesX();
+    return await avmGetAtomicUTXOs(addresses, sourceChain);
+  }
+
   Future<String> sendAvaxC(
       String to, BigInt amount, BigInt gasPrice, int gasLimit) async {
     assert(amount > BigInt.zero);
@@ -298,6 +339,49 @@ abstract class WalletProvider {
       emitBalanceChangeC();
     }
     return balNew;
+  }
+
+  /// Exports ROI from C chain to X chain
+  /// @remarks
+  /// Make sure the exported `amt` includes the import fee for the destination chain.
+  ///
+  /// @param amt amount of nROI to transfer
+  /// @param destinationChain either `X` or `P`
+  /// @param exportFee Export fee in nAVAX
+  /// @return returns the transaction id.
+  Future<String> exportCChain(BigInt amount, ExportChainsC destinationChain,
+      {BigInt? exportFee}) async {
+    final hexAddress = getAddressC();
+    final bechAddress = getEvmAddressBech();
+    final fromAddresses = [hexAddress];
+    final destinationAddress =
+        destinationChain == ExportChainsC.X ? getAddressX() : getAddressP();
+
+    if (exportFee == null) {
+      final gas = estimateExportGasFeeFromMockTx(
+          destinationChain, amount, hexAddress, destinationAddress);
+      final baseFee = await getBaseFeeRecommended();
+      exportFee = avaxCtoX(baseFee ~/ BigInt.from(gas));
+    }
+
+    final unsignedTx = await buildEvmExportTransaction(
+      fromAddresses,
+      destinationAddress,
+      amount,
+      bechAddress,
+      destinationChain,
+      exportFee,
+    );
+    final signedTx = await signC(unsignedTx);
+    final String txId;
+    try {
+      txId = await cChain.issueTx(signedTx);
+    } catch (e) {
+      throw Exception("txId cannot be null");
+    }
+    await waitTxC(txId);
+    await updateAvaxBalanceC();
+    return txId;
   }
 
   WalletBalanceC getBalanceC() {
@@ -382,6 +466,42 @@ abstract class WalletProvider {
       [toAddress],
       ownerAddresses,
       changeAddresses: [walletAddressP],
+    );
+    final signedTx = await signP(unsignedTx);
+    final String txId;
+    try {
+      txId = await pChain.issueTx(signedTx);
+    } catch (e) {
+      throw Exception("txId cannot be null");
+    }
+    await waitTxP(txId);
+    await updateUtxosP();
+    return txId;
+  }
+
+  /// Exports ROI from P chain to X chain
+  /// @remarks
+  /// The export fee is added automatically to the amount. Make sure the exported amount includes the import fee for the destination chain.
+  ///
+  /// @param amt amount of nROI to transfer. Fees excluded.
+  /// @param destinationChain Either `X` or `C`
+  /// @return returns the transaction id.
+  Future<String> exportPChain(
+      BigInt amount, ExportChainsP destinationChain) async {
+    final pChangeAddress = getAddressP();
+    final fromAddresses = await getAllAddressesP();
+    final destinationAddress = destinationChain == ExportChainsP.X
+        ? getAddressX()
+        : getEvmAddressBech();
+    final utxoSet = utxosP;
+
+    final unsignedTx = await buildPvmExportTransaction(
+      utxoSet,
+      fromAddresses,
+      destinationAddress,
+      amount,
+      pChangeAddress,
+      destinationChain,
     );
     final signedTx = await signP(unsignedTx);
     final String txId;

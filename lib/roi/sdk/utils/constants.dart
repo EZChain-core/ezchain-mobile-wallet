@@ -452,8 +452,8 @@ class C {
   int? chainId;
   final BigInt? minGasPrice;
   final BigInt? maxGasPrice;
-  final num? txBytesGas;
-  final num? costPerSignature;
+  final int? txBytesGas;
+  final int? costPerSignature;
   final BigInt? txFee;
   String? avaxAssetId;
 

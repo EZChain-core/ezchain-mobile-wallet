@@ -26,10 +26,22 @@ abstract class AvmApi implements ROIChainApi {
       List<String> changeAddresses,
       {Uint8List? memo});
 
+  Future<AvmUnsignedTx> buildImportTx(
+      AvmUTXOSet utxoSet,
+      List<String> ownerAddresses,
+      String sourceChain,
+      List<String> toAddresses,
+      List<String> fromAddresses,
+      {List<String>? changeAddresses,
+      Uint8List? memo,
+      BigInt? asOf,
+      BigInt? lockTime,
+      int threshold = 1});
+
   Future<AvmUnsignedTx> buildExportTx(
       AvmUTXOSet utxoSet,
       BigInt amount,
-      dynamic destinationChain,
+      String destinationChainId,
       List<String> toAddresses,
       List<String> fromAddresses,
       {List<String>? changeAddresses,
@@ -191,10 +203,64 @@ class _AvmApiImpl implements AvmApi {
   }
 
   @override
+  Future<AvmUnsignedTx> buildImportTx(
+      AvmUTXOSet utxoSet,
+      List<String> ownerAddresses,
+      String sourceChain,
+      List<String> toAddresses,
+      List<String> fromAddresses,
+      {List<String>? changeAddresses,
+      Uint8List? memo,
+      BigInt? asOf,
+      BigInt? lockTime,
+      int threshold = 1}) async {
+    asOf ??= unixNow();
+    lockTime ??= BigInt.zero;
+
+    final to = toAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    final from =
+        fromAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    final List<Uint8List>? change;
+    if (changeAddresses == null) {
+      change = null;
+    } else {
+      change =
+          changeAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    }
+
+    final atomicUTXOs =
+        (await getUTXOs(ownerAddresses, sourceChain: sourceChain)).getUTXOs();
+
+    final avaxAssetId = await getAVAXAssetId();
+
+    final atomics = atomicUTXOs.getAllUTXOs();
+
+    final buildUnsignedTx = utxoSet.buildImportTx(
+      roiNetwork.networkId,
+      bindtools.cb58Decode(blockChainId),
+      atomics,
+      to,
+      from,
+      changeAddresses: change,
+      sourceChain: bindtools.cb58Decode(sourceChain),
+      fee: getTxFee(),
+      feeAssetId: avaxAssetId,
+      memo: memo,
+      asOf: asOf,
+      lockTime: lockTime,
+      threshold: threshold,
+    );
+    if (!await _checkGooseEgg(buildUnsignedTx)) {
+      throw Exception("Error - AVMAPI.buildBaseTx:Failed Goose Egg Check");
+    }
+    return buildUnsignedTx;
+  }
+
+  @override
   Future<AvmUnsignedTx> buildExportTx(
       AvmUTXOSet utxoSet,
       BigInt amount,
-      dynamic destinationChain,
+      String destinationChainId,
       List<String> toAddresses,
       List<String> fromAddresses,
       {List<String>? changeAddresses,
@@ -215,16 +281,7 @@ class _AvmApiImpl implements AvmApi {
           "Error - AVMAPI.buildExportTx: To addresses must have the same chainID prefix.");
     }
 
-    if (destinationChain == null) {
-      throw Exception(
-          "Error - AVMAPI.buildExportTx: Destination ChainID is undefined.");
-    } else if (destinationChain is String) {
-      destinationChain = bindtools.cb58Decode(destinationChain);
-    }
-    if (destinationChain is! Uint8List) {
-      throw Exception(
-          "Error - AVMAPI.buildExportTx: Invalid destinationChain type: ${destinationChain.runtimeType}");
-    }
+    final destinationChain = bindtools.cb58Decode(destinationChainId);
 
     if (destinationChain.length != 32) {
       throw Exception(

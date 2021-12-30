@@ -1,13 +1,15 @@
 import 'package:wallet/roi/sdk/apis/avm/model/get_tx_status.dart'
-    as AvmTxStatus;
+    as avm_tx_status;
 import 'package:wallet/roi/sdk/apis/pvm/model/get_tx_status.dart'
-    as PvmTxStatus;
+    as pvm_tx_status;
+import 'package:wallet/roi/sdk/apis/evm/model/get_atomic_tx_status.dart'
+    as evm_tx_status;
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:web3dart/web3dart.dart';
 
 Future<String> waitTxX(String txId, {int tryCount = 10}) async {
   assert(tryCount > 0, "Timeout");
-  final AvmTxStatus.TxStatus txStatus;
+  final avm_tx_status.TxStatus txStatus;
   String? reason;
   try {
     final response = await xChain.getTxStatus(txId);
@@ -16,13 +18,13 @@ Future<String> waitTxX(String txId, {int tryCount = 10}) async {
   } catch (e) {
     throw Exception("Unable to get transaction status.");
   }
-  if (txStatus == AvmTxStatus.TxStatus.unknown ||
-      txStatus == AvmTxStatus.TxStatus.processing) {
+  if (txStatus == avm_tx_status.TxStatus.unknown ||
+      txStatus == avm_tx_status.TxStatus.processing) {
     return Future.delayed(const Duration(seconds: 1),
         () => waitTxX(txId, tryCount: tryCount - 1));
-  } else if (txStatus == AvmTxStatus.TxStatus.rejected) {
+  } else if (txStatus == avm_tx_status.TxStatus.rejected) {
     throw Exception(reason);
-  } else if (txStatus == AvmTxStatus.TxStatus.accepted) {
+  } else if (txStatus == avm_tx_status.TxStatus.accepted) {
     return txId;
   }
   return txId;
@@ -30,7 +32,7 @@ Future<String> waitTxX(String txId, {int tryCount = 10}) async {
 
 Future<String> waitTxP(String txId, {int tryCount = 10}) async {
   assert(tryCount > 0, "Timeout");
-  final PvmTxStatus.TxStatus txStatus;
+  final pvm_tx_status.TxStatus txStatus;
   String? reason;
   try {
     final response = await pChain.getTxStatus(txId);
@@ -39,13 +41,36 @@ Future<String> waitTxP(String txId, {int tryCount = 10}) async {
   } catch (e) {
     throw Exception("Unable to get transaction status.");
   }
-  if (txStatus == PvmTxStatus.TxStatus.unknown ||
-      txStatus == PvmTxStatus.TxStatus.processing) {
+  if (txStatus == pvm_tx_status.TxStatus.unknown ||
+      txStatus == pvm_tx_status.TxStatus.processing) {
     return Future.delayed(const Duration(seconds: 1),
         () => waitTxP(txId, tryCount: tryCount - 1));
-  } else if (txStatus == PvmTxStatus.TxStatus.dropped) {
+  } else if (txStatus == pvm_tx_status.TxStatus.dropped) {
     throw Exception(reason);
-  } else if (txStatus == PvmTxStatus.TxStatus.committed) {
+  } else if (txStatus == pvm_tx_status.TxStatus.committed) {
+    return txId;
+  }
+  return txId;
+}
+
+Future<String> waitTxC(String txId, {int tryCount = 10}) async {
+  assert(tryCount > 0, "Timeout");
+  final evm_tx_status.TxStatus txStatus;
+  String? reason;
+  try {
+    final response = await cChain.getAtomicTxStatus(txId);
+    txStatus = response.status;
+    reason = response.reason;
+  } catch (e) {
+    throw Exception("Unable to get transaction status.");
+  }
+  if (txStatus == evm_tx_status.TxStatus.unknown ||
+      txStatus == evm_tx_status.TxStatus.processing) {
+    return Future.delayed(const Duration(seconds: 1),
+        () => waitTxC(txId, tryCount: tryCount - 1));
+  } else if (txStatus == evm_tx_status.TxStatus.dropped) {
+    throw Exception(reason);
+  } else if (txStatus == evm_tx_status.TxStatus.accepted) {
     return txId;
   }
   return txId;

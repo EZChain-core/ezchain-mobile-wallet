@@ -167,22 +167,50 @@ void main() {
     });
 
     test("Creation Tx4 using ImportTx", () {
-      final txu =
-          set.buildImportTx(netid, blockchainID, importUTXOs, addrs3, addrs1,
-              changeAddresses: addrs2,
-              sourceChain: cb58Decode(platformChainId),
-              fee: BigInt.from(90),
-              feeAssetId: assetID,
-              memo: Uint8List.fromList([
-                ...Uint8List(1)..buffer.asByteData().setUint8(0, 0),
-                ...utf8.encode("hello world")
-              ]),
-              asOf: unixNow());
+      final txu = set.buildImportTx(
+        netid,
+        blockchainID,
+        importUTXOs,
+        addrs3,
+        addrs1,
+        changeAddresses: addrs2,
+        sourceChain: cb58Decode(platformChainId),
+        fee: BigInt.from(90),
+        feeAssetId: assetID,
+        memo: Uint8List.fromList([
+          ...Uint8List(1)..buffer.asByteData().setUint8(0, 0),
+          ...utf8.encode("hello world")
+        ]),
+        asOf: unixNow(),
+      );
 
       final tx = txu.sign(keymgr1);
       final tx2 = PvmTx();
       tx2.fromBuffer(tx.toBuffer());
-      // expect(hexEncode(tx2.toBuffer()), hexEncode(tx.toBuffer()));
+      expect(hexEncode(tx2.toBuffer()), hexEncode(tx.toBuffer()));
+    });
+
+    test("Creation Tx5 using ExportTx", () {
+      final txu = set.buildExportTx(
+        netid,
+        blockchainID,
+        BigInt.from(90),
+        avaxAssetID,
+        cb58Decode(platformChainId),
+        addrs3,
+        addrs1,
+        changeAddresses: addrs2,
+        memo: Uint8List.fromList([
+          ...Uint8List(1)..buffer.asByteData().setUint8(0, 0),
+          ...utf8.encode("hello world")
+        ]),
+        asOf: unixNow(),
+      );
+
+      final tx = txu.sign(keymgr1);
+      final tx2 = PvmTx();
+      tx2.fromBuffer(tx.toBuffer());
+      expect(hexEncode(tx2.toBuffer()), hexEncode(tx.toBuffer()));
     });
   });
 }

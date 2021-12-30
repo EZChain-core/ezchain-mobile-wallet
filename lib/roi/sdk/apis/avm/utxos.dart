@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:wallet/roi/sdk/apis/avm/base_tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/export_tx.dart';
+import 'package:wallet/roi/sdk/apis/avm/import_tx.dart';
 
 import 'package:wallet/roi/sdk/apis/avm/inputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
@@ -194,13 +195,126 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
         asOf: asOf, lockTime: lockTime, threshold: threshold);
 
     final baseTx = AvmBaseTx(
-        networkId: networkId,
-        blockchainId: blockchainId,
-        outs: aad.getAllOutputs(),
-        ins: aad.getInputs(),
-        memo: memo);
+      networkId: networkId,
+      blockchainId: blockchainId,
+      outs: aad.getAllOutputs(),
+      ins: aad.getInputs(),
+      memo: memo,
+    );
 
     return AvmUnsignedTx(transaction: baseTx);
+  }
+
+  AvmUnsignedTx buildImportTx(
+      int networkId,
+      Uint8List blockchainId,
+      List<AvmUTXO> atomics,
+      List<Uint8List> toAddresses,
+      List<Uint8List> fromAddresses,
+      {List<Uint8List>? changeAddresses,
+      Uint8List? sourceChain,
+      BigInt? fee,
+      Uint8List? feeAssetId,
+      Uint8List? memo,
+      BigInt? asOf,
+      BigInt? lockTime,
+      int threshold = 1}) {
+    var ins = <AvmTransferableInput>[];
+    var outs = <AvmTransferableOutput>[];
+    fee ??= BigInt.zero;
+    final importIns = <AvmTransferableInput>[];
+    var feePaid = BigInt.zero;
+    final feeAssetStr = feeAssetId == null ? null : hexEncode(feeAssetId);
+
+    for (int i = 0; i < atomics.length; i++) {
+      final utxo = atomics[i];
+      final assetId = utxo.getAssetId();
+      final output = utxo.getOutput() as AvmAmountOutput;
+      final amt = output.getAmount();
+      var inFeeAmount = amt;
+      final assetStr = hexEncode(assetId);
+      if (feeAssetId != null &&
+          fee > BigInt.zero &&
+          feePaid < fee &&
+          assetStr == feeAssetStr) {
+        feePaid += inFeeAmount;
+        if (feePaid >= fee) {
+          inFeeAmount = feePaid - fee;
+          feePaid = fee;
+        } else {
+          inFeeAmount = BigInt.zero;
+        }
+      }
+      final txId = utxo.getTxId();
+      final outputIdx = utxo.getOutputIdx();
+      final input = AvmSECPTransferInput(amount: amt);
+      final xFerIn = AvmTransferableInput(
+        txId: txId,
+        outputIdx: outputIdx,
+        assetId: assetId,
+        input: input,
+      );
+      final from = output.getAddresses();
+      final spenders = output.getSpenders(from, asOf: asOf);
+      for (int j = 0; j < spenders.length; j++) {
+        final spender = spenders[j];
+        final idx = output.getAddressIdx(spender);
+        if (idx == -1) {
+          throw Exception(
+              "Error - UTXOSet.buildImportTx: no such address in output: $spender");
+        }
+        xFerIn.getInput().addSignatureIdx(idx, spender);
+      }
+      importIns.add(xFerIn);
+      if (inFeeAmount > BigInt.zero) {
+        final spendOut = selectOutputClass(output.getOutputId(),
+            args: AvmSECPTransferOutput.createArgs(
+              amount: inFeeAmount,
+              addresses: toAddresses,
+              lockTime: lockTime,
+              threshold: threshold,
+            )) as AvmAmountOutput;
+        final xFerOut = AvmTransferableOutput(
+          assetId: assetId,
+          output: spendOut,
+        );
+        outs.add(xFerOut);
+      }
+    }
+
+    final feeRemaining = fee - feePaid;
+
+    if (feeRemaining > BigInt.zero &&
+        feeAssetId != null &&
+        _feeCheck(feeRemaining, feeAssetId) &&
+        changeAddresses != null) {
+      final aad = AvmAssetAmountDestination(
+        destinations: toAddresses,
+        senders: fromAddresses,
+        changeAddresses: changeAddresses,
+      );
+      aad.addAssetAmount(feeAssetId, BigInt.zero, feeRemaining);
+      _getMinimumSpendable(
+        aad,
+        asOf: asOf,
+        lockTime: lockTime,
+        threshold: threshold,
+      );
+      ins = aad.getInputs();
+      outs = aad.getOutputs();
+    }
+
+    final importTx = AvmImportTx(
+      networkId: networkId,
+      blockchainId: blockchainId,
+      outs: outs,
+      ins: ins,
+      memo: memo,
+      sourceChain: sourceChain,
+      importIns: importIns,
+    );
+
+    return AvmUnsignedTx(transaction: importTx);
   }
 
   AvmUnsignedTx buildExportTx(
@@ -245,13 +359,14 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
         asOf: asOf, lockTime: lockTime, threshold: threshold);
 
     final exportTx = AvmExportTx(
-        networkId: networkId,
-        blockchainId: blockchainId,
-        outs: aad.getChangeOutputs(),
-        ins: aad.getInputs(),
-        memo: memo,
-        destinationChain: destinationChain,
-        exportOuts: aad.getOutputs());
+      networkId: networkId,
+      blockchainId: blockchainId,
+      outs: aad.getChangeOutputs(),
+      ins: aad.getInputs(),
+      memo: memo,
+      destinationChain: destinationChain,
+      exportOuts: aad.getOutputs(),
+    );
 
     return AvmUnsignedTx(transaction: exportTx);
   }
@@ -281,10 +396,11 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
           final outputIdx = u.getOutputIdx();
           final input = AvmSECPTransferInput(amount: amount);
           final xFerIn = AvmTransferableInput(
-              input: input,
-              txId: txId,
-              outputIdx: outputIdx,
-              assetId: u.getAssetId());
+            input: input,
+            txId: txId,
+            outputIdx: outputIdx,
+            assetId: u.getAssetId(),
+          );
           final spenders = uOut.getSpenders(fromAddresses, asOf: asOf);
           for (int j = 0; j < spenders.length; j++) {
             final spender = spenders[j];
@@ -312,25 +428,32 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
       final assetKey = assetAmount.getAssetIdString();
       final amount = assetAmount.getAmount();
       if (amount > BigInt.zero) {
-        final spendOut = selectOutputClass(outIds[assetKey],
-            args: AvmSECPTransferOutput.createArgs(
-                amount: amount,
-                addresses: aad.getDestinations(),
-                lockTime: lockTime,
-                threshold: threshold)) as AvmAmountOutput;
+        final spendOut = selectOutputClass(
+          outIds[assetKey],
+          args: AvmSECPTransferOutput.createArgs(
+              amount: amount,
+              addresses: aad.getDestinations(),
+              lockTime: lockTime,
+              threshold: threshold),
+        ) as AvmAmountOutput;
 
         final xFerOut = AvmTransferableOutput(
-            assetId: assetAmount.getAssetId(), output: spendOut);
+          assetId: assetAmount.getAssetId(),
+          output: spendOut,
+        );
         aad.addOutput(xFerOut);
       }
       final change = assetAmount.getChange();
       if (change > BigInt.zero) {
-        final changeOut = selectOutputClass(outIds[assetKey],
-            args: AvmSECPTransferOutput.createArgs(
-                amount: change,
-                addresses: aad.getChangeAddresses())) as AvmAmountOutput;
+        final changeOut = selectOutputClass(
+          outIds[assetKey],
+          args: AvmSECPTransferOutput.createArgs(
+              amount: change, addresses: aad.getChangeAddresses()),
+        ) as AvmAmountOutput;
         final chgXFerOut = AvmTransferableOutput(
-            assetId: assetAmount.getAssetId(), output: changeOut);
+          assetId: assetAmount.getAssetId(),
+          output: changeOut,
+        );
         aad.addChange(chgXFerOut);
       }
     }

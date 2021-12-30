@@ -33,6 +33,18 @@ abstract class PvmApi implements ROIChainApi {
       BigInt? lockTime,
       int threshold = 1});
 
+  Future<PvmUnsignedTx> buildExportTx(
+      PvmUTXOSet utxoSet,
+      BigInt amount,
+      String destinationChainId,
+      List<String> toAddresses,
+      List<String> fromAddresses,
+      {List<String>? changeAddresses,
+      Uint8List? memo,
+      BigInt? asOf,
+      BigInt? lockTime,
+      int threshold = 1});
+
   Future<String> issueTx(PvmTx tx);
 
   Future<GetUTXOsResponse> getUTXOs(List<String> addresses,
@@ -265,9 +277,76 @@ class _PvmApiImpl implements PvmApi {
       threshold: threshold,
     );
     if (!await _checkGooseEgg(buildUnsignedTx)) {
-      throw Exception("Error - AVMAPI.buildBaseTx:Failed Goose Egg Check");
+      throw Exception("Error - PVMAPI.buildBaseTx:Failed Goose Egg Check");
     }
     return buildUnsignedTx;
+  }
+
+  @override
+  Future<PvmUnsignedTx> buildExportTx(
+      PvmUTXOSet utxoSet,
+      BigInt amount,
+      String destinationChainId,
+      List<String> toAddresses,
+      List<String> fromAddresses,
+      {List<String>? changeAddresses,
+      Uint8List? memo,
+      BigInt? asOf,
+      BigInt? lockTime,
+      int threshold = 1}) async {
+    asOf ??= unixNow();
+    lockTime ??= BigInt.zero;
+
+    final prefixes = <String, bool>{};
+    for (var address in toAddresses) {
+      prefixes[address.split("-")[0]] = true;
+    }
+    if (prefixes.keys.length != 1) {
+      throw Exception(
+          "Error - PVMAPI.buildExportTx: To addresses must have the same chainID prefix.");
+    }
+
+    final destinationChain = bindtools.cb58Decode(destinationChainId);
+
+    if (destinationChain.length != 32) {
+      throw Exception(
+          "Error - PVMAPI.buildExportTx: Destination ChainID must be 32 bytes in length.");
+    }
+
+    final to = toAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    final from =
+        fromAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    final List<Uint8List>? change;
+    if (changeAddresses == null) {
+      change = null;
+    } else {
+      change =
+          changeAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    }
+
+    final avaxAssetId = await getAVAXAssetId();
+
+    final builtUnsignedTx = utxoSet.buildExportTx(
+      roiNetwork.networkId,
+      bindtools.cb58Decode(blockChainId),
+      amount,
+      avaxAssetId!,
+      destinationChain,
+      to,
+      from,
+      changeAddresses: change,
+      fee: getTxFee(),
+      feeAssetId: avaxAssetId,
+      memo: memo,
+      asOf: asOf,
+      lockTime: lockTime,
+      threshold: threshold,
+    );
+
+    if (!await _checkGooseEgg(builtUnsignedTx)) {
+      throw Exception("Error - PVMAPI.buildExportTx:Failed Goose Egg Check");
+    }
+    return builtUnsignedTx;
   }
 
   BigInt _getDefaultTxFee() {
