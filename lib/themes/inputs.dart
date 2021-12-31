@@ -169,6 +169,8 @@ class ROIAmountTextField extends StatefulWidget {
 
   final double? rateUsd;
 
+  final Color? backgroundColor;
+
   const ROIAmountTextField(
       {Key? key,
       this.hint,
@@ -180,7 +182,8 @@ class ROIAmountTextField extends StatefulWidget {
       this.suffixText,
       this.onChanged,
       this.rateUsd,
-      this.error})
+      this.error,
+      this.backgroundColor})
       : super(key: key);
 
   @override
@@ -251,6 +254,8 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
                 controller: widget.controller,
                 onChanged: widget.onChanged,
                 decoration: InputDecoration(
+                  filled: widget.backgroundColor != null,
+                  fillColor: widget.backgroundColor,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                   hintText: widget.hint,
                   hintStyle:
