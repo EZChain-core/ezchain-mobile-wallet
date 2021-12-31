@@ -3,12 +3,12 @@ import 'package:dio/dio.dart';
 import 'package:wallet/roi/sdk/common/rpc/rpc_request.dart';
 import 'package:wallet/roi/sdk/common/rpc/rpc_response.dart';
 
-part 'evm_rest_client.g.dart';
+part 'evm_rpc_rest_client.g.dart';
 
 /// https://docs.avax.network/build/avalanchego-apis/contract-chain-c-chain-api
 @RestApi()
-abstract class EvmRestClient {
-  factory EvmRestClient(Dio dio, {String baseUrl}) = _EvmRestClient;
+abstract class EvmRpcRestClient {
+  factory EvmRpcRestClient(Dio dio, {String baseUrl}) = _EvmRpcRestClient;
 
   @POST("")
   Future<RpcResponse<String>> getEthBaseFee(

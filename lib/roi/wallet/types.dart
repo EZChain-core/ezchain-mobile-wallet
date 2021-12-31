@@ -32,6 +32,17 @@ extension ExportChainsPString on ExportChainsP {
 
 enum ExportChainsC { X, P }
 
+extension ExportChainsCString on ExportChainsC {
+  String get value {
+    switch (this) {
+      case ExportChainsC.X:
+        return "X";
+      case ExportChainsC.P:
+        return "P";
+    }
+  }
+}
+
 enum HdChainType { X, P }
 
 class AvaxBalance {

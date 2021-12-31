@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/apis/pvm/constants.dart';
 import 'package:wallet/roi/sdk/apis/pvm/base_tx.dart';
+import 'package:wallet/roi/sdk/apis/pvm/export_tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/import_tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/inputs.dart';
 import 'package:wallet/roi/sdk/apis/pvm/outputs.dart';
@@ -191,8 +192,12 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       }
     }
 
-    _getMinimumSpendable(aad,
-        asOf: asOf, lockTime: lockTime, threshold: threshold);
+    _getMinimumSpendable(
+      aad,
+      asOf: asOf,
+      lockTime: lockTime,
+      threshold: threshold,
+    );
 
     final baseTx = PvmBaseTx(
         networkId: networkId,
@@ -248,7 +253,11 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       final outputIdx = utxo.getOutputIdx();
       final input = PvmSECPTransferInput(amount: amt);
       final xFerIn = PvmTransferableInput(
-          txId: txId, outputIdx: outputIdx, assetId: assetId, input: input);
+        txId: txId,
+        outputIdx: outputIdx,
+        assetId: assetId,
+        input: input,
+      );
       final from = output.getAddresses();
       final spenders = output.getSpenders(from, asOf: asOf);
       for (int j = 0; j < spenders.length; j++) {
@@ -268,8 +277,10 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
                 addresses: toAddresses,
                 lockTime: lockTime,
                 threshold: threshold)) as PvmAmountOutput;
-        final xFerOut =
-            PvmTransferableOutput(assetId: assetId, output: spendOut);
+        final xFerOut = PvmTransferableOutput(
+          assetId: assetId,
+          output: spendOut,
+        );
         outs.add(xFerOut);
       }
     }
@@ -281,12 +292,17 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
         _feeCheck(feeRemaining, feeAssetId) &&
         changeAddresses != null) {
       final aad = PvmAssetAmountDestination(
-          destinations: toAddresses,
-          senders: fromAddresses,
-          changeAddresses: changeAddresses);
+        destinations: toAddresses,
+        senders: fromAddresses,
+        changeAddresses: changeAddresses,
+      );
       aad.addAssetAmount(feeAssetId, BigInt.zero, feeRemaining);
-      _getMinimumSpendable(aad,
-          asOf: asOf, lockTime: lockTime, threshold: threshold);
+      _getMinimumSpendable(
+        aad,
+        asOf: asOf,
+        lockTime: lockTime,
+        threshold: threshold,
+      );
       ins = aad.getInputs();
       outs = aad.getOutputs();
     }
@@ -301,6 +317,68 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
         importIns: importIns);
 
     return PvmUnsignedTx(transaction: importTx);
+  }
+
+  PvmUnsignedTx buildExportTx(
+      int networkId,
+      Uint8List blockchainId,
+      BigInt amount,
+      Uint8List avaxAssetId,
+      Uint8List destinationChain,
+      List<Uint8List> toAddresses,
+      List<Uint8List> fromAddresses,
+      {List<Uint8List>? changeAddresses,
+      BigInt? fee,
+      Uint8List? feeAssetId,
+      Uint8List? memo,
+      BigInt? asOf,
+      BigInt? lockTime,
+      int threshold = 1}) {
+    asOf ??= unixNow();
+    lockTime ??= BigInt.zero;
+
+    changeAddresses ??= toAddresses;
+
+    assert(amount > BigInt.zero);
+
+    feeAssetId ??= avaxAssetId;
+
+    assert(hexEncode(feeAssetId) == hexEncode(avaxAssetId),
+        "Error - UTXOSet.buildExportTx: feeAssetID must match avaxAssetID");
+
+    final aad = PvmAssetAmountDestination(
+      destinations: toAddresses,
+      senders: fromAddresses,
+      changeAddresses: changeAddresses,
+    );
+
+    if (hexEncode(avaxAssetId) == hexEncode(feeAssetId)) {
+      aad.addAssetAmount(avaxAssetId, amount, fee ?? BigInt.zero);
+    } else {
+      aad.addAssetAmount(avaxAssetId, amount, BigInt.zero);
+      if (_feeCheck(fee, feeAssetId)) {
+        aad.addAssetAmount(feeAssetId, BigInt.zero, fee ?? BigInt.zero);
+      }
+    }
+
+    _getMinimumSpendable(
+      aad,
+      asOf: asOf,
+      lockTime: lockTime,
+      threshold: threshold,
+    );
+
+    final exportTx = PvmExportTx(
+      networkId: networkId,
+      blockchainId: blockchainId,
+      outs: aad.getChangeOutputs(),
+      ins: aad.getInputs(),
+      memo: memo,
+      destinationChain: destinationChain,
+      exportOuts: aad.getOutputs(),
+    );
+
+    return PvmUnsignedTx(transaction: exportTx);
   }
 
   List<PvmUTXO> getConsumableUXTO({BigInt? asOf, bool stakeable = false}) {
@@ -362,7 +440,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       }
 
       final assetAmount = aad.getAssetAmount(assetKey);
-      if (assetAmount.isFinished()) return;
+      if (assetAmount.isFinished()) continue;
       if (!outs.keys.contains(assetKey)) {
         outs[assetKey] = {
           "lockedStakeable": <PvmAmountOutput>[],
@@ -376,9 +454,10 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
         final stakeableLockTime = output.getStakeableLockTime();
         if (stakeableLockTime > asOf) {
           input = PvmStakeableLockIn(
-              amount: amount,
-              stakeableLockTime: stakeableLockTime,
-              transferableInput: PvmParseableInput(input: input));
+            amount: amount,
+            stakeableLockTime: stakeableLockTime,
+            transferableInput: PvmParseableInput(input: input),
+          );
           locked = true;
         }
       }
@@ -404,7 +483,11 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       final txId = utxo.getTxId();
       final outputIdx = utxo.getOutputIdx();
       final transferInput = PvmTransferableInput(
-          input: input, txId: txId, outputIdx: outputIdx, assetId: assetId);
+        input: input,
+        txId: txId,
+        outputIdx: outputIdx,
+        assetId: assetId,
+      );
       aad.addInput(transferInput);
     }
 
@@ -422,53 +505,60 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       final assetId = assetAmount.getAssetId();
       final assetKey = assetAmount.getAssetIdString();
 
-      final lockedOutputs =
-          outs[assetKey]!["lockedStakeable"] as List<PvmStakeableLockOut>;
+      final lockedOutputs = outs[assetKey]!["lockedStakeable"] as List<dynamic>;
       for (int i = 0; i < lockedOutputs.length; i++) {
-        final lockedOutput = lockedOutputs[i];
+        final lockedOutput = lockedOutputs[i] as PvmStakeableLockOut;
         final stakeableLockTime = lockedOutput.getStakeableLockTime();
         final parseableOutput = lockedOutput.getTransferableOutput();
         final output = parseableOutput.getOutput() as PvmAmountOutput;
         var outputAmountRemaining = output.getAmount();
         if (i == lockedOutputs.length - 1 && lockedChange > BigInt.zero) {
           outputAmountRemaining = outputAmountRemaining - lockedChange;
-          final newChangeOutput = selectOutputClass(output.getOutputId(),
-              args: PvmAmountOutput.createArgs(
-                  amount: lockedChange,
-                  addresses: output.getAddresses(),
-                  lockTime: output.getLockTime(),
-                  threshold: output.getThreshold())) as PvmAmountOutput;
-
-          final newLockedChangeOutput = selectOutputClass(
-              lockedOutput.getOutputId(),
-              args: PvmAmountOutput.createArgs(
-                  amount: lockedChange,
-                  addresses: output.getAddresses(),
-                  lockTime: output.getLockTime(),
-                  threshold: output.getThreshold(),
-                  stakeableLockTime: stakeableLockTime,
-                  transferableOutput:
-                      PvmParseableOutput(output: newChangeOutput)));
-
-          final transferOutput = PvmTransferableOutput(
-              assetId: assetId, output: newLockedChangeOutput);
-          aad.addChange(transferOutput);
-        }
-        final newOutput = selectOutputClass(output.getOutputId(),
+          final newChangeOutput = selectOutputClass(
+            output.getOutputId(),
             args: PvmAmountOutput.createArgs(
-                amount: outputAmountRemaining,
+                amount: lockedChange,
                 addresses: output.getAddresses(),
                 lockTime: output.getLockTime(),
-                threshold: output.getThreshold())) as PvmAmountOutput;
-        final newLockedOutput = selectOutputClass(lockedOutput.getOutputId(),
-                args: PvmAmountOutput.createArgs(
-                    amount: outputAmountRemaining,
-                    addresses: output.getAddresses(),
-                    lockTime: output.getLockTime(),
-                    threshold: output.getThreshold(),
-                    stakeableLockTime: stakeableLockTime,
-                    transferableOutput: PvmParseableOutput(output: newOutput)))
-            as PvmStakeableLockOut;
+                threshold: output.getThreshold()),
+          ) as PvmAmountOutput;
+
+          final newLockedChangeOutput = selectOutputClass(
+            lockedOutput.getOutputId(),
+            args: PvmAmountOutput.createArgs(
+                amount: lockedChange,
+                addresses: output.getAddresses(),
+                lockTime: output.getLockTime(),
+                threshold: output.getThreshold(),
+                stakeableLockTime: stakeableLockTime,
+                transferableOutput:
+                    PvmParseableOutput(output: newChangeOutput)),
+          );
+
+          final transferOutput = PvmTransferableOutput(
+            assetId: assetId,
+            output: newLockedChangeOutput,
+          );
+          aad.addChange(transferOutput);
+        }
+        final newOutput = selectOutputClass(
+          output.getOutputId(),
+          args: PvmAmountOutput.createArgs(
+              amount: outputAmountRemaining,
+              addresses: output.getAddresses(),
+              lockTime: output.getLockTime(),
+              threshold: output.getThreshold()),
+        ) as PvmAmountOutput;
+        final newLockedOutput = selectOutputClass(
+          lockedOutput.getOutputId(),
+          args: PvmAmountOutput.createArgs(
+              amount: outputAmountRemaining,
+              addresses: output.getAddresses(),
+              lockTime: output.getLockTime(),
+              threshold: output.getThreshold(),
+              stakeableLockTime: stakeableLockTime,
+              transferableOutput: PvmParseableOutput(output: newOutput)),
+        ) as PvmStakeableLockOut;
 
         final transferOutput =
             PvmTransferableOutput(assetId: assetId, output: newLockedOutput);
@@ -477,12 +567,15 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       final unlockedChange = isStakeableLockChange ? BigInt.zero : change;
       if (unlockedChange > BigInt.zero) {
         final newChangeOutput = PvmSECPTransferOutput(
-            amount: unlockedChange,
-            addresses: aad.getChangeAddresses(),
-            lockTime: BigInt.zero,
-            threshold: 1);
-        final transferOutput =
-            PvmTransferableOutput(assetId: assetId, output: newChangeOutput);
+          amount: unlockedChange,
+          addresses: aad.getChangeAddresses(),
+          lockTime: BigInt.zero,
+          threshold: 1,
+        );
+        final transferOutput = PvmTransferableOutput(
+          assetId: assetId,
+          output: newChangeOutput,
+        );
         aad.addChange(transferOutput);
       }
       final totalAmountSpent = assetAmount.getSpent();
@@ -493,12 +586,15 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       final unlockedAmount = totalUnlockedAvailable - unlockedChange;
       if (unlockedAmount > BigInt.zero) {
         final newOutput = PvmSECPTransferOutput(
-            amount: unlockedAmount,
-            addresses: aad.getDestinations(),
-            lockTime: lockTime,
-            threshold: threshold);
-        final transferOutput =
-            PvmTransferableOutput(assetId: assetId, output: newOutput);
+          amount: unlockedAmount,
+          addresses: aad.getDestinations(),
+          lockTime: lockTime,
+          threshold: threshold,
+        );
+        final transferOutput = PvmTransferableOutput(
+          assetId: assetId,
+          output: newOutput,
+        );
         aad.addOutput(transferOutput);
       }
     }

@@ -59,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: ROIMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           exportXToP();
+    //           exportCToImportX();
     //         },
     //       ),
     //     ),
@@ -197,17 +197,45 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  // exportXToP() async {
-  //   try {
-  //     final exportFee = getTxFeeX();
-  //     final importFee = getTxFeeP();
-  //     final amount = numberToBNAvaxX(1) + exportFee;
-  //     final exportTxId = await wallet.exportXChain(amount, ExportChainsX.P);
-  //     print("exportTxId = $exportTxId");
-  //     final importTxId = await wallet.importP(ExportChainsP.X);
-  //     print("importTxId = $importTxId");
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
+  exportXToImportP() async {
+    try {
+      final exportFee = getTxFeeX();
+      final importFee = getTxFeeP();
+      final amount = numberToBNAvaxX(1) + exportFee;
+      final exportTxId = await wallet.exportXChain(amount, ExportChainsX.P);
+      print("exportTxId = $exportTxId");
+      final importTxId = await wallet.importPChain(ExportChainsP.X);
+      print("importTxId = $importTxId");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  exportPToImportX() async {
+    try {
+      final exportFee = getTxFeeP();
+      final importFee = getTxFeeX();
+      final amount = numberToBNAvaxP(1) + exportFee;
+      final exportTxId = await wallet.exportPChain(amount, ExportChainsP.X);
+      print("exportTxId = $exportTxId");
+      final importTxId = await wallet.importXChain(ExportChainsX.P);
+      print("importTxId = $importTxId");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  exportCToImportX() async {
+    try {
+      final exportFee = getTxFeeP();
+      final importFee = getTxFeeX();
+      final amount = numberToBNAvaxC(1);
+      final exportTxId = await wallet.exportCChain(amount, ExportChainsC.X);
+      print("exportTxId = $exportTxId");
+      final importTxId = await wallet.importXChain(ExportChainsX.C);
+      print("importTxId = $importTxId");
+    } catch (e) {
+      print(e);
+    }
+  }
 }
