@@ -390,6 +390,26 @@ class Strings {
     );
   }
 
+  /// `Source`
+  String get sharedSource {
+    return Intl.message(
+      'Source',
+      name: 'sharedSource',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Destination`
+  String get sharedDestination {
+    return Intl.message(
+      'Destination',
+      name: 'sharedDestination',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -895,6 +915,16 @@ class Strings {
     return Intl.message(
       'Invalid C Chain address. Make sure your address begins with "0x" or "C-0x"',
       name: 'walletSendCChainErrorAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fee (export + import)`
+  String get crossFee {
+    return Intl.message(
+      'Fee (export + import)',
+      name: 'crossFee',
       desc: '',
       args: [],
     );

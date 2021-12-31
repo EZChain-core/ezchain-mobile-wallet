@@ -55,6 +55,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Yes, I kept them safe"),
         "createWalletPassphraseToRestore":
             MessageLookupByLibrary.simpleMessage("Passphrase to restore"),
+        "crossFee":
+            MessageLookupByLibrary.simpleMessage("Fee (export + import)"),
         "dashboardCross": MessageLookupByLibrary.simpleMessage("Cross"),
         "dashboardEarn": MessageLookupByLibrary.simpleMessage("Earn"),
         "dashboardSetting": MessageLookupByLibrary.simpleMessage("Setting"),
@@ -107,6 +109,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "sharedCopy": MessageLookupByLibrary.simpleMessage("Copy"),
         "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
+        "sharedDestination":
+            MessageLookupByLibrary.simpleMessage("Destination"),
         "sharedInvalidAddress":
             MessageLookupByLibrary.simpleMessage("Invalid Address"),
         "sharedInvalidAmount":
@@ -129,6 +133,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Send Transaction"),
         "sharedSetAmount": MessageLookupByLibrary.simpleMessage("Set amount"),
         "sharedShare": MessageLookupByLibrary.simpleMessage("Share"),
+        "sharedSource": MessageLookupByLibrary.simpleMessage("Source"),
         "sharedStartAgain": MessageLookupByLibrary.simpleMessage("Start Again"),
         "sharedToken": MessageLookupByLibrary.simpleMessage("Token"),
         "sharedTotal": MessageLookupByLibrary.simpleMessage("Total"),

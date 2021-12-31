@@ -26,6 +26,10 @@ class $AssetsIconsGen {
   SvgGenImage get icArrowDown =>
       const SvgGenImage('assets/icons/ic_arrow_down.svg');
 
+  /// File path: assets/icons/ic_arrow_down_black.svg
+  SvgGenImage get icArrowDownBlack =>
+      const SvgGenImage('assets/icons/ic_arrow_down_black.svg');
+
   /// File path: assets/icons/ic_arrow_left_white.svg
   SvgGenImage get icArrowLeftWhite =>
       const SvgGenImage('assets/icons/ic_arrow_left_white.svg');
@@ -49,6 +53,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_doc_outline_black.svg
   SvgGenImage get icDocOutlineBlack =>
       const SvgGenImage('assets/icons/ic_doc_outline_black.svg');
+
+  /// File path: assets/icons/ic_dropdown_arrow.svg
+  SvgGenImage get icDropdownArrow =>
+      const SvgGenImage('assets/icons/ic_dropdown_arrow.svg');
 
   /// File path: assets/icons/ic_earn_outline.svg
   SvgGenImage get icEarnOutline =>
@@ -88,6 +96,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_share_primary.svg
   SvgGenImage get icSharePrimary =>
       const SvgGenImage('assets/icons/ic_share_primary.svg');
+
+  /// File path: assets/icons/ic_switch_arrow.svg
+  SvgGenImage get icSwitchArrow =>
+      const SvgGenImage('assets/icons/ic_switch_arrow.svg');
 
   /// File path: assets/icons/ic_touch_id.svg
   SvgGenImage get icTouchId =>
