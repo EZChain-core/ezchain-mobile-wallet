@@ -13,7 +13,10 @@ abstract class _CrossStore with Store {
           "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
 
   @observable
-  String balance = '0';
+  String sourceBalance = '0';
+
+  @observable
+  String destinationBalance = '0';
 
   @observable
   double avaxPrice = 0;
@@ -22,32 +25,35 @@ abstract class _CrossStore with Store {
   String? amountError;
 
   @observable
+  bool isConfirm = false;
+
+  @observable
   CrossChainType sourceChain = CrossChainType.xChain;
 
   @observable
   CrossChainType destinationChain = CrossChainType.pChain;
 
-  double get balanceDouble => double.tryParse(balance.replaceAll(',', '')) ?? 0;
+  double get balanceDouble => double.tryParse(sourceBalance.replaceAll(',', '')) ?? 0;
 
   List<CrossChainType> get destinationList =>
       CrossChainType.values.toList()..remove(sourceChain);
 
   @action
-  getBalance(CrossChainType type) async {
+  getSourceBalance(CrossChainType type) async {
     switch (type) {
       case CrossChainType.xChain:
         await wallet.updateUtxosX();
         wallet
             .getBalanceX()
-            .forEach((_, balanceX) => {balance = balanceX.unlockedDecimal});
+            .forEach((_, balanceX) => {sourceBalance = balanceX.unlockedDecimal});
         break;
       case CrossChainType.pChain:
         await wallet.updateUtxosP();
-        balance = wallet.getBalanceP().unlockedDecimal;
+        sourceBalance = wallet.getBalanceP().unlockedDecimal;
         break;
       case CrossChainType.cChain:
         await wallet.updateAvaxBalanceC();
-        balance = wallet.getBalanceC().balanceDecimal;
+        sourceBalance = wallet.getBalanceC().balanceDecimal;
         break;
     }
 
@@ -55,10 +61,31 @@ abstract class _CrossStore with Store {
   }
 
   @action
+  getDestinationBalance(CrossChainType type) async {
+    switch (type) {
+      case CrossChainType.xChain:
+        await wallet.updateUtxosX();
+        wallet
+            .getBalanceX()
+            .forEach((_, balanceX) => {destinationBalance = balanceX.unlockedDecimal});
+        break;
+      case CrossChainType.pChain:
+        await wallet.updateUtxosP();
+        destinationBalance = wallet.getBalanceP().unlockedDecimal;
+        break;
+      case CrossChainType.cChain:
+        await wallet.updateAvaxBalanceC();
+        destinationBalance = wallet.getBalanceC().balanceDecimal;
+        break;
+    }
+  }
+
+  @action
   setSourceChain(CrossChainType type) {
     sourceChain = type;
-    getBalance(type);
+    getSourceBalance(type);
     destinationChain = destinationList.first;
+    getDestinationBalance(destinationChain);
   }
 
   @action

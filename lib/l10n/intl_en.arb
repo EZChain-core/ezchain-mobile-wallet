@@ -35,6 +35,7 @@
   "sharedInvalidAmount": "Invalid Amount",
   "sharedSource": "Source",
   "sharedDestination": "Destination",
+  "sharedTransfer": "Transfer",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",

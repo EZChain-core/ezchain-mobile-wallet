@@ -11,23 +11,47 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
-class CrossScreen extends StatelessWidget {
+class CrossScreen extends StatefulWidget {
   const CrossScreen({Key? key}) : super(key: key);
 
-  void _onClickConfirm() {}
+  @override
+  State<CrossScreen> createState() => _CrossScreenState();
+}
+
+class _CrossScreenState extends State<CrossScreen> {
+  final crossStore = CrossStore();
+  final amountController = TextEditingController();
+
+  @override
+  void initState() {
+    crossStore.setSourceChain(crossStore.sourceChain);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    amountController.dispose();
+    super.dispose();
+  }
+
+  void _onClickConfirm() {
+    final amount = double.tryParse(amountController.text) ?? 0;
+    crossStore.isConfirm = crossStore.validate(amount);
+    if (crossStore.isConfirm) {
+      setState(() {});
+    }
+  }
 
   void _onClickTransfer() {}
 
-  void _onClickCancel() {}
+  void _onClickCancel() {
+    setState(() {
+      crossStore.isConfirm = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final crossStore = CrossStore();
-    crossStore.setSourceChain(crossStore.sourceChain);
-    final amountController = TextEditingController();
-
-    bool _isConfirm = false;
-
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -65,6 +89,7 @@ class CrossScreen extends StatelessWidget {
                             },
                             parseString: (type) => type.name,
                             initValue: crossStore.sourceChain,
+                            enabled: !crossStore.isConfirm,
                           ),
                         ),
                       ),
@@ -76,15 +101,16 @@ class CrossScreen extends StatelessWidget {
                             backgroundColor: provider.themeMode.white,
                             hint: '0.0',
                             suffixText: Strings.current
-                                .walletSendBalance(crossStore.balance),
+                                .walletSendBalance(crossStore.sourceBalance),
                             rateUsd: crossStore.avaxPrice,
                             error: crossStore.amountError,
                             onChanged: (_) => crossStore.removeAmountError(),
                             controller: amountController,
                             onSuffixPressed: () {
                               amountController.text =
-                                  crossStore.balance.replaceAll(',', '');
+                                  crossStore.sourceBalance.replaceAll(',', '');
                             },
+                            enabled: !crossStore.isConfirm,
                           ),
                         ),
                       ),
@@ -116,7 +142,7 @@ class CrossScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Observer(
                           builder: (_) => ROIDropdown<CrossChainType>(
                             label: Strings.current.sharedDestination,
@@ -126,9 +152,27 @@ class CrossScreen extends StatelessWidget {
                             onChanged: (t) {
                               crossStore.destinationChain = t;
                             },
+                            enabled: !crossStore.isConfirm,
                           ),
                         ),
                       ),
+                      const SizedBox(height: 4),
+                      Observer(
+                        builder: (_) => Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.only(right: 16),
+                          child: Text(
+                            Strings.current.walletSendBalance(
+                                crossStore.destinationBalance),
+                            maxLines: 1,
+                            overflow: TextOverflow.fade,
+                            textAlign: TextAlign.end,
+                            style: ROILabelMediumTextStyle(
+                                color: provider.themeMode.text60),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
                     ],
                   ),
                 ),
@@ -152,16 +196,16 @@ class CrossScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 87),
-                if (!_isConfirm)
+                if (!crossStore.isConfirm)
                   ROIMediumPrimaryButton(
                     text: Strings.current.sharedConfirm,
                     width: 185,
                     padding: const EdgeInsets.symmetric(),
                     onPressed: _onClickConfirm,
                   ),
-                if (_isConfirm) ...[
+                if (crossStore.isConfirm) ...[
                   ROIMediumSuccessButton(
-                    text: Strings.current.sharedSendTransaction,
+                    text: Strings.current.sharedTransfer,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 64,
                       vertical: 8,
