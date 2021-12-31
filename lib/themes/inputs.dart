@@ -171,6 +171,8 @@ class ROIAmountTextField extends StatefulWidget {
 
   final Color? backgroundColor;
 
+  final bool? enabled;
+
   const ROIAmountTextField(
       {Key? key,
       this.hint,
@@ -183,7 +185,8 @@ class ROIAmountTextField extends StatefulWidget {
       this.onChanged,
       this.rateUsd,
       this.error,
-      this.backgroundColor})
+      this.backgroundColor,
+      this.enabled})
       : super(key: key);
 
   @override
@@ -249,6 +252,7 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
             SizedBox(
               height: 48,
               child: TextField(
+                enabled: widget.enabled,
                 style: ROITitleLargeTextStyle(color: provider.themeMode.text),
                 cursorColor: provider.themeMode.text,
                 controller: widget.controller,
@@ -282,6 +286,10 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
                         color: _hasError
                             ? provider.themeMode.red
                             : provider.themeMode.borderActive),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: roiBorder,
+                    borderSide: BorderSide(color: provider.themeMode.border),
                   ),
                 ),
                 keyboardType: widget.inputType ?? TextInputType.number,

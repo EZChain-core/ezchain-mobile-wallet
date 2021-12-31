@@ -87,6 +87,8 @@ class WalletROIChainScreen extends StatelessWidget {
                                 availableRoi:
                                     walletRoiChainStore.balanceP.available,
                                 lockRoi: walletRoiChainStore.balanceP.lock,
+                                lockStakeableRoi:
+                                    walletRoiChainStore.balanceP.lockStakeable,
                                 hasSend: false,
                                 onReceivePressed: () => context.router
                                     .push(const WalletReceiveRoute()),
@@ -226,36 +228,40 @@ class _WalletChainWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            if(lockRoi != null) Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  Strings.current.sharedLock,
-                  style: ROITitleMediumTextStyle(
-                      color: provider.themeMode.secondary60),
-                ),
-                Text(
-                  '$lockRoi ROI',
-                  style:
-                      ROITitleMediumTextStyle(color: provider.themeMode.text),
-                ),
-              ],
-            ),
-            if(lockStakeableRoi != null) Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  Strings.current.sharedLockStakeable,
-                  style: ROITitleMediumTextStyle(
-                      color: provider.themeMode.secondary60),
-                ),
-                Text(
-                  '$lockStakeableRoi ROI',
-                  style:
-                  ROITitleMediumTextStyle(color: provider.themeMode.text),
-                ),
-              ],
-            ),
+            if (lockRoi != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    Strings.current.sharedLock,
+                    style: ROITitleMediumTextStyle(
+                        color: provider.themeMode.secondary60),
+                  ),
+                  Text(
+                    '$lockRoi ROI',
+                    style:
+                        ROITitleMediumTextStyle(color: provider.themeMode.text),
+                  ),
+                ],
+              ),
+            if (lockStakeableRoi != null) ...[
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    Strings.current.sharedLockStakeable,
+                    style: ROITitleMediumTextStyle(
+                        color: provider.themeMode.secondary60),
+                  ),
+                  Text(
+                    '$lockStakeableRoi ROI',
+                    style:
+                        ROITitleMediumTextStyle(color: provider.themeMode.text),
+                  ),
+                ],
+              ),
+            ]
           ],
         ),
       ),

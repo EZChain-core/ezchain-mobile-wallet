@@ -141,6 +141,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Transaction fee"),
         "sharedTransactionSent":
             MessageLookupByLibrary.simpleMessage("Transaction Sent"),
+        "sharedTransfer": MessageLookupByLibrary.simpleMessage("Transfer"),
         "sharedXChain": MessageLookupByLibrary.simpleMessage("X chain"),
         "walletReceiveBitcoin":
             MessageLookupByLibrary.simpleMessage("Bitcoin(BTC)"),

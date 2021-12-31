@@ -89,6 +89,8 @@ class ROIDropdown<T> extends StatefulWidget {
 
   final ValueChanged<T>? onChanged;
 
+  final bool? enabled;
+
   T? initValue;
 
   final String Function(T t) parseString;
@@ -99,7 +101,8 @@ class ROIDropdown<T> extends StatefulWidget {
       required this.items,
       this.onChanged,
       this.initValue,
-      required this.parseString})
+      required this.parseString,
+      this.enabled})
       : super(key: key);
 
   @override
@@ -152,14 +155,16 @@ class _ROIDropdownState<T> extends State<ROIDropdown<T>> {
                       ),
                     )
                     .toList(),
-                onChanged: (s) {
-                  if (s != null) {
-                    setState(() {
-                      widget.initValue = s;
-                    });
-                    widget.onChanged?.call(s);
-                  }
-                },
+                onChanged: widget.enabled != false
+                    ? (s) {
+                        if (s != null) {
+                          setState(() {
+                            widget.initValue = s;
+                          });
+                          widget.onChanged?.call(s);
+                        }
+                      }
+                    : null,
               ),
             )
           ],
