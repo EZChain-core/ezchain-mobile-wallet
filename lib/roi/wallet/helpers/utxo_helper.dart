@@ -7,6 +7,25 @@ import 'package:wallet/roi/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/types.dart';
 
+Future<AvmUTXOSet> avmGetAtomicUTXOs(
+    List<String> addresses, ExportChainsX sourceChain) async {
+  final sourceChainId = chainIdFromAlias(sourceChain.value);
+  if (addresses.length < 1024) {
+    return (await xChain.getUTXOs(addresses, sourceChain: sourceChainId))
+        .getUTXOs();
+  } else {
+    final selection = addresses.sublist(0, 1024);
+    final remaining = addresses.sublist(1024);
+    var utxoSet = (await xChain.getUTXOs(selection, sourceChain: sourceChainId))
+        .getUTXOs();
+    if (remaining.isNotEmpty) {
+      final nextSet = await avmGetAtomicUTXOs(remaining, sourceChain);
+      utxoSet = utxoSet.merge(nextSet) as AvmUTXOSet;
+    }
+    return utxoSet;
+  }
+}
+
 Future<AvmUTXOSet> avmGetAllUTXOs({List<String> addresses = const []}) async {
   if (addresses.length < 1024) {
     return await avmGetAllUTXOsForAddresses(addresses: addresses);

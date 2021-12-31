@@ -82,8 +82,8 @@ abstract class StandardBaseTx<KPClass extends ROIKeyPair,
     networkId = Serialization.instance.decoder(fields["networkId"], encoding,
         SerializedType.decimalString, SerializedType.Buffer,
         args: [4]);
-    blockchainId = Serialization.instance.decoder(
-        fields[""], encoding, SerializedType.cb58, SerializedType.Buffer,
+    blockchainId = Serialization.instance.decoder(fields["blockchainId"],
+        encoding, SerializedType.cb58, SerializedType.Buffer,
         args: [32]);
     memo = Serialization.instance.decoder(
         fields["memo"], encoding, SerializedType.hex, SerializedType.Buffer);

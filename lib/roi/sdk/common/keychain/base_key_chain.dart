@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/crypto/key_pair.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart';
 
 abstract class StandardKeyPair {
   late KeyPair keyPair;
@@ -54,20 +55,20 @@ abstract class StandardKeyChain<KPClass extends StandardKeyPair> {
   }
 
   void addKey(KPClass newKey) {
-    keys[newKey.getAddress().toString()] = newKey;
+    keys[hexEncode(newKey.getAddress())] = newKey;
   }
 
   bool removeKey(KPClass key) {
-    final keyAddress = key.getAddress().toString();
+    final keyAddress = hexEncode(key.getAddress());
     final deletedKey = keys.remove(keyAddress);
     return deletedKey != null;
   }
 
   bool hasKey(Uint8List address) {
-    return keys.containsKey(address.toString());
+    return keys.containsKey(hexEncode(address));
   }
 
   KPClass? getKey(Uint8List address) {
-    return keys[address.toString()];
+    return keys[hexEncode(address)];
   }
 }

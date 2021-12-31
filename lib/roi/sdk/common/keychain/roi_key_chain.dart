@@ -55,7 +55,7 @@ class ROIKeyChain extends SECP256k1KeyChain<ROIKeyPair> {
     }
     assert(bytes.isNotEmpty);
     final result = keyPair.importKey(bytes);
-    if (result && !keys.containsKey(keyPair.getAddress().toString())) {
+    if (result && !hasKey(keyPair.getAddress())) {
       addKey(keyPair);
     }
     return keyPair;
