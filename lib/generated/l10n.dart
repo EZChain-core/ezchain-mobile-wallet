@@ -420,6 +420,46 @@ class Strings {
     );
   }
 
+  /// `Export`
+  String get sharedExport {
+    return Intl.message(
+      'Export',
+      name: 'sharedExport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import`
+  String get sharedImport {
+    return Intl.message(
+      'Import',
+      name: 'sharedImport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Processing`
+  String get sharedProcessing {
+    return Intl.message(
+      'Processing',
+      name: 'sharedProcessing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Accepted`
+  String get sharedAccepted {
+    return Intl.message(
+      'Accepted',
+      name: 'sharedAccepted',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -935,6 +975,56 @@ class Strings {
     return Intl.message(
       'Fee (export + import)',
       name: 'crossFee',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ID:`
+  String get crossId {
+    return Intl.message(
+      'ID:',
+      name: 'crossId',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Status:`
+  String get crossStatus {
+    return Intl.message(
+      'Status:',
+      name: 'crossStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transferring...`
+  String get crossTransferring {
+    return Intl.message(
+      'Transferring...',
+      name: 'crossTransferring',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer Completed`
+  String get crossTransferCompleted {
+    return Intl.message(
+      'Transfer Completed',
+      name: 'crossTransferCompleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You have successfully transferred\nbetween chains.`
+  String get crossTransferCompletedDes {
+    return Intl.message(
+      'You have successfully transferred\nbetween chains.',
+      name: 'crossTransferCompletedDes',
       desc: '',
       args: [],
     );

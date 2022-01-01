@@ -36,6 +36,10 @@
   "sharedSource": "Source",
   "sharedDestination": "Destination",
   "sharedTransfer": "Transfer",
+  "sharedExport": "Export",
+  "sharedImport": "Import",
+  "sharedProcessing": "Processing",
+  "sharedAccepted": "Accepted",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",
@@ -87,5 +91,11 @@
   "walletSendGasLimit": "Gas Limit",
   "walletSendGasLimitNote": "Gas Limit will be automatically calculated after you click Confirm.",
   "walletSendCChainErrorAddress": "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\"",
-  "crossFee": "Fee (export + import)"
+  "crossFee": "Fee (export + import)",
+  "crossId": "ID:",
+  "crossStatus": "Status:",
+  "crossTransferring": "Transferring...",
+  "crossTransferCompleted": "Transfer Completed",
+  "crossTransferCompletedDes": "You have successfully transferred\nbetween chains."
+
 }

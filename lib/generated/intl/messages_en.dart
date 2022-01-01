@@ -57,6 +57,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Passphrase to restore"),
         "crossFee":
             MessageLookupByLibrary.simpleMessage("Fee (export + import)"),
+        "crossId": MessageLookupByLibrary.simpleMessage("ID:"),
+        "crossStatus": MessageLookupByLibrary.simpleMessage("Status:"),
+        "crossTransferCompleted":
+            MessageLookupByLibrary.simpleMessage("Transfer Completed"),
+        "crossTransferCompletedDes": MessageLookupByLibrary.simpleMessage(
+            "You have successfully transferred\nbetween chains."),
+        "crossTransferring":
+            MessageLookupByLibrary.simpleMessage("Transferring..."),
         "dashboardCross": MessageLookupByLibrary.simpleMessage("Cross"),
         "dashboardEarn": MessageLookupByLibrary.simpleMessage("Earn"),
         "dashboardSetting": MessageLookupByLibrary.simpleMessage("Setting"),
@@ -99,6 +107,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "settingTouchId": MessageLookupByLibrary.simpleMessage("Touch ID"),
         "settingWalletSecurity":
             MessageLookupByLibrary.simpleMessage("Wallet Security"),
+        "sharedAccepted": MessageLookupByLibrary.simpleMessage("Accepted"),
         "sharedAccessWallet":
             MessageLookupByLibrary.simpleMessage("Access Wallet"),
         "sharedAmount": MessageLookupByLibrary.simpleMessage("Amount"),
@@ -111,6 +120,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
         "sharedDestination":
             MessageLookupByLibrary.simpleMessage("Destination"),
+        "sharedExport": MessageLookupByLibrary.simpleMessage("Export"),
+        "sharedImport": MessageLookupByLibrary.simpleMessage("Import"),
         "sharedInvalidAddress":
             MessageLookupByLibrary.simpleMessage("Invalid Address"),
         "sharedInvalidAmount":
@@ -125,6 +136,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedPasteAddress":
             MessageLookupByLibrary.simpleMessage("Paste Address"),
         "sharedPrivateKey": MessageLookupByLibrary.simpleMessage("Private Key"),
+        "sharedProcessing": MessageLookupByLibrary.simpleMessage("Processing"),
         "sharedROIChain": MessageLookupByLibrary.simpleMessage("ROI Chain"),
         "sharedReceive": MessageLookupByLibrary.simpleMessage("Receive"),
         "sharedSend": MessageLookupByLibrary.simpleMessage("Send"),

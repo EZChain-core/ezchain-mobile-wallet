@@ -101,6 +101,10 @@ class $AssetsIconsGen {
   SvgGenImage get icSwitchArrow =>
       const SvgGenImage('assets/icons/ic_switch_arrow.svg');
 
+  /// File path: assets/icons/ic_tick_circle_green.svg
+  SvgGenImage get icTickCircleGreen =>
+      const SvgGenImage('assets/icons/ic_tick_circle_green.svg');
+
   /// File path: assets/icons/ic_touch_id.svg
   SvgGenImage get icTouchId =>
       const SvgGenImage('assets/icons/ic_touch_id.svg');
