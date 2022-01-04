@@ -7,7 +7,6 @@ import 'package:wallet/roi/sdk/utils/bigint.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
-import 'package:web3dart/credentials.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:sha3/sha3.dart';
 
@@ -33,8 +32,9 @@ class EvmWallet {
   }
 
   String getAddressBech32() {
+    final compressedKey = privateKeyToPublicKey(privateKey, compressed: true);
     final keyPair = EvmKeyPair(chainId: "C", hrp: roi.getHRP());
-    final address = keyPair.addressFromPublicKey(publicKey);
+    final address = keyPair.addressFromPublicKey(compressedKey);
     return addressToString("C", roi.getHRP(), address);
   }
 
@@ -61,7 +61,8 @@ class EvmWallet {
   Future<Uint8List> signEvm(Transaction tx) async {
     final credentials = EthPrivateKey.fromHex(getPrivateKeyHex());
     final chainId = await web3.getChainId();
-    var signed = await web3.signTransaction(credentials, tx, chainId: chainId.toInt());
+    var signed =
+        await web3.signTransaction(credentials, tx, chainId: chainId.toInt());
     if (tx.isEIP1559) {
       signed = prependTransactionType(0x02, signed);
     }
@@ -76,11 +77,12 @@ class EvmWallet {
     return bufferToPrivateKeyString(privateKey);
   }
 
-  static Uint8List privateKeyToPublicKey(Uint8List privateKey) {
+  static Uint8List privateKeyToPublicKey(Uint8List privateKey,
+      {bool compressed = false}) {
     assert(privateKey.length == 32);
     final privateKeyNum = decodeBigInt(privateKey);
     final p = params.G * privateKeyNum;
-    return Uint8List.view(p!.getEncoded(false).buffer, 1);
+    return Uint8List.view(p!.getEncoded(compressed).buffer, compressed ? 0 : 1);
   }
 
   static Uint8List publicKeyToAddress(Uint8List publicKey) {

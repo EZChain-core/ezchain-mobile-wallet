@@ -34,6 +34,9 @@ void main() {
   test("can return initial C address", () {
     String addressC = walletFromAvmKey.getAddressC();
     expect(addressC, '0xd30a9f6645a73f67b7850b9304b6a3172dda75bf');
+
+    String evmAddressBech = walletFromAvmKey.getEvmAddressBech();
+    expect(evmAddressBech, 'C-avax129sdwasyyvdlqqsg8d9pguvzlqvup6cm8lrd3j');
   });
 
   const evmPk =

@@ -7,8 +7,7 @@ import 'package:pointycastle/ecc/api.dart';
 // ignore: implementation_imports
 import 'package:pointycastle/src/registry/registry.dart';
 
-// ignore: implementation_imports
-import 'package:pointycastle/src/utils.dart' as utils;
+import 'package:wallet/roi/sdk/utils/bigint.dart';
 
 class ROIECDSASigner implements Signer {
   /// Intended for internal use.
@@ -26,8 +25,8 @@ class ROIECDSASigner implements Signer {
     };
   });
 
-  ECPublicKey? _pbkey;
-  ECPrivateKey? _pvkey;
+  ECPublicKey? _pbKey;
+  ECPrivateKey? _pvKey;
   SecureRandom? _random;
   final Digest? _digest;
   final Mac? _kMac;
@@ -50,37 +49,27 @@ class ROIECDSASigner implements Signer {
   /// -An [PublicKeyParameter] for verifying.
   @override
   void init(bool forSigning, CipherParameters params) {
-    _pbkey = _pvkey = null;
+    _pbKey = _pvKey = null;
 
     if (forSigning) {
-      PrivateKeyParameter pvparams;
+      PrivateKeyParameter pvParams;
 
       if (params is ParametersWithRandom) {
         _random = params.random;
-        pvparams = params.parameters as PrivateKeyParameter<PrivateKey>;
+        pvParams = params.parameters as PrivateKeyParameter<PrivateKey>;
       } else if (_kMac != null) {
         _random = null;
-        pvparams = params as PrivateKeyParameter<PrivateKey>;
+        pvParams = params as PrivateKeyParameter<PrivateKey>;
       } else {
         _random = SecureRandom();
-        pvparams = params as PrivateKeyParameter<PrivateKey>;
+        pvParams = params as PrivateKeyParameter<PrivateKey>;
       }
 
-      if (pvparams is! PrivateKeyParameter) {
-        throw ArgumentError(
-            'Unsupported parameters type ${pvparams.runtimeType}: should be PrivateKeyParameter');
-      }
-      _pvkey = pvparams.key as ECPrivateKey;
+      _pvKey = pvParams.key as ECPrivateKey;
     } else {
-      PublicKeyParameter pbparams;
+      PublicKeyParameter pbParams = params as PublicKeyParameter<PublicKey>;
 
-      pbparams = params as PublicKeyParameter<PublicKey>;
-
-      if (pbparams is! PublicKeyParameter) {
-        throw ArgumentError(
-            'Unsupported parameters type ${pbparams.runtimeType}: should be PublicKeyParameter');
-      }
-      _pbkey = pbparams.key as ECPublicKey;
+      _pbKey = pbParams.key as ECPublicKey;
     }
   }
 
@@ -88,14 +77,14 @@ class ROIECDSASigner implements Signer {
   Signature generateSignature(Uint8List message) {
     message = _hashMessageIfNeeded(message);
 
-    var n = _pvkey!.parameters!.n;
+    var n = _pvKey!.parameters!.n;
     var e = _calculateE(n, message);
     BigInt r;
     BigInt s;
 
     dynamic kCalculator;
     if (_kMac != null) {
-      kCalculator = _RFC6979KCalculator(_kMac!, n, _pvkey!.d!, message);
+      kCalculator = _RFC6979KCalculator(_kMac!, n, _pvKey!.d!, message);
     } else {
       kCalculator = _RandomKCalculator(n, _random!);
     }
@@ -109,7 +98,7 @@ class ROIECDSASigner implements Signer {
         // generate r
         k = kCalculator.nextK() as BigInt?;
 
-        p = (_pvkey!.parameters!.G * k)!;
+        p = (_pvKey!.parameters!.G * k)!;
 
         // 5.3.3
         var x = p.x!.toBigInteger()!;
@@ -120,7 +109,7 @@ class ROIECDSASigner implements Signer {
       recoveryParam = (p.y!.toBigInteger()!.isOdd ? 1 : 0) |
           (p.x!.toBigInteger()!.compareTo(r) != 0 ? 2 : 0);
 
-      var d = _pvkey!.d!;
+      var d = _pvKey!.d!;
 
       s = (k!.modInverse(n) * (e + (d * r))) % n;
     } while (s == BigInt.zero);
@@ -137,7 +126,7 @@ class ROIECDSASigner implements Signer {
   bool verifySignature(Uint8List message, covariant ROIECSignature signature) {
     message = _hashMessageIfNeeded(message);
 
-    var n = _pbkey!.parameters!.n;
+    var n = _pbKey!.parameters!.n;
     var e = _calculateE(n, message);
 
     var r = signature.r;
@@ -158,8 +147,8 @@ class ROIECDSASigner implements Signer {
     var u1 = (e * c) % n;
     var u2 = (r * c) % n;
 
-    var G = _pbkey!.parameters!.G;
-    var Q = _pbkey!.Q!;
+    var G = _pbKey!.parameters!.G;
+    var Q = _pbKey!.Q!;
 
     var point = _sumOfTwoMultiplies(G, u1, Q, u2)!;
 
@@ -187,9 +176,9 @@ class ROIECDSASigner implements Signer {
     var messageBitLength = message.length * 8;
 
     if (log2n >= messageBitLength) {
-      return utils.decodeBigIntWithSign(1, message);
+      return decodeBigInt(message);
     } else {
-      var trunc = utils.decodeBigIntWithSign(1, message);
+      var trunc = decodeBigInt(message);
 
       trunc = trunc >> (messageBitLength - log2n);
 
@@ -245,8 +234,8 @@ class ROIECSignature implements Signature {
   ROIECSignature(this.r, this.s, this.recoveryId);
 
   factory ROIECSignature.fromSignature(Uint8List signature) {
-    BigInt r = utils.decodeBigInt(signature.sublist(0, rEnd));
-    BigInt s = utils.decodeBigInt(signature.sublist(rEnd, sEnd));
+    BigInt r = decodeBigInt(signature.sublist(0, rEnd));
+    BigInt s = decodeBigInt(signature.sublist(rEnd, sEnd));
     int recoveryId = signature.sublist(sEnd, signatureSize).first;
     return ROIECSignature(r, s, recoveryId);
   }
@@ -386,7 +375,7 @@ class _RFC6979KCalculator {
   }
 
   BigInt _bitsToInt(Uint8List t) {
-    var v = utils.decodeBigIntWithSign(1, t);
+    var v = decodeBigInt(t);
     if ((t.length * 8) > _n.bitLength) {
       v = v >> ((t.length * 8) - _n.bitLength);
     }
@@ -395,7 +384,7 @@ class _RFC6979KCalculator {
   }
 
   Uint8List _asUnsignedByteArray(BigInt value) {
-    var bytes = utils.encodeBigInt(value);
+    var bytes = encodeBigInt(value);
 
     if (bytes[0] == 0) {
       return Uint8List.fromList(bytes.sublist(1));
