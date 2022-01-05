@@ -84,6 +84,9 @@ class WalletSendAvmScreen extends StatelessWidget {
                             error: walletSendAvmStore.addressError,
                             onChanged: (_) =>
                                 walletSendAvmStore.removeAddressError(),
+                            onSuffixPressed: () {
+                              context.pushRoute(const QrCodeRoute());
+                            },
                           ),
                         ),
                         const SizedBox(height: 16),

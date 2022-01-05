@@ -38,6 +38,7 @@ dependencies:
   modal_bottom_sheet: ^2.0.0
   flutter_switch: ^0.3.2
   freezed_annotation:
+  qr_code_scanner: ^0.6.1
 
   ## crypto dependencies
   fast_base58: ^0.2.1
