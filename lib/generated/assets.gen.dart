@@ -70,6 +70,10 @@ class $AssetsIconsGen {
   SvgGenImage get icGeneralSetting =>
       const SvgGenImage('assets/icons/ic_general_setting.svg');
 
+  /// File path: assets/icons/ic_info_circle_red.svg
+  SvgGenImage get icInfoCircleRed =>
+      const SvgGenImage('assets/icons/ic_info_circle_red.svg');
+
   /// File path: assets/icons/ic_key_outline_black.svg
   SvgGenImage get icKeyOutlineBlack =>
       const SvgGenImage('assets/icons/ic_key_outline_black.svg');
