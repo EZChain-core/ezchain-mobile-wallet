@@ -149,6 +149,14 @@ class $AssetsImagesGen {
   AssetGenImage get imgOnboardOne =>
       const AssetGenImage('assets/images/img_onboard_one.png');
 
+  /// File path: assets/images/img_onboard_three.png
+  AssetGenImage get imgOnboardThree =>
+      const AssetGenImage('assets/images/img_onboard_three.png');
+
+  /// File path: assets/images/img_onboard_two.png
+  AssetGenImage get imgOnboardTwo =>
+      const AssetGenImage('assets/images/img_onboard_two.png');
+
   /// File path: assets/images/img_private_key_wraning.png
   AssetGenImage get imgPrivateKeyWraning =>
       const AssetGenImage('assets/images/img_private_key_wraning.png');

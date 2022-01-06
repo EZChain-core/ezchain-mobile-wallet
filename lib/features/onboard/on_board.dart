@@ -26,17 +26,18 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
     ),
     Padding(
       padding: const EdgeInsets.symmetric(horizontal: 21),
-      child: Assets.images.imgOnboardOne.image(),
+      child: Assets.images.imgOnboardTwo.image(),
     ),
     Padding(
       padding: const EdgeInsets.symmetric(horizontal: 21),
-      child: Assets.images.imgOnboardOne.image(),
+      child: Assets.images.imgOnboardThree.image(),
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Stack(
         children: [
           SizedBox(

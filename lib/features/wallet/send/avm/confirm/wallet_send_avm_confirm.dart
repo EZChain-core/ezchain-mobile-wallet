@@ -33,7 +33,7 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
 
     void _onClickSendTransaction() {
       walletSendAvmStore.sendAvm(
-          transactionInfo.address, transactionInfo.amount);
+          transactionInfo.address, transactionInfo.amount, memo: transactionInfo.memo);
       // _showWarningDialog();
     }
 
