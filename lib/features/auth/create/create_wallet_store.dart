@@ -4,7 +4,6 @@ import 'package:wallet/roi/wallet/mnemonic_wallet.dart';
 
 part 'create_wallet_store.g.dart';
 
-@LazySingleton()
 class CreateWalletStore = _CreateWalletStore with _$CreateWalletStore;
 
 abstract class _CreateWalletStore with Store {
@@ -13,10 +12,10 @@ abstract class _CreateWalletStore with Store {
   _CreateWalletStore();
 
   @observable
-  List<String> mnemonicPhrase = <String>[];
+  String mnemonicPhrase = '';
 
   @action
   void generateMnemonicPhrase() {
-    mnemonicPhrase = _mnemonicWallet.mnemonic.split(' ');
+    mnemonicPhrase = _mnemonicWallet.mnemonic;
   }
 }

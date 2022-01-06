@@ -266,7 +266,7 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
                   hintStyle:
                       ROITitleLargeTextStyle(color: provider.themeMode.text40),
                   suffixIcon: IconButton(
-                    iconSize: 40,
+                    iconSize: 50,
                     icon: Text(
                       'MAX',
                       style: ROITitleLargeTextStyle(
