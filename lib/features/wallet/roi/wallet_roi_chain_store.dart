@@ -65,7 +65,7 @@ abstract class _WalletRoiChainStore with Store {
     final stakedDecimal = bnToDecimalAvaxP(staked.stakedBI);
 
     final totalDecimal = totalAvaxBalanceDecimal + stakedDecimal;
-    totalRoi = decimalToLocaleString(totalDecimal);
+    totalRoi = decimalToLocaleString(totalDecimal, decimals: 2);
 
     final avaxPrice = await getAvaxPriceDecimal();
 
