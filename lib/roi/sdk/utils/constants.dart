@@ -274,8 +274,8 @@ final n4C = C(
 
 // Start Fuji
 final n5X = X(
-    blockchainId: "UM7LzqqdhmyoLLwXRJxTDWXzhP9ZNm4nCA1dtX6M6dWe4tcew",
-    avaxAssetId: "2b5EBv57UhJ5QbcApsgpmr3NiQoqed3w15xKqmm1GQ1JytPtZ2",
+    blockchainId: "2DVxoCB9yUqmvbqCiRT6s7L2XEY4mcxicyJ6m4TN5oNsx6rbAK",
+    avaxAssetId: "b6zVkwR9zwMPTE91WpWPcfiELp9SisLfxXRK8JJSE6NNJScAK",
     alias: xChainAlias,
     vm: xChainVMName,
     txFee: MILLIAVAX,
@@ -283,7 +283,7 @@ final n5X = X(
 
 final n5P = P(
     blockchainId: "11111111111111111111111111111111LpoYY",
-    avaxAssetId: "2b5EBv57UhJ5QbcApsgpmr3NiQoqed3w15xKqmm1GQ1JytPtZ2",
+    avaxAssetId: "b6zVkwR9zwMPTE91WpWPcfiELp9SisLfxXRK8JJSE6NNJScAK",
     alias: pChainAlias,
     vm: pChainVMName,
     txFee: MILLIAVAX,
@@ -301,7 +301,7 @@ final n5P = P(
     minDelegationFee: BigInt.from(2));
 
 final n5C = C(
-    blockchainId: "yH8D7ThNJkxmtkuv2jgBa4P1Rn3Qpr4pPr7QYNfcdoS6k6HWp",
+    blockchainId: "2XNs8nmfB8HdDeHhf41yTd1KQ5md3PBsnz3mvFevtr3DzBAiib",
     alias: cChainAlias,
     vm: cChainVMName,
     txBytesGas: 1,
