@@ -15,11 +15,17 @@ import 'package:wallet/themes/typography.dart';
 class CreateWalletScreen extends StatelessWidget {
   const CreateWalletScreen({Key? key}) : super(key: key);
 
-  CreateWalletStore get _createWalletStore => getIt<CreateWalletStore>();
 
   @override
   Widget build(BuildContext context) {
+    final _createWalletStore = CreateWalletStore();
     _createWalletStore.generateMnemonicPhrase();
+
+    List<ROIMnemonicText> _buildRandomMnemonicList() => _createWalletStore
+        .mnemonicPhrase
+        .split(' ')
+        .mapIndexed((index, text) => ROIMnemonicText(text: '${index + 1}. $text'))
+        .toList();
 
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
@@ -67,7 +73,10 @@ class CreateWalletScreen extends StatelessWidget {
                   child: ROIMediumPrimaryButton(
                     text: Strings.current.createWalletKeptKey,
                     onPressed: () {
-                      context.router.push(const CreateWalletConfirmRoute());
+                      context.router.push(
+                        CreateWalletConfirmRoute(
+                            mnemonic: _createWalletStore.mnemonicPhrase),
+                      );
                     },
                   ),
                 ),
@@ -78,9 +87,4 @@ class CreateWalletScreen extends StatelessWidget {
       ),
     );
   }
-
-  List<ROIMnemonicText> _buildRandomMnemonicList() => _createWalletStore
-      .mnemonicPhrase
-      .mapIndexed((index, text) => ROIMnemonicText(text: '${index + 1}. $text'))
-      .toList();
 }
