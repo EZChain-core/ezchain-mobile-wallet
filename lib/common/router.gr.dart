@@ -50,12 +50,20 @@ class AppRouter extends _i26.RootStackRouter {
   @override
   final Map<String, _i26.PageFactory> pagesMap = {
     SplashRoute.name: (routeData) {
-      return _i26.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i1.SplashScreen());
+      return _i26.CustomPage<dynamic>(
+          routeData: routeData,
+          child: const _i1.SplashScreen(),
+          transitionsBuilder: _i26.TransitionsBuilders.noTransition,
+          opaque: true,
+          barrierDismissible: false);
     },
     OnBoardRoute.name: (routeData) {
-      return _i26.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i2.OnBoardScreen());
+      return _i26.CustomPage<dynamic>(
+          routeData: routeData,
+          child: const _i2.OnBoardScreen(),
+          transitionsBuilder: _i26.TransitionsBuilders.noTransition,
+          opaque: true,
+          barrierDismissible: false);
     },
     AccessWalletOptionsRoute.name: (routeData) {
       return _i26.AdaptivePage<dynamic>(
@@ -87,8 +95,11 @@ class AppRouter extends _i26.RootStackRouter {
           routeData: routeData, child: _i9.PinCodeConfirmScreen(pin: args.pin));
     },
     WalletReceiveRoute.name: (routeData) {
+      final args = routeData.argsAs<WalletReceiveRouteArgs>();
       return _i26.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i10.WalletReceiveScreen());
+          routeData: routeData,
+          child: _i10.WalletReceiveScreen(
+              key: args.key, walletReceiveInfo: args.walletReceiveInfo));
     },
     WalletSendAvmRoute.name: (routeData) {
       return _i26.AdaptivePage<dynamic>(
@@ -292,10 +303,28 @@ class PinCodeConfirmRouteArgs {
 }
 
 /// generated route for [_i10.WalletReceiveScreen]
-class WalletReceiveRoute extends _i26.PageRouteInfo<void> {
-  const WalletReceiveRoute() : super(name, path: '/wallet-receive-screen');
+class WalletReceiveRoute extends _i26.PageRouteInfo<WalletReceiveRouteArgs> {
+  WalletReceiveRoute(
+      {_i27.Key? key, required _i10.WalletReceiveInfo walletReceiveInfo})
+      : super(name,
+            path: '/wallet-receive-screen',
+            args: WalletReceiveRouteArgs(
+                key: key, walletReceiveInfo: walletReceiveInfo));
 
   static const String name = 'WalletReceiveRoute';
+}
+
+class WalletReceiveRouteArgs {
+  const WalletReceiveRouteArgs({this.key, required this.walletReceiveInfo});
+
+  final _i27.Key? key;
+
+  final _i10.WalletReceiveInfo walletReceiveInfo;
+
+  @override
+  String toString() {
+    return 'WalletReceiveRouteArgs{key: $key, walletReceiveInfo: $walletReceiveInfo}';
+  }
 }
 
 /// generated route for [_i11.WalletSendAvmScreen]

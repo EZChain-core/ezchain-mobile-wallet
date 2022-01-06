@@ -17,21 +17,27 @@ abstract class _WalletRoiChainStore with Store {
 
   @observable
   WalletRoiChainBalanceViewData balanceX =
-      WalletRoiChainBalanceViewData('0', '0', null);
+      WalletRoiChainBalanceViewData('0', '0', null, false);
 
   @observable
   WalletRoiChainBalanceViewData balanceP =
-      WalletRoiChainBalanceViewData('0', '0', '0');
+      WalletRoiChainBalanceViewData('0', '0', '0', false);
 
   @observable
   WalletRoiChainBalanceViewData balanceC =
-      WalletRoiChainBalanceViewData('0', null, null);
+      WalletRoiChainBalanceViewData('0', null, null, false);
 
   @observable
   String totalRoi = "";
 
   @observable
   String totalUsd = "";
+
+  String get addressX => wallet.getAddressX();
+
+  String get addressP => wallet.getAddressP();
+
+  String get addressC => wallet.getAddressC();
 
   @action
   fetchData() async {
@@ -48,10 +54,10 @@ abstract class _WalletRoiChainStore with Store {
     _updateX();
     _updateP();
     _updateC();
-    _fetchTotal();
   }
 
   _fetchTotal() async {
+    if(!balanceX.loaded || !balanceP.loaded || !balanceC.loaded) return;
     final avaxBalance = wallet.getAvaxBalance();
     final totalAvaxBalanceDecimal = avaxBalance.totalDecimal;
 
@@ -75,17 +81,17 @@ abstract class _WalletRoiChainStore with Store {
       final x = eventData[activeNetwork.avaxId];
       if (x != null) {
         balanceX = WalletRoiChainBalanceViewData(
-                x.unlockedDecimal, x.lockedDecimal, null);
+                x.unlockedDecimal, x.lockedDecimal, null, true);
       }
     }
     if (eventName == WalletEventType.balanceChangedP.type &&
         eventData is AssetBalanceP) {
       balanceP = WalletRoiChainBalanceViewData(
-          eventData.unlockedDecimal, eventData.lockedDecimal, eventData.lockedStakeableDecimal);
+          eventData.unlockedDecimal, eventData.lockedDecimal, eventData.lockedStakeableDecimal, true);
     }
     if (eventName == WalletEventType.balanceChangedC.type &&
         eventData is WalletBalanceC) {
-      balanceC = WalletRoiChainBalanceViewData(eventData.balanceDecimal, null, null);
+      balanceC = WalletRoiChainBalanceViewData(eventData.balanceDecimal, null, null, true);
     }
 
     _fetchTotal();
@@ -121,8 +127,9 @@ class WalletRoiChainBalanceViewData {
   final String available;
   final String? lock;
   final String? lockStakeable;
+  final bool loaded;
 
 
-  WalletRoiChainBalanceViewData(this.available, this.lock, this.lockStakeable);
+  WalletRoiChainBalanceViewData(this.available, this.lock, this.lockStakeable, this.loaded);
 
 }

@@ -17,10 +17,10 @@ abstract class _WalletSendAvmConfirmStore with Store {
   bool sendSuccess = false;
 
   @action
-  sendAvm(String address, double amount) async {
+  sendAvm(String address, double amount, {String? memo}) async {
     try {
       await wallet.updateUtxosX();
-      final txId = await wallet.sendAvaxX(address, numberToBNAvaxX(amount));
+      final txId = await wallet.sendAvaxX(address, numberToBNAvaxX(amount), memo: memo);
       print("txId = $txId");
       sendSuccess = true;
     } catch (e) {

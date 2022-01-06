@@ -1,7 +1,9 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/extensions.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -11,7 +13,10 @@ import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
 class WalletReceiveScreen extends StatelessWidget {
-  const WalletReceiveScreen({Key? key}) : super(key: key);
+  final WalletReceiveInfo walletReceiveInfo;
+
+  const WalletReceiveScreen({Key? key, required this.walletReceiveInfo})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +47,7 @@ class WalletReceiveScreen extends StatelessWidget {
                                   color: provider.themeMode.text),
                             ),
                             const SizedBox(width: 16),
-                            const ROIChainLabelText(text: 'X-Chain'),
+                            ROIChainLabelText(text: walletReceiveInfo.chain),
                           ],
                         ),
                       ),
@@ -87,7 +92,8 @@ class WalletReceiveScreen extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 45),
                               child: Text(
-                                'X-fuji1qen0kzvn34zc8jsdatym8tacukgdfepyk9ees2',
+                                walletReceiveInfo.address.useCorrectEllipsis(),
+                                maxLines: 3,
                                 style: ROIBodyLargeTextStyle(
                                     color: provider.themeMode.text),
                                 textAlign: TextAlign.center,
@@ -140,13 +146,16 @@ class WalletReceiveScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.only(left: 16, bottom: 4),
-                        child: Text(
-                          Strings.current.walletReceiveSetAmount,
-                          style: ROITitleLargeTextStyle(
-                              color: provider.themeMode.text60),
+                      Visibility(
+                        visible: false,
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.only(left: 16, bottom: 4),
+                          child: Text(
+                            Strings.current.walletReceiveSetAmount,
+                            style: ROITitleLargeTextStyle(
+                                color: provider.themeMode.text60),
+                          ),
                         ),
                       )
                     ],
@@ -159,4 +168,11 @@ class WalletReceiveScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class WalletReceiveInfo {
+  final String chain;
+  final String address;
+
+  WalletReceiveInfo(this.chain, this.address);
 }
