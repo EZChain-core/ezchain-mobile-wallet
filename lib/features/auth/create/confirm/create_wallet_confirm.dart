@@ -18,15 +18,15 @@ import 'package:wallet/themes/typography.dart';
 import '../create_wallet_store.dart';
 
 class CreateWalletConfirmScreen extends StatelessWidget {
-  const CreateWalletConfirmScreen({Key? key}) : super(key: key);
+  final String mnemonic;
 
-  CreateWalletStore get _createWalletStore => getIt<CreateWalletStore>();
+  const CreateWalletConfirmScreen({Key? key, required this.mnemonic}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     const sizeOfMnemonic = 24;
     const sizeOfRandomInputMnemonic = 4;
-    List<String> phrase = _createWalletStore.mnemonicPhrase;
+    List<String> phrase = mnemonic.split(' ');
 
     List<String> resultPhrase = List.from(phrase);
 

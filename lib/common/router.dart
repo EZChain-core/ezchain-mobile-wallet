@@ -24,8 +24,8 @@ import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Screen,Route',
   routes: <AutoRoute>[
-    AutoRoute(path: '/splash', page: SplashScreen, initial: true),
-    AutoRoute(path: '/onboard', page: OnBoardScreen),
+    CustomRoute(path: '/splash', page: SplashScreen, initial: true, transitionsBuilder: TransitionsBuilders.noTransition),
+    CustomRoute(path: '/onboard', page: OnBoardScreen, transitionsBuilder: TransitionsBuilders.noTransition),
     AutoRoute(page: AccessWalletOptionsScreen),
     AutoRoute(page: CreateWalletScreen),
     AutoRoute(page: CreateWalletConfirmScreen),
