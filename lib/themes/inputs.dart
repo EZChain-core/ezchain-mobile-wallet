@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/extensions.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
@@ -319,10 +320,10 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        widget.suffixText!,
+                        widget.suffixText!.useCorrectEllipsis(),
                         maxLines: 1,
                         softWrap: false,
-                        overflow: TextOverflow.fade,
+                        overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.end,
                         style: ROILabelMediumTextStyle(
                             color: provider.themeMode.text60),
