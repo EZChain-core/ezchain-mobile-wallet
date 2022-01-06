@@ -1,0 +1,9 @@
+*.properties
+*.keystore
+*.jks
+*.json
+google-services.json
+ezc_dev.jks
+key_store.properties
+.env.default
+.env

@@ -1,0 +1,30 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "EZChain-Android"
+  lane :android_internal_beta do
+    sh "flutter build apk --release --target=lib/main_production.dart"
+    firebase_app_distribution(
+        app: ENV["FIREBASE_APP_ID"],
+        firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"],
+        groups: "developer",
+        release_notes: "EZChain Android",
+        apk_path: "../build/app/outputs/flutter-apk/app-release.apk"
+    )
+  end
+end

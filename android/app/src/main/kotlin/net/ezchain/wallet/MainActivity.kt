@@ -1,4 +1,4 @@
-package net.roichain.wallet
+package net.ezchain.wallet
 
 import io.flutter.embedding.android.FlutterActivity
 

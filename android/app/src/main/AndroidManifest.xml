@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.roichain.wallet">
+    package="net.ezchain.wallet">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -15,7 +15,7 @@
     </queries>
 
    <application
-        android:label="wallet"
+        android:label="EZChain"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
