@@ -35,109 +35,117 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen> with Automa
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         backgroundColor: Colors.transparent,
-        body: SizedBox(
-          height: double.infinity,
-          child: Column(
-            children: [
-              const SizedBox(height: 24),
-              Row(
-                children: [
-                  const SizedBox(width: 16),
-                  Assets.images.imgLogoRoi.image(width: 63, height: 48),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Observer(
-                          builder: (_) => Text(
-                            '${walletRoiChainStore.totalRoi} ROI'
-                                .useCorrectEllipsis(),
-                            style: ROIHeadlineSmallTextStyle(
-                                color: provider.themeMode.primary),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: NotificationListener<OverscrollIndicatorNotification>(
+            onNotification: (overscroll) {
+              overscroll.disallowIndicator();
+              return true;
+            },
+            child: ListView(
+              padding: const EdgeInsets.all(0),
+              children: [
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    const SizedBox(width: 16),
+                    Assets.images.imgLogoRoi.image(width: 63, height: 48),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Observer(
+                            builder: (_) => Text(
+                              '${walletRoiChainStore.totalRoi} ROI'
+                                  .useCorrectEllipsis(),
+                              style: ROIHeadlineSmallTextStyle(
+                                  color: provider.themeMode.primary),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                        Observer(
-                          builder: (_) => Text(
-                            '\$ ${walletRoiChainStore.totalUsd}'
-                                .useCorrectEllipsis(),
-                            style: ROITitleLargeTextStyle(
-                                color: provider.themeMode.white),
-                            maxLines: 1,
-                            softWrap: false,
-                            textAlign: TextAlign.end,
-                            overflow: TextOverflow.ellipsis,
+                          Observer(
+                            builder: (_) => Text(
+                              '\$ ${walletRoiChainStore.totalUsd}'
+                                  .useCorrectEllipsis(),
+                              style: ROITitleLargeTextStyle(
+                                  color: provider.themeMode.white),
+                              maxLines: 1,
+                              softWrap: false,
+                              textAlign: TextAlign.end,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                  ],
+                ),
+                const SizedBox(height: 22),
+                const SizedBox(height: 20),
+                Observer(
+                  builder: (_) => _WalletChainWidget(
+                    chain: Strings.current.sharedXChain,
+                    availableRoi: walletRoiChainStore.balanceX.available,
+                    lockRoi: walletRoiChainStore.balanceX.lock,
+                    onSendPressed: () =>
+                        context.router.push(const WalletSendAvmRoute()),
+                    onReceivePressed: () => context.router.push(
+                      WalletReceiveRoute(
+                        walletReceiveInfo: WalletReceiveInfo(
+                            'X-Chain', walletRoiChainStore.addressX),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 16),
-                ],
-              ),
-              const SizedBox(height: 22),
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: _refresh,
-                  child: ListView(
-                    padding: const EdgeInsets.all(0),
-                    children: [
-                      const SizedBox(height: 20),
-                      Observer(
-                        builder: (_) => _WalletChainWidget(
-                          chain: Strings.current.sharedXChain,
-                          availableRoi: walletRoiChainStore.balanceX.available,
-                          lockRoi: walletRoiChainStore.balanceX.lock,
-                          onSendPressed: () =>
-                              context.router.push(const WalletSendAvmRoute()),
-                          onReceivePressed: () => context.router.push(
-                            WalletReceiveRoute(
-                              walletReceiveInfo: WalletReceiveInfo(
-                                  'X-Chain', walletRoiChainStore.addressX),
-                            ),
-                          ),
-                        ),
+                ),
+                const SizedBox(height: 12),
+                Observer(
+                  builder: (_) => _WalletChainWidget(
+                    chain: Strings.current.sharedPChain,
+                    availableRoi: walletRoiChainStore.balanceP.available,
+                    lockRoi: walletRoiChainStore.balanceP.lock,
+                    lockStakeableRoi:
+                    walletRoiChainStore.balanceP.lockStakeable,
+                    hasSend: false,
+                    onReceivePressed: () => context.router.push(
+                      WalletReceiveRoute(
+                        walletReceiveInfo: WalletReceiveInfo(
+                            'P-Chain', walletRoiChainStore.addressP),
                       ),
-                      const SizedBox(height: 12),
-                      Observer(
-                        builder: (_) => _WalletChainWidget(
-                          chain: Strings.current.sharedPChain,
-                          availableRoi: walletRoiChainStore.balanceP.available,
-                          lockRoi: walletRoiChainStore.balanceP.lock,
-                          lockStakeableRoi:
-                              walletRoiChainStore.balanceP.lockStakeable,
-                          hasSend: false,
-                          onReceivePressed: () => context.router.push(
-                            WalletReceiveRoute(
-                              walletReceiveInfo: WalletReceiveInfo(
-                                  'P-Chain', walletRoiChainStore.addressP),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Observer(
-                        builder: (_) => _WalletChainWidget(
-                          chain: Strings.current.sharedCChain,
-                          availableRoi: walletRoiChainStore.balanceC.available,
-                          lockRoi: walletRoiChainStore.balanceC.lock,
-                          onSendPressed: () =>
-                              context.router.push(const WalletSendEvmRoute()),
-                          onReceivePressed: () => context.router.push(
-                            WalletReceiveRoute(
-                              walletReceiveInfo: WalletReceiveInfo(
-                                  'C-Chain', walletRoiChainStore.addressC),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 12),
+                Observer(
+                  builder: (_) => _WalletChainWidget(
+                    chain: Strings.current.sharedCChain,
+                    availableRoi: walletRoiChainStore.balanceC.available,
+                    lockRoi: walletRoiChainStore.balanceC.lock,
+                    onSendPressed: () =>
+                        context.router.push(const WalletSendEvmRoute()),
+                    onReceivePressed: () => context.router.push(
+                      WalletReceiveRoute(
+                        walletReceiveInfo: WalletReceiveInfo(
+                            'C-Chain', walletRoiChainStore.addressC),
+                      ),
+                    ),
+                  ),
+                ),
+                // Expanded(
+                //   child: RefreshIndicator(
+                //     onRefresh: _refresh,
+                //     child: ListView(
+                //       padding: const EdgeInsets.all(0),
+                //       children: [
+                //
+                //       ],
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
       ),
