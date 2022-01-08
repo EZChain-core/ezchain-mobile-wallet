@@ -19,7 +19,7 @@ class AccessMnemonicInput extends StatefulWidget {
 }
 
 class _AccessMnemonicInputState extends State<AccessMnemonicInput> {
-  final inputController = TextEditingController(text: 'unaware click walnut alpha leopard pig attitude collect suit belt math sword token pupil matrix void ten vendor barrel bitter rather debris include moral');
+  final inputController = TextEditingController();
   final phrase = <String>[];
   final space = ' ';
   final focusNode = FocusNode();
