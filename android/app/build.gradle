@@ -22,11 +22,14 @@ if (flutterVersionName == null) {
 }
 
 def walletRoot = rootDir.getAbsolutePath().replace("android", "")
-def keyStorePropertiesFile = new File("$walletRoot/release/key_store.properties")
-def keyStoreProperties = new Properties()
-keyStoreProperties.load(new FileInputStream(keyStorePropertiesFile))
 
 def useReleaseKeystore = rootProject.file("$walletRoot/release/ezc_dev.jks").exists()
+
+def keyStorePropertiesFile = new File("$walletRoot/release/key_store.properties")
+def keyStoreProperties = new Properties()
+if (keyStorePropertiesFile.exists()) {
+    keyStoreProperties.load(new FileInputStream(keyStorePropertiesFile))
+}
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'

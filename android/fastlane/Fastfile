@@ -21,14 +21,14 @@ platform :android do
   before_all do |lane, options|
   end
 
-  lane :android_internal_beta do |options|
-    sh "flutter build apk --release --target=lib/main_production.dart"
+  lane :android_internal_alpha do |options|
+    gradle(task: 'assemble', build_type: 'Release')
     firebase_app_distribution(
-        app: ENV["FIREBASE_APP_ID"],
+        app: ENV["FIREBASE_ANDROID_APP_ID"],
         firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"],
         groups: "developer",
         release_notes: "EZChain Android",
-        apk_path: "../build/app/outputs/flutter-apk/app-release.apk"
+        apk_path: "../build/app/outputs/apk/release/app-release.apk"
     )
   end
 

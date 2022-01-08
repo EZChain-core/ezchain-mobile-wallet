@@ -96,9 +96,6 @@ flutter_gen:
 flutter:
   uses-material-design: true
   assets:
-    - assets/env/.env.production
-    - assets/env/.env.staging
-    - assets/env/
     - assets/images/
     - assets/icons/
 

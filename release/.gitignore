@@ -7,3 +7,4 @@ ezc_dev.jks
 key_store.properties
 .env.default
 .env
+GoogleService-Info.plist
