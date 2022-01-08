@@ -9,16 +9,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
-class $AssetsEnvGen {
-  const $AssetsEnvGen();
-
-  /// File path: assets/env/.env.production
-  String get envProduction => 'assets/env/.env.production';
-
-  /// File path: assets/env/.env.staging
-  String get envStaging => 'assets/env/.env.staging';
-}
-
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -177,7 +167,6 @@ class $AssetsImagesGen {
 class Assets {
   Assets._();
 
-  static const $AssetsEnvGen env = $AssetsEnvGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }

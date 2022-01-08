@@ -10,7 +10,6 @@
 
 import 'package:auto_route/auto_route.dart' as _i26;
 import 'package:flutter/material.dart' as _i27;
-import 'package:flutter/widgets.dart' as _i28;
 import 'package:wallet/features/auth/access/mnemonic/access_mnemonic_key.dart'
     as _i7;
 import 'package:wallet/features/auth/access/options/access_wallet_options.dart'
@@ -257,7 +256,7 @@ class CreateWalletRoute extends _i26.PageRouteInfo<void> {
 /// generated route for [_i5.CreateWalletConfirmScreen]
 class CreateWalletConfirmRoute
     extends _i26.PageRouteInfo<CreateWalletConfirmRouteArgs> {
-  CreateWalletConfirmRoute({_i28.Key? key, required String mnemonic})
+  CreateWalletConfirmRoute({_i27.Key? key, required String mnemonic})
       : super(name,
             path: '/create-wallet-confirm-screen',
             args: CreateWalletConfirmRouteArgs(key: key, mnemonic: mnemonic));
@@ -268,7 +267,7 @@ class CreateWalletConfirmRoute
 class CreateWalletConfirmRouteArgs {
   const CreateWalletConfirmRouteArgs({this.key, required this.mnemonic});
 
-  final _i28.Key? key;
+  final _i27.Key? key;
 
   final String mnemonic;
 
@@ -325,7 +324,7 @@ class PinCodeConfirmRouteArgs {
 /// generated route for [_i10.WalletReceiveScreen]
 class WalletReceiveRoute extends _i26.PageRouteInfo<WalletReceiveRouteArgs> {
   WalletReceiveRoute(
-      {_i28.Key? key, required _i10.WalletReceiveInfo walletReceiveInfo})
+      {_i27.Key? key, required _i10.WalletReceiveInfo walletReceiveInfo})
       : super(name,
             path: '/wallet-receive-screen',
             args: WalletReceiveRouteArgs(
@@ -337,7 +336,7 @@ class WalletReceiveRoute extends _i26.PageRouteInfo<WalletReceiveRouteArgs> {
 class WalletReceiveRouteArgs {
   const WalletReceiveRouteArgs({this.key, required this.walletReceiveInfo});
 
-  final _i28.Key? key;
+  final _i27.Key? key;
 
   final _i10.WalletReceiveInfo walletReceiveInfo;
 
@@ -358,7 +357,7 @@ class WalletSendAvmRoute extends _i26.PageRouteInfo<void> {
 class WalletSendAvmConfirmRoute
     extends _i26.PageRouteInfo<WalletSendAvmConfirmRouteArgs> {
   WalletSendAvmConfirmRoute(
-      {_i28.Key? key,
+      {_i27.Key? key,
       required _i12.WalletSendAvmTransactionViewData transactionInfo})
       : super(name,
             path: '/wallet-send-avm-confirm-screen',
@@ -372,7 +371,7 @@ class WalletSendAvmConfirmRouteArgs {
   const WalletSendAvmConfirmRouteArgs(
       {this.key, required this.transactionInfo});
 
-  final _i28.Key? key;
+  final _i27.Key? key;
 
   final _i12.WalletSendAvmTransactionViewData transactionInfo;
 
@@ -393,7 +392,7 @@ class WalletSendEvmRoute extends _i26.PageRouteInfo<void> {
 class WalletSendEvmConfirmRoute
     extends _i26.PageRouteInfo<WalletSendEvmConfirmRouteArgs> {
   WalletSendEvmConfirmRoute(
-      {_i28.Key? key,
+      {_i27.Key? key,
       required _i14.WalletSendEvmTransactionViewData transactionInfo})
       : super(name,
             path: '/wallet-send-evm-confirm-screen',
@@ -407,7 +406,7 @@ class WalletSendEvmConfirmRouteArgs {
   const WalletSendEvmConfirmRouteArgs(
       {this.key, required this.transactionInfo});
 
-  final _i28.Key? key;
+  final _i27.Key? key;
 
   final _i14.WalletSendEvmTransactionViewData transactionInfo;
 
