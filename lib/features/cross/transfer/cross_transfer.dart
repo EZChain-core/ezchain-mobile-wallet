@@ -2,6 +2,7 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/cross/cross_store.dart';
 import 'package:wallet/features/cross/transfer/cross_transfer_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -11,7 +12,10 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
 class CrossTransferScreen extends StatelessWidget {
-  const CrossTransferScreen({Key? key}) : super(key: key);
+  final CrossStore crossStore;
+
+  const CrossTransferScreen({Key? key, required this.crossStore})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +62,12 @@ class CrossTransferScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'X Chain',
+                              crossStore.sourceChain.nameTwo,
                               style: ROIBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
                             Text(
-                              '1000',
+                              crossStore.sourceBalance,
                               style: ROIBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
@@ -174,12 +178,12 @@ class CrossTransferScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'X Chain',
+                              crossStore.destinationChain.nameTwo,
                               style: ROIBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
                             Text(
-                              '1000',
+                              crossStore.destinationBalance,
                               style: ROIBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),

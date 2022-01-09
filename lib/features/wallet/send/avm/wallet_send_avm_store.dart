@@ -26,6 +26,12 @@ abstract class _WalletSendAvmStore with Store {
   @observable
   String? amountError;
 
+  @observable
+  double fee = 0.001;
+
+  @observable
+  double total = 0;
+
   double get balanceXDouble => double.tryParse(balanceX.replaceAll(',', '')) ?? 0;
 
   @action
@@ -36,6 +42,7 @@ abstract class _WalletSendAvmStore with Store {
         .forEach((_, balance) => {balanceX = balance.unlockedDecimal});
 
     avaxPrice = (await getAvaxPrice()).toDouble();
+    total = avaxPrice * fee;
   }
 
   @action
@@ -63,5 +70,10 @@ abstract class _WalletSendAvmStore with Store {
     if(addressError != null) {
       addressError = null;
     }
+  }
+
+  @action
+  updateTotal(double amount) {
+    total = (amount + fee) * avaxPrice;
   }
 }
