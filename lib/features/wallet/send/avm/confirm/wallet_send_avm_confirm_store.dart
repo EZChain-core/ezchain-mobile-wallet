@@ -1,12 +1,11 @@
 import 'package:mobx/mobx.dart';
-import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
 part 'wallet_send_avm_confirm_store.g.dart';
 
-class WalletSendAvmConfirmStore = _WalletSendAvmConfirmStore with _$WalletSendAvmConfirmStore;
+class WalletSendAvmConfirmStore = _WalletSendAvmConfirmStore
+    with _$WalletSendAvmConfirmStore;
 
 abstract class _WalletSendAvmConfirmStore with Store {
   final wallet = SingletonWallet(
@@ -16,15 +15,21 @@ abstract class _WalletSendAvmConfirmStore with Store {
   @observable
   bool sendSuccess = false;
 
+  @observable
+  bool isLoading = false;
+
   @action
   sendAvm(String address, double amount, {String? memo}) async {
+    isLoading = true;
     try {
       await wallet.updateUtxosX();
-      final txId = await wallet.sendAvaxX(address, numberToBNAvaxX(amount), memo: memo);
+      final txId =
+          await wallet.sendAvaxX(address, numberToBNAvaxX(amount), memo: memo);
       print("txId = $txId");
       sendSuccess = true;
     } catch (e) {
       print(e);
     }
+    isLoading = false;
   }
 }

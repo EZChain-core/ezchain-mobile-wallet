@@ -22,6 +22,7 @@ import 'package:wallet/features/auth/create/create_wallet.dart' as _i4;
 import 'package:wallet/features/auth/pin/pin_code_confirm.dart' as _i9;
 import 'package:wallet/features/auth/pin/pin_code_setup.dart' as _i8;
 import 'package:wallet/features/cross/cross.dart' as _i23;
+import 'package:wallet/features/cross/cross_store.dart' as _i28;
 import 'package:wallet/features/cross/transfer/cross_transfer.dart' as _i19;
 import 'package:wallet/features/dashboard/dashboard.dart' as _i21;
 import 'package:wallet/features/earn/earn.dart' as _i24;
@@ -143,8 +144,11 @@ class AppRouter extends _i26.RootStackRouter {
           routeData: routeData, child: const _i18.SettingSecurityScreen());
     },
     CrossTransferRoute.name: (routeData) {
+      final args = routeData.argsAs<CrossTransferRouteArgs>();
       return _i26.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i19.CrossTransferScreen());
+          routeData: routeData,
+          child: _i19.CrossTransferScreen(
+              key: args.key, crossStore: args.crossStore));
     },
     QrCodeRoute.name: (routeData) {
       return _i26.AdaptivePage<dynamic>(
@@ -446,10 +450,26 @@ class SettingSecurityRoute extends _i26.PageRouteInfo<void> {
 }
 
 /// generated route for [_i19.CrossTransferScreen]
-class CrossTransferRoute extends _i26.PageRouteInfo<void> {
-  const CrossTransferRoute() : super(name, path: '/cross-transfer-screen');
+class CrossTransferRoute extends _i26.PageRouteInfo<CrossTransferRouteArgs> {
+  CrossTransferRoute({_i27.Key? key, required _i28.CrossStore crossStore})
+      : super(name,
+            path: '/cross-transfer-screen',
+            args: CrossTransferRouteArgs(key: key, crossStore: crossStore));
 
   static const String name = 'CrossTransferRoute';
+}
+
+class CrossTransferRouteArgs {
+  const CrossTransferRouteArgs({this.key, required this.crossStore});
+
+  final _i27.Key? key;
+
+  final _i28.CrossStore crossStore;
+
+  @override
+  String toString() {
+    return 'CrossTransferRouteArgs{key: $key, crossStore: $crossStore}';
+  }
 }
 
 /// generated route for [_i20.QrCodeScreen]

@@ -22,6 +22,9 @@ abstract class _CrossStore with Store {
   double avaxPrice = 0;
 
   @observable
+  double fee = 0;
+
+  @observable
   String? amountError;
 
   @observable
@@ -89,6 +92,12 @@ abstract class _CrossStore with Store {
   }
 
   @action
+  setDestinationChain(CrossChainType type) {
+    destinationChain = type;
+    getDestinationBalance(type);
+  }
+
+  @action
   bool validate(double amount) {
     final isAmountValid = balanceDouble > amount && amount > 0;
 
@@ -104,6 +113,15 @@ abstract class _CrossStore with Store {
       amountError = null;
     }
   }
+
+  @action
+  transferring() {
+
+  }
+
+  getFee(CrossChainType type) {
+
+  }
 }
 
 enum CrossChainType { xChain, pChain, cChain }
@@ -114,6 +132,14 @@ extension CrossChainTypeExtension on CrossChainType {
       "X Chain (Exchange)",
       "P Chain (Platform)",
       "C chain (Contract)"
+    ][index];
+  }
+
+  String get nameTwo {
+    return [
+      "X Chain",
+      "P Chain",
+      "C chain"
     ][index];
   }
 }

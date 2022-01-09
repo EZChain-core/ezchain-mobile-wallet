@@ -96,12 +96,15 @@ class ROIMediumSuccessButton extends StatelessWidget {
 
   final VoidCallback? onLongPress;
 
+  final bool? isLoading;
+
   const ROIMediumSuccessButton(
       {required this.text,
       this.onPressed,
       this.onLongPress,
       this.padding,
-      this.width});
+      this.width,
+      this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -110,9 +113,17 @@ class ROIMediumSuccessButton extends StatelessWidget {
         height: roiButtonMediumHeight,
         width: width,
         child: TextButton(
-          child: Text(text,
-              textAlign: TextAlign.center,
-              style: ROIButtonTextStyle(color: provider.themeMode.white)),
+          child: isLoading == true
+              ? SizedBox(
+                  width: roiButtonMediumHeight - 20,
+                  height: roiButtonMediumHeight - 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: provider.themeMode.white,
+                  ))
+              : Text(text,
+                  textAlign: TextAlign.center,
+                  style: ROIButtonTextStyle(color: provider.themeMode.white)),
           style: ROIButtonStyle(
               bgColor: provider.themeMode.stateSuccess,
               buttonPadding: padding ?? roiButtonMediumPadding),

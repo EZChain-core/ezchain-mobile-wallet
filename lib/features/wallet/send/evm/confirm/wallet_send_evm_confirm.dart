@@ -47,7 +47,7 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
                                 color: provider.themeMode.text),
                           ),
                           const SizedBox(width: 16),
-                          const ROIChainLabelText(text: 'X-Chain'),
+                          const ROIChainLabelText(text: 'C-Chain'),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -82,14 +82,6 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
                         content: '${transactionInfo.fee} ROI',
                       ),
                       const SizedBox(height: 8),
-                      ROIDashedLine(color: provider.themeMode.text10),
-                      const SizedBox(height: 8),
-                      WalletSendHorizontalText(
-                        title: Strings.current.sharedTotal,
-                        content: '${transactionInfo.total} ROI',
-                        leftColor: provider.themeMode.text,
-                        rightColor: provider.themeMode.stateSuccess,
-                      ),
                       const Spacer(),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
@@ -125,12 +117,11 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
 
 class WalletSendEvmTransactionViewData {
   final String address;
-  final int gwei;
-  final int gasPrice;
+  final BigInt gwei;
+  final BigInt gasPrice;
   final double amount;
   final double fee;
-  final double total;
 
   WalletSendEvmTransactionViewData(this.address, this.gwei, this.gasPrice,
-      this.amount, this.fee, this.total);
+      this.amount, this.fee);
 }
