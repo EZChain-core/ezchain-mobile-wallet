@@ -45,177 +45,165 @@ class WalletSendEvmScreen extends StatelessWidget {
 
     Future<void> _onClickSendTransaction() async {
       final address = addressController.text;
-      final sendSuccess = await walletSendEvmStore.sendEvm(
-          address, getAmount());
+      final sendSuccess =
+          await walletSendEvmStore.sendEvm(address, getAmount());
       if (sendSuccess) {
-        context.router.push(WalletSendEvmConfirmRoute(
+        context.router.push(
+          WalletSendEvmConfirmRoute(
             transactionInfo: WalletSendEvmTransactionViewData(
-                addressController.text, 0, 0, 0, 0, 0)));
+                addressController.text,
+                walletSendEvmStore.gasPrice,
+                walletSendEvmStore.gasLimit,
+                getAmount(),
+                walletSendEvmStore.fee),
+          ),
+        );
       }
     }
 
     return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) =>
-          Scaffold(
-            body: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ROIAppBar(
-                    title: Strings.current.sharedSend,
-                    onPressed: () {
-                      context.router.pop();
-                    },
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
+      builder: (context, provider, child) => Scaffold(
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ROIAppBar(
+                title: Strings.current.sharedSend,
+                onPressed: () {
+                  context.router.pop();
+                },
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Assets.icons.icRoi.svg(),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'ROI',
-                                  style: ROIBodyLargeTextStyle(
-                                      color: provider.themeMode.text),
-                                ),
-                                const SizedBox(width: 16),
-                                const ROIChainLabelText(text: 'C-Chain'),
-                              ],
+                            Assets.icons.icRoi.svg(),
+                            const SizedBox(width: 8),
+                            Text(
+                              'ROI',
+                              style: ROIBodyLargeTextStyle(
+                                  color: provider.themeMode.text),
                             ),
-                            const SizedBox(height: 16),
-                            Observer(
-                              builder: (_) =>
-                                  ROIAddressTextField(
-                                    label: Strings.current.sharedSendTo,
-                                    hint: Strings.current.sharedPasteAddress,
-                                    controller: addressController,
-                                    error: walletSendEvmStore.addressError,
-                                    onChanged: (_) =>
-                                        walletSendEvmStore.removeAddressError(),
-                                  ),
-                            ),
-                            const SizedBox(height: 16),
-                            Observer(
-                              builder: (_) =>
-                                  ROIAmountTextField(
-                                    label: Strings.current.sharedSetAmount,
-                                    hint: '0.0',
-                                    suffixText: Strings.current
-                                        .walletSendBalance(
-                                        walletSendEvmStore.balanceC),
-                                    rateUsd: walletSendEvmStore.avaxPrice,
-                                    error: walletSendEvmStore.amountError,
-                                    onChanged: (_) =>
-                                        walletSendEvmStore.removeAmountError(),
-                                    controller: amountController,
-                                    onSuffixPressed: () {
-                                      amountController.text = walletSendEvmStore
-                                          .balanceC
-                                          .replaceAll(',', '');
-                                    },
-                                  ),
-                            ),
-                            const SizedBox(height: 16),
-                            Observer(
-                              builder: (_) =>
-                                  ROITextField(
-                                    label: Strings.current
-                                        .walletSendGasPriceGWEI,
-                                    hint: '0',
-                                    enabled: false,
-                                    controller: TextEditingController(
-                                        text: walletSendEvmStore.gasPrice
-                                            .toString()),
-                                  ),
-                            ),
-                            const SizedBox(height: 4),
-                            SizedBox(
-                              width: double.infinity,
-                              child: Text(
-                                Strings.current.walletSendGasPriceNote,
-                                style: ROILabelMediumTextStyle(
-                                    color: provider.themeMode.text40),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Observer(
-                              builder: (_) =>
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
-                                    children: [
-                                      if (!walletSendEvmStore
-                                          .confirmSuccess) ...[
-                                        Text(
-                                          Strings.current.walletSendGasLimit,
-                                          style: ROITitleLargeTextStyle(
-                                              color: provider.themeMode.text60),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          Strings.current
-                                              .walletSendGasLimitNote,
-                                          style: ROILabelMediumTextStyle(
-                                              color: provider.themeMode.text40),
-                                        ),
-                                      ],
-                                      if (walletSendEvmStore.confirmSuccess)
-                                        ROITextField(
-                                          label: Strings.current
-                                              .walletSendGasLimit,
-                                          hint: '0',
-                                          enabled: false,
-                                          controller: TextEditingController(
-                                              text: walletSendEvmStore.gasLimit
-                                                  .toString()),
-                                        ),
-                                    ],
-                                  ),
-                            ),
-                            const SizedBox(height: 16),
-                            WalletSendHorizontalText(
-                              title: Strings.current.sharedTransactionFee,
-                              content: '0.02 ROI',
-                              rightColor: provider.themeMode.text60,
-                            ),
-                            const SizedBox(height: 4),
-                            WalletSendHorizontalText(
-                              title: Strings.current.sharedTotal,
-                              content: '--',
-                              rightColor: provider.themeMode.text60,
-                            ),
-                            const SizedBox(height: 100),
-                            Observer(
-                              builder: (_) =>
-                              walletSendEvmStore.confirmSuccess
-                                  ? ROIMediumSuccessButton(
-                                text: Strings.current.sharedSendTransaction,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 64,
-                                  vertical: 8,
-                                ),
-                                onPressed: _onClickSendTransaction,
-                              )
-                                  : ROIMediumPrimaryButton(
-                                text: Strings.current.sharedConfirm,
-                                width: 185,
-                                padding: const EdgeInsets.symmetric(),
-                                onPressed: _onClickConfirm,
-                              ),
-                            ),
+                            const SizedBox(width: 16),
+                            const ROIChainLabelText(text: 'C-Chain'),
                           ],
                         ),
-                      ),
+                        const SizedBox(height: 16),
+                        Observer(
+                          builder: (_) => ROIAddressTextField(
+                            label: Strings.current.sharedSendTo,
+                            hint: Strings.current.sharedPasteAddress,
+                            controller: addressController,
+                            error: walletSendEvmStore.addressError,
+                            onChanged: (_) =>
+                                walletSendEvmStore.removeAddressError(),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Observer(
+                          builder: (_) => ROIAmountTextField(
+                            label: Strings.current.sharedSetAmount,
+                            hint: '0.0',
+                            suffixText: Strings.current
+                                .walletSendBalance(walletSendEvmStore.balanceC),
+                            rateUsd: walletSendEvmStore.avaxPrice,
+                            error: walletSendEvmStore.amountError,
+                            onChanged: (_) =>
+                                walletSendEvmStore.removeAmountError(),
+                            controller: amountController,
+                            onSuffixPressed: () {
+                              amountController.text = walletSendEvmStore
+                                  .balanceC
+                                  .replaceAll(',', '');
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Observer(
+                          builder: (_) => ROITextField(
+                            label: Strings.current.walletSendGasPriceGWEI,
+                            hint: '0',
+                            enabled: false,
+                            controller: TextEditingController(
+                                text: walletSendEvmStore.gasPrice.toString()),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        SizedBox(
+                          width: double.infinity,
+                          child: Text(
+                            Strings.current.walletSendGasPriceNote,
+                            style: ROILabelMediumTextStyle(
+                                color: provider.themeMode.text40),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Observer(
+                          builder: (_) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (!walletSendEvmStore.confirmSuccess) ...[
+                                Text(
+                                  Strings.current.walletSendGasLimit,
+                                  style: ROITitleLargeTextStyle(
+                                      color: provider.themeMode.text60),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  Strings.current.walletSendGasLimitNote,
+                                  style: ROILabelMediumTextStyle(
+                                      color: provider.themeMode.text40),
+                                ),
+                              ],
+                              if (walletSendEvmStore.confirmSuccess)
+                                ROITextField(
+                                  label: Strings.current.walletSendGasLimit,
+                                  hint: '0',
+                                  enabled: false,
+                                  controller: TextEditingController(
+                                      text: walletSendEvmStore.gasLimit
+                                          .toString()),
+                                ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Observer(
+                          builder: (_) => WalletSendHorizontalText(
+                            title: Strings.current.sharedTransactionFee,
+                            content: '${walletSendEvmStore.fee} ROI',
+                            rightColor: provider.themeMode.text60,
+                          ),
+                        ),
+                        const SizedBox(height: 100),
+                        Observer(
+                          builder: (_) => walletSendEvmStore.confirmSuccess
+                              ? ROIMediumSuccessButton(
+                                  text: Strings.current.sharedSendTransaction,
+                                  width: 251,
+                                  onPressed: _onClickSendTransaction,
+                                  isLoading: walletSendEvmStore.isLoading,
+                                )
+                              : ROIMediumPrimaryButton(
+                                  text: Strings.current.sharedConfirm,
+                                  width: 185,
+                                  padding: const EdgeInsets.symmetric(),
+                                  onPressed: _onClickConfirm,
+                                ),
+                        ),
+                      ],
                     ),
-                  )
-                ],
-              ),
-            ),
+                  ),
+                ),
+              )
+            ],
           ),
+        ),
+      ),
     );
   }
 }

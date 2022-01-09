@@ -45,7 +45,7 @@ class _CrossScreenState extends State<CrossScreen> {
   }
 
   void _onClickTransfer() {
-    context.router.push(const CrossTransferRoute());
+    context.router.push(CrossTransferRoute(crossStore: crossStore));
   }
 
   void _onClickCancel() {
