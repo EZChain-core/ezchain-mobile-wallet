@@ -22,11 +22,16 @@ platform :android do
   end
 
   lane :android_internal_alpha do |options|
-    gradle(task: 'assemble', build_type: 'Release')
+    latest_release = firebase_app_distribution_get_latest_release(
+        app: ENV["FIREBASE_ANDROID_APP_ID"],
+        firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"]
+    )
+    build_number = latest_release[:buildVersion].to_i + 1
+    gradle(task: 'assemble', build_type: 'Release', properties: { "android.injected.version.code" => build_number })
     firebase_app_distribution(
         app: ENV["FIREBASE_ANDROID_APP_ID"],
         firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"],
-        groups: "developer",
+        groups: "android_testers",
         release_notes: "EZChain Android",
         apk_path: "../build/app/outputs/apk/release/app-release.apk"
     )

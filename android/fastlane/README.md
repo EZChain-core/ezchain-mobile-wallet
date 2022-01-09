@@ -15,10 +15,10 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## Android
 
-### android android_internal_beta
+### android android_internal_alpha
 
 ```sh
-[bundle exec] fastlane android android_internal_beta
+[bundle exec] fastlane android android_internal_alpha
 ```
 
 EZChain-Android
