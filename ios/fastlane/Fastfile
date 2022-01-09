@@ -22,6 +22,7 @@ platform :ios do
   end
 
   lane :ios_internal_alpha do |options|
+    bump_version()
     build_app(
         scheme: "Runner",
         archive_path: "./build/Runner.xcarchive",
@@ -31,14 +32,18 @@ platform :ios do
     firebase_app_distribution(
         app: ENV["FIREBASE_IOS_APP_ID"],
         firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"],
-        groups: "developer",
+        groups: "ios_testers",
         release_notes: "EZChain iOS",
         ipa_path: "./build/Runner/Runner.ipa"
     )
   end
 
-  lane :ios_test do
-    UI.message "FIREBASE_IOS_APP_ID = #{ENV["FIREBASE_IOS_APP_ID"]}"
+  lane :bump_version do
+    latest_release = firebase_app_distribution_get_latest_release(
+      app: ENV["FIREBASE_IOS_APP_ID"],
+      firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"]
+    )
+    increment_build_number({ build_number: latest_release[:buildVersion].to_i + 1 })
   end
 
   after_all do |lane, options|
