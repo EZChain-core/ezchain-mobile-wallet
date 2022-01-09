@@ -40,6 +40,12 @@ abstract class _WalletSendEvmStore with Store {
   @observable
   bool confirmSuccess = false;
 
+  @observable
+  double fee = 0.00065625;
+
+  @observable
+  bool isLoading = false;
+
   double get balanceCDouble =>
       double.tryParse(balanceC.replaceAll(',', '')) ?? 0;
 
@@ -89,13 +95,16 @@ abstract class _WalletSendEvmStore with Store {
 
   @action
   Future<bool> sendEvm(String address, double amount) async {
+    isLoading = true;
     try {
       final txId = await wallet.sendAvaxC(
           address, numberToBNAvaxC(amount), gasPrice, gasLimit.toInt());
       print("txId = $txId");
+      isLoading = false;
       return true;
     } catch (e) {
       print(e);
+      isLoading = false;
       return false;
     }
   }

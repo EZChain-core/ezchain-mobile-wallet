@@ -37,8 +37,8 @@ class WalletSendAvmScreen extends StatelessWidget {
               address,
               memoController.text,
               amount,
-              0.01,
-              2.01,
+              walletSendAvmStore.fee,
+              walletSendAvmStore.total,
             ),
           ),
         );
@@ -98,8 +98,10 @@ class WalletSendAvmScreen extends StatelessWidget {
                                 .walletSendBalance(walletSendAvmStore.balanceX),
                             rateUsd: walletSendAvmStore.avaxPrice,
                             error: walletSendAvmStore.amountError,
-                            onChanged: (_) =>
-                                walletSendAvmStore.removeAmountError(),
+                            onChanged: (amount) {
+                              walletSendAvmStore.removeAmountError();
+                              walletSendAvmStore.updateTotal(double.tryParse(amount) ?? 0);
+                            },
                             controller: amountController,
                             onSuffixPressed: () {
                               amountController.text = walletSendAvmStore
@@ -116,16 +118,20 @@ class WalletSendAvmScreen extends StatelessWidget {
                           controller: memoController,
                         ),
                         const SizedBox(height: 16),
-                        WalletSendHorizontalText(
-                          title: Strings.current.sharedTransactionFee,
-                          content: '0.02 ROI',
-                          rightColor: provider.themeMode.text60,
+                        Observer(
+                          builder: (_) => WalletSendHorizontalText(
+                            title: Strings.current.sharedTransactionFee,
+                            content: '${walletSendAvmStore.fee} ROI',
+                            rightColor: provider.themeMode.text60,
+                          ),
                         ),
                         const SizedBox(height: 4),
-                        WalletSendHorizontalText(
-                          title: Strings.current.sharedTotal,
-                          content: '--',
-                          rightColor: provider.themeMode.text60,
+                        Observer(
+                          builder: (_) => WalletSendHorizontalText(
+                            title: Strings.current.sharedTotal,
+                            content: '${walletSendAvmStore.total} USD',
+                            rightColor: provider.themeMode.text60,
+                          ),
                         ),
                         const SizedBox(height: 157),
                         ROIMediumPrimaryButton(
