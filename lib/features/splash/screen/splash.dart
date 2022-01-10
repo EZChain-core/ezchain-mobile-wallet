@@ -130,7 +130,7 @@ class _SplashScreenState extends State<SplashScreen> {
       const to = "X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad";
 
       assert(validateAddressX(to));
-
+      final fee = getTxFeeX();
       // Gửi AvaxX
       // phải dùng numberToBNAvaxX để convert
       final txId = await wallet.sendAvaxX(to, numberToBNAvaxX(10));
