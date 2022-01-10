@@ -13,7 +13,7 @@ class IssueTxRequest with RpcRequestWrapper<IssueTxRequest> {
 
   @override
   String method() {
-    return "avax.issueTx";
+    return "ezc.issueTx";
   }
 
   factory IssueTxRequest.fromJson(Map<String, dynamic> json) =>
