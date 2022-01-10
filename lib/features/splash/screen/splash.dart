@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: ROIMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           exportCToImportX();
+    //           exportXToImportC();
     //         },
     //       ),
     //     ),
@@ -228,12 +228,24 @@ class _SplashScreenState extends State<SplashScreen> {
 
   exportCToImportX() async {
     try {
-      final exportFee = getTxFeeP();
       final importFee = getTxFeeX();
       final amount = numberToBNAvaxC(1);
       final exportTxId = await wallet.exportCChain(amount, ExportChainsC.X);
       print("exportTxId = $exportTxId");
       final importTxId = await wallet.importXChain(ExportChainsX.C);
+      print("importTxId = $importTxId");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  exportXToImportC() async {
+    try {
+      final exportFee = getTxFeeX();
+      final amount = numberToBNAvaxX(1) + exportFee;
+      final exportTxId = await wallet.exportXChain(amount, ExportChainsX.C);
+      print("exportTxId = $exportTxId");
+      final importTxId = await wallet.importCChain(ExportChainsC.X);
       print("importTxId = $importTxId");
     } catch (e) {
       print(e);

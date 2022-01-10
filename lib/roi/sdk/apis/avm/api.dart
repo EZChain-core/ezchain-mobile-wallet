@@ -18,41 +18,48 @@ import 'package:wallet/roi/sdk/utils/serialization.dart';
 
 abstract class AvmApi implements ROIChainApi {
   Future<AvmUnsignedTx> buildBaseTx(
-      AvmUTXOSet utxoSet,
-      BigInt amount,
-      String assetId,
-      List<String> toAddresses,
-      List<String> fromAddresses,
-      List<String> changeAddresses,
-      {Uint8List? memo});
+    AvmUTXOSet utxoSet,
+    BigInt amount,
+    String assetId,
+    List<String> toAddresses,
+    List<String> fromAddresses,
+    List<String> changeAddresses, {
+    Uint8List? memo,
+  });
 
   Future<AvmUnsignedTx> buildImportTx(
-      AvmUTXOSet utxoSet,
-      List<String> ownerAddresses,
-      String sourceChain,
-      List<String> toAddresses,
-      List<String> fromAddresses,
-      {List<String>? changeAddresses,
-      Uint8List? memo,
-      BigInt? asOf,
-      BigInt? lockTime,
-      int threshold = 1});
+    AvmUTXOSet utxoSet,
+    List<String> ownerAddresses,
+    String sourceChain,
+    List<String> toAddresses,
+    List<String> fromAddresses, {
+    List<String>? changeAddresses,
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+  });
 
   Future<AvmUnsignedTx> buildExportTx(
-      AvmUTXOSet utxoSet,
-      BigInt amount,
-      String destinationChainId,
-      List<String> toAddresses,
-      List<String> fromAddresses,
-      {List<String>? changeAddresses,
-      Uint8List? memo,
-      BigInt? asOf,
-      BigInt? lockTime,
-      int threshold = 1,
-      String? assetId});
+    AvmUTXOSet utxoSet,
+    BigInt amount,
+    String destinationChainId,
+    List<String> toAddresses,
+    List<String> fromAddresses, {
+    List<String>? changeAddresses,
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+    String? assetId,
+  });
 
-  Future<GetUTXOsResponse> getUTXOs(List<String> addresses,
-      {String? sourceChain, int limit = 0, GetUTXOsStartIndex? startIndex});
+  Future<GetUTXOsResponse> getUTXOs(
+    List<String> addresses, {
+    String? sourceChain,
+    int limit = 0,
+    GetUTXOsStartIndex? startIndex,
+  });
 
   Future<GetAssetDescriptionResponse> getAssetDescription(String assetId);
 
@@ -170,14 +177,15 @@ class _AvmApiImpl implements AvmApi {
 
   @override
   Future<AvmUnsignedTx> buildBaseTx(
-      AvmUTXOSet utxoSet,
-      BigInt amount,
-      String assetId,
-      List<String> toAddresses,
-      List<String> fromAddresses,
-      List<String> changeAddresses,
-      {Uint8List? memo,
-      int threshold = 1}) async {
+    AvmUTXOSet utxoSet,
+    BigInt amount,
+    String assetId,
+    List<String> toAddresses,
+    List<String> fromAddresses,
+    List<String> changeAddresses, {
+    Uint8List? memo,
+    int threshold = 1,
+  }) async {
     final to = toAddresses.map((e) => bindtools.stringToAddress(e)).toList();
     final from =
         fromAddresses.map((e) => bindtools.stringToAddress(e)).toList();
@@ -204,16 +212,17 @@ class _AvmApiImpl implements AvmApi {
 
   @override
   Future<AvmUnsignedTx> buildImportTx(
-      AvmUTXOSet utxoSet,
-      List<String> ownerAddresses,
-      String sourceChain,
-      List<String> toAddresses,
-      List<String> fromAddresses,
-      {List<String>? changeAddresses,
-      Uint8List? memo,
-      BigInt? asOf,
-      BigInt? lockTime,
-      int threshold = 1}) async {
+    AvmUTXOSet utxoSet,
+    List<String> ownerAddresses,
+    String sourceChain,
+    List<String> toAddresses,
+    List<String> fromAddresses, {
+    List<String>? changeAddresses,
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+  }) async {
     asOf ??= unixNow();
     lockTime ??= BigInt.zero;
 
@@ -258,17 +267,18 @@ class _AvmApiImpl implements AvmApi {
 
   @override
   Future<AvmUnsignedTx> buildExportTx(
-      AvmUTXOSet utxoSet,
-      BigInt amount,
-      String destinationChainId,
-      List<String> toAddresses,
-      List<String> fromAddresses,
-      {List<String>? changeAddresses,
-      Uint8List? memo,
-      BigInt? asOf,
-      BigInt? lockTime,
-      int threshold = 1,
-      String? assetId}) async {
+    AvmUTXOSet utxoSet,
+    BigInt amount,
+    String destinationChainId,
+    List<String> toAddresses,
+    List<String> fromAddresses, {
+    List<String>? changeAddresses,
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+    String? assetId,
+  }) async {
     asOf ??= unixNow();
     lockTime ??= BigInt.zero;
 
@@ -341,10 +351,12 @@ class _AvmApiImpl implements AvmApi {
   }
 
   @override
-  Future<GetUTXOsResponse> getUTXOs(List<String> addresses,
-      {String? sourceChain,
-      int limit = 0,
-      GetUTXOsStartIndex? startIndex}) async {
+  Future<GetUTXOsResponse> getUTXOs(
+    List<String> addresses, {
+    String? sourceChain,
+    int limit = 0,
+    GetUTXOsStartIndex? startIndex,
+  }) async {
     final request = GetUTXOsRequest(
             addresses: addresses,
             sourceChain: sourceChain,

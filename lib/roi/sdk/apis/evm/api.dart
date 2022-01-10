@@ -6,12 +6,14 @@ import 'package:wallet/roi/sdk/apis/evm/inputs.dart';
 import 'package:wallet/roi/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/evm/model/get_asset_description.dart';
 import 'package:wallet/roi/sdk/apis/evm/model/get_atomic_tx_status.dart';
+import 'package:wallet/roi/sdk/apis/evm/model/get_utxos.dart';
 import 'package:wallet/roi/sdk/apis/evm/model/issue_tx.dart';
 import 'package:wallet/roi/sdk/apis/evm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/evm/rest/evm_avax_rest_client.dart';
 import 'package:wallet/roi/sdk/apis/evm/rest/evm_rpc_rest_client.dart';
 import 'package:wallet/roi/sdk/apis/evm/rest/evm_x_rest_client.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
+import 'package:wallet/roi/sdk/apis/evm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';
 import 'package:wallet/roi/sdk/common/output.dart';
 import 'package:wallet/roi/sdk/common/rpc/rpc_request.dart';
@@ -22,25 +24,34 @@ import 'package:wallet/roi/sdk/utils/serialization.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart' as bindtools;
 
 abstract class EvmApi implements ROIChainApi {
-  // Future<EvmUnsignedTx> buildImportTx(
-  //     EvmUTXOSet set,
-  //     String toAddress,
-  //     List<String> ownerAddresses,
-  //     String sourceChain,
-  //     List<String> fromAddresses,
-  //     {BigInt? fee});
+  Future<GetUTXOsResponse> getUTXOs(
+    List<String> addresses, {
+    String? sourceChain,
+    int limit = 0,
+    GetUTXOsStartIndex? startIndex,
+  });
+
+  Future<EvmUnsignedTx> buildImportTx(
+    EvmUTXOSet utxoSet,
+    String toAddress,
+    List<String> ownerAddresses,
+    String sourceChain,
+    List<String> fromAddresses, {
+    BigInt? fee,
+  });
 
   Future<EvmUnsignedTx> buildExportTx(
-      BigInt amount,
-      String assetId,
-      String destinationChainId,
-      String fromAddressHex,
-      String fromAddressBech,
-      List<String> toAddresses,
-      {int nonce = 0,
-      BigInt? lockTime,
-      int threshold = 1,
-      BigInt? fee});
+    BigInt amount,
+    String assetId,
+    String destinationChainId,
+    String fromAddressHex,
+    String fromAddressBech,
+    List<String> toAddresses, {
+    int nonce = 0,
+    BigInt? lockTime,
+    int threshold = 1,
+    BigInt? fee,
+  });
 
   Future<String> issueTx(EvmTx tx);
 
@@ -50,12 +61,13 @@ abstract class EvmApi implements ROIChainApi {
 
   Future<String> getMaxPriorityFeePerGas();
 
-  factory EvmApi.create(
-      {required ROINetwork roiNetwork,
-      String avaxEndPoint = "/ext/bc/C/avax",
-      String rpcEndPoint = "/ext/bc/C/rpc",
-      String xEndPoint = "/ext/bc/X",
-      String blockChainId = ""}) {
+  factory EvmApi.create({
+    required ROINetwork roiNetwork,
+    String avaxEndPoint = "/ext/bc/C/ezc",
+    String rpcEndPoint = "/ext/bc/C/rpc",
+    String xEndPoint = "/ext/bc/X",
+    String blockChainId = "",
+  }) {
     return _EvmApiImpl(
         roiNetwork: roiNetwork,
         avaxEndPoint: avaxEndPoint,
@@ -165,17 +177,70 @@ class _EvmApiImpl implements EvmApi {
   }
 
   @override
+  Future<GetUTXOsResponse> getUTXOs(
+    List<String> addresses, {
+    String? sourceChain,
+    int limit = 0,
+    GetUTXOsStartIndex? startIndex,
+  }) async {
+    final request = GetUTXOsRequest(
+      addresses: addresses,
+      sourceChain: sourceChain,
+      limit: limit,
+      startIndex: startIndex,
+    ).toRpc();
+    final response = await evmAvaxRestClient.getUTXOs(request);
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result;
+  }
+
+  @override
+  Future<EvmUnsignedTx> buildImportTx(
+    EvmUTXOSet utxoSet,
+    String toAddress,
+    List<String> ownerAddresses,
+    String sourceChain,
+    List<String> fromAddresses, {
+    BigInt? fee,
+  }) async {
+    final utxoResponse = await getUTXOs(
+      ownerAddresses,
+      sourceChain: sourceChain,
+    );
+    final atomicUTXOs = utxoResponse.getUTXOs();
+    final networkId = roiNetwork.networkId;
+    final avaxAssetId = networks[networkId]!.x.avaxAssetId;
+    final avaxAssetIdBuff = cb58Decode(avaxAssetId);
+    final atomics = atomicUTXOs.getAllUTXOs();
+    if (atomics.isEmpty) {
+      throw Exception(
+          "Error - EVMAPI.buildImportTx: no atomic utxos to import");
+    }
+    return utxoSet.buildImportTx(
+      networkId,
+      cb58Decode(blockChainId),
+      toAddress,
+      atomics,
+      sourceChain: cb58Decode(sourceChain),
+      fee: fee,
+      feeAssetId: avaxAssetIdBuff,
+    );
+  }
+
+  @override
   Future<EvmUnsignedTx> buildExportTx(
-      BigInt amount,
-      String assetId,
-      String destinationChainId,
-      String fromAddressHex,
-      String fromAddressBech,
-      List<String> toAddresses,
-      {int nonce = 0,
-      BigInt? lockTime,
-      int threshold = 1,
-      BigInt? fee}) async {
+    BigInt amount,
+    String assetId,
+    String destinationChainId,
+    String fromAddressHex,
+    String fromAddressBech,
+    List<String> toAddresses, {
+    int nonce = 0,
+    BigInt? lockTime,
+    int threshold = 1,
+    BigInt? fee,
+  }) async {
     lockTime ??= BigInt.zero;
     fee ??= BigInt.zero;
 
@@ -217,14 +282,14 @@ class _EvmApiImpl implements EvmApi {
       evmAvaxInput.addSignatureIdx(0, stringToAddress(fromAddressBech));
       evmInputs.add(evmAvaxInput);
 
-      final evmAntInput = EvmInput(
+      final evmANTInput = EvmInput(
         address: fromAddressHex,
         amount: amount,
         assetId: assetId,
         nonce: nonce,
       );
-      evmAntInput.addSignatureIdx(0, stringToAddress(fromAddressBech));
-      evmInputs.add(evmAntInput);
+      evmANTInput.addSignatureIdx(0, stringToAddress(fromAddressBech));
+      evmInputs.add(evmANTInput);
     }
 
     final to = toAddresses.map((address) => stringToAddress(address)).toList();
@@ -237,15 +302,14 @@ class _EvmApiImpl implements EvmApi {
       threshold: threshold,
     );
 
-    final transferOutput = EvmTransferableOutput(
+    final transferableOutput = EvmTransferableOutput(
       assetId: cb58Decode(assetId),
       output: secpTransferOutput,
     );
-    exportedOuts.add(transferOutput);
+    exportedOuts.add(transferableOutput);
 
     evmInputs.sort(EvmOutput.comparator());
     exportedOuts.sort(StandardParseableOutput.comparator());
-
     final exportTx = EvmExportTx(
       networkId: roiNetwork.networkId,
       blockchainId: cb58Decode(blockChainId),

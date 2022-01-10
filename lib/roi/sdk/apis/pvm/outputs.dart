@@ -28,7 +28,7 @@ class PvmTransferableOutput extends StandardTransferableOutput {
   void deserialize(dynamic fields,
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
-    output = selectOutputClass(fields["output"]["typeId"]);
+    output = selectOutputClass(fields["output"]["_typeId"]);
     output.deserialize(fields["output"], encoding: encoding);
   }
 
@@ -54,7 +54,7 @@ class PvmParseableOutput extends StandardParseableOutput {
   @override
   void deserialize(fields,
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
-    output = selectOutputClass(fields["output"]["typeId"]);
+    output = selectOutputClass(fields["output"]["_typeId"]);
     output.deserialize(fields["output"], encoding: encoding);
   }
 

@@ -17,7 +17,7 @@ class EvmSECPCredential extends Credential {
   String get typeName => "EvmSECPCredential";
 
   EvmSECPCredential() {
-    setCodecId(LATESTCODEC);
+    setTypeId(SECPCREDENTIAL);
   }
 
   @override
@@ -39,7 +39,4 @@ class EvmSECPCredential extends Credential {
   Credential select(int id, {Map<String, dynamic> args = const {}}) {
     return selectCredentialClass(id, args: args);
   }
-
-  @override
-  int getTypeId() => SECPCREDENTIAL;
 }

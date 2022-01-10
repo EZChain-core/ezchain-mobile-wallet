@@ -26,7 +26,7 @@ class AvmTransferableInput extends StandardTransferableInput {
   void deserialize(dynamic fields,
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
-    input = selectInputClass(fields["input"]["typeId"]);
+    input = selectInputClass(fields["input"]["_typeId"]);
     input.deserialize(fields["input"], encoding: encoding);
   }
 

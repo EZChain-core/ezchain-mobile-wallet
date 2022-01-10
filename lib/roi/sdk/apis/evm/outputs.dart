@@ -27,7 +27,7 @@ class EvmTransferableOutput extends StandardTransferableOutput {
   void deserialize(dynamic fields,
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
-    output = selectOutputClass(fields["output"]["typeId"]);
+    output = selectOutputClass(fields["output"]["_typeId"]);
     output.deserialize(fields["output"], encoding: encoding);
   }
 
@@ -84,7 +84,7 @@ class EvmSECPTransferOutput extends EvmAmountOutput {
             addresses: addresses,
             lockTime: lockTime,
             threshold: threshold) {
-    setCodecId(LATESTCODEC);
+    setTypeId(SECPXFEROUTPUTID);
   }
 
   factory EvmSECPTransferOutput.fromArgs(Map<String, dynamic> args) {
@@ -117,9 +117,6 @@ class EvmSECPTransferOutput extends EvmAmountOutput {
   Output create({Map<String, dynamic> args = const {}}) {
     return EvmSECPTransferOutput.fromArgs(args);
   }
-
-  @override
-  int getTypeId() => SECPXFEROUTPUTID;
 
   @override
   int getOutputId() => getTypeId();

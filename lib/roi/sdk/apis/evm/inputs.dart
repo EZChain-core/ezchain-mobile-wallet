@@ -29,7 +29,7 @@ class EvmTransferableInput extends StandardTransferableInput {
   void deserialize(dynamic fields,
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
-    input = selectInputClass(fields["input"]["typeId"]);
+    input = selectInputClass(fields["input"]["_typeId"]);
     input.deserialize(fields["input"], encoding: encoding);
   }
 
@@ -69,7 +69,7 @@ class EvmSECPTransferInput extends EvmAmountInput {
   String get typeName => "EvmSECPTransferInput";
 
   EvmSECPTransferInput({BigInt? amount}) : super(amount: amount) {
-    setCodecId(LATESTCODEC);
+    setTypeId(SECPINPUTID);
   }
 
   factory EvmSECPTransferInput.fromArgs(Map<String, dynamic> args) {
@@ -87,9 +87,6 @@ class EvmSECPTransferInput extends EvmAmountInput {
   }
 
   @override
-  int getTypeId() => SECPINPUTID;
-
-  @override
   int getInputId() => SECPINPUTID;
 
   @override
@@ -105,10 +102,10 @@ class EvmInput extends EvmOutput {
   EvmInput({dynamic address, dynamic amount, dynamic assetId, dynamic nonce})
       : super(address: address, amount: amount, assetId: assetId) {
     if (nonce != null) {
-      if (amount is int) {
-        nonceValue = BigInt.from(amount);
+      if (nonce is int) {
+        nonceValue = BigInt.from(nonce);
       } else {
-        nonceValue = amount;
+        nonceValue = nonce;
       }
       this.nonce = fromBNToBuffer(nonceValue, length: 8);
     }
