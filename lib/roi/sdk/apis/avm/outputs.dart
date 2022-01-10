@@ -26,7 +26,7 @@ class AvmTransferableOutput extends StandardTransferableOutput {
   void deserialize(dynamic fields,
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
-    output = selectOutputClass(fields["output"]["typeId"]);
+    output = selectOutputClass(fields["output"]["_typeId"]);
     output.deserialize(fields["output"], encoding: encoding);
   }
 

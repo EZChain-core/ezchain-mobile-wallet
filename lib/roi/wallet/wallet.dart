@@ -7,6 +7,7 @@ import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
+import 'package:wallet/roi/sdk/apis/evm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/pvm/constants.dart' as pvmConstants;
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/outputs.dart';
@@ -372,6 +373,7 @@ abstract class WalletProvider {
       destinationChain,
       exportFee,
     );
+
     final signedTx = await signC(unsignedTx);
     final String txId;
     try {
@@ -382,6 +384,53 @@ abstract class WalletProvider {
     await waitTxC(txId);
     await updateAvaxBalanceC();
     return txId;
+  }
+
+  Future<String> importCChain(ExportChainsC sourceChain,
+      {BigInt? fee, EvmUTXOSet? utxoSet}) async {
+    final bechAddress = getEvmAddressBech();
+
+    utxoSet ??= await getAtomicUTXOsC(sourceChain);
+
+    final utxos = utxoSet.getAllUTXOs();
+    if (utxos.isEmpty) {
+      throw Exception('Nothing to import.');
+    }
+    final toAddress = getAddressC();
+    final ownerAddresses = [bechAddress];
+    final fromAddresses = ownerAddresses;
+    final sourceChainId = chainIdFromAlias(sourceChain.value);
+    if (fee == null) {
+      final numSigs = utxos.fold<int>(
+          0, (acc, utxo) => acc + utxo.getOutput().getAddresses().length);
+      final numIns = utxos.length;
+      final importGas = estimateImportGasFeeFromMockTx(numIns, numSigs);
+      final baseFee = await getBaseFeeRecommended();
+      fee = avaxCtoX(baseFee ~/ BigInt.from(importGas));
+    }
+    final unsignedTx = await cChain.buildImportTx(
+      utxoSet,
+      toAddress,
+      ownerAddresses,
+      sourceChainId,
+      fromAddresses,
+      fee: fee,
+    );
+    final signedTx = await signC(unsignedTx);
+    final String txId;
+    try {
+      txId = await cChain.issueTx(signedTx);
+    } catch (e) {
+      throw Exception("txId cannot be null");
+    }
+    await waitTxC(txId);
+    await updateAvaxBalanceC();
+    return txId;
+  }
+
+  Future<EvmUTXOSet> getAtomicUTXOsC(ExportChainsC sourceChain) async {
+    final bechAddress = getEvmAddressBech();
+    return await evmGetAtomicUTXOs([bechAddress], sourceChain);
   }
 
   WalletBalanceC getBalanceC() {

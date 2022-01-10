@@ -25,11 +25,15 @@ class EvmImportTx extends EvmBaseTx {
   EvmImportTx(
       {int networkId = defaultNetworkId,
       Uint8List? blockchainId,
-      required this.sourceChain,
+      Uint8List? sourceChain,
       List<EvmTransferableInput>? importIns,
       List<EvmOutput>? outs,
       BigInt? fee})
       : super(networkId: networkId, blockchainId: blockchainId) {
+    setTypeId(IMPORTTX);
+    if (sourceChain != null) {
+      this.sourceChain = sourceChain;
+    }
     var inputsPassed = false;
     var outputsPassed = false;
     if (importIns != null && importIns.isNotEmpty) {
@@ -82,9 +86,6 @@ class EvmImportTx extends EvmBaseTx {
         .toList();
     numIns.buffer.asByteData().setUint32(0, importIns.length);
   }
-
-  @override
-  int getTypeId() => IMPORTTX;
 
   @override
   int getTxType() => getTypeId();

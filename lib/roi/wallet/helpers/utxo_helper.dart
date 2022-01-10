@@ -3,6 +3,7 @@ import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_utxos.dart' as pvm_utxos;
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/pvm/utxos.dart';
+import 'package:wallet/roi/sdk/apis/evm/utxos.dart';
 import 'package:wallet/roi/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/types.dart';
@@ -135,4 +136,14 @@ Future<PvmUTXOSet> platformGetAtomicUTXOs(
     }
     return utxoSet;
   }
+}
+
+Future<EvmUTXOSet> evmGetAtomicUTXOs(
+    List<String> addresses, ExportChainsC sourceChain) async {
+  if (addresses.length > 1024) {
+    throw Exception("Number of addresses can not be greater than 1024.");
+  }
+  final sourceChainId = chainIdFromAlias(sourceChain.value);
+  return (await cChain.getUTXOs(addresses, sourceChain: sourceChainId))
+      .getUTXOs();
 }

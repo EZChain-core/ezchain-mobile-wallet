@@ -18,12 +18,12 @@ final mainNetConfig = NetworkConfig(
 );
 
 final testNetConfig = NetworkConfig(
-  rawUrl: 'https://testnet-api.roichain.net',
+  rawUrl: 'https://testnet-api.ezchain.com',
   apiProtocol: 'https',
-  apiIp: 'testnet-api.roichain.net',
+  apiIp: 'testnet-api.ezchain.com',
   apiPort: 443,
-  explorerURL: 'https://explorerapi.roichain.net',
-  explorerSiteURL: 'https://explorer.roichain.net',
+  explorerURL: 'https://explorerapi.ezchain.com',
+  explorerSiteURL: 'https://explorer.ezchain.com',
   networkId: 5,
   xChainId: networks[5]!.x.blockchainId,
   pChainId: networks[5]!.p.blockchainId,

@@ -37,10 +37,18 @@ abstract class EvmStandardBaseTx<KPClass extends ROIKeyPair,
     final fields = super.serialize(encoding: encoding);
     return {
       ...fields,
-      "networkId": Serialization.instance.encoder(networkId, encoding,
-          SerializedType.Buffer, SerializedType.decimalString),
+      "networkId": Serialization.instance.encoder(
+        networkId,
+        encoding,
+        SerializedType.Buffer,
+        SerializedType.decimalString,
+      ),
       "blockchainId": Serialization.instance.encoder(
-          blockchainId, encoding, SerializedType.Buffer, SerializedType.cb58)
+        blockchainId,
+        encoding,
+        SerializedType.Buffer,
+        SerializedType.cb58,
+      )
     };
   }
 
@@ -48,12 +56,20 @@ abstract class EvmStandardBaseTx<KPClass extends ROIKeyPair,
   void deserialize(dynamic fields,
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
-    networkId = Serialization.instance.decoder(fields["networkId"], encoding,
-        SerializedType.decimalString, SerializedType.Buffer,
-        args: [4]);
-    blockchainId = Serialization.instance.decoder(fields["blockchainId"],
-        encoding, SerializedType.cb58, SerializedType.Buffer,
-        args: [32]);
+    networkId = Serialization.instance.decoder(
+      fields["networkId"],
+      encoding,
+      SerializedType.decimalString,
+      SerializedType.Buffer,
+      args: [4],
+    );
+    blockchainId = Serialization.instance.decoder(
+      fields["blockchainId"],
+      encoding,
+      SerializedType.cb58,
+      SerializedType.Buffer,
+      args: [32],
+    );
   }
 
   @override
@@ -96,9 +112,13 @@ abstract class EvmStandardUnsignedTx<
     final fields = super.serialize(encoding: encoding);
     return {
       ...fields,
-      "codecId": Serialization.instance.encoder(codecId, encoding,
-          SerializedType.number, SerializedType.decimalString,
-          args: [2]),
+      "codecId": Serialization.instance.encoder(
+        codecId,
+        encoding,
+        SerializedType.number,
+        SerializedType.decimalString,
+        args: [2],
+      ),
       "transaction": transaction.serialize(encoding: encoding)
     };
   }

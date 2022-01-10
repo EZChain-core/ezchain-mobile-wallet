@@ -36,7 +36,7 @@ class PvmUnsignedTx
   void deserialize(dynamic fields,
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
-    transaction = selectTxClass(fields["transaction"]["typeId"]);
+    transaction = selectTxClass(fields["transaction"]["_typeId"]);
     transaction.deserialize(fields["transaction"], encoding: encoding);
   }
 
@@ -84,7 +84,7 @@ class PvmTx extends StandardTx<PvmKeyPair, PvmKeyChain, PvmUnsignedTx> {
     for (int i = 0;
         i < (fields["credentials"] as List<Credential>).length;
         i++) {
-      final cred = selectCredentialClass(fields["credentials"][i]["typeId"]);
+      final cred = selectCredentialClass(fields["credentials"][i]["_typeId"]);
       cred.deserialize(fields["credentials"][i], encoding: encoding);
       credentials.add(cred);
     }

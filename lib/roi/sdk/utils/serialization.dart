@@ -15,8 +15,8 @@ abstract class Serializable {
   dynamic serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
     return {
       "typeName": typeName,
-      "typeId": _typeId,
-      "codecId": _codecId,
+      "_typeId": _typeId,
+      "_codecId": _codecId,
     };
   }
 
@@ -24,13 +24,13 @@ abstract class Serializable {
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     assert(fields["typeName"] is String);
     assert(fields["typeName"] == typeName);
-    if (fields["typeId"] != null) {
-      assert(fields["typeId"] is int);
-      assert(fields["typeId"] == _typeId);
+    if (fields["_typeId"] != null) {
+      assert(fields["_typeId"] is int);
+      assert(fields["_typeId"] == _typeId);
     }
-    if (fields["codecId"] != null) {
-      assert(fields["codecId"] is int);
-      assert(fields["codecId"] == _codecId);
+    if (fields["_codecId"] != null) {
+      assert(fields["_codecId"] is int);
+      assert(fields["_codecId"] == _codecId);
     }
   }
 

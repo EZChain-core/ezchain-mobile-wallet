@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/common/credentials.dart';
 import 'package:wallet/roi/sdk/common/input.dart';
-import 'package:wallet/roi/sdk/common/keychain/base_key_chain.dart';
 import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 import 'package:wallet/roi/sdk/common/output.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
@@ -64,14 +63,26 @@ abstract class StandardBaseTx<KPClass extends ROIKeyPair,
     final fields = super.serialize(encoding: encoding);
     return {
       ...fields,
-      "networkId": Serialization.instance.encoder(networkId, encoding,
-          SerializedType.Buffer, SerializedType.decimalString),
+      "networkId": Serialization.instance.encoder(
+        networkId,
+        encoding,
+        SerializedType.Buffer,
+        SerializedType.decimalString,
+      ),
       "blockchainId": Serialization.instance.encoder(
-          blockchainId, encoding, SerializedType.Buffer, SerializedType.cb58),
+        blockchainId,
+        encoding,
+        SerializedType.Buffer,
+        SerializedType.cb58,
+      ),
       "outs": outs.map((e) => e.serialize(encoding: encoding)),
       "ins": ins.map((e) => e.serialize(encoding: encoding)),
-      "memo": Serialization.instance
-          .encoder(memo, encoding, SerializedType.Buffer, SerializedType.hex)
+      "memo": Serialization.instance.encoder(
+        memo,
+        encoding,
+        SerializedType.Buffer,
+        SerializedType.hex,
+      )
     };
   }
 
@@ -79,14 +90,26 @@ abstract class StandardBaseTx<KPClass extends ROIKeyPair,
   void deserialize(dynamic fields,
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
-    networkId = Serialization.instance.decoder(fields["networkId"], encoding,
-        SerializedType.decimalString, SerializedType.Buffer,
-        args: [4]);
-    blockchainId = Serialization.instance.decoder(fields["blockchainId"],
-        encoding, SerializedType.cb58, SerializedType.Buffer,
-        args: [32]);
+    networkId = Serialization.instance.decoder(
+      fields["networkId"],
+      encoding,
+      SerializedType.decimalString,
+      SerializedType.Buffer,
+      args: [4],
+    );
+    blockchainId = Serialization.instance.decoder(
+      fields["blockchainId"],
+      encoding,
+      SerializedType.cb58,
+      SerializedType.Buffer,
+      args: [32],
+    );
     memo = Serialization.instance.decoder(
-        fields["memo"], encoding, SerializedType.hex, SerializedType.Buffer);
+      fields["memo"],
+      encoding,
+      SerializedType.hex,
+      SerializedType.Buffer,
+    );
   }
 
   @override

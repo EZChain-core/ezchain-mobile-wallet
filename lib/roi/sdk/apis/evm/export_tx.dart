@@ -24,10 +24,14 @@ class EvmExportTx extends EvmBaseTx {
   EvmExportTx(
       {int networkId = defaultNetworkId,
       Uint8List? blockchainId,
-      required this.destinationChain,
+      Uint8List? destinationChain,
       List<EvmInput>? inputs,
       List<EvmTransferableOutput>? exportedOutputs})
       : super(networkId: networkId, blockchainId: blockchainId) {
+    setTypeId(EXPORTTX);
+    if (destinationChain != null) {
+      this.destinationChain = destinationChain;
+    }
     if (inputs != null) {
       if (inputs.length > 1) {
         inputs.sort(EvmOutput.comparator());
@@ -50,17 +54,19 @@ class EvmExportTx extends EvmBaseTx {
   }
 
   @override
-  int getTypeId() => EXPORTTX;
-
-  @override
   serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
     final fields = super.serialize(encoding: encoding);
     return {
       ...fields,
-      "destinationChain": Serialization.instance.encoder(destinationChain,
-          encoding, SerializedType.Buffer, SerializedType.cb58),
-      "exportedOutputs":
-          exportedOutputs.map((e) => e.serialize(encoding: encoding))
+      "destinationChain": Serialization.instance.encoder(
+        destinationChain,
+        encoding,
+        SerializedType.Buffer,
+        SerializedType.cb58,
+      ),
+      "exportedOutputs": exportedOutputs.map(
+        (e) => e.serialize(encoding: encoding),
+      )
     };
   }
 
@@ -69,11 +75,12 @@ class EvmExportTx extends EvmBaseTx {
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     destinationChain = Serialization.instance.decoder(
-        fields["destinationChain"],
-        encoding,
-        SerializedType.cb58,
-        SerializedType.Buffer,
-        args: [32]);
+      fields["destinationChain"],
+      encoding,
+      SerializedType.cb58,
+      SerializedType.Buffer,
+      args: [32],
+    );
     exportedOutputs = (fields["exportedOutputs"] as List<dynamic>)
         .map((e) => EvmTransferableOutput()..deserialize(e, encoding: encoding))
         .toList();

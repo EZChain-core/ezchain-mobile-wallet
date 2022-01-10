@@ -22,33 +22,39 @@ abstract class PvmApi implements ROIChainApi {
   BigInt getTxFee();
 
   Future<PvmUnsignedTx> buildImportTx(
-      PvmUTXOSet utxoSet,
-      List<String> ownerAddresses,
-      String sourceChain,
-      List<String> toAddresses,
-      List<String> fromAddresses,
-      {List<String>? changeAddresses,
-      Uint8List? memo,
-      BigInt? asOf,
-      BigInt? lockTime,
-      int threshold = 1});
+    PvmUTXOSet utxoSet,
+    List<String> ownerAddresses,
+    String sourceChain,
+    List<String> toAddresses,
+    List<String> fromAddresses, {
+    List<String>? changeAddresses,
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+  });
 
   Future<PvmUnsignedTx> buildExportTx(
-      PvmUTXOSet utxoSet,
-      BigInt amount,
-      String destinationChainId,
-      List<String> toAddresses,
-      List<String> fromAddresses,
-      {List<String>? changeAddresses,
-      Uint8List? memo,
-      BigInt? asOf,
-      BigInt? lockTime,
-      int threshold = 1});
+    PvmUTXOSet utxoSet,
+    BigInt amount,
+    String destinationChainId,
+    List<String> toAddresses,
+    List<String> fromAddresses, {
+    List<String>? changeAddresses,
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+  });
 
   Future<String> issueTx(PvmTx tx);
 
-  Future<GetUTXOsResponse> getUTXOs(List<String> addresses,
-      {String? sourceChain, int limit = 0, GetUTXOsStartIndex? startIndex});
+  Future<GetUTXOsResponse> getUTXOs(
+    List<String> addresses, {
+    String? sourceChain,
+    int limit = 0,
+    GetUTXOsStartIndex? startIndex,
+  });
 
   Future<GetStakeResponse> getStake(List<String> addresses);
 
