@@ -4,6 +4,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.dart';
 import 'package:wallet/features/wallet/send/evm/wallet_send_evm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
@@ -19,10 +21,13 @@ import 'package:wallet/themes/widgets.dart';
 class WalletSendEvmScreen extends StatelessWidget {
   const WalletSendEvmScreen({Key? key}) : super(key: key);
 
+  BalanceStore get balanceStore => getIt<BalanceStore>();
+
   @override
   Widget build(BuildContext context) {
     final walletSendEvmStore = WalletSendEvmStore();
     walletSendEvmStore.getBalanceC();
+    balanceStore.updateBalanceC();
     final addressController = TextEditingController(
         text: '0xd30a9f6645a73f67b7850b9304b6a3172dda75bf');
     final amountController = TextEditingController();
@@ -33,7 +38,7 @@ class WalletSendEvmScreen extends StatelessWidget {
 
     void _onClickConfirm() {
       final address = addressController.text;
-      walletSendEvmStore.confirm(address, getAmount());
+      walletSendEvmStore.confirm(address, getAmount(), balanceStore.balanceCDouble);
     }
 
     void _showWarningDialog() {
@@ -109,14 +114,14 @@ class WalletSendEvmScreen extends StatelessWidget {
                             label: Strings.current.sharedSetAmount,
                             hint: '0.0',
                             suffixText: Strings.current
-                                .walletSendBalance(walletSendEvmStore.balanceC),
+                                .walletSendBalance(balanceStore.balanceC),
                             rateUsd: walletSendEvmStore.avaxPrice,
                             error: walletSendEvmStore.amountError,
                             onChanged: (_) =>
                                 walletSendEvmStore.removeAmountError(),
                             controller: amountController,
                             onSuffixPressed: () {
-                              amountController.text = walletSendEvmStore
+                              amountController.text = balanceStore
                                   .balanceC
                                   .replaceAll(',', '');
                             },

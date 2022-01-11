@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.dart';
 import 'package:wallet/features/wallet/send/avm/wallet_send_avm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
@@ -18,10 +20,13 @@ import 'package:wallet/themes/widgets.dart';
 class WalletSendAvmScreen extends StatelessWidget {
   const WalletSendAvmScreen({Key? key}) : super(key: key);
 
+  BalanceStore get balanceStore => getIt<BalanceStore>();
+
   @override
   Widget build(BuildContext context) {
     final walletSendAvmStore = WalletSendAvmStore();
     walletSendAvmStore.getBalanceX();
+    balanceStore.updateBalanceX();
     final addressController = TextEditingController(
         text: 'X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad');
     final amountController = TextEditingController();
@@ -30,7 +35,8 @@ class WalletSendAvmScreen extends StatelessWidget {
     void _onClickConfirm() {
       final address = addressController.text;
       final amount = double.tryParse(amountController.text) ?? 0;
-      if (walletSendAvmStore.validate(address, amount)) {
+      if (walletSendAvmStore.validate(
+          address, amount, balanceStore.balanceXDouble)) {
         context.router.push(
           WalletSendAvmConfirmRoute(
             transactionInfo: WalletSendAvmTransactionViewData(
@@ -95,18 +101,18 @@ class WalletSendAvmScreen extends StatelessWidget {
                             label: Strings.current.sharedSetAmount,
                             hint: '0.0',
                             suffixText: Strings.current
-                                .walletSendBalance(walletSendAvmStore.balanceX),
+                                .walletSendBalance(balanceStore.balanceX),
                             rateUsd: walletSendAvmStore.avaxPrice,
                             error: walletSendAvmStore.amountError,
                             onChanged: (amount) {
                               walletSendAvmStore.removeAmountError();
-                              walletSendAvmStore.updateTotal(double.tryParse(amount) ?? 0);
+                              walletSendAvmStore
+                                  .updateTotal(double.tryParse(amount) ?? 0);
                             },
                             controller: amountController,
                             onSuffixPressed: () {
-                              amountController.text = walletSendAvmStore
-                                  .balanceX
-                                  .replaceAll(',', '');
+                              amountController.text =
+                                  balanceStore.balanceX.replaceAll(',', '');
                             },
                           ),
                         ),
