@@ -26,7 +26,7 @@ class _CrossScreenState extends State<CrossScreen> {
 
   @override
   void initState() {
-    crossStore.setSourceChain(crossStore.sourceChain);
+    crossStore.init();
     super.initState();
   }
 
