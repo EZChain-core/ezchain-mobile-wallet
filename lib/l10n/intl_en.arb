@@ -40,6 +40,7 @@
   "sharedImport": "Import",
   "sharedProcessing": "Processing",
   "sharedAccepted": "Accepted",
+  "sharedError": "Error",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",
@@ -96,6 +97,8 @@
   "crossStatus": "Status:",
   "crossTransferring": "Transferring...",
   "crossTransferCompleted": "Transfer Completed",
+  "crossTransferIncomplete": "Transfer Incomplete",
+  "crossTransferWrong": "Something went wrong",
   "crossTransferCompletedDes": "You have successfully transferred\nbetween chains."
 
 }
