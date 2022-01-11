@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/cross/cross_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -23,6 +25,8 @@ class CrossScreen extends StatefulWidget {
 class _CrossScreenState extends State<CrossScreen> {
   final crossStore = CrossStore();
   final amountController = TextEditingController();
+  final priceStore = getIt<PriceStore>();
+
 
   @override
   void initState() {
