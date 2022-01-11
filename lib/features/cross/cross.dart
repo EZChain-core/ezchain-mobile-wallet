@@ -37,8 +37,7 @@ class _CrossScreenState extends State<CrossScreen> {
   }
 
   void _onClickConfirm() {
-    final amount = double.tryParse(amountController.text) ?? 0;
-    crossStore.isConfirm = crossStore.validate(amount);
+    crossStore.isConfirm = crossStore.validate();
     if (crossStore.isConfirm) {
       setState(() {});
     }
@@ -108,7 +107,10 @@ class _CrossScreenState extends State<CrossScreen> {
                                 .walletSendBalance(crossStore.sourceBalance),
                             rateUsd: crossStore.avaxPrice,
                             error: crossStore.amountError,
-                            onChanged: (_) => crossStore.removeAmountError(),
+                            onChanged: (amount) {
+                              crossStore.amount = double.tryParse(amount) ?? 0;
+                              crossStore.removeAmountError();
+                            },
                             controller: amountController,
                             onSuffixPressed: () {
                               amountController.text =
@@ -191,10 +193,12 @@ class _CrossScreenState extends State<CrossScreen> {
                         style: ROITitleLargeTextStyle(
                             color: provider.themeMode.text60),
                       ),
-                      Text(
-                        '0.02 AVAX',
-                        style: ROITitleLargeTextStyle(
-                            color: provider.themeMode.text60),
+                      Observer(
+                        builder: (_) => Text(
+                          '${crossStore.fee} AVAX',
+                          style: ROITitleLargeTextStyle(
+                              color: provider.themeMode.text60),
+                        ),
                       ),
                     ],
                   ),
