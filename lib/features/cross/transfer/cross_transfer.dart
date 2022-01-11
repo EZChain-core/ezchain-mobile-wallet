@@ -102,10 +102,12 @@ class CrossTransferScreen extends StatelessWidget {
                                   color: provider.themeMode.text60),
                             ),
                             const SizedBox(height: 4),
-                            Text(
-                              '2Z5ozYCLDqxZqDAJggm9eSH8dNVfVdfhp4bJ4Y3DvZXzqobzm1',
-                              style: ROIBodySmallTextStyle(
-                                  color: provider.themeMode.text),
+                            Observer(
+                              builder: (_) => Text(
+                                crossStore.exportTxId,
+                                style: ROIBodySmallTextStyle(
+                                    color: provider.themeMode.text),
+                              ),
                             ),
                             const SizedBox(height: 8),
                             Text(
@@ -218,10 +220,12 @@ class CrossTransferScreen extends StatelessWidget {
                                   color: provider.themeMode.text60),
                             ),
                             const SizedBox(height: 4),
-                            Text(
-                              '2Z5ozYCLDqxZqDAJggm9eSH8dNVfVdfhp4bJ4Y3DvZXzqobzm1',
-                              style: ROIBodySmallTextStyle(
-                                  color: provider.themeMode.text),
+                            Observer(
+                              builder: (_) => Text(
+                                crossStore.importTxId,
+                                style: ROIBodySmallTextStyle(
+                                    color: provider.themeMode.text),
+                              ),
                             ),
                             const SizedBox(height: 8),
                             Text(
