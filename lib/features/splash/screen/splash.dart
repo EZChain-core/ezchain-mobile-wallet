@@ -30,9 +30,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // wallet = SingletonWallet(
-    //     privateKey:
-    //         "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
+    wallet = SingletonWallet(
+        privateKey:
+            "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
     // wallet.on(WalletEventType.balanceChangedX, _handleCallback);
     // wallet.on(WalletEventType.balanceChangedP, _handleCallback);
     // wallet.on(WalletEventType.balanceChangedC, _handleCallback);
@@ -202,10 +202,28 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       final exportFee = getTxFeeX();
       final importFee = getTxFeeP();
-      final amount = numberToBNAvaxX(1) + exportFee;
+      // amount phải thêm import fee
+      // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
+      final amount = numberToBNAvaxX(1) + importFee;
       final exportTxId = await wallet.exportXChain(amount, ExportChainsX.P);
       print("exportTxId = $exportTxId");
       final importTxId = await wallet.importPChain(ExportChainsP.X);
+      print("importTxId = $importTxId");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  exportXToImportC() async {
+    try {
+      final exportFee = getTxFeeX();
+      final importFee = await estimateImportGasFee();
+      // amount phải thêm import fee
+      // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
+      final amount = numberToBNAvaxX(1) + importFee;
+      final exportTxId = await wallet.exportXChain(amount, ExportChainsX.C);
+      print("exportTxId = $exportTxId");
+      final importTxId = await wallet.importCChain(ExportChainsC.X);
       print("importTxId = $importTxId");
     } catch (e) {
       print(e);
@@ -216,7 +234,9 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       final exportFee = getTxFeeP();
       final importFee = getTxFeeX();
-      final amount = numberToBNAvaxP(1) + exportFee;
+      // amount phải thêm import fee
+      // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
+      final amount = numberToBNAvaxP(1) + importFee;
       final exportTxId = await wallet.exportPChain(amount, ExportChainsP.X);
       print("exportTxId = $exportTxId");
       final importTxId = await wallet.importXChain(ExportChainsX.P);
@@ -226,11 +246,43 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
+  exportPToImportC() async {
+    try {
+      final exportFee = getTxFeeP();
+      final importFee = await estimateImportGasFee();
+      // amount phải thêm import fee
+      // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
+      final amount = numberToBNAvaxP(1) + importFee;
+      final exportTxId = await wallet.exportPChain(amount, ExportChainsP.C);
+      print("exportTxId = $exportTxId");
+      final importTxId = await wallet.importCChain(ExportChainsC.P);
+      print("importTxId = $importTxId");
+    } catch (e) {
+      print(e);
+    }
+  }
+
   exportCToImportX() async {
     try {
+      final hexAddress = wallet.getAddressC();
+      const destinationChain = ExportChainsC.X;
+      final destinationAddress = wallet.getAddressX();
+      // estimate ban đầu amount = 0
+      // khi ấn confirm cần estimate lại với amount được nhập
+      final exportFee = await estimateExportGasFee(
+        destinationChain,
+        BigInt.zero,
+        hexAddress,
+        destinationAddress,
+      );
       final importFee = getTxFeeX();
-      final amount = numberToBNAvaxC(1);
-      final exportTxId = await wallet.exportCChain(amount, ExportChainsC.X);
+      // amount phải thêm import fee
+      final amount = numberToBNAvaxX(1) + importFee;
+      final exportTxId = await wallet.exportCChain(
+        amount,
+        destinationChain,
+        exportFee: exportFee,
+      );
       print("exportTxId = $exportTxId");
       final importTxId = await wallet.importXChain(ExportChainsX.C);
       print("importTxId = $importTxId");
@@ -239,13 +291,29 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  exportXToImportC() async {
+  exportCToImportP() async {
     try {
-      final exportFee = getTxFeeX();
-      final amount = numberToBNAvaxX(1) + exportFee;
-      final exportTxId = await wallet.exportXChain(amount, ExportChainsX.C);
+      final hexAddress = wallet.getAddressC();
+      const destinationChain = ExportChainsC.P;
+      final destinationAddress = wallet.getAddressP();
+      // estimate ban đầu amount = 0
+      // khi ấn confirm cần estimate lại với amount được nhập
+      final exportFee = await estimateExportGasFee(
+        destinationChain,
+        BigInt.zero,
+        hexAddress,
+        destinationAddress,
+      );
+      final importFee = getTxFeeP();
+      // amount phải thêm import fee
+      final amount = numberToBNAvaxP(1) + importFee;
+      final exportTxId = await wallet.exportCChain(
+        amount,
+        destinationChain,
+        exportFee: exportFee,
+      );
       print("exportTxId = $exportTxId");
-      final importTxId = await wallet.importCChain(ExportChainsC.X);
+      final importTxId = await wallet.importPChain(ExportChainsP.C);
       print("importTxId = $importTxId");
     } catch (e) {
       print(e);

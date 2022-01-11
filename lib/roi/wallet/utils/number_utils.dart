@@ -109,3 +109,9 @@ BigInt stringToBn(String value, int decimals) {
   final rawStr = (big * tens).toStringAsFixed(0);
   return BigInt.tryParse(rawStr) ?? BigInt.zero;
 }
+
+BigInt decimalToBn(Decimal value, int denom) {
+  final bnBig = value * Decimal.fromInt(10).pow(denom);
+  final bnString = bnBig.toStringAsFixed(0);
+  return BigInt.tryParse(bnString) ?? BigInt.zero;
+}
