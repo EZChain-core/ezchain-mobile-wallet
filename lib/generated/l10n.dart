@@ -460,6 +460,16 @@ class Strings {
     );
   }
 
+  /// `Error`
+  String get sharedError {
+    return Intl.message(
+      'Error',
+      name: 'sharedError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -1015,6 +1025,26 @@ class Strings {
     return Intl.message(
       'Transfer Completed',
       name: 'crossTransferCompleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transfer Incomplete`
+  String get crossTransferIncomplete {
+    return Intl.message(
+      'Transfer Incomplete',
+      name: 'crossTransferIncomplete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Something went wrong`
+  String get crossTransferWrong {
+    return Intl.message(
+      'Something went wrong',
+      name: 'crossTransferWrong',
       desc: '',
       args: [],
     );
