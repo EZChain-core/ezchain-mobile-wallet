@@ -359,10 +359,14 @@ abstract class WalletProvider {
         destinationChain == ExportChainsC.X ? getAddressX() : getAddressP();
 
     if (exportFee == null) {
-      final gas = estimateExportGasFeeFromMockTx(
-          destinationChain, amount, hexAddress, destinationAddress);
+      final exportGas = estimateExportGasFeeFromMockTx(
+        destinationChain,
+        amount,
+        hexAddress,
+        destinationAddress,
+      );
       final baseFee = await getBaseFeeRecommended();
-      exportFee = avaxCtoX(baseFee ~/ BigInt.from(gas));
+      exportFee = avaxCtoX(baseFee * BigInt.from(exportGas));
     }
 
     final unsignedTx = await buildEvmExportTransaction(
@@ -406,7 +410,7 @@ abstract class WalletProvider {
       final numIns = utxos.length;
       final importGas = estimateImportGasFeeFromMockTx(numIns, numSigs);
       final baseFee = await getBaseFeeRecommended();
-      fee = avaxCtoX(baseFee ~/ BigInt.from(importGas));
+      fee = avaxCtoX(baseFee * BigInt.from(importGas));
     }
     final unsignedTx = await cChain.buildImportTx(
       utxoSet,

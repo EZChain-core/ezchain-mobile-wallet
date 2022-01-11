@@ -84,7 +84,11 @@ int estimateImportGasFeeFromMockTx(int numIns, int numSigs) {
 /// @param from The C chain hex address exported from
 /// @param to The destination X or P address
 int estimateExportGasFeeFromMockTx(
-    ExportChainsC destinationChain, BigInt amount, String from, String to) {
+  ExportChainsC destinationChain,
+  BigInt amount,
+  String from,
+  String to,
+) {
   final destChainId = chainIdFromAlias(destinationChain.value);
   final destChainIdBuff = cb58Decode(destChainId);
   final toBuff = stringToAddress(to);

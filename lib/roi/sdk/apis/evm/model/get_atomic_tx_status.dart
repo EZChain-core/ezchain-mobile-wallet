@@ -13,7 +13,7 @@ class GetAtomicTxStatusRequest
 
   @override
   String method() {
-    return "avm.getAtomicTxStatus";
+    return "ezc.getAtomicTxStatus";
   }
 
   factory GetAtomicTxStatusRequest.fromJson(Map<String, dynamic> json) =>
@@ -25,11 +25,11 @@ class GetAtomicTxStatusRequest
 @JsonSerializable()
 class GetAtomicTxStatusResponse {
   final TxStatus status;
-  final String blockHeight;
+  final String? blockHeight;
   final String? reason;
 
   const GetAtomicTxStatusResponse(
-      {required this.status, required this.blockHeight, this.reason});
+      {required this.status, this.blockHeight, this.reason});
 
   factory GetAtomicTxStatusResponse.fromJson(Map<String, dynamic> json) =>
       _$GetAtomicTxStatusResponseFromJson(json);
