@@ -77,14 +77,29 @@ class CrossTransferScreen extends StatelessWidget {
                       const SizedBox(height: 12),
                       Padding(
                         padding: const EdgeInsets.only(left: 16),
-                        child: Text(
-                          Strings.current.sharedExport,
-                          style: ROITitleLargeTextStyle(
-                              color: provider.themeMode.text60),
+                        child: Row(
+                          children: [
+                            Text(
+                              Strings.current.sharedExport,
+                              style: ROITitleLargeTextStyle(
+                                  color: provider.themeMode.text60),
+                            ),
+                            const SizedBox(width: 8),
+                            Observer(
+                              builder: (_) => crossStore.exportState.when(
+                                loading: () => const SizedBox.shrink(),
+                                success: () =>
+                                    Assets.icons.icTickCircleGreen.svg(),
+                                error: (_) =>
+                                    Assets.icons.icInfoCircleRed.svg(),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 4),
                       Container(
+                        width: double.infinity,
                         decoration: BoxDecoration(
                             border:
                                 Border.all(color: provider.themeMode.border),
@@ -102,10 +117,12 @@ class CrossTransferScreen extends StatelessWidget {
                                   color: provider.themeMode.text60),
                             ),
                             const SizedBox(height: 4),
-                            Text(
-                              '2Z5ozYCLDqxZqDAJggm9eSH8dNVfVdfhp4bJ4Y3DvZXzqobzm1',
-                              style: ROIBodySmallTextStyle(
-                                  color: provider.themeMode.text),
+                            Observer(
+                              builder: (_) => Text(
+                                crossStore.exportTxId,
+                                style: ROIBodySmallTextStyle(
+                                    color: provider.themeMode.text),
+                              ),
                             ),
                             const SizedBox(height: 8),
                             Text(
@@ -116,9 +133,7 @@ class CrossTransferScreen extends StatelessWidget {
                             const SizedBox(height: 4),
                             Observer(
                               builder: (_) => Text(
-                                crossTransferStore.isSourceAccepted
-                                    ? Strings.current.sharedAccepted
-                                    : Strings.current.sharedProcessing,
+                                crossStore.exportState.status(),
                                 style: ROIBodySmallTextStyle(
                                     color: provider.themeMode.text),
                               ),
@@ -193,14 +208,29 @@ class CrossTransferScreen extends StatelessWidget {
                       const SizedBox(height: 12),
                       Padding(
                         padding: const EdgeInsets.only(left: 16),
-                        child: Text(
-                          Strings.current.sharedImport,
-                          style: ROITitleLargeTextStyle(
-                              color: provider.themeMode.text60),
+                        child: Row(
+                          children: [
+                            Text(
+                              Strings.current.sharedImport,
+                              style: ROITitleLargeTextStyle(
+                                  color: provider.themeMode.text60),
+                            ),
+                            const SizedBox(width: 8),
+                            Observer(
+                              builder: (_) => crossStore.importState.when(
+                                loading: () => const SizedBox.shrink(),
+                                success: () =>
+                                    Assets.icons.icTickCircleGreen.svg(),
+                                error: (_) =>
+                                    Assets.icons.icInfoCircleRed.svg(),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 4),
                       Container(
+                        width: double.infinity,
                         decoration: BoxDecoration(
                             border:
                                 Border.all(color: provider.themeMode.border),
@@ -218,10 +248,12 @@ class CrossTransferScreen extends StatelessWidget {
                                   color: provider.themeMode.text60),
                             ),
                             const SizedBox(height: 4),
-                            Text(
-                              '2Z5ozYCLDqxZqDAJggm9eSH8dNVfVdfhp4bJ4Y3DvZXzqobzm1',
-                              style: ROIBodySmallTextStyle(
-                                  color: provider.themeMode.text),
+                            Observer(
+                              builder: (_) => Text(
+                                crossStore.importTxId,
+                                style: ROIBodySmallTextStyle(
+                                    color: provider.themeMode.text),
+                              ),
                             ),
                             const SizedBox(height: 8),
                             Text(
@@ -232,9 +264,7 @@ class CrossTransferScreen extends StatelessWidget {
                             const SizedBox(height: 4),
                             Observer(
                               builder: (_) => Text(
-                                crossTransferStore.isDestinationAccepted
-                                    ? Strings.current.sharedAccepted
-                                    : Strings.current.sharedProcessing,
+                                crossStore.importState.status(),
                                 style: ROIBodySmallTextStyle(
                                     color: provider.themeMode.text),
                               ),
@@ -247,16 +277,19 @@ class CrossTransferScreen extends StatelessWidget {
                   ),
                 ),
                 Observer(
-                  builder: (_) => Column(
-                    children: [
-                      if (!crossTransferStore.isTransferred) ...[
+                  builder: (_) => crossStore.transferringState.when(
+                    loading: () => Column(
+                      children: [
                         const SizedBox(height: 40),
                         Text(
                           Strings.current.crossTransferring,
                           style: ROIHeadlineSmallTextStyle(
                               color: provider.themeMode.text),
                         ),
-                      ] else ...[
+                      ],
+                    ),
+                    success: () => Column(
+                      children: [
                         const SizedBox(height: 16),
                         Text(
                           Strings.current.crossTransferCompleted,
@@ -282,7 +315,35 @@ class CrossTransferScreen extends StatelessWidget {
                           },
                         )
                       ],
-                    ],
+                    ),
+                    error: (_) => Column(
+                      children: [
+                        const SizedBox(height: 16),
+                        Text(
+                          Strings.current.crossTransferIncomplete,
+                          style: ROIHeadlineSmallTextStyle(
+                              color: provider.themeMode.text),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          Strings.current.crossTransferWrong,
+                          textAlign: TextAlign.center,
+                          style: ROIBodyMediumTextStyle(
+                              color: provider.themeMode.stateDanger),
+                        ),
+                        const SizedBox(height: 8),
+                        ROIMediumPrimaryButton(
+                          text: Strings.current.sharedStartAgain,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 64,
+                            vertical: 8,
+                          ),
+                          onPressed: () {
+                            context.router.pop();
+                          },
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],

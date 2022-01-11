@@ -2,6 +2,7 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
+import 'package:wallet/roi/wallet/utils/fee_utils.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 import 'package:wallet/roi/wallet/utils/price_utils.dart';
 
@@ -27,7 +28,7 @@ abstract class _WalletSendAvmStore with Store {
   String? amountError;
 
   @observable
-  double fee = 0.001;
+  double fee = 0;
 
   @observable
   double total = 0;
@@ -42,6 +43,7 @@ abstract class _WalletSendAvmStore with Store {
         .forEach((_, balance) => {balanceX = balance.unlockedDecimal});
 
     avaxPrice = (await getAvaxPrice()).toDouble();
+    fee = getTxFeeX().toDouble();
     total = avaxPrice * fee;
   }
 

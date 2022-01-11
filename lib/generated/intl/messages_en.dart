@@ -63,6 +63,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Transfer Completed"),
         "crossTransferCompletedDes": MessageLookupByLibrary.simpleMessage(
             "You have successfully transferred\nbetween chains."),
+        "crossTransferIncomplete":
+            MessageLookupByLibrary.simpleMessage("Transfer Incomplete"),
+        "crossTransferWrong":
+            MessageLookupByLibrary.simpleMessage("Something went wrong"),
         "crossTransferring":
             MessageLookupByLibrary.simpleMessage("Transferring..."),
         "dashboardCross": MessageLookupByLibrary.simpleMessage("Cross"),
@@ -120,6 +124,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
         "sharedDestination":
             MessageLookupByLibrary.simpleMessage("Destination"),
+        "sharedError": MessageLookupByLibrary.simpleMessage("Error"),
         "sharedExport": MessageLookupByLibrary.simpleMessage("Export"),
         "sharedImport": MessageLookupByLibrary.simpleMessage("Import"),
         "sharedInvalidAddress":
