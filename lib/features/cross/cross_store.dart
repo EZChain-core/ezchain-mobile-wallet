@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
@@ -7,8 +10,9 @@ import 'package:wallet/roi/wallet/utils/fee_utils.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 import 'package:wallet/roi/wallet/utils/price_utils.dart';
 
-part 'cross_store.g.dart';
 part 'cross_store.freezed.dart';
+
+part 'cross_store.g.dart';
 
 class CrossStore = _CrossStore with _$CrossStore;
 
@@ -17,11 +21,7 @@ abstract class _CrossStore with Store {
       privateKey:
           "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
 
-  @observable
-  String sourceBalance = '0';
-
-  @observable
-  String destinationBalance = '0';
+  BalanceStore get balanceStore => getIt<BalanceStore>();
 
   @observable
   double avaxPrice = 0;
@@ -57,7 +57,18 @@ abstract class _CrossStore with Store {
   CrossTransferringState importState = const CrossTransferringState.loading();
 
   @observable
-  CrossTransferringState transferringState = const CrossTransferringState.loading();
+  CrossTransferringState transferringState =
+      const CrossTransferringState.loading();
+
+  @computed
+  String get sourceBalance {
+    return _getBalance(sourceChain);
+  }
+
+  @computed
+  String get destinationBalance {
+    return _getBalance(destinationChain);
+  }
 
   double get balanceDouble =>
       double.tryParse(sourceBalance.replaceAll(',', '')) ?? 0;
@@ -66,43 +77,9 @@ abstract class _CrossStore with Store {
       CrossChainType.values.toList()..remove(sourceChain);
 
   @action
-  getSourceBalance(CrossChainType type) async {
-    switch (type) {
-      case CrossChainType.xChain:
-        await wallet.updateUtxosX();
-        wallet.getBalanceX().forEach(
-            (_, balanceX) => {sourceBalance = balanceX.unlockedDecimal});
-        break;
-      case CrossChainType.pChain:
-        await wallet.updateUtxosP();
-        sourceBalance = wallet.getBalanceP().unlockedDecimal;
-        break;
-      case CrossChainType.cChain:
-        await wallet.updateAvaxBalanceC();
-        sourceBalance = wallet.getBalanceC().balanceDecimal;
-        break;
-    }
-
+  init() async {
     avaxPrice = (await getAvaxPrice()).toDouble();
-  }
-
-  @action
-  getDestinationBalance(CrossChainType type) async {
-    switch (type) {
-      case CrossChainType.xChain:
-        await wallet.updateUtxosX();
-        wallet.getBalanceX().forEach(
-            (_, balanceX) => {destinationBalance = balanceX.unlockedDecimal});
-        break;
-      case CrossChainType.pChain:
-        await wallet.updateUtxosP();
-        destinationBalance = wallet.getBalanceP().unlockedDecimal;
-        break;
-      case CrossChainType.cChain:
-        await wallet.updateAvaxBalanceC();
-        destinationBalance = wallet.getBalanceC().balanceDecimal;
-        break;
-    }
+    setSourceChain(sourceChain);
   }
 
   @action
@@ -110,14 +87,12 @@ abstract class _CrossStore with Store {
     sourceChain = type;
     destinationChain = destinationList.first;
     fee = getFee(sourceChain) + getFee(destinationChain);
-    _updateBalance();
   }
 
   @action
   setDestinationChain(CrossChainType type) {
     destinationChain = type;
     fee = getFee(sourceChain) + getFee(destinationChain);
-    _updateBalance();
   }
 
   @action
@@ -139,9 +114,9 @@ abstract class _CrossStore with Store {
 
   @action
   transferring() async {
-    _export();
-    _import();
-    _updateBalance();
+    await _export();
+    await _import();
+    balanceStore.updateBalance();
   }
 
   _export() async {
@@ -156,7 +131,7 @@ abstract class _CrossStore with Store {
         exportState = const CrossTransferringState.success();
       } else if (sourceChain == CrossChainType.pChain &&
           destinationChain == CrossChainType.xChain) {
-        final amountAvax = numberToBNAvaxP(amount) ;
+        final amountAvax = numberToBNAvaxP(amount);
         exportTxId = await wallet.exportPChain(amountAvax, ExportChainsP.X);
         exportState = const CrossTransferringState.success();
       } else if (sourceChain == CrossChainType.cChain &&
@@ -177,6 +152,7 @@ abstract class _CrossStore with Store {
       print(e);
     }
   }
+
   _import() async {
     try {
       if (sourceChain == CrossChainType.xChain &&
@@ -212,9 +188,15 @@ abstract class _CrossStore with Store {
     }
   }
 
-  _updateBalance() {
-    getSourceBalance(sourceChain);
-    getDestinationBalance(destinationChain);
+  String _getBalance(CrossChainType chain) {
+    switch (chain) {
+      case CrossChainType.xChain:
+        return balanceStore.balanceX;
+      case CrossChainType.pChain:
+        return balanceStore.balanceP;
+      case CrossChainType.cChain:
+        return balanceStore.balanceC;
+    }
   }
 }
 
@@ -240,17 +222,18 @@ extension CrossChainTypeStringExtension on String {
 }
 
 @freezed
-class CrossTransferringState with _$CrossTransferringState{
+class CrossTransferringState with _$CrossTransferringState {
   const CrossTransferringState._();
 
   const factory CrossTransferringState.loading() = Loading;
+
   const factory CrossTransferringState.success() = Success;
+
   const factory CrossTransferringState.error([String? message]) = Error;
 
   String status() => this.when(
-    loading: () => Strings.current.sharedProcessing,
-    success: () => Strings.current.sharedAccepted,
-    error: (error) => error ?? Strings.current.sharedError,
-  );
-
+        loading: () => Strings.current.sharedProcessing,
+        success: () => Strings.current.sharedAccepted,
+        error: (error) => error ?? Strings.current.sharedError,
+      );
 }

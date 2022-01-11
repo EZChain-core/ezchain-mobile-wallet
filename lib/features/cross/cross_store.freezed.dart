@@ -119,12 +119,19 @@ class _$LoadingCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Loading extends Loading {
+class _$Loading extends Loading with DiagnosticableTreeMixin {
   const _$Loading() : super._();
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'CrossTransferringState.loading()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'CrossTransferringState.loading'));
   }
 
   @override
@@ -229,12 +236,19 @@ class _$SuccessCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Success extends Success {
+class _$Success extends Success with DiagnosticableTreeMixin {
   const _$Success() : super._();
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'CrossTransferringState.success()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'CrossTransferringState.success'));
   }
 
   @override
@@ -352,15 +366,23 @@ class _$ErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Error extends Error {
+class _$Error extends Error with DiagnosticableTreeMixin {
   const _$Error([this.message]) : super._();
 
   @override
   final String? message;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'CrossTransferringState.error(message: $message)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'CrossTransferringState.error'))
+      ..add(DiagnosticsProperty('message', message));
   }
 
   @override
