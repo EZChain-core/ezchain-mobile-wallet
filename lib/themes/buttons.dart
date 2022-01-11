@@ -127,8 +127,9 @@ class ROIMediumSuccessButton extends StatelessWidget {
           style: ROIButtonStyle(
               bgColor: provider.themeMode.stateSuccess,
               buttonPadding: padding ?? roiButtonMediumPadding),
-          onPressed: onPressed,
-          onLongPress: onLongPress,
+          onPressed: isLoading == true ? null : onPressed,
+          onLongPress: isLoading == true ? null : onLongPress,
+
         ),
       ),
     );
