@@ -3,15 +3,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/balance_store.dart';
+import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/fee_utils.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
-import 'package:wallet/roi/wallet/utils/price_utils.dart';
 
 part 'cross_store.freezed.dart';
-
 part 'cross_store.g.dart';
 
 class CrossStore = _CrossStore with _$CrossStore;
@@ -21,10 +20,11 @@ abstract class _CrossStore with Store {
       privateKey:
           "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
 
-  BalanceStore get balanceStore => getIt<BalanceStore>();
+  final balanceStore = getIt<BalanceStore>();
+  final priceStore = getIt<PriceStore>();
 
-  @observable
-  double avaxPrice = 0;
+  @computed
+  double get avaxPrice => priceStore.avaxPrice.toDouble();
 
   @observable
   double amount = 0;
@@ -78,7 +78,7 @@ abstract class _CrossStore with Store {
 
   @action
   init() async {
-    avaxPrice = (await getAvaxPrice()).toDouble();
+    priceStore.updateAvaxPrice();
     setSourceChain(sourceChain);
   }
 

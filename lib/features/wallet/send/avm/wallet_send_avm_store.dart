@@ -1,4 +1,6 @@
 import 'package:mobx/mobx.dart';
+import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
@@ -14,9 +16,10 @@ abstract class _WalletSendAvmStore with Store {
   final wallet = SingletonWallet(
       privateKey:
           "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
+  final priceStore = getIt<PriceStore>();
 
-  @observable
-  double avaxPrice = 0;
+  @computed
+  double get avaxPrice => priceStore.avaxPrice.toDouble();
 
   @observable
   String? addressError;
@@ -32,7 +35,7 @@ abstract class _WalletSendAvmStore with Store {
 
   @action
   getBalanceX() async {
-    avaxPrice = (await getAvaxPrice()).toDouble();
+    priceStore.updateAvaxPrice();
     fee = getTxFeeX().toDouble();
     total = avaxPrice * fee;
   }

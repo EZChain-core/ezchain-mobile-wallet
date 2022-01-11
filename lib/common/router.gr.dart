@@ -10,7 +10,6 @@
 
 import 'package:auto_route/auto_route.dart' as _i26;
 import 'package:flutter/material.dart' as _i27;
-import 'package:flutter/widgets.dart' as _i28;
 import 'package:wallet/features/auth/access/mnemonic/access_mnemonic_key.dart'
     as _i7;
 import 'package:wallet/features/auth/access/options/access_wallet_options.dart'
@@ -23,7 +22,7 @@ import 'package:wallet/features/auth/create/create_wallet.dart' as _i4;
 import 'package:wallet/features/auth/pin/pin_code_confirm.dart' as _i9;
 import 'package:wallet/features/auth/pin/pin_code_setup.dart' as _i8;
 import 'package:wallet/features/cross/cross.dart' as _i23;
-import 'package:wallet/features/cross/cross_store.dart' as _i29;
+import 'package:wallet/features/cross/cross_store.dart' as _i28;
 import 'package:wallet/features/cross/transfer/cross_transfer.dart' as _i19;
 import 'package:wallet/features/dashboard/dashboard.dart' as _i21;
 import 'package:wallet/features/earn/earn.dart' as _i24;
@@ -261,7 +260,7 @@ class CreateWalletRoute extends _i26.PageRouteInfo<void> {
 /// generated route for [_i5.CreateWalletConfirmScreen]
 class CreateWalletConfirmRoute
     extends _i26.PageRouteInfo<CreateWalletConfirmRouteArgs> {
-  CreateWalletConfirmRoute({_i28.Key? key, required String mnemonic})
+  CreateWalletConfirmRoute({_i27.Key? key, required String mnemonic})
       : super(name,
             path: '/create-wallet-confirm-screen',
             args: CreateWalletConfirmRouteArgs(key: key, mnemonic: mnemonic));
@@ -272,7 +271,7 @@ class CreateWalletConfirmRoute
 class CreateWalletConfirmRouteArgs {
   const CreateWalletConfirmRouteArgs({this.key, required this.mnemonic});
 
-  final _i28.Key? key;
+  final _i27.Key? key;
 
   final String mnemonic;
 
@@ -329,7 +328,7 @@ class PinCodeConfirmRouteArgs {
 /// generated route for [_i10.WalletReceiveScreen]
 class WalletReceiveRoute extends _i26.PageRouteInfo<WalletReceiveRouteArgs> {
   WalletReceiveRoute(
-      {_i28.Key? key, required _i10.WalletReceiveInfo walletReceiveInfo})
+      {_i27.Key? key, required _i10.WalletReceiveInfo walletReceiveInfo})
       : super(name,
             path: '/wallet-receive-screen',
             args: WalletReceiveRouteArgs(
@@ -341,7 +340,7 @@ class WalletReceiveRoute extends _i26.PageRouteInfo<WalletReceiveRouteArgs> {
 class WalletReceiveRouteArgs {
   const WalletReceiveRouteArgs({this.key, required this.walletReceiveInfo});
 
-  final _i28.Key? key;
+  final _i27.Key? key;
 
   final _i10.WalletReceiveInfo walletReceiveInfo;
 
@@ -362,7 +361,7 @@ class WalletSendAvmRoute extends _i26.PageRouteInfo<void> {
 class WalletSendAvmConfirmRoute
     extends _i26.PageRouteInfo<WalletSendAvmConfirmRouteArgs> {
   WalletSendAvmConfirmRoute(
-      {_i28.Key? key,
+      {_i27.Key? key,
       required _i12.WalletSendAvmTransactionViewData transactionInfo})
       : super(name,
             path: '/wallet-send-avm-confirm-screen',
@@ -376,7 +375,7 @@ class WalletSendAvmConfirmRouteArgs {
   const WalletSendAvmConfirmRouteArgs(
       {this.key, required this.transactionInfo});
 
-  final _i28.Key? key;
+  final _i27.Key? key;
 
   final _i12.WalletSendAvmTransactionViewData transactionInfo;
 
@@ -397,7 +396,7 @@ class WalletSendEvmRoute extends _i26.PageRouteInfo<void> {
 class WalletSendEvmConfirmRoute
     extends _i26.PageRouteInfo<WalletSendEvmConfirmRouteArgs> {
   WalletSendEvmConfirmRoute(
-      {_i28.Key? key,
+      {_i27.Key? key,
       required _i14.WalletSendEvmTransactionViewData transactionInfo})
       : super(name,
             path: '/wallet-send-evm-confirm-screen',
@@ -411,7 +410,7 @@ class WalletSendEvmConfirmRouteArgs {
   const WalletSendEvmConfirmRouteArgs(
       {this.key, required this.transactionInfo});
 
-  final _i28.Key? key;
+  final _i27.Key? key;
 
   final _i14.WalletSendEvmTransactionViewData transactionInfo;
 
@@ -452,7 +451,7 @@ class SettingSecurityRoute extends _i26.PageRouteInfo<void> {
 
 /// generated route for [_i19.CrossTransferScreen]
 class CrossTransferRoute extends _i26.PageRouteInfo<CrossTransferRouteArgs> {
-  CrossTransferRoute({_i28.Key? key, required _i29.CrossStore crossStore})
+  CrossTransferRoute({_i27.Key? key, required _i28.CrossStore crossStore})
       : super(name,
             path: '/cross-transfer-screen',
             args: CrossTransferRouteArgs(key: key, crossStore: crossStore));
@@ -463,9 +462,9 @@ class CrossTransferRoute extends _i26.PageRouteInfo<CrossTransferRouteArgs> {
 class CrossTransferRouteArgs {
   const CrossTransferRouteArgs({this.key, required this.crossStore});
 
-  final _i28.Key? key;
+  final _i27.Key? key;
 
-  final _i29.CrossStore crossStore;
+  final _i28.CrossStore crossStore;
 
   @override
   String toString() {
