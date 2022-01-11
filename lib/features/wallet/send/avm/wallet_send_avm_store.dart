@@ -16,9 +16,6 @@ abstract class _WalletSendAvmStore with Store {
           "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
 
   @observable
-  String balanceX = '0';
-
-  @observable
   double avaxPrice = 0;
 
   @observable
@@ -33,24 +30,17 @@ abstract class _WalletSendAvmStore with Store {
   @observable
   double total = 0;
 
-  double get balanceXDouble => double.tryParse(balanceX.replaceAll(',', '')) ?? 0;
-
   @action
   getBalanceX() async {
-    await wallet.updateUtxosX();
-    wallet
-        .getBalanceX()
-        .forEach((_, balance) => {balanceX = balance.unlockedDecimal});
-
     avaxPrice = (await getAvaxPrice()).toDouble();
     fee = getTxFeeX().toDouble();
     total = avaxPrice * fee;
   }
 
   @action
-  bool validate(String address, double amount) {
+  bool validate(String address, double amount, double balance) {
     final isAddressValid = validateAddressX(address);
-    final isAmountValid = balanceXDouble > amount && amount > 0;
+    final isAmountValid = balance > amount && amount > 0;
     if(!isAddressValid) {
       addressError = Strings.current.sharedInvalidAddress;
     }

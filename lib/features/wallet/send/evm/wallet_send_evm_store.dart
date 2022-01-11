@@ -17,9 +17,6 @@ abstract class _WalletSendEvmStore with Store {
           "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
 
   @observable
-  String balanceC = '0';
-
-  @observable
   BigInt gasPrice = BigInt.zero;
 
   @observable
@@ -46,13 +43,8 @@ abstract class _WalletSendEvmStore with Store {
   @observable
   bool isLoading = false;
 
-  double get balanceCDouble =>
-      double.tryParse(balanceC.replaceAll(',', '')) ?? 0;
-
   @action
   getBalanceC() async {
-    await wallet.updateAvaxBalanceC();
-    balanceC = wallet.getBalanceC().balanceDecimal;
 
     final adjustGasPrice = await getAdjustedGasPrice();
     gasPrice = EtherAmount.fromUnitAndValue(EtherUnit.wei, adjustGasPrice)
@@ -62,9 +54,9 @@ abstract class _WalletSendEvmStore with Store {
   }
 
   @action
-  confirm(String address, double amount) async {
+  confirm(String address, double amount, double balance) async {
     final isAddressValid = validateAddressEvm(address);
-    final isAmountValid = balanceCDouble > amount && amount > 0;
+    final isAmountValid = balance >= amount && amount > 0;
     if (!isAddressValid) {
       addressError = Strings.current.sharedInvalidAddress;
     }
