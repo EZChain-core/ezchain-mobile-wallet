@@ -20,7 +20,7 @@ class AccessPrivateKeyScreen extends StatelessWidget {
     final accessPrivateKeyStore = AccessPrivateKeyStore();
 
     final privateKeyInputController = TextEditingController(
-        text: 'PrivateKey-TDroX95FwK93XkFgzKpZJwKknqyUaWQZaQp9r5m29HLaaVmdm');
+        text: 'PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M');
 
     void _showWarningDialog() {
       context.showWarningDialog(

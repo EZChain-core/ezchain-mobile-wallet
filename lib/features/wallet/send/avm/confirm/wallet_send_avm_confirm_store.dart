@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
-import 'package:wallet/roi/wallet/singleton_wallet.dart';
+import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
 part 'wallet_send_avm_confirm_store.g.dart';
@@ -8,9 +9,7 @@ class WalletSendAvmConfirmStore = _WalletSendAvmConfirmStore
     with _$WalletSendAvmConfirmStore;
 
 abstract class _WalletSendAvmConfirmStore with Store {
-  final wallet = SingletonWallet(
-      privateKey:
-          "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
+  final wallet = getIt<WalletFactory>().activeWallet;
 
   @observable
   bool sendSuccess = false;

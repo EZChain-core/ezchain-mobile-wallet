@@ -2,6 +2,8 @@ import 'package:decimal/decimal.dart';
 import 'package:eventify/eventify.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
@@ -13,9 +15,7 @@ part 'balance_store.g.dart';
 class BalanceStore = _BalanceStore with _$BalanceStore;
 
 abstract class _BalanceStore with Store {
-  final wallet = SingletonWallet(
-      privateKey:
-          "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
+  final wallet = getIt<WalletFactory>().activeWallet;
 
   final decimalNumber = 3;
 

@@ -132,10 +132,6 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                                 : ROIMediumSuccessButton(
                                     text: Strings.current.sharedSendTransaction,
                                     width: 251,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 64,
-                                      vertical: 8,
-                                    ),
                                     onPressed: _onClickSendTransaction,
                                     isLoading: walletSendAvmStore.isLoading,
                                   ),

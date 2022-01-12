@@ -2,6 +2,7 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
+import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
@@ -10,9 +11,7 @@ part 'wallet_roi_chain_store.g.dart';
 class WalletRoiChainStore = _WalletRoiChainStore with _$WalletRoiChainStore;
 
 abstract class _WalletRoiChainStore with Store {
-  final wallet = SingletonWallet(
-      privateKey:
-          "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
+  final wallet = getIt<WalletFactory>().activeWallet;
 
   BalanceStore get balanceStore => getIt<BalanceStore>();
 
@@ -20,18 +19,17 @@ abstract class _WalletRoiChainStore with Store {
 
   @computed
   WalletRoiChainBalanceViewData get balanceX => WalletRoiChainBalanceViewData(
-      balanceStore.balanceX, balanceStore.balanceLockedX, null, true);
+      balanceStore.balanceX, balanceStore.balanceLockedX, null);
 
   @computed
   WalletRoiChainBalanceViewData get balanceP => WalletRoiChainBalanceViewData(
       balanceStore.balanceP,
       balanceStore.balanceLockedP,
-      balanceStore.balanceLockedStakeableP,
-      true);
+      balanceStore.balanceLockedStakeableP);
 
   @computed
   WalletRoiChainBalanceViewData get balanceC =>
-      WalletRoiChainBalanceViewData(balanceStore.balanceC, null, null, true);
+      WalletRoiChainBalanceViewData(balanceStore.balanceC, null, null);
 
   @computed
   String get totalRoi =>
@@ -65,8 +63,7 @@ class WalletRoiChainBalanceViewData {
   final String available;
   final String? lock;
   final String? lockStakeable;
-  final bool loaded;
 
   WalletRoiChainBalanceViewData(
-      this.available, this.lock, this.lockStakeable, this.loaded);
+      this.available, this.lock, this.lockStakeable);
 }

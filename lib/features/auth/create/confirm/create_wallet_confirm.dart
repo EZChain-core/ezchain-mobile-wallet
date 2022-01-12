@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.gr.dart';
-import 'package:wallet/di/di.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -15,15 +14,17 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-import '../create_wallet_store.dart';
+import 'create_wallet_confirm_store.dart';
 
 class CreateWalletConfirmScreen extends StatelessWidget {
   final String mnemonic;
 
-  const CreateWalletConfirmScreen({Key? key, required this.mnemonic}) : super(key: key);
+  const CreateWalletConfirmScreen({Key? key, required this.mnemonic})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final createWalletConfirmStore = CreateWalletConfirmStore();
     const sizeOfMnemonic = 24;
     const sizeOfRandomInputMnemonic = 4;
     List<String> phrase = mnemonic.split(' ');
@@ -54,7 +55,8 @@ class CreateWalletConfirmScreen extends StatelessWidget {
     }
 
     void _onClickConfirm() {
-      if (phrase.equals(resultPhrase)) {
+      if (phrase.equals(resultPhrase) &&
+          createWalletConfirmStore.accessWithMnemonicKey(phrase.join(' '))) {
         context.router.push(const PinCodeSetupRoute());
       } else {
         _showWarningDialog();
