@@ -147,7 +147,7 @@ class AppRouter extends _i26.RootStackRouter {
     },
     CrossTransferRoute.name: (routeData) {
       final args = routeData.argsAs<CrossTransferRouteArgs>();
-      return _i26.AdaptivePage<dynamic>(
+      return _i26.AdaptivePage<bool>(
           routeData: routeData,
           child: _i19.CrossTransferScreen(
               key: args.key, crossStore: args.crossStore));

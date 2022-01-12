@@ -42,7 +42,7 @@ import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.
     AutoRoute(page: SettingGeneralScreen),
     AutoRoute(page: SettingAboutScreen),
     AutoRoute(page: SettingSecurityScreen),
-    AutoRoute(page: CrossTransferScreen),
+    AutoRoute<bool>(page: CrossTransferScreen),
     AutoRoute(page: QrCodeScreen),
     dashboardRoutes,
   ],

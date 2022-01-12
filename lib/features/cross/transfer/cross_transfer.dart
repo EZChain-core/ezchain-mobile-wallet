@@ -66,10 +66,12 @@ class CrossTransferScreen extends StatelessWidget {
                               style: ROIBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
-                            Text(
-                              crossStore.sourceBalance,
-                              style: ROIBodyLargeTextStyle(
-                                  color: provider.themeMode.text),
+                            Observer(
+                              builder: (_) => Text(
+                                crossStore.sourceBalance,
+                                style: ROIBodyLargeTextStyle(
+                                    color: provider.themeMode.text),
+                              ),
                             ),
                           ],
                         ),
@@ -197,10 +199,12 @@ class CrossTransferScreen extends StatelessWidget {
                               style: ROIBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
-                            Text(
-                              crossStore.destinationBalance,
-                              style: ROIBodyLargeTextStyle(
-                                  color: provider.themeMode.text),
+                            Observer(
+                              builder: (_) => Text(
+                                crossStore.destinationBalance,
+                                style: ROIBodyLargeTextStyle(
+                                    color: provider.themeMode.text),
+                              ),
                             ),
                           ],
                         ),
@@ -311,7 +315,7 @@ class CrossTransferScreen extends StatelessWidget {
                             vertical: 8,
                           ),
                           onPressed: () {
-                            context.router.pop();
+                            context.router.pop<bool>(true);
                           },
                         )
                       ],
@@ -338,8 +342,8 @@ class CrossTransferScreen extends StatelessWidget {
                             horizontal: 64,
                             vertical: 8,
                           ),
-                          onPressed: () {
-                            context.router.pop();
+                          onPressed: () async {
+                            await context.router.pop<bool>(true);
                           },
                         )
                       ],
