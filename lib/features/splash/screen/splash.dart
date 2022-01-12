@@ -5,6 +5,8 @@ import 'package:decimal/decimal.dart';
 import 'package:eventify/eventify.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
@@ -26,6 +28,8 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   late SingletonWallet wallet;
+
+  final WalletFactory _walletFactory = getIt<WalletFactory>();
 
   @override
   void initState() {
@@ -72,8 +76,14 @@ class _SplashScreenState extends State<SplashScreen> {
     return Timer(const Duration(milliseconds: 2000), navigate);
   }
 
-  navigate() {
-    context.router.replaceAll([const OnBoardRoute()]);
+  navigate() async {
+    if(await _walletFactory.isExpired()) {
+      _walletFactory.clear();
+      context.router.replaceAll([const OnBoardRoute()]);
+    } else {
+      _walletFactory.initWallet();
+      context.router.replaceAll([const DashboardRoute()]);
+    }
   }
 
   void _handleCallback(Event event, Object? context) async {

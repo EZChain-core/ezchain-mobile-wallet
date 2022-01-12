@@ -125,25 +125,49 @@ abstract class _CrossStore with Store {
 
       if (sourceChain == CrossChainType.xChain &&
           destinationChain == CrossChainType.pChain) {
-        final amountAvax = numberToBNAvaxX(amount);
+        // x -> p
+        final amountAvax = numberToBNAvaxX(amount) + feeP;
         exportTxId = await wallet.exportXChain(amountAvax, ExportChainsX.P);
-        exportState = const CrossTransferringState.success();
       } else if (sourceChain == CrossChainType.pChain &&
           destinationChain == CrossChainType.xChain) {
-        final amountAvax = numberToBNAvaxP(amount);
+        // p -> x
+        final amountAvax = numberToBNAvaxP(amount) + feeX;
         exportTxId = await wallet.exportPChain(amountAvax, ExportChainsP.X);
-        exportState = const CrossTransferringState.success();
       } else if (sourceChain == CrossChainType.cChain &&
           destinationChain == CrossChainType.xChain) {
-        final amountAvax = numberToBNAvaxC(amount);
-        exportTxId = await wallet.exportCChain(amountAvax, ExportChainsC.X);
-        exportState = const CrossTransferringState.success();
+        // c -> x
+        final hexAddress = wallet.getAddressC();
+        const destinationChain = ExportChainsC.X;
+        final destinationAddress = wallet.getAddressX();
+        final exportFee = await estimateExportGasFee(
+          destinationChain,
+          numberToBNAvaxX(amount),
+          hexAddress,
+          destinationAddress,
+        );
+        final amountAvax = numberToBNAvaxX(amount) + feeX;
+        exportTxId = await wallet.exportCChain(
+          amountAvax,
+          destinationChain,
+          exportFee: exportFee,
+        );
       } else if (sourceChain == CrossChainType.xChain &&
           destinationChain == CrossChainType.cChain) {
+        // x -> c
         final amountAvax = numberToBNAvaxX(amount) + feeX;
         exportTxId = await wallet.exportXChain(amountAvax, ExportChainsX.C);
-        exportState = const CrossTransferringState.success();
+      } else if (sourceChain == CrossChainType.pChain &&
+          destinationChain == CrossChainType.cChain) {
+        // p -> c
+        final importFee = await estimateImportGasFee();
+        final amountAvax = numberToBNAvaxX(amount) + importFee;
+        exportTxId = await wallet.exportXChain(amountAvax, ExportChainsX.C);
+      } else if (sourceChain == CrossChainType.cChain &&
+          destinationChain == CrossChainType.pChain) {
+        // c -> p
+        importTxId = await wallet.importPChain(ExportChainsP.C);
       }
+      exportState = const CrossTransferringState.success();
     } catch (e) {
       exportState = const CrossTransferringState.error();
       importState = const CrossTransferringState.error();
@@ -166,6 +190,12 @@ abstract class _CrossStore with Store {
       } else if (sourceChain == CrossChainType.xChain &&
           destinationChain == CrossChainType.cChain) {
         importTxId = await wallet.importCChain(ExportChainsC.X);
+      } else if (sourceChain == CrossChainType.pChain &&
+          destinationChain == CrossChainType.cChain) {
+        importTxId = await wallet.importCChain(ExportChainsC.P);
+      } else if (sourceChain == CrossChainType.cChain &&
+          destinationChain == CrossChainType.pChain) {
+        importTxId = await wallet.importPChain(ExportChainsP.C);
       }
       importState = const CrossTransferringState.success();
       transferringState = const CrossTransferringState.success();
