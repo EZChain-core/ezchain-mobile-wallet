@@ -33,17 +33,27 @@ platform :ios do
         app: ENV["FIREBASE_IOS_APP_ID"],
         firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"],
         groups: "ios_testers",
-        release_notes: "EZChain iOS",
+        release_notes: change_log_from_git(),
         ipa_path: "./build/Runner/Runner.ipa"
     )
   end
 
-  lane :bump_version do
+  private_lane :bump_version do
     latest_release = firebase_app_distribution_get_latest_release(
       app: ENV["FIREBASE_IOS_APP_ID"],
       firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"]
     )
     increment_build_number({ build_number: latest_release[:buildVersion].to_i + 1 })
+  end
+
+  private_lane :change_log_from_git do |options|
+      count = (options[:count] ? options[:count] : 10)
+      changelog_from_git_commits(
+          commits_count: count,
+          pretty: "- (%ae) %s",
+          date_format: "short",
+          merge_commit_filtering: "exclude_merges"
+      )
   end
 
   after_all do |lane, options|
