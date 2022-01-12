@@ -52,7 +52,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                           ),
                         ),
                         onPressed: () {
-                          context.router.push(const AccessPrivateKeyRoute());
+                          context.router.push(AccessPrivateKeyRoute());
                         },
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,7 +86,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                           ),
                         ),
                         onPressed: () {
-                          context.router.push(const AccessMnemonicKeyRoute());
+                          context.router.push(AccessMnemonicKeyRoute());
                         },
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,

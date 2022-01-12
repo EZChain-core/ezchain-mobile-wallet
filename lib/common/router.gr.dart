@@ -86,12 +86,18 @@ class AppRouter extends _i26.RootStackRouter {
               randomIndex: args.randomIndex));
     },
     AccessPrivateKeyRoute.name: (routeData) {
+      final args = routeData.argsAs<AccessPrivateKeyRouteArgs>(
+          orElse: () => const AccessPrivateKeyRouteArgs());
       return _i26.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i6.AccessPrivateKeyScreen());
+          routeData: routeData,
+          child: _i6.AccessPrivateKeyScreen(key: args.key));
     },
     AccessMnemonicKeyRoute.name: (routeData) {
+      final args = routeData.argsAs<AccessMnemonicKeyRouteArgs>(
+          orElse: () => const AccessMnemonicKeyRouteArgs());
       return _i26.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i7.AccessMnemonicKeyScreen());
+          routeData: routeData,
+          child: _i7.AccessMnemonicKeyScreen(key: args.key));
     },
     PinCodeSetupRoute.name: (routeData) {
       return _i26.AdaptivePage<dynamic>(
@@ -100,7 +106,8 @@ class AppRouter extends _i26.RootStackRouter {
     PinCodeConfirmRoute.name: (routeData) {
       final args = routeData.argsAs<PinCodeConfirmRouteArgs>();
       return _i26.AdaptivePage<dynamic>(
-          routeData: routeData, child: _i9.PinCodeConfirmScreen(pin: args.pin));
+          routeData: routeData,
+          child: _i9.PinCodeConfirmScreen(key: args.key, pin: args.pin));
     },
     WalletReceiveRoute.name: (routeData) {
       final args = routeData.argsAs<WalletReceiveRouteArgs>();
@@ -305,19 +312,47 @@ class CreateWalletConfirmRouteArgs {
 }
 
 /// generated route for [_i6.AccessPrivateKeyScreen]
-class AccessPrivateKeyRoute extends _i26.PageRouteInfo<void> {
-  const AccessPrivateKeyRoute()
-      : super(name, path: '/access-private-key-screen');
+class AccessPrivateKeyRoute
+    extends _i26.PageRouteInfo<AccessPrivateKeyRouteArgs> {
+  AccessPrivateKeyRoute({_i27.Key? key})
+      : super(name,
+            path: '/access-private-key-screen',
+            args: AccessPrivateKeyRouteArgs(key: key));
 
   static const String name = 'AccessPrivateKeyRoute';
 }
 
+class AccessPrivateKeyRouteArgs {
+  const AccessPrivateKeyRouteArgs({this.key});
+
+  final _i27.Key? key;
+
+  @override
+  String toString() {
+    return 'AccessPrivateKeyRouteArgs{key: $key}';
+  }
+}
+
 /// generated route for [_i7.AccessMnemonicKeyScreen]
-class AccessMnemonicKeyRoute extends _i26.PageRouteInfo<void> {
-  const AccessMnemonicKeyRoute()
-      : super(name, path: '/access-mnemonic-key-screen');
+class AccessMnemonicKeyRoute
+    extends _i26.PageRouteInfo<AccessMnemonicKeyRouteArgs> {
+  AccessMnemonicKeyRoute({_i27.Key? key})
+      : super(name,
+            path: '/access-mnemonic-key-screen',
+            args: AccessMnemonicKeyRouteArgs(key: key));
 
   static const String name = 'AccessMnemonicKeyRoute';
+}
+
+class AccessMnemonicKeyRouteArgs {
+  const AccessMnemonicKeyRouteArgs({this.key});
+
+  final _i27.Key? key;
+
+  @override
+  String toString() {
+    return 'AccessMnemonicKeyRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for [_i8.PinCodeSetupScreen]
@@ -329,22 +364,24 @@ class PinCodeSetupRoute extends _i26.PageRouteInfo<void> {
 
 /// generated route for [_i9.PinCodeConfirmScreen]
 class PinCodeConfirmRoute extends _i26.PageRouteInfo<PinCodeConfirmRouteArgs> {
-  PinCodeConfirmRoute({required String pin})
+  PinCodeConfirmRoute({_i27.Key? key, required String pin})
       : super(name,
             path: '/pin-code-confirm-screen',
-            args: PinCodeConfirmRouteArgs(pin: pin));
+            args: PinCodeConfirmRouteArgs(key: key, pin: pin));
 
   static const String name = 'PinCodeConfirmRoute';
 }
 
 class PinCodeConfirmRouteArgs {
-  const PinCodeConfirmRouteArgs({required this.pin});
+  const PinCodeConfirmRouteArgs({this.key, required this.pin});
+
+  final _i27.Key? key;
 
   final String pin;
 
   @override
   String toString() {
-    return 'PinCodeConfirmRouteArgs{pin: $pin}';
+    return 'PinCodeConfirmRouteArgs{key: $key, pin: $pin}';
   }
 }
 

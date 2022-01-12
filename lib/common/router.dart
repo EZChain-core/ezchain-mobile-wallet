@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/di/di.dart';
 import 'package:wallet/features/auth/access/mnemonic/access_mnemonic_key.dart';
 import 'package:wallet/features/auth/access/options/access_wallet_options.dart';
 import 'package:wallet/features/auth/access/private_key/access_private_key.dart';
@@ -24,8 +27,15 @@ import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Screen,Route',
   routes: <AutoRoute>[
-    CustomRoute(path: '/splash', page: SplashScreen, initial: true, transitionsBuilder: TransitionsBuilders.noTransition),
-    CustomRoute(path: '/onboard', page: OnBoardScreen, transitionsBuilder: TransitionsBuilders.noTransition),
+    CustomRoute(
+        path: '/splash',
+        page: SplashScreen,
+        initial: true,
+        transitionsBuilder: TransitionsBuilders.noTransition),
+    CustomRoute(
+        path: '/onboard',
+        page: OnBoardScreen,
+        transitionsBuilder: TransitionsBuilders.noTransition),
     AutoRoute(page: AccessWalletOptionsScreen),
     AutoRoute(page: CreateWalletScreen),
     AutoRoute(page: CreateWalletConfirmScreen),
@@ -48,3 +58,6 @@ import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.
   ],
 )
 class $AppRouter {}
+
+BuildContext? get walletContext =>
+    getIt<AppRouter>().navigatorKey.currentContext;

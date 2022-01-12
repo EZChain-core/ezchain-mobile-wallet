@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
@@ -12,7 +11,7 @@ import 'package:wallet/themes/typography.dart';
 class PinCodeConfirmScreen extends StatefulWidget {
   final String pin;
 
-  const PinCodeConfirmScreen({required this.pin});
+  const PinCodeConfirmScreen({Key? key, required this.pin}) : super(key: key);
 
   @override
   State<PinCodeConfirmScreen> createState() => _PinCodeConfirmScreenState();

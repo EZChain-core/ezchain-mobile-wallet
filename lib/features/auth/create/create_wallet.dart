@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/auth/create/create_wallet_store.dart';
@@ -17,21 +14,9 @@ class CreateWalletScreen extends StatelessWidget {
   CreateWalletScreen({Key? key}) : super(key: key);
 
   final _createWalletStore = CreateWalletStore();
-  final sizeOfMnemonic = 24;
-  final sizeOfRandomInputMnemonic = 4;
-
-  List<ROIMnemonicText> _buildRandomMnemonicList() => _createWalletStore
-      .mnemonicPhrase
-      .split(' ')
-      .mapIndexed((index, text) => ROIMnemonicText(text: '${index + 1}. $text'))
-      .toList();
 
   @override
   Widget build(BuildContext context) {
-    _createWalletStore.generateMnemonicPhrase();
-    List<int> randomIndex = List.generate(
-        sizeOfRandomInputMnemonic, (_) => Random().nextInt(sizeOfMnemonic) + 1);
-
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -64,12 +49,29 @@ class CreateWalletScreen extends StatelessWidget {
                 ),
                 padding: const EdgeInsets.all(16),
                 margin: const EdgeInsets.only(
-                    left: 16, right: 16, top: 32, bottom: 64),
-                child: Observer(
-                  builder: (_) => Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: _buildRandomMnemonicList()),
+                  left: 16,
+                  right: 16,
+                  top: 32,
+                  bottom: 64,
+                ),
+                child: FutureBuilder<String>(
+                  future: _createWalletStore.generateMnemonicPhrase(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final mnemonic = snapshot.data!;
+                      return Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: mnemonic
+                            .split(' ')
+                            .mapIndexed((index, text) =>
+                                ROIMnemonicText(text: '${index + 1}. $text'))
+                            .toList(),
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
                 ),
               ),
               Center(
@@ -80,8 +82,9 @@ class CreateWalletScreen extends StatelessWidget {
                     onPressed: () {
                       context.router.push(
                         CreateWalletConfirmRoute(
-                            mnemonic: _createWalletStore.mnemonicPhrase,
-                            randomIndex: randomIndex),
+                          mnemonic: _createWalletStore.mnemonicPhrase,
+                          randomIndex: _createWalletStore.randomIndex,
+                        ),
                       );
                     },
                   ),

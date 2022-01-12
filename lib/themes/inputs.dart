@@ -369,7 +369,6 @@ class ROIAddressTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _hasError = error != null;
-    print('builddddd');
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
         width: double.infinity,

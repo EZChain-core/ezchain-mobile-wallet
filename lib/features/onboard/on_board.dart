@@ -19,20 +19,13 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
   final _controller = PageController();
   int _pageSelectedIndex = 0;
 
-  final _pageImages = <Widget>[
-    Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 21),
-      child: Assets.images.imgOnboardOne.image(),
-    ),
-    Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 21),
-      child: Assets.images.imgOnboardTwo.image(),
-    ),
-    Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 21),
-      child: Assets.images.imgOnboardThree.image(),
-    ),
-  ];
+  final _pageSize = 3;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +53,20 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                         _pageSelectedIndex = value;
                       });
                     },
-                    children: _pageImages,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 21),
+                        child: Assets.images.imgOnboardOne.image(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 21),
+                        child: Assets.images.imgOnboardTwo.image(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 21),
+                        child: Assets.images.imgOnboardThree.image(),
+                      ),
+                    ],
                   ),
                 ),
                 Container(
@@ -68,7 +74,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
-                      _pageImages.length,
+                      _pageSize,
                       (index) => _DotIndicator(
                         isSelected: index == _pageSelectedIndex,
                       ),
