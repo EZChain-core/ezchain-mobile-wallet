@@ -119,7 +119,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                           text:
                               Strings.current.accessWalletOptionsDontHaveWallet,
                           onPressed: () {
-                            context.router.push(const CreateWalletRoute());
+                            context.router.push(CreateWalletRoute());
                           },
                         ),
                       ),

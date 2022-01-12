@@ -1,12 +1,11 @@
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/price_store.dart';
+import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
-import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
-import 'package:wallet/roi/wallet/utils/price_utils.dart';
 import 'package:web3dart/web3dart.dart';
 
 part 'wallet_send_evm_store.g.dart';
@@ -14,9 +13,7 @@ part 'wallet_send_evm_store.g.dart';
 class WalletSendEvmStore = _WalletSendEvmStore with _$WalletSendEvmStore;
 
 abstract class _WalletSendEvmStore with Store {
-  final wallet = SingletonWallet(
-      privateKey:
-          "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
+  final wallet = getIt<WalletFactory>().activeWallet;
 
   final priceStore = getIt<PriceStore>();
 
@@ -49,7 +46,6 @@ abstract class _WalletSendEvmStore with Store {
 
   @action
   getBalanceC() async {
-
     final adjustGasPrice = await getAdjustedGasPrice();
     gasPrice = EtherAmount.fromUnitAndValue(EtherUnit.wei, adjustGasPrice)
         .getValueInUnitBI(EtherUnit.gwei);

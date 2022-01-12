@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
-import 'package:wallet/di/di.dart';
 import 'package:wallet/features/auth/create/create_wallet_store.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -13,19 +12,20 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
 class CreateWalletScreen extends StatelessWidget {
-  const CreateWalletScreen({Key? key}) : super(key: key);
+  CreateWalletScreen({Key? key}) : super(key: key);
 
+  final _createWalletStore = CreateWalletStore();
+
+  List<ROIMnemonicText> _buildRandomMnemonicList() =>
+      _createWalletStore.mnemonicPhrase
+          .split(' ')
+          .mapIndexed(
+              (index, text) => ROIMnemonicText(text: '${index + 1}. $text'))
+          .toList();
 
   @override
   Widget build(BuildContext context) {
-    final _createWalletStore = CreateWalletStore();
     _createWalletStore.generateMnemonicPhrase();
-
-    List<ROIMnemonicText> _buildRandomMnemonicList() => _createWalletStore
-        .mnemonicPhrase
-        .split(' ')
-        .mapIndexed((index, text) => ROIMnemonicText(text: '${index + 1}. $text'))
-        .toList();
 
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(

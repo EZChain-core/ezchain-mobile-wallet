@@ -4,21 +4,20 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
+import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/fee_utils.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
 part 'cross_store.freezed.dart';
+
 part 'cross_store.g.dart';
 
 class CrossStore = _CrossStore with _$CrossStore;
 
 abstract class _CrossStore with Store {
-  final wallet = SingletonWallet(
-      privateKey:
-          "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
+  final wallet = getIt<WalletFactory>().activeWallet;
 
   final balanceStore = getIt<BalanceStore>();
   final priceStore = getIt<PriceStore>();
@@ -180,11 +179,11 @@ abstract class _CrossStore with Store {
   double getFee(CrossChainType type) {
     switch (type) {
       case CrossChainType.xChain:
-        return getTxFeeX().toDouble();
+        return bnToDecimalAvaxX(getTxFeeX()).toDouble();
       case CrossChainType.pChain:
-        return getTxFeeP().toDouble();
+        return bnToDecimalAvaxP(getTxFeeP()).toDouble();
       default:
-        return getTxFeeX().toDouble();
+        return 0;
     }
   }
 

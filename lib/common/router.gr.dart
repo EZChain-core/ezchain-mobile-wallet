@@ -71,8 +71,10 @@ class AppRouter extends _i26.RootStackRouter {
           routeData: routeData, child: const _i3.AccessWalletOptionsScreen());
     },
     CreateWalletRoute.name: (routeData) {
+      final args = routeData.argsAs<CreateWalletRouteArgs>(
+          orElse: () => const CreateWalletRouteArgs());
       return _i26.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i4.CreateWalletScreen());
+          routeData: routeData, child: _i4.CreateWalletScreen(key: args.key));
     },
     CreateWalletConfirmRoute.name: (routeData) {
       final args = routeData.argsAs<CreateWalletConfirmRouteArgs>();
@@ -251,10 +253,24 @@ class AccessWalletOptionsRoute extends _i26.PageRouteInfo<void> {
 }
 
 /// generated route for [_i4.CreateWalletScreen]
-class CreateWalletRoute extends _i26.PageRouteInfo<void> {
-  const CreateWalletRoute() : super(name, path: '/create-wallet-screen');
+class CreateWalletRoute extends _i26.PageRouteInfo<CreateWalletRouteArgs> {
+  CreateWalletRoute({_i27.Key? key})
+      : super(name,
+            path: '/create-wallet-screen',
+            args: CreateWalletRouteArgs(key: key));
 
   static const String name = 'CreateWalletRoute';
+}
+
+class CreateWalletRouteArgs {
+  const CreateWalletRouteArgs({this.key});
+
+  final _i27.Key? key;
+
+  @override
+  String toString() {
+    return 'CreateWalletRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for [_i5.CreateWalletConfirmScreen]
