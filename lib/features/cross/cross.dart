@@ -23,7 +23,7 @@ class CrossScreen extends StatefulWidget {
 }
 
 class _CrossScreenState extends State<CrossScreen> {
-  final crossStore = CrossStore();
+  CrossStore crossStore = CrossStore();
   final amountController = TextEditingController();
   final priceStore = getIt<PriceStore>();
 
@@ -47,9 +47,15 @@ class _CrossScreenState extends State<CrossScreen> {
     }
   }
 
-  void _onClickTransfer() {
+  Future<void> _onClickTransfer() async {
     crossStore.transferring();
-    context.router.push(CrossTransferRoute(crossStore: crossStore));
+    final isRefreshCrossScreen = await context.router.push<bool>(CrossTransferRoute(crossStore: crossStore));
+    if(isRefreshCrossScreen == true) {
+      setState(() {
+        crossStore = CrossStore();
+        amountController.text = '';
+      });
+    }
   }
 
   void _onClickCancel() {
