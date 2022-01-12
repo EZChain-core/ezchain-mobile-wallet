@@ -25,10 +25,8 @@ void resetGetIt<T extends Object>({
   );
 }
 
-
 @module
 abstract class DIModule {
-
   @singleton
   AppRouter get appRouter => AppRouter();
 }

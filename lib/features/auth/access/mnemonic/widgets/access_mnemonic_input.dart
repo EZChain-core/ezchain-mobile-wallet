@@ -1,17 +1,14 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
 class AccessMnemonicInput extends StatefulWidget {
-
   final Function(List<String> phrases) onPhrasesChanged;
 
-  const AccessMnemonicInput(
-      {Key? key, required this.onPhrasesChanged})
+  const AccessMnemonicInput({Key? key, required this.onPhrasesChanged})
       : super(key: key);
 
   @override
@@ -19,65 +16,65 @@ class AccessMnemonicInput extends StatefulWidget {
 }
 
 class _AccessMnemonicInputState extends State<AccessMnemonicInput> {
-  final inputController = TextEditingController();
-  final phrase = <String>[];
-  final space = ' ';
-  final focusNode = FocusNode();
+  final _inputController = TextEditingController();
+  final _phrase = <String>[];
+  final _space = ' ';
+  final _focusNode = FocusNode();
 
   @override
   void dispose() {
-    inputController.dispose();
-    focusNode.dispose();
+    _inputController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    inputController.addListener(_handlePhrases);
+    _inputController.addListener(_handlePhrases);
   }
 
   void _handlePhrases() {
-    String text = inputController.text;
-    var splits = text.split(space).where((element) => element.isNotEmpty);
+    String text = _inputController.text;
+    var splits = text.split(_space).where((element) => element.isNotEmpty);
     if (splits.length > 1) {
       // case paste
-      phrase.addAll(splits);
+      _phrase.addAll(splits);
       _resetState();
-    } else if (text.trim().isNotEmpty & text.endsWith(space)) {
+    } else if (text.trim().isNotEmpty & text.endsWith(_space)) {
       // case ấn dấu cách
-      phrase.add(text.trim());
+      _phrase.add(text.trim());
       _resetState();
-    } else if (text.isEmpty & phrase.isNotEmpty) {
+    } else if (text.isEmpty & _phrase.isNotEmpty) {
       // case xóa dấu cách
-      phrase.removeLast();
+      _phrase.removeLast();
       _resetState();
     }
   }
 
   void _resetState() {
     // default thêm 1 dấu cách để detect xóa phrase
-    inputController.text = space;
-    inputController.selection = TextSelection.fromPosition(
-        TextPosition(offset: inputController.text.length));
+    _inputController.text = _space;
+    _inputController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _inputController.text.length));
     setState(() {});
-    widget.onPhrasesChanged(phrase);
+    widget.onPhrasesChanged(_phrase);
   }
 
   void _openKeyboard() {
-    focusNode.requestFocus();
+    _focusNode.requestFocus();
   }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> _buildList() {
       var phraseWidgets = <Widget>[];
-      phrase.forEachIndexed((index, word) {
+      _phrase.forEachIndexed((index, word) {
         phraseWidgets.add(ROIMnemonicText(text: '${index + 1}. $word'));
       });
       phraseWidgets.add(_MnemonicTextField(
-        controller: inputController,
-        focusNode: focusNode,
+        controller: _inputController,
+        focusNode: _focusNode,
       ));
       return phraseWidgets;
     }

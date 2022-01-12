@@ -1,11 +1,9 @@
-import 'dart:math';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/dialog_extensions.dart';
+import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -17,49 +15,22 @@ import 'package:wallet/themes/typography.dart';
 import 'create_wallet_confirm_store.dart';
 
 class CreateWalletConfirmScreen extends StatelessWidget {
-  final String mnemonic;
-  final List<int> randomIndex;
+  final _createWalletConfirmStore = CreateWalletConfirmStore();
 
-  const CreateWalletConfirmScreen({Key? key, required this.mnemonic, required this.randomIndex})
-      : super(key: key);
+  final List<int> randomIndex;
+  final List<String> phrase = [];
+  final List<String> resultPhrase = [];
+
+  CreateWalletConfirmScreen(
+      {Key? key, required String mnemonic, required this.randomIndex})
+      : super(key: key) {
+    final temp = mnemonic.split(' ');
+    phrase.addAll(temp);
+    resultPhrase.addAll(temp);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final createWalletConfirmStore = CreateWalletConfirmStore();
-    List<String> phrase = mnemonic.split(' ');
-
-    List<String> resultPhrase = List.from(phrase);
-
-    List<Widget> _buildRandomMnemonicList() {
-      return phrase
-          .mapIndexed((index, text) => randomIndex.contains(index)
-              ? _MnemonicConfirmTextField(
-                  index: index,
-                  onChanged: (String word) {
-                    resultPhrase.removeAt(index);
-                    resultPhrase.insert(index, word);
-                  },
-                )
-              : ROIMnemonicText(text: '${index + 1}. $text'))
-          .toList();
-    }
-
-    void _showWarningDialog() {
-      context.showWarningDialog(
-        Assets.images.imgWarning.svg(width: 130, height: 130),
-        Strings.current.accessMnemonicKeyWarning,
-      );
-    }
-
-    void _onClickConfirm() {
-      if (phrase.equals(resultPhrase) &&
-          createWalletConfirmStore.accessWithMnemonicKey(phrase.join(' '))) {
-        context.router.push(const PinCodeSetupRoute());
-      } else {
-        _showWarningDialog();
-      }
-    }
-
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -121,6 +92,37 @@ class CreateWalletConfirmScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildRandomMnemonicList() {
+    return phrase
+        .mapIndexed((index, text) => randomIndex.contains(index)
+            ? _MnemonicConfirmTextField(
+                index: index,
+                onChanged: (String word) {
+                  resultPhrase.removeAt(index);
+                  resultPhrase.insert(index, word);
+                },
+              )
+            : ROIMnemonicText(text: '${index + 1}. $text'))
+        .toList();
+  }
+
+  void _showWarningDialog() {
+    walletContext?.showWarningDialog(
+      Assets.images.imgWarning.svg(width: 130, height: 130),
+      Strings.current.accessMnemonicKeyWarning,
+    );
+  }
+
+  void _onClickConfirm() {
+    if (phrase.equals(resultPhrase) &&
+        _createWalletConfirmStore
+            .accessWithMnemonicKey(resultPhrase.join(' '))) {
+      walletContext?.router.push(const PinCodeSetupRoute());
+    } else {
+      _showWarningDialog();
+    }
   }
 }
 

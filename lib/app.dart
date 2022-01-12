@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -9,8 +10,9 @@ import 'di/di.dart';
 import 'generated/l10n.dart';
 
 class WalletApp extends StatelessWidget {
+  final _appRouter = getIt<AppRouter>();
 
-  final appRouter = getIt<AppRouter>();
+  WalletApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +37,13 @@ class WalletApp extends StatelessWidget {
           locale: provider.locale,
           debugShowCheckedModeBanner: false,
           routerDelegate: AutoRouterDelegate(
-            appRouter,
-            navigatorObservers: () => [AutoRouteObserver()],
+            _appRouter,
+            navigatorObservers: () => [
+              AutoRouteObserver(),
+              FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)
+            ],
           ),
-          routeInformationParser: appRouter.defaultRouteParser(),
+          routeInformationParser: _appRouter.defaultRouteParser(),
         ),
       ),
     );

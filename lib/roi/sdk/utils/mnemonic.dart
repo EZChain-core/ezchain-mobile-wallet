@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:bip39/bip39.dart' as bip39;
 
 class Mnemonic {
+  static const mnemonicLength = 24;
+
   Mnemonic._privateConstructor();
 
   static final Mnemonic _instance = Mnemonic._privateConstructor();

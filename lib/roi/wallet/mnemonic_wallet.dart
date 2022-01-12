@@ -51,7 +51,7 @@ class MnemonicWallet extends HDWalletAbstract implements UnsafeWallet {
   /// @param mnemonic
   static bool validateMnemonic(String mnemonic) {
     final words = mnemonic.split(" ");
-    if (words.length != 24) return false;
+    if (words.length != Mnemonic.mnemonicLength) return false;
     return Mnemonic.instance.validateMnemonic(mnemonic);
   }
 
