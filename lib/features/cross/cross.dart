@@ -191,18 +191,22 @@ class _CrossScreenState extends State<CrossScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         Strings.current.crossFee,
                         style: ROITitleLargeTextStyle(
                             color: provider.themeMode.text60),
                       ),
-                      Observer(
-                        builder: (_) => Text(
-                          '${crossStore.fee} AVAX',
-                          style: ROITitleLargeTextStyle(
-                              color: provider.themeMode.text60),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Observer(
+                          builder: (_) => Text(
+                            '${crossStore.fee} AVAX',
+                            textAlign: TextAlign.end,
+                            style: ROITitleLargeTextStyle(
+                                color: provider.themeMode.text60),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                     ],

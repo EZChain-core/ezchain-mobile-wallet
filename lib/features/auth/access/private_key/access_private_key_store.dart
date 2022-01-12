@@ -16,6 +16,7 @@ abstract class _AccessPrivateKeyStore with Store {
     final wallet = SingletonWallet.access(privateKey);
     if(wallet != null) {
       walletFactory.addWallet(wallet);
+      walletFactory.saveAccessKey(privateKey);
       return true;
     }
     return false;

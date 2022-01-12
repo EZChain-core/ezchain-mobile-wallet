@@ -1,18 +1,15 @@
-
-import 'package:injectable/injectable.dart';
 import 'package:wallet/roi/wallet/wallet.dart';
 
-@LazySingleton()
-class WalletFactory {
-  final List<WalletProvider> _wallets = [];
+abstract class WalletFactory {
+  WalletProvider get activeWallet;
 
-  WalletProvider get activeWallet => _wallets.first;
+  addWallet(WalletProvider wallet);
 
-  addWallet(WalletProvider wallet) {
-    _wallets.add(wallet);
-  }
+  saveAccessKey(String key);
 
-  clear() {
-    _wallets.clear();
-  }
+  clear();
+
+  Future<bool> isExpired();
+
+  Future<bool> initWallet();
 }

@@ -11,7 +11,8 @@ import '../common/router.gr.dart' as _i3;
 import '../features/common/balance_store.dart' as _i4;
 import '../features/common/price_store.dart' as _i5;
 import '../features/common/wallet_factory.dart' as _i6;
-import 'di.dart' as _i7; // ignore_for_file: unnecessary_lambdas
+import '../features/common/wallet_factory_impl.dart' as _i7;
+import 'di.dart' as _i8; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -22,8 +23,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i3.AppRouter>(dIModule.appRouter);
   gh.lazySingleton<_i4.BalanceStore>(() => _i4.BalanceStore());
   gh.lazySingleton<_i5.PriceStore>(() => _i5.PriceStore());
-  gh.lazySingleton<_i6.WalletFactory>(() => _i6.WalletFactory());
+  gh.lazySingleton<_i6.WalletFactory>(() => _i7.WalletFactoryImpl());
   return get;
 }
 
-class _$DIModule extends _i7.DIModule {}
+class _$DIModule extends _i8.DIModule {}

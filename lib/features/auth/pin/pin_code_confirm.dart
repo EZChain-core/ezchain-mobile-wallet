@@ -86,7 +86,7 @@ class _PinCodeConfirmScreenState extends State<PinCodeConfirmScreen> {
                     },
                     onSuccess: (String confirmPin) {
                       if (confirmPin == widget.pin) {
-                        context.router.push(const DashboardRoute());
+                        context.router.replaceAll([const DashboardRoute()]);
                       } else {
                         setState(() {
                           isPinCorrect = false;

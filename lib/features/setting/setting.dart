@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
-import 'package:wallet/features/setting/general/setting_general.dart';
 import 'package:wallet/features/setting/widgets/setting_item.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -28,12 +27,14 @@ class SettingScreen extends StatelessWidget {
               SettingItem(
                 text: Strings.current.settingWalletSecurity,
                 icon: Assets.icons.icSecurity.svg(),
-                onPressed: () => context.router.push(const SettingSecurityRoute()),
+                onPressed: () =>
+                    context.router.push(const SettingSecurityRoute()),
               ),
               SettingItem(
                 text: Strings.current.settingGeneral,
                 icon: Assets.icons.icGeneralSetting.svg(),
-                onPressed: () => context.router.push(const SettingGeneralRoute()),
+                onPressed: () =>
+                    context.router.push(const SettingGeneralRoute()),
               ),
               SettingItem(
                 text: Strings.current.settingAboutRoi,

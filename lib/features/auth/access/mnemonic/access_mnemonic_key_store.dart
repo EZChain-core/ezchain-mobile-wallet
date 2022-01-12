@@ -15,6 +15,7 @@ abstract class _AccessMnemonicKeyStore with Store {
     final wallet = MnemonicWallet.import(mnemonicKey);
     if(wallet != null) {
       walletFactory.addWallet(wallet);
+      walletFactory.saveAccessKey(mnemonicKey);
       return true;
     }
     return false;
