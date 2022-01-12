@@ -18,22 +18,19 @@ import 'create_wallet_confirm_store.dart';
 
 class CreateWalletConfirmScreen extends StatelessWidget {
   final String mnemonic;
+  final List<int> randomIndex;
 
-  const CreateWalletConfirmScreen({Key? key, required this.mnemonic})
+  const CreateWalletConfirmScreen({Key? key, required this.mnemonic, required this.randomIndex})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final createWalletConfirmStore = CreateWalletConfirmStore();
-    const sizeOfMnemonic = 24;
-    const sizeOfRandomInputMnemonic = 4;
     List<String> phrase = mnemonic.split(' ');
 
     List<String> resultPhrase = List.from(phrase);
 
     List<Widget> _buildRandomMnemonicList() {
-      List<int> randomIndex = List.generate(sizeOfRandomInputMnemonic,
-          (_) => Random().nextInt(sizeOfMnemonic) + 1);
       return phrase
           .mapIndexed((index, text) => randomIndex.contains(index)
               ? _MnemonicConfirmTextField(
