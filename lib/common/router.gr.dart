@@ -81,7 +81,9 @@ class AppRouter extends _i26.RootStackRouter {
       return _i26.AdaptivePage<dynamic>(
           routeData: routeData,
           child: _i5.CreateWalletConfirmScreen(
-              key: args.key, mnemonic: args.mnemonic));
+              key: args.key,
+              mnemonic: args.mnemonic,
+              randomIndex: args.randomIndex));
     },
     AccessPrivateKeyRoute.name: (routeData) {
       return _i26.AdaptivePage<dynamic>(
@@ -276,24 +278,29 @@ class CreateWalletRouteArgs {
 /// generated route for [_i5.CreateWalletConfirmScreen]
 class CreateWalletConfirmRoute
     extends _i26.PageRouteInfo<CreateWalletConfirmRouteArgs> {
-  CreateWalletConfirmRoute({_i27.Key? key, required String mnemonic})
+  CreateWalletConfirmRoute(
+      {_i27.Key? key, required String mnemonic, required List<int> randomIndex})
       : super(name,
             path: '/create-wallet-confirm-screen',
-            args: CreateWalletConfirmRouteArgs(key: key, mnemonic: mnemonic));
+            args: CreateWalletConfirmRouteArgs(
+                key: key, mnemonic: mnemonic, randomIndex: randomIndex));
 
   static const String name = 'CreateWalletConfirmRoute';
 }
 
 class CreateWalletConfirmRouteArgs {
-  const CreateWalletConfirmRouteArgs({this.key, required this.mnemonic});
+  const CreateWalletConfirmRouteArgs(
+      {this.key, required this.mnemonic, required this.randomIndex});
 
   final _i27.Key? key;
 
   final String mnemonic;
 
+  final List<int> randomIndex;
+
   @override
   String toString() {
-    return 'CreateWalletConfirmRouteArgs{key: $key, mnemonic: $mnemonic}';
+    return 'CreateWalletConfirmRouteArgs{key: $key, mnemonic: $mnemonic, randomIndex: $randomIndex}';
   }
 }
 
