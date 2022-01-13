@@ -26,7 +26,7 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              ROIAppBar(
+              EZCAppBar(
                 title: Strings.current.sharedSend,
                 onPressed: () {
                   context.router.replaceAll([const DashboardRoute()]);
@@ -42,12 +42,12 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
                           Assets.icons.icRoi.svg(),
                           const SizedBox(width: 8),
                           Text(
-                            'ROI',
-                            style: ROIBodyLargeTextStyle(
+                            'EZC',
+                            style: EZCBodyLargeTextStyle(
                                 color: provider.themeMode.text),
                           ),
                           const SizedBox(width: 16),
-                          const ROIChainLabelText(text: 'C-Chain'),
+                          const EZCChainLabelText(text: 'C-Chain'),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -87,11 +87,11 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Text(
                           Strings.current.sharedTransactionSent,
-                          style: ROIBodyMediumTextStyle(
+                          style: EZCBodyMediumTextStyle(
                               color: provider.themeMode.stateSuccess),
                         ),
                       ),
-                      ROIMediumSuccessButton(
+                      EZCMediumSuccessButton(
                         text: Strings.current.sharedStartAgain,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 64,

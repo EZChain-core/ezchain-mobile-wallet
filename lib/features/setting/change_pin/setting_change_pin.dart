@@ -22,7 +22,7 @@ class SettingChangePinScreen extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              ROIAppBar(
+              EZCAppBar(
                 title: Strings.current.settingChangePin,
                 onPressed: () {
                   context.router.pop();
@@ -36,14 +36,14 @@ class SettingChangePinScreen extends StatelessWidget {
                     Observer(
                       builder: (_) => Text(
                         settingChangePinStore.state.errorMessage(),
-                        style: ROIBodyMediumTextStyle(
+                        style: EZCBodyMediumTextStyle(
                             color: provider.themeMode.stateDanger),
                       ),
                     ),
                     Observer(
                       builder: (_) => Text(
                         settingChangePinStore.state.title(),
-                        style: ROIBodyLargeTextStyle(
+                        style: EZCBodyLargeTextStyle(
                             color: provider.themeMode.text70),
                       ),
                     ),

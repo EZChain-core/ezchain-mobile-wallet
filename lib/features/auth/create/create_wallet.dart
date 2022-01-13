@@ -27,7 +27,7 @@ class CreateWalletScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
                 child: Text(
                   Strings.current.createWalletPassphraseToRestore,
-                  style: ROIHeadlineMediumTextStyle(
+                  style: EZCHeadlineMediumTextStyle(
                     color: provider.themeMode.text,
                   ),
                 ),
@@ -36,7 +36,7 @@ class CreateWalletScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
                 child: Text(
                   Strings.current.createWalletDes,
-                  style: ROIBodyLargeTextStyle(
+                  style: EZCBodyLargeTextStyle(
                     color: provider.themeMode.text70,
                   ),
                 ),
@@ -65,7 +65,7 @@ class CreateWalletScreen extends StatelessWidget {
                         children: mnemonic
                             .split(' ')
                             .mapIndexed((index, text) =>
-                                ROIMnemonicText(text: '${index + 1}. $text'))
+                                EZCMnemonicText(text: '${index + 1}. $text'))
                             .toList(),
                       );
                     } else {
@@ -77,7 +77,7 @@ class CreateWalletScreen extends StatelessWidget {
               Center(
                 child: SizedBox(
                   width: 211,
-                  child: ROIMediumPrimaryButton(
+                  child: EZCMediumPrimaryButton(
                     text: Strings.current.createWalletKeptKey,
                     onPressed: () {
                       context.router.push(

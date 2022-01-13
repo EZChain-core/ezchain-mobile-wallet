@@ -4,10 +4,10 @@ import 'package:wallet/generated/fonts.gen.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 
-class ROIMnemonicText extends StatelessWidget {
+class EZCMnemonicText extends StatelessWidget {
   final String text;
 
-  const ROIMnemonicText({Key? key, required this.text}) : super(key: key);
+  const EZCMnemonicText({Key? key, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +20,17 @@ class ROIMnemonicText extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         child: Text(
           text,
-          style: ROIBodySmallTextStyle(color: provider.themeMode.secondary),
+          style: EZCBodySmallTextStyle(color: provider.themeMode.secondary),
         ),
       ),
     );
   }
 }
 
-class ROIChainLabelText extends StatelessWidget {
+class EZCChainLabelText extends StatelessWidget {
   final String text;
 
-  const ROIChainLabelText({Key? key, required this.text}) : super(key: key);
+  const EZCChainLabelText({Key? key, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +43,14 @@ class ROIChainLabelText extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         child: Text(
           text,
-          style: ROITitleMediumTextStyle(color: provider.themeMode.text90),
+          style: EZCTitleMediumTextStyle(color: provider.themeMode.text90),
         ),
       ),
     );
   }
 }
 
-class ROITextStyle extends TextStyle {
+class EZCTextStyle extends TextStyle {
   final Color color;
 
   final double fontSize;
@@ -59,7 +59,7 @@ class ROITextStyle extends TextStyle {
 
   final FontWeight fontWeight;
 
-  const ROITextStyle({
+  const EZCTextStyle({
     required this.color,
     required this.fontSize,
     required this.fontWeight,
@@ -67,120 +67,120 @@ class ROITextStyle extends TextStyle {
   }) : super(fontFamily: fontFamily);
 }
 
-class ROIHeadlineMediumTextStyle extends ROITextStyle {
+class EZCHeadlineMediumTextStyle extends EZCTextStyle {
   final Color color;
 
-  const ROIHeadlineMediumTextStyle({required this.color})
+  const EZCHeadlineMediumTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 28,
             fontWeight: FontWeight.w400);
 }
 
-class ROIHeadlineSmallTextStyle extends ROITextStyle {
+class EZCHeadlineSmallTextStyle extends EZCTextStyle {
   final Color color;
 
-  const ROIHeadlineSmallTextStyle({required this.color})
+  const EZCHeadlineSmallTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 24,
             fontWeight: FontWeight.w400);
 }
 
-class ROITitleLargeTextStyle extends ROITextStyle {
+class EZCTitleLargeTextStyle extends EZCTextStyle {
   final Color color;
 
-  const ROITitleLargeTextStyle({required this.color})
+  const EZCTitleLargeTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 16,
             fontWeight: FontWeight.w500);
 }
 
-class ROITitleMediumTextStyle extends ROITextStyle {
+class EZCTitleMediumTextStyle extends EZCTextStyle {
   final Color color;
 
-  const ROITitleMediumTextStyle({required this.color})
+  const EZCTitleMediumTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 14,
             fontWeight: FontWeight.w500);
 }
 
-class ROITitleSmallTextStyle extends ROITextStyle {
+class EZCTitleSmallTextStyle extends EZCTextStyle {
   final Color color;
 
-  const ROITitleSmallTextStyle({required this.color})
+  const EZCTitleSmallTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 12,
             fontWeight: FontWeight.w500);
 }
 
-class ROIBodyLargeTextStyle extends ROITextStyle {
+class EZCBodyLargeTextStyle extends EZCTextStyle {
   final Color color;
 
-  const ROIBodyLargeTextStyle({required this.color})
+  const EZCBodyLargeTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 16,
             fontWeight: FontWeight.w400);
 }
 
-class ROIBodyMediumTextStyle extends ROITextStyle {
+class EZCBodyMediumTextStyle extends EZCTextStyle {
   final Color color;
 
-  const ROIBodyMediumTextStyle({required this.color})
+  const EZCBodyMediumTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 14,
             fontWeight: FontWeight.w400);
 }
 
-class ROIBodySmallTextStyle extends ROITextStyle {
+class EZCBodySmallTextStyle extends EZCTextStyle {
   final Color color;
 
-  const ROIBodySmallTextStyle({required this.color})
+  const EZCBodySmallTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 12,
             fontWeight: FontWeight.w400);
 }
 
-class ROILabelMediumTextStyle extends ROITextStyle {
+class EZCLabelMediumTextStyle extends EZCTextStyle {
   final Color color;
 
-  const ROILabelMediumTextStyle({required this.color})
+  const EZCLabelMediumTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 12,
             fontWeight: FontWeight.w500);
 }
 
-class ROILabelSmallTextStyle extends ROITextStyle {
+class EZCLabelSmallTextStyle extends EZCTextStyle {
   final Color color;
 
-  const ROILabelSmallTextStyle({required this.color})
+  const EZCLabelSmallTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 10,
             fontWeight: FontWeight.w500);
 }
 
-class ROIButtonTextStyle extends ROITextStyle {
+class EZCButtonTextStyle extends EZCTextStyle {
   final Color color;
 
-  const ROIButtonTextStyle({required this.color})
+  const EZCButtonTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 14,
             fontWeight: FontWeight.w500);
 }
 
-class ROISemiBoldSmallTextStyle extends ROITextStyle {
+class EZCSemiBoldSmallTextStyle extends EZCTextStyle {
   final Color color;
 
-  const ROISemiBoldSmallTextStyle({required this.color})
+  const EZCSemiBoldSmallTextStyle({required this.color})
       : super(
             color: color,
             fontSize: 12,

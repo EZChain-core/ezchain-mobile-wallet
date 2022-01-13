@@ -25,12 +25,12 @@ class WalletSendVerticalText extends StatelessWidget {
           children: [
             Text(
               title,
-              style: ROITitleLargeTextStyle(color: provider.themeMode.text60),
+              style: EZCTitleLargeTextStyle(color: provider.themeMode.text60),
             ),
             const SizedBox(height: 8),
             Text(
               content,
-              style: ROIBodyLargeTextStyle(color: provider.themeMode.text),
+              style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
             ),
             if (hasDivider == true) const SizedBox(height: 8),
             if (hasDivider == true)
@@ -71,13 +71,13 @@ class WalletSendHorizontalText extends StatelessWidget {
           children: [
             Text(
               title,
-              style: ROITitleLargeTextStyle(
+              style: EZCTitleLargeTextStyle(
                   color: leftColor ?? provider.themeMode.text60),
             ),
             const Spacer(),
             Text(
               content,
-              style: ROITitleLargeTextStyle(
+              style: EZCTitleLargeTextStyle(
                   color: rightColor ?? provider.themeMode.text),
             ),
           ],

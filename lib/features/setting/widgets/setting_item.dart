@@ -55,7 +55,7 @@ class _SettingItemState extends State<SettingItem> {
               if (hasLeftIcon) ...[widget.icon!, const SizedBox(width: 8)],
               Text(
                 widget.text,
-                style: ROITitleLargeTextStyle(
+                style: EZCTitleLargeTextStyle(
                     color: widget.textColor ?? provider.themeMode.text),
               ),
               const Spacer(),
@@ -63,7 +63,7 @@ class _SettingItemState extends State<SettingItem> {
                 Text(
                   widget.rightText!,
                   style:
-                      ROIBodyLargeTextStyle(color: provider.themeMode.text70),
+                      EZCBodyLargeTextStyle(color: provider.themeMode.text70),
                 ),
               if (widget.isSwitch == true)
                 FlutterSwitch(

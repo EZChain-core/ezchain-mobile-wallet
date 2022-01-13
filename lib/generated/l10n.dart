@@ -50,10 +50,10 @@ class Strings {
     return Localizations.of<Strings>(context, Strings);
   }
 
-  /// `ROI Wallet`
+  /// `EZC Wallet`
   String get appName {
     return Intl.message(
-      'ROI Wallet',
+      'EZC Wallet',
       name: 'appName',
       desc: '',
       args: [],
@@ -110,11 +110,11 @@ class Strings {
     );
   }
 
-  /// `ROI Chain`
-  String get sharedROIChain {
+  /// `EZChain`
+  String get sharedEZChain {
     return Intl.message(
-      'ROI Chain',
-      name: 'sharedROIChain',
+      'EZChain',
+      name: 'sharedEZChain',
       desc: '',
       args: [],
     );
@@ -600,10 +600,10 @@ class Strings {
     );
   }
 
-  /// `Store this key phrase in a secure location. Anyone with this key phrase can access your ROIChain wallet. there is no way to recover lost key phrase`
+  /// `Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. there is no way to recover lost key phrase`
   String get createWalletDes {
     return Intl.message(
-      'Store this key phrase in a secure location. Anyone with this key phrase can access your ROIChain wallet. there is no way to recover lost key phrase',
+      'Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. there is no way to recover lost key phrase',
       name: 'createWalletDes',
       desc: '',
       args: [],
@@ -730,11 +730,11 @@ class Strings {
     );
   }
 
-  /// `About RoiChain`
-  String get settingAboutRoi {
+  /// `About EZChain`
+  String get settingAboutEZC {
     return Intl.message(
-      'About RoiChain',
-      name: 'settingAboutRoi',
+      'About EZChain',
+      name: 'settingAboutEZC',
       desc: '',
       args: [],
     );

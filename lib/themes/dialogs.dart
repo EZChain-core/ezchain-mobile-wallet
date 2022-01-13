@@ -4,11 +4,11 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-class ROIWarningDialog extends StatelessWidget {
+class EZCWarningDialog extends StatelessWidget {
   final Widget image;
   final String content;
 
-  const ROIWarningDialog({Key? key, required this.image, required this.content})
+  const EZCWarningDialog({Key? key, required this.image, required this.content})
       : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class ROIWarningDialog extends StatelessWidget {
                 child: Text(
                   content,
                   textAlign: TextAlign.center,
-                  style: ROIHeadlineSmallTextStyle(
+                  style: EZCHeadlineSmallTextStyle(
                       color: provider.themeMode.text70),
                 ),
               ),
