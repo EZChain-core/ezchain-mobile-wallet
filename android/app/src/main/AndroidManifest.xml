@@ -19,7 +19,8 @@
         android:name=".EZCWalletApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="EZChain"
-        android:usesCleartextTraffic="true"
+        android:largeHeap="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:ignore="UnusedAttribute">
 
         <activity
@@ -45,6 +46,7 @@
             <meta-data
                 android:name="io.flutter.embedding.android.SplashScreenDrawable"
                 android:resource="@drawable/launch_background" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -55,5 +57,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <meta-data
+            android:name="io.flutter.network-policy"
+            android:resource="@xml/network_security_config" />
+
     </application>
 </manifest>

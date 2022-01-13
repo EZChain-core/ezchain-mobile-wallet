@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
+import 'package:wallet/roi/sdk/utils/mnemonic.dart';
 import 'package:wallet/roi/wallet/mnemonic_wallet.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/wallet.dart';
@@ -56,10 +57,10 @@ class WalletFactoryImpl extends WalletFactory {
     final key = await _storage.read(key: accessKey);
     if (key == null || key.isEmpty) return false;
     WalletProvider? wallet;
-    if (key.split(' ').length == 24) {
+    if (key.split(' ').length == Mnemonic.mnemonicLength) {
       // mnemonic key
       wallet = MnemonicWallet.import(key);
-    } else if (key.startsWith("PrivateKey-")) {
+    } else {
       // private key
       wallet = SingletonWallet.access(key);
     }

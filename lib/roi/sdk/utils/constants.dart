@@ -1,6 +1,7 @@
 const protocols = ["http", "https"];
 
 const privateKeyPrefix = "PrivateKey-";
+const evmPrivateKeyPrefix = "0x";
 const nodeIdPrefix = "NodeID-";
 const primaryAssetAlias = "AVAX";
 const mainNetAPI = "api.avax.network";
