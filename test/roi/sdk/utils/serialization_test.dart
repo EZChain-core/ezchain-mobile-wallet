@@ -42,7 +42,7 @@ void main() {
     });
 
     test("nodeID", () {
-      type = SerializedType.nodeID;
+      type = SerializedType.nodeId;
       buff = serialization.typeToBuffer(nodeID, type);
       final n = serialization.bufferToType(buff, type);
       expect(n, nodeID);
@@ -127,9 +127,9 @@ void main() {
 
     test("nodeID", () {
       final str = serialization.encoder(
-          nodeID, encoding, SerializedType.nodeID, SerializedType.nodeID);
+          nodeID, encoding, SerializedType.nodeId, SerializedType.nodeId);
       final decoded = serialization.decoder(
-          str, encoding, SerializedType.nodeID, SerializedType.nodeID);
+          str, encoding, SerializedType.nodeId, SerializedType.nodeId);
       expect(decoded.toString(), nodeID);
     });
 

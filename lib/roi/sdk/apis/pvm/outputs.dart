@@ -11,6 +11,8 @@ Output selectOutputClass(int outputId, {Map<String, dynamic> args = const {}}) {
       return PvmSECPTransferOutput.fromArgs(args);
     case STAKEABLELOCKOUTID:
       return PvmStakeableLockOut.fromArgs(args);
+    case SECPOWNEROUTPUTID:
+      return PvmSECPOwnerOutput.fromArgs(args);
     default:
       throw Exception(
           "Error - SelectOutputClass: unknown outputId = $outputId");
@@ -125,7 +127,9 @@ class PvmSECPTransferOutput extends PvmAmountOutput {
             amount: amount,
             addresses: addresses,
             lockTime: lockTime,
-            threshold: threshold);
+            threshold: threshold) {
+    setTypeId(SECPXFEROUTPUTID);
+  }
 
   factory PvmSECPTransferOutput.fromArgs(Map<String, dynamic> args) {
     return PvmSECPTransferOutput(
@@ -143,11 +147,6 @@ class PvmSECPTransferOutput extends PvmAmountOutput {
   @override
   Output create({Map<String, dynamic> args = const {}}) {
     return PvmSECPTransferOutput.fromArgs(args);
-  }
-
-  @override
-  int getTypeId() {
-    return SECPXFEROUTPUTID;
   }
 
   @override
@@ -173,6 +172,7 @@ class PvmStakeableLockOut extends PvmAmountOutput {
             addresses: addresses,
             lockTime: lockTime,
             threshold: threshold) {
+    setTypeId(STAKEABLELOCKOUTID);
     if (stakeableLockTime != null) {
       this.stakeableLockTime = fromBNToBuffer(stakeableLockTime);
     }
@@ -251,11 +251,6 @@ class PvmStakeableLockOut extends PvmAmountOutput {
   }
 
   @override
-  int getTypeId() {
-    return STAKEABLELOCKOUTID;
-  }
-
-  @override
   int getOutputId() {
     return getTypeId();
   }
@@ -294,5 +289,53 @@ class PvmStakeableLockOut extends PvmAmountOutput {
   @override
   PvmTransferableOutput makeTransferable(Uint8List assetId) {
     return PvmTransferableOutput(assetId: assetId, output: this);
+  }
+}
+
+class PvmSECPOwnerOutput extends Output {
+  @override
+  String get typeName => "PvmSECPOwnerOutput";
+
+  PvmSECPOwnerOutput({
+    BigInt? lockTime,
+    int? threshold,
+    List<Uint8List>? addresses,
+  }) : super(
+          lockTime: lockTime,
+          threshold: threshold,
+          addresses: addresses,
+        ) {
+    setTypeId(SECPOWNEROUTPUTID);
+  }
+
+  factory PvmSECPOwnerOutput.fromArgs(Map<String, dynamic> args) {
+    return PvmSECPOwnerOutput(
+      lockTime: args["lockTime"],
+      threshold: args["threshold"],
+      addresses: args["addresses"],
+    );
+  }
+
+  @override
+  int getOutputId() => getTypeId();
+
+  @override
+  PvmTransferableOutput makeTransferable(Uint8List assetId) {
+    return PvmTransferableOutput(assetId: assetId, output: this);
+  }
+
+  @override
+  Output create({Map<String, dynamic> args = const {}}) {
+    return PvmSECPOwnerOutput.fromArgs(args);
+  }
+
+  @override
+  Output clone() {
+    return PvmSECPOwnerOutput()..fromBuffer(toBuffer());
+  }
+
+  @override
+  Output select(int id, {Map<String, dynamic> args = const {}}) {
+    return selectOutputClass(id, args: args);
   }
 }

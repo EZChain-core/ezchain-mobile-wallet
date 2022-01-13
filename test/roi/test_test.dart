@@ -11,17 +11,17 @@ import 'package:wallet/roi/wallet/utils/number_utils.dart';
 import 'sdk/utils/serialization_test.dart';
 
 void main() {
-  final totalROI = Decimal.parse("31769498.674525431");
-
-  final total = decimalToLocaleString(totalROI);
-  print("total = $total");
-
-  final usd = Decimal.parse(116.04.toString());
-
-  final totalUsd = totalROI * usd;
-
-  final totalUsdString = decimalToLocaleString(totalUsd, decimals: 2);
-  print("totalUsdString = $totalUsdString");
+  // final totalROI = Decimal.parse("31769498.674525431");
+  //
+  // final total = decimalToLocaleString(totalROI);
+  // print("total = $total");
+  //
+  // final usd = Decimal.parse(116.04.toString());
+  //
+  // final totalUsd = totalROI * usd;
+  //
+  // final totalUsdString = decimalToLocaleString(totalUsd, decimals: 2);
+  // print("totalUsdString = $totalUsdString");
 
   // print("value = ${stringToBigInt16("0x2540be400")}");
   // final keyChain = ROIKeyChain(chainId: "X", hrp: "avax");
@@ -45,4 +45,6 @@ void main() {
   //         "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
   //
   // print("getAddressX = ${wallet.getAddressX()}");
+
+  print("test = ${double.parse(12345.123456789.toStringAsFixed(4))}");
 }

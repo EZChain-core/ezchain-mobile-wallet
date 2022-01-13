@@ -16,9 +16,8 @@ class PvmSECPCredential extends Credential {
   @override
   String get typeName => "PvmSECPCredential";
 
-  @override
-  int getTypeId() {
-    return SECPCREDENTIAL;
+  PvmSECPCredential() {
+    setTypeId(SECPCREDENTIAL);
   }
 
   @override

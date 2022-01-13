@@ -90,7 +90,9 @@ class PvmSECPTransferInput extends PvmAmountInput {
   @override
   String get typeName => "PvmSECPTransferInput";
 
-  PvmSECPTransferInput({BigInt? amount}) : super(amount: amount);
+  PvmSECPTransferInput({BigInt? amount}) : super(amount: amount) {
+    setTypeId(SECPINPUTID);
+  }
 
   factory PvmSECPTransferInput.fromArgs(Map<String, dynamic> args) {
     return PvmSECPTransferInput(amount: args["amount"]);
@@ -104,11 +106,6 @@ class PvmSECPTransferInput extends PvmAmountInput {
   @override
   Input create({Map<String, dynamic> args = const {}}) {
     return PvmSECPTransferInput.fromArgs(args);
-  }
-
-  @override
-  int getTypeId() {
-    return SECPINPUTID;
   }
 
   @override
@@ -132,6 +129,7 @@ class PvmStakeableLockIn extends PvmAmountInput {
       BigInt? stakeableLockTime,
       PvmParseableInput? transferableInput})
       : super(amount: amount) {
+    setTypeId(STAKEABLELOCKINID);
     if (stakeableLockTime != null) {
       this.stakeableLockTime = fromBNToBuffer(stakeableLockTime, length: 8);
     }
@@ -190,8 +188,10 @@ class PvmStakeableLockIn extends PvmAmountInput {
         SerializedType.Buffer,
         args: [8]);
     transferableInput = PvmParseableInput();
-    transferableInput.deserialize(fields["transferableInput"],
-        encoding: encoding);
+    transferableInput.deserialize(
+      fields["transferableInput"],
+      encoding: encoding,
+    );
     _synchronize();
   }
 
@@ -210,11 +210,6 @@ class PvmStakeableLockIn extends PvmAmountInput {
 
   PvmParseableInput getTransferablInput() {
     return transferableInput;
-  }
-
-  @override
-  int getTypeId() {
-    return STAKEABLELOCKINID;
   }
 
   @override

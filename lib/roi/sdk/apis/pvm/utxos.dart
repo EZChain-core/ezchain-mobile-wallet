@@ -7,6 +7,7 @@ import 'package:wallet/roi/sdk/apis/pvm/import_tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/inputs.dart';
 import 'package:wallet/roi/sdk/apis/pvm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
+import 'package:wallet/roi/sdk/apis/pvm/validation_tx.dart';
 import 'package:wallet/roi/sdk/common/asset_amount.dart';
 import 'package:wallet/roi/sdk/common/output.dart';
 import 'package:wallet/roi/sdk/common/utxos.dart';
@@ -381,7 +382,154 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
     return PvmUnsignedTx(transaction: exportTx);
   }
 
-  List<PvmUTXO> getConsumableUXTO({BigInt? asOf, bool stakeable = false}) {
+  PvmUnsignedTx buildAddDelegatorTx(
+    int networkId,
+    Uint8List blockchainId,
+    Uint8List avaxAssetId,
+    List<Uint8List> toAddresses,
+    List<Uint8List> fromAddresses,
+    List<Uint8List> changeAddresses,
+    Uint8List nodeId,
+    BigInt startTime,
+    BigInt endTime,
+    BigInt stakeAmount,
+    BigInt rewardLockTime,
+    int rewardThreshold,
+    List<Uint8List> rewardAddresses, {
+    BigInt? fee,
+    Uint8List? feeAssetId,
+    Uint8List? memo,
+    BigInt? asOf,
+  }) {
+    asOf ??= unixNow();
+    final ins = <PvmTransferableInput>[];
+    final outs = <PvmTransferableOutput>[];
+    final stakeOuts = <PvmTransferableOutput>[];
+    final now = unixNow();
+    if (startTime < now || endTime <= startTime) {
+      throw Exception(
+          "UTXOSet.buildAddDelegatorTx -- startTime must be in the future and endTime must come after startTime");
+    }
+
+    final aad = PvmAssetAmountDestination(
+      destinations: toAddresses,
+      senders: fromAddresses,
+      changeAddresses: changeAddresses,
+    );
+
+    if (feeAssetId != null) {
+      if (hexEncode(avaxAssetId) == hexEncode(feeAssetId)) {
+        aad.addAssetAmount(avaxAssetId, stakeAmount, fee ?? BigInt.zero);
+      } else {
+        aad.addAssetAmount(avaxAssetId, stakeAmount, BigInt.zero);
+        if (_feeCheck(fee, feeAssetId)) {
+          aad.addAssetAmount(feeAssetId, BigInt.zero, fee ?? BigInt.zero);
+        }
+      }
+    }
+
+    _getMinimumSpendable(aad, asOf: asOf);
+
+    final rewardOutputOwners = PvmSECPOwnerOutput(
+      lockTime: rewardLockTime,
+      addresses: rewardAddresses,
+      threshold: rewardThreshold,
+    );
+
+    final delegatorTx = PvmAddDelegatorTx(
+      networkId: networkId,
+      blockchainId: blockchainId,
+      outs: outs,
+      ins: ins,
+      memo: memo,
+      nodeId: nodeId,
+      startTime: startTime,
+      endTime: endTime,
+      stakeAmount: stakeAmount,
+      stakeOuts: stakeOuts,
+      rewardOwners: PvmParseableOutput(output: rewardOutputOwners),
+    );
+
+    return PvmUnsignedTx(transaction: delegatorTx);
+  }
+
+  PvmUnsignedTx buildAddValidatorTx(
+    int networkId,
+    Uint8List blockchainId,
+    Uint8List avaxAssetId,
+    List<Uint8List> toAddresses,
+    List<Uint8List> fromAddresses,
+    List<Uint8List> changeAddresses,
+    Uint8List nodeId,
+    BigInt startTime,
+    BigInt endTime,
+    BigInt stakeAmount,
+    BigInt rewardLockTime,
+    int rewardThreshold,
+    List<Uint8List> rewardAddresses,
+    num delegationFee, {
+    BigInt? fee,
+    Uint8List? feeAssetId,
+    Uint8List? memo,
+    BigInt? asOf,
+  }) {
+    asOf ??= unixNow();
+    final ins = <PvmTransferableInput>[];
+    final outs = <PvmTransferableOutput>[];
+    final stakeOuts = <PvmTransferableOutput>[];
+    final now = unixNow();
+    if (startTime < now || endTime <= startTime) {
+      throw Exception(
+          "UTXOSet.buildAddDelegatorTx -- startTime must be in the future and endTime must come after startTime");
+    }
+    if (delegationFee > 100 || delegationFee < 0) {
+      throw Exception(
+          "UTXOSet.buildAddValidatorTx -- startTime must be in the range of 0 to 100, inclusively");
+    }
+
+    final aad = PvmAssetAmountDestination(
+      destinations: toAddresses,
+      senders: fromAddresses,
+      changeAddresses: changeAddresses,
+    );
+
+    if (feeAssetId != null) {
+      if (hexEncode(avaxAssetId) == hexEncode(feeAssetId)) {
+        aad.addAssetAmount(avaxAssetId, stakeAmount, fee ?? BigInt.zero);
+      } else {
+        aad.addAssetAmount(avaxAssetId, stakeAmount, BigInt.zero);
+        if (_feeCheck(fee, feeAssetId)) {
+          aad.addAssetAmount(feeAssetId, BigInt.zero, fee ?? BigInt.zero);
+        }
+      }
+    }
+
+    _getMinimumSpendable(aad, asOf: asOf);
+
+    final rewardOutputOwners = PvmSECPOwnerOutput(
+      lockTime: rewardLockTime,
+      addresses: rewardAddresses,
+      threshold: rewardThreshold,
+    );
+
+    final delegatorTx = PvmAddValidatorTx(
+        networkId: networkId,
+        blockchainId: blockchainId,
+        outs: outs,
+        ins: ins,
+        memo: memo,
+        nodeId: nodeId,
+        startTime: startTime,
+        endTime: endTime,
+        stakeAmount: stakeAmount,
+        stakeOuts: stakeOuts,
+        rewardOwners: PvmParseableOutput(output: rewardOutputOwners),
+        delegationFee: delegationFee);
+
+    return PvmUnsignedTx(transaction: delegatorTx);
+  }
+
+  List<PvmUTXO> _getConsumableUXTO({BigInt? asOf, bool stakeable = false}) {
     asOf ??= unixNow();
     return getAllUTXOs().where((utxo) {
       if (stakeable) return true;
@@ -400,7 +548,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
     asOf ??= unixNow();
     lockTime ??= BigInt.zero;
 
-    var utxoArray = getConsumableUXTO(asOf: asOf, stakeable: stakeable);
+    var utxoArray = _getConsumableUXTO(asOf: asOf, stakeable: stakeable);
     final tmpUTXOArray = <PvmUTXO>[];
 
     if (stakeable) {

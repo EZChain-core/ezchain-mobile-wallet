@@ -77,8 +77,8 @@ class Serialization {
         return vb;
       case SerializedType.bech32:
         return addressToString(args[0], args[1], vb);
-      case SerializedType.nodeID:
-        return bufferToNodeIDString(vb);
+      case SerializedType.nodeId:
+        return bufferToNodeIdString(vb);
       case SerializedType.privateKey:
         return bufferToPrivateKeyString(vb);
       case SerializedType.cb58:
@@ -117,7 +117,7 @@ class Serialization {
       case SerializedType.bech32:
         final hrp = args.getOrNull(0);
         return stringToAddress(v, hrp: hrp);
-      case SerializedType.nodeID:
+      case SerializedType.nodeId:
         return nodeIDStringToBuffer(v);
       case SerializedType.privateKey:
         return privateKeyStringToBuffer(v);
@@ -212,7 +212,7 @@ enum SerializedType {
   BN,
   Buffer,
   bech32,
-  nodeID,
+  nodeId,
   privateKey,
   cb58,
   base58,
@@ -233,7 +233,7 @@ extension SerializedTypeString on SerializedType {
         return "Buffer";
       case SerializedType.bech32:
         return "bech32";
-      case SerializedType.nodeID:
+      case SerializedType.nodeId:
         return "nodeID";
       case SerializedType.privateKey:
         return "privateKey";

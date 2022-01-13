@@ -18,18 +18,21 @@ class PvmBaseTx extends StandardBaseTx<PvmKeyPair, PvmKeyChain> {
   @override
   String get typeName => "PvmBaseTx";
 
-  PvmBaseTx(
-      {int networkId = defaultNetworkId,
-      Uint8List? blockchainId,
-      List<StandardTransferableOutput>? outs,
-      List<StandardTransferableInput>? ins,
-      Uint8List? memo})
-      : super(
-            networkId: networkId,
-            blockchainId: blockchainId,
-            outs: outs,
-            ins: ins,
-            memo: memo);
+  PvmBaseTx({
+    int networkId = defaultNetworkId,
+    Uint8List? blockchainId,
+    List<StandardTransferableOutput>? outs,
+    List<StandardTransferableInput>? ins,
+    Uint8List? memo,
+  }) : super(
+          networkId: networkId,
+          blockchainId: blockchainId,
+          outs: outs,
+          ins: ins,
+          memo: memo,
+        ) {
+    setTypeId(CREATESUBNETTX);
+  }
 
   factory PvmBaseTx.fromArgs(Map<String, dynamic> args) {
     return PvmBaseTx(
@@ -59,11 +62,6 @@ class PvmBaseTx extends StandardBaseTx<PvmKeyPair, PvmKeyChain> {
   @override
   int getTxType() {
     return BASETX;
-  }
-
-  @override
-  int getTypeId() {
-    return CREATESUBNETTX;
   }
 
   @override
