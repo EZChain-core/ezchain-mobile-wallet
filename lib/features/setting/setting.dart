@@ -37,7 +37,7 @@ class SettingScreen extends StatelessWidget {
                     context.router.push(const SettingGeneralRoute()),
               ),
               SettingItem(
-                text: Strings.current.settingAboutRoi,
+                text: Strings.current.settingAboutEZC,
                 icon: Assets.icons.icQuestion.svg(),
                 onPressed: () => context.router.push(const SettingAboutRoute()),
               ),

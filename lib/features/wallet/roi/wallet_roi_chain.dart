@@ -57,9 +57,9 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen> with Automa
                         children: [
                           Observer(
                             builder: (_) => Text(
-                              '${walletRoiChainStore.totalRoi} ROI'
+                              '${walletRoiChainStore.totalRoi} EZC'
                                   .useCorrectEllipsis(),
-                              style: ROIHeadlineSmallTextStyle(
+                              style: EZCHeadlineSmallTextStyle(
                                   color: provider.themeMode.primary),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -69,7 +69,7 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen> with Automa
                             builder: (_) => Text(
                               '\$ ${walletRoiChainStore.totalUsd}'
                                   .useCorrectEllipsis(),
-                              style: ROITitleLargeTextStyle(
+                              style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.white),
                               maxLines: 1,
                               softWrap: false,
@@ -177,7 +177,7 @@ class _WalletButton extends StatelessWidget {
           onPressed: onPressed,
           label: Text(
             text,
-            style: ROITitleSmallTextStyle(color: provider.themeMode.text90),
+            style: EZCTitleSmallTextStyle(color: provider.themeMode.text90),
             textAlign: TextAlign.center,
           ),
           icon: icon,
@@ -233,7 +233,7 @@ class _WalletChainWidget extends StatelessWidget {
                 Text(
                   chain,
                   style:
-                      ROIHeadlineSmallTextStyle(color: provider.themeMode.text),
+                      EZCHeadlineSmallTextStyle(color: provider.themeMode.text),
                 ),
                 const Spacer(),
                 if (hasSend != false)
@@ -256,13 +256,13 @@ class _WalletChainWidget extends StatelessWidget {
               children: [
                 Text(
                   Strings.current.sharedAvailable,
-                  style: ROITitleMediumTextStyle(
+                  style: EZCTitleMediumTextStyle(
                       color: provider.themeMode.secondary60),
                 ),
                 Text(
-                  '$availableRoi ROI',
+                  '$availableRoi EZC',
                   style:
-                      ROITitleMediumTextStyle(color: provider.themeMode.text),
+                      EZCTitleMediumTextStyle(color: provider.themeMode.text),
                 ),
               ],
             ),
@@ -273,13 +273,13 @@ class _WalletChainWidget extends StatelessWidget {
                 children: [
                   Text(
                     Strings.current.sharedLock,
-                    style: ROITitleMediumTextStyle(
+                    style: EZCTitleMediumTextStyle(
                         color: provider.themeMode.secondary60),
                   ),
                   Text(
-                    '$lockRoi ROI',
+                    '$lockRoi EZC',
                     style:
-                        ROITitleMediumTextStyle(color: provider.themeMode.text),
+                        EZCTitleMediumTextStyle(color: provider.themeMode.text),
                   ),
                 ],
               ),
@@ -290,13 +290,13 @@ class _WalletChainWidget extends StatelessWidget {
                 children: [
                   Text(
                     Strings.current.sharedLockStakeable,
-                    style: ROITitleMediumTextStyle(
+                    style: EZCTitleMediumTextStyle(
                         color: provider.themeMode.secondary60),
                   ),
                   Text(
-                    '$lockStakeableRoi ROI',
+                    '$lockStakeableRoi EZC',
                     style:
-                        ROITitleMediumTextStyle(color: provider.themeMode.text),
+                        EZCTitleMediumTextStyle(color: provider.themeMode.text),
                   ),
                 ],
               ),

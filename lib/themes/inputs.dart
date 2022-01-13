@@ -10,9 +10,9 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-const roiBorder = BorderRadius.all(Radius.circular(8));
+const ezcBorder = BorderRadius.all(Radius.circular(8));
 
-class ROITextField extends StatefulWidget {
+class EZCTextField extends StatefulWidget {
   final String hint;
 
   final TextInputType? inputType;
@@ -33,7 +33,7 @@ class ROITextField extends StatefulWidget {
 
   final bool? enabled;
 
-  const ROITextField(
+  const EZCTextField(
       {Key? key,
       required this.hint,
       this.inputType,
@@ -48,10 +48,10 @@ class ROITextField extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ROITextField> createState() => _ROITextFieldState();
+  State<EZCTextField> createState() => _EZCTextFieldState();
 }
 
-class _ROITextFieldState extends State<ROITextField> {
+class _EZCTextFieldState extends State<EZCTextField> {
   bool _hasError = false;
 
   @override
@@ -90,7 +90,7 @@ class _ROITextFieldState extends State<ROITextField> {
                     alignment: Alignment.topLeft,
                     child: Text(
                       widget.label!,
-                      style: ROITitleLargeTextStyle(
+                      style: EZCTitleLargeTextStyle(
                           color: provider.themeMode.text60),
                     ),
                   ),
@@ -99,7 +99,7 @@ class _ROITextFieldState extends State<ROITextField> {
                     alignment: Alignment.bottomRight,
                     child: Text(
                       widget.error!,
-                      style: ROILabelMediumTextStyle(
+                      style: EZCLabelMediumTextStyle(
                           color: provider.themeMode.stateDanger),
                     ),
                   ),
@@ -107,7 +107,7 @@ class _ROITextFieldState extends State<ROITextField> {
             ),
             const SizedBox(height: 4),
             TextField(
-              style: ROIBodyLargeTextStyle(color: provider.themeMode.text),
+              style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
               enabled: widget.enabled,
               cursorColor: provider.themeMode.text,
               controller: widget.controller,
@@ -117,25 +117,25 @@ class _ROITextFieldState extends State<ROITextField> {
                 contentPadding: const EdgeInsets.all(12),
                 hintText: widget.hint,
                 hintStyle:
-                    ROIBodyLargeTextStyle(color: provider.themeMode.text40),
+                    EZCBodyLargeTextStyle(color: provider.themeMode.text40),
                 prefixIcon: widget.prefixIcon,
                 suffixIcon: widget.suffixIcon,
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: roiBorder,
+                  borderRadius: ezcBorder,
                   borderSide: BorderSide(
                       color: _hasError
                           ? provider.themeMode.red
                           : provider.themeMode.border),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: roiBorder,
+                  borderRadius: ezcBorder,
                   borderSide: BorderSide(
                       color: _hasError
                           ? provider.themeMode.red
                           : provider.themeMode.borderActive),
                 ),
                 disabledBorder: OutlineInputBorder(
-                  borderRadius: roiBorder,
+                  borderRadius: ezcBorder,
                   borderSide: BorderSide(color: provider.themeMode.border),
                 ),
               ),
@@ -149,7 +149,7 @@ class _ROITextFieldState extends State<ROITextField> {
   }
 }
 
-class ROIAmountTextField extends StatefulWidget {
+class EZCAmountTextField extends StatefulWidget {
   final String? hint;
 
   final TextInputType? inputType;
@@ -174,7 +174,7 @@ class ROIAmountTextField extends StatefulWidget {
 
   final bool? enabled;
 
-  const ROIAmountTextField(
+  const EZCAmountTextField(
       {Key? key,
       this.hint,
       this.inputType,
@@ -191,10 +191,10 @@ class ROIAmountTextField extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ROIAmountTextField> createState() => _ROIAmountTextFieldState();
+  State<EZCAmountTextField> createState() => _EZCAmountTextFieldState();
 }
 
-class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
+class _EZCAmountTextFieldState extends State<EZCAmountTextField> {
   double _usdValue = 0;
   bool _hasError = false;
 
@@ -237,14 +237,14 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
                 if (widget.label != null)
                   Text(
                     widget.label!,
-                    style: ROITitleLargeTextStyle(
+                    style: EZCTitleLargeTextStyle(
                         color: provider.themeMode.text60),
                   ),
                 const Spacer(),
                 if (_hasError)
                   Text(
                     widget.error!,
-                    style: ROILabelMediumTextStyle(
+                    style: EZCLabelMediumTextStyle(
                         color: provider.themeMode.stateDanger),
                   ),
               ],
@@ -254,7 +254,7 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
               height: 48,
               child: TextField(
                 enabled: widget.enabled,
-                style: ROITitleLargeTextStyle(color: provider.themeMode.text),
+                style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
                 cursorColor: provider.themeMode.text,
                 controller: widget.controller,
                 onChanged: widget.onChanged,
@@ -264,32 +264,32 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                   hintText: widget.hint,
                   hintStyle:
-                      ROITitleLargeTextStyle(color: provider.themeMode.text40),
+                      EZCTitleLargeTextStyle(color: provider.themeMode.text40),
                   suffixIcon: IconButton(
                     iconSize: 50,
                     icon: Text(
                       'MAX',
-                      style: ROITitleLargeTextStyle(
+                      style: EZCTitleLargeTextStyle(
                           color: provider.themeMode.text40),
                     ),
                     onPressed: widget.onSuffixPressed,
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: roiBorder,
+                    borderRadius: ezcBorder,
                     borderSide: BorderSide(
                         color: _hasError
                             ? provider.themeMode.red
                             : provider.themeMode.border),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: roiBorder,
+                    borderRadius: ezcBorder,
                     borderSide: BorderSide(
                         color: _hasError
                             ? provider.themeMode.red
                             : provider.themeMode.borderActive),
                   ),
                   disabledBorder: OutlineInputBorder(
-                    borderRadius: roiBorder,
+                    borderRadius: ezcBorder,
                     borderSide: BorderSide(color: provider.themeMode.border),
                   ),
                 ),
@@ -311,7 +311,7 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.fade,
                         softWrap: false,
-                        style: ROILabelMediumTextStyle(
+                        style: EZCLabelMediumTextStyle(
                             color: provider.themeMode.text60),
                       ),
                     ),
@@ -325,7 +325,7 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
                         softWrap: false,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.end,
-                        style: ROILabelMediumTextStyle(
+                        style: EZCLabelMediumTextStyle(
                             color: provider.themeMode.text60),
                       ),
                     ),
@@ -340,7 +340,7 @@ class _ROIAmountTextFieldState extends State<ROIAmountTextField> {
   }
 }
 
-class ROIAddressTextField extends StatelessWidget {
+class EZCAddressTextField extends StatelessWidget {
   final String? hint;
 
   final TextInputType? inputType;
@@ -355,7 +355,7 @@ class ROIAddressTextField extends StatelessWidget {
 
   final ValueChanged<String>? onChanged;
 
-  const ROIAddressTextField({
+  const EZCAddressTextField({
     Key? key,
     this.hint,
     this.inputType,
@@ -381,14 +381,14 @@ class ROIAddressTextField extends StatelessWidget {
                 if (label != null)
                   Text(
                     label!,
-                    style: ROITitleLargeTextStyle(
+                    style: EZCTitleLargeTextStyle(
                         color: provider.themeMode.text60),
                   ),
                 const Spacer(),
                 if (_hasError)
                   Text(
                     error!,
-                    style: ROILabelMediumTextStyle(
+                    style: EZCLabelMediumTextStyle(
                         color: provider.themeMode.stateDanger),
                   ),
               ],
@@ -397,7 +397,7 @@ class ROIAddressTextField extends StatelessWidget {
             SizedBox(
               height: 48,
               child: TextField(
-                style: ROITitleLargeTextStyle(color: provider.themeMode.text),
+                style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
                 cursorColor: provider.themeMode.text,
                 controller: controller,
                 onChanged: onChanged,
@@ -405,7 +405,7 @@ class ROIAddressTextField extends StatelessWidget {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                   hintText: hint,
                   hintStyle:
-                      ROITitleLargeTextStyle(color: provider.themeMode.text40),
+                      EZCTitleLargeTextStyle(color: provider.themeMode.text40),
                   suffixIcon: IconButton(
                     iconSize: 40,
                     icon: Row(
@@ -421,14 +421,14 @@ class ROIAddressTextField extends StatelessWidget {
                     onPressed: () {},
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: roiBorder,
+                    borderRadius: ezcBorder,
                     borderSide: BorderSide(
                         color: _hasError
                             ? provider.themeMode.red
                             : provider.themeMode.border),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: roiBorder,
+                    borderRadius: ezcBorder,
                     borderSide: BorderSide(
                         color: _hasError
                             ? provider.themeMode.red

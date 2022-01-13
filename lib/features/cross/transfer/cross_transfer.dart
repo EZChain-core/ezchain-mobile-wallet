@@ -44,12 +44,12 @@ class CrossTransferScreen extends StatelessWidget {
                           children: [
                             Text(
                               Strings.current.sharedSource,
-                              style: ROITitleLargeTextStyle(
+                              style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.text60),
                             ),
                             Text(
                               Strings.current.sharedBalance,
-                              style: ROITitleLargeTextStyle(
+                              style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.text60),
                             ),
                           ],
@@ -63,13 +63,13 @@ class CrossTransferScreen extends StatelessWidget {
                           children: [
                             Text(
                               crossStore.sourceChain.nameTwo,
-                              style: ROIBodyLargeTextStyle(
+                              style: EZCBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
                             Observer(
                               builder: (_) => Text(
                                 crossStore.sourceBalance,
-                                style: ROIBodyLargeTextStyle(
+                                style: EZCBodyLargeTextStyle(
                                     color: provider.themeMode.text),
                               ),
                             ),
@@ -83,7 +83,7 @@ class CrossTransferScreen extends StatelessWidget {
                           children: [
                             Text(
                               Strings.current.sharedExport,
-                              style: ROITitleLargeTextStyle(
+                              style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.text60),
                             ),
                             const SizedBox(width: 8),
@@ -115,28 +115,28 @@ class CrossTransferScreen extends StatelessWidget {
                           children: [
                             Text(
                               Strings.current.crossId,
-                              style: ROITitleSmallTextStyle(
+                              style: EZCTitleSmallTextStyle(
                                   color: provider.themeMode.text60),
                             ),
                             const SizedBox(height: 4),
                             Observer(
                               builder: (_) => Text(
                                 crossStore.exportTxId,
-                                style: ROIBodySmallTextStyle(
+                                style: EZCBodySmallTextStyle(
                                     color: provider.themeMode.text),
                               ),
                             ),
                             const SizedBox(height: 8),
                             Text(
                               Strings.current.crossStatus,
-                              style: ROITitleSmallTextStyle(
+                              style: EZCTitleSmallTextStyle(
                                   color: provider.themeMode.text60),
                             ),
                             const SizedBox(height: 4),
                             Observer(
                               builder: (_) => Text(
                                 crossStore.exportState.status(),
-                                style: ROIBodySmallTextStyle(
+                                style: EZCBodySmallTextStyle(
                                     color: provider.themeMode.text),
                               ),
                             ),
@@ -177,12 +177,12 @@ class CrossTransferScreen extends StatelessWidget {
                           children: [
                             Text(
                               Strings.current.sharedDestination,
-                              style: ROITitleLargeTextStyle(
+                              style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.text60),
                             ),
                             Text(
                               Strings.current.sharedBalance,
-                              style: ROITitleLargeTextStyle(
+                              style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.text60),
                             ),
                           ],
@@ -196,13 +196,13 @@ class CrossTransferScreen extends StatelessWidget {
                           children: [
                             Text(
                               crossStore.destinationChain.nameTwo,
-                              style: ROIBodyLargeTextStyle(
+                              style: EZCBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
                             Observer(
                               builder: (_) => Text(
                                 crossStore.destinationBalance,
-                                style: ROIBodyLargeTextStyle(
+                                style: EZCBodyLargeTextStyle(
                                     color: provider.themeMode.text),
                               ),
                             ),
@@ -216,7 +216,7 @@ class CrossTransferScreen extends StatelessWidget {
                           children: [
                             Text(
                               Strings.current.sharedImport,
-                              style: ROITitleLargeTextStyle(
+                              style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.text60),
                             ),
                             const SizedBox(width: 8),
@@ -248,28 +248,28 @@ class CrossTransferScreen extends StatelessWidget {
                           children: [
                             Text(
                               Strings.current.crossId,
-                              style: ROITitleSmallTextStyle(
+                              style: EZCTitleSmallTextStyle(
                                   color: provider.themeMode.text60),
                             ),
                             const SizedBox(height: 4),
                             Observer(
                               builder: (_) => Text(
                                 crossStore.importTxId,
-                                style: ROIBodySmallTextStyle(
+                                style: EZCBodySmallTextStyle(
                                     color: provider.themeMode.text),
                               ),
                             ),
                             const SizedBox(height: 8),
                             Text(
                               Strings.current.crossStatus,
-                              style: ROITitleSmallTextStyle(
+                              style: EZCTitleSmallTextStyle(
                                   color: provider.themeMode.text60),
                             ),
                             const SizedBox(height: 4),
                             Observer(
                               builder: (_) => Text(
                                 crossStore.importState.status(),
-                                style: ROIBodySmallTextStyle(
+                                style: EZCBodySmallTextStyle(
                                     color: provider.themeMode.text),
                               ),
                             ),
@@ -287,7 +287,7 @@ class CrossTransferScreen extends StatelessWidget {
                         const SizedBox(height: 40),
                         Text(
                           Strings.current.crossTransferring,
-                          style: ROIHeadlineSmallTextStyle(
+                          style: EZCHeadlineSmallTextStyle(
                               color: provider.themeMode.text),
                         ),
                       ],
@@ -297,18 +297,18 @@ class CrossTransferScreen extends StatelessWidget {
                         const SizedBox(height: 16),
                         Text(
                           Strings.current.crossTransferCompleted,
-                          style: ROIHeadlineSmallTextStyle(
+                          style: EZCHeadlineSmallTextStyle(
                               color: provider.themeMode.text),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           Strings.current.crossTransferCompletedDes,
                           textAlign: TextAlign.center,
-                          style: ROIBodyMediumTextStyle(
+                          style: EZCBodyMediumTextStyle(
                               color: provider.themeMode.stateSuccess),
                         ),
                         const SizedBox(height: 8),
-                        ROIMediumSuccessButton(
+                        EZCMediumSuccessButton(
                           text: Strings.current.sharedStartAgain,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 64,
@@ -325,18 +325,18 @@ class CrossTransferScreen extends StatelessWidget {
                         const SizedBox(height: 16),
                         Text(
                           Strings.current.crossTransferIncomplete,
-                          style: ROIHeadlineSmallTextStyle(
+                          style: EZCHeadlineSmallTextStyle(
                               color: provider.themeMode.text),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           Strings.current.crossTransferWrong,
                           textAlign: TextAlign.center,
-                          style: ROIBodyMediumTextStyle(
+                          style: EZCBodyMediumTextStyle(
                               color: provider.themeMode.stateDanger),
                         ),
                         const SizedBox(height: 8),
-                        ROIMediumPrimaryButton(
+                        EZCMediumPrimaryButton(
                           text: Strings.current.sharedStartAgain,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 64,

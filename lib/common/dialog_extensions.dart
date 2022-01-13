@@ -5,7 +5,7 @@ extension DialogExtensions on BuildContext {
   void showWarningDialog(Widget image, String content) {
     showDialog(
       context: this,
-      builder: (_) => ROIWarningDialog(image: image, content: content),
+      builder: (_) => EZCWarningDialog(image: image, content: content),
     );
   }
 }

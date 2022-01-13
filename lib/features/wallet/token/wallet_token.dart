@@ -30,14 +30,14 @@ class WalletTokenScreen extends StatelessWidget {
                 const SizedBox(width: 16),
                 Text(
                   Strings.current.sharedBalance,
-                  style: ROIHeadlineSmallTextStyle(
+                  style: EZCHeadlineSmallTextStyle(
                       color: provider.themeMode.white),
                 ),
                 Expanded(
                   child: Text(
                     r'$ 4.000.000',
                     textAlign: TextAlign.end,
-                    style: ROIHeadlineSmallTextStyle(
+                    style: EZCHeadlineSmallTextStyle(
                         color: provider.themeMode.primary),
                   ),
                 ),
@@ -50,7 +50,7 @@ class WalletTokenScreen extends StatelessWidget {
               child: Text(
                 Strings.current.sharedToken,
                 style:
-                    ROIHeadlineSmallTextStyle(color: provider.themeMode.text),
+                    EZCHeadlineSmallTextStyle(color: provider.themeMode.text),
               ),
             ),
             Expanded(
@@ -81,7 +81,7 @@ class _WalletTokenItem extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            ROICircleImage(src: token.logo, size: 48),
+            EZCCircleImage(src: token.logo, size: 48),
             const SizedBox(width: 8),
             Expanded(
               child: Column(
@@ -91,12 +91,12 @@ class _WalletTokenItem extends StatelessWidget {
                     children: [
                       Text(
                         token.name,
-                        style: ROIBodyLargeTextStyle(
+                        style: EZCBodyLargeTextStyle(
                           color: provider.themeMode.text,
                         ),
                       ),
                       const SizedBox(width: 8),
-                      ROIChainLabelText(text: token.type)
+                      EZCChainLabelText(text: token.type)
                     ],
                   ),
                   const SizedBox(height: 4),
@@ -104,13 +104,13 @@ class _WalletTokenItem extends StatelessWidget {
                     children: [
                       Text(
                         '\$${token.price}',
-                        style: ROITitleSmallTextStyle(
+                        style: EZCTitleSmallTextStyle(
                             color: provider.themeMode.text50),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         token.rateString,
-                        style: ROITitleSmallTextStyle(
+                        style: EZCTitleSmallTextStyle(
                             color: token.isGainer
                                 ? provider.themeMode.stateSuccess
                                 : provider.themeMode.stateDanger),
@@ -125,13 +125,13 @@ class _WalletTokenItem extends StatelessWidget {
               children: [
                 Text(
                   token.quantityString,
-                  style: ROIBodyLargeTextStyle(color: provider.themeMode.text),
+                  style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   token.totalPrice,
                   style:
-                      ROITitleSmallTextStyle(color: provider.themeMode.text50),
+                      EZCTitleSmallTextStyle(color: provider.themeMode.text50),
                 ),
               ],
             ),

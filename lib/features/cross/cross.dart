@@ -78,9 +78,9 @@ class _CrossScreenState extends State<CrossScreen> {
                     Assets.icons.icRoi.svg(),
                     const SizedBox(width: 8),
                     Text(
-                      'ROI',
+                      'EZC',
                       style:
-                          ROIBodyLargeTextStyle(color: provider.themeMode.text),
+                          EZCBodyLargeTextStyle(color: provider.themeMode.text),
                     ),
                   ],
                 ),
@@ -95,7 +95,7 @@ class _CrossScreenState extends State<CrossScreen> {
                       Padding(
                         padding: const EdgeInsets.all(16),
                         child: Observer(
-                          builder: (_) => ROIDropdown<CrossChainType>(
+                          builder: (_) => EZCDropdown<CrossChainType>(
                             label: Strings.current.sharedSource,
                             items: CrossChainType.values,
                             onChanged: (type) {
@@ -110,7 +110,7 @@ class _CrossScreenState extends State<CrossScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Observer(
-                          builder: (_) => ROIAmountTextField(
+                          builder: (_) => EZCAmountTextField(
                             label: Strings.current.sharedAmount,
                             backgroundColor: provider.themeMode.white,
                             hint: '0.0',
@@ -161,7 +161,7 @@ class _CrossScreenState extends State<CrossScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Observer(
-                          builder: (_) => ROIDropdown<CrossChainType>(
+                          builder: (_) => EZCDropdown<CrossChainType>(
                             label: Strings.current.sharedDestination,
                             items: crossStore.destinationList,
                             parseString: (type) => type.name,
@@ -184,7 +184,7 @@ class _CrossScreenState extends State<CrossScreen> {
                             maxLines: 1,
                             overflow: TextOverflow.fade,
                             textAlign: TextAlign.end,
-                            style: ROILabelMediumTextStyle(
+                            style: EZCLabelMediumTextStyle(
                                 color: provider.themeMode.text60),
                           ),
                         ),
@@ -200,16 +200,16 @@ class _CrossScreenState extends State<CrossScreen> {
                     children: [
                       Text(
                         Strings.current.crossFee,
-                        style: ROITitleLargeTextStyle(
+                        style: EZCTitleLargeTextStyle(
                             color: provider.themeMode.text60),
                       ),
                       const SizedBox(width: 6),
                       Expanded(
                         child: Observer(
                           builder: (_) => Text(
-                            '${crossStore.fee} AVAX',
+                            '${crossStore.fee} EZC',
                             textAlign: TextAlign.end,
-                            style: ROITitleLargeTextStyle(
+                            style: EZCTitleLargeTextStyle(
                                 color: provider.themeMode.text60),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -220,14 +220,14 @@ class _CrossScreenState extends State<CrossScreen> {
                 ),
                 const SizedBox(height: 87),
                 if (!crossStore.isConfirm)
-                  ROIMediumPrimaryButton(
+                  EZCMediumPrimaryButton(
                     text: Strings.current.sharedConfirm,
                     width: 185,
                     padding: const EdgeInsets.symmetric(),
                     onPressed: _onClickConfirm,
                   ),
                 if (crossStore.isConfirm) ...[
-                  ROIMediumSuccessButton(
+                  EZCMediumSuccessButton(
                     text: Strings.current.sharedTransfer,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 64,
@@ -236,7 +236,7 @@ class _CrossScreenState extends State<CrossScreen> {
                     onPressed: _onClickTransfer,
                   ),
                   const SizedBox(height: 4),
-                  ROIMediumNoneButton(
+                  EZCMediumNoneButton(
                     width: 82,
                     text: Strings.current.sharedCancel,
                     textColor: provider.themeMode.text90,

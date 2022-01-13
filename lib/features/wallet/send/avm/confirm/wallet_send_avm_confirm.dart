@@ -43,7 +43,7 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              ROIAppBar(
+              EZCAppBar(
                 title: Strings.current.sharedSend,
                 onPressed: () {
                   context.router.replaceAll([const DashboardRoute()]);
@@ -59,12 +59,12 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                           Assets.icons.icRoi.svg(),
                           const SizedBox(width: 8),
                           Text(
-                            'ROI',
-                            style: ROIBodyLargeTextStyle(
+                            'EZC',
+                            style: EZCBodyLargeTextStyle(
                                 color: provider.themeMode.text),
                           ),
                           const SizedBox(width: 16),
-                          const ROIChainLabelText(text: 'X-Chain'),
+                          const EZCChainLabelText(text: 'X-Chain'),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -95,7 +95,7 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                         content: '${transactionInfo.fee} ROI',
                       ),
                       const SizedBox(height: 8),
-                      ROIDashedLine(color: provider.themeMode.text10),
+                      EZCDashedLine(color: provider.themeMode.text10),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedTotal,
@@ -112,12 +112,12 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                                 padding: const EdgeInsets.only(bottom: 10),
                                 child: Text(
                                   Strings.current.sharedTransactionSent,
-                                  style: ROIBodyMediumTextStyle(
+                                  style: EZCBodyMediumTextStyle(
                                       color: provider.themeMode.stateSuccess),
                                 ),
                               ),
                             walletSendAvmStore.sendSuccess
-                                ? ROIMediumSuccessButton(
+                                ? EZCMediumSuccessButton(
                                     text: Strings.current.sharedStartAgain,
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 64,
@@ -129,7 +129,7 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                                           const WalletSendAvmRoute());
                                     },
                                   )
-                                : ROIMediumSuccessButton(
+                                : EZCMediumSuccessButton(
                                     text: Strings.current.sharedSendTransaction,
                                     width: 251,
                                     onPressed: _onClickSendTransaction,
@@ -137,7 +137,7 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                                   ),
                             const SizedBox(height: 4),
                             if (!walletSendAvmStore.sendSuccess)
-                              ROIMediumNoneButton(
+                              EZCMediumNoneButton(
                                 width: 82,
                                 text: Strings.current.sharedCancel,
                                 textColor: provider.themeMode.text90,

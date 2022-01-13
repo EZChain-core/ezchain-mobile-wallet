@@ -31,7 +31,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                   padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
                   child: Text(
                     Strings.current.accessWalletOptionsTitle,
-                    style: ROIHeadlineMediumTextStyle(
+                    style: EZCHeadlineMediumTextStyle(
                       color: provider.themeMode.text,
                     ),
                   ),
@@ -60,7 +60,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                             Expanded(
                               child: Text(
                                 Strings.current.sharedPrivateKey,
-                                style: ROIBodyLargeTextStyle(
+                                style: EZCBodyLargeTextStyle(
                                     color: provider.themeMode.text),
                               ),
                             ),
@@ -94,7 +94,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                             Expanded(
                               child: Text(
                                 Strings.current.accessWalletOptionsMnemonic,
-                                style: ROIBodyLargeTextStyle(
+                                style: EZCBodyLargeTextStyle(
                                     color: provider.themeMode.text),
                               ),
                             ),
@@ -115,7 +115,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: ROIBodyLargeNoneButton(
+                        child: EZCBodyLargeNoneButton(
                           text:
                               Strings.current.accessWalletOptionsDontHaveWallet,
                           onPressed: () {
@@ -128,7 +128,7 @@ class _AccessWalletOptionsScreenState extends State<AccessWalletOptionsScreen> {
                       alignment: Alignment.centerRight,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: ROIBodyLargeNoneButton(
+                        child: EZCBodyLargeNoneButton(
                           text: Strings.current.sharedCancel,
                           onPressed: () {
                             context.router.pop();

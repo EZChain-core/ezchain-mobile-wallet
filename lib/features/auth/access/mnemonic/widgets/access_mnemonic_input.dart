@@ -70,7 +70,7 @@ class _AccessMnemonicInputState extends State<AccessMnemonicInput> {
     List<Widget> _buildList() {
       var phraseWidgets = <Widget>[];
       _phrase.forEachIndexed((index, word) {
-        phraseWidgets.add(ROIMnemonicText(text: '${index + 1}. $word'));
+        phraseWidgets.add(EZCMnemonicText(text: '${index + 1}. $word'));
       });
       phraseWidgets.add(_MnemonicTextField(
         controller: _inputController,
@@ -120,7 +120,7 @@ class _MnemonicTextField extends StatelessWidget {
         height: 32,
         child: TextField(
           textAlignVertical: TextAlignVertical.center,
-          style: ROIBodySmallTextStyle(color: provider.themeMode.text),
+          style: EZCBodySmallTextStyle(color: provider.themeMode.text),
           cursorColor: provider.themeMode.text,
           controller: controller,
           decoration: const InputDecoration(

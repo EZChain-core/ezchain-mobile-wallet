@@ -72,7 +72,7 @@ class WalletSendEvmScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ROIAppBar(
+              EZCAppBar(
                 title: Strings.current.sharedSend,
                 onPressed: () {
                   context.router.pop();
@@ -89,17 +89,17 @@ class WalletSendEvmScreen extends StatelessWidget {
                             Assets.icons.icRoi.svg(),
                             const SizedBox(width: 8),
                             Text(
-                              'ROI',
-                              style: ROIBodyLargeTextStyle(
+                              'EZC',
+                              style: EZCBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
                             const SizedBox(width: 16),
-                            const ROIChainLabelText(text: 'C-Chain'),
+                            const EZCChainLabelText(text: 'C-Chain'),
                           ],
                         ),
                         const SizedBox(height: 16),
                         Observer(
-                          builder: (_) => ROIAddressTextField(
+                          builder: (_) => EZCAddressTextField(
                             label: Strings.current.sharedSendTo,
                             hint: Strings.current.sharedPasteAddress,
                             controller: addressController,
@@ -110,7 +110,7 @@ class WalletSendEvmScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         Observer(
-                          builder: (_) => ROIAmountTextField(
+                          builder: (_) => EZCAmountTextField(
                             label: Strings.current.sharedSetAmount,
                             hint: '0.0',
                             suffixText: Strings.current
@@ -129,7 +129,7 @@ class WalletSendEvmScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         Observer(
-                          builder: (_) => ROITextField(
+                          builder: (_) => EZCTextField(
                             label: Strings.current.walletSendGasPriceGWEI,
                             hint: '0',
                             enabled: false,
@@ -142,7 +142,7 @@ class WalletSendEvmScreen extends StatelessWidget {
                           width: double.infinity,
                           child: Text(
                             Strings.current.walletSendGasPriceNote,
-                            style: ROILabelMediumTextStyle(
+                            style: EZCLabelMediumTextStyle(
                                 color: provider.themeMode.text40),
                           ),
                         ),
@@ -154,18 +154,18 @@ class WalletSendEvmScreen extends StatelessWidget {
                               if (!walletSendEvmStore.confirmSuccess) ...[
                                 Text(
                                   Strings.current.walletSendGasLimit,
-                                  style: ROITitleLargeTextStyle(
+                                  style: EZCTitleLargeTextStyle(
                                       color: provider.themeMode.text60),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   Strings.current.walletSendGasLimitNote,
-                                  style: ROILabelMediumTextStyle(
+                                  style: EZCLabelMediumTextStyle(
                                       color: provider.themeMode.text40),
                                 ),
                               ],
                               if (walletSendEvmStore.confirmSuccess)
-                                ROITextField(
+                                EZCTextField(
                                   label: Strings.current.walletSendGasLimit,
                                   hint: '0',
                                   enabled: false,
@@ -180,20 +180,20 @@ class WalletSendEvmScreen extends StatelessWidget {
                         Observer(
                           builder: (_) => WalletSendHorizontalText(
                             title: Strings.current.sharedTransactionFee,
-                            content: '${walletSendEvmStore.fee} ROI',
+                            content: '${walletSendEvmStore.fee} EZC',
                             rightColor: provider.themeMode.text60,
                           ),
                         ),
                         const SizedBox(height: 100),
                         Observer(
                           builder: (_) => walletSendEvmStore.confirmSuccess
-                              ? ROIMediumSuccessButton(
+                              ? EZCMediumSuccessButton(
                                   text: Strings.current.sharedSendTransaction,
                                   width: 251,
                                   onPressed: _onClickSendTransaction,
                                   isLoading: walletSendEvmStore.isLoading,
                                 )
-                              : ROIMediumPrimaryButton(
+                              : EZCMediumPrimaryButton(
                                   text: Strings.current.sharedConfirm,
                                   width: 185,
                                   padding: const EdgeInsets.symmetric(),

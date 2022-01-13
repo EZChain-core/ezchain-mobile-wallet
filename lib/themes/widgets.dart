@@ -5,11 +5,11 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-class ROIAppBar extends StatelessWidget {
+class EZCAppBar extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const ROIAppBar({Key? key, required this.title, required this.onPressed})
+  const EZCAppBar({Key? key, required this.title, required this.onPressed})
       : super(key: key);
 
   @override
@@ -28,7 +28,7 @@ class ROIAppBar extends StatelessWidget {
             ),
             Text(
               title,
-              style: ROITitleLargeTextStyle(color: provider.themeMode.white),
+              style: EZCTitleLargeTextStyle(color: provider.themeMode.white),
             )
           ],
         ),
@@ -37,10 +37,10 @@ class ROIAppBar extends StatelessWidget {
   }
 }
 
-class ROIDashedLine extends StatelessWidget {
+class EZCDashedLine extends StatelessWidget {
   final Color color;
 
-  const ROIDashedLine({Key? key, required this.color}) : super(key: key);
+  const EZCDashedLine({Key? key, required this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class ROIDashedLine extends StatelessWidget {
       builder: (context, provider, child) => SizedBox(
         width: double.infinity,
         child: CustomPaint(
-          painter: ROIDashedLinePainter(color),
+          painter: EZCDashedLinePainter(color),
           size: Size(MediaQuery.of(context).size.width, 10),
         ),
       ),
@@ -56,10 +56,10 @@ class ROIDashedLine extends StatelessWidget {
   }
 }
 
-class ROIDashedLinePainter extends CustomPainter {
+class EZCDashedLinePainter extends CustomPainter {
   final Color color;
 
-  ROIDashedLinePainter(this.color);
+  EZCDashedLinePainter(this.color);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -82,7 +82,7 @@ class ROIDashedLinePainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
 
-class ROIDropdown<T> extends StatefulWidget {
+class EZCDropdown<T> extends StatefulWidget {
   final String? label;
 
   final List<T> items;
@@ -95,7 +95,7 @@ class ROIDropdown<T> extends StatefulWidget {
 
   final String Function(T t) parseString;
 
-  ROIDropdown(
+  EZCDropdown(
       {Key? key,
       this.label,
       required this.items,
@@ -106,10 +106,10 @@ class ROIDropdown<T> extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ROIDropdown> createState() => _ROIDropdownState<T>();
+  State<EZCDropdown> createState() => _EZCDropdownState<T>();
 }
 
-class _ROIDropdownState<T> extends State<ROIDropdown<T>> {
+class _EZCDropdownState<T> extends State<EZCDropdown<T>> {
   @override
   void initState() {
     if (widget.initValue == null && widget.items.isNotEmpty) {
@@ -129,7 +129,7 @@ class _ROIDropdownState<T> extends State<ROIDropdown<T>> {
             if (widget.label != null)
               Text(
                 widget.label!,
-                style: ROITitleLargeTextStyle(color: provider.themeMode.text60),
+                style: EZCTitleLargeTextStyle(color: provider.themeMode.text60),
               ),
             const SizedBox(height: 4),
             Container(
@@ -149,7 +149,7 @@ class _ROIDropdownState<T> extends State<ROIDropdown<T>> {
                         value: item,
                         child: Text(
                           widget.parseString(item),
-                          style: ROIBodyLargeTextStyle(
+                          style: EZCBodyLargeTextStyle(
                               color: provider.themeMode.text),
                         ),
                       ),

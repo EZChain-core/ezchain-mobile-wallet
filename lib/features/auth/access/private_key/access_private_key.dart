@@ -35,7 +35,7 @@ class AccessPrivateKeyScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
                   child: Text(
                     Strings.current.sharedPrivateKey,
-                    style: ROIHeadlineMediumTextStyle(
+                    style: EZCHeadlineMediumTextStyle(
                       color: provider.themeMode.text,
                     ),
                   ),
@@ -47,7 +47,7 @@ class AccessPrivateKeyScreen extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: ROITextField(
+                      child: EZCTextField(
                         hint:
                             Strings.current.accessPrivateKeyYourPrivateKeyHint,
                         label: Strings.current.accessPrivateKeyYourPrivateKey,
@@ -62,7 +62,7 @@ class AccessPrivateKeyScreen extends StatelessWidget {
                           child: Container(
                             width: 164,
                             padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: ROIMediumPrimaryButton(
+                            child: EZCMediumPrimaryButton(
                               text: Strings.current.sharedAccessWallet,
                               onPressed: () {
                                 _onClickAccess();
@@ -74,7 +74,7 @@ class AccessPrivateKeyScreen extends StatelessWidget {
                           alignment: Alignment.centerRight,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: ROIBodyLargeNoneButton(
+                            child: EZCBodyLargeNoneButton(
                               text: Strings.current.sharedCancel,
                               onPressed: () {
                                 context.router.pop();
