@@ -6,6 +6,7 @@ import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
 
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
@@ -36,13 +37,15 @@ class SingletonWallet extends WalletProvider implements UnsafeWallet {
 
   static SingletonWallet? access(String key) {
     try {
-      return SingletonWallet.fromEvmKey(key);
-    } catch (e) {
-      try {
+      if (key.startsWith(privateKeyPrefix)) {
         return SingletonWallet(privateKey: key);
-      } catch (e) {
+      } else if (key.startsWith(evmPrivateKeyPrefix)) {
+        return SingletonWallet.fromEvmKey(key);
+      } else {
         return null;
       }
+    } catch (e) {
+      return null;
     }
   }
 

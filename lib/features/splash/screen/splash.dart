@@ -77,12 +77,16 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   navigate() async {
-    if(await _walletFactory.isExpired()) {
+    if (await _walletFactory.isExpired()) {
       _walletFactory.clear();
       context.router.replaceAll([const OnBoardRoute()]);
     } else {
-      _walletFactory.initWallet();
-      context.router.replaceAll([const DashboardRoute()]);
+      final result = await _walletFactory.initWallet();
+      if (result) {
+        context.router.replaceAll([const DashboardRoute()]);
+      } else {
+        context.router.replaceAll([const OnBoardRoute()]);
+      }
     }
   }
 
