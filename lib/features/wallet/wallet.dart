@@ -40,14 +40,14 @@ class WalletScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                         color: provider.themeMode.secondary,
                       ),
-                      labelStyle: ROITitleLargeTextStyle(
+                      labelStyle: EZCTitleLargeTextStyle(
                           color: provider.themeMode.primary),
                       labelColor: provider.themeMode.primary,
-                      unselectedLabelStyle: ROITitleLargeTextStyle(
+                      unselectedLabelStyle: EZCTitleLargeTextStyle(
                           color: provider.themeMode.secondary60),
                       unselectedLabelColor: provider.themeMode.secondary60,
                       tabs: [
-                        Tab(text: Strings.current.sharedROIChain),
+                        Tab(text: Strings.current.sharedEZChain),
                         Tab(text: Strings.current.sharedToken),
                       ],
                     ),

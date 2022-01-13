@@ -22,7 +22,7 @@ class SettingGeneralScreen extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              ROIAppBar(
+              EZCAppBar(
                 title: Strings.current.settingGeneral,
                 onPressed: () {
                   context.router.pop();

@@ -4,12 +4,12 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-const roiButtonRadius = 8.0;
-const roiButtonMediumHeight = 40.0;
-const EdgeInsetsGeometry roiButtonMediumPadding =
+const ezcButtonRadius = 8.0;
+const ezcButtonMediumHeight = 40.0;
+const EdgeInsetsGeometry ezcButtonMediumPadding =
     EdgeInsets.only(left: 0, top: 8, right: 0, bottom: 8);
 
-class ROIButton extends StatelessWidget {
+class EZCButton extends StatelessWidget {
   final double height;
 
   final String text;
@@ -22,7 +22,7 @@ class ROIButton extends StatelessWidget {
 
   final VoidCallback? onLongPress;
 
-  const ROIButton(
+  const EZCButton(
       {required this.height,
       required this.text,
       required this.textStyle,
@@ -46,7 +46,7 @@ class ROIButton extends StatelessWidget {
   }
 }
 
-class ROIMediumPrimaryButton extends StatelessWidget {
+class EZCMediumPrimaryButton extends StatelessWidget {
   final String text;
 
   final double? width;
@@ -57,7 +57,7 @@ class ROIMediumPrimaryButton extends StatelessWidget {
 
   final VoidCallback? onLongPress;
 
-  const ROIMediumPrimaryButton(
+  const EZCMediumPrimaryButton(
       {required this.text,
       this.onPressed,
       this.onLongPress,
@@ -68,15 +68,15 @@ class ROIMediumPrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
-        height: roiButtonMediumHeight,
+        height: ezcButtonMediumHeight,
         width: width,
         child: TextButton(
           child: Text(text,
               textAlign: TextAlign.center,
-              style: ROIButtonTextStyle(color: provider.themeMode.text90)),
-          style: ROIButtonStyle(
+              style: EZCButtonTextStyle(color: provider.themeMode.text90)),
+          style: EZCButtonStyle(
               bgColor: provider.themeMode.primary,
-              buttonPadding: padding ?? roiButtonMediumPadding),
+              buttonPadding: padding ?? ezcButtonMediumPadding),
           onPressed: onPressed,
           onLongPress: onLongPress,
         ),
@@ -85,7 +85,7 @@ class ROIMediumPrimaryButton extends StatelessWidget {
   }
 }
 
-class ROIMediumSuccessButton extends StatelessWidget {
+class EZCMediumSuccessButton extends StatelessWidget {
   final String text;
 
   final double? width;
@@ -98,7 +98,7 @@ class ROIMediumSuccessButton extends StatelessWidget {
 
   final bool? isLoading;
 
-  const ROIMediumSuccessButton(
+  const EZCMediumSuccessButton(
       {required this.text,
       this.onPressed,
       this.onLongPress,
@@ -110,23 +110,23 @@ class ROIMediumSuccessButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
-        height: roiButtonMediumHeight,
+        height: ezcButtonMediumHeight,
         width: width,
         child: TextButton(
           child: isLoading == true
               ? SizedBox(
-                  width: roiButtonMediumHeight - 20,
-                  height: roiButtonMediumHeight - 20,
+                  width: ezcButtonMediumHeight - 20,
+                  height: ezcButtonMediumHeight - 20,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     color: provider.themeMode.white,
                   ))
               : Text(text,
                   textAlign: TextAlign.center,
-                  style: ROIButtonTextStyle(color: provider.themeMode.white)),
-          style: ROIButtonStyle(
+                  style: EZCButtonTextStyle(color: provider.themeMode.white)),
+          style: EZCButtonStyle(
               bgColor: provider.themeMode.stateSuccess,
-              buttonPadding: padding ?? roiButtonMediumPadding),
+              buttonPadding: padding ?? ezcButtonMediumPadding),
           onPressed: isLoading == true ? null : onPressed,
           onLongPress: isLoading == true ? null : onLongPress,
 
@@ -136,7 +136,7 @@ class ROIMediumSuccessButton extends StatelessWidget {
   }
 }
 
-class ROIMediumNoneButton extends StatelessWidget {
+class EZCMediumNoneButton extends StatelessWidget {
   final String text;
 
   final Color? textColor;
@@ -151,7 +151,7 @@ class ROIMediumNoneButton extends StatelessWidget {
 
   final VoidCallback? onLongPress;
 
-  const ROIMediumNoneButton(
+  const EZCMediumNoneButton(
       {required this.text,
       this.iconLeft,
       this.onPressed,
@@ -164,7 +164,7 @@ class ROIMediumNoneButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
         builder: (context, provider, child) => SizedBox(
-              height: roiButtonMediumHeight,
+              height: ezcButtonMediumHeight,
               width: width,
               child: TextButton(
                 child: Row(
@@ -174,15 +174,15 @@ class ROIMediumNoneButton extends StatelessWidget {
                     if (iconLeft != null) const SizedBox(width: 8),
                     Text(
                       text,
-                      style: ROIButtonTextStyle(
+                      style: EZCButtonTextStyle(
                           color: textColor ?? provider.themeMode.primary),
                       textAlign: TextAlign.center,
                     ),
                   ],
                 ),
-                style: ROIButtonStyle(
+                style: EZCButtonStyle(
                     bgColor: Colors.transparent,
-                    buttonPadding: padding ?? roiButtonMediumPadding),
+                    buttonPadding: padding ?? ezcButtonMediumPadding),
                 onPressed: onPressed,
                 onLongPress: onLongPress,
               ),
@@ -190,28 +190,28 @@ class ROIMediumNoneButton extends StatelessWidget {
   }
 }
 
-class ROIBodyLargeNoneButton extends StatelessWidget {
+class EZCBodyLargeNoneButton extends StatelessWidget {
   final String text;
 
   final VoidCallback? onPressed;
 
   final VoidCallback? onLongPress;
 
-  const ROIBodyLargeNoneButton(
+  const EZCBodyLargeNoneButton(
       {required this.text, this.onPressed, this.onLongPress});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
         builder: (context, provider, child) => SizedBox(
-              height: roiButtonMediumHeight,
+              height: ezcButtonMediumHeight,
               child: TextButton(
                 child: Text(text,
-                    style: ROIBodyLargeTextStyle(
+                    style: EZCBodyLargeTextStyle(
                         color: provider.themeMode.primary)),
-                style: ROIButtonStyle(
+                style: EZCButtonStyle(
                     bgColor: Colors.transparent,
-                    buttonPadding: roiButtonMediumPadding),
+                    buttonPadding: ezcButtonMediumPadding),
                 onPressed: onPressed,
                 onLongPress: onLongPress,
               ),
@@ -219,12 +219,12 @@ class ROIBodyLargeNoneButton extends StatelessWidget {
   }
 }
 
-class ROIButtonStyle extends ButtonStyle {
+class EZCButtonStyle extends ButtonStyle {
   final Color bgColor;
 
   final EdgeInsetsGeometry buttonPadding;
 
-  ROIButtonStyle({required this.bgColor, required this.buttonPadding})
+  EZCButtonStyle({required this.bgColor, required this.buttonPadding})
       : super(
           enableFeedback: false,
           padding:
@@ -232,7 +232,7 @@ class ROIButtonStyle extends ButtonStyle {
           backgroundColor: ButtonStyleButton.allOrNull<Color>(bgColor),
           shape: ButtonStyleButton.allOrNull<OutlinedBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(roiButtonRadius),
+              borderRadius: BorderRadius.circular(ezcButtonRadius),
             ),
           ),
         );

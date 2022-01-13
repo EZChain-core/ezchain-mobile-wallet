@@ -32,7 +32,7 @@ class _PinCodeConfirmScreenState extends State<PinCodeConfirmScreen> {
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
                 child: Text(
                   Strings.current.sharedConfirm,
-                  style: ROIHeadlineMediumTextStyle(
+                  style: EZCHeadlineMediumTextStyle(
                     color: provider.themeMode.text,
                   ),
                 ),
@@ -49,14 +49,14 @@ class _PinCodeConfirmScreenState extends State<PinCodeConfirmScreen> {
                           children: [
                             Text(
                               Strings.current.pinCodeWrong,
-                              style: ROIBodyMediumTextStyle(
+                              style: EZCBodyMediumTextStyle(
                                 color: provider.themeMode.red,
                               ),
                             ),
                             TextButton(
                               child: Text(
                                 Strings.current.pinCodeSetNewPin,
-                                style: ROIBodyMediumTextStyle(
+                                style: EZCBodyMediumTextStyle(
                                         color: provider.themeMode.primary)
                                     .copyWith(
                                         decoration: TextDecoration.underline),

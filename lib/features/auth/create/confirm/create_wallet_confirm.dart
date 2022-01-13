@@ -41,7 +41,7 @@ class CreateWalletConfirmScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
                 child: Text(
                   Strings.current.sharedConfirm,
-                  style: ROIHeadlineMediumTextStyle(
+                  style: EZCHeadlineMediumTextStyle(
                     color: provider.themeMode.text,
                   ),
                 ),
@@ -50,7 +50,7 @@ class CreateWalletConfirmScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
                 child: Text(
                   Strings.current.createWalletConfirmDes,
-                  style: ROIBodyLargeTextStyle(
+                  style: EZCBodyLargeTextStyle(
                     color: provider.themeMode.text70,
                   ),
                 ),
@@ -78,7 +78,7 @@ class CreateWalletConfirmScreen extends StatelessWidget {
                 child: Center(
                   child: SizedBox(
                     width: 169,
-                    child: ROIMediumPrimaryButton(
+                    child: EZCMediumPrimaryButton(
                       text: Strings.current.sharedConfirm,
                       onPressed: () {
                         _onClickConfirm();
@@ -104,7 +104,7 @@ class CreateWalletConfirmScreen extends StatelessWidget {
                   resultPhrase.insert(index, word);
                 },
               )
-            : ROIMnemonicText(text: '${index + 1}. $text'))
+            : EZCMnemonicText(text: '${index + 1}. $text'))
         .toList();
   }
 
@@ -151,7 +151,7 @@ class _MnemonicConfirmTextField extends StatelessWidget {
           children: [
             Text(
               '${index + 1}. ',
-              style: ROISemiBoldSmallTextStyle(color: provider.themeMode.white),
+              style: EZCSemiBoldSmallTextStyle(color: provider.themeMode.white),
             ),
             Expanded(
               child: TextField(
@@ -159,7 +159,7 @@ class _MnemonicConfirmTextField extends StatelessWidget {
                   onChanged(text);
                 },
                 textAlignVertical: TextAlignVertical.center,
-                style: ROIBodySmallTextStyle(color: provider.themeMode.white),
+                style: EZCBodySmallTextStyle(color: provider.themeMode.white),
                 cursorColor: provider.themeMode.white,
                 decoration: const InputDecoration(
                   contentPadding: EdgeInsets.zero,

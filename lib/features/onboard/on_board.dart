@@ -92,7 +92,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
               children: [
                 SizedBox(
                   width: 164,
-                  child: ROIMediumPrimaryButton(
+                  child: EZCMediumPrimaryButton(
                     text: Strings.current.sharedAccessWallet,
                     onPressed: () {
                       context.router.push(const AccessWalletOptionsRoute());
@@ -102,7 +102,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                 const SizedBox(height: 4),
                 SizedBox(
                   width: 164,
-                  child: ROIMediumNoneButton(
+                  child: EZCMediumNoneButton(
                     text: Strings.current.onBoardCreateWallet,
                     onPressed: () {
                       context.router.push(CreateWalletRoute());

@@ -21,7 +21,7 @@ class SettingSecurityScreen extends StatelessWidget {
           body: SafeArea(
             child: Column(
               children: [
-                ROIAppBar(
+                EZCAppBar(
                   title: Strings.current.settingWalletSecurity,
                   onPressed: () {
                     context.router.pop();
@@ -37,7 +37,7 @@ class SettingSecurityScreen extends StatelessWidget {
                         children: [
                           Text(
                             Strings.current.settingSecurityWalletAddress,
-                            style: ROITitleLargeTextStyle(
+                            style: EZCTitleLargeTextStyle(
                                 color: provider.themeMode.text),
                           ),
                           const SizedBox(
@@ -78,10 +78,10 @@ class SettingSecurityScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(4),
                                 color: provider.themeMode.secondary,
                               ),
-                              labelStyle: ROITitleLargeTextStyle(
+                              labelStyle: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.primary),
                               labelColor: provider.themeMode.primary,
-                              unselectedLabelStyle: ROITitleLargeTextStyle(
+                              unselectedLabelStyle: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.text40),
                               unselectedLabelColor:
                                   provider.themeMode.text40,
@@ -97,13 +97,13 @@ class SettingSecurityScreen extends StatelessWidget {
                           const SizedBox(height: 16),
                           Text(
                             Strings.current.sharedPrivateKey,
-                            style: ROITitleLargeTextStyle(
+                            style: EZCTitleLargeTextStyle(
                                 color: provider.themeMode.text),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             Strings.current.settingSecurityPrivateKeyNote,
-                            style: ROIBodySmallTextStyle(
+                            style: EZCBodySmallTextStyle(
                                 color: provider.themeMode.text70),
                           ),
                           const SizedBox(height: 16),
@@ -178,7 +178,7 @@ class _WalletAddressTab extends StatelessWidget {
             Text(
               address,
               textAlign: TextAlign.center,
-              style: ROIBodyLargeTextStyle(color: provider.themeMode.text),
+              style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
             ),
           ],
         ),
@@ -204,7 +204,7 @@ class _WalletKeyInfoWidget extends StatelessWidget {
         children: [
           Text(
             title,
-            style: ROITitleLargeTextStyle(
+            style: EZCTitleLargeTextStyle(
                 color: titleColor ?? provider.themeMode.text60),
           ),
           const SizedBox(height: 4),
@@ -216,7 +216,7 @@ class _WalletKeyInfoWidget extends StatelessWidget {
                 borderRadius: const BorderRadius.all(Radius.circular(8))),
             child: Text(
               content,
-              style: ROIBodySmallTextStyle(color: provider.themeMode.text),
+              style: EZCBodySmallTextStyle(color: provider.themeMode.text),
             ),
           )
         ],

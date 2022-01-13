@@ -25,7 +25,7 @@ class WalletReceiveScreen extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              ROIAppBar(
+              EZCAppBar(
                 title: Strings.current.sharedReceive,
                 onPressed: () {
                   context.router.pop();
@@ -42,12 +42,12 @@ class WalletReceiveScreen extends StatelessWidget {
                             Assets.icons.icRoi.svg(),
                             const SizedBox(width: 8),
                             Text(
-                              'ROI',
-                              style: ROIBodyLargeTextStyle(
+                              'EZC',
+                              style: EZCBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
                             const SizedBox(width: 16),
-                            ROIChainLabelText(text: walletReceiveInfo.chain),
+                            EZCChainLabelText(text: walletReceiveInfo.chain),
                           ],
                         ),
                       ),
@@ -94,7 +94,7 @@ class WalletReceiveScreen extends StatelessWidget {
                               child: Text(
                                 walletReceiveInfo.address.useCorrectEllipsis(),
                                 maxLines: 3,
-                                style: ROIBodyLargeTextStyle(
+                                style: EZCBodyLargeTextStyle(
                                     color: provider.themeMode.text),
                                 textAlign: TextAlign.center,
                               ),
@@ -103,7 +103,7 @@ class WalletReceiveScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                ROIMediumNoneButton(
+                                EZCMediumNoneButton(
                                   text: Strings.current.sharedCopy,
                                   iconLeft: Assets.icons.icCopyPrimary.svg(),
                                   padding: const EdgeInsets.symmetric(
@@ -111,7 +111,7 @@ class WalletReceiveScreen extends StatelessWidget {
                                   onPressed: () => {},
                                 ),
                                 const SizedBox(width: 16),
-                                ROIMediumNoneButton(
+                                EZCMediumNoneButton(
                                   text: Strings.current.sharedShare,
                                   iconLeft: Assets.icons.icSharePrimary.svg(),
                                   padding: const EdgeInsets.symmetric(
@@ -131,16 +131,16 @@ class WalletReceiveScreen extends StatelessWidget {
                           textAlign: TextAlign.center,
                           text: TextSpan(
                             text: Strings.current.walletReceiveSendOnly,
-                            style: ROIBodySmallTextStyle(
+                            style: EZCBodySmallTextStyle(
                                 color: provider.themeMode.text90),
                             children: <TextSpan>[
                               TextSpan(
                                   text: Strings.current.walletReceiveBitcoin,
-                                  style: ROISemiBoldSmallTextStyle(
+                                  style: EZCSemiBoldSmallTextStyle(
                                       color: provider.themeMode.text90)),
                               TextSpan(
                                   text: Strings.current.walletReceiveToThis,
-                                  style: ROIBodySmallTextStyle(
+                                  style: EZCBodySmallTextStyle(
                                       color: provider.themeMode.text90)),
                             ],
                           ),
@@ -153,7 +153,7 @@ class WalletReceiveScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 16, bottom: 4),
                           child: Text(
                             Strings.current.walletReceiveSetAmount,
-                            style: ROITitleLargeTextStyle(
+                            style: EZCTitleLargeTextStyle(
                                 color: provider.themeMode.text60),
                           ),
                         ),

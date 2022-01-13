@@ -208,7 +208,7 @@ class _CircleDigitKey extends StatelessWidget {
                   alignment: Alignment.topCenter,
                   child: Text(
                     '$number',
-                    style: ROIHeadlineSmallTextStyle(
+                    style: EZCHeadlineSmallTextStyle(
                         color: provider.themeMode.secondary),
                   ),
                 ),
@@ -216,7 +216,7 @@ class _CircleDigitKey extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: Text(
                     textOfNumber[number],
-                    style: ROILabelSmallTextStyle(
+                    style: EZCLabelSmallTextStyle(
                         color: provider.themeMode.secondary),
                   ),
                 ),

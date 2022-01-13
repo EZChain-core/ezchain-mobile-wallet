@@ -23,7 +23,7 @@ class PinCodeSetupScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
                 child: Text(
                   Strings.current.pinCodeTitle,
-                  style: ROIHeadlineMediumTextStyle(
+                  style: EZCHeadlineMediumTextStyle(
                     color: provider.themeMode.text,
                   ),
                 ),
@@ -34,7 +34,7 @@ class PinCodeSetupScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 16, right: 58, top: 16),
                   child: Text(
                     Strings.current.pinCodeDes,
-                    style: ROIBodyLargeTextStyle(
+                    style: EZCBodyLargeTextStyle(
                       color: provider.themeMode.text70,
                     ),
                   ),
