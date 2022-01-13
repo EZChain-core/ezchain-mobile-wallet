@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:wallet/roi/sdk/apis/avm/api.dart';
 import 'package:wallet/roi/sdk/apis/evm/api.dart';
@@ -42,9 +43,18 @@ abstract class ROI {
       int connectTimeout = 5000,
       int receiveTimeout = 5000,
       bool skipInit = false}) {
-    return _ROICore(host, port, protocol, networkId, xChainId, cChainId, hrp,
-        connectTimeout, receiveTimeout,
-        skipInit: skipInit);
+    return _ROICore(
+      host,
+      port,
+      protocol,
+      networkId,
+      xChainId,
+      cChainId,
+      hrp,
+      connectTimeout,
+      receiveTimeout,
+      skipInit: skipInit,
+    );
   }
 }
 
@@ -70,6 +80,8 @@ abstract class ROINetwork {
   int get rpcId => _rpcId;
 
   var _rpcId = 1;
+
+  final _logger = Logger(printer: SimplePrinter());
 
   ROINetwork(this.host, this.port, this.protocol, this.networkId, this.hrp,
       this.connectTimeout, this.receiveTimeout)
@@ -110,15 +122,17 @@ abstract class ROINetwork {
           handler.next(response);
         },
       ))
-      ..interceptors.add(PrettyDioLogger(
-        requestHeader: true,
-        requestBody: true,
-        responseBody: true,
-        responseHeader: true,
-        error: true,
-        compact: true,
-        maxWidth: 200,
-      ));
+      ..interceptors.add(
+        PrettyDioLogger(
+            requestHeader: true,
+            requestBody: true,
+            responseBody: true,
+            responseHeader: true,
+            error: true,
+            compact: true,
+            maxWidth: 200,
+            logPrint: (obj) => _logger.i(obj)),
+      );
   }
 
   void changeNetworkId(int networkId) {

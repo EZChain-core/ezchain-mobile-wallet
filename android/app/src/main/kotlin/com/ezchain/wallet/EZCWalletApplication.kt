@@ -1,4 +1,4 @@
-package net.ezchain.wallet
+package com.ezchain.wallet
 
 import androidx.multidex.MultiDexApplication
 
