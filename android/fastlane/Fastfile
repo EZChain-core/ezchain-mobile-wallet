@@ -26,7 +26,11 @@ platform :android do
         app: ENV["FIREBASE_ANDROID_APP_ID"],
         firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"]
     )
-    build_number = latest_release[:buildVersion].to_i + 1
+    if latest_release.nil?
+        build_number = 1
+    else
+        build_number = latest_release[:buildVersion].to_i + 1
+    end
     gradle(task: 'assemble', build_type: 'Release', properties: { "android.injected.version.code" => build_number })
     firebase_app_distribution(
         app: ENV["FIREBASE_ANDROID_APP_ID"],
@@ -37,15 +41,15 @@ platform :android do
     )
   end
 
-    private_lane :change_log_from_git do |options|
-        count = (options[:count] ? options[:count] : 10)
-        changelog_from_git_commits(
-            commits_count: count,
-            pretty: "- (%ae) %s",
-            date_format: "short",
-            merge_commit_filtering: "exclude_merges"
-        )
-    end
+  private_lane :change_log_from_git do |options|
+      count = (options[:count] ? options[:count] : 10)
+      changelog_from_git_commits(
+          commits_count: count,
+          pretty: "- (%ae) %s",
+          date_format: "short",
+          merge_commit_filtering: "exclude_merges"
+      )
+  end
 
   after_all do |lane, options|
   end
