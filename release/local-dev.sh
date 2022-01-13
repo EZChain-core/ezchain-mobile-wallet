@@ -1,4 +1,5 @@
 local_dev() {
+  ./clean-secrets.sh
   ENCRYPT_KEY=$1
   export ENCRYPT_KEY=$ENCRYPT_KEY && ./decrypt-secrets.sh
   cp google-services.json ../android/app/google-services.json
