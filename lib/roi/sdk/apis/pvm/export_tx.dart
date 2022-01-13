@@ -32,6 +32,7 @@ class PvmExportTx extends PvmBaseTx {
             outs: outs,
             ins: ins,
             memo: memo) {
+    setTypeId(EXPORTTX);
     if (destinationChain != null) {
       this.destinationChain = destinationChain;
     }
@@ -80,13 +81,8 @@ class PvmExportTx extends PvmBaseTx {
   }
 
   @override
-  int getTypeId() {
-    return EXPORTTX;
-  }
-
-  @override
   int getTxType() {
-    return EXPORTTX;
+    return getTypeId();
   }
 
   @override

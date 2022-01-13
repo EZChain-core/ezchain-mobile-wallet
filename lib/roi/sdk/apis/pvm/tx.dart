@@ -7,6 +7,7 @@ import 'package:wallet/roi/sdk/apis/pvm/credentials.dart';
 import 'package:wallet/roi/sdk/apis/pvm/export_tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/import_tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
+import 'package:wallet/roi/sdk/apis/pvm/validation_tx.dart';
 import 'package:wallet/roi/sdk/common/credentials.dart';
 import 'package:wallet/roi/sdk/common/tx.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
@@ -19,6 +20,10 @@ PvmBaseTx selectTxClass(int inputId, {Map<String, dynamic> args = const {}}) {
       return PvmImportTx.fromArgs(args);
     case EXPORTTX:
       return PvmExportTx.fromArgs(args);
+    case ADDDELEGATORTX:
+      return PvmAddDelegatorTx.fromArgs(args);
+    case ADDVALIDATORTX:
+      return PvmAddValidatorTx.fromArgs(args);
     default:
       throw Exception("Error - SelectTxClass: unknown inputId = $inputId");
   }

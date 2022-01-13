@@ -35,6 +35,7 @@ class PvmImportTx extends PvmBaseTx {
             outs: outs,
             ins: ins,
             memo: memo) {
+    setTypeId(IMPORTTX);
     if (sourceChain != null) {
       this.sourceChain = sourceChain;
     }
@@ -61,7 +62,11 @@ class PvmImportTx extends PvmBaseTx {
     return {
       ...fields,
       "sourceChain": Serialization.instance.encoder(
-          sourceChain, encoding, SerializedType.Buffer, SerializedType.cb58),
+        sourceChain,
+        encoding,
+        SerializedType.Buffer,
+        SerializedType.cb58,
+      ),
       "importIns": importIns.map((e) => e.serialize(encoding: encoding))
     };
   }
@@ -70,18 +75,17 @@ class PvmImportTx extends PvmBaseTx {
   void deserialize(dynamic fields,
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
-    sourceChain = Serialization.instance.decoder(fields["sourceChain"],
-        encoding, SerializedType.cb58, SerializedType.Buffer,
-        args: [32]);
+    sourceChain = Serialization.instance.decoder(
+      fields["sourceChain"],
+      encoding,
+      SerializedType.cb58,
+      SerializedType.Buffer,
+      args: [32],
+    );
     importIns = (fields["importIns"] as List<dynamic>)
         .map((e) => PvmTransferableInput()..deserialize(e, encoding: encoding))
         .toList();
     importNumIns.buffer.asByteData().setUint32(0, importIns.length);
-  }
-
-  @override
-  int getTypeId() {
-    return IMPORTTX;
   }
 
   @override

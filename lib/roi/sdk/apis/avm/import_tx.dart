@@ -35,6 +35,7 @@ class AvmImportTx extends AvmBaseTx {
             outs: outs,
             ins: ins,
             memo: memo) {
+    setTypeId(IMPORTTX);
     if (sourceChain != null) {
       this.sourceChain = sourceChain;
     }
@@ -77,11 +78,6 @@ class AvmImportTx extends AvmBaseTx {
         .map((e) => AvmTransferableInput()..deserialize(e, encoding: encoding))
         .toList();
     importNumIns.buffer.asByteData().setUint32(0, importIns.length);
-  }
-
-  @override
-  int getTypeId() {
-    return IMPORTTX;
   }
 
   @override

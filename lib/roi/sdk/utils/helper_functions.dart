@@ -10,7 +10,7 @@ String getPreferredHRP(int networkId) {
   return networkIdToHRP[networkId] ?? networkIdToHRP[defaultNetworkId]!;
 }
 
-String bufferToNodeIDString(Uint8List pk) {
+String bufferToNodeIdString(Uint8List pk) {
   return "$nodeIdPrefix${cb58Encode(pk)}";
 }
 

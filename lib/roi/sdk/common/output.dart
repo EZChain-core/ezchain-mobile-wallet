@@ -223,8 +223,15 @@ abstract class Output extends OutputOwners {
   @override
   String get typeName => "Output";
 
-  Output({BigInt? lockTime, int? threshold, List<Uint8List>? addresses})
-      : super(lockTime: lockTime, threshold: threshold, addresses: addresses);
+  Output({
+    BigInt? lockTime,
+    int? threshold,
+    List<Uint8List>? addresses,
+  }) : super(
+          lockTime: lockTime,
+          threshold: threshold,
+          addresses: addresses,
+        );
 
   int getOutputId();
 
@@ -401,5 +408,5 @@ abstract class BaseNFTOutput extends Output {
         args: [4]);
   }
 
-  int getGroupID() => groupId.buffer.asByteData().getUint32(0);
+  int getGroupId() => groupId.buffer.asByteData().getUint32(0);
 }
