@@ -32,7 +32,7 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
                 child: Text(
                   Strings.current.accessMnemonicKeyTitle,
-                  style: ROIHeadlineMediumTextStyle(
+                  style: EZCHeadlineMediumTextStyle(
                     color: provider.themeMode.text,
                   ),
                 ),
@@ -41,7 +41,7 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 58, top: 16),
                 child: Text(
                   Strings.current.accessMnemonicKeyDes,
-                  style: ROIBodyLargeTextStyle(
+                  style: EZCBodyLargeTextStyle(
                     color: provider.themeMode.text70,
                   ),
                 ),
@@ -66,7 +66,7 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
                       child: Container(
                         width: 164,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: ROIMediumPrimaryButton(
+                        child: EZCMediumPrimaryButton(
                           text: Strings.current.sharedAccessWallet,
                           onPressed: () {
                             _onClickAccess();
@@ -78,7 +78,7 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: ROIBodyLargeNoneButton(
+                        child: EZCBodyLargeNoneButton(
                           text: Strings.current.sharedCancel,
                           onPressed: () {
                             context.router.pop();

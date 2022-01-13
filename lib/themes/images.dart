@@ -4,14 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 
-class ROICircleImage extends StatelessWidget {
+class EZCCircleImage extends StatelessWidget {
   final String src;
 
   final double size;
 
   final Widget? placeholder;
 
-  const ROICircleImage(
+  const EZCCircleImage(
       {required this.src, required this.size, this.placeholder});
 
   @override

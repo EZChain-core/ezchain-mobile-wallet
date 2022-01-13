@@ -46,11 +46,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Mnemonic Key Phrase"),
         "accessWalletOptionsTitle": MessageLookupByLibrary.simpleMessage(
             "How do you want to access your wallet?"),
-        "appName": MessageLookupByLibrary.simpleMessage("ROI Wallet"),
+        "appName": MessageLookupByLibrary.simpleMessage("EZC Wallet"),
         "createWalletConfirmDes": MessageLookupByLibrary.simpleMessage(
             "Confirm your passphrase backup"),
         "createWalletDes": MessageLookupByLibrary.simpleMessage(
-            "Store this key phrase in a secure location. Anyone with this key phrase can access your ROIChain wallet. there is no way to recover lost key phrase"),
+            "Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. there is no way to recover lost key phrase"),
         "createWalletKeptKey":
             MessageLookupByLibrary.simpleMessage("Yes, I kept them safe"),
         "createWalletPassphraseToRestore":
@@ -83,8 +83,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "pinCodeTitle": MessageLookupByLibrary.simpleMessage("PIN code"),
         "pinCodeWrong": MessageLookupByLibrary.simpleMessage(
             "PIN Code doesn’t match! Try Again"),
-        "settingAboutRoi":
-            MessageLookupByLibrary.simpleMessage("About RoiChain"),
+        "settingAboutEZC":
+            MessageLookupByLibrary.simpleMessage("About EZChain"),
         "settingChangePin": MessageLookupByLibrary.simpleMessage("Change PIN"),
         "settingConfirmNewPin":
             MessageLookupByLibrary.simpleMessage("Please confirm new PIN"),
@@ -124,6 +124,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
         "sharedDestination":
             MessageLookupByLibrary.simpleMessage("Destination"),
+        "sharedEZChain": MessageLookupByLibrary.simpleMessage("EZChain"),
         "sharedError": MessageLookupByLibrary.simpleMessage("Error"),
         "sharedExport": MessageLookupByLibrary.simpleMessage("Export"),
         "sharedImport": MessageLookupByLibrary.simpleMessage("Import"),
@@ -142,7 +143,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Paste Address"),
         "sharedPrivateKey": MessageLookupByLibrary.simpleMessage("Private Key"),
         "sharedProcessing": MessageLookupByLibrary.simpleMessage("Processing"),
-        "sharedROIChain": MessageLookupByLibrary.simpleMessage("ROI Chain"),
         "sharedReceive": MessageLookupByLibrary.simpleMessage("Receive"),
         "sharedSend": MessageLookupByLibrary.simpleMessage("Send"),
         "sharedSendTo": MessageLookupByLibrary.simpleMessage("Send to"),

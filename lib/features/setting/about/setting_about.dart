@@ -18,8 +18,8 @@ class SettingAboutScreen extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              ROIAppBar(
-                title: Strings.current.settingAboutRoi,
+              EZCAppBar(
+                title: Strings.current.settingAboutEZC,
                 onPressed: () {
                   context.router.pop();
                 },
@@ -33,7 +33,7 @@ class SettingAboutScreen extends StatelessWidget {
                 child: Text(
                   'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s',
                   style:
-                      ROIBodyLargeTextStyle(color: provider.themeMode.text70),
+                      EZCBodyLargeTextStyle(color: provider.themeMode.text70),
                   textAlign: TextAlign.center,
                 ),
               ),
