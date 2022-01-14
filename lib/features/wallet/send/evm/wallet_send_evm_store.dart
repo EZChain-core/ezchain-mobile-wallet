@@ -1,30 +1,41 @@
+import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
-import 'package:web3dart/web3dart.dart';
 
 part 'wallet_send_evm_store.g.dart';
 
 class WalletSendEvmStore = _WalletSendEvmStore with _$WalletSendEvmStore;
 
 abstract class _WalletSendEvmStore with Store {
-  final wallet = getIt<WalletFactory>().activeWallet;
+  final _wallet = getIt<WalletFactory>().activeWallet;
 
-  final priceStore = getIt<PriceStore>();
+  final _balanceStore = getIt<BalanceStore>();
+  final _priceStore = getIt<PriceStore>();
 
   @observable
-  BigInt gasPrice = BigInt.zero;
+  int gasPriceNumber = 0;
 
   @observable
   BigInt gasLimit = BigInt.zero;
 
   @computed
-  double get avaxPrice => priceStore.avaxPrice.toDouble();
+  Decimal get avaxPrice => _priceStore.avaxPrice;
+
+  @observable
+  Decimal amount = Decimal.zero;
+
+  @computed
+  Decimal get balanceC => _balanceStore.balanceC;
+
+  String get balanceCString => _balanceStore.balanceCString;
 
   @observable
   String? addressError;
@@ -39,24 +50,32 @@ abstract class _WalletSendEvmStore with Store {
   bool confirmSuccess = false;
 
   @observable
-  double fee = 0.00065625;
+  String fee = '0';
 
   @observable
   bool isLoading = false;
 
+  BigInt _gasPrice = BigInt.zero;
+
   @action
   getBalanceC() async {
-    final adjustGasPrice = await getAdjustedGasPrice();
-    gasPrice = EtherAmount.fromUnitAndValue(EtherUnit.wei, adjustGasPrice)
-        .getValueInUnitBI(EtherUnit.gwei);
+    _balanceStore.updateBalanceC();
 
-    priceStore.updateAvaxPrice();
+    _gasPrice = BigInt.from(225000000000);
+    try {
+      _gasPrice = await getAdjustedGasPrice();
+    } catch (e) {
+      logger.e(e);
+    }
+    gasPriceNumber = int.parse(bnToDecimalAvaxX(_gasPrice).toStringAsFixed(0));
+
+    _priceStore.updateAvaxPrice();
   }
 
   @action
-  confirm(String address, double amount, double balance) async {
+  confirm(String address) async {
     final isAddressValid = validateAddressEvm(address);
-    final isAmountValid = balance >= amount && amount > 0;
+    final isAmountValid = balanceC >= amount && amount > Decimal.zero;
     if (!isAddressValid) {
       addressError = Strings.current.sharedInvalidAddress;
     }
@@ -64,9 +83,10 @@ abstract class _WalletSendEvmStore with Store {
       amountError = Strings.current.sharedInvalidAmount;
     }
     if (isAddressValid && isAmountValid) {
-      final evmAmount = numberToBNAvaxC(amount);
+      final evmAmount = numberToBNAvaxC(amount.toBigInt());
       gasLimit =
-          await wallet.estimateAvaxGasLimit(address, evmAmount, gasPrice);
+          await _wallet.estimateAvaxGasLimit(address, evmAmount, _gasPrice);
+      fee = bnToAvaxC(_gasPrice * gasLimit);
       confirmSuccess = true;
     }
   }
@@ -86,11 +106,11 @@ abstract class _WalletSendEvmStore with Store {
   }
 
   @action
-  Future<bool> sendEvm(String address, double amount) async {
+  Future<bool> sendEvm(String address) async {
     isLoading = true;
     try {
-      final txId = await wallet.sendAvaxC(
-          address, numberToBNAvaxC(amount), gasPrice, gasLimit.toInt());
+      final txId = await _wallet.sendAvaxC(address,
+          numberToBNAvaxC(amount.toBigInt()), _gasPrice, gasLimit.toInt());
       print("txId = $txId");
       isLoading = false;
       return true;

@@ -1,8 +1,10 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/dialog_extensions.dart';
+import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
@@ -17,27 +19,13 @@ import 'package:wallet/themes/widgets.dart';
 class WalletSendAvmConfirmScreen extends StatelessWidget {
   final WalletSendAvmTransactionViewData transactionInfo;
 
-  const WalletSendAvmConfirmScreen({Key? key, required this.transactionInfo})
+  final _walletSendAvmStore = WalletSendAvmConfirmStore();
+
+  WalletSendAvmConfirmScreen({Key? key, required this.transactionInfo})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final walletSendAvmStore = WalletSendAvmConfirmStore();
-
-    void _showWarningDialog() {
-      context.showWarningDialog(
-        Assets.images.imgSendChainError.svg(width: 130, height: 130),
-        Strings.current.walletSendCChainErrorAddress,
-      );
-    }
-
-    void _onClickSendTransaction() {
-      walletSendAvmStore.sendAvm(
-          transactionInfo.address, transactionInfo.amount,
-          memo: transactionInfo.memo);
-      // _showWarningDialog();
-    }
-
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -107,7 +95,7 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                       Observer(
                         builder: (_) => Column(
                           children: [
-                            if (walletSendAvmStore.sendSuccess)
+                            if (_walletSendAvmStore.sendSuccess)
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 10),
                                 child: Text(
@@ -116,7 +104,7 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                                       color: provider.themeMode.stateSuccess),
                                 ),
                               ),
-                            walletSendAvmStore.sendSuccess
+                            _walletSendAvmStore.sendSuccess
                                 ? EZCMediumSuccessButton(
                                     text: Strings.current.sharedStartAgain,
                                     padding: const EdgeInsets.symmetric(
@@ -125,18 +113,17 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                                     ),
                                     onPressed: () {
                                       context.router.popUntilRoot();
-                                      context.pushRoute(
-                                          const WalletSendAvmRoute());
+                                      context.pushRoute(WalletSendAvmRoute());
                                     },
                                   )
                                 : EZCMediumSuccessButton(
                                     text: Strings.current.sharedSendTransaction,
                                     width: 251,
                                     onPressed: _onClickSendTransaction,
-                                    isLoading: walletSendAvmStore.isLoading,
+                                    isLoading: _walletSendAvmStore.isLoading,
                                   ),
                             const SizedBox(height: 4),
-                            if (!walletSendAvmStore.sendSuccess)
+                            if (!_walletSendAvmStore.sendSuccess)
                               EZCMediumNoneButton(
                                 width: 82,
                                 text: Strings.current.sharedCancel,
@@ -157,14 +144,30 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _showWarningDialog() {
+    walletContext?.showWarningDialog(
+      Assets.images.imgSendChainError.svg(width: 130, height: 130),
+      Strings.current.walletSendCChainErrorAddress,
+    );
+  }
+
+  void _onClickSendTransaction() {
+    _walletSendAvmStore.sendAvm(
+      transactionInfo.address,
+      transactionInfo.amount,
+      memo: transactionInfo.memo,
+    );
+    // _showWarningDialog();
+  }
 }
 
 class WalletSendAvmTransactionViewData {
   final String address;
   final String memo;
-  final double amount;
-  final double fee;
-  final double total;
+  final Decimal amount;
+  final Decimal fee;
+  final Decimal total;
 
   WalletSendAvmTransactionViewData(
       this.address, this.memo, this.amount, this.fee, this.total);

@@ -57,12 +57,15 @@ class EZCMediumPrimaryButton extends StatelessWidget {
 
   final VoidCallback? onLongPress;
 
+  final bool? isLoading;
+
   const EZCMediumPrimaryButton(
       {required this.text,
       this.onPressed,
       this.onLongPress,
       this.padding,
-      this.width});
+      this.width,
+      this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +74,17 @@ class EZCMediumPrimaryButton extends StatelessWidget {
         height: ezcButtonMediumHeight,
         width: width,
         child: TextButton(
-          child: Text(text,
-              textAlign: TextAlign.center,
-              style: EZCButtonTextStyle(color: provider.themeMode.text90)),
+          child: isLoading == true
+              ? SizedBox(
+                  width: ezcButtonMediumHeight - 20,
+                  height: ezcButtonMediumHeight - 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: provider.themeMode.text90,
+                  ))
+              : Text(text,
+                  textAlign: TextAlign.center,
+                  style: EZCButtonTextStyle(color: provider.themeMode.text90)),
           style: EZCButtonStyle(
               bgColor: provider.themeMode.primary,
               buttonPadding: padding ?? ezcButtonMediumPadding),
@@ -129,7 +140,6 @@ class EZCMediumSuccessButton extends StatelessWidget {
               buttonPadding: padding ?? ezcButtonMediumPadding),
           onPressed: isLoading == true ? null : onPressed,
           onLongPress: isLoading == true ? null : onLongPress,
-
         ),
       ),
     );

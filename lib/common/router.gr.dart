@@ -117,8 +117,10 @@ class AppRouter extends _i26.RootStackRouter {
               key: args.key, walletReceiveInfo: args.walletReceiveInfo));
     },
     WalletSendAvmRoute.name: (routeData) {
+      final args = routeData.argsAs<WalletSendAvmRouteArgs>(
+          orElse: () => const WalletSendAvmRouteArgs());
       return _i26.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i11.WalletSendAvmScreen());
+          routeData: routeData, child: _i11.WalletSendAvmScreen(key: args.key));
     },
     WalletSendAvmConfirmRoute.name: (routeData) {
       final args = routeData.argsAs<WalletSendAvmConfirmRouteArgs>();
@@ -128,8 +130,10 @@ class AppRouter extends _i26.RootStackRouter {
               key: args.key, transactionInfo: args.transactionInfo));
     },
     WalletSendEvmRoute.name: (routeData) {
+      final args = routeData.argsAs<WalletSendEvmRouteArgs>(
+          orElse: () => const WalletSendEvmRouteArgs());
       return _i26.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i13.WalletSendEvmScreen());
+          routeData: routeData, child: _i13.WalletSendEvmScreen(key: args.key));
     },
     WalletSendEvmConfirmRoute.name: (routeData) {
       final args = routeData.argsAs<WalletSendEvmConfirmRouteArgs>();
@@ -411,10 +415,24 @@ class WalletReceiveRouteArgs {
 }
 
 /// generated route for [_i11.WalletSendAvmScreen]
-class WalletSendAvmRoute extends _i26.PageRouteInfo<void> {
-  const WalletSendAvmRoute() : super(name, path: '/wallet-send-avm-screen');
+class WalletSendAvmRoute extends _i26.PageRouteInfo<WalletSendAvmRouteArgs> {
+  WalletSendAvmRoute({_i27.Key? key})
+      : super(name,
+            path: '/wallet-send-avm-screen',
+            args: WalletSendAvmRouteArgs(key: key));
 
   static const String name = 'WalletSendAvmRoute';
+}
+
+class WalletSendAvmRouteArgs {
+  const WalletSendAvmRouteArgs({this.key});
+
+  final _i27.Key? key;
+
+  @override
+  String toString() {
+    return 'WalletSendAvmRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for [_i12.WalletSendAvmConfirmScreen]
@@ -446,10 +464,24 @@ class WalletSendAvmConfirmRouteArgs {
 }
 
 /// generated route for [_i13.WalletSendEvmScreen]
-class WalletSendEvmRoute extends _i26.PageRouteInfo<void> {
-  const WalletSendEvmRoute() : super(name, path: '/wallet-send-evm-screen');
+class WalletSendEvmRoute extends _i26.PageRouteInfo<WalletSendEvmRouteArgs> {
+  WalletSendEvmRoute({_i27.Key? key})
+      : super(name,
+            path: '/wallet-send-evm-screen',
+            args: WalletSendEvmRouteArgs(key: key));
 
   static const String name = 'WalletSendEvmRoute';
+}
+
+class WalletSendEvmRouteArgs {
+  const WalletSendEvmRouteArgs({this.key});
+
+  final _i27.Key? key;
+
+  @override
+  String toString() {
+    return 'WalletSendEvmRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for [_i14.WalletSendEvmConfirmScreen]

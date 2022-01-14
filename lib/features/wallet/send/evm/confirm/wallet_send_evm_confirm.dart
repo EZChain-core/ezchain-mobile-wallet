@@ -1,7 +1,7 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -20,7 +20,6 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -99,7 +98,7 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
                         ),
                         onPressed: () {
                           context.router.popUntilRoot();
-                          context.pushRoute(const WalletSendEvmRoute());
+                          context.pushRoute(WalletSendEvmRoute());
                         },
                       ),
                       const SizedBox(height: 45),
@@ -117,11 +116,11 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
 
 class WalletSendEvmTransactionViewData {
   final String address;
-  final BigInt gwei;
+  final int gwei;
   final BigInt gasPrice;
-  final double amount;
-  final double fee;
+  final Decimal amount;
+  final String fee;
 
-  WalletSendEvmTransactionViewData(this.address, this.gwei, this.gasPrice,
-      this.amount, this.fee);
+  WalletSendEvmTransactionViewData(
+      this.address, this.gwei, this.gasPrice, this.amount, this.fee);
 }

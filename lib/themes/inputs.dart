@@ -1,11 +1,11 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/generated/assets.gen.dart';
+import 'package:wallet/roi/wallet/utils/number_utils.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -168,7 +168,7 @@ class EZCAmountTextField extends StatefulWidget {
 
   final ValueChanged<String>? onChanged;
 
-  final double? rateUsd;
+  final Decimal? rateUsd;
 
   final Color? backgroundColor;
 
@@ -195,7 +195,7 @@ class EZCAmountTextField extends StatefulWidget {
 }
 
 class _EZCAmountTextFieldState extends State<EZCAmountTextField> {
-  double _usdValue = 0;
+  Decimal _usdValue = Decimal.zero;
   bool _hasError = false;
 
   @override
@@ -203,7 +203,7 @@ class _EZCAmountTextFieldState extends State<EZCAmountTextField> {
     widget.controller?.addListener(() {
       if (widget.rateUsd != null) {
         String text = widget.controller!.text;
-        final amount = double.tryParse(text) ?? 0;
+        final amount = Decimal.parse(text);
         setState(() {
           _usdValue = widget.rateUsd! * amount;
         });
@@ -306,7 +306,8 @@ class _EZCAmountTextFieldState extends State<EZCAmountTextField> {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        widget.prefixText ?? '\$ $_usdValue',
+                        widget.prefixText ??
+                            '\$ ${decimalToLocaleString(_usdValue, decimals: 3)}',
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.fade,
