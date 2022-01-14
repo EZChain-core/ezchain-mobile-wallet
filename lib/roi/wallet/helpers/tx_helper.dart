@@ -9,27 +9,36 @@ import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:web3dart/web3dart.dart';
 
-Future<Transaction> buildEvmTransferNativeTx(String from, String to,
-    BigInt amount, BigInt gasPrice, int gasLimit) async {
+Future<Transaction> buildEvmTransferNativeTx(
+  String from,
+  String to,
+  BigInt amount,
+  BigInt gasPrice,
+  int gasLimit,
+) async {
   final etherFromAddress = EthereumAddress.fromHex(from);
   final nonce = await web3.getTransactionCount(etherFromAddress);
   return Transaction(
     from: etherFromAddress,
     to: EthereumAddress.fromHex(to),
     maxGas: gasLimit,
-    gasPrice: EtherAmount.fromUnitAndValue(EtherUnit.gwei, gasPrice),
+    gasPrice: EtherAmount.fromUnitAndValue(EtherUnit.wei, gasPrice),
     value: EtherAmount.fromUnitAndValue(EtherUnit.wei, amount),
     nonce: nonce,
   );
 }
 
 Future<BigInt> estimateAvaxGas(
-    String from, String to, BigInt amount, BigInt gasPrice) async {
+  String from,
+  String to,
+  BigInt amount,
+  BigInt gasPrice,
+) async {
   try {
     final test = await web3.estimateGas(
       sender: EthereumAddress.fromHex(from),
       to: EthereumAddress.fromHex(to),
-      gasPrice: EtherAmount.fromUnitAndValue(EtherUnit.gwei, gasPrice),
+      gasPrice: EtherAmount.fromUnitAndValue(EtherUnit.wei, gasPrice),
       value: EtherAmount.fromUnitAndValue(EtherUnit.wei, amount),
     );
     return test;
@@ -39,12 +48,13 @@ Future<BigInt> estimateAvaxGas(
 }
 
 Future<AvmUnsignedTx> buildAvmExportTransaction(
-    ExportChainsX destinationChain,
-    AvmUTXOSet utxoSet,
-    List<String> fromAddresses,
-    String toAddress,
-    BigInt amount, // export amount + fee
-    String sourceChangeAddress) async {
+  ExportChainsX destinationChain,
+  AvmUTXOSet utxoSet,
+  List<String> fromAddresses,
+  String toAddress,
+  BigInt amount, // export amount + fee
+  String sourceChangeAddress,
+) async {
   final destinationChainId = chainIdFromAlias(destinationChain.value);
 
   return await xChain.buildExportTx(
@@ -58,12 +68,13 @@ Future<AvmUnsignedTx> buildAvmExportTransaction(
 }
 
 Future<PvmUnsignedTx> buildPvmExportTransaction(
-    PvmUTXOSet utxoSet,
-    List<String> fromAddresses,
-    String toAddress,
-    BigInt amount,
-    String sourceChangeAddress,
-    ExportChainsP destinationChain) async {
+  PvmUTXOSet utxoSet,
+  List<String> fromAddresses,
+  String toAddress,
+  BigInt amount,
+  String sourceChangeAddress,
+  ExportChainsP destinationChain,
+) async {
   final destinationChainId = chainIdFromAlias(destinationChain.value);
 
   return await pChain.buildExportTx(
@@ -77,12 +88,13 @@ Future<PvmUnsignedTx> buildPvmExportTransaction(
 }
 
 Future<EvmUnsignedTx> buildEvmExportTransaction(
-    List<String> fromAddresses,
-    String toAddress,
-    BigInt amount,
-    String fromAddressBech,
-    ExportChainsC destinationChain,
-    BigInt fee) async {
+  List<String> fromAddresses,
+  String toAddress,
+  BigInt amount,
+  String fromAddressBech,
+  ExportChainsC destinationChain,
+  BigInt fee,
+) async {
   final destinationChainId = chainIdFromAlias(destinationChain.value);
   final fromAddressHex = fromAddresses[0];
   final nonce =

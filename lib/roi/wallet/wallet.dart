@@ -259,7 +259,9 @@ abstract class WalletProvider {
   /// @param destinationChain Which chain to export to.
   /// @return returns the transaction id.
   Future<String> exportXChain(
-      BigInt amount, ExportChainsX destinationChain) async {
+    BigInt amount,
+    ExportChainsX destinationChain,
+  ) async {
     final destinationAddress = destinationChain == ExportChainsX.P
         ? getAddressP()
         : getEvmAddressBech();
@@ -339,7 +341,11 @@ abstract class WalletProvider {
   ///
   /// @return Returns the transaction hash
   Future<String> sendAvaxC(
-      String to, BigInt amount, BigInt gasPrice, int gasLimit) async {
+    String to,
+    BigInt amount,
+    BigInt gasPrice,
+    int gasLimit,
+  ) async {
     assert(amount > BigInt.zero);
     final fromAddress = getAddressC();
     final tx = await buildEvmTransferNativeTx(
@@ -369,7 +375,10 @@ abstract class WalletProvider {
   /// @param to Destination address.
   /// @param amount Amount of EZC to send, in WEI.
   Future<BigInt> estimateAvaxGasLimit(
-      String to, BigInt amount, BigInt gasPrice) async {
+    String to,
+    BigInt amount,
+    BigInt gasPrice,
+  ) async {
     final from = getAddressC();
     return await estimateAvaxGas(from, to, amount, gasPrice);
   }
@@ -400,8 +409,11 @@ abstract class WalletProvider {
   /// @param destinationChain either `X` or `P`
   /// @param exportFee Export fee in nEZC
   /// @return returns the transaction id.
-  Future<String> exportCChain(BigInt amount, ExportChainsC destinationChain,
-      {BigInt? exportFee}) async {
+  Future<String> exportCChain(
+    BigInt amount,
+    ExportChainsC destinationChain, {
+    BigInt? exportFee,
+  }) async {
     final hexAddress = getAddressC();
     final bechAddress = getEvmAddressBech();
     final fromAddresses = [hexAddress];
@@ -439,8 +451,11 @@ abstract class WalletProvider {
   /// @param sourceChain Which chain to import from. `X` or `P`
   /// @param [fee] The import fee to use in the transactions. If omitted the SDK will try to calculate the fee. For deterministic transactions you should always pre calculate and provide this value.
   /// @param [utxoSet] If omitted imports all atomic UTXOs.
-  Future<String> importCChain(ExportChainsC sourceChain,
-      {BigInt? fee, EvmUTXOSet? utxoSet}) async {
+  Future<String> importCChain(
+    ExportChainsC sourceChain, {
+    BigInt? fee,
+    EvmUTXOSet? utxoSet,
+  }) async {
     final bechAddress = getEvmAddressBech();
 
     utxoSet ??= await getAtomicUTXOsC(sourceChain);
@@ -534,7 +549,10 @@ abstract class WalletProvider {
     }
 
     return AssetBalanceP(
-        unlocked: unlocked, locked: locked, lockedStakeable: lockedStakeable);
+      unlocked: unlocked,
+      locked: locked,
+      lockedStakeable: lockedStakeable,
+    );
   }
 
   /// Returns the number AZC staked by this wallet.
@@ -546,8 +564,10 @@ abstract class WalletProvider {
   /// Import utxos in atomic memory to the P chain.
   /// @param sourceChain Either `X` or `C`
   /// @param [toAddress] The destination P chain address assets will get imported to. Defaults to the P chain address of the wallet.
-  Future<String> importPChain(ExportChainsP sourceChain,
-      {String? toAddress}) async {
+  Future<String> importPChain(
+    ExportChainsP sourceChain, {
+    String? toAddress,
+  }) async {
     final utxoSet = await getAtomicUTXOsP(sourceChain);
     if (utxoSet.getAllUTXOs().isEmpty) {
       throw Exception("Nothing to import.");
@@ -589,7 +609,9 @@ abstract class WalletProvider {
   /// @param destinationChain Either `X` or `C`
   /// @return returns the transaction id.
   Future<String> exportPChain(
-      BigInt amount, ExportChainsP destinationChain) async {
+    BigInt amount,
+    ExportChainsP destinationChain,
+  ) async {
     final pChangeAddress = getAddressP();
     final fromAddresses = await getAllAddressesP();
     final destinationAddress = destinationChain == ExportChainsP.X

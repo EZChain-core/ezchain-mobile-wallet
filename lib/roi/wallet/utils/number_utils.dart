@@ -48,8 +48,10 @@ BigInt numberToBN(dynamic value, int decimals) {
   final BigInt valBigInt;
   if (value is String) {
     valBigInt = BigInt.tryParse(value) ?? BigInt.zero;
-  } else {
+  } else if (value is num) {
     valBigInt = BigInt.from(value);
+  } else {
+    valBigInt = value;
   }
   final Decimal valBig = Decimal.fromBigInt(valBigInt);
   final tens = Decimal.fromInt(10).pow(decimals);
