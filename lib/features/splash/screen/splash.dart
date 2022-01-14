@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:decimal/decimal.dart';
 import 'package:eventify/eventify.dart';
 import 'package:flutter/material.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
@@ -15,9 +15,7 @@ import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/fee_utils.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
-import 'package:wallet/roi/wallet/utils/price_utils.dart';
 import 'package:wallet/themes/buttons.dart';
-import 'package:web3dart/web3dart.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -34,9 +32,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    wallet = SingletonWallet(
-        privateKey:
-            "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
+    // wallet = SingletonWallet(
+    //     privateKey:
+    //         "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
     // wallet.on(WalletEventType.balanceChangedX, _handleCallback);
     // wallet.on(WalletEventType.balanceChangedP, _handleCallback);
     // wallet.on(WalletEventType.balanceChangedC, _handleCallback);
@@ -61,10 +59,10 @@ class _SplashScreenState extends State<SplashScreen> {
     //     alignment: Alignment.center,
     //     child: SizedBox(
     //       width: 164,
-    //       child: ROIMediumPrimaryButton(
+    //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           exportXToImportC();
+    //           exportCToImportP();
     //         },
     //       ),
     //     ),
@@ -97,18 +95,18 @@ class _SplashScreenState extends State<SplashScreen> {
         eventData is WalletBalanceX) {
       final balanceX = eventData[activeNetwork.avaxId];
       if (balanceX != null) {
-        print(
+        logger.i(
             "balanceX: locked = ${balanceX.lockedDecimal}, unlocked = ${balanceX.unlockedDecimal}");
       }
     }
     if (eventName == WalletEventType.balanceChangedP.type &&
         eventData is AssetBalanceP) {
-      print(
+      logger.i(
           "balanceP: locked = ${eventData.lockedDecimal}, unlocked = ${eventData.unlockedDecimal}, lockedStakeable = ${eventData.lockedStakeableDecimal}");
     }
     if (eventName == WalletEventType.balanceChangedC.type &&
         eventData is WalletBalanceC) {
-      print(
+      logger.i(
           "balanceC: balance = ${eventData.balance}, balanceDecimal = ${eventData.balanceDecimal}");
     }
     // final avaxBalance = wallet.getAvaxBalance();
@@ -119,14 +117,14 @@ class _SplashScreenState extends State<SplashScreen> {
     //
     // final totalDecimal = totalAvaxBalanceDecimal + stakedDecimal;
     // final totalString = decimalToLocaleString(totalDecimal);
-    // print("total ROI = $totalString");
+    // logger.i("total ROI = $totalString");
     //
     // final avaxPrice = await getAvaxPriceDecimal();
-    // print("1 ROI = ${decimalToLocaleString(avaxPrice, decimals: 2)}");
+    // logger.i("1 ROI = ${decimalToLocaleString(avaxPrice, decimals: 2)}");
     //
     // final totalUsd = totalDecimal * avaxPrice;
     // final totalUsdString = decimalToLocaleString(totalUsd, decimals: 2);
-    // print("totalUsd = $totalUsdString");
+    // logger.i("totalUsd = $totalUsdString");
   }
 
   /// don't delete: to Address of PrivateKey-JaCCSxdoWfo3ao5KwenXrJjJR7cBTQ287G1C5qpv2hr2tCCdb
@@ -135,7 +133,7 @@ class _SplashScreenState extends State<SplashScreen> {
       // Lấy balance X
       await wallet.updateUtxosX();
     } catch (e) {
-      print(e);
+      logger.e(e);
     }
   }
 
@@ -147,10 +145,10 @@ class _SplashScreenState extends State<SplashScreen> {
       final fee = getTxFeeX();
       // Gửi AvaxX
       // phải dùng numberToBNAvaxX để convert
-      final txId = await wallet.sendAvaxX(to, numberToBNAvaxX(10));
-      print("txId = $txId");
+      final txId = await wallet.sendAvaxX(to, numberToBNAvaxX(1));
+      logger.i("txId = $txId");
     } catch (e) {
-      print(e);
+      logger.e(e);
     }
   }
 
@@ -158,16 +156,16 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       await wallet.updateUtxosP();
     } catch (e) {
-      print(e);
+      logger.e(e);
     }
   }
 
   getStakeP() async {
     try {
       final response = await wallet.getStake();
-      print("getStakeP = ${bnToAvaxP(response.stakedBI)}");
+      logger.i("getStakeP = ${bnToAvaxP(response.stakedBI)}");
     } catch (e) {
-      print(e);
+      logger.e(e);
     }
   }
 
@@ -176,7 +174,7 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       await wallet.updateAvaxBalanceC();
     } catch (e) {
-      print(e);
+      logger.e(e);
       return;
     }
   }
@@ -185,11 +183,15 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       // Gửi AvaxC
       // Bước 1 lấy Gas Price (là con số 31 ở web wallet)
-      final adjustGasPrice = await getAdjustedGasPrice();
-      final gasPrice =
-          EtherAmount.fromUnitAndValue(EtherUnit.wei, adjustGasPrice)
-              .getValueInUnitBI(EtherUnit.gwei);
-      print("gasPrice = $gasPrice");
+      BigInt gasPrice = BigInt.from(225000000000);
+      try {
+        gasPrice = await getAdjustedGasPrice();
+      } catch (e) {
+        logger.e(e);
+      }
+      final gasPriceNumber =
+          int.parse(bnToDecimalAvaxX(gasPrice).toStringAsFixed(0));
+      logger.i("gasPrice = $gasPriceNumber");
 
       const to = "0xd30a9f6645a73f67b7850b9304b6a3172dda75bf";
 
@@ -200,83 +202,128 @@ class _SplashScreenState extends State<SplashScreen> {
 
       // Ở web wallet sau khi fill amount và address sẽ chuyển sang confirm
       // Confirm sẽ get Gas Limit
-      final gasLimit = await wallet.estimateAvaxGasLimit(to, amount, gasPrice);
-      print("gasLimit = $gasLimit");
+      BigInt gasLimit = BigInt.from(21000);
+      try {
+        gasLimit = await wallet.estimateAvaxGasLimit(to, amount, gasPrice);
+      } catch (e) {
+        logger.e(e);
+      }
+
+      final maxFee = gasPrice * gasLimit;
+      final maxFeeText = bnToAvaxC(maxFee);
+      logger.i("maxFee = $maxFeeText");
 
       // Xác nhận gửi AvaxC
-      final txId =
-          await wallet.sendAvaxC(to, amount, gasPrice, gasLimit.toInt());
-      print("txId = $txId");
+      final txId = await wallet.sendAvaxC(
+        to,
+        amount,
+        gasPrice,
+        gasLimit.toInt(),
+      );
+      logger.i("txId = $txId");
     } catch (e) {
-      print(e);
+      logger.e(e);
     }
   }
 
   exportXToImportP() async {
+    final exportFee = getTxFeeX();
+    final importFee = getTxFeeP();
+    // amount phải thêm import fee
+    // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
+    final amount = numberToBNAvaxX(1) + importFee;
+    String exportTxId = "";
     try {
-      final exportFee = getTxFeeX();
-      final importFee = getTxFeeP();
-      // amount phải thêm import fee
-      // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
-      final amount = numberToBNAvaxX(1) + importFee;
-      final exportTxId = await wallet.exportXChain(amount, ExportChainsX.P);
-      print("exportTxId = $exportTxId");
-      final importTxId = await wallet.importPChain(ExportChainsP.X);
-      print("importTxId = $importTxId");
+      exportTxId = await wallet.exportXChain(amount, ExportChainsX.P);
+      logger.i("exportTxId = $exportTxId");
     } catch (e) {
-      print(e);
+      logger.e(e);
+    }
+    if (exportTxId.isEmpty) return;
+    String importTxId = "";
+
+    try {
+      importTxId = await wallet.importPChain(ExportChainsP.X);
+      logger.i("importTxId = $importTxId");
+    } catch (e) {
+      logger.e(e);
     }
   }
 
   exportXToImportC() async {
+    final exportFee = getTxFeeX();
+    final importFee = await estimateImportGasFee();
+    // amount phải thêm import fee
+    // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
+    final amount = numberToBNAvaxX(1) + importFee;
+
+    String exportTxId = "";
     try {
-      final exportFee = getTxFeeX();
-      final importFee = await estimateImportGasFee();
-      // amount phải thêm import fee
-      // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
-      final amount = numberToBNAvaxX(1) + importFee;
-      final exportTxId = await wallet.exportXChain(amount, ExportChainsX.C);
-      print("exportTxId = $exportTxId");
-      final importTxId = await wallet.importCChain(ExportChainsC.X);
-      print("importTxId = $importTxId");
+      exportTxId = await wallet.exportXChain(amount, ExportChainsX.C);
+      logger.i("exportTxId = $exportTxId");
     } catch (e) {
-      print(e);
+      logger.e(e);
+    }
+    if (exportTxId.isEmpty) return;
+    String importTxId = "";
+    try {
+      importTxId = await wallet.importCChain(ExportChainsC.X);
+      logger.i("importTxId = $importTxId");
+    } catch (e) {
+      logger.e(e);
     }
   }
 
   exportPToImportX() async {
+    final exportFee = getTxFeeP();
+    final importFee = getTxFeeX();
+    // amount phải thêm import fee
+    // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
+    final amount = numberToBNAvaxP(1) + importFee;
+
+    String exportTxId = "";
     try {
-      final exportFee = getTxFeeP();
-      final importFee = getTxFeeX();
-      // amount phải thêm import fee
-      // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
-      final amount = numberToBNAvaxP(1) + importFee;
-      final exportTxId = await wallet.exportPChain(amount, ExportChainsP.X);
-      print("exportTxId = $exportTxId");
-      final importTxId = await wallet.importXChain(ExportChainsX.P);
-      print("importTxId = $importTxId");
+      exportTxId = await wallet.exportPChain(amount, ExportChainsP.X);
+      logger.i("exportTxId = $exportTxId");
     } catch (e) {
-      print(e);
+      logger.e(e);
+    }
+    if (exportTxId.isEmpty) return;
+    String importTxId = "";
+    try {
+      importTxId = await wallet.importXChain(ExportChainsX.P);
+      logger.i("importTxId = $importTxId");
+    } catch (e) {
+      logger.e(e);
     }
   }
 
   exportPToImportC() async {
+    final exportFee = getTxFeeP();
+    final importFee = await estimateImportGasFee();
+    // amount phải thêm import fee
+    // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
+    final amount = numberToBNAvaxP(1) + importFee;
+
+    String exportTxId = "";
     try {
-      final exportFee = getTxFeeP();
-      final importFee = await estimateImportGasFee();
-      // amount phải thêm import fee
-      // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
-      final amount = numberToBNAvaxP(1) + importFee;
-      final exportTxId = await wallet.exportPChain(amount, ExportChainsP.C);
-      print("exportTxId = $exportTxId");
-      final importTxId = await wallet.importCChain(ExportChainsC.P);
-      print("importTxId = $importTxId");
+      exportTxId = await wallet.exportPChain(amount, ExportChainsP.C);
+      logger.i("exportTxId = $exportTxId");
     } catch (e) {
-      print(e);
+      logger.e(e);
+    }
+    if (exportTxId.isEmpty) return;
+    String importTxId = "";
+    try {
+      importTxId = await wallet.importCChain(ExportChainsC.P);
+      logger.i("importTxId = $importTxId");
+    } catch (e) {
+      logger.e(e);
     }
   }
 
   exportCToImportX() async {
+    String exportTxId = "";
     try {
       final hexAddress = wallet.getAddressC();
       const destinationChain = ExportChainsC.X;
@@ -292,20 +339,27 @@ class _SplashScreenState extends State<SplashScreen> {
       final importFee = getTxFeeX();
       // amount phải thêm import fee
       final amount = numberToBNAvaxX(1) + importFee;
-      final exportTxId = await wallet.exportCChain(
+      exportTxId = await wallet.exportCChain(
         amount,
         destinationChain,
         exportFee: exportFee,
       );
-      print("exportTxId = $exportTxId");
-      final importTxId = await wallet.importXChain(ExportChainsX.C);
-      print("importTxId = $importTxId");
+      logger.i("exportTxId = $exportTxId");
     } catch (e) {
-      print(e);
+      logger.e(e);
+    }
+    if (exportTxId.isEmpty) return;
+    String importTxId = "";
+    try {
+      importTxId = await wallet.importXChain(ExportChainsX.C);
+      logger.i("importTxId = $importTxId");
+    } catch (e) {
+      logger.e(e);
     }
   }
 
   exportCToImportP() async {
+    String exportTxId = "";
     try {
       final hexAddress = wallet.getAddressC();
       const destinationChain = ExportChainsC.P;
@@ -321,16 +375,22 @@ class _SplashScreenState extends State<SplashScreen> {
       final importFee = getTxFeeP();
       // amount phải thêm import fee
       final amount = numberToBNAvaxP(1) + importFee;
-      final exportTxId = await wallet.exportCChain(
+      exportTxId = await wallet.exportCChain(
         amount,
         destinationChain,
         exportFee: exportFee,
       );
-      print("exportTxId = $exportTxId");
-      final importTxId = await wallet.importPChain(ExportChainsP.C);
-      print("importTxId = $importTxId");
+      logger.i("exportTxId = $exportTxId");
     } catch (e) {
-      print(e);
+      logger.e(e);
+    }
+    if (exportTxId.isEmpty) return;
+    String importTxId = "";
+    try {
+      importTxId = await wallet.importPChain(ExportChainsP.C);
+      logger.i("importTxId = $importTxId");
+    } catch (e) {
+      logger.e(e);
     }
   }
 }
