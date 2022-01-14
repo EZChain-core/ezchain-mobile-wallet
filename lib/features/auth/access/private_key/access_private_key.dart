@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.dart';
@@ -62,11 +63,14 @@ class AccessPrivateKeyScreen extends StatelessWidget {
                           child: Container(
                             width: 164,
                             padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: EZCMediumPrimaryButton(
-                              text: Strings.current.sharedAccessWallet,
-                              onPressed: () {
-                                _onClickAccess();
-                              },
+                            child: Observer(
+                              builder: (_) => EZCMediumPrimaryButton(
+                                text: Strings.current.sharedAccessWallet,
+                                onPressed: () {
+                                  _onClickAccess();
+                                },
+                                isLoading: _accessPrivateKeyStore.isLoading,
+                              ),
                             ),
                           ),
                         ),
@@ -101,8 +105,8 @@ class AccessPrivateKeyScreen extends StatelessWidget {
     );
   }
 
-  void _onClickAccess() {
-    bool isSuccess = _accessPrivateKeyStore
+  void _onClickAccess() async {
+    bool isSuccess = await _accessPrivateKeyStore
         .accessWithPrivateKey(_privateKeyInputController.text);
     if (isSuccess) {
       walletContext?.router.replaceAll([const DashboardRoute()]);

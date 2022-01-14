@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.dart';
@@ -78,11 +79,14 @@ class CreateWalletConfirmScreen extends StatelessWidget {
                 child: Center(
                   child: SizedBox(
                     width: 169,
-                    child: EZCMediumPrimaryButton(
-                      text: Strings.current.sharedConfirm,
-                      onPressed: () {
-                        _onClickConfirm();
-                      },
+                    child: Observer(
+                      builder: (_) => EZCMediumPrimaryButton(
+                        text: Strings.current.sharedConfirm,
+                        onPressed: () {
+                          _onClickConfirm();
+                        },
+                        isLoading: _createWalletConfirmStore.isLoading,
+                      ),
                     ),
                   ),
                 ),
@@ -115,9 +119,9 @@ class CreateWalletConfirmScreen extends StatelessWidget {
     );
   }
 
-  void _onClickConfirm() {
+  void _onClickConfirm() async {
     if (phrase.equals(resultPhrase) &&
-        _createWalletConfirmStore
+        await _createWalletConfirmStore
             .accessWithMnemonicKey(resultPhrase.join(' '))) {
       walletContext?.router.push(const PinCodeSetupRoute());
     } else {

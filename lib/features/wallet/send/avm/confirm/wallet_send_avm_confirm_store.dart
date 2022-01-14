@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
@@ -18,12 +19,12 @@ abstract class _WalletSendAvmConfirmStore with Store {
   bool isLoading = false;
 
   @action
-  sendAvm(String address, double amount, {String? memo}) async {
+  sendAvm(String address, Decimal amount, {String? memo}) async {
     isLoading = true;
     try {
       await wallet.updateUtxosX();
-      final txId =
-          await wallet.sendAvaxX(address, numberToBNAvaxX(amount), memo: memo);
+      final txId = await wallet
+          .sendAvaxX(address, numberToBNAvaxX(amount.toBigInt()), memo: memo);
       print("txId = $txId");
       sendSuccess = true;
     } catch (e) {

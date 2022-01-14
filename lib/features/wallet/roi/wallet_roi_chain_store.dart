@@ -1,9 +1,9 @@
+import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
 part 'wallet_roi_chain_store.g.dart';
@@ -60,10 +60,19 @@ abstract class _WalletRoiChainStore with Store {
 }
 
 class WalletRoiChainBalanceViewData {
-  final String available;
-  final String? lock;
-  final String? lockStakeable;
+  final Decimal available;
+  final Decimal? lock;
+  final Decimal? lockStakeable;
 
-  WalletRoiChainBalanceViewData(
-      this.available, this.lock, this.lockStakeable);
+  get availableString =>
+      decimalToLocaleString(available, decimals: decimalNumber);
+
+  get lockString =>
+      decimalToLocaleString(lock ?? Decimal.zero, decimals: decimalNumber);
+
+  get lockStakeableString =>
+      decimalToLocaleString(lockStakeable ?? Decimal.zero,
+          decimals: decimalNumber);
+
+  WalletRoiChainBalanceViewData(this.available, this.lock, this.lockStakeable);
 }

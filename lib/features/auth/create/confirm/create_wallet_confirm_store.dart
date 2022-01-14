@@ -12,9 +12,14 @@ class CreateWalletConfirmStore = _CreateWalletConfirmStore
 abstract class _CreateWalletConfirmStore with Store {
   final _walletFactory = getIt<WalletFactory>();
 
-  bool accessWithMnemonicKey(String mnemonicKey) {
+  @observable
+  bool isLoading = false;
+
+  Future<bool> accessWithMnemonicKey(String mnemonicKey) async {
+    isLoading = true;
     final wallet = MnemonicWallet.import(mnemonicKey);
     if (wallet != null) {
+      isLoading = false;
       _walletFactory.addWallet(wallet);
       _walletFactory.saveAccessKey(mnemonicKey);
       return true;

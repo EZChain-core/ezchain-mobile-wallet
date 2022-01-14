@@ -21,7 +21,8 @@ class WalletROIChainScreen extends StatefulWidget {
   State<WalletROIChainScreen> createState() => _WalletROIChainScreenState();
 }
 
-class _WalletROIChainScreenState extends State<WalletROIChainScreen> with AutomaticKeepAliveClientMixin{
+class _WalletROIChainScreenState extends State<WalletROIChainScreen>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     final walletRoiChainStore = WalletRoiChainStore();
@@ -88,10 +89,10 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen> with Automa
                 Observer(
                   builder: (_) => _WalletChainWidget(
                     chain: Strings.current.sharedXChain,
-                    availableRoi: walletRoiChainStore.balanceX.available,
-                    lockRoi: walletRoiChainStore.balanceX.lock,
+                    availableRoi: walletRoiChainStore.balanceX.availableString,
+                    lockRoi: walletRoiChainStore.balanceX.lockString,
                     onSendPressed: () =>
-                        context.router.push(const WalletSendAvmRoute()),
+                        context.router.push(WalletSendAvmRoute()),
                     onReceivePressed: () => context.router.push(
                       WalletReceiveRoute(
                         walletReceiveInfo: WalletReceiveInfo(
@@ -104,10 +105,10 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen> with Automa
                 Observer(
                   builder: (_) => _WalletChainWidget(
                     chain: Strings.current.sharedPChain,
-                    availableRoi: walletRoiChainStore.balanceP.available,
-                    lockRoi: walletRoiChainStore.balanceP.lock,
+                    availableRoi: walletRoiChainStore.balanceP.availableString,
+                    lockRoi: walletRoiChainStore.balanceP.lockString,
                     lockStakeableRoi:
-                    walletRoiChainStore.balanceP.lockStakeable,
+                        walletRoiChainStore.balanceP.lockStakeableString,
                     hasSend: false,
                     onReceivePressed: () => context.router.push(
                       WalletReceiveRoute(
@@ -121,10 +122,10 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen> with Automa
                 Observer(
                   builder: (_) => _WalletChainWidget(
                     chain: Strings.current.sharedCChain,
-                    availableRoi: walletRoiChainStore.balanceC.available,
-                    lockRoi: walletRoiChainStore.balanceC.lock,
+                    availableRoi: walletRoiChainStore.balanceC.availableString,
+                    lockRoi: walletRoiChainStore.balanceC.lockString,
                     onSendPressed: () =>
-                        context.router.push(const WalletSendEvmRoute()),
+                        context.router.push(WalletSendEvmRoute()),
                     onReceivePressed: () => context.router.push(
                       WalletReceiveRoute(
                         walletReceiveInfo: WalletReceiveInfo(
@@ -133,17 +134,6 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen> with Automa
                     ),
                   ),
                 ),
-                // Expanded(
-                //   child: RefreshIndicator(
-                //     onRefresh: _refresh,
-                //     child: ListView(
-                //       padding: const EdgeInsets.all(0),
-                //       children: [
-                //
-                //       ],
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),

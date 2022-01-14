@@ -10,6 +10,10 @@ class AccessMnemonicKeyStore = _AccessMnemonicKeyStore
     with _$AccessMnemonicKeyStore;
 
 abstract class _AccessMnemonicKeyStore with Store {
+
+  @observable
+  bool isLoading = false;
+
   final _walletFactory = getIt<WalletFactory>();
 
   final _mnemonicPhrase = <String>[];
@@ -21,9 +25,11 @@ abstract class _AccessMnemonicKeyStore with Store {
     _mnemonicPhrase.addAll(phrase);
   }
 
-  bool accessWithMnemonicKey(String mnemonicKey) {
+  Future<bool> accessWithMnemonicKey(String mnemonicKey) async {
+    isLoading = true;
     final wallet = MnemonicWallet.import(mnemonicKey);
     if (wallet != null) {
+      isLoading = false;
       _walletFactory.addWallet(wallet);
       _walletFactory.saveAccessKey(mnemonicKey);
       return true;

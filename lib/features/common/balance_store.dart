@@ -5,11 +5,12 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
-import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
 part 'balance_store.g.dart';
+
+const decimalNumber = 3;
 
 @LazySingleton()
 class BalanceStore = _BalanceStore with _$BalanceStore;
@@ -17,37 +18,37 @@ class BalanceStore = _BalanceStore with _$BalanceStore;
 abstract class _BalanceStore with Store {
   final _wallet = getIt<WalletFactory>().activeWallet;
 
-  final _decimalNumber = 3;
-
   @observable
   Decimal totalRoi = Decimal.zero;
 
   @observable
-  String balanceX = '0';
+  Decimal balanceX = Decimal.zero;
 
   @observable
-  String balanceP = '0';
+  Decimal balanceP = Decimal.zero;
 
   @observable
-  String balanceC = '0';
+  Decimal balanceC = Decimal.zero;
 
   @observable
-  String balanceLockedX = '0';
+  Decimal balanceLockedX = Decimal.zero;
 
   @observable
-  String balanceLockedP = '0';
+  Decimal balanceLockedP = Decimal.zero;
 
   @observable
-  String balanceLockedStakeableP = '0';
+  Decimal balanceLockedStakeableP = Decimal.zero;
 
   bool _isXLoaded = false;
   bool _isPLoaded = false;
   bool _isCLoaded = false;
   bool _needFetchTotal = false;
 
-  double get balanceXDouble => _parseDouble(balanceX);
+  String get balanceXString => _decimalBalance(balanceX);
 
-  double get balanceCDouble => _parseDouble(balanceC);
+  String get balanceCString => _decimalBalance(balanceC);
+
+  String get balancePString => _decimalBalance(balanceP);
 
   _BalanceStore() {
     init();
@@ -80,10 +81,8 @@ abstract class _BalanceStore with Store {
         eventData is WalletBalanceX) {
       final x = eventData[activeNetwork.avaxId];
       if (x != null) {
-        balanceX =
-            decimalToLocaleString(bnToDecimalAvaxX(x.unlocked), decimals: 3);
-        balanceLockedX =
-            decimalToLocaleString(bnToDecimalAvaxX(x.locked), decimals: 3);
+        balanceX = bnToDecimalAvaxX(x.unlocked);
+        balanceLockedX = bnToDecimalAvaxX(x.locked);
         if (_needFetchTotal) {
           _isXLoaded = true;
         }
@@ -91,21 +90,16 @@ abstract class _BalanceStore with Store {
     }
     if (eventName == WalletEventType.balanceChangedP.type &&
         eventData is AssetBalanceP) {
-      balanceP = decimalToLocaleString(bnToDecimalAvaxP(eventData.unlocked),
-          decimals: _decimalNumber);
-      balanceLockedP = decimalToLocaleString(bnToDecimalAvaxP(eventData.locked),
-          decimals: _decimalNumber);
-      balanceLockedStakeableP = decimalToLocaleString(
-          bnToDecimalAvaxP(eventData.lockedStakeable),
-          decimals: _decimalNumber);
+      balanceP = bnToDecimalAvaxP(eventData.unlocked);
+      balanceLockedP = bnToDecimalAvaxP(eventData.locked);
+      balanceLockedStakeableP = bnToDecimalAvaxP(eventData.lockedStakeable);
       if (_needFetchTotal) {
         _isPLoaded = true;
       }
     }
     if (eventName == WalletEventType.balanceChangedC.type &&
         eventData is WalletBalanceC) {
-      balanceC = decimalToLocaleString(bnToDecimalAvaxC(eventData.balance),
-          decimals: 3);
+      balanceC = bnToDecimalAvaxC(eventData.balance);
       if (_needFetchTotal) {
         _isCLoaded = true;
       }
@@ -154,7 +148,7 @@ abstract class _BalanceStore with Store {
     totalRoi = totalAvaxBalanceDecimal + stakedDecimal;
   }
 
-  double _parseDouble(String balance) {
-    return double.tryParse(balance) ?? 0;
+  String _decimalBalance(Decimal balance) {
+    return decimalToLocaleString(balance, decimals: decimalNumber);
   }
 }

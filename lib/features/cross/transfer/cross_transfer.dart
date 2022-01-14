@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/cross/cross_store.dart';
-import 'package:wallet/features/cross/transfer/cross_transfer_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -19,7 +18,6 @@ class CrossTransferScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final crossTransferStore = CrossTransferStore();
 
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
@@ -68,7 +66,7 @@ class CrossTransferScreen extends StatelessWidget {
                             ),
                             Observer(
                               builder: (_) => Text(
-                                crossStore.sourceBalance,
+                                crossStore.sourceBalance.toString(),
                                 style: EZCBodyLargeTextStyle(
                                     color: provider.themeMode.text),
                               ),
@@ -201,7 +199,7 @@ class CrossTransferScreen extends StatelessWidget {
                             ),
                             Observer(
                               builder: (_) => Text(
-                                crossStore.destinationBalance,
+                                crossStore.destinationBalance.toString(),
                                 style: EZCBodyLargeTextStyle(
                                     color: provider.themeMode.text),
                               ),

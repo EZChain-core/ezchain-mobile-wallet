@@ -1,10 +1,9 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
-import 'package:wallet/di/di.dart';
-import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/cross/cross_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -87,14 +86,14 @@ class _CrossScreenState extends State<CrossScreen> {
                             rateUsd: _crossStore.avaxPrice,
                             error: _crossStore.amountError,
                             onChanged: (amount) {
-                              _crossStore.amount = double.tryParse(amount) ?? 0;
+                              _crossStore.amount = Decimal.parse(amount);
                               _crossStore.removeAmountError();
                               _crossStore.updateFee();
                             },
                             controller: _amountController,
                             onSuffixPressed: () {
                               _amountController.text =
-                                  _crossStore.sourceBalance.replaceAll(',', '');
+                                  _crossStore.sourceBalance.toString();
                             },
                             enabled: !_crossStore.isConfirm,
                           ),
@@ -235,8 +234,9 @@ class _CrossScreenState extends State<CrossScreen> {
 
   Future<void> _onClickTransfer() async {
     _crossStore.transferring();
-    final isRefreshCrossScreen = await context.router.push<bool>(CrossTransferRoute(crossStore: _crossStore));
-    if(isRefreshCrossScreen == true) {
+    final isRefreshCrossScreen = await context.router
+        .push<bool>(CrossTransferRoute(crossStore: _crossStore));
+    if (isRefreshCrossScreen == true) {
       setState(() {
         _crossStore = CrossStore();
         _amountController.text = '';

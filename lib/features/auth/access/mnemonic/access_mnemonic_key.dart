@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.dart';
@@ -66,11 +67,14 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
                       child: Container(
                         width: 164,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: EZCMediumPrimaryButton(
-                          text: Strings.current.sharedAccessWallet,
-                          onPressed: () {
-                            _onClickAccess();
-                          },
+                        child: Observer(
+                          builder: (_) => EZCMediumPrimaryButton(
+                            text: Strings.current.sharedAccessWallet,
+                            onPressed: () {
+                              _onClickAccess();
+                            },
+                            isLoading: _accessMnemonicKeyStore.isLoading,
+                          ),
                         ),
                       ),
                     ),
@@ -96,13 +100,14 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
     );
   }
 
-  void _onClickAccess() {
+  void _onClickAccess() async {
     final mnemonicPhrase = _accessMnemonicKeyStore.mnemonicPhrase;
     if (mnemonicPhrase.length != Mnemonic.mnemonicLength) {
       _showWarningDialog();
     } else {
       String mnemonic = mnemonicPhrase.join(' ');
-      final isSuccess = _accessMnemonicKeyStore.accessWithMnemonicKey(mnemonic);
+      final isSuccess =
+          await _accessMnemonicKeyStore.accessWithMnemonicKey(mnemonic);
       if (isSuccess) {
         walletContext?.router.replaceAll([const DashboardRoute()]);
       } else {
