@@ -15,9 +15,9 @@ part 'balance_store.g.dart';
 class BalanceStore = _BalanceStore with _$BalanceStore;
 
 abstract class _BalanceStore with Store {
-  final wallet = getIt<WalletFactory>().activeWallet;
+  final _wallet = getIt<WalletFactory>().activeWallet;
 
-  final decimalNumber = 3;
+  final _decimalNumber = 3;
 
   @observable
   Decimal totalRoi = Decimal.zero;
@@ -54,9 +54,9 @@ abstract class _BalanceStore with Store {
   }
 
   init() {
-    wallet.on(WalletEventType.balanceChangedX, _handleCallback);
-    wallet.on(WalletEventType.balanceChangedP, _handleCallback);
-    wallet.on(WalletEventType.balanceChangedC, _handleCallback);
+    _wallet.on(WalletEventType.balanceChangedX, _handleCallback);
+    _wallet.on(WalletEventType.balanceChangedP, _handleCallback);
+    _wallet.on(WalletEventType.balanceChangedC, _handleCallback);
     updateBalance();
   }
 
@@ -92,12 +92,12 @@ abstract class _BalanceStore with Store {
     if (eventName == WalletEventType.balanceChangedP.type &&
         eventData is AssetBalanceP) {
       balanceP = decimalToLocaleString(bnToDecimalAvaxP(eventData.unlocked),
-          decimals: decimalNumber);
+          decimals: _decimalNumber);
       balanceLockedP = decimalToLocaleString(bnToDecimalAvaxP(eventData.locked),
-          decimals: decimalNumber);
+          decimals: _decimalNumber);
       balanceLockedStakeableP = decimalToLocaleString(
           bnToDecimalAvaxP(eventData.lockedStakeable),
-          decimals: decimalNumber);
+          decimals: _decimalNumber);
       if (_needFetchTotal) {
         _isPLoaded = true;
       }
@@ -121,7 +121,7 @@ abstract class _BalanceStore with Store {
 
   updateBalanceX() async {
     try {
-      await wallet.updateUtxosX();
+      await _wallet.updateUtxosX();
     } catch (e) {
       print(e);
     }
@@ -129,7 +129,7 @@ abstract class _BalanceStore with Store {
 
   updateBalanceP() async {
     try {
-      await wallet.updateUtxosP();
+      await _wallet.updateUtxosP();
     } catch (e) {
       print(e);
     }
@@ -137,7 +137,7 @@ abstract class _BalanceStore with Store {
 
   updateBalanceC() async {
     try {
-      await wallet.updateAvaxBalanceC();
+      await _wallet.updateAvaxBalanceC();
     } catch (e) {
       print(e);
       return;
@@ -145,10 +145,10 @@ abstract class _BalanceStore with Store {
   }
 
   _fetchTotal() async {
-    final avaxBalance = wallet.getAvaxBalance();
+    final avaxBalance = _wallet.getAvaxBalance();
     final totalAvaxBalanceDecimal = avaxBalance.totalDecimal;
 
-    final staked = await wallet.getStake();
+    final staked = await _wallet.getStake();
     final stakedDecimal = bnToDecimalAvaxP(staked.stakedBI);
 
     totalRoi = totalAvaxBalanceDecimal + stakedDecimal;
