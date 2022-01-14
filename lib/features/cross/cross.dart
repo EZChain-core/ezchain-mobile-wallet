@@ -23,45 +23,13 @@ class CrossScreen extends StatefulWidget {
 }
 
 class _CrossScreenState extends State<CrossScreen> {
-  CrossStore crossStore = CrossStore();
-  final amountController = TextEditingController();
-  final priceStore = getIt<PriceStore>();
-
+  CrossStore _crossStore = CrossStore();
+  final _amountController = TextEditingController();
 
   @override
   void initState() {
-    crossStore.init();
+    _crossStore.init();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    amountController.dispose();
-    super.dispose();
-  }
-
-  void _onClickConfirm() {
-    crossStore.isConfirm = crossStore.validate();
-    if (crossStore.isConfirm) {
-      setState(() {});
-    }
-  }
-
-  Future<void> _onClickTransfer() async {
-    crossStore.transferring();
-    final isRefreshCrossScreen = await context.router.push<bool>(CrossTransferRoute(crossStore: crossStore));
-    if(isRefreshCrossScreen == true) {
-      setState(() {
-        crossStore = CrossStore();
-        amountController.text = '';
-      });
-    }
-  }
-
-  void _onClickCancel() {
-    setState(() {
-      crossStore.isConfirm = false;
-    });
   }
 
   @override
@@ -99,11 +67,11 @@ class _CrossScreenState extends State<CrossScreen> {
                             label: Strings.current.sharedSource,
                             items: CrossChainType.values,
                             onChanged: (type) {
-                              crossStore.setSourceChain(type);
+                              _crossStore.setSourceChain(type);
                             },
                             parseString: (type) => type.name,
-                            initValue: crossStore.sourceChain,
-                            enabled: !crossStore.isConfirm,
+                            initValue: _crossStore.sourceChain,
+                            enabled: !_crossStore.isConfirm,
                           ),
                         ),
                       ),
@@ -115,19 +83,20 @@ class _CrossScreenState extends State<CrossScreen> {
                             backgroundColor: provider.themeMode.white,
                             hint: '0.0',
                             suffixText: Strings.current
-                                .walletSendBalance(crossStore.sourceBalance),
-                            rateUsd: crossStore.avaxPrice,
-                            error: crossStore.amountError,
+                                .walletSendBalance(_crossStore.sourceBalance),
+                            rateUsd: _crossStore.avaxPrice,
+                            error: _crossStore.amountError,
                             onChanged: (amount) {
-                              crossStore.amount = double.tryParse(amount) ?? 0;
-                              crossStore.removeAmountError();
+                              _crossStore.amount = double.tryParse(amount) ?? 0;
+                              _crossStore.removeAmountError();
+                              _crossStore.updateFee();
                             },
-                            controller: amountController,
+                            controller: _amountController,
                             onSuffixPressed: () {
-                              amountController.text =
-                                  crossStore.sourceBalance.replaceAll(',', '');
+                              _amountController.text =
+                                  _crossStore.sourceBalance.replaceAll(',', '');
                             },
-                            enabled: !crossStore.isConfirm,
+                            enabled: !_crossStore.isConfirm,
                           ),
                         ),
                       ),
@@ -163,13 +132,13 @@ class _CrossScreenState extends State<CrossScreen> {
                         child: Observer(
                           builder: (_) => EZCDropdown<CrossChainType>(
                             label: Strings.current.sharedDestination,
-                            items: crossStore.destinationList,
+                            items: _crossStore.destinationList,
                             parseString: (type) => type.name,
-                            initValue: crossStore.destinationChain,
+                            initValue: _crossStore.destinationChain,
                             onChanged: (t) {
-                              crossStore.destinationChain = t;
+                              _crossStore.destinationChain = t;
                             },
-                            enabled: !crossStore.isConfirm,
+                            enabled: !_crossStore.isConfirm,
                           ),
                         ),
                       ),
@@ -180,7 +149,7 @@ class _CrossScreenState extends State<CrossScreen> {
                           padding: const EdgeInsets.only(right: 16),
                           child: Text(
                             Strings.current.walletSendBalance(
-                                crossStore.destinationBalance),
+                                _crossStore.destinationBalance),
                             maxLines: 1,
                             overflow: TextOverflow.fade,
                             textAlign: TextAlign.end,
@@ -207,7 +176,7 @@ class _CrossScreenState extends State<CrossScreen> {
                       Expanded(
                         child: Observer(
                           builder: (_) => Text(
-                            '${crossStore.fee} EZC',
+                            '${_crossStore.fee} EZC',
                             textAlign: TextAlign.end,
                             style: EZCTitleLargeTextStyle(
                                 color: provider.themeMode.text60),
@@ -219,14 +188,14 @@ class _CrossScreenState extends State<CrossScreen> {
                   ),
                 ),
                 const SizedBox(height: 87),
-                if (!crossStore.isConfirm)
+                if (!_crossStore.isConfirm)
                   EZCMediumPrimaryButton(
                     text: Strings.current.sharedConfirm,
                     width: 185,
                     padding: const EdgeInsets.symmetric(),
                     onPressed: _onClickConfirm,
                   ),
-                if (crossStore.isConfirm) ...[
+                if (_crossStore.isConfirm) ...[
                   EZCMediumSuccessButton(
                     text: Strings.current.sharedTransfer,
                     padding: const EdgeInsets.symmetric(
@@ -249,5 +218,35 @@ class _CrossScreenState extends State<CrossScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  void _onClickConfirm() {
+    _crossStore.isConfirm = _crossStore.validate();
+    if (_crossStore.isConfirm) {
+      setState(() {});
+    }
+  }
+
+  Future<void> _onClickTransfer() async {
+    _crossStore.transferring();
+    final isRefreshCrossScreen = await context.router.push<bool>(CrossTransferRoute(crossStore: _crossStore));
+    if(isRefreshCrossScreen == true) {
+      setState(() {
+        _crossStore = CrossStore();
+        _amountController.text = '';
+      });
+    }
+  }
+
+  void _onClickCancel() {
+    setState(() {
+      _crossStore.isConfirm = false;
+    });
   }
 }
