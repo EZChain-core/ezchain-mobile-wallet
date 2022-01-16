@@ -40,7 +40,7 @@ Uint8List stringToAddress(String address, {String? hrp}) {
     throw Exception("Error - HRP should be at least 1 character");
   }
 
-  if (humanReadablePart != "avax" &&
+  if (humanReadablePart != "ezc" &&
       humanReadablePart != "fuji" &&
       humanReadablePart != "local" &&
       humanReadablePart != hrp) {
