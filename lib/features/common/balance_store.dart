@@ -152,3 +152,9 @@ abstract class _BalanceStore with Store {
     return decimalToLocaleString(balance, decimals: decimalNumber);
   }
 }
+
+extension DecimalExtension on Decimal {
+  String text({int decimals = decimalNumber}) {
+    return decimalToLocaleString(this, decimals: decimals);
+  }
+}

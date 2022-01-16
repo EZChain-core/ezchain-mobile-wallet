@@ -173,3 +173,30 @@ class _EZCDropdownState<T> extends State<EZCDropdown<T>> {
     );
   }
 }
+
+class EZCLoading extends StatelessWidget {
+  final Color color;
+  final double size;
+  final double strokeWidth;
+
+  const EZCLoading(
+      {Key? key,
+      required this.color,
+      required this.size,
+      required this.strokeWidth})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => SizedBox(
+        width: size,
+        height: size,
+        child: CircularProgressIndicator(
+          strokeWidth: strokeWidth,
+          color: color,
+        ),
+      ),
+    );
+  }
+}

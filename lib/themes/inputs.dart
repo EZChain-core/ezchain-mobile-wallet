@@ -12,7 +12,7 @@ import 'package:wallet/themes/typography.dart';
 
 const ezcBorder = BorderRadius.all(Radius.circular(8));
 
-class EZCTextField extends StatefulWidget {
+class EZCTextField extends StatelessWidget {
   final String hint;
 
   final TextInputType? inputType;
@@ -48,35 +48,9 @@ class EZCTextField extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<EZCTextField> createState() => _EZCTextFieldState();
-}
-
-class _EZCTextFieldState extends State<EZCTextField> {
-  bool _hasError = false;
-
-  @override
-  void initState() {
-    _hasError = widget.error != null;
-    if (widget.controller != null) {
-      widget.controller?.addListener(() {
-        if (_hasError) {
-          setState(() {
-            _hasError = false;
-          });
-        }
-      });
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    widget.controller?.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final _hasError = error != null;
+
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
         width: double.infinity,
@@ -85,11 +59,11 @@ class _EZCTextFieldState extends State<EZCTextField> {
           children: [
             Stack(
               children: [
-                if (widget.label != null)
+                if (label != null)
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      widget.label!,
+                      label!,
                       style: EZCTitleLargeTextStyle(
                           color: provider.themeMode.text60),
                     ),
@@ -98,7 +72,7 @@ class _EZCTextFieldState extends State<EZCTextField> {
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Text(
-                      widget.error!,
+                      error!,
                       style: EZCLabelMediumTextStyle(
                           color: provider.themeMode.stateDanger),
                     ),
@@ -108,18 +82,18 @@ class _EZCTextFieldState extends State<EZCTextField> {
             const SizedBox(height: 4),
             TextField(
               style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
-              enabled: widget.enabled,
+              enabled: enabled,
               cursorColor: provider.themeMode.text,
-              controller: widget.controller,
-              onChanged: widget.onChanged,
-              maxLines: widget.maxLines,
+              controller: controller,
+              onChanged: onChanged,
+              maxLines: maxLines,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(12),
-                hintText: widget.hint,
+                hintText: hint,
                 hintStyle:
                     EZCBodyLargeTextStyle(color: provider.themeMode.text40),
-                prefixIcon: widget.prefixIcon,
-                suffixIcon: widget.suffixIcon,
+                prefixIcon: prefixIcon,
+                suffixIcon: suffixIcon,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: ezcBorder,
                   borderSide: BorderSide(
@@ -139,7 +113,7 @@ class _EZCTextFieldState extends State<EZCTextField> {
                   borderSide: BorderSide(color: provider.themeMode.border),
                 ),
               ),
-              keyboardType: widget.inputType,
+              keyboardType: inputType,
               textInputAction: TextInputAction.next,
             )
           ],
@@ -196,31 +170,18 @@ class EZCAmountTextField extends StatefulWidget {
 
 class _EZCAmountTextFieldState extends State<EZCAmountTextField> {
   Decimal _usdValue = Decimal.zero;
-  bool _hasError = false;
 
   @override
   void initState() {
     widget.controller?.addListener(() {
-      if (widget.rateUsd != null) {
-        String text = widget.controller!.text;
-        final amount = Decimal.parse(text);
-        setState(() {
-          _usdValue = widget.rateUsd! * amount;
-        });
-      }
+      _onChanged(widget.controller!.text);
     });
     super.initState();
   }
 
   @override
-  void dispose() {
-    widget.controller?.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    _hasError = widget.error != null;
+    final _hasError = widget.error != null;
     final hasBottomText =
         widget.prefixText != null || widget.suffixText != null;
     final hasTopText = widget.label != null || _hasError;
@@ -257,7 +218,6 @@ class _EZCAmountTextFieldState extends State<EZCAmountTextField> {
                 style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
                 cursorColor: provider.themeMode.text,
                 controller: widget.controller,
-                onChanged: widget.onChanged,
                 decoration: InputDecoration(
                   filled: widget.backgroundColor != null,
                   fillColor: widget.backgroundColor,
@@ -338,6 +298,16 @@ class _EZCAmountTextFieldState extends State<EZCAmountTextField> {
         ),
       ),
     );
+  }
+
+  void _onChanged(text) {
+    if (widget.rateUsd != null) {
+      final amount = Decimal.tryParse(text) ?? Decimal.zero;
+      setState(() {
+        _usdValue = widget.rateUsd! * amount;
+      });
+    }
+    widget.onChanged?.call(text);
   }
 }
 

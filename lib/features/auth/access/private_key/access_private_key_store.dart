@@ -9,18 +9,19 @@ class AccessPrivateKeyStore = _AccessPrivateKeyStore
     with _$AccessPrivateKeyStore;
 
 abstract class _AccessPrivateKeyStore with Store {
-  final walletFactory = getIt<WalletFactory>();
+  final _walletFactory = getIt<WalletFactory>();
 
   @observable
   bool isLoading = false;
 
+  @action
   Future<bool> accessWithPrivateKey(String privateKey) async {
     isLoading = true;
     final wallet = SingletonWallet.access(privateKey);
     if (wallet != null) {
       isLoading = false;
-      walletFactory.addWallet(wallet);
-      walletFactory.saveAccessKey(privateKey);
+      _walletFactory.addWallet(wallet);
+      _walletFactory.saveAccessKey(privateKey);
       return true;
     }
     return false;

@@ -1,18 +1,14 @@
 import 'package:decimal/decimal.dart';
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mobx/mobx.dart';
-import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
+import 'package:wallet/features/cross/transfer/cross_transfer.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/fee_utils.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
-
-part 'cross_store.freezed.dart';
 
 part 'cross_store.g.dart';
 
@@ -29,8 +25,6 @@ abstract class _CrossStore with Store {
 
   @observable
   Decimal amount = Decimal.zero;
-
-  get _amountDouble => amount.toDouble();
 
   @observable
   Decimal fee = Decimal.zero;
@@ -53,16 +47,6 @@ abstract class _CrossStore with Store {
   @observable
   CrossChainType destinationChain = CrossChainType.pChain;
 
-  @observable
-  CrossTransferringState exportState = const CrossTransferringState.loading();
-
-  @observable
-  CrossTransferringState importState = const CrossTransferringState.loading();
-
-  @observable
-  CrossTransferringState transferringState =
-      const CrossTransferringState.loading();
-
   @computed
   Decimal get sourceBalance {
     return _getBalance(sourceChain);
@@ -75,6 +59,9 @@ abstract class _CrossStore with Store {
 
   List<CrossChainType> get destinationList =>
       CrossChainType.values.toList()..remove(sourceChain);
+
+  CrossTransferInfo get crossTransferInfo =>
+      CrossTransferInfo(sourceChain, destinationChain, amount);
 
   @action
   init() async {
@@ -98,7 +85,6 @@ abstract class _CrossStore with Store {
   @action
   bool validate() {
     final isAmountValid = sourceBalance > amount && amount > Decimal.zero;
-
     if (!isAmountValid) {
       amountError = Strings.current.sharedInvalidAmount;
     }
@@ -113,116 +99,8 @@ abstract class _CrossStore with Store {
   }
 
   @action
-  transferring() async {
-    await _export();
-    await _import();
-    _balanceStore.updateBalance();
-  }
-
-  @action
   updateFee() async {
     fee = await _getFeeExport() + await _getFeeImport();
-  }
-
-  _export() async {
-    try {
-      final feeP = getTxFeeP();
-      final feeX = getTxFeeX();
-
-      if (sourceChain == CrossChainType.xChain &&
-          destinationChain == CrossChainType.pChain) {
-        // x -> p
-        final amountAvax = numberToBNAvaxX(_amountDouble) + feeP;
-        exportTxId = await _wallet.exportXChain(amountAvax, ExportChainsX.P);
-      } else if (sourceChain == CrossChainType.pChain &&
-          destinationChain == CrossChainType.xChain) {
-        // p -> x
-        final amountAvax = numberToBNAvaxP(_amountDouble) + feeX;
-        exportTxId = await _wallet.exportPChain(amountAvax, ExportChainsP.X);
-      } else if (sourceChain == CrossChainType.cChain &&
-          destinationChain == CrossChainType.xChain) {
-        // c -> x
-        final hexAddress = _wallet.getAddressC();
-        const destinationChain = ExportChainsC.X;
-        final destinationAddress = _wallet.getAddressX();
-        final exportFee = await estimateExportGasFee(
-          destinationChain,
-          numberToBNAvaxX(amount),
-          hexAddress,
-          destinationAddress,
-        );
-        final amountAvax = numberToBNAvaxX(_amountDouble) + feeX;
-        exportTxId = await _wallet.exportCChain(
-          amountAvax,
-          destinationChain,
-          exportFee: exportFee,
-        );
-      } else if (sourceChain == CrossChainType.xChain &&
-          destinationChain == CrossChainType.cChain) {
-        // x -> c
-        final amountAvax = numberToBNAvaxX(_amountDouble) + feeX;
-        exportTxId = await _wallet.exportXChain(amountAvax, ExportChainsX.C);
-      } else if (sourceChain == CrossChainType.pChain &&
-          destinationChain == CrossChainType.cChain) {
-        // p -> c
-        final importFee = await estimateImportGasFee();
-        final amountAvax = numberToBNAvaxX(_amountDouble) + importFee;
-        exportTxId = await _wallet.exportXChain(amountAvax, ExportChainsX.C);
-      } else if (sourceChain == CrossChainType.cChain &&
-          destinationChain == CrossChainType.pChain) {
-        // c -> p
-        final hexAddress = _wallet.getAddressC();
-        const destinationChain = ExportChainsC.P;
-        final destinationAddress = _wallet.getAddressP();
-        final exportFee = await estimateExportGasFee(
-          destinationChain,
-          numberToBNAvaxP(amount),
-          hexAddress,
-          destinationAddress,
-        );
-        final amountAvax = numberToBNAvaxP(_amountDouble) + feeP;
-        exportTxId = await _wallet.exportCChain(
-          amountAvax,
-          destinationChain,
-          exportFee: exportFee,
-        );
-      }
-      exportState = const CrossTransferringState.success();
-    } catch (e) {
-      exportState = const CrossTransferringState.error();
-      importState = const CrossTransferringState.error();
-      transferringState = const CrossTransferringState.error();
-      print(e);
-    }
-  }
-
-  _import() async {
-    try {
-      if (sourceChain == CrossChainType.xChain &&
-          destinationChain == CrossChainType.pChain) {
-        importTxId = await _wallet.importPChain(ExportChainsP.X);
-      } else if (sourceChain == CrossChainType.pChain &&
-          destinationChain == CrossChainType.xChain) {
-        importTxId = await _wallet.importXChain(ExportChainsX.P);
-      } else if (sourceChain == CrossChainType.cChain &&
-          destinationChain == CrossChainType.xChain) {
-        importTxId = await _wallet.importXChain(ExportChainsX.C);
-      } else if (sourceChain == CrossChainType.xChain &&
-          destinationChain == CrossChainType.cChain) {
-        importTxId = await _wallet.importCChain(ExportChainsC.X);
-      } else if (sourceChain == CrossChainType.pChain &&
-          destinationChain == CrossChainType.cChain) {
-        importTxId = await _wallet.importCChain(ExportChainsC.P);
-      } else if (sourceChain == CrossChainType.cChain &&
-          destinationChain == CrossChainType.pChain) {
-        importTxId = await _wallet.importPChain(ExportChainsP.C);
-      }
-      importState = const CrossTransferringState.success();
-      transferringState = const CrossTransferringState.success();
-    } catch (e) {
-      importState = const CrossTransferringState.error();
-      transferringState = const CrossTransferringState.error();
-    }
   }
 
   Future<Decimal> _getFeeExport() async {
@@ -294,21 +172,4 @@ extension CrossChainTypeExtension on CrossChainType {
 extension CrossChainTypeStringExtension on String {
   CrossChainType get getCrossChainType =>
       CrossChainType.values.firstWhere((element) => element.name == this);
-}
-
-@freezed
-class CrossTransferringState with _$CrossTransferringState {
-  const CrossTransferringState._();
-
-  const factory CrossTransferringState.loading() = Loading;
-
-  const factory CrossTransferringState.success() = Success;
-
-  const factory CrossTransferringState.error([String? message]) = Error;
-
-  String status() => this.when(
-        loading: () => Strings.current.sharedProcessing,
-        success: () => Strings.current.sharedAccepted,
-        error: (error) => error ?? Strings.current.sharedError,
-      );
 }
