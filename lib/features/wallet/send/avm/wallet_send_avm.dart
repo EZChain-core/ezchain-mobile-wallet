@@ -85,15 +85,13 @@ class WalletSendAvmScreen extends StatelessWidget {
                             error: _walletSendAvmStore.amountError,
                             onChanged: (amount) {
                               _walletSendAvmStore.amount =
-                                  Decimal.parse(amount);
+                                  Decimal.tryParse(amount) ?? Decimal.zero;
                               _walletSendAvmStore.removeAmountError();
-                              _walletSendAvmStore
-                                  .updateTotal(Decimal.parse(amount));
                             },
                             controller: _amountController,
                             onSuffixPressed: () {
                               _amountController.text =
-                                  _walletSendAvmStore.balanceX.toString();
+                                  _walletSendAvmStore.maxAmount.toString();
                             },
                           ),
                         ),

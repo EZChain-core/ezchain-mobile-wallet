@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/cross/cross_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -81,8 +82,8 @@ class _CrossScreenState extends State<CrossScreen> {
                             label: Strings.current.sharedAmount,
                             backgroundColor: provider.themeMode.white,
                             hint: '0.0',
-                            suffixText: Strings.current
-                                .walletSendBalance(_crossStore.sourceBalance),
+                            suffixText: Strings.current.walletSendBalance(
+                                _crossStore.sourceBalance.text()),
                             rateUsd: _crossStore.avaxPrice,
                             error: _crossStore.amountError,
                             onChanged: (amount) {
@@ -93,7 +94,8 @@ class _CrossScreenState extends State<CrossScreen> {
                             controller: _amountController,
                             onSuffixPressed: () {
                               _amountController.text =
-                                  _crossStore.sourceBalance.toString();
+                                  (_crossStore.sourceBalance - _crossStore.fee)
+                                      .toString();
                             },
                             enabled: !_crossStore.isConfirm,
                           ),
@@ -148,7 +150,7 @@ class _CrossScreenState extends State<CrossScreen> {
                           padding: const EdgeInsets.only(right: 16),
                           child: Text(
                             Strings.current.walletSendBalance(
-                                _crossStore.destinationBalance),
+                                _crossStore.destinationBalance.text()),
                             maxLines: 1,
                             overflow: TextOverflow.fade,
                             textAlign: TextAlign.end,
@@ -233,9 +235,8 @@ class _CrossScreenState extends State<CrossScreen> {
   }
 
   Future<void> _onClickTransfer() async {
-    _crossStore.transferring();
-    final isRefreshCrossScreen = await context.router
-        .push<bool>(CrossTransferRoute(crossStore: _crossStore));
+    final isRefreshCrossScreen = await context.router.push<bool>(
+        CrossTransferRoute(crossTransferInfo: _crossStore.crossTransferInfo));
     if (isRefreshCrossScreen == true) {
       setState(() {
         _crossStore = CrossStore();
