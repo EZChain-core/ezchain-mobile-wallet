@@ -63,14 +63,14 @@ abstract class EvmApi implements ROIChainApi {
 
   factory EvmApi.create({
     required ROINetwork roiNetwork,
-    String avaxEndPoint = "/ext/bc/C/ezc",
+    String ezcEndPoint = "/ext/bc/C/ezc",
     String rpcEndPoint = "/ext/bc/C/rpc",
     String xEndPoint = "/ext/bc/X",
     String blockChainId = "",
   }) {
     return _EvmApiImpl(
         roiNetwork: roiNetwork,
-        avaxEndPoint: avaxEndPoint,
+        ezcEndPoint: ezcEndPoint,
         rpcEndPoint: rpcEndPoint,
         xEndPoint: xEndPoint,
         blockChainId: blockChainId);
@@ -96,12 +96,13 @@ class _EvmApiImpl implements EvmApi {
   late EvmRpcRestClient evmRpcRestClient;
   late EvmXRestClient evmXRestClient;
 
-  _EvmApiImpl(
-      {required this.roiNetwork,
-      required String avaxEndPoint,
-      required String rpcEndPoint,
-      required String xEndPoint,
-      required this.blockChainId}) {
+  _EvmApiImpl({
+    required this.roiNetwork,
+    required String ezcEndPoint,
+    required String rpcEndPoint,
+    required String xEndPoint,
+    required this.blockChainId,
+  }) {
     final networkId = roiNetwork.networkId;
     final network = networks[networkId];
     final String alias;
@@ -114,7 +115,7 @@ class _EvmApiImpl implements EvmApi {
     final dio = roiNetwork.dio;
 
     evmAvaxRestClient =
-        EvmAvaxRestClient(dio, baseUrl: dio.options.baseUrl + avaxEndPoint);
+        EvmAvaxRestClient(dio, baseUrl: dio.options.baseUrl + ezcEndPoint);
 
     evmRpcRestClient =
         EvmRpcRestClient(dio, baseUrl: dio.options.baseUrl + rpcEndPoint);
@@ -260,7 +261,7 @@ class _EvmApiImpl implements EvmApi {
           "Error - EVMAPI.buildExportTx: Destination ChainID must be 32 bytes in length.");
     }
 
-    final assetDescription = await _getAssetDescription("AVAX");
+    final assetDescription = await _getAssetDescription(primaryAssetAlias);
     final evmInputs = <EvmInput>[];
 
     if (assetDescription.assetId == assetId) {

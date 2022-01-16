@@ -10,6 +10,7 @@ import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
+import 'package:wallet/roi/wallet/network/constants.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
@@ -32,6 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    setRpcNetwork(testNetConfig);
     // wallet = SingletonWallet(
     //     privateKey:
     //         "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
@@ -41,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // updateX();
     // updateP();
     // updateC();
-    startTimer();
+    _startTimer();
   }
 
   @override
@@ -62,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           exportCToImportP();
+    //           getHistoryC();
     //         },
     //       ),
     //     ),
@@ -70,11 +72,11 @@ class _SplashScreenState extends State<SplashScreen> {
     // );
   }
 
-  startTimer() {
-    return Timer(const Duration(milliseconds: 2000), navigate);
+  _startTimer() {
+    return Timer(const Duration(milliseconds: 2000), _navigate);
   }
 
-  navigate() async {
+  _navigate() async {
     if (await _walletFactory.isExpired()) {
       _walletFactory.clear();
       context.router.replaceAll([const OnBoardRoute()]);
@@ -389,6 +391,33 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       importTxId = await wallet.importPChain(ExportChainsP.C);
       logger.i("importTxId = $importTxId");
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  getHistoryX() async {
+    try {
+      final transactions = await wallet.getHistoryX(limit: 20);
+      logger.i("getHistoryX = ${transactions.length}");
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  getHistoryP() async {
+    try {
+      final transactions = await wallet.getHistoryP(limit: 20);
+      logger.i("getHistoryP = ${transactions.length}");
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  getHistoryC() async {
+    try {
+      final transactions = await wallet.getHistoryC(limit: 20);
+      logger.i("getHistoryC = ${transactions.length}");
     } catch (e) {
       logger.e(e);
     }
