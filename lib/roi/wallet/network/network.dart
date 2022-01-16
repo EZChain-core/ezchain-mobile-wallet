@@ -1,67 +1,46 @@
+import 'package:dio/dio.dart';
 import 'package:http/http.dart';
-import 'package:wallet/roi/sdk/apis/info/model/get_network_id.dart';
 import 'package:wallet/roi/sdk/roi.dart';
+import 'package:wallet/roi/sdk/utils/dio_logger.dart';
 import 'package:wallet/roi/wallet/network/constants.dart';
 import 'package:web3dart/web3dart.dart';
 
-var activeNetwork = defaultConfig;
+var _activeNetwork = testNetConfig;
+
+NetworkConfig get activeNetwork => _activeNetwork;
 
 final roi = _createROIProvider(activeNetwork);
 
 final xChain = roi.avmApi;
 final cChain = roi.evmApi;
 final pChain = roi.pvmApi;
-final infoApi = roi.infoApi;
 
-var web3 = Web3Client(getRpcC(activeNetwork), Client());
+Dio? _explorerApi;
+
+Dio? get explorerApi => _explorerApi;
+
+var _web3 = Web3Client(getRpcC(activeNetwork), Client());
+
+Web3Client get web3 => _web3;
 
 ROI _createROIProvider(NetworkConfig config) {
   return ROI.create(
-      host: config.apiIp,
-      port: config.apiPort,
-      protocol: config.apiProtocol,
-      networkId: config.networkId);
+    host: config.apiIp,
+    port: config.apiPort,
+    protocol: config.apiProtocol,
+    networkId: config.networkId,
+  );
 }
 
 int? getEvmChainID() {
   return activeNetwork.evmChainId;
 }
 
-/// Similar to `setRpcNetwork`, but checks if credentials can be used with the api.
-/// Checks if the given network accepts credentials.
-/// This must be true to use cookies.
-Future<bool> setRpcNetworkAsync(NetworkConfig config) async {
-  final roi = _createROIProvider(config);
-  roi.setRequestConfig("withCredentials", true);
-  final infoApi = roi.infoApi;
-  var credentials = false;
-  final request = const GetNetworkIdRequest().toRpc();
-  try {
-    await infoApi.getNetworkId(request);
-    credentials = true;
-  } catch (e) {}
-  roi.setRequestConfig("withCredentials", false);
-  try {
-    await infoApi.getNetworkId(request);
-    setRpcNetwork(config, credentials: credentials);
-  } catch (e) {
-    return false;
-  }
-  return true;
-}
-
 /// Changes the connected network of the SDK.
 /// This is a synchronous call that does not do any network requests.
-void setRpcNetwork(NetworkConfig config, {bool credentials = true}) {
-  activeNetwork = config;
+void setRpcNetwork(NetworkConfig config) {
   roi.setAddress(config.apiIp, config.apiPort, config.apiProtocol);
   roi.setNetworkId(config.networkId);
-
-  if (credentials) {
-    roi.setRequestConfig('withCredentials', credentials);
-  } else {
-    roi.removeRequestConfig('withCredentials');
-  }
 
   xChain.refreshBlockchainId(config.xChainId);
   xChain.setBlockchainAlias("X");
@@ -76,5 +55,20 @@ void setRpcNetwork(NetworkConfig config, {bool credentials = true}) {
   pChain.setAVAXAssetId(config.avaxId);
   cChain.setAVAXAssetId(config.avaxId);
 
-  web3 = Web3Client(getRpcC(config), Client());
+  final explorerUrl = config.explorerURL;
+
+  if (explorerUrl != null && explorerUrl.isNotEmpty) {
+    _explorerApi = _createExplorerApi(explorerUrl);
+  } else {
+    _explorerApi = null;
+  }
+  _web3 = Web3Client(getRpcC(config), Client());
+
+  _activeNetwork = config;
+}
+
+Dio _createExplorerApi(String explorerApi) {
+  return Dio(
+    BaseOptions(baseUrl: explorerApi),
+  )..interceptors.add(prettyDioLogger);
 }

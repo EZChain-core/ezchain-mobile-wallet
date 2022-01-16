@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:decimal/decimal.dart';
 import 'package:eventify/eventify.dart';
 import 'package:wallet/roi/sdk/apis/avm/constants.dart' as avm_constants;
 import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
@@ -18,16 +17,16 @@ import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/asset/assets.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
-import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
 import 'package:wallet/roi/wallet/helpers/tx_helper.dart';
 import 'package:wallet/roi/wallet/helpers/utxo_helper.dart';
+import 'package:wallet/roi/wallet/history/api_helpers.dart';
+import 'package:wallet/roi/wallet/history/raw_types.dart';
 import 'package:wallet/roi/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/fee_utils.dart';
-import 'package:wallet/roi/wallet/utils/number_utils.dart';
 import 'package:wallet/roi/wallet/utils/wait_tx_utils.dart';
-import 'package:web3dart/web3dart.dart';
+import 'package:web3dart/web3dart.dart' as web3_dart;
 
 abstract class UnsafeWallet {
   String getEvmPrivateKeyHex();
@@ -46,7 +45,7 @@ abstract class WalletProvider {
 
   EventEmitter emitter = EventEmitter();
 
-  Future<Uint8List> signEvm(Transaction tx);
+  Future<Uint8List> signEvm(web3_dart.Transaction tx);
 
   Future<AvmTx> signX(AvmUnsignedTx tx);
 
@@ -364,10 +363,10 @@ abstract class WalletProvider {
   /// @param to
   /// @param data
   Future<BigInt> estimateGas(String to, String data) async {
-    final from = EthereumAddress.fromHex(getAddressC());
+    final from = web3_dart.EthereumAddress.fromHex(getAddressC());
     return await web3.estimateGas(
         sender: from,
-        to: EthereumAddress.fromHex(to),
+        to: web3_dart.EthereumAddress.fromHex(to),
         data: Uint8List.fromList(utf8.encode(data)));
   }
 
@@ -385,7 +384,7 @@ abstract class WalletProvider {
 
   /// Given a `Transaction`, it will sign and issue it to the network.
   /// @param tx The unsigned transaction to issue.
-  Future<String> issueEvmTx(Transaction tx) async {
+  Future<String> issueEvmTx(web3_dart.Transaction tx) async {
     final signedTx = await signEvm(tx);
     final txHash = await web3.sendRawTransaction(signedTx);
     return await waitTxEvm(txHash);
@@ -642,5 +641,32 @@ abstract class WalletProvider {
   Future<PvmUTXOSet> getAtomicUTXOsP(ExportChainsP sourceChain) async {
     final addresses = await getAllAddressesP();
     return await platformGetAtomicUTXOs(addresses, sourceChain);
+  }
+
+  Future<List<Transaction>> getHistoryX({int limit = 0}) async {
+    final addresses = await getAllAddressesX();
+    return await getAddressHistory(
+      xChain.getBlockchainId(),
+      addresses,
+      limit: limit,
+    );
+  }
+
+  Future<List<Transaction>> getHistoryP({int limit = 0}) async {
+    final addresses = await getAllAddressesP();
+    return await getAddressHistory(
+      pChain.getBlockchainId(),
+      addresses,
+      limit: limit,
+    );
+  }
+
+  Future<List<Transaction>> getHistoryC({int limit = 0}) async {
+    final addresses = [getEvmAddressBech(), ...(await getAllAddressesP())];
+    return await getAddressHistory(
+      cChain.getBlockchainId(),
+      addresses,
+      limit: limit,
+    );
   }
 }
