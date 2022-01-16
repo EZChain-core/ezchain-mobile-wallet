@@ -66,9 +66,7 @@ class AccessPrivateKeyScreen extends StatelessWidget {
                             child: Observer(
                               builder: (_) => EZCMediumPrimaryButton(
                                 text: Strings.current.sharedAccessWallet,
-                                onPressed: () {
-                                  _onClickAccess();
-                                },
+                                onPressed: _onClickAccess,
                                 isLoading: _accessPrivateKeyStore.isLoading,
                               ),
                             ),
@@ -80,9 +78,7 @@ class AccessPrivateKeyScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: EZCBodyLargeNoneButton(
                               text: Strings.current.sharedCancel,
-                              onPressed: () {
-                                context.router.pop();
-                              },
+                              onPressed: context.router.pop,
                             ),
                           ),
                         ),
