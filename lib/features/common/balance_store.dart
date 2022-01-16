@@ -2,6 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:eventify/eventify.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
@@ -117,7 +118,7 @@ abstract class _BalanceStore with Store {
     try {
       await _wallet.updateUtxosX();
     } catch (e) {
-      print(e);
+      logger.e(e);
     }
   }
 
@@ -125,7 +126,7 @@ abstract class _BalanceStore with Store {
     try {
       await _wallet.updateUtxosP();
     } catch (e) {
-      print(e);
+      logger.e(e);
     }
   }
 
@@ -133,7 +134,7 @@ abstract class _BalanceStore with Store {
     try {
       await _wallet.updateAvaxBalanceC();
     } catch (e) {
-      print(e);
+      logger.e(e);
       return;
     }
   }
