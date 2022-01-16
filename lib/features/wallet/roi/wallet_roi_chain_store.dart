@@ -11,51 +11,50 @@ part 'wallet_roi_chain_store.g.dart';
 class WalletRoiChainStore = _WalletRoiChainStore with _$WalletRoiChainStore;
 
 abstract class _WalletRoiChainStore with Store {
-  final wallet = getIt<WalletFactory>().activeWallet;
+  final _wallet = getIt<WalletFactory>().activeWallet;
 
-  BalanceStore get balanceStore => getIt<BalanceStore>();
-
-  PriceStore get priceStore => getIt<PriceStore>();
+  final _balanceStore = getIt<BalanceStore>();
+  final _priceStore = getIt<PriceStore>();
 
   @computed
   WalletRoiChainBalanceViewData get balanceX => WalletRoiChainBalanceViewData(
-      balanceStore.balanceX, balanceStore.balanceLockedX, null);
+      _balanceStore.balanceX, _balanceStore.balanceLockedX, null);
 
   @computed
   WalletRoiChainBalanceViewData get balanceP => WalletRoiChainBalanceViewData(
-      balanceStore.balanceP,
-      balanceStore.balanceLockedP,
-      balanceStore.balanceLockedStakeableP);
+      _balanceStore.balanceP,
+      _balanceStore.balanceLockedP,
+      _balanceStore.balanceLockedStakeableP);
 
   @computed
   WalletRoiChainBalanceViewData get balanceC =>
-      WalletRoiChainBalanceViewData(balanceStore.balanceC, null, null);
+      WalletRoiChainBalanceViewData(_balanceStore.balanceC, null, null);
 
   @computed
   String get totalRoi =>
-      decimalToLocaleString(balanceStore.totalRoi, decimals: 2);
+      decimalToLocaleString(_balanceStore.totalRoi, decimals: decimalNumber);
 
   @computed
   String get totalUsd {
-    final totalUsdNumber = balanceStore.totalRoi * priceStore.avaxPrice;
-    return decimalToLocaleString(totalUsdNumber, decimals: 2);
+    final totalUsdNumber = _balanceStore.totalRoi * _priceStore.avaxPrice;
+    return decimalToLocaleString(totalUsdNumber, decimals: decimalNumber);
   }
 
-  String get addressX => wallet.getAddressX();
+  String get addressX => _wallet.getAddressX();
 
-  String get addressP => wallet.getAddressP();
+  String get addressP => _wallet.getAddressP();
 
-  String get addressC => wallet.getAddressC();
+  String get addressC => _wallet.getAddressC();
 
   @action
   fetchData() async {
-    priceStore.updateAvaxPrice();
-    balanceStore.updateTotalBalance();
+    _priceStore.updateAvaxPrice();
+    _balanceStore.updateTotalBalance();
   }
 
   @action
   refresh() async {
-    balanceStore.updateTotalBalance();
+    _balanceStore.updateTotalBalance();
   }
 }
 
