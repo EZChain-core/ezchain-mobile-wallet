@@ -9,7 +9,9 @@ import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/types.dart';
 
 Future<AvmUTXOSet> avmGetAtomicUTXOs(
-    List<String> addresses, ExportChainsX sourceChain) async {
+  List<String> addresses,
+  ExportChainsX sourceChain,
+) async {
   final sourceChainId = chainIdFromAlias(sourceChain.value);
   if (addresses.length < 1024) {
     return (await xChain.getUTXOs(addresses, sourceChain: sourceChainId))
@@ -40,9 +42,13 @@ Future<AvmUTXOSet> avmGetAllUTXOs({List<String> addresses = const []}) async {
   }
 }
 
-Future<AvmUTXOSet> avmGetAllUTXOsForAddresses(
-    {List<String> addresses = const [], dynamic endIndex}) async {
-  assert(addresses.length <= 1024, "Maximum length of addresses is 1024");
+Future<AvmUTXOSet> avmGetAllUTXOsForAddresses({
+  List<String> addresses = const [],
+  dynamic endIndex,
+}) async {
+  if (addresses.length > 1024) {
+    throw Exception("Maximum length of addresses is 1024");
+  }
   final avm_utxos.GetUTXOsResponse response;
   if (endIndex != null) {
     response = await xChain.getUTXOs(addresses);
@@ -76,9 +82,13 @@ Future<PvmUTXOSet> pvmGetAllUTXOs({List<String> addresses = const []}) async {
   }
 }
 
-Future<PvmUTXOSet> pvmGetAllUTXOsForAddresses(
-    {List<String> addresses = const [], dynamic endIndex}) async {
-  assert(addresses.length <= 1024, "Maximum length of addresses is 1024");
+Future<PvmUTXOSet> pvmGetAllUTXOsForAddresses({
+  List<String> addresses = const [],
+  dynamic endIndex,
+}) async {
+  if (addresses.length > 1024) {
+    throw Exception("Maximum length of addresses is 1024");
+  }
   final pvm_utxos.GetUTXOsResponse response;
   if (endIndex != null) {
     response = await pChain.getUTXOs(addresses);
@@ -120,7 +130,9 @@ Future<GetStakeResponse> getStakeForAddresses(List<String> addresses) async {
 }
 
 Future<PvmUTXOSet> platformGetAtomicUTXOs(
-    List<String> addresses, ExportChainsP sourceChain) async {
+  List<String> addresses,
+  ExportChainsP sourceChain,
+) async {
   final sourceChainId = chainIdFromAlias(sourceChain.value);
   if (addresses.length < 1024) {
     return (await pChain.getUTXOs(addresses, sourceChain: sourceChainId))
@@ -139,7 +151,9 @@ Future<PvmUTXOSet> platformGetAtomicUTXOs(
 }
 
 Future<EvmUTXOSet> evmGetAtomicUTXOs(
-    List<String> addresses, ExportChainsC sourceChain) async {
+  List<String> addresses,
+  ExportChainsC sourceChain,
+) async {
   if (addresses.length > 1024) {
     throw Exception("Number of addresses can not be greater than 1024.");
   }

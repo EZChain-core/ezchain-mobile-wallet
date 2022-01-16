@@ -1,7 +1,5 @@
 import 'package:wallet/roi/sdk/utils/constants.dart';
 
-final defaultConfig = testNetConfig;
-
 final mainNetConfig = NetworkConfig(
   rawUrl: 'https://api.avax.network',
   apiProtocol: 'https',
@@ -22,8 +20,8 @@ final testNetConfig = NetworkConfig(
   apiProtocol: 'https',
   apiIp: 'testnet-api.ezchain.com',
   apiPort: 443,
-  explorerURL: 'https://explorerapi.ezchain.com',
-  explorerSiteURL: 'https://explorer.ezchain.com',
+  explorerURL: 'https://testnet-index-api.ezchain.com',
+  explorerSiteURL: 'https://testnet-explorer.ezchain.com',
   networkId: 5,
   xChainId: networks[5]!.x.blockchainId,
   pChainId: networks[5]!.p.blockchainId,
@@ -68,21 +66,25 @@ class NetworkConfig {
   final String? avaxId;
   late NetworkConfigRpc rpcUrl;
 
-  NetworkConfig(
-      {required this.rawUrl,
-      required this.apiProtocol,
-      required this.apiIp,
-      required this.apiPort,
-      this.explorerURL,
-      this.explorerSiteURL,
-      required this.networkId,
-      this.evmChainId,
-      required this.xChainId,
-      required this.pChainId,
-      required this.cChainId,
-      this.avaxId}) {
-    rpcUrl =
-        NetworkConfigRpc(c: getRpcC(this), p: getRpcP(this), x: getRpcX(this));
+  NetworkConfig({
+    required this.rawUrl,
+    required this.apiProtocol,
+    required this.apiIp,
+    required this.apiPort,
+    this.explorerURL,
+    this.explorerSiteURL,
+    required this.networkId,
+    this.evmChainId,
+    required this.xChainId,
+    required this.pChainId,
+    required this.cChainId,
+    this.avaxId,
+  }) {
+    rpcUrl = NetworkConfigRpc(
+      c: getRpcC(this),
+      p: getRpcP(this),
+      x: getRpcX(this),
+    );
   }
 }
 

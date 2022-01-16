@@ -7,7 +7,7 @@ import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 
 void main() {
-  final keyChain = ROIKeyChain(chainId: "X", hrp: "avax");
+  final keyChain = ROIKeyChain(chainId: "X", hrp: "ezc");
 
   const privateKey =
       "PrivateKey-JaCCSxdoWfo3ao5KwenXrJjJR7cBTQ287G1C5qpv2hr2tCCdb";

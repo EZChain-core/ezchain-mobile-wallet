@@ -22,12 +22,12 @@ void main() {
 
   test("can return initial X address", () {
     final addressX = wallet.getAddressX();
-    expect(addressX, 'X-avax1drhz4wmg2fcxgm6f2ypffl7stugezxr8uu0xqt');
+    expect(addressX, 'X-ezc1drhz4wmg2fcxgm6f2ypffl7stugezxr8uu0xqt');
   });
 
   test("can return initial P address", () {
     final addressP = wallet.getAddressP();
-    expect(addressP, 'P-avax1drhz4wmg2fcxgm6f2ypffl7stugezxr8uu0xqt');
+    expect(addressP, 'P-ezc1drhz4wmg2fcxgm6f2ypffl7stugezxr8uu0xqt');
   });
 
   test("can return initial C address", () {
@@ -38,13 +38,13 @@ void main() {
   test("all X addresses", () {
     final allAddressesX = wallet.getAllAddressesXSync();
     expect(allAddressesX, [
-      "X-avax1drhz4wmg2fcxgm6f2ypffl7stugezxr8uu0xqt",
-      "X-avax1txyfeuea7uw0g8d7659dxxejcjz3zws25v7mhg"
+      "X-ezc1drhz4wmg2fcxgm6f2ypffl7stugezxr8uu0xqt",
+      "X-ezc1txyfeuea7uw0g8d7659dxxejcjz3zws25v7mhg"
     ]);
   });
 
   test("all P addresses", () {
     final allAddressesP = wallet.getAllAddressesPSync();
-    expect(allAddressesP, ["P-avax1drhz4wmg2fcxgm6f2ypffl7stugezxr8uu0xqt"]);
+    expect(allAddressesP, ["P-ezc1drhz4wmg2fcxgm6f2ypffl7stugezxr8uu0xqt"]);
   });
 }

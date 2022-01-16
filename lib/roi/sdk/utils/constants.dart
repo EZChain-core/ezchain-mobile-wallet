@@ -3,13 +3,13 @@ const protocols = ["http", "https"];
 const privateKeyPrefix = "PrivateKey-";
 const evmPrivateKeyPrefix = "0x";
 const nodeIdPrefix = "NodeID-";
-const primaryAssetAlias = "AVAX";
+const primaryAssetAlias = "EZC";
 const mainNetAPI = "api.avax.network";
 const fujiAPI = "api.avax-test.network";
 
 const networkIdToHRP = {
   0: "custom",
-  1: "avax",
+  1: "ezc",
   2: "cascade",
   3: "denali",
   4: "everest",
@@ -19,34 +19,12 @@ const networkIdToHRP = {
 
 const hrpToNetworkId = {
   "custom": 0,
-  "avax": 1,
+  "ezc": 1,
   "cascade": 2,
   "denali": 3,
   "everest": 4,
   "fuji": 5,
   "local": 12345
-};
-
-const networkIdToNetworkNames = {
-  0: ["Manhattan"],
-  1: ["Avalanche", "Mainnet"],
-  2: ["Cascade"],
-  3: ["Denali"],
-  4: ["Everest"],
-  5: ["Fuji", "Testnet"],
-  12345: ["Local Network"]
-};
-
-const networkNameToNetworkId = {
-  "Manhattan": 0,
-  "Avalanche": 1,
-  "Mainnet": 1,
-  "Cascade": 2,
-  "Denali": 3,
-  "Everest": 4,
-  "Fuji": 5,
-  "Testnet": 5,
-  "Local Network": 12345
 };
 
 const fallbackHRP = "custom";

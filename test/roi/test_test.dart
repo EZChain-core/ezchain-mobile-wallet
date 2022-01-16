@@ -24,7 +24,7 @@ void main() {
   // print("totalUsdString = $totalUsdString");
 
   // print("value = ${stringToBigInt16("0x2540be400")}");
-  // final keyChain = ROIKeyChain(chainId: "X", hrp: "avax");
+  // final keyChain = ROIKeyChain(chainId: "X", hrp: "ezc");
   //
   // const privateKey =
   //     "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M";
