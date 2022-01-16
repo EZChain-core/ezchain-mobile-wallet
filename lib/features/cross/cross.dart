@@ -68,6 +68,7 @@ class _CrossScreenState extends State<CrossScreen> {
                             items: CrossChainType.values,
                             onChanged: (type) {
                               _crossStore.setSourceChain(type);
+                              _amountController.text = '';
                             },
                             parseString: (type) => type.name,
                             initValue: _crossStore.sourceChain,
@@ -87,7 +88,8 @@ class _CrossScreenState extends State<CrossScreen> {
                             rateUsd: _crossStore.avaxPrice,
                             error: _crossStore.amountError,
                             onChanged: (amount) {
-                              _crossStore.amount = Decimal.parse(amount);
+                              _crossStore.amount =
+                                  Decimal.tryParse(amount) ?? Decimal.zero;
                               _crossStore.removeAmountError();
                               _crossStore.updateFee();
                             },
@@ -136,8 +138,9 @@ class _CrossScreenState extends State<CrossScreen> {
                             items: _crossStore.destinationList,
                             parseString: (type) => type.name,
                             initValue: _crossStore.destinationChain,
-                            onChanged: (t) {
-                              _crossStore.destinationChain = t;
+                            onChanged: (type) {
+                              _crossStore.destinationChain = type;
+                              _amountController.text = '';
                             },
                             enabled: !_crossStore.isConfirm,
                           ),

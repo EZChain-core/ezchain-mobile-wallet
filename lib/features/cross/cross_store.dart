@@ -63,6 +63,8 @@ abstract class _CrossStore with Store {
   CrossTransferInfo get crossTransferInfo =>
       CrossTransferInfo(sourceChain, destinationChain, amount);
 
+  get _amountDouble => amount.toDouble();
+
   @action
   init() async {
     _priceStore.updateAvaxPrice();
@@ -118,8 +120,8 @@ abstract class _CrossStore with Store {
             ? _wallet.getAddressX()
             : _wallet.getAddressP();
         final amountEzc = destinationChain == CrossChainType.xChain
-            ? numberToBNAvaxX(amount)
-            : numberToBNAvaxP(amount);
+            ? numberToBNAvaxX(_amountDouble)
+            : numberToBNAvaxP(_amountDouble);
         final exportFee = await estimateExportGasFee(
           destination,
           amountEzc,
