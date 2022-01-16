@@ -119,7 +119,7 @@ class WalletSendEvmTransactionViewData {
   final int gwei;
   final BigInt gasPrice;
   final Decimal amount;
-  final String fee;
+  final Decimal fee;
 
   WalletSendEvmTransactionViewData(
       this.address, this.gwei, this.gasPrice, this.amount, this.fee);

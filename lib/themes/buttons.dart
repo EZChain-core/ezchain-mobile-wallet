@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
+import 'package:wallet/themes/widgets.dart';
 
 const ezcButtonRadius = 8.0;
 const ezcButtonMediumHeight = 40.0;
@@ -75,13 +77,10 @@ class EZCMediumPrimaryButton extends StatelessWidget {
         width: width,
         child: TextButton(
           child: isLoading == true
-              ? SizedBox(
-                  width: ezcButtonMediumHeight - 20,
-                  height: ezcButtonMediumHeight - 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: provider.themeMode.text90,
-                  ))
+              ? EZCLoading(
+                  color: provider.themeMode.text90,
+                  size: ezcButtonMediumHeight - 20,
+                  strokeWidth: 2)
               : Text(text,
                   textAlign: TextAlign.center,
                   style: EZCButtonTextStyle(color: provider.themeMode.text90)),
@@ -125,13 +124,10 @@ class EZCMediumSuccessButton extends StatelessWidget {
         width: width,
         child: TextButton(
           child: isLoading == true
-              ? SizedBox(
-                  width: ezcButtonMediumHeight - 20,
-                  height: ezcButtonMediumHeight - 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: provider.themeMode.white,
-                  ))
+              ? EZCLoading(
+                  color: provider.themeMode.white,
+                  size: ezcButtonMediumHeight - 20,
+                  strokeWidth: 2)
               : Text(text,
                   textAlign: TextAlign.center,
                   style: EZCButtonTextStyle(color: provider.themeMode.white)),

@@ -1,24 +1,28 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/cross/cross_store.dart';
+import 'package:wallet/features/cross/transfer/cross_transfer_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
+import 'package:wallet/themes/widgets.dart';
 
 class CrossTransferScreen extends StatelessWidget {
-  final CrossStore crossStore;
+  final CrossTransferInfo crossTransferInfo;
+  final CrossTransferStore _crossTransferStore = CrossTransferStore();
 
-  const CrossTransferScreen({Key? key, required this.crossStore})
-      : super(key: key);
+  CrossTransferScreen({Key? key, required this.crossTransferInfo}) : super(key: key) {
+    _crossTransferStore.setCrossTransferInfo(crossTransferInfo);
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -60,13 +64,13 @@ class CrossTransferScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              crossStore.sourceChain.nameTwo,
+                              _crossTransferStore.sourceChain.nameTwo,
                               style: EZCBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
                             Observer(
                               builder: (_) => Text(
-                                crossStore.sourceBalance.toString(),
+                                _crossTransferStore.sourceBalance.toString(),
                                 style: EZCBodyLargeTextStyle(
                                     color: provider.themeMode.text),
                               ),
@@ -86,8 +90,11 @@ class CrossTransferScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Observer(
-                              builder: (_) => crossStore.exportState.when(
-                                loading: () => const SizedBox.shrink(),
+                              builder: (_) => _crossTransferStore.exportState.when(
+                                loading: () => EZCLoading(
+                                    color: provider.themeMode.text60,
+                                    size: 12,
+                                    strokeWidth: 2),
                                 success: () =>
                                     Assets.icons.icTickCircleGreen.svg(),
                                 error: (_) =>
@@ -119,7 +126,7 @@ class CrossTransferScreen extends StatelessWidget {
                             const SizedBox(height: 4),
                             Observer(
                               builder: (_) => Text(
-                                crossStore.exportTxId,
+                                _crossTransferStore.exportTxId,
                                 style: EZCBodySmallTextStyle(
                                     color: provider.themeMode.text),
                               ),
@@ -133,7 +140,7 @@ class CrossTransferScreen extends StatelessWidget {
                             const SizedBox(height: 4),
                             Observer(
                               builder: (_) => Text(
-                                crossStore.exportState.status(),
+                                _crossTransferStore.exportState.status(),
                                 style: EZCBodySmallTextStyle(
                                     color: provider.themeMode.text),
                               ),
@@ -193,13 +200,13 @@ class CrossTransferScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              crossStore.destinationChain.nameTwo,
+                              _crossTransferStore.destinationChain.nameTwo,
                               style: EZCBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
                             Observer(
                               builder: (_) => Text(
-                                crossStore.destinationBalance.toString(),
+                                _crossTransferStore.destinationBalance.toString(),
                                 style: EZCBodyLargeTextStyle(
                                     color: provider.themeMode.text),
                               ),
@@ -219,8 +226,11 @@ class CrossTransferScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Observer(
-                              builder: (_) => crossStore.importState.when(
-                                loading: () => const SizedBox.shrink(),
+                              builder: (_) => _crossTransferStore.importState.when(
+                                loading: () => EZCLoading(
+                                    color: provider.themeMode.text60,
+                                    size: 12,
+                                    strokeWidth: 2),
                                 success: () =>
                                     Assets.icons.icTickCircleGreen.svg(),
                                 error: (_) =>
@@ -252,7 +262,7 @@ class CrossTransferScreen extends StatelessWidget {
                             const SizedBox(height: 4),
                             Observer(
                               builder: (_) => Text(
-                                crossStore.importTxId,
+                                _crossTransferStore.importTxId,
                                 style: EZCBodySmallTextStyle(
                                     color: provider.themeMode.text),
                               ),
@@ -266,7 +276,7 @@ class CrossTransferScreen extends StatelessWidget {
                             const SizedBox(height: 4),
                             Observer(
                               builder: (_) => Text(
-                                crossStore.importState.status(),
+                                _crossTransferStore.importState.status(),
                                 style: EZCBodySmallTextStyle(
                                     color: provider.themeMode.text),
                               ),
@@ -279,7 +289,7 @@ class CrossTransferScreen extends StatelessWidget {
                   ),
                 ),
                 Observer(
-                  builder: (_) => crossStore.transferringState.when(
+                  builder: (_) => _crossTransferStore.transferringState.when(
                     loading: () => Column(
                       children: [
                         const SizedBox(height: 40),
@@ -355,4 +365,12 @@ class CrossTransferScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class CrossTransferInfo {
+  final CrossChainType sourceChain;
+  final CrossChainType destinationChain;
+  final Decimal amount;
+
+  CrossTransferInfo(this.sourceChain, this.destinationChain, this.amount);
 }

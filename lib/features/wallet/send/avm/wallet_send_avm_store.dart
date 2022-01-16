@@ -36,15 +36,16 @@ abstract class _WalletSendAvmStore with Store {
   @observable
   Decimal fee = Decimal.zero;
 
-  @observable
-  Decimal total = Decimal.zero;
+  @computed
+  Decimal get total => (amount + fee) * avaxPrice;
+
+  get maxAmount => balanceX - fee;
 
   @action
   getBalanceX() async {
     _balanceStore.updateBalanceX();
     _priceStore.updateAvaxPrice();
     fee = bnToDecimalAvaxX(getTxFeeX());
-    total = avaxPrice * fee;
   }
 
   @action
@@ -73,10 +74,5 @@ abstract class _WalletSendAvmStore with Store {
     if (addressError != null) {
       addressError = null;
     }
-  }
-
-  @action
-  updateTotal(Decimal amount) {
-    total = (amount + fee) * avaxPrice;
   }
 }

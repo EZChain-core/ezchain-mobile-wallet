@@ -50,10 +50,12 @@ abstract class _WalletSendEvmStore with Store {
   bool confirmSuccess = false;
 
   @observable
-  String fee = '0';
+  Decimal fee = Decimal.zero;
 
   @observable
   bool isLoading = false;
+
+  Decimal get maxAmount => balanceC - fee;
 
   BigInt _gasPrice = BigInt.zero;
 
@@ -86,7 +88,7 @@ abstract class _WalletSendEvmStore with Store {
       final evmAmount = numberToBNAvaxC(amount.toBigInt());
       gasLimit =
           await _wallet.estimateAvaxGasLimit(address, evmAmount, _gasPrice);
-      fee = bnToAvaxC(_gasPrice * gasLimit);
+      fee = bnToDecimalAvaxC(_gasPrice * gasLimit);
       confirmSuccess = true;
     }
   }
@@ -109,13 +111,12 @@ abstract class _WalletSendEvmStore with Store {
   Future<bool> sendEvm(String address) async {
     isLoading = true;
     try {
-      final txId = await _wallet.sendAvaxC(address,
+      await _wallet.sendAvaxC(address,
           numberToBNAvaxC(amount.toBigInt()), _gasPrice, gasLimit.toInt());
-      print("txId = $txId");
       isLoading = false;
       return true;
     } catch (e) {
-      print(e);
+      logger.e(e);
       isLoading = false;
       return false;
     }
