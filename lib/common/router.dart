@@ -11,6 +11,7 @@ import 'package:wallet/features/auth/pin/pin_code_confirm.dart';
 import 'package:wallet/features/auth/pin/pin_code_setup.dart';
 import 'package:wallet/features/cross/transfer/cross_transfer.dart';
 import 'package:wallet/features/dashboard/routes.dart';
+import 'package:wallet/features/history/history.dart';
 import 'package:wallet/features/onboard/on_board.dart';
 import 'package:wallet/features/qrcode/qr_code.dart';
 import 'package:wallet/features/setting/about/setting_about.dart';
@@ -54,6 +55,7 @@ import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.
     AutoRoute(page: SettingSecurityScreen),
     AutoRoute<bool>(page: CrossTransferScreen),
     AutoRoute(page: QrCodeScreen),
+    AutoRoute(page: HistoryScreen),
     dashboardRoutes,
   ],
 )

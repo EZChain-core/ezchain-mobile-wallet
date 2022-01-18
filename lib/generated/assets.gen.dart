@@ -52,6 +52,9 @@ class $AssetsIconsGen {
   SvgGenImage get icEarnOutline =>
       const SvgGenImage('assets/icons/ic_earn_outline.svg');
 
+  /// File path: assets/icons/ic_ezc_64.svg
+  SvgGenImage get icEzc64 => const SvgGenImage('assets/icons/ic_ezc_64.svg');
+
   /// File path: assets/icons/ic_folder_ouline_black.svg
   SvgGenImage get icFolderOulineBlack =>
       const SvgGenImage('assets/icons/ic_folder_ouline_black.svg');
@@ -114,6 +117,10 @@ class $AssetsIconsGen {
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/img_bg_history.svg
+  SvgGenImage get imgBgHistory =>
+      const SvgGenImage('assets/images/img_bg_history.svg');
 
   /// File path: assets/images/img_bg_on_board.png
   AssetGenImage get imgBgOnBoard =>

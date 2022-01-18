@@ -6,6 +6,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
 import 'package:wallet/features/wallet/roi/wallet_roi_chain_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -23,7 +24,6 @@ class WalletROIChainScreen extends StatefulWidget {
 
 class _WalletROIChainScreenState extends State<WalletROIChainScreen>
     with AutomaticKeepAliveClientMixin {
-
   final _walletRoiChainStore = WalletRoiChainStore();
 
   @override
@@ -100,6 +100,8 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen>
                             'X-Chain', _walletRoiChainStore.addressX),
                       ),
                     ),
+                    onPressed: () => context
+                        .pushRoute(HistoryRoute(ezcType: EZCType.xChain)),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -117,6 +119,8 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen>
                             'P-Chain', _walletRoiChainStore.addressP),
                       ),
                     ),
+                    onPressed: () => context
+                        .pushRoute(HistoryRoute(ezcType: EZCType.pChain)),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -133,6 +137,8 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen>
                             'C-Chain', _walletRoiChainStore.addressC),
                       ),
                     ),
+                    onPressed: () => context
+                        .pushRoute(HistoryRoute(ezcType: EZCType.cChain)),
                   ),
                 ),
               ],
@@ -198,6 +204,7 @@ class _WalletChainWidget extends StatelessWidget {
   final bool? hasSend;
   final VoidCallback? onSendPressed;
   final VoidCallback? onReceivePressed;
+  final VoidCallback? onPressed;
 
   const _WalletChainWidget(
       {Key? key,
@@ -207,97 +214,101 @@ class _WalletChainWidget extends StatelessWidget {
       this.hasSend,
       this.onSendPressed,
       this.onReceivePressed,
-      this.lockStakeableRoi})
+      this.lockStakeableRoi,
+      this.onPressed})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => Container(
-        padding:
-            const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          color: provider.themeMode.bg,
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-        ),
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  chain,
-                  style:
-                      EZCHeadlineSmallTextStyle(color: provider.themeMode.text),
-                ),
-                const Spacer(),
-                if (hasSend != false)
-                  _WalletButton(
-                    text: Strings.current.sharedSend,
-                    icon: Assets.icons.icArrowUp.svg(),
-                    onPressed: onSendPressed,
-                  ),
-                const SizedBox(width: 8),
-                _WalletButton(
-                  text: Strings.current.sharedReceive,
-                  icon: Assets.icons.icArrowDown.svg(),
-                  onPressed: onReceivePressed,
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  Strings.current.sharedAvailable,
-                  style: EZCTitleMediumTextStyle(
-                      color: provider.themeMode.secondary60),
-                ),
-                Text(
-                  '$availableRoi EZC',
-                  style:
-                      EZCTitleMediumTextStyle(color: provider.themeMode.text),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            if (lockRoi != null)
+      builder: (context, provider, child) => GestureDetector(
+        onTap: onPressed,
+        child: Container(
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 16),
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: provider.themeMode.bg,
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+          ),
+          child: Column(
+            children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    Strings.current.sharedLock,
-                    style: EZCTitleMediumTextStyle(
-                        color: provider.themeMode.secondary60),
+                    chain,
+                    style: EZCHeadlineSmallTextStyle(
+                        color: provider.themeMode.text),
                   ),
-                  Text(
-                    '$lockRoi EZC',
-                    style:
-                        EZCTitleMediumTextStyle(color: provider.themeMode.text),
+                  const Spacer(),
+                  if (hasSend != false)
+                    _WalletButton(
+                      text: Strings.current.sharedSend,
+                      icon: Assets.icons.icArrowUp.svg(),
+                      onPressed: onSendPressed,
+                    ),
+                  const SizedBox(width: 8),
+                  _WalletButton(
+                    text: Strings.current.sharedReceive,
+                    icon: Assets.icons.icArrowDown.svg(),
+                    onPressed: onReceivePressed,
                   ),
                 ],
               ),
-            if (lockStakeableRoi != null) ...[
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    Strings.current.sharedLockStakeable,
+                    Strings.current.sharedAvailable,
                     style: EZCTitleMediumTextStyle(
                         color: provider.themeMode.secondary60),
                   ),
                   Text(
-                    '$lockStakeableRoi EZC',
+                    '$availableRoi EZC',
                     style:
                         EZCTitleMediumTextStyle(color: provider.themeMode.text),
                   ),
                 ],
               ),
-            ]
-          ],
+              const SizedBox(height: 8),
+              if (lockRoi != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      Strings.current.sharedLock,
+                      style: EZCTitleMediumTextStyle(
+                          color: provider.themeMode.secondary60),
+                    ),
+                    Text(
+                      '$lockRoi EZC',
+                      style: EZCTitleMediumTextStyle(
+                          color: provider.themeMode.text),
+                    ),
+                  ],
+                ),
+              if (lockStakeableRoi != null) ...[
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      Strings.current.sharedLockStakeable,
+                      style: EZCTitleMediumTextStyle(
+                          color: provider.themeMode.secondary60),
+                    ),
+                    Text(
+                      '$lockStakeableRoi EZC',
+                      style: EZCTitleMediumTextStyle(
+                          color: provider.themeMode.text),
+                    ),
+                  ],
+                ),
+              ]
+            ],
+          ),
         ),
       ),
     );
