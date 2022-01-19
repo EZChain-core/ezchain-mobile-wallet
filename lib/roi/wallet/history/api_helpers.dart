@@ -30,7 +30,7 @@ Future<List<Transaction>> getAddressHistory(
     limit > 0 ? [limit.toString()] : null,
     endTime == null ? null : [endTime],
   );
-  final response = await explorerClient.getGetTransactions(request);
+  final response = await explorerClient.getTransactions(request);
   final transactions = response.transactions;
   final next = response.next;
 
@@ -57,4 +57,13 @@ Future<List<Transaction>> getAddressHistory(
   }
 
   return transactions;
+}
+
+/// Returns the ortelius data from the given tx id.
+/// @param txID
+Future<Transaction> getTx(String txId) async {
+  final explorerApi = ezc_network.explorerApi;
+  if (explorerApi == null) throw Exception("Explorer API not found.");
+  final explorerClient = ExplorerRestClient(explorerApi);
+  return await explorerClient.getTransaction(txId);
 }

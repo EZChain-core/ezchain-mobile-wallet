@@ -9,7 +9,10 @@ abstract class ExplorerRestClient {
   factory ExplorerRestClient(Dio dio, {String baseUrl}) = _ExplorerRestClient;
 
   @POST("/v2/transactions")
-  Future<GetTransactionsResponse> getGetTransactions(
+  Future<GetTransactionsResponse> getTransactions(
     @Body() GetTransactionsRequest request,
   );
+
+  @GET("/v2/transactions/{txId}")
+  Future<Transaction> getTransaction(@Path() String txId);
 }

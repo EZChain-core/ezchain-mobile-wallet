@@ -17,10 +17,6 @@ abstract class ROI {
 
   String getHRP();
 
-  void setAddress(String host, int port, String protocol);
-
-  void setNetworkId(int networkId);
-
   factory ROI.create(
       {required String host,
       required int port,
@@ -97,11 +93,6 @@ abstract class ROINetwork {
       ))
       ..interceptors.add(prettyDioLogger);
   }
-
-  void changeNetworkId(int networkId) {
-    this.networkId = networkId;
-    hrp = getPreferredHRP(networkId);
-  }
 }
 
 class _ROICore extends ROINetwork implements ROI {
@@ -159,15 +150,5 @@ class _ROICore extends ROINetwork implements ROI {
   @override
   String getHRP() {
     return hrp;
-  }
-
-  @override
-  void setAddress(String host, int port, String protocol) {
-    changeAddress(host, port, protocol);
-  }
-
-  @override
-  void setNetworkId(int networkId) {
-    changeNetworkId(networkId);
   }
 }
