@@ -41,6 +41,7 @@
   "sharedProcessing": "Processing",
   "sharedAccepted": "Accepted",
   "sharedError": "Error",
+  "sharedTransaction": "Transaction",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",

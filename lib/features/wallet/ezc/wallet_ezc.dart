@@ -7,28 +7,28 @@ import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
+import 'package:wallet/features/wallet/ezc/wallet_ezc_store.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
-import 'package:wallet/features/wallet/roi/wallet_roi_chain_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-class WalletROIChainScreen extends StatefulWidget {
-  const WalletROIChainScreen({Key? key}) : super(key: key);
+class WalletEZCScreen extends StatefulWidget {
+  const WalletEZCScreen({Key? key}) : super(key: key);
 
   @override
-  State<WalletROIChainScreen> createState() => _WalletROIChainScreenState();
+  State<WalletEZCScreen> createState() => _WalletEZCScreenState();
 }
 
-class _WalletROIChainScreenState extends State<WalletROIChainScreen>
+class _WalletEZCScreenState extends State<WalletEZCScreen>
     with AutomaticKeepAliveClientMixin {
-  final _walletRoiChainStore = WalletRoiChainStore();
+  final _walletEZCStore = WalletEZCStore();
 
   @override
   void initState() {
-    _walletRoiChainStore.fetchData();
+    _walletEZCStore.fetchData();
     super.initState();
   }
 
@@ -50,8 +50,8 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen>
                 const SizedBox(height: 24),
                 Row(
                   children: [
-                    const SizedBox(width: 16),
-                    Assets.images.imgLogoRoi.image(width: 63, height: 48),
+                    const SizedBox(width: 18),
+                    Assets.images.imgLogoEzc.svg(),
                     const SizedBox(width: 16),
                     Expanded(
                       child: Column(
@@ -59,7 +59,7 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen>
                         children: [
                           Observer(
                             builder: (_) => Text(
-                              '${_walletRoiChainStore.totalRoi} EZC'
+                              '${_walletEZCStore.totalRoi} EZC'
                                   .useCorrectEllipsis(),
                               style: EZCHeadlineSmallTextStyle(
                                   color: provider.themeMode.primary),
@@ -69,7 +69,7 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen>
                           ),
                           Observer(
                             builder: (_) => Text(
-                              '\$ ${_walletRoiChainStore.totalUsd}'
+                              '\$ ${_walletEZCStore.totalUsd}'
                                   .useCorrectEllipsis(),
                               style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.white),
@@ -90,14 +90,14 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen>
                 Observer(
                   builder: (_) => _WalletChainWidget(
                     chain: Strings.current.sharedXChain,
-                    availableRoi: _walletRoiChainStore.balanceX.availableString,
-                    lockRoi: _walletRoiChainStore.balanceX.lockString,
+                    availableRoi: _walletEZCStore.balanceX.availableString,
+                    lockRoi: _walletEZCStore.balanceX.lockString,
                     onSendPressed: () =>
                         context.router.push(WalletSendAvmRoute()),
                     onReceivePressed: () => context.router.push(
                       WalletReceiveRoute(
                         walletReceiveInfo: WalletReceiveInfo(
-                            'X-Chain', _walletRoiChainStore.addressX),
+                            'X-Chain', _walletEZCStore.addressX),
                       ),
                     ),
                     onPressed: () => context
@@ -108,15 +108,15 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen>
                 Observer(
                   builder: (_) => _WalletChainWidget(
                     chain: Strings.current.sharedPChain,
-                    availableRoi: _walletRoiChainStore.balanceP.availableString,
-                    lockRoi: _walletRoiChainStore.balanceP.lockString,
+                    availableRoi: _walletEZCStore.balanceP.availableString,
+                    lockRoi: _walletEZCStore.balanceP.lockString,
                     lockStakeableRoi:
-                        _walletRoiChainStore.balanceP.lockStakeableString,
+                        _walletEZCStore.balanceP.lockStakeableString,
                     hasSend: false,
                     onReceivePressed: () => context.router.push(
                       WalletReceiveRoute(
                         walletReceiveInfo: WalletReceiveInfo(
-                            'P-Chain', _walletRoiChainStore.addressP),
+                            'P-Chain', _walletEZCStore.addressP),
                       ),
                     ),
                     onPressed: () => context
@@ -127,14 +127,14 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen>
                 Observer(
                   builder: (_) => _WalletChainWidget(
                     chain: Strings.current.sharedCChain,
-                    availableRoi: _walletRoiChainStore.balanceC.availableString,
-                    lockRoi: _walletRoiChainStore.balanceC.lockString,
+                    availableRoi: _walletEZCStore.balanceC.availableString,
+                    lockRoi: _walletEZCStore.balanceC.lockString,
                     onSendPressed: () =>
                         context.router.push(WalletSendEvmRoute()),
                     onReceivePressed: () => context.router.push(
                       WalletReceiveRoute(
                         walletReceiveInfo: WalletReceiveInfo(
-                            'C-Chain', _walletRoiChainStore.addressC),
+                            'C-Chain', _walletEZCStore.addressC),
                       ),
                     ),
                     onPressed: () => context
@@ -153,7 +153,7 @@ class _WalletROIChainScreenState extends State<WalletROIChainScreen>
   bool get wantKeepAlive => true;
 
   Future<void> _refresh() {
-    _walletRoiChainStore.refresh();
+    _walletEZCStore.refresh();
     return Future.delayed(const Duration(seconds: 1));
   }
 }
