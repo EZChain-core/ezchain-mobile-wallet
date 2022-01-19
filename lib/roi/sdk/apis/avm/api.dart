@@ -138,22 +138,7 @@ class _AvmApiImpl implements AvmApi {
   }
 
   @override
-  void refreshBlockchainId(String blockChainId) {
-    this.blockChainId = blockChainId;
-  }
-
-  @override
   String getBlockchainId() => blockChainId;
-
-  @override
-  void setAVAXAssetId(String? avaxAssetId) {
-    this.avaxAssetId = bindtools.cb58Decode(avaxAssetId);
-  }
-
-  @override
-  void setBlockchainAlias(String alias) {
-    blockchainAlias = alias;
-  }
 
   @override
   Uint8List parseAddress(String address) {
@@ -384,7 +369,7 @@ class _AvmApiImpl implements AvmApi {
     if (avaxAssetId == null || refresh) {
       try {
         final response = await getAssetDescription(primaryAssetAlias);
-        setAVAXAssetId(response.assetId);
+        avaxAssetId = bindtools.cb58Decode(response.assetId);
       } catch (e) {}
     }
     return avaxAssetId;

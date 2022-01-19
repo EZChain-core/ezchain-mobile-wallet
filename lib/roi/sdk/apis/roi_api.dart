@@ -16,12 +16,6 @@ abstract class ROIChainApi implements ROIApi {
 
   String getBlockchainId();
 
-  void setBlockchainAlias(String alias);
-
-  void refreshBlockchainId(String blockChainId);
-
-  void setAVAXAssetId(String? avaxAssetId);
-
   String addressFromBuffer(Uint8List address);
 
   Uint8List parseAddress(String address);

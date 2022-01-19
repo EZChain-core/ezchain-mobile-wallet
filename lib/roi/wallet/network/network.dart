@@ -9,7 +9,9 @@ var _activeNetwork = testNetConfig;
 
 NetworkConfig get activeNetwork => _activeNetwork;
 
-final roi = _createROIProvider(activeNetwork);
+var _roi = _createROIProvider(activeNetwork);
+
+ROI get roi => _roi;
 
 final xChain = roi.avmApi;
 final cChain = roi.evmApi;
@@ -39,21 +41,7 @@ int? getEvmChainID() {
 /// Changes the connected network of the SDK.
 /// This is a synchronous call that does not do any network requests.
 void setRpcNetwork(NetworkConfig config) {
-  roi.setAddress(config.apiIp, config.apiPort, config.apiProtocol);
-  roi.setNetworkId(config.networkId);
-
-  xChain.refreshBlockchainId(config.xChainId);
-  xChain.setBlockchainAlias("X");
-
-  xChain.refreshBlockchainId(config.pChainId);
-  pChain.setBlockchainAlias("P");
-
-  xChain.refreshBlockchainId(config.cChainId);
-  cChain.setBlockchainAlias("C");
-
-  xChain.setAVAXAssetId(config.avaxId);
-  pChain.setAVAXAssetId(config.avaxId);
-  cChain.setAVAXAssetId(config.avaxId);
+  _roi = _createROIProvider(config);
 
   final explorerUrl = config.explorerURL;
 

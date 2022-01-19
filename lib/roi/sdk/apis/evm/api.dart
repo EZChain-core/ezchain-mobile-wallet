@@ -146,22 +146,7 @@ class _EvmApiImpl implements EvmApi {
   }
 
   @override
-  void refreshBlockchainId(String blockChainId) {
-    this.blockChainId = blockChainId;
-  }
-
-  @override
   String getBlockchainId() => blockChainId;
-
-  @override
-  void setAVAXAssetId(String? avaxAssetId) {
-    this.avaxAssetId = cb58Decode(avaxAssetId);
-  }
-
-  @override
-  void setBlockchainAlias(String alias) {
-    blockchainAlias = alias;
-  }
 
   @override
   String addressFromBuffer(Uint8List address) {

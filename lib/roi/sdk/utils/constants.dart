@@ -110,9 +110,9 @@ final n0C = C(
 // End Manhattan
 
 // Start mainnet
-const avaxAssetId = "FvwEAhmxKfeiG8SnEvq42hc6whRyY3EFYAvebMqDNDGCgxN5Z";
+const avaxAssetId = "2hnSEtkBGTb11GJUmeoWUXPC7zSaBG818c1GZc3WtCpbqZQS11";
 final n1X = X(
-    blockchainId: "2oYMBNV4eNHyqk2fjjV5nVQLDbtmNJzq5s3qs3Lo6ftnC6FByM",
+    blockchainId: "2bUiRRqUr9ZkDAVehjeaM4J8PsW52X2EbuGW1K5e56KZcT6yi7",
     avaxAssetId: avaxAssetId,
     alias: xChainAlias,
     vm: xChainVMName,
@@ -139,7 +139,7 @@ final n1P = P(
     minDelegationFee: BigInt.from(2));
 
 final n1C = C(
-    blockchainId: "2q9e4r6Mu3U68nU1fYjgbR6JvwrRx36CohpAX5UQxse55x1Q5",
+    blockchainId: "2XNs8nmfB8HdDeHhf41yTd1KQ5md3PBsnz3mvFevtr3DzBAiib",
     alias: cChainAlias,
     vm: cChainVMName,
     txBytesGas: 1,
@@ -253,8 +253,8 @@ final n4C = C(
 
 // Start Fuji
 final n5X = X(
-    blockchainId: "2DVxoCB9yUqmvbqCiRT6s7L2XEY4mcxicyJ6m4TN5oNsx6rbAK",
-    avaxAssetId: "b6zVkwR9zwMPTE91WpWPcfiELp9SisLfxXRK8JJSE6NNJScAK",
+    blockchainId: "2bUiRRqUr9ZkDAVehjeaM4J8PsW52X2EbuGW1K5e56KZcT6yi7",
+    avaxAssetId: "2hnSEtkBGTb11GJUmeoWUXPC7zSaBG818c1GZc3WtCpbqZQS11",
     alias: xChainAlias,
     vm: xChainVMName,
     txFee: MILLIAVAX,
@@ -262,7 +262,7 @@ final n5X = X(
 
 final n5P = P(
     blockchainId: "11111111111111111111111111111111LpoYY",
-    avaxAssetId: "b6zVkwR9zwMPTE91WpWPcfiELp9SisLfxXRK8JJSE6NNJScAK",
+    avaxAssetId: "2hnSEtkBGTb11GJUmeoWUXPC7zSaBG818c1GZc3WtCpbqZQS11",
     alias: pChainAlias,
     vm: pChainVMName,
     txFee: MILLIAVAX,
@@ -404,8 +404,8 @@ final networks = {
     p: n5P,
     hrp: networkIdToHRP[5]!,
     keys: {
-      "yH8D7ThNJkxmtkuv2jgBa4P1Rn3Qpr4pPr7QYNfcdoS6k6HWp": n5C,
-      "2JVSBoinj9C2J33VntvzYtVJNZdN2NKiwwKjcumHUWEb5DbBrm": n5X,
+      "2XNs8nmfB8HdDeHhf41yTd1KQ5md3PBsnz3mvFevtr3DzBAiib": n5C,
+      "2bUiRRqUr9ZkDAVehjeaM4J8PsW52X2EbuGW1K5e56KZcT6yi7": n5X,
       "11111111111111111111111111111111LpoYY": n5P,
     },
   ),

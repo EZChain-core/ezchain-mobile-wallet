@@ -92,6 +92,8 @@ class Transaction {
   @JsonKey(name: "validatorNodeID")
   final String validatorNodeId;
 
+  final bool rewarded;
+
   Transaction(
     this.id,
     this.chainId,
@@ -108,6 +110,7 @@ class Transaction {
     this.validatorStart,
     this.validatorEnd,
     this.validatorNodeId,
+    this.rewarded,
   );
 
   factory Transaction.fromJson(Map<String, dynamic> json) =>

@@ -131,22 +131,7 @@ class _PvmApiImpl implements PvmApi {
   }
 
   @override
-  void refreshBlockchainId(String blockChainId) {
-    this.blockChainId = blockChainId;
-  }
-
-  @override
   String getBlockchainId() => blockChainId;
-
-  @override
-  void setAVAXAssetId(String? avaxAssetId) {
-    this.avaxAssetId = cb58Decode(avaxAssetId);
-  }
-
-  @override
-  void setBlockchainAlias(String alias) {
-    blockchainAlias = alias;
-  }
 
   @override
   String addressFromBuffer(Uint8List address) {
@@ -173,7 +158,7 @@ class _PvmApiImpl implements PvmApi {
     if (avaxAssetId == null || refresh) {
       try {
         final response = await getStakingAssetId();
-        setAVAXAssetId(response.assetId);
+        avaxAssetId = cb58Decode(response.assetId);
       } catch (e) {}
     }
     return avaxAssetId;

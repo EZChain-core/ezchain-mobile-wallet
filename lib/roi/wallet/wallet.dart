@@ -23,6 +23,7 @@ import 'package:wallet/roi/wallet/history/api_helpers.dart';
 import 'package:wallet/roi/wallet/history/raw_types.dart';
 import 'package:wallet/roi/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
+import 'package:wallet/roi/wallet/history/parsers.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/fee_utils.dart';
 import 'package:wallet/roi/wallet/utils/wait_tx_utils.dart';
@@ -668,5 +669,14 @@ abstract class WalletProvider {
       addresses,
       limit: limit,
     );
+  }
+
+  /// Fetches information about the given txId and parses it from the wallet's perspective
+  /// @param txId
+  Future<void> getHistoryTx(String txId) async {
+    final addressesX = await getAllAddressesX();
+    final addressesC = getAddressC();
+    final transaction = await getTx(txId);
+    return await getTransactionSummary(transaction, addressesX, addressesC);
   }
 }
