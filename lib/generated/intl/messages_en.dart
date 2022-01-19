@@ -154,6 +154,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedStartAgain": MessageLookupByLibrary.simpleMessage("Start Again"),
         "sharedToken": MessageLookupByLibrary.simpleMessage("Token"),
         "sharedTotal": MessageLookupByLibrary.simpleMessage("Total"),
+        "sharedTransaction":
+            MessageLookupByLibrary.simpleMessage("Transaction"),
         "sharedTransactionFee":
             MessageLookupByLibrary.simpleMessage("Transaction fee"),
         "sharedTransactionSent":

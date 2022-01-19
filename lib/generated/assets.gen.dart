@@ -20,6 +20,10 @@ class $AssetsIconsGen {
   SvgGenImage get icArrowDownBlack =>
       const SvgGenImage('assets/icons/ic_arrow_down_black.svg');
 
+  /// File path: assets/icons/ic_arrow_down_primary.svg
+  SvgGenImage get icArrowDownPrimary =>
+      const SvgGenImage('assets/icons/ic_arrow_down_primary.svg');
+
   /// File path: assets/icons/ic_arrow_left_white.svg
   SvgGenImage get icArrowLeftWhite =>
       const SvgGenImage('assets/icons/ic_arrow_left_white.svg');
@@ -28,6 +32,10 @@ class $AssetsIconsGen {
   SvgGenImage get icArrowUp =>
       const SvgGenImage('assets/icons/ic_arrow_up.svg');
 
+  /// File path: assets/icons/ic_arrow_up_primary.svg
+  SvgGenImage get icArrowUpPrimary =>
+      const SvgGenImage('assets/icons/ic_arrow_up_primary.svg');
+
   /// File path: assets/icons/ic_backspace_secondary.svg
   SvgGenImage get icBackspaceSecondary =>
       const SvgGenImage('assets/icons/ic_backspace_secondary.svg');
@@ -35,6 +43,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_change_pin.svg
   SvgGenImage get icChangePin =>
       const SvgGenImage('assets/icons/ic_change_pin.svg');
+
+  /// File path: assets/icons/ic_copy_orange.svg
+  SvgGenImage get icCopyOrange =>
+      const SvgGenImage('assets/icons/ic_copy_orange.svg');
 
   /// File path: assets/icons/ic_copy_primary.svg
   SvgGenImage get icCopyPrimary =>
@@ -129,6 +141,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/img_bg_wallet.png
   AssetGenImage get imgBgWallet =>
       const AssetGenImage('assets/images/img_bg_wallet.png');
+
+  /// File path: assets/images/img_logo_ezc.svg
+  SvgGenImage get imgLogoEzc =>
+      const SvgGenImage('assets/images/img_logo_ezc.svg');
 
   /// File path: assets/images/img_logo_roi.png
   AssetGenImage get imgLogoRoi =>

@@ -6,29 +6,29 @@ import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
-part 'wallet_roi_chain_store.g.dart';
+part 'wallet_ezc_store.g.dart';
 
-class WalletRoiChainStore = _WalletRoiChainStore with _$WalletRoiChainStore;
+class WalletEZCStore = _WalletEZCStore with _$WalletEZCStore;
 
-abstract class _WalletRoiChainStore with Store {
+abstract class _WalletEZCStore with Store {
   final _wallet = getIt<WalletFactory>().activeWallet;
 
   final _balanceStore = getIt<BalanceStore>();
   final _priceStore = getIt<PriceStore>();
 
   @computed
-  WalletRoiChainBalanceViewData get balanceX => WalletRoiChainBalanceViewData(
+  WalletEZCBalanceViewData get balanceX => WalletEZCBalanceViewData(
       _balanceStore.balanceX, _balanceStore.balanceLockedX, null);
 
   @computed
-  WalletRoiChainBalanceViewData get balanceP => WalletRoiChainBalanceViewData(
+  WalletEZCBalanceViewData get balanceP => WalletEZCBalanceViewData(
       _balanceStore.balanceP,
       _balanceStore.balanceLockedP,
       _balanceStore.balanceLockedStakeableP);
 
   @computed
-  WalletRoiChainBalanceViewData get balanceC =>
-      WalletRoiChainBalanceViewData(_balanceStore.balanceC, null, null);
+  WalletEZCBalanceViewData get balanceC =>
+      WalletEZCBalanceViewData(_balanceStore.balanceC, null, null);
 
   @computed
   String get totalRoi =>
@@ -58,7 +58,7 @@ abstract class _WalletRoiChainStore with Store {
   }
 }
 
-class WalletRoiChainBalanceViewData {
+class WalletEZCBalanceViewData {
   final Decimal available;
   final Decimal? lock;
   final Decimal? lockStakeable;
@@ -73,5 +73,5 @@ class WalletRoiChainBalanceViewData {
       decimalToLocaleString(lockStakeable ?? Decimal.zero,
           decimals: decimalNumber);
 
-  WalletRoiChainBalanceViewData(this.available, this.lock, this.lockStakeable);
+  WalletEZCBalanceViewData(this.available, this.lock, this.lockStakeable);
 }

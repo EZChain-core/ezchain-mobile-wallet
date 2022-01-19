@@ -3,3 +3,5 @@ extension StringExtension on String {
     return replaceAll('', '\u200B');
   }
 }
+
+T? tryCast<T>(dynamic x) => x is T ? x : null;

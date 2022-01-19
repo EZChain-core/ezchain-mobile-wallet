@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/wallet/roi/wallet_roi_chain.dart';
+import 'package:wallet/features/wallet/ezc/wallet_ezc.dart';
 import 'package:wallet/features/wallet/token/wallet_token.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -55,7 +55,7 @@ class WalletScreen extends StatelessWidget {
                   const Expanded(
                     child: TabBarView(
                       children: [
-                        WalletROIChainScreen(),
+                        WalletEZCScreen(),
                         WalletTokenScreen(),
                       ],
                     ),
