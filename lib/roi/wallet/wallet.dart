@@ -674,10 +674,16 @@ abstract class WalletProvider {
 
   /// Fetches information about the given txId and parses it from the wallet's perspective
   /// @param txId
-  Future<HistoryItem> getHistoryTx(String txId) async {
+  Future<HistoryItem> getHistoryItemTx(String txId) async {
     final addressesX = await getAllAddressesX();
     final addressesC = getAddressC();
     final transaction = await getTx(txId);
     return await getTransactionSummary(transaction, addressesX, addressesC);
+  }
+
+  /// Fetches information about the given txId and parses it from the wallet's perspective
+  /// @param txId
+  Future<Transaction> getHistoryTx(String txId) async {
+    return await getTx(txId);
   }
 }

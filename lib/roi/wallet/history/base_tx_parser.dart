@@ -67,13 +67,15 @@ Future<List<HistoryBaseTxToken>> getBaseTxTokensSummary(
 
     /// If we sent avax, deduct the fee
     if (id == activeNetwork.avaxId && tokenLost > BigInt.zero) {
-      tokenLost = tokenLost - getTxFeeX();
+      tokenLost -= getTxFeeX();
     }
 
     /// How much we gained/lost of this token
     final diff = tokenGain - tokenLost;
-    final diffClean =
-        bnToLocaleString(diff, decimals: int.parse(tokenDesc.denomination));
+    final diffClean = bnToLocaleString(
+      diff,
+      decimals: int.parse(tokenDesc.denomination),
+    );
 
     /// If we didnt gain or lose anything, ignore this token
     if (diff == BigInt.zero) continue;
@@ -102,19 +104,21 @@ Future<List<HistoryBaseTxToken>> getBaseTxTokensSummary(
 /// @param utxos
 /// @param ownerAddrs
 HistoryBaseTxTokenLossGain getOwnedTokens(
-    List<TransactionOutput> utxos, List<String> ownerAddresses) {
+  List<TransactionOutput> utxos,
+  List<String> ownerAddresses,
+) {
   final tokenUTXOs = getOutputsOfType(utxos, SECPXFEROUTPUTID);
 
   /// Owned inputs
   final myUTXOs = getOwnedOutputs(tokenUTXOs, ownerAddresses);
 
   /// Asset IDs received
-  final assetIDs = getOutputsAssetIds(myUTXOs);
+  final assetIds = getOutputsAssetIds(myUTXOs);
 
   final res = <String, BigInt>{};
 
-  for (var i = 0; i < assetIDs.length; i++) {
-    final assetID = assetIDs[i];
+  for (var i = 0; i < assetIds.length; i++) {
+    final assetID = assetIds[i];
     final assetUTXOs = getAssetOutputs(myUTXOs, assetID);
     final tot = getOutputTotals(assetUTXOs);
     res[assetID] = tot;
