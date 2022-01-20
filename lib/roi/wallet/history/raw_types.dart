@@ -94,6 +94,8 @@ class Transaction {
 
   final bool rewarded;
 
+  final String? txBlockId;
+
   Transaction(
     this.id,
     this.chainId,
@@ -111,6 +113,7 @@ class Transaction {
     this.validatorEnd,
     this.validatorNodeId,
     this.rewarded,
+    this.txBlockId,
   );
 
   factory Transaction.fromJson(Map<String, dynamic> json) =>
@@ -205,6 +208,9 @@ class TransactionOutput {
 
   final int nonce;
 
+  @JsonKey(name: "stakeLocktime")
+  final int? stakeLockTime;
+
   TransactionOutput(
     this.id,
     this.transactionId,
@@ -226,6 +232,7 @@ class TransactionOutput {
     this.rewardUtxo,
     this.redeemingTransactionId,
     this.nonce,
+    this.stakeLockTime,
   );
 
   factory TransactionOutput.fromJson(Map<String, dynamic> json) =>

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:intl/intl.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -9,8 +10,11 @@ import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
+import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
+import 'package:wallet/roi/wallet/history/history_helpers.dart';
+import 'package:wallet/roi/wallet/history/raw_types.dart';
 import 'package:wallet/roi/wallet/network/constants.dart';
 import 'package:wallet/roi/wallet/network/helpers/alias_from_network_id.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
@@ -66,7 +70,8 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           getHistoryTx("yLiThamDEydaMivwyZWEZL6ujhZADd5HQ8NxzCQui7mPgvrP2");
+    //           getHistoryTx(
+    //               "2XNs8nmfB8HdDeHhf41yTd1KQ5md3PBsnz3mvFevtr3DzBAiib");
     //         },
     //       ),
     //     ),
@@ -429,7 +434,7 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       final transaction = await wallet.getHistoryTx(txId);
 
-      var message = "Transaction Id = ${transaction.id}\n";
+      var message = "Transaction Id: ${transaction.id}\n";
 
       final timestamp = transaction.timestamp;
       if (timestamp != null && timestamp.isNotEmpty) {
@@ -438,14 +443,81 @@ class _SplashScreenState extends State<SplashScreen> {
 
         var outputFormat = DateFormat('dd/MM/yyyy, hh:mm:ss');
         var outputDate = outputFormat.format(inputDate);
-        message += "Accepted = $outputDate\n";
+        message += "Accepted: $outputDate\n";
       }
+
+      final value = transaction.outputTotals.values.fold<BigInt>(
+          BigInt.zero,
+          (previousValue, element) =>
+              previousValue + (BigInt.tryParse(element) ?? BigInt.zero));
+
+      if (value != BigInt.zero) {
+        message += "Value: ${bnToLocaleString(value)}\n";
+      }
+
       message +=
-          "Burned = ${bnToDecimalAvaxX(BigInt.tryParse(transaction.txFee.toString()) ?? BigInt.zero)}\n";
-      message += "Blockchain = ${idToChainAlias(transaction.chainId)}\n\n\n";
+          "Burned: ${bnToDecimalAvaxX(BigInt.tryParse(transaction.txFee.toString()) ?? BigInt.zero)}\n";
+
+      message += "Blockchain: ${idToChainAlias(transaction.chainId)}\n";
+
+      final blockId = transaction.txBlockId;
+      if (blockId != null && blockId.isNotEmpty) {
+        message += "          block = $blockId\n";
+      }
+
+      final validatorNodeId = transaction.validatorNodeId;
+
+      if (validatorNodeId.isNotEmpty) {
+        message += "Staking: validator = $validatorNodeId\n";
+      }
+
+      final validatorStart = transaction.validatorStart * 1000;
+      final validatorEnd = transaction.validatorEnd * 1000;
+
+      if (validatorStart != 0 && validatorEnd != 0) {
+        final validatorStartDate =
+            DateTime.fromMillisecondsSinceEpoch(validatorStart);
+        final validatorEndDate =
+            DateTime.fromMillisecondsSinceEpoch(validatorEnd);
+        final dateFormatter = DateFormat("dd/MM/yyyy");
+
+        final sub = validatorEnd - validatorStart;
+        const numOfMillisPerDay = 24 * 60 * 60 * 1000;
+        final totalDays = sub / numOfMillisPerDay;
+        final validatorUntilNow =
+            DateTime.now().millisecondsSinceEpoch - validatorStart;
+        final elapsedDay = validatorUntilNow / numOfMillisPerDay;
+        final elapsedPercent = (elapsedDay / totalDays) * 100;
+        message +=
+            "         duration = ${totalDays.toStringAsFixed(0)} days (${elapsedPercent.toStringAsFixed(0)}% elapsed)\n";
+        message +=
+            "         start = ${dateFormatter.format(validatorStartDate)}, end = ${dateFormatter.format(validatorEndDate)}\n";
+      }
+
+      final memo = transaction.memo;
+      if (memo != null && memo.isNotEmpty) {
+        try {
+          message +=
+              "Memo: hex = ${hexEncode(base64.decode(memo))}, utf8 = ${parseMemo(memo)}";
+        } catch (e) {
+          logger.e(e);
+        }
+      }
+
+      message += "\n\n";
+
+      var prefixInput = "";
+      if (transaction.type == TransactionType.import) {
+        prefixInput = "Exported ";
+      }
+
+      var prefixOutput = "";
+      if (transaction.type == TransactionType.export) {
+        prefixOutput = "Exported ";
+      }
 
       final ins = transaction.inputs ?? [];
-      message += "Input: = ${ins.length}\n";
+      message += "${prefixInput}Input: ${ins.length}\n";
       for (var i = 0; i < ins.length; i++) {
         final input = ins[i];
         final signatures = input.credentials?.map((e) => e.signature);
@@ -454,17 +526,25 @@ class _SplashScreenState extends State<SplashScreen> {
             bnToLocaleString(BigInt.tryParse(output.amount) ?? BigInt.zero);
         final addresses = output.addresses;
         message +=
-            "Input: #$i, amount = $amount, from = $addresses, signature = $signatures\n\n";
+            "#$i: amount = $amount, from = $addresses, signature = $signatures\n";
       }
 
       final outs = transaction.outputs ?? [];
-      message += "Output: = ${outs.length}\n";
+      message += "\n${prefixOutput}Output: ${outs.length}\n";
       for (var i = 0; i < outs.length; i++) {
         final output = outs[i];
         final amount =
             bnToLocaleString(BigInt.tryParse(output.amount) ?? BigInt.zero);
         final addresses = output.addresses;
-        message += "Output: #$i, amount = $amount, to = $addresses\n";
+        message += "#$i: amount = $amount, to = $addresses\n";
+        final stakeLockTime = output.stakeLockTime;
+        if (stakeLockTime != null && stakeLockTime != 0) {
+          final stakeLockTimeDate =
+              DateTime.fromMillisecondsSinceEpoch(stakeLockTime * 1000);
+          final dateFormatter = DateFormat("MM/dd/yyyy, HH:mm:ss a");
+          message +=
+              "Output can be spent in a year (${dateFormatter.format(stakeLockTimeDate)})";
+        }
       }
       logger.i(message);
     } catch (e) {
