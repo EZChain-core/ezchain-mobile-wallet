@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:intl/intl.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:eventify/eventify.dart';
@@ -11,6 +12,7 @@ import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
 import 'package:wallet/roi/wallet/network/constants.dart';
+import 'package:wallet/roi/wallet/network/helpers/alias_from_network_id.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
@@ -426,7 +428,45 @@ class _SplashScreenState extends State<SplashScreen> {
   getHistoryTx(String txId) async {
     try {
       final transaction = await wallet.getHistoryTx(txId);
-      // logger.i("getTransaction = ${transactions.length}");
+
+      var message = "Transaction Id = ${transaction.id}\n";
+
+      final timestamp = transaction.timestamp;
+      if (timestamp != null && timestamp.isNotEmpty) {
+        final inputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        final inputDate = inputFormat.parse(timestamp, true).toLocal();
+
+        var outputFormat = DateFormat('dd/MM/yyyy, hh:mm:ss');
+        var outputDate = outputFormat.format(inputDate);
+        message += "Accepted = $outputDate\n";
+      }
+      message +=
+          "Burned = ${bnToDecimalAvaxX(BigInt.tryParse(transaction.txFee.toString()) ?? BigInt.zero)}\n";
+      message += "Blockchain = ${idToChainAlias(transaction.chainId)}\n\n\n";
+
+      final ins = transaction.inputs ?? [];
+      message += "Input: = ${ins.length}\n";
+      for (var i = 0; i < ins.length; i++) {
+        final input = ins[i];
+        final signatures = input.credentials?.map((e) => e.signature);
+        final output = input.output;
+        final amount =
+            bnToLocaleString(BigInt.tryParse(output.amount) ?? BigInt.zero);
+        final addresses = output.addresses;
+        message +=
+            "Input: #$i, amount = $amount, from = $addresses, signature = $signatures\n\n";
+      }
+
+      final outs = transaction.outputs ?? [];
+      message += "Output: = ${outs.length}\n";
+      for (var i = 0; i < outs.length; i++) {
+        final output = outs[i];
+        final amount =
+            bnToLocaleString(BigInt.tryParse(output.amount) ?? BigInt.zero);
+        final addresses = output.addresses;
+        message += "Output: #$i, amount = $amount, to = $addresses\n";
+      }
+      logger.i(message);
     } catch (e) {
       logger.e(e);
     }
