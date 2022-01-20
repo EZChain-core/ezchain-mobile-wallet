@@ -101,7 +101,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                       ),
                     ),
                     onPressed: () => context
-                        .pushRoute(HistoryRoute(ezcType: EZCType.xChain)),
+                        .pushRoute(TransactionsRoute(ezcType: EZCType.xChain)),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -120,7 +120,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                       ),
                     ),
                     onPressed: () => context
-                        .pushRoute(HistoryRoute(ezcType: EZCType.pChain)),
+                        .pushRoute(TransactionsRoute(ezcType: EZCType.pChain)),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -138,7 +138,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                       ),
                     ),
                     onPressed: () => context
-                        .pushRoute(HistoryRoute(ezcType: EZCType.cChain)),
+                        .pushRoute(TransactionsRoute(ezcType: EZCType.cChain)),
                   ),
                 ),
               ],

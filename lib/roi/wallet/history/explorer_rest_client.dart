@@ -8,7 +8,7 @@ part 'explorer_rest_client.g.dart';
 abstract class ExplorerRestClient {
   factory ExplorerRestClient(Dio dio, {String baseUrl}) = _ExplorerRestClient;
 
-  @POST("/v2/transactions")
+  @POST("/v2/transaction")
   Future<GetTransactionsResponse> getGetTransactions(
     @Body() GetTransactionsRequest request,
   );

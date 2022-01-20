@@ -77,7 +77,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Create Wallet"),
         "pageHomeWelcome": m0,
         "pinCodeDes": MessageLookupByLibrary.simpleMessage(
-            "Set up your PIN code to unlock the wallet, confirm transactions and other activities tha require your permission"),
+            "Set up your PIN code to unlock the wallet, confirm transaction and other activities tha require your permission"),
         "pinCodeSetNewPin":
             MessageLookupByLibrary.simpleMessage(" or Set new PIN code"),
         "pinCodeTitle": MessageLookupByLibrary.simpleMessage("PIN code"),

@@ -12,6 +12,9 @@ import 'package:flutter/services.dart';
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/ic_app.png
+  AssetGenImage get icApp => const AssetGenImage('assets/icons/ic_app.png');
+
   /// File path: assets/icons/ic_arrow_down.svg
   SvgGenImage get icArrowDown =>
       const SvgGenImage('assets/icons/ic_arrow_down.svg');
@@ -93,6 +96,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_scan_barcode.svg
   SvgGenImage get icScanBarcode =>
       const SvgGenImage('assets/icons/ic_scan_barcode.svg');
+
+  /// File path: assets/icons/ic_search_black.svg
+  SvgGenImage get icSearchBlack =>
+      const SvgGenImage('assets/icons/ic_search_black.svg');
 
   /// File path: assets/icons/ic_security.svg
   SvgGenImage get icSecurity =>
