@@ -26,7 +26,6 @@ import 'package:wallet/features/cross/cross.dart' as _i24;
 import 'package:wallet/features/cross/transfer/cross_transfer.dart' as _i19;
 import 'package:wallet/features/dashboard/dashboard.dart' as _i22;
 import 'package:wallet/features/earn/earn.dart' as _i25;
-import 'package:wallet/features/history/history.dart' as _i21;
 import 'package:wallet/features/onboard/on_board.dart' as _i2;
 import 'package:wallet/features/qrcode/qr_code.dart' as _i20;
 import 'package:wallet/features/setting/about/setting_about.dart' as _i17;
@@ -36,6 +35,7 @@ import 'package:wallet/features/setting/general/setting_general.dart' as _i16;
 import 'package:wallet/features/setting/security/setting_security.dart' as _i18;
 import 'package:wallet/features/setting/setting.dart' as _i26;
 import 'package:wallet/features/splash/screen/splash.dart' as _i1;
+import 'package:wallet/features/transaction/transactions.dart' as _i21;
 import 'package:wallet/features/wallet/receive/wallet_receive.dart' as _i10;
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.dart'
     as _i12;
@@ -170,11 +170,11 @@ class AppRouter extends _i27.RootStackRouter {
       return _i27.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i20.QrCodeScreen());
     },
-    HistoryRoute.name: (routeData) {
-      final args = routeData.argsAs<HistoryRouteArgs>();
+    TransactionsRoute.name: (routeData) {
+      final args = routeData.argsAs<TransactionsRouteArgs>();
       return _i27.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i21.HistoryScreen(key: args.key, ezcType: args.ezcType));
+          child: _i21.TransactionsScreen(key: args.key, ezcType: args.ezcType));
     },
     DashboardRoute.name: (routeData) {
       return _i27.AdaptivePage<dynamic>(
@@ -237,7 +237,7 @@ class AppRouter extends _i27.RootStackRouter {
         _i27.RouteConfig(CrossTransferRoute.name,
             path: '/cross-transfer-screen'),
         _i27.RouteConfig(QrCodeRoute.name, path: '/qr-code-screen'),
-        _i27.RouteConfig(HistoryRoute.name, path: '/history-screen'),
+        _i27.RouteConfig(TransactionsRoute.name, path: '/transactions-screen'),
         _i27.RouteConfig(DashboardRoute.name, path: '/dashboard', children: [
           _i27.RouteConfig(WalletRoute.name,
               path: 'wallet', parent: DashboardRoute.name),
@@ -581,18 +581,18 @@ class QrCodeRoute extends _i27.PageRouteInfo<void> {
   static const String name = 'QrCodeRoute';
 }
 
-/// generated route for [_i21.HistoryScreen]
-class HistoryRoute extends _i27.PageRouteInfo<HistoryRouteArgs> {
-  HistoryRoute({_i28.Key? key, required _i29.EZCType ezcType})
+/// generated route for [_i21.TransactionsScreen]
+class TransactionsRoute extends _i27.PageRouteInfo<TransactionsRouteArgs> {
+  TransactionsRoute({_i28.Key? key, required _i29.EZCType ezcType})
       : super(name,
-            path: '/history-screen',
-            args: HistoryRouteArgs(key: key, ezcType: ezcType));
+            path: '/transactions-screen',
+            args: TransactionsRouteArgs(key: key, ezcType: ezcType));
 
-  static const String name = 'HistoryRoute';
+  static const String name = 'TransactionsRoute';
 }
 
-class HistoryRouteArgs {
-  const HistoryRouteArgs({this.key, required this.ezcType});
+class TransactionsRouteArgs {
+  const TransactionsRouteArgs({this.key, required this.ezcType});
 
   final _i28.Key? key;
 
@@ -600,7 +600,7 @@ class HistoryRouteArgs {
 
   @override
   String toString() {
-    return 'HistoryRouteArgs{key: $key, ezcType: $ezcType}';
+    return 'TransactionsRouteArgs{key: $key, ezcType: $ezcType}';
   }
 }
 

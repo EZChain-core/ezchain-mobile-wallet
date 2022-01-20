@@ -17,8 +17,8 @@
 
     <application
         android:name=".EZCWalletApplication"
-        android:icon="@mipmap/ic_launcher"
-        android:label="EZChain"
+        android:icon="@mipmap/launcher_icon"
+        android:label="EZChain Wallet"
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
         tools:ignore="UnusedAttribute">

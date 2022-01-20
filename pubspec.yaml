@@ -116,6 +116,11 @@ flutter_intl:
 flutter_native_splash:
   background_image: "assets/images/img_splash.png"
 
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/ic_app.png"
+
 ## Install derry from https://pub.dev/packages/derry and run derry build, derry watch, derry gen
 ## https://github.com/SimpleBoilerplates/Flutter/blob/master/derry.yaml
 ## scripts: derry.yaml
