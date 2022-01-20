@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/types.dart';
@@ -45,11 +46,11 @@ abstract class _BalanceStore with Store {
   bool _isCLoaded = false;
   bool _needFetchTotal = false;
 
-  String get balanceXString => _decimalBalance(balanceX);
+  String get balanceXString => decimalBalance(balanceX);
 
-  String get balanceCString => _decimalBalance(balanceC);
+  String get balanceCString => decimalBalance(balanceC);
 
-  String get balancePString => _decimalBalance(balanceP);
+  String get balancePString => decimalBalance(balanceP);
 
   _BalanceStore() {
     init();
@@ -139,6 +140,28 @@ abstract class _BalanceStore with Store {
     }
   }
 
+  Decimal getBalance(EZCType chain) {
+    switch (chain) {
+      case EZCType.xChain:
+        return balanceX;
+      case EZCType.pChain:
+        return balanceP;
+      case EZCType.cChain:
+        return balanceC;
+    }
+  }
+
+  String getBalanceText(EZCType chain) {
+    switch (chain) {
+      case EZCType.xChain:
+        return balanceXString;
+      case EZCType.pChain:
+        return balancePString;
+      case EZCType.cChain:
+        return balanceCString;
+    }
+  }
+
   _fetchTotal() async {
     final avaxBalance = _wallet.getAvaxBalance();
     final totalAvaxBalanceDecimal = avaxBalance.totalDecimal;
@@ -149,7 +172,7 @@ abstract class _BalanceStore with Store {
     totalRoi = totalAvaxBalanceDecimal + stakedDecimal;
   }
 
-  String _decimalBalance(Decimal balance) {
+  String decimalBalance(Decimal balance) {
     return decimalToLocaleString(balance, decimals: decimalNumber);
   }
 }

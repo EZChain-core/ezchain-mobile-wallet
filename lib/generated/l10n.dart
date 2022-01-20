@@ -470,6 +470,16 @@ class Strings {
     );
   }
 
+  /// `Transaction`
+  String get sharedTransaction {
+    return Intl.message(
+      'Transaction',
+      name: 'sharedTransaction',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
