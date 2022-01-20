@@ -7,8 +7,9 @@ class AssetDescriptionClean {
   final String denomination;
 
   AssetDescriptionClean(
-      {required this.name,
-      required this.symbol,
-      required this.assetId,
-      required this.denomination});
+    this.name,
+    this.symbol,
+    this.assetId,
+    this.denomination,
+  );
 }

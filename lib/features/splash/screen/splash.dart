@@ -64,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           getHistoryC();
+    //           getHistoryTx("yLiThamDEydaMivwyZWEZL6ujhZADd5HQ8NxzCQui7mPgvrP2");
     //         },
     //       ),
     //     ),
@@ -418,6 +418,15 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       final transactions = await wallet.getHistoryC(limit: 20);
       logger.i("getHistoryC = ${transactions.length}");
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  getHistoryTx(String txId) async {
+    try {
+      final transaction = await wallet.getHistoryTx(txId);
+      // logger.i("getTransaction = ${transactions.length}");
     } catch (e) {
       logger.e(e);
     }

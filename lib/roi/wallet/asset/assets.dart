@@ -22,10 +22,11 @@ Future<AssetDescriptionClean> getAssetDescription(String assetId) async {
       throw Exception("Can not getAssetDescription by $assetId");
     }
     final clean = AssetDescriptionClean(
-        name: response.name,
-        symbol: response.symbol,
-        assetId: response.assetId,
-        denomination: response.denomination);
+      response.name,
+      response.symbol,
+      response.assetId,
+      response.denomination,
+    );
     assetCache[assetId] = clean;
     return clean;
   } catch (e) {
