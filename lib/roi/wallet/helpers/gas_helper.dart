@@ -50,7 +50,7 @@ Future<BigInt> getMaxPriorityFee() async {
   return stringToBigInt16(rawHex);
 }
 
-/// Calculate max fee for EIP 1559 transactions given baseFee and maxPriorityFee.
+/// Calculate max fee for EIP 1559 transaction given baseFee and maxPriorityFee.
 /// According to https://www.blocknative.com/blog/eip-1559-fees
 /// @param baseFee in WEI
 /// @param maxPriorityFee in WEI
@@ -60,7 +60,7 @@ BigInt calculateMaxFee(BigInt baseFee, BigInt maxPriorityFee) {
 
 /// Creates a mock import transaction and estimates the gas required for it. Returns fee in units of gas.
 /// @param numIns Number of inputs for the import transaction.
-/// @param numSigs Number of signatures used in the import transactions. This value is the sum of owner addresses in every UTXO.
+/// @param numSigs Number of signatures used in the import transaction. This value is the sum of owner addresses in every UTXO.
 int estimateImportGasFeeFromMockTx(int numIns, int numSigs) {
   const ATOMIC_TX_COST = 10000; // in gas
   const SIG_COST = 1000; // in gas

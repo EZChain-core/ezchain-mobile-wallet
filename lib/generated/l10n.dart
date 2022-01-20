@@ -640,10 +640,10 @@ class Strings {
     );
   }
 
-  /// `Set up your PIN code to unlock the wallet, confirm transactions and other activities tha require your permission`
+  /// `Set up your PIN code to unlock the wallet, confirm transaction and other activities tha require your permission`
   String get pinCodeDes {
     return Intl.message(
-      'Set up your PIN code to unlock the wallet, confirm transactions and other activities tha require your permission',
+      'Set up your PIN code to unlock the wallet, confirm transaction and other activities tha require your permission',
       name: 'pinCodeDes',
       desc: '',
       args: [],

@@ -33,8 +33,9 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
             children: [
               EZCAppBar(
                 title: Strings.current.sharedSend,
-                onPressed: () {
-                  context.router.replaceAll([const DashboardRoute()]);
+                onPressed: () async {
+                  await context.router.pop();
+                  context.router.pop();
                 },
               ),
               Expanded(

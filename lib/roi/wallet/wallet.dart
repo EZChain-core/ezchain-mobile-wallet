@@ -448,7 +448,7 @@ abstract class WalletProvider {
   }
 
   /// @param sourceChain Which chain to import from. `X` or `P`
-  /// @param [fee] The import fee to use in the transactions. If omitted the SDK will try to calculate the fee. For deterministic transactions you should always pre calculate and provide this value.
+  /// @param [fee] The import fee to use in the transaction. If omitted the SDK will try to calculate the fee. For deterministic transaction you should always pre calculate and provide this value.
   /// @param [utxoSet] If omitted imports all atomic UTXOs.
   Future<String> importCChain(
     ExportChainsC sourceChain, {
