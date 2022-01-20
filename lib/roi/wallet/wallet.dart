@@ -20,6 +20,7 @@ import 'package:wallet/roi/wallet/evm_wallet.dart';
 import 'package:wallet/roi/wallet/helpers/tx_helper.dart';
 import 'package:wallet/roi/wallet/helpers/utxo_helper.dart';
 import 'package:wallet/roi/wallet/history/api_helpers.dart';
+import 'package:wallet/roi/wallet/history/parsed_types.dart';
 import 'package:wallet/roi/wallet/history/raw_types.dart';
 import 'package:wallet/roi/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
@@ -673,7 +674,7 @@ abstract class WalletProvider {
 
   /// Fetches information about the given txId and parses it from the wallet's perspective
   /// @param txId
-  Future<void> getHistoryTx(String txId) async {
+  Future<HistoryItem> getHistoryTx(String txId) async {
     final addressesX = await getAllAddressesX();
     final addressesC = getAddressC();
     final transaction = await getTx(txId);

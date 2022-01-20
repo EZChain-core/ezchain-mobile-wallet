@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:wallet/roi/wallet/history/parsed_types.dart';
 import 'package:wallet/roi/wallet/history/raw_types.dart';
 
 List<String> filterDuplicateStrings(List<String> values) {
@@ -158,9 +159,9 @@ List<String> getAddresses(List<TransactionOutput> outs) {
 
 /// Returns a map of asset id to owner addresses
 /// @param outs
-getOutputsAssetOwners(List<TransactionOutput> outs) {
+HistoryBaseTxTokenOwners getOutputsAssetOwners(List<TransactionOutput> outs) {
   final assetIds = getOutputsAssetIds(outs);
-  final res = {};
+  final res = <String, List<String>>{};
 
   for (var i = 0; i < assetIds.length; i++) {
     final id = assetIds[i];
@@ -169,7 +170,7 @@ getOutputsAssetOwners(List<TransactionOutput> outs) {
     res[id] = address;
   }
 
-  return res;
+  return HistoryBaseTxTokenOwners(res);
 }
 
 /// Filters the UTXOs of a certain output type
