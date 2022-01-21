@@ -480,6 +480,40 @@ class Strings {
     );
   }
 
+  /// `Just now`
+  String get sharedJustNow {
+    return Intl.message(
+      'Just now',
+      name: 'sharedJustNow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count,plural, =1{1 minute ago} other{{count} minutes ago}}`
+  String sharedMinuteAgo(num count) {
+    return Intl.plural(
+      count,
+      one: '1 minute ago',
+      other: '$count minutes ago',
+      name: 'sharedMinuteAgo',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count,plural, =1{1 hour ago} other{{count} hours ago}}`
+  String sharedHourAgo(num count) {
+    return Intl.plural(
+      count,
+      one: '1 hour ago',
+      other: '$count hours ago',
+      name: 'sharedHourAgo',
+      desc: '',
+      args: [count],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
