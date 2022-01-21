@@ -42,6 +42,7 @@
   "sharedAccepted": "Accepted",
   "sharedError": "Error",
   "sharedTransaction": "Transaction",
+  "sharedTransactionDetail": "Transaction Detail",
   "sharedJustNow": "Just now",
   "sharedMinuteAgo": "{count,plural, =1{1 minute ago} other{{count} minutes ago}}",
   "sharedHourAgo": "{count,plural, =1{1 hour ago} other{{count} hours ago}}",
