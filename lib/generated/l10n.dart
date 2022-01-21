@@ -480,6 +480,16 @@ class Strings {
     );
   }
 
+  /// `Transaction Detail`
+  String get sharedTransactionDetail {
+    return Intl.message(
+      'Transaction Detail',
+      name: 'sharedTransactionDetail',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Just now`
   String get sharedJustNow {
     return Intl.message(

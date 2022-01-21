@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
+import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/transaction/transactions_store.dart';
@@ -152,7 +153,10 @@ class TransactionsScreen extends StatelessWidget {
                               itemBuilder: (_, index) => TransactionsItemWidget(
                                 item: transactions[index]
                                     .mapToTransactionsItemViewData(),
-                                onPressed: () {},
+                                onPressed: () {
+                                  context.pushRoute(TransactionDetailRoute(
+                                      txId: transactions[index].id));
+                                },
                               ),
                               separatorBuilder: (_, index) => Divider(
                                   color: provider.themeMode.text10, height: 25),
