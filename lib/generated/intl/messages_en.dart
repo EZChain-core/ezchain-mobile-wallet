@@ -22,7 +22,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(name) => "Welcome ${name}";
 
-  static String m1(balance) => "Balance: ${balance}";
+  static String m1(count) =>
+      "${Intl.plural(count, one: '1 hour ago', other: '${count} hours ago')}";
+
+  static String m2(count) =>
+      "${Intl.plural(count, one: '1 minute ago', other: '${count} minutes ago')}";
+
+  static String m3(balance) => "Balance: ${balance}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -127,16 +133,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedEZChain": MessageLookupByLibrary.simpleMessage("EZChain"),
         "sharedError": MessageLookupByLibrary.simpleMessage("Error"),
         "sharedExport": MessageLookupByLibrary.simpleMessage("Export"),
+        "sharedHourAgo": m1,
         "sharedImport": MessageLookupByLibrary.simpleMessage("Import"),
         "sharedInvalidAddress":
             MessageLookupByLibrary.simpleMessage("Invalid Address"),
         "sharedInvalidAmount":
             MessageLookupByLibrary.simpleMessage("Invalid Amount"),
+        "sharedJustNow": MessageLookupByLibrary.simpleMessage("Just now"),
         "sharedLanguage": MessageLookupByLibrary.simpleMessage("Language"),
         "sharedLock": MessageLookupByLibrary.simpleMessage("Lock"),
         "sharedLockStakeable":
             MessageLookupByLibrary.simpleMessage("Lock Stakeable"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
+        "sharedMinuteAgo": m2,
         "sharedPChain": MessageLookupByLibrary.simpleMessage("P chain"),
         "sharedPassphrase": MessageLookupByLibrary.simpleMessage("Passphrase"),
         "sharedPasteAddress":
@@ -172,7 +181,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Set Amount"),
         "walletReceiveToThis": MessageLookupByLibrary.simpleMessage(
             " to this address\nSending any other coins my result in permanent loss"),
-        "walletSendBalance": m1,
+        "walletSendBalance": m3,
         "walletSendCChainErrorAddress": MessageLookupByLibrary.simpleMessage(
             "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\""),
         "walletSendGasGWEI": MessageLookupByLibrary.simpleMessage("GWEI"),

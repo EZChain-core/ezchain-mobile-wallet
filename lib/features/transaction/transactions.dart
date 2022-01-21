@@ -144,18 +144,20 @@ class TransactionsScreen extends StatelessWidget {
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {
                       final transactions = snapshot.data!;
-                      return ListView.separated(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
-                        itemCount: transactions.length,
-                        itemBuilder: (_, index) => TransactionsItemWidget(
-                          item: transactions[index]
-                              .mapToTransactionsItemViewData(),
-                          onPressed: () {},
-                        ),
-                        separatorBuilder: (_, index) => Divider(
-                            color: provider.themeMode.text10, height: 25),
-                      );
+                      return transactions.isNotEmpty
+                          ? ListView.separated(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                              itemCount: transactions.length,
+                              itemBuilder: (_, index) => TransactionsItemWidget(
+                                item: transactions[index]
+                                    .mapToTransactionsItemViewData(),
+                                onPressed: () {},
+                              ),
+                              separatorBuilder: (_, index) => Divider(
+                                  color: provider.themeMode.text10, height: 25),
+                            )
+                          : _TransactionsNoData();
                     } else {
                       return Align(
                         alignment: Alignment.topCenter,

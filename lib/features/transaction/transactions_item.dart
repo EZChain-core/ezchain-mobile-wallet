@@ -1,6 +1,8 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/extensions.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/roi/wallet/history/raw_types.dart';
 import 'package:wallet/themes/colors.dart';
@@ -27,8 +29,7 @@ class TransactionsItemWidget extends StatelessWidget {
               children: [
                 Text(
                   item.timestamp,
-                  style:
-                      EZCBodyLargeTextStyle(color: provider.themeMode.text),
+                  style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
                 ),
                 Assets.icons.icSearchBlack.svg()
               ],
@@ -70,8 +71,10 @@ class TransactionsItemViewData {
 
 extension TransactionExtension on Transaction {
   TransactionsItemViewData mapToTransactionsItemViewData() {
-    return TransactionsItemViewData(
-        timestamp ?? '', type.name, Decimal.zero, true);
+
+    final time = timestamp?.parseDateTime()?.parseTimeAgo() ?? '';
+
+    return TransactionsItemViewData(time, type.name, Decimal.zero, true);
   }
 }
 
@@ -79,10 +82,10 @@ extension TransactionTypeExtension on TransactionType {
   String get name {
     return [
       "Send",
+      "Received",
       "Send",
-      "Send",
-      "Send",
-      "Send",
+      "Import",
+      "Export",
       "Send",
       "Send",
       "Send",

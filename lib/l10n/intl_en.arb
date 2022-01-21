@@ -42,6 +42,9 @@
   "sharedAccepted": "Accepted",
   "sharedError": "Error",
   "sharedTransaction": "Transaction",
+  "sharedJustNow": "Just now",
+  "sharedMinuteAgo": "{count,plural, =1{1 minute ago} other{{count} minutes ago}}",
+  "sharedHourAgo": "{count,plural, =1{1 hour ago} other{{count} hours ago}}",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",
@@ -102,5 +105,4 @@
   "crossTransferWrong": "Something went wrong",
   "crossTransferCompletedDes": "You have successfully transferred\nbetween chains.",
   "transactionsNoRecord": "No transaction record"
-
 }
