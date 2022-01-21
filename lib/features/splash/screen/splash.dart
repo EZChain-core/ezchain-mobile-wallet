@@ -405,7 +405,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   getHistoryX() async {
     try {
-      final transactions = await wallet.getHistoryX(limit: 20);
+      final transactions = await wallet.getTransactionsX(limit: 20);
       logger.i("getHistoryX = ${transactions.length}");
     } catch (e) {
       logger.e(e);
@@ -414,7 +414,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   getHistoryP() async {
     try {
-      final transactions = await wallet.getHistoryP(limit: 20);
+      final transactions = await wallet.getTransactionsP(limit: 20);
       logger.i("getHistoryP = ${transactions.length}");
     } catch (e) {
       logger.e(e);
@@ -423,7 +423,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   getHistoryC() async {
     try {
-      final transactions = await wallet.getHistoryC(limit: 20);
+      final transactions = await wallet.getTransactionsC(limit: 20);
       logger.i("getHistoryC = ${transactions.length}");
     } catch (e) {
       logger.e(e);
@@ -432,7 +432,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   getHistoryTx(String txId) async {
     try {
-      final transaction = await wallet.getHistoryTx(txId);
+      final transaction = await wallet.getTransaction(txId);
 
       var message = "Transaction Id: ${transaction.id}\n";
 

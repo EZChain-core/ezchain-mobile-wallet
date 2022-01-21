@@ -645,7 +645,7 @@ abstract class WalletProvider {
     return await platformGetAtomicUTXOs(addresses, sourceChain);
   }
 
-  Future<List<Transaction>> getHistoryX({int limit = 0}) async {
+  Future<List<Transaction>> getTransactionsX({int limit = 0}) async {
     final addresses = await getAllAddressesX();
     return await getAddressHistory(
       xChain.getBlockchainId(),
@@ -654,7 +654,14 @@ abstract class WalletProvider {
     );
   }
 
-  Future<List<Transaction>> getHistoryP({int limit = 0}) async {
+  Future<List<HistoryItem>> getHistoryItemsX({int limit = 0}) async {
+    final addressesX = await getAllAddressesX();
+    final transactions = await getTransactionsX(limit: limit);
+    return Future.wait(
+        transactions.map((tx) => getTransactionSummary(tx, addressesX, "")));
+  }
+
+  Future<List<Transaction>> getTransactionsP({int limit = 0}) async {
     final addresses = await getAllAddressesP();
     return await getAddressHistory(
       pChain.getBlockchainId(),
@@ -663,8 +670,15 @@ abstract class WalletProvider {
     );
   }
 
-  Future<List<Transaction>> getHistoryC({int limit = 0}) async {
-    final addresses = [getEvmAddressBech(), ...(await getAllAddressesP())];
+  Future<List<HistoryItem>> getHistoryItemsP({int limit = 0}) async {
+    final addressesX = await getAllAddressesX();
+    final transactions = await getTransactionsP(limit: limit);
+    return Future.wait(
+        transactions.map((tx) => getTransactionSummary(tx, addressesX, "")));
+  }
+
+  Future<List<Transaction>> getTransactionsC({int limit = 0}) async {
+    final addresses = [getEvmAddressBech(), ...(await getAllAddressesX())];
     return await getAddressHistory(
       cChain.getBlockchainId(),
       addresses,
@@ -672,18 +686,25 @@ abstract class WalletProvider {
     );
   }
 
+  Future<List<HistoryItem>> getHistoryItemsC({int limit = 0}) async {
+    final addressesC = getAddressC();
+    final transactions = await getTransactionsC(limit: limit);
+    return Future.wait(
+        transactions.map((tx) => getTransactionSummary(tx, [], addressesC)));
+  }
+
+  /// Fetches information about the given txId and parses it from the wallet's perspective
+  /// @param txId
+  Future<Transaction> getTransaction(String txId) async {
+    return await getTx(txId);
+  }
+
   /// Fetches information about the given txId and parses it from the wallet's perspective
   /// @param txId
   Future<HistoryItem> getHistoryItemTx(String txId) async {
     final addressesX = await getAllAddressesX();
     final addressesC = getAddressC();
-    final transaction = await getTx(txId);
+    final transaction = await getTransaction(txId);
     return await getTransactionSummary(transaction, addressesX, addressesC);
-  }
-
-  /// Fetches information about the given txId and parses it from the wallet's perspective
-  /// @param txId
-  Future<Transaction> getHistoryTx(String txId) async {
-    return await getTx(txId);
   }
 }
