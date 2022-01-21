@@ -100,6 +100,7 @@
   "crossTransferCompleted": "Transfer Completed",
   "crossTransferIncomplete": "Transfer Incomplete",
   "crossTransferWrong": "Something went wrong",
-  "crossTransferCompletedDes": "You have successfully transferred\nbetween chains."
+  "crossTransferCompletedDes": "You have successfully transferred\nbetween chains.",
+  "transactionsNoRecord": "No transaction record"
 
 }

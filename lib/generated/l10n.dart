@@ -1069,6 +1069,16 @@ class Strings {
       args: [],
     );
   }
+
+  /// `No transaction record`
+  String get transactionsNoRecord {
+    return Intl.message(
+      'No transaction record',
+      name: 'transactionsNoRecord',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Strings> {

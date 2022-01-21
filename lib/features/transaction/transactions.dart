@@ -5,9 +5,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
+import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/transaction/transactions_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
+import 'package:wallet/roi/wallet/history/raw_types.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -130,12 +132,42 @@ class TransactionsScreen extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.only(left: 16, top: 16, bottom: 10),
                 child: Text(
                   Strings.current.sharedTransaction,
                   style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
                 ),
-              )
+              ),
+              Expanded(
+                child: FutureBuilder<List<Transaction>>(
+                  future: _transactionsStore.getTransactions(ezcType),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasData) {
+                      final transactions = snapshot.data!;
+                      return ListView.separated(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        itemCount: transactions.length,
+                        itemBuilder: (_, index) => TransactionsItemWidget(
+                          item: transactions[index]
+                              .mapToTransactionsItemViewData(),
+                          onPressed: () {},
+                        ),
+                        separatorBuilder: (_, index) => Divider(
+                            color: provider.themeMode.text10, height: 25),
+                      );
+                    } else {
+                      return Align(
+                        alignment: Alignment.topCenter,
+                        child: EZCLoading(
+                            color: provider.themeMode.secondary,
+                            size: 40,
+                            strokeWidth: 4),
+                      );
+                    }
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -177,6 +209,27 @@ class _HistoryButton extends StatelessWidget {
             Text(
               text,
               style: EZCTitleSmallTextStyle(color: provider.themeMode.primary),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TransactionsNoData extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => SizedBox(
+        width: double.infinity,
+        child: Column(
+          children: [
+            Assets.images.imgNoData.svg(),
+            const SizedBox(height: 18),
+            Text(
+              Strings.current.transactionsNoRecord,
+              style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
             )
           ],
         ),

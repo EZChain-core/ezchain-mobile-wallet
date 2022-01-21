@@ -9,6 +9,7 @@ import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
+import 'package:wallet/roi/wallet/history/raw_types.dart';
 
 part 'transactions_store.g.dart';
 
@@ -32,9 +33,12 @@ abstract class _TransactionsStore with Store {
   @computed
   String get balanceUsd => _priceStore.getBalanceInUsd(balance);
 
+  @observable
+  List<Transaction> transactions = [];
+
+  @action
   setEzcType(EZCType type) {
     ezcType = type;
-    getTransactions(type);
   }
 
   String get addressX => _wallet.getAddressX();
@@ -57,24 +61,20 @@ abstract class _TransactionsStore with Store {
     }
   }
 
-  getTransactions(EZCType type) async {
+  Future<List<Transaction>> getTransactions(EZCType type) async {
+    await Future.delayed(const Duration(milliseconds: 300));
     try {
       switch (ezcType) {
         case EZCType.xChain:
-          final transactions = await _wallet.getHistoryX(limit: 20);
-          logger.i("getHistoryX = ${transactions.length}");
-          break;
+          return _wallet.getHistoryX(limit: 20);
         case EZCType.pChain:
-          final transactions = await _wallet.getHistoryP(limit: 20);
-          logger.i("getHistoryP = ${transactions.length}");
-          break;
+          return _wallet.getHistoryP(limit: 20);
         case EZCType.cChain:
-          final transactions = await _wallet.getHistoryC(limit: 20);
-          logger.i("getHistoryC = ${transactions.length}");
-          break;
+          return _wallet.getHistoryC(limit: 20);
       }
     } catch (e) {
       logger.e(e);
+      return [];
     }
   }
 }
