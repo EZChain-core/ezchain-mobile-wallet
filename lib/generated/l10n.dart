@@ -524,6 +524,56 @@ class Strings {
     );
   }
 
+  /// `Value`
+  String get sharedValue {
+    return Intl.message(
+      'Value',
+      name: 'sharedValue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Burned`
+  String get sharedBurned {
+    return Intl.message(
+      'Burned',
+      name: 'sharedBurned',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Blockchain`
+  String get sharedBlockchain {
+    return Intl.message(
+      'Blockchain',
+      name: 'sharedBlockchain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Input`
+  String get sharedInput {
+    return Intl.message(
+      'Input',
+      name: 'sharedInput',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Output`
+  String get sharedOutput {
+    return Intl.message(
+      'Output',
+      name: 'sharedOutput',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -1119,6 +1169,36 @@ class Strings {
     return Intl.message(
       'No transaction record',
       name: 'transactionsNoRecord',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Form:`
+  String get transactionsForm {
+    return Intl.message(
+      'Form:',
+      name: 'transactionsForm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signature:`
+  String get transactionsSignature {
+    return Intl.message(
+      'Signature:',
+      name: 'transactionsSignature',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To:`
+  String get transactionsTo {
+    return Intl.message(
+      'To:',
+      name: 'transactionsTo',
       desc: '',
       args: [],
     );
