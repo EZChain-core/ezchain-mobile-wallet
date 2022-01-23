@@ -123,6 +123,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedAmount": MessageLookupByLibrary.simpleMessage("Amount"),
         "sharedAvailable": MessageLookupByLibrary.simpleMessage("Available"),
         "sharedBalance": MessageLookupByLibrary.simpleMessage("Balance"),
+        "sharedBlockchain": MessageLookupByLibrary.simpleMessage("Blockchain"),
+        "sharedBurned": MessageLookupByLibrary.simpleMessage("Burned"),
         "sharedCChain": MessageLookupByLibrary.simpleMessage("C chain"),
         "sharedCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "sharedConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
@@ -135,6 +137,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedExport": MessageLookupByLibrary.simpleMessage("Export"),
         "sharedHourAgo": m1,
         "sharedImport": MessageLookupByLibrary.simpleMessage("Import"),
+        "sharedInput": MessageLookupByLibrary.simpleMessage("Input"),
         "sharedInvalidAddress":
             MessageLookupByLibrary.simpleMessage("Invalid Address"),
         "sharedInvalidAmount":
@@ -146,6 +149,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Lock Stakeable"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
         "sharedMinuteAgo": m2,
+        "sharedOutput": MessageLookupByLibrary.simpleMessage("Output"),
         "sharedPChain": MessageLookupByLibrary.simpleMessage("P chain"),
         "sharedPassphrase": MessageLookupByLibrary.simpleMessage("Passphrase"),
         "sharedPasteAddress":
@@ -172,9 +176,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedTransactionSent":
             MessageLookupByLibrary.simpleMessage("Transaction Sent"),
         "sharedTransfer": MessageLookupByLibrary.simpleMessage("Transfer"),
+        "sharedValue": MessageLookupByLibrary.simpleMessage("Value"),
         "sharedXChain": MessageLookupByLibrary.simpleMessage("X chain"),
+        "transactionsForm": MessageLookupByLibrary.simpleMessage("Form:"),
         "transactionsNoRecord":
             MessageLookupByLibrary.simpleMessage("No transaction record"),
+        "transactionsSignature":
+            MessageLookupByLibrary.simpleMessage("Signature:"),
+        "transactionsTo": MessageLookupByLibrary.simpleMessage("To:"),
         "walletReceiveBitcoin":
             MessageLookupByLibrary.simpleMessage("Bitcoin(BTC)"),
         "walletReceiveSendOnly":

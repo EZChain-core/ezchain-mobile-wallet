@@ -46,6 +46,11 @@
   "sharedJustNow": "Just now",
   "sharedMinuteAgo": "{count,plural, =1{1 minute ago} other{{count} minutes ago}}",
   "sharedHourAgo": "{count,plural, =1{1 hour ago} other{{count} hours ago}}",
+  "sharedValue": "Value",
+  "sharedBurned": "Burned",
+  "sharedBlockchain": "Blockchain",
+  "sharedInput": "Input",
+  "sharedOutput": "Output",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",
@@ -105,5 +110,8 @@
   "crossTransferIncomplete": "Transfer Incomplete",
   "crossTransferWrong": "Something went wrong",
   "crossTransferCompletedDes": "You have successfully transferred\nbetween chains.",
-  "transactionsNoRecord": "No transaction record"
+  "transactionsNoRecord": "No transaction record",
+  "transactionsForm": "Form:",
+  "transactionsSignature": "Signature:",
+  "transactionsTo": "To:"
 }
