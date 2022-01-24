@@ -4,18 +4,18 @@ part 'types.g.dart';
 
 @JsonSerializable()
 class GetOrteliusTxsResponse {
+  final List<OrteliusTx>? transactions;
+
   final String? startTime;
 
   final String? endTime;
 
-  final List<OrteliusTx>? transactions;
-
   final String? next;
 
   GetOrteliusTxsResponse(
+    this.transactions,
     this.startTime,
     this.endTime,
-    this.transactions,
     this.next,
   );
 
@@ -289,4 +289,37 @@ enum OrteliusTxType {
 
   @JsonValue("reward_validator")
   rewardValidator,
+}
+
+@JsonSerializable()
+class GetOrteliusEvmTxsResponse {
+  @JsonKey(name: "Transactions")
+  final List<OrteliusEvmTx>? transactions;
+
+  final String? startTime;
+
+  final String? endTime;
+
+  GetOrteliusEvmTxsResponse({
+    this.transactions,
+    this.startTime,
+    this.endTime,
+  });
+
+  factory GetOrteliusEvmTxsResponse.fromJson(Map<String, dynamic> json) =>
+      _$GetOrteliusEvmTxsResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GetOrteliusEvmTxsResponseToJson(this);
+}
+
+@JsonSerializable()
+class OrteliusEvmTx {
+  final String block;
+
+  OrteliusEvmTx(this.block);
+
+  factory OrteliusEvmTx.fromJson(Map<String, dynamic> json) =>
+      _$OrteliusEvmTxFromJson(json);
+
+  Map<String, dynamic> toJson() => _$OrteliusEvmTxToJson(this);
 }

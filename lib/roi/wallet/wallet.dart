@@ -649,7 +649,7 @@ abstract class WalletProvider {
     return pChain.getCurrentValidators(subnetId: subnetId, nodeIds: nodeIds);
   }
 
-  Future<List<OrteliusTx>> getTransactionsX({int limit = 0}) async {
+  Future<List<OrteliusTx>> getXTransactions({int limit = 0}) async {
     final addresses = await getAllAddressesX();
     return await getAddressHistory(
       xChain.getBlockchainId(),
@@ -658,7 +658,7 @@ abstract class WalletProvider {
     );
   }
 
-  Future<List<OrteliusTx>> getTransactionsP({int limit = 0}) async {
+  Future<List<OrteliusTx>> getPTransactions({int limit = 0}) async {
     final addresses = await getAllAddressesP();
     return await getAddressHistory(
       pChain.getBlockchainId(),
@@ -670,7 +670,7 @@ abstract class WalletProvider {
   /// Returns atomic history for this wallet on the C chain.
   /// @remarks Excludes EVM transactions.
   /// @param limit
-  Future<List<OrteliusTx>> getTransactionsC({int limit = 0}) async {
+  Future<List<OrteliusTx>> getCTransactions({int limit = 0}) async {
     final addresses = [getEvmAddressBech(), ...(await getAllAddressesX())];
     return await getAddressHistory(
       cChain.getBlockchainId(),
@@ -683,6 +683,19 @@ abstract class WalletProvider {
   /// @param txId
   Future<OrteliusTx> getTransaction(String txId) async {
     return await getTx(txId);
+  }
+
+  /// Returns history for this wallet on the C chain.
+  /// @remarks Excludes atomic C chain import/export transactions.
+  Future<List<OrteliusEvmTx>> getEvmTransactions() async {
+    final address = getAddressC();
+    return await getAddressHistoryEVM(address);
+  }
+
+  /// Fetches information about the given txId and parses it from the wallet's perspective
+  /// @param txId
+  Future<OrteliusEvmTx> getEvmTransaction(String txId) async {
+    return await getEvmTx(txId);
   }
 
   /// Fetches information about the given txId and parses it from the wallet's perspective

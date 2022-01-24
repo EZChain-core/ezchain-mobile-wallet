@@ -8,6 +8,16 @@ part 'ortelius_rest_client.g.dart';
 abstract class OrteliusRestClient {
   factory OrteliusRestClient(Dio dio, {String baseUrl}) = _OrteliusRestClient;
 
+  @GET("/v2/ctransactions")
+  Future<GetOrteliusEvmTxsResponse> getEvmTransactions(
+    @Query("address") String address,
+  );
+
+  @GET("/v2/ctransactions")
+  Future<GetOrteliusEvmTxsResponse> getEvmTransaction(
+    @Query("hash") String hash,
+  );
+
   @POST("/v2/transactions")
   Future<GetOrteliusTxsResponse> getTransactions(
     @Body() GetOrteliusTxsRequest request,
