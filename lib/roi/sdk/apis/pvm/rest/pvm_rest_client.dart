@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_staking_asset_id.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_tx_status.dart';
@@ -34,4 +35,8 @@ abstract class PvmRestClient {
   @POST("")
   Future<RpcResponse<GetTxStatusResponse>> getTxStatus(
       @Body() RpcRequest<GetTxStatusRequest> request);
+
+  @POST("")
+  Future<RpcResponse<GetCurrentValidatorsResponse>> getCurrentValidators(
+      @Body() RpcRequest<GetCurrentValidatorsRequest> request);
 }

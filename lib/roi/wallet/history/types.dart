@@ -36,8 +36,8 @@ class HistoryItem {
 /// Parsed interface for Validation, Validation Fee, Delegation and Delegation Fee transactions.
 class HistoryStaking extends HistoryItem {
   final String nodeId;
-  final double stakeStart;
-  final double stakeEnd;
+  final int stakeStart;
+  final int stakeEnd;
   final BigInt amount;
   final String amountDisplayValue;
   final bool isRewarded;
