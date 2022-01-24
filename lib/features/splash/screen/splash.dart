@@ -11,13 +11,14 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
 import 'package:wallet/roi/wallet/history/history_helpers.dart';
-import 'package:wallet/roi/wallet/history/raw_types.dart';
 import 'package:wallet/roi/wallet/network/constants.dart';
 import 'package:wallet/roi/wallet/network/helpers/alias_from_network_id.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
+import 'package:wallet/roi/wallet/network/utils.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/fee_utils.dart';
@@ -102,7 +103,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final eventData = event.eventData;
     if (eventName == WalletEventType.balanceChangedX.type &&
         eventData is WalletBalanceX) {
-      final balanceX = eventData[activeNetwork.avaxId];
+      final balanceX = eventData[getAvaxAssetId()];
       if (balanceX != null) {
         logger.i(
             "balanceX: locked = ${balanceX.lockedDecimal}, unlocked = ${balanceX.unlockedDecimal}");
@@ -507,12 +508,12 @@ class _SplashScreenState extends State<SplashScreen> {
       message += "\n\n";
 
       var prefixInput = "";
-      if (transaction.type == TransactionType.import) {
+      if (transaction.type == OrteliusTxType.import) {
         prefixInput = "Exported ";
       }
 
       var prefixOutput = "";
-      if (transaction.type == TransactionType.export) {
+      if (transaction.type == OrteliusTxType.export) {
         prefixOutput = "Exported ";
       }
 

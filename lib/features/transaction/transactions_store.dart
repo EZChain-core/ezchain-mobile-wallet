@@ -9,7 +9,7 @@ import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
-import 'package:wallet/roi/wallet/history/raw_types.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 
 part 'transactions_store.g.dart';
 
@@ -34,7 +34,7 @@ abstract class _TransactionsStore with Store {
   String get balanceUsd => _priceStore.getBalanceInUsd(balance);
 
   @observable
-  List<Transaction> transactions = [];
+  List<OrteliusTx> transactions = [];
 
   @action
   setEzcType(EZCType type) {
@@ -61,7 +61,7 @@ abstract class _TransactionsStore with Store {
     }
   }
 
-  Future<List<Transaction>> getTransactions(EZCType type) async {
+  Future<List<OrteliusTx>> getTransactions(EZCType type) async {
     await Future.delayed(const Duration(milliseconds: 300));
     try {
       switch (ezcType) {

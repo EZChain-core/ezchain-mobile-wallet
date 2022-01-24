@@ -8,7 +8,7 @@ import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 import 'package:wallet/roi/sdk/apis/evm/utxos.dart';
-import 'package:wallet/roi/sdk/apis/pvm/constants.dart' as pvmConstants;
+import 'package:wallet/roi/sdk/apis/pvm/constants.dart' as pvm_constants;
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
@@ -17,18 +17,20 @@ import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/asset/assets.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/roi/wallet/helpers/tx_helper.dart';
 import 'package:wallet/roi/wallet/helpers/utxo_helper.dart';
-import 'package:wallet/roi/wallet/history/api_helpers.dart';
-import 'package:wallet/roi/wallet/history/parsed_types.dart';
-import 'package:wallet/roi/wallet/history/raw_types.dart';
+import 'package:wallet/roi/wallet/history/types.dart';
 import 'package:wallet/roi/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/history/parsers.dart';
+import 'package:wallet/roi/wallet/network/utils.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/fee_utils.dart';
 import 'package:wallet/roi/wallet/utils/wait_tx_utils.dart';
 import 'package:web3dart/web3dart.dart' as web3_dart;
+
+import 'explorer/ortelius/requests.dart';
 
 abstract class UnsafeWallet {
   String getEvmPrivateKeyHex();
@@ -93,10 +95,6 @@ abstract class WalletProvider {
     emitter.emit(event.type, null, args);
   }
 
-  void emitAddressChange() {
-    emit(WalletEventType.addressChanged, "emitAddressChange Test");
-  }
-
   void emitBalanceChangeX() {
     emit(WalletEventType.balanceChangedX, balanceX);
   }
@@ -143,7 +141,7 @@ abstract class WalletProvider {
     final tx = await xChain.buildBaseTx(
       utxoSet,
       amount,
-      activeNetwork.avaxId!,
+      getAvaxAssetId(),
       [to],
       froms,
       [changeAddress],
@@ -220,9 +218,9 @@ abstract class WalletProvider {
       }
       balanceX[assetId] = asset;
     }
-    final avaxId = activeNetwork.avaxId;
+    final avaxId = getAvaxAssetId();
 
-    if (!balanceX.containsKey(avaxId) && avaxId != null) {
+    if (!balanceX.containsKey(avaxId)) {
       final assetInfo = await getAssetDescription(avaxId);
       balanceX[avaxId] = AssetBalanceX(
         locked: BigInt.zero,
@@ -248,7 +246,7 @@ abstract class WalletProvider {
   /// - Does not make a network request.
   /// - Does not refresh wallet balance.
   AssetBalanceRawX getAvaxBalanceX() {
-    return getBalanceX()[activeNetwork.avaxId] ??
+    return getBalanceX()[getAvaxAssetId] ??
         AssetBalanceRawX(locked: BigInt.zero, unlocked: BigInt.zero);
   }
 
@@ -532,7 +530,7 @@ abstract class WalletProvider {
       final out = utxo.getOutput();
       final type = out.getOutputId();
       final amount = (out as PvmAmountOutput).getAmount();
-      if (type == pvmConstants.STAKEABLELOCKOUTID) {
+      if (type == pvm_constants.STAKEABLELOCKOUTID) {
         final lockTime = (out as PvmStakeableLockOut).getStakeableLockTime();
         if (lockTime <= now) {
           unlocked += amount;
@@ -645,7 +643,7 @@ abstract class WalletProvider {
     return await platformGetAtomicUTXOs(addresses, sourceChain);
   }
 
-  Future<List<Transaction>> getTransactionsX({int limit = 0}) async {
+  Future<List<OrteliusTx>> getTransactionsX({int limit = 0}) async {
     final addresses = await getAllAddressesX();
     return await getAddressHistory(
       xChain.getBlockchainId(),
@@ -661,7 +659,7 @@ abstract class WalletProvider {
         transactions.map((tx) => getTransactionSummary(tx, addressesX, "")));
   }
 
-  Future<List<Transaction>> getTransactionsP({int limit = 0}) async {
+  Future<List<OrteliusTx>> getTransactionsP({int limit = 0}) async {
     final addresses = await getAllAddressesP();
     return await getAddressHistory(
       pChain.getBlockchainId(),
@@ -677,7 +675,10 @@ abstract class WalletProvider {
         transactions.map((tx) => getTransactionSummary(tx, addressesX, "")));
   }
 
-  Future<List<Transaction>> getTransactionsC({int limit = 0}) async {
+  /// Returns atomic history for this wallet on the C chain.
+  /// @remarks Excludes EVM transactions.
+  /// @param limit
+  Future<List<OrteliusTx>> getTransactionsC({int limit = 0}) async {
     final addresses = [getEvmAddressBech(), ...(await getAllAddressesX())];
     return await getAddressHistory(
       cChain.getBlockchainId(),
@@ -695,7 +696,7 @@ abstract class WalletProvider {
 
   /// Fetches information about the given txId and parses it from the wallet's perspective
   /// @param txId
-  Future<Transaction> getTransaction(String txId) async {
+  Future<OrteliusTx> getTransaction(String txId) async {
     return await getTx(txId);
   }
 
@@ -706,5 +707,13 @@ abstract class WalletProvider {
     final addressesC = getAddressC();
     final transaction = await getTransaction(txId);
     return await getTransactionSummary(transaction, addressesX, addressesC);
+  }
+
+  Future<HistoryItem> parseOrteliusTx(OrteliusTx tx) async {
+    final addressesX = await getAllAddressesX();
+    final addressBechC = getEvmAddressBech();
+    final addresses = [...addressesX, addressBechC];
+    final addressesC = getAddressC();
+    return await getTransactionSummary(tx, addresses, addressesC);
   }
 }

@@ -1,12 +1,14 @@
+import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/utils.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/utxo_utils.dart';
 import 'package:wallet/roi/wallet/history/history_helpers.dart';
-import 'package:wallet/roi/wallet/history/parsed_types.dart';
-import 'package:wallet/roi/wallet/history/raw_types.dart';
+import 'package:wallet/roi/wallet/history/types.dart';
 import 'package:wallet/roi/wallet/network/helpers/alias_from_network_id.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
 HistoryImportExport getImportSummary(
-  Transaction tx,
+  OrteliusTx tx,
   List<String> addresses,
 ) {
   final sourceChain = findSourceChain(tx);
@@ -33,7 +35,7 @@ HistoryImportExport getImportSummary(
 }
 
 HistoryImportExport getExportSummary(
-  Transaction tx,
+  OrteliusTx tx,
   List<String> addresses,
 ) {
   final sourceChain = findSourceChain(tx);

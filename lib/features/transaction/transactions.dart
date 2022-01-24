@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +9,7 @@ import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/transaction/transactions_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/wallet/history/raw_types.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -140,7 +139,7 @@ class TransactionsScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: FutureBuilder<List<Transaction>>(
+                child: FutureBuilder<List<OrteliusTx>>(
                   future: _transactionsStore.getTransactions(ezcType),
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {

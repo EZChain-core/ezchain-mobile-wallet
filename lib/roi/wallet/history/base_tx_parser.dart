@@ -1,15 +1,17 @@
 import 'package:wallet/roi/sdk/apis/avm/constants.dart';
 import 'package:wallet/roi/wallet/asset/assets.dart';
 import 'package:wallet/roi/wallet/asset/types.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/utxo_utils.dart';
 import 'package:wallet/roi/wallet/history/history_helpers.dart';
-import 'package:wallet/roi/wallet/history/parsed_types.dart';
-import 'package:wallet/roi/wallet/history/raw_types.dart';
+import 'package:wallet/roi/wallet/history/types.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
+import 'package:wallet/roi/wallet/network/utils.dart';
 import 'package:wallet/roi/wallet/utils/fee_utils.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
 Future<HistoryBaseTx> getBaseTxSummary(
-  Transaction tx,
+  OrteliusTx tx,
   List<String> ownerAddresses,
 ) async {
   final ins = tx.inputs?.map((input) => input.output).toList() ?? [];
@@ -66,7 +68,7 @@ Future<List<HistoryBaseTxToken>> getBaseTxTokensSummary(
     final tokenDesc = descsDict[id]!;
 
     /// If we sent avax, deduct the fee
-    if (id == activeNetwork.avaxId && tokenLost > BigInt.zero) {
+    if (id == getAvaxAssetId() && tokenLost > BigInt.zero) {
       tokenLost -= getTxFeeX();
     }
 
@@ -104,7 +106,7 @@ Future<List<HistoryBaseTxToken>> getBaseTxTokensSummary(
 /// @param utxos
 /// @param ownerAddrs
 HistoryBaseTxTokenLossGain getOwnedTokens(
-  List<TransactionOutput> utxos,
+  List<OrteliusTxOutput> utxos,
   List<String> ownerAddresses,
 ) {
   final tokenUTXOs = getOutputsOfType(utxos, SECPXFEROUTPUTID);

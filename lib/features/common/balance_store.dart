@@ -7,6 +7,7 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
+import 'package:wallet/roi/wallet/network/utils.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
@@ -81,7 +82,7 @@ abstract class _BalanceStore with Store {
     final eventData = event.eventData;
     if (eventName == WalletEventType.balanceChangedX.type &&
         eventData is WalletBalanceX) {
-      final x = eventData[activeNetwork.avaxId];
+      final x = eventData[getAvaxAssetId()];
       if (x != null) {
         balanceX = bnToDecimalAvaxX(x.unlocked);
         balanceLockedX = bnToDecimalAvaxX(x.locked);

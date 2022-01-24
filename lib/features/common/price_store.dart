@@ -1,8 +1,8 @@
 import 'package:decimal/decimal.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/roi/wallet/explorer/coingecko/requests.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
-import 'package:wallet/roi/wallet/utils/price_utils.dart';
 
 import 'balance_store.dart';
 
