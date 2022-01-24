@@ -66,11 +66,11 @@ abstract class _TransactionsStore with Store {
     try {
       switch (ezcType) {
         case EZCType.xChain:
-          return _wallet.getTransactionsX(limit: 20);
+          return _wallet.getXTransactions(limit: 20);
         case EZCType.pChain:
-          return _wallet.getTransactionsP(limit: 20);
+          return _wallet.getPTransactions(limit: 20);
         case EZCType.cChain:
-          return _wallet.getTransactionsC(limit: 20);
+          return _wallet.getCTransactions(limit: 20);
       }
     } catch (e) {
       logger.e(e);

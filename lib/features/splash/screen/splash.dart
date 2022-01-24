@@ -408,7 +408,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   getHistoryX() async {
     try {
-      final transactions = await wallet.getTransactionsX(limit: 20);
+      final transactions = await wallet.getXTransactions(limit: 20);
       final histories = await Future.wait(
           transactions.map((tx) => wallet.parseOrteliusTx(tx)));
       _printHistoryItems("X", histories);
@@ -421,7 +421,7 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       // chỉ P Chain mới cần get validators.
       final validators = await wallet.getPlatformValidators();
-      final transactions = await wallet.getTransactionsP(limit: 20);
+      final transactions = await wallet.getPTransactions(limit: 20);
       final histories = await Future.wait(
           transactions.map((tx) => wallet.parseOrteliusTx(tx)));
       _printHistoryItems("P", histories, validators: validators);
@@ -432,10 +432,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   getHistoryC() async {
     try {
-      final transactions = await wallet.getTransactionsC(limit: 20);
-      final histories = await Future.wait(
-          transactions.map((tx) => wallet.parseOrteliusTx(tx)));
-      _printHistoryItems("C", histories);
+      final transactions = await wallet.getEvmTransactions();
+      logger.i("transactions = ${transactions.length}");
     } catch (e) {
       logger.e(e);
     }

@@ -2,6 +2,26 @@ import 'package:wallet/roi/wallet/explorer/ortelius/ortelius_rest_client.dart';
 import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/roi/wallet/network/network.dart' as ezc_network;
 
+/// Returns transactions FROM and TO the address given
+/// @param address The address to get historic transactions for.
+Future<List<OrteliusEvmTx>> getAddressHistoryEVM(String address) async {
+  final explorerApi = ezc_network.explorerApi;
+  if (explorerApi == null) throw Exception("Explorer API not found.");
+  final explorerClient = OrteliusRestClient(explorerApi);
+  final response = await explorerClient.getEvmTransactions(address);
+  return response.transactions ?? [];
+}
+
+/// Returns ortelius data for a transaction hash on C chain EVM,
+/// @param txHash
+Future<OrteliusEvmTx> getEvmTx(String txHash) async {
+  final explorerApi = ezc_network.explorerApi;
+  if (explorerApi == null) throw Exception("Explorer API not found.");
+  final explorerClient = OrteliusRestClient(explorerApi);
+  final response = await explorerClient.getEvmTransaction(txHash);
+  return response.transactions![0];
+}
+
 /// Returns, X or P chain transactions belonging to the given address array.
 /// @param addresses Addresses to check for. Max number of addresses is 1024
 /// @param limit
