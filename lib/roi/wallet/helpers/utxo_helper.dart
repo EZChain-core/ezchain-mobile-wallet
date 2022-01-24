@@ -58,7 +58,7 @@ Future<AvmUTXOSet> avmGetAllUTXOsForAddresses({
 
   final utxoSet = response.getUTXOs();
   final nextEndIndex = response.endIndex;
-  final length = int.parse(response.numFetched);
+  final length = int.tryParse(response.numFetched) ?? 0;
 
   if (length > 1024) {
     final subUtxos = await avmGetAllUTXOsForAddresses(
@@ -98,7 +98,7 @@ Future<PvmUTXOSet> pvmGetAllUTXOsForAddresses({
 
   final utxoSet = response.getUTXOs();
   final nextEndIndex = response.endIndex;
-  final length = int.parse(response.numFetched);
+  final length = int.tryParse(response.numFetched) ?? 0;
 
   if (length > 1024) {
     final subUtxos = await pvmGetAllUTXOsForAddresses(

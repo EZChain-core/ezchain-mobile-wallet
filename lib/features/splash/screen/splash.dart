@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:collection/collection.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:eventify/eventify.dart';
@@ -15,6 +16,7 @@ import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
 import 'package:wallet/roi/wallet/history/history_helpers.dart';
+import 'package:wallet/roi/wallet/history/types.dart';
 import 'package:wallet/roi/wallet/network/constants.dart';
 import 'package:wallet/roi/wallet/network/helpers/alias_from_network_id.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
@@ -71,8 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           getHistoryTx(
-    //               "2XNs8nmfB8HdDeHhf41yTd1KQ5md3PBsnz3mvFevtr3DzBAiib");
+    //           getHistoryP();
     //         },
     //       ),
     //     ),
@@ -200,7 +201,7 @@ class _SplashScreenState extends State<SplashScreen> {
         logger.e(e);
       }
       final gasPriceNumber =
-          int.parse(bnToDecimalAvaxX(gasPrice).toStringAsFixed(0));
+          int.tryParse(bnToDecimalAvaxX(gasPrice).toStringAsFixed(0)) ?? 0;
       logger.i("gasPrice = $gasPriceNumber");
 
       const to = "0xd30a9f6645a73f67b7850b9304b6a3172dda75bf";
@@ -407,7 +408,9 @@ class _SplashScreenState extends State<SplashScreen> {
   getHistoryX() async {
     try {
       final transactions = await wallet.getTransactionsX(limit: 20);
-      logger.i("getHistoryX = ${transactions.length}");
+      final histories = await Future.wait(
+          transactions.map((tx) => wallet.parseOrteliusTx(tx)));
+      _printHistoryItems("X", histories);
     } catch (e) {
       logger.e(e);
     }
@@ -416,7 +419,9 @@ class _SplashScreenState extends State<SplashScreen> {
   getHistoryP() async {
     try {
       final transactions = await wallet.getTransactionsP(limit: 20);
-      logger.i("getHistoryP = ${transactions.length}");
+      final histories = await Future.wait(
+          transactions.map((tx) => wallet.parseOrteliusTx(tx)));
+      _printHistoryItems("P", histories);
     } catch (e) {
       logger.e(e);
     }
@@ -425,9 +430,56 @@ class _SplashScreenState extends State<SplashScreen> {
   getHistoryC() async {
     try {
       final transactions = await wallet.getTransactionsC(limit: 20);
-      logger.i("getHistoryC = ${transactions.length}");
+      final histories = await Future.wait(
+          transactions.map((tx) => wallet.parseOrteliusTx(tx)));
+      _printHistoryItems("C", histories);
     } catch (e) {
       logger.e(e);
+    }
+  }
+
+  _printHistoryItems(String chainAlias, List<HistoryItem> items) {
+    final result = items.where((tx) {
+      if (tx is HistoryBaseTx) {
+        return tx.tokens.isNotEmpty;
+      } else {
+        return tx.type != HistoryItemTypeName.notSupported;
+      }
+    }).toList();
+    for (var item in result) {
+      if (item is HistoryBaseTx) {
+        final token = item.tokens.firstWhereOrNull(
+            (token) => token.asset.assetId == getAvaxAssetId());
+        if (token == null) {
+          continue;
+        }
+        var message = "Date = ${item.timestamp}\n";
+        if (token.amount < BigInt.zero) {
+          final amount = bnToLocaleString(
+            token.amount - item.fee,
+            decimals: int.tryParse(token.asset.denomination) ?? 0,
+          );
+          message += "Send = $amount ${token.asset.symbol}";
+        } else {
+          message +=
+              "Receive = ${token.amountDisplayValue} ${token.asset.symbol}";
+        }
+        message +=
+            ", to = $chainAlias-${token.addresses.firstOrNull ?? ""}\n\n";
+      } else if (item is HistoryImportExport) {
+        if (item.amount > BigInt.zero) {
+          var message = "Date = ${item.timestamp}\n";
+          if (item.type == HistoryItemTypeName.import) {
+            message +=
+                "Import(${item.destination}) = ${item.amountDisplayValue} EZC";
+          } else if (item.type == HistoryItemTypeName.export) {
+            final amount =
+                bnToAvaxX((item.amount + item.fee) * BigInt.from(-1));
+            message += "Export(${item.source}) = $amount EZC";
+          }
+          logger.i(message);
+        }
+      } else if (item is HistoryStaking) {}
     }
   }
 

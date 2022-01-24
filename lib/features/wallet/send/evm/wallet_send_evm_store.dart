@@ -69,7 +69,8 @@ abstract class _WalletSendEvmStore with Store {
     } catch (e) {
       logger.e(e);
     }
-    gasPriceNumber = int.parse(bnToDecimalAvaxX(_gasPrice).toStringAsFixed(0));
+    gasPriceNumber =
+        int.tryParse(bnToDecimalAvaxX(_gasPrice).toStringAsFixed(0)) ?? 0;
 
     _priceStore.updateAvaxPrice();
   }
@@ -111,8 +112,8 @@ abstract class _WalletSendEvmStore with Store {
   Future<bool> sendEvm(String address) async {
     isLoading = true;
     try {
-      await _wallet.sendAvaxC(address,
-          numberToBNAvaxC(amount.toBigInt()), _gasPrice, gasLimit.toInt());
+      await _wallet.sendAvaxC(address, numberToBNAvaxC(amount.toBigInt()),
+          _gasPrice, gasLimit.toInt());
       isLoading = false;
       return true;
     } catch (e) {

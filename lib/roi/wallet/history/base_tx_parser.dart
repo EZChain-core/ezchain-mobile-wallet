@@ -5,7 +5,6 @@ import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/roi/wallet/explorer/ortelius/utxo_utils.dart';
 import 'package:wallet/roi/wallet/history/history_helpers.dart';
 import 'package:wallet/roi/wallet/history/types.dart';
-import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:wallet/roi/wallet/network/utils.dart';
 import 'package:wallet/roi/wallet/utils/fee_utils.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
@@ -76,7 +75,7 @@ Future<List<HistoryBaseTxToken>> getBaseTxTokensSummary(
     final diff = tokenGain - tokenLost;
     final diffClean = bnToLocaleString(
       diff,
-      decimals: int.parse(tokenDesc.denomination),
+      decimals: int.tryParse(tokenDesc.denomination) ?? 0,
     );
 
     /// If we didnt gain or lose anything, ignore this token

@@ -4,11 +4,11 @@ part 'types.g.dart';
 
 @JsonSerializable()
 class GetOrteliusTxsResponse {
-  final String startTime;
+  final String? startTime;
 
-  final String endTime;
+  final String? endTime;
 
-  final List<OrteliusTx> transactions;
+  final List<OrteliusTx>? transactions;
 
   final String? next;
 
