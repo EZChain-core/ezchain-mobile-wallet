@@ -80,7 +80,10 @@ String decimalToLocaleString(Decimal bigValue, {int decimals = 9}) {
   final fixedStr = bigValue.toStringAsFixed(decimals);
   final split = fixedStr.split(".");
   var formatter = NumberFormat.decimalPattern("en_US");
-  final wholeStr = formatter.format(int.parse(split[0]));
+  var wholeStr = formatter.format(int.tryParse(split[0]) ?? 0);
+  if (bigValue < Decimal.zero && wholeStr == "0") {
+    wholeStr = "-0";
+  }
   if (split.length == 1) {
     return wholeStr;
   } else {

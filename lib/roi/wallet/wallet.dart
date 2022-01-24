@@ -652,13 +652,6 @@ abstract class WalletProvider {
     );
   }
 
-  Future<List<HistoryItem>> getHistoryItemsX({int limit = 0}) async {
-    final addressesX = await getAllAddressesX();
-    final transactions = await getTransactionsX(limit: limit);
-    return Future.wait(
-        transactions.map((tx) => getTransactionSummary(tx, addressesX, "")));
-  }
-
   Future<List<OrteliusTx>> getTransactionsP({int limit = 0}) async {
     final addresses = await getAllAddressesP();
     return await getAddressHistory(
@@ -666,13 +659,6 @@ abstract class WalletProvider {
       addresses,
       limit: limit,
     );
-  }
-
-  Future<List<HistoryItem>> getHistoryItemsP({int limit = 0}) async {
-    final addressesX = await getAllAddressesX();
-    final transactions = await getTransactionsP(limit: limit);
-    return Future.wait(
-        transactions.map((tx) => getTransactionSummary(tx, addressesX, "")));
   }
 
   /// Returns atomic history for this wallet on the C chain.
@@ -685,13 +671,6 @@ abstract class WalletProvider {
       addresses,
       limit: limit,
     );
-  }
-
-  Future<List<HistoryItem>> getHistoryItemsC({int limit = 0}) async {
-    final addressesC = getAddressC();
-    final transactions = await getTransactionsC(limit: limit);
-    return Future.wait(
-        transactions.map((tx) => getTransactionSummary(tx, [], addressesC)));
   }
 
   /// Fetches information about the given txId and parses it from the wallet's perspective
