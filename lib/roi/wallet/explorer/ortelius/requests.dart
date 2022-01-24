@@ -1,8 +1,8 @@
-import 'package:wallet/roi/wallet/history/explorer_rest_client.dart';
-import 'package:wallet/roi/wallet/history/raw_types.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/ortelius_rest_client.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/roi/wallet/network/network.dart' as ezc_network;
 
-Future<List<Transaction>> getAddressHistory(
+Future<List<OrteliusTx>> getAddressHistory(
   String chainId,
   List<String> addresses, {
   int limit = 20,
@@ -10,7 +10,7 @@ Future<List<Transaction>> getAddressHistory(
 }) async {
   final explorerApi = ezc_network.explorerApi;
   if (explorerApi == null) throw Exception("Explorer API not found.");
-  final explorerClient = ExplorerRestClient(explorerApi);
+  final explorerClient = OrteliusRestClient(explorerApi);
   const addressSize = 1024;
   var selection = addresses;
   var remaining = <String>[];
@@ -21,7 +21,7 @@ Future<List<Transaction>> getAddressHistory(
   final addressesRaw =
       selection.map((address) => address.split('-')[1]).toList();
 
-  final request = GetTransactionsRequest(
+  final request = GetOrteliusTxsRequest(
     addressesRaw,
     ["timestamp-desc"],
     ["1"],
@@ -61,9 +61,9 @@ Future<List<Transaction>> getAddressHistory(
 
 /// Returns the ortelius data from the given tx id.
 /// @param txID
-Future<Transaction> getTx(String txId) async {
+Future<OrteliusTx> getTx(String txId) async {
   final explorerApi = ezc_network.explorerApi;
   if (explorerApi == null) throw Exception("Explorer API not found.");
-  final explorerClient = ExplorerRestClient(explorerApi);
+  final explorerClient = OrteliusRestClient(explorerApi);
   return await explorerClient.getTransaction(txId);
 }

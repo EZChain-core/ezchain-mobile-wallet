@@ -106,18 +106,11 @@ class WalletBalanceC {
   String get balanceDecimal => bnToAvaxC(balance);
 }
 
-enum WalletEventType {
-  addressChanged,
-  balanceChangedX,
-  balanceChangedP,
-  balanceChangedC
-}
+enum WalletEventType { balanceChangedX, balanceChangedP, balanceChangedC }
 
 extension WalletEventTypeString on WalletEventType {
   String get type {
     switch (this) {
-      case WalletEventType.addressChanged:
-        return "addressChanged";
       case WalletEventType.balanceChangedX:
         return "balanceChangedX";
       case WalletEventType.balanceChangedP:

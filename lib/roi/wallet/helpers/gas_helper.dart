@@ -7,6 +7,7 @@ import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
+import 'package:wallet/roi/wallet/network/utils.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -95,7 +96,7 @@ int estimateExportGasFeeFromMockTx(
   final netId = activeNetwork.networkId;
   final chainId = activeNetwork.cChainId;
   final chainIdBuff = cb58Decode(chainId);
-  final avaxId = activeNetwork.avaxId;
+  final avaxId = getAvaxAssetId();
   final avaxIdBuff = cb58Decode(avaxId);
   final txIn = EvmInput(
     address: from,

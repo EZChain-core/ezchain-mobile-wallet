@@ -1,32 +1,32 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'raw_types.g.dart';
+part 'types.g.dart';
 
 @JsonSerializable()
-class GetTransactionsResponse {
+class GetOrteliusTxsResponse {
   final String startTime;
 
   final String endTime;
 
-  final List<Transaction> transactions;
+  final List<OrteliusTx> transactions;
 
   final String? next;
 
-  GetTransactionsResponse(
+  GetOrteliusTxsResponse(
     this.startTime,
     this.endTime,
     this.transactions,
     this.next,
   );
 
-  factory GetTransactionsResponse.fromJson(Map<String, dynamic> json) =>
-      _$GetTransactionsResponseFromJson(json);
+  factory GetOrteliusTxsResponse.fromJson(Map<String, dynamic> json) =>
+      _$GetOrteliusTxsResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GetTransactionsResponseToJson(this);
+  Map<String, dynamic> toJson() => _$GetOrteliusTxsResponseToJson(this);
 }
 
 @JsonSerializable()
-class GetTransactionsRequest {
+class GetOrteliusTxsRequest {
   final List<String> addresses;
 
   final List<String> sort;
@@ -42,7 +42,7 @@ class GetTransactionsRequest {
 
   final List<String>? endTime;
 
-  GetTransactionsRequest(
+  GetOrteliusTxsRequest(
     this.addresses,
     this.sort,
     this.disableCount,
@@ -52,24 +52,24 @@ class GetTransactionsRequest {
     this.endTime,
   );
 
-  factory GetTransactionsRequest.fromJson(Map<String, dynamic> json) =>
-      _$GetTransactionsRequestFromJson(json);
+  factory GetOrteliusTxsRequest.fromJson(Map<String, dynamic> json) =>
+      _$GetOrteliusTxsRequestFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GetTransactionsRequestToJson(this);
+  Map<String, dynamic> toJson() => _$GetOrteliusTxsRequestToJson(this);
 }
 
 @JsonSerializable()
-class Transaction {
+class OrteliusTx {
   final String id;
 
   @JsonKey(name: "chainID")
   final String chainId;
 
-  final TransactionType type;
+  final OrteliusTxType type;
 
-  final List<TransactionInput>? inputs;
+  final List<OrteliusTxInput>? inputs;
 
-  final List<TransactionOutput>? outputs;
+  final List<OrteliusTxOutput>? outputs;
 
   final String? memo;
 
@@ -96,7 +96,7 @@ class Transaction {
 
   final String? txBlockId;
 
-  Transaction(
+  OrteliusTx(
     this.id,
     this.chainId,
     this.type,
@@ -116,28 +116,28 @@ class Transaction {
     this.txBlockId,
   );
 
-  factory Transaction.fromJson(Map<String, dynamic> json) =>
-      _$TransactionFromJson(json);
+  factory OrteliusTx.fromJson(Map<String, dynamic> json) =>
+      _$OrteliusTxFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TransactionToJson(this);
+  Map<String, dynamic> toJson() => _$OrteliusTxToJson(this);
 }
 
 @JsonSerializable()
-class TransactionInput {
-  final List<TransactionCredential>? credentials;
+class OrteliusTxInput {
+  final List<OrteliusTxCredential>? credentials;
 
-  final TransactionOutput output;
+  final OrteliusTxOutput output;
 
-  TransactionInput(this.credentials, this.output);
+  OrteliusTxInput(this.credentials, this.output);
 
-  factory TransactionInput.fromJson(Map<String, dynamic> json) =>
-      _$TransactionInputFromJson(json);
+  factory OrteliusTxInput.fromJson(Map<String, dynamic> json) =>
+      _$OrteliusTxInputFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TransactionInputToJson(this);
+  Map<String, dynamic> toJson() => _$OrteliusTxInputToJson(this);
 }
 
 @JsonSerializable()
-class TransactionCredential {
+class OrteliusTxCredential {
   final String address;
 
   @JsonKey(name: "public_key")
@@ -145,20 +145,20 @@ class TransactionCredential {
 
   final String signature;
 
-  TransactionCredential(
+  OrteliusTxCredential(
     this.address,
     this.publicKey,
     this.signature,
   );
 
-  factory TransactionCredential.fromJson(Map<String, dynamic> json) =>
-      _$TransactionCredentialFromJson(json);
+  factory OrteliusTxCredential.fromJson(Map<String, dynamic> json) =>
+      _$OrteliusTxCredentialFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TransactionCredentialToJson(this);
+  Map<String, dynamic> toJson() => _$OrteliusTxCredentialToJson(this);
 }
 
 @JsonSerializable()
-class TransactionOutput {
+class OrteliusTxOutput {
   final String id;
 
   @JsonKey(name: "transactionID")
@@ -211,7 +211,7 @@ class TransactionOutput {
   @JsonKey(name: "stakeLocktime")
   final int? stakeLockTime;
 
-  TransactionOutput(
+  OrteliusTxOutput(
     this.id,
     this.transactionId,
     this.amount,
@@ -235,13 +235,13 @@ class TransactionOutput {
     this.stakeLockTime,
   );
 
-  factory TransactionOutput.fromJson(Map<String, dynamic> json) =>
-      _$TransactionOutputFromJson(json);
+  factory OrteliusTxOutput.fromJson(Map<String, dynamic> json) =>
+      _$OrteliusTxOutputFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TransactionOutputToJson(this);
+  Map<String, dynamic> toJson() => _$OrteliusTxOutputToJson(this);
 }
 
-enum TransactionType {
+enum OrteliusTxType {
   @JsonValue("base")
   base,
 

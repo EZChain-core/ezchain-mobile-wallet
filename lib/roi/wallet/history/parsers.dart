@@ -1,41 +1,44 @@
+import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/utils.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/utxo_utils.dart';
 import 'package:wallet/roi/wallet/history/base_tx_parser.dart';
 import 'package:wallet/roi/wallet/history/history_helpers.dart';
 import 'package:wallet/roi/wallet/history/import_export_parser.dart';
-import 'package:wallet/roi/wallet/history/parsed_types.dart';
-import 'package:wallet/roi/wallet/history/raw_types.dart';
+import 'package:wallet/roi/wallet/history/types.dart';
 import 'package:wallet/roi/wallet/network/helpers/alias_from_network_id.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
+import 'package:wallet/roi/wallet/network/utils.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
 Future<HistoryItem> getTransactionSummary(
-  Transaction tx,
+  OrteliusTx tx,
   List<String> walletAddresses,
   String evmAddress,
 ) async {
   final cleanAddressesXP =
       walletAddresses.map((address) => address.split("-")[1]).toList();
   switch (tx.type) {
-    case TransactionType.import:
-    case TransactionType.pvmImport:
+    case OrteliusTxType.import:
+    case OrteliusTxType.pvmImport:
       return getImportSummary(tx, cleanAddressesXP);
-    case TransactionType.atomicImportTx:
+    case OrteliusTxType.atomicImportTx:
       return getImportSummaryC(tx, evmAddress);
-    case TransactionType.export:
-    case TransactionType.pvmExport:
-    case TransactionType.atomicExportTx:
+    case OrteliusTxType.export:
+    case OrteliusTxType.pvmExport:
+    case OrteliusTxType.atomicExportTx:
       return getExportSummary(tx, cleanAddressesXP);
-    case TransactionType.addValidator:
-    case TransactionType.addDelegator:
+    case OrteliusTxType.addValidator:
+    case OrteliusTxType.addDelegator:
       return getStakingSummary(tx, cleanAddressesXP);
-    case TransactionType.operation:
-    case TransactionType.base:
+    case OrteliusTxType.operation:
+    case OrteliusTxType.base:
       return getBaseTxSummary(tx, cleanAddressesXP);
     default:
       return getUnsupportedSummary(tx);
   }
 }
 
-HistoryItem getUnsupportedSummary(Transaction tx) {
+HistoryItem getUnsupportedSummary(OrteliusTx tx) {
   return HistoryItem(
     id: tx.id,
     type: HistoryItemTypeName.notSupported,
@@ -45,7 +48,7 @@ HistoryItem getUnsupportedSummary(Transaction tx) {
 }
 
 HistoryStaking getStakingSummary(
-  Transaction tx,
+  OrteliusTx tx,
   List<String> ownerAddresses,
 ) {
   final ins = tx.inputs?.map((tx) => tx.output).toList() ?? [];
@@ -57,7 +60,7 @@ HistoryStaking getStakingSummary(
   final stakeAmount = getStakeAmount(tx);
 
   /// Assign the type
-  var type = tx.type == TransactionType.addValidator
+  var type = tx.type == OrteliusTxType.addValidator
       ? HistoryItemTypeName.addValidator
       : HistoryItemTypeName.addDelegator;
 
@@ -95,14 +98,14 @@ HistoryStaking getStakingSummary(
 
 /// Returns the summary for a C chain import TX
 HistoryImportExport getImportSummaryC(
-  Transaction tx,
+  OrteliusTx tx,
   String ownerAddresses,
 ) {
   final sourceChain = findSourceChain(tx);
   final chainAliasFrom = idToChainAlias(sourceChain);
   final chainAliasTo = idToChainAlias(tx.chainId);
 
-  final avaxId = activeNetwork.avaxId!;
+  final avaxId = getAvaxAssetId();
   final outs = tx.outputs ?? [];
   final amtOut = getEvmAssetBalanceFromUTXOs(
     outs,

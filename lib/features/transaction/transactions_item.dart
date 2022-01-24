@@ -1,10 +1,9 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/generated/assets.gen.dart';
-import 'package:wallet/roi/wallet/history/raw_types.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -69,16 +68,15 @@ class TransactionsItemViewData {
       this.timestamp, this.type, this.amount, this.isIncrease);
 }
 
-extension TransactionExtension on Transaction {
+extension TransactionExtension on OrteliusTx {
   TransactionsItemViewData mapToTransactionsItemViewData() {
-
     final time = timestamp?.parseDateTime()?.parseTimeAgo() ?? '';
 
     return TransactionsItemViewData(time, type.name, Decimal.zero, true);
   }
 }
 
-extension TransactionTypeExtension on TransactionType {
+extension TransactionTypeExtension on OrteliusTxType {
   String get name {
     return [
       "Send",

@@ -3,6 +3,8 @@ import 'package:http/http.dart';
 import 'package:wallet/roi/sdk/roi.dart';
 import 'package:wallet/roi/sdk/utils/dio_logger.dart';
 import 'package:wallet/roi/wallet/network/constants.dart';
+import 'package:wallet/roi/wallet/network/helpers/rpc_from_config.dart';
+import 'package:wallet/roi/wallet/network/types.dart';
 import 'package:web3dart/web3dart.dart';
 
 var _activeNetwork = testNetConfig;

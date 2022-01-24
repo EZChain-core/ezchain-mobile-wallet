@@ -76,6 +76,7 @@ final AVAXSTAKECAP = ONEAVAX * BigInt.from(3000000);
 // Start Manhattan
 final n0X = X(
     blockchainId: "2vrXWHgGxh5n3YsLHMV16YVVJTpT4z45Fmb4y3bL6si8kLCyg9",
+    avaxAssetId: "",
     alias: xChainAlias,
     vm: xChainVMName,
     fee: MILLIAVAX,
@@ -154,6 +155,7 @@ final n1C = C(
 // Start Cascade
 final n2X = X(
     blockchainId: "4ktRjsAKxgMr2aEzv9SWmrU7Xk5FniHUrVCX4P1TZSfTLZWFM",
+    avaxAssetId: "",
     alias: xChainAlias,
     vm: xChainVMName,
     txFee: BigInt.zero,
@@ -181,12 +183,14 @@ final n2C = C(
     blockchainId: "2mUYSXfLrDtigwbzj1LxKVsHwELghc5sisoXrzJwLqAAQHF4i",
     alias: cChainAlias,
     vm: cChainVMName,
-    gasPrice: BigInt.zero);
+    gasPrice: BigInt.zero,
+    chainId: 0);
 // End Cascade
 
 // Start Denali
 final n3X = X(
     blockchainId: "rrEWX7gc7D9mwcdrdBxBTdqh1a7WDVsMuadhTZgyXfFcRz45L",
+    avaxAssetId: "",
     alias: xChainAlias,
     vm: xChainVMName,
     txFee: BigInt.zero,
@@ -214,12 +218,14 @@ final n3C = C(
     blockchainId: "zJytnh96Pc8rM337bBrtMvJDbEdDNjcXG3WkTNCiLp18ergm9",
     alias: cChainAlias,
     vm: cChainVMName,
-    gasPrice: BigInt.zero);
+    gasPrice: BigInt.zero,
+    chainId: 0);
 // End Denali
 
 // Start Everest
 final n4X = X(
     blockchainId: "jnUjZSRt16TcRnZzmh5aMhavwVHz3zBrSN8GfFMTQkzUnoBxC",
+    avaxAssetId: "",
     alias: xChainAlias,
     vm: xChainVMName,
     txFee: MILLIAVAX,
@@ -423,18 +429,18 @@ final networks = {
 };
 
 class C {
-  String blockchainId;
+  final String blockchainId;
   final String alias;
   final String vm;
   final BigInt? fee;
   final BigInt? gasPrice;
-  int? chainId;
+  final int chainId;
   final BigInt? minGasPrice;
   final BigInt? maxGasPrice;
   final int? txBytesGas;
   final int? costPerSignature;
   final BigInt? txFee;
-  String? avaxAssetId;
+  final String? avaxAssetId;
 
   C(
       {required this.blockchainId,
@@ -442,7 +448,7 @@ class C {
       required this.vm,
       this.fee,
       this.gasPrice,
-      this.chainId,
+      required this.chainId,
       this.minGasPrice,
       this.maxGasPrice,
       this.txBytesGas,
@@ -456,7 +462,7 @@ class X {
   final String alias;
   final String vm;
   final BigInt creationTxFee;
-  String? avaxAssetId;
+  String avaxAssetId;
   final BigInt? txFee;
   final BigInt? fee;
 
@@ -465,7 +471,7 @@ class X {
       required this.alias,
       required this.vm,
       required this.creationTxFee,
-      this.avaxAssetId,
+      required this.avaxAssetId,
       this.txFee,
       this.fee});
 }
