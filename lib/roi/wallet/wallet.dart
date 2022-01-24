@@ -9,6 +9,7 @@ import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 import 'package:wallet/roi/sdk/apis/evm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/pvm/constants.dart' as pvm_constants;
+import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
@@ -641,6 +642,11 @@ abstract class WalletProvider {
   Future<PvmUTXOSet> getAtomicUTXOsP(ExportChainsP sourceChain) async {
     final addresses = await getAllAddressesP();
     return await platformGetAtomicUTXOs(addresses, sourceChain);
+  }
+
+  Future<List<Validator>> getPlatformValidators(
+      {String? subnetId, List<String>? nodeIds}) async {
+    return pChain.getCurrentValidators(subnetId: subnetId, nodeIds: nodeIds);
   }
 
   Future<List<OrteliusTx>> getTransactionsX({int limit = 0}) async {

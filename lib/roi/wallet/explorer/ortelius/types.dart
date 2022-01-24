@@ -27,7 +27,7 @@ class GetOrteliusTxsResponse {
 
 @JsonSerializable()
 class GetOrteliusTxsRequest {
-  final List<String> addresses;
+  final List<String> address;
 
   final List<String> sort;
 
@@ -43,7 +43,7 @@ class GetOrteliusTxsRequest {
   final List<String>? endTime;
 
   GetOrteliusTxsRequest(
-    this.addresses,
+    this.address,
     this.sort,
     this.disableCount,
     this.chainId,

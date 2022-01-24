@@ -11,6 +11,7 @@ import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
@@ -73,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           getHistoryP();
+    //           getHistoryC();
     //         },
     //       ),
     //     ),
@@ -418,10 +419,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   getHistoryP() async {
     try {
+      // chỉ P Chain mới cần get validators.
+      final validators = await wallet.getPlatformValidators();
       final transactions = await wallet.getTransactionsP(limit: 20);
       final histories = await Future.wait(
           transactions.map((tx) => wallet.parseOrteliusTx(tx)));
-      _printHistoryItems("P", histories);
+      _printHistoryItems("P", histories, validators: validators);
     } catch (e) {
       logger.e(e);
     }
@@ -438,10 +441,17 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  _printHistoryItems(String chainAlias, List<HistoryItem> items) {
+  _printHistoryItems(
+    String chainAlias,
+    List<HistoryItem> items, {
+    List<Validator>? validators, // for only platform chain
+  }) {
     final result = items.where((tx) {
       if (tx is HistoryBaseTx) {
         return tx.tokens.isNotEmpty;
+      } else if (tx is HistoryStaking) {
+        return tx.type == HistoryItemTypeName.addValidator ||
+            tx.type == HistoryItemTypeName.addDelegator;
       } else {
         return tx.type != HistoryItemTypeName.notSupported;
       }
@@ -450,7 +460,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (item is HistoryBaseTx) {
         final token = item.tokens.firstWhereOrNull(
             (token) => token.asset.assetId == getAvaxAssetId());
-        if (token == null) {
+        if (token == null || token.amount == BigInt.zero) {
           continue;
         }
         var message = "Date = ${item.timestamp}\n";
@@ -459,13 +469,13 @@ class _SplashScreenState extends State<SplashScreen> {
             token.amount - item.fee,
             decimals: int.tryParse(token.asset.denomination) ?? 0,
           );
-          message += "Send = $amount ${token.asset.symbol}";
+          message += "Send = $amount ${token.asset.symbol}, to = ";
         } else {
           message +=
-              "Receive = ${token.amountDisplayValue} ${token.asset.symbol}";
+              "Receive = ${token.amountDisplayValue} ${token.asset.symbol}, from = ";
         }
-        message +=
-            ", to = $chainAlias-${token.addresses.firstOrNull ?? ""}\n\n";
+        message += "$chainAlias-${token.addresses.firstOrNull ?? ""}";
+        logger.i(message);
       } else if (item is HistoryImportExport) {
         if (item.amount > BigInt.zero) {
           var message = "Date = ${item.timestamp}\n";
@@ -479,7 +489,40 @@ class _SplashScreenState extends State<SplashScreen> {
           }
           logger.i(message);
         }
-      } else if (item is HistoryStaking) {}
+      } else if (item is HistoryStaking && validators != null) {
+        var message = "Date = ${item.timestamp}\n";
+
+        final stakeEndDate = DateTime.fromMillisecondsSinceEpoch(item.stakeEnd);
+        final dateFormatter = DateFormat("MM/dd/yyyy, HH:mm:ss a");
+        message += "Stake End Date = ${dateFormatter.format(stakeEndDate)}\n";
+        String? potentialReward;
+        final validator = validators.firstWhereOrNull((validator) {
+          final nodeId = validator.nodeId.split("-")[1];
+          return nodeId == item.nodeId;
+        });
+        if (validator != null) {
+          if (item.type == HistoryItemTypeName.addValidator) {
+            potentialReward = validator.potentialReward;
+            message += "Add Validator = ${item.amountDisplayValue}\n";
+          } else {
+            final delegators = validator.delegators;
+            if (delegators != null) {
+              final delegator = delegators
+                  .firstWhere((delegator) => delegator.txId == item.id);
+              potentialReward = delegator.potentialReward;
+              message += "Add Delegator = ${item.amountDisplayValue}\n";
+            }
+          }
+          if (potentialReward != null) {
+            final reward =
+                bnToAvaxP(BigInt.tryParse(potentialReward) ?? BigInt.zero);
+            message += "Reward Pending = $reward";
+          } else {
+            message += "Reward Pending = ?";
+          }
+        }
+        logger.i(message);
+      }
     }
   }
 

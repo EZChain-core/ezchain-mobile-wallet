@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/apis/pvm/constants.dart';
 import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_staking_asset_id.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_tx_status.dart';
@@ -63,6 +64,9 @@ abstract class PvmApi implements ROIChainApi {
   Future<GetStakingAssetIdResponse> getStakingAssetId({String? subnetId});
 
   Future<GetTxStatusResponse> getTxStatus(String txId);
+
+  Future<List<Validator>> getCurrentValidators(
+      {String? subnetId, List<String>? nodeIds});
 
   factory PvmApi.create(
       {required ROINetwork roiNetwork, String endPoint = "/ext/bc/P"}) {
@@ -338,6 +342,18 @@ class _PvmApiImpl implements PvmApi {
       throw Exception("Error - PVMAPI.buildExportTx:Failed Goose Egg Check");
     }
     return builtUnsignedTx;
+  }
+
+  @override
+  Future<List<Validator>> getCurrentValidators(
+      {String? subnetId, List<String>? nodeIds}) async {
+    final request =
+        GetCurrentValidatorsRequest(subnetId: subnetId, nodeIds: nodeIds)
+            .toRpc();
+    final response = await pvmRestClient.getCurrentValidators(request);
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result.validators;
   }
 
   BigInt _getDefaultTxFee() {

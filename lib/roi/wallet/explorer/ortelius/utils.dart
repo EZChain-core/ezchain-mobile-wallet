@@ -31,10 +31,10 @@ String findDestinationChain(OrteliusTx tx) {
   return baseChain;
 }
 
-//// To get the stake amount, sum the non-reward output utxos.
+/// To get the stake amount, sum the non-reward output utxos.
 BigInt getStakeAmount(OrteliusTx tx) {
   final outs = tx.outputs ?? [];
   final nonRewardUtxos =
-      outs.where((utxo) => !utxo.rewardUtxo && utxo.stake != null).toList();
+      outs.where((utxo) => !utxo.rewardUtxo && utxo.stake == true).toList();
   return getOutputTotals(nonRewardUtxos);
 }
