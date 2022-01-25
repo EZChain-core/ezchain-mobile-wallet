@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:wallet/generated/l10n.dart';
 
 extension StringExtension on String {
+
   String useCorrectEllipsis() {
     return replaceAll('', '\u200B');
   }
@@ -13,6 +14,12 @@ extension StringExtension on String {
       return null;
     }
   }
+}
+
+extension StringNullableExtension on String? {
+
+  bool isNotNullOrEmpty() =>
+      this != null && this != "";
 }
 
 T? tryCast<T>(dynamic x) => x is T ? x : null;
@@ -33,5 +40,9 @@ extension DateTimeExtension on DateTime {
     } else {
       return Strings.current.sharedJustNow;
     }
+  }
+
+  String format(String pattern) {
+    return DateFormat(pattern).format(this);
   }
 }
