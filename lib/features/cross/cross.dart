@@ -113,18 +113,21 @@ class _CrossScreenState extends State<CrossScreen> {
                           ),
                           Align(
                             alignment: Alignment.centerRight,
-                            child: Container(
-                              width: 48,
-                              height: 48,
-                              margin: const EdgeInsets.only(right: 16),
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                  color: provider.themeMode.white,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      width: 1,
-                                      color: provider.themeMode.text10)),
-                              child: Assets.icons.icSwitchArrow.svg(),
+                            child: GestureDetector(
+                              onTap: _crossStore.switchChain,
+                              child: Container(
+                                width: 48,
+                                height: 48,
+                                margin: const EdgeInsets.only(right: 16),
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                    color: provider.themeMode.white,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        width: 1,
+                                        color: provider.themeMode.text10)),
+                                child: Assets.icons.icSwitchArrow.svg(),
+                              ),
                             ),
                           )
                         ],

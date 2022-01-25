@@ -90,9 +90,6 @@ class $AssetsIconsGen {
   SvgGenImage get icQuestion =>
       const SvgGenImage('assets/icons/ic_question.svg');
 
-  /// File path: assets/icons/ic_roi.svg
-  SvgGenImage get icRoi => const SvgGenImage('assets/icons/ic_roi.svg');
-
   /// File path: assets/icons/ic_scan_barcode.svg
   SvgGenImage get icScanBarcode =>
       const SvgGenImage('assets/icons/ic_scan_barcode.svg');
@@ -149,17 +146,13 @@ class $AssetsImagesGen {
   AssetGenImage get imgBgWallet =>
       const AssetGenImage('assets/images/img_bg_wallet.png');
 
+  /// File path: assets/images/img_ezc_about.png
+  AssetGenImage get imgEzcAbout =>
+      const AssetGenImage('assets/images/img_ezc_about.png');
+
   /// File path: assets/images/img_logo_ezc.svg
   SvgGenImage get imgLogoEzc =>
       const SvgGenImage('assets/images/img_logo_ezc.svg');
-
-  /// File path: assets/images/img_logo_roi.png
-  AssetGenImage get imgLogoRoi =>
-      const AssetGenImage('assets/images/img_logo_roi.png');
-
-  /// File path: assets/images/img_logo_roi_about.png
-  AssetGenImage get imgLogoRoiAbout =>
-      const AssetGenImage('assets/images/img_logo_roi_about.png');
 
   /// File path: assets/images/img_logo_roi_secondary.png
   AssetGenImage get imgLogoRoiSecondary =>

@@ -1,6 +1,7 @@
 import 'package:decimal/decimal.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/roi/wallet/explorer/coingecko/requests.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
@@ -17,7 +18,11 @@ abstract class _PriceStore with Store {
 
   @action
   updateAvaxPrice() async {
-    avaxPrice = await getAvaxPriceDecimal();
+    try {
+      avaxPrice = await getAvaxPriceDecimal();
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   String getBalanceInUsd(Decimal balance) {
