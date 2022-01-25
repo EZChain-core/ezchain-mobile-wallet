@@ -8,6 +8,7 @@ import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
+import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
 import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 
@@ -61,16 +62,24 @@ abstract class _TransactionsStore with Store {
     }
   }
 
-  Future<List<OrteliusTx>> getTransactions(EZCType type) async {
+  Future<List<TransactionsItemViewData>> getTransactions(EZCType type) async {
     await Future.delayed(const Duration(milliseconds: 300));
     try {
       switch (ezcType) {
         case EZCType.xChain:
-          return _wallet.getXTransactions(limit: 20);
+          final transactions = await _wallet.getXTransactions(limit: 20);
+          final histories = await Future.wait(
+              transactions.map((tx) => _wallet.parseOrteliusTx(tx)));
+
+          return mapToTransactionsItemViewData(histories);
         case EZCType.pChain:
-          return _wallet.getPTransactions(limit: 20);
+          final validators = await _wallet.getPlatformValidators();
+          final transactions = await _wallet.getPTransactions(limit: 20);
+          final histories = await Future.wait(
+              transactions.map((tx) => _wallet.parseOrteliusTx(tx)));
+          return mapToTransactionsItemViewData(histories, validators: validators);
         case EZCType.cChain:
-          return _wallet.getCTransactions(limit: 20);
+          return [];
       }
     } catch (e) {
       logger.e(e);
@@ -78,3 +87,4 @@ abstract class _TransactionsStore with Store {
     }
   }
 }
+

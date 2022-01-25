@@ -9,7 +9,6 @@ import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/transaction/transactions_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -139,7 +138,7 @@ class TransactionsScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: FutureBuilder<List<OrteliusTx>>(
+                child: FutureBuilder<List<TransactionsItemViewData>>(
                   future: _transactionsStore.getTransactions(ezcType),
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {
@@ -150,11 +149,10 @@ class TransactionsScreen extends StatelessWidget {
                                   horizontal: 16, vertical: 12),
                               itemCount: transactions.length,
                               itemBuilder: (_, index) => TransactionsItemWidget(
-                                item: transactions[index]
-                                    .mapToTransactionsItemViewData(),
+                                item: transactions[index],
                                 onPressed: () {
                                   context.pushRoute(TransactionDetailRoute(
-                                      txId: transactions[index].id));
+                                      txId: transactions[index].txId));
                                 },
                               ),
                               separatorBuilder: (_, index) => Divider(

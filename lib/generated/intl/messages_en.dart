@@ -157,10 +157,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedPrivateKey": MessageLookupByLibrary.simpleMessage("Private Key"),
         "sharedProcessing": MessageLookupByLibrary.simpleMessage("Processing"),
         "sharedReceive": MessageLookupByLibrary.simpleMessage("Receive"),
+        "sharedReceived": MessageLookupByLibrary.simpleMessage("Received"),
         "sharedSend": MessageLookupByLibrary.simpleMessage("Send"),
         "sharedSendTo": MessageLookupByLibrary.simpleMessage("Send to"),
         "sharedSendTransaction":
             MessageLookupByLibrary.simpleMessage("Send Transaction"),
+        "sharedSent": MessageLookupByLibrary.simpleMessage("Sent"),
         "sharedSetAmount": MessageLookupByLibrary.simpleMessage("Set amount"),
         "sharedShare": MessageLookupByLibrary.simpleMessage("Share"),
         "sharedSource": MessageLookupByLibrary.simpleMessage("Source"),

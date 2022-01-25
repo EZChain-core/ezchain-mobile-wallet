@@ -34,4 +34,8 @@ extension DateTimeExtension on DateTime {
       return Strings.current.sharedJustNow;
     }
   }
+
+  String format(String pattern) {
+    return DateFormat(pattern).format(this);
+  }
 }
