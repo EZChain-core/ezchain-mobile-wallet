@@ -39,7 +39,7 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Assets.icons.icRoi.svg(),
+                          Assets.icons.icEzc64.svg(width: 32, height: 32),
                           const SizedBox(width: 8),
                           Text(
                             'EZC',
@@ -64,7 +64,7 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedAmount,
-                        content: '${transactionInfo.amount} ROI',
+                        content: '${transactionInfo.amount} EZC',
                       ),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
@@ -79,7 +79,7 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedTransactionFee,
-                        content: '${transactionInfo.fee} ROI',
+                        content: '${transactionInfo.fee} EZC',
                       ),
                       const SizedBox(height: 8),
                       const Spacer(),

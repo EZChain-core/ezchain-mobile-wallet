@@ -1,9 +1,13 @@
-import 'package:decimal/decimal.dart';
+import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/generated/assets.gen.dart';
-import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
+import 'package:wallet/generated/l10n.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
+import 'package:wallet/roi/wallet/history/types.dart';
+import 'package:wallet/roi/wallet/network/utils.dart';
+import 'package:wallet/roi/wallet/utils/number_utils.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -27,7 +31,7 @@ class TransactionsItemWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  item.timestamp,
+                  item.time,
                   style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
                 ),
                 Assets.icons.icSearchBlack.svg()
@@ -42,7 +46,7 @@ class TransactionsItemWidget extends StatelessWidget {
                       EZCBodyLargeTextStyle(color: provider.themeMode.text60),
                 ),
                 Text(
-                  '${item.amount} EZC',
+                  item.amount,
                   style: EZCBodyLargeTextStyle(
                     color: item.isIncrease
                         ? provider.themeMode.stateSuccess
@@ -59,42 +63,110 @@ class TransactionsItemWidget extends StatelessWidget {
 }
 
 class TransactionsItemViewData {
-  final String timestamp;
+  final String txId;
+  final String time;
   final String type;
-  final Decimal amount;
+  final String amount;
   final bool isIncrease;
 
   TransactionsItemViewData(
-      this.timestamp, this.type, this.amount, this.isIncrease);
+      this.txId, this.time, this.type, this.amount, this.isIncrease);
 }
 
-extension TransactionExtension on OrteliusTx {
-  TransactionsItemViewData mapToTransactionsItemViewData() {
-    final time = timestamp?.parseDateTime()?.parseTimeAgo() ?? '';
+List<TransactionsItemViewData> mapToTransactionsItemViewData(
+    List<HistoryItem> items,
+    {List<Validator>? validators}) {
+  final List<TransactionsItemViewData> transactions = [];
 
-    return TransactionsItemViewData(time, type.name, Decimal.zero, true);
-  }
-}
+  final result = items.where((tx) {
+    if (tx is HistoryBaseTx) {
+      return tx.tokens.isNotEmpty;
+    } else if (tx is HistoryStaking) {
+      return tx.type == HistoryItemTypeName.addValidator ||
+          tx.type == HistoryItemTypeName.addDelegator;
+    } else {
+      return tx.type != HistoryItemTypeName.notSupported;
+    }
+  }).toList();
+  for (var item in result) {
+    final transId = item.id;
+    final transTime = item.timestamp?.parseDateTime()?.parseTimeAgo() ?? '';
+    String transAmount = '';
+    String transType = '';
+    bool transIncrease = false;
 
-extension TransactionTypeExtension on OrteliusTxType {
-  String get name {
-    return [
-      "Send",
-      "Received",
-      "Send",
-      "Import",
-      "Export",
-      "Send",
-      "Send",
-      "Send",
-      "Send",
-      "Send",
-      "Send",
-      "Send",
-      "Send",
-      "Send",
-      "Send",
-      "Send",
-    ][index];
+    if (item is HistoryBaseTx) {
+      final token = item.tokens
+          .firstWhereOrNull((token) => token.asset.assetId == getAvaxAssetId());
+
+      if (token == null || token.amount == BigInt.zero) {
+        continue;
+      }
+      if (token.amount < BigInt.zero) {
+        final amount = bnToLocaleString(
+          token.amount - item.fee,
+          decimals: int.tryParse(token.asset.denomination) ?? 0,
+        );
+
+        transType = Strings.current.sharedSent;
+        transAmount = '$amount ${token.asset.symbol}';
+        transIncrease = false;
+      } else {
+        transType = Strings.current.sharedReceived;
+        transAmount = '${token.amountDisplayValue} ${token.asset.symbol}';
+        transIncrease = true;
+      }
+    } else if (item is HistoryImportExport) {
+      if (item.amount > BigInt.zero) {
+        if (item.type == HistoryItemTypeName.import) {
+          transType = Strings.current.sharedImport;
+          transAmount = "${item.amountDisplayValue} EZC";
+          transIncrease = true;
+        } else if (item.type == HistoryItemTypeName.export) {
+          final amount = bnToAvaxX((item.amount + item.fee) * BigInt.from(-1));
+
+          transType = Strings.current.sharedExport;
+          transAmount = '$amount EZC';
+          transIncrease = false;
+        }
+      }
+    } else if (item is HistoryStaking && validators != null) {
+      // var message = "Date = ${item.timestamp}\n";
+      //
+      // final stakeEndDate = DateTime.fromMillisecondsSinceEpoch(item.stakeEnd);
+      // final dateFormatter = DateFormat("MM/dd/yyyy, HH:mm:ss a");
+      // message += "Stake End Date = ${dateFormatter.format(stakeEndDate)}\n";
+      // String? potentialReward;
+      // final validator = validators.firstWhereOrNull((validator) {
+      //   final nodeId = validator.nodeId.split("-")[1];
+      //   return nodeId == item.nodeId;
+      // });
+      // if (validator != null) {
+      //   if (item.type == HistoryItemTypeName.addValidator) {
+      //     potentialReward = validator.potentialReward;
+      //     message += "Add Validator = ${item.amountDisplayValue}\n";
+      //   } else {
+      //     final delegators = validator.delegators;
+      //     if (delegators != null) {
+      //       final delegator =
+      //           delegators.firstWhere((delegator) => delegator.txId == item.id);
+      //       potentialReward = delegator.potentialReward;
+      //       message += "Add Delegator = ${item.amountDisplayValue}\n";
+      //     }
+      //   }
+      //   if (potentialReward != null) {
+      //     final reward =
+      //         bnToAvaxP(BigInt.tryParse(potentialReward) ?? BigInt.zero);
+      //     message += "Reward Pending = $reward";
+      //   } else {
+      //     message += "Reward Pending = ?";
+      //   }
+      // }
+      // logger.i(message);
+    }
+    transactions.add(TransactionsItemViewData(
+        transId, transTime, transType, transAmount, transIncrease));
   }
+
+  return transactions;
 }

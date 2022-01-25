@@ -180,11 +180,31 @@ class Strings {
     );
   }
 
+  /// `Sent`
+  String get sharedSent {
+    return Intl.message(
+      'Sent',
+      name: 'sharedSent',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Receive`
   String get sharedReceive {
     return Intl.message(
       'Receive',
       name: 'sharedReceive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Received`
+  String get sharedReceived {
+    return Intl.message(
+      'Received',
+      name: 'sharedReceived',
       desc: '',
       args: [],
     );
