@@ -24,10 +24,12 @@ class SettingAboutScreen extends StatelessWidget {
                   context.router.pop();
                 },
               ),
-              Assets.images.imgLogoRoiAbout.image(
-                width: 168,
-                height: 168,
+              const SizedBox(height: 88),
+              Assets.images.imgEzcAbout.image(
+                width: 151,
+                height: 41,
               ),
+              const SizedBox(height: 32),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(

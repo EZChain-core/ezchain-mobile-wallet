@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
@@ -81,6 +82,14 @@ abstract class _CrossStore with Store {
   @action
   setDestinationChain(CrossChainType type) async {
     destinationChain = type;
+    updateFee();
+  }
+
+  @action
+  switchChain() {
+    final chain = sourceChain;
+    sourceChain = destinationChain;
+    destinationChain = chain;
     updateFee();
   }
 

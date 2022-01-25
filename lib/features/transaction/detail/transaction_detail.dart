@@ -2,8 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/transaction/detail/transaction_detail_view_data.dart';
+import 'package:wallet/common/extensions.dart';
 import 'package:wallet/features/transaction/detail/transaction_detail_store.dart';
+import 'package:wallet/features/transaction/detail/transaction_detail_view_data.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
@@ -88,17 +89,17 @@ class _TransactionDetailInfoWidget extends StatelessWidget {
                       color: provider.themeMode.secondary),
                 ),
                 const SizedBox(height: 22),
-                if (transaction.accepted != null)
+                if (transaction.accepted.isNotNullOrEmpty())
                   _TransactionDetailHorizontalText(
                       leftText: Strings.current.sharedAccepted,
                       rightText: transaction.accepted!),
                 const SizedBox(height: 12),
-                if (transaction.value != null)
+                if (transaction.value.isNotNullOrEmpty())
                   _TransactionDetailHorizontalText(
                       leftText: Strings.current.sharedValue,
                       rightText: transaction.value!),
                 const SizedBox(height: 12),
-                if (transaction.burned != null)
+                if (transaction.burned.isNotNullOrEmpty())
                   _TransactionDetailHorizontalText(
                       leftText: Strings.current.sharedBurned,
                       rightText: transaction.burned!),
@@ -108,7 +109,7 @@ class _TransactionDetailInfoWidget extends StatelessWidget {
                       leftText: Strings.current.sharedBlockchain,
                       rightText: transaction.blockchain!.name),
                 const SizedBox(height: 12),
-                if (transaction.memo != null)
+                if (transaction.memo.isNotNullOrEmpty())
                   _TransactionDetailHorizontalText(
                       leftText: Strings.current.sharedMemo,
                       rightText: transaction.memo!),

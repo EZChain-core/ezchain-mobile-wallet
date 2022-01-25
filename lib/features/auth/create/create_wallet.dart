@@ -41,52 +41,60 @@ class CreateWalletScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: provider.themeMode.bg,
-                  borderRadius: const BorderRadius.all(Radius.circular(16)),
-                ),
-                padding: const EdgeInsets.all(16),
-                margin: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 32,
-                  bottom: 64,
-                ),
-                child: FutureBuilder<String>(
-                  future: _createWalletStore.generateMnemonicPhrase(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      final mnemonic = snapshot.data!;
-                      return Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: mnemonic
-                            .split(' ')
-                            .mapIndexed((index, text) =>
-                                EZCMnemonicText(text: '${index + 1}. $text'))
-                            .toList(),
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
+              Expanded(
+                flex: 4,
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: provider.themeMode.bg,
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                  ),
+                  margin: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    top: 32,
+                    bottom: 64,
+                  ),
+                  child: FutureBuilder<String>(
+                    future: _createWalletStore.generateMnemonicPhrase(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final mnemonic = snapshot.data!;
+                        return SingleChildScrollView(
+                          padding: const EdgeInsets.all(16),
+                          child: Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: mnemonic
+                                .split(' ')
+                                .mapIndexed((index, text) => EZCMnemonicText(
+                                    text: '${index + 1}. $text'))
+                                .toList(),
+                          ),
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  ),
                 ),
               ),
-              Center(
-                child: SizedBox(
-                  width: 211,
-                  child: EZCMediumPrimaryButton(
-                    text: Strings.current.createWalletKeptKey,
-                    onPressed: () {
-                      context.router.push(
-                        CreateWalletConfirmRoute(
-                          mnemonic: _createWalletStore.mnemonicPhrase,
-                          randomIndex: _createWalletStore.randomIndex,
-                        ),
-                      );
-                    },
+              Expanded(
+                flex: 1,
+                child: Center(
+                  child: SizedBox(
+                    width: 211,
+                    child: EZCMediumPrimaryButton(
+                      text: Strings.current.createWalletKeptKey,
+                      onPressed: () {
+                        context.router.push(
+                          CreateWalletConfirmRoute(
+                            mnemonic: _createWalletStore.mnemonicPhrase,
+                            randomIndex: _createWalletStore.randomIndex,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               )
