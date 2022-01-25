@@ -9,9 +9,16 @@ extension EZCTypeExtension on EZCType {
     return ["X-Chain", "P-Chain", "C-chain"][index];
   }
 
+  String get chainAlias {
+    return ["X", "P", "C"][index];
+  }
+
   PageRouteInfo? get sendRoute {
     return tryCast<PageRouteInfo>(
         [WalletSendAvmRoute(), null, WalletSendEvmRoute()][index]);
   }
+}
 
+EZCType chainAliasToEZCType(String chain) {
+  return EZCType.values.firstWhere((element) => element.chainAlias == chain);
 }
