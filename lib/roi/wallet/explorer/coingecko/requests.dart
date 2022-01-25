@@ -1,11 +1,14 @@
 import 'package:decimal/decimal.dart';
 import 'package:dio/dio.dart';
 import 'package:wallet/roi/sdk/utils/dio_logger.dart';
+import 'package:wallet/roi/wallet/explorer/coingecko/rest_client.dart';
 
-const AVAX_COIN_ID = "avalanche-2";
-final coingeckoApi =
-    Dio(BaseOptions(baseUrl: "https://api.coingecko.com/api/v3"))
+const avaxCoinId = "avalanche-2";
+final _coinGeckoApi =
+    Dio(BaseOptions(baseUrl: "https://api.coingecko.com/api/v3/"))
       ..interceptors.add(prettyDioLogger);
+
+final _coinGeckoRestClient = CoingeckoRestClient(_coinGeckoApi);
 
 /// Fetches the current AVAX price using Coin Gecko.
 /// @remarks
@@ -13,26 +16,28 @@ final coingeckoApi =
 ///
 /// @return Current USD price of 1 AVAX
 Future<num> getAvaxPrice({String currentCurrency = "USD"}) async {
-  final response = await coingeckoApi.get<Map<String, dynamic>>(
-      "/simple/price?ids=$AVAX_COIN_ID&vs_currencies=$currentCurrency");
-  final avalanche = response.data?[AVAX_COIN_ID];
-  final usd = avalanche[currentCurrency.toLowerCase()] as num;
-  return usd;
+  final response = await _coinGeckoRestClient.getAvaxPrice(
+    avaxCoinId,
+    currentCurrency,
+  );
+  return response.price[currentCurrency.toLowerCase()] ?? 0;
 }
 
 /// Gets daily price history using Coin Gecko.
 /// @param currency
-Future<List<dynamic>> getAvaxPriceHistory(
-    {String currentCurrency = "USD"}) async {
-  final response = await coingeckoApi.get<Map<String, dynamic>>(
-    "/coins/$AVAX_COIN_ID/market_chart",
-    queryParameters: {
-      "vs_currency": currentCurrency.toLowerCase(),
-      "days": "max",
-      "interval": "daily"
-    },
+Future<List<dynamic>> getAvaxPriceHistory({
+  String currentCurrency = "USD",
+}) async {
+  final queries = {
+    "vs_currency": currentCurrency.toLowerCase(),
+    "days": "max",
+    "interval": "daily"
+  };
+  final response = await _coinGeckoRestClient.getAvaxPriceHistory(
+    avaxCoinId,
+    queries,
   );
-  return response.data?["prices"];
+  return response.prices;
 }
 
 Future<Decimal> getAvaxPriceDecimal() async {

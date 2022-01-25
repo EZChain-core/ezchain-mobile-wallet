@@ -74,7 +74,9 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           getHistoryC();
+    //           // getCTransaction(
+    //           //     "0xcd22f4f1a30ef9e51033e8a98389f51172b95c149d30672aa4964f6cf61d7159");
+    //           getCTransactions();
     //         },
     //       ),
     //     ),
@@ -406,125 +408,31 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  getHistoryX() async {
+  getXTransactions() async {
     try {
       final transactions = await wallet.getXTransactions(limit: 20);
       final histories = await Future.wait(
           transactions.map((tx) => wallet.parseOrteliusTx(tx)));
-      _printHistoryItems("X", histories);
+      _parseXPTransactions("X", histories);
     } catch (e) {
       logger.e(e);
     }
   }
 
-  getHistoryP() async {
+  getPTransactions() async {
     try {
       // chỉ P Chain mới cần get validators.
       final validators = await wallet.getPlatformValidators();
       final transactions = await wallet.getPTransactions(limit: 20);
       final histories = await Future.wait(
           transactions.map((tx) => wallet.parseOrteliusTx(tx)));
-      _printHistoryItems("P", histories, validators: validators);
+      _parseXPTransactions("P", histories, validators: validators);
     } catch (e) {
       logger.e(e);
     }
   }
 
-  getHistoryC() async {
-    try {
-      final transactions = await wallet.getEvmTransactions();
-      logger.i("transactions = ${transactions.length}");
-    } catch (e) {
-      logger.e(e);
-    }
-  }
-
-  _printHistoryItems(
-    String chainAlias,
-    List<HistoryItem> items, {
-    List<Validator>? validators, // for only platform chain
-  }) {
-    final result = items.where((tx) {
-      if (tx is HistoryBaseTx) {
-        return tx.tokens.isNotEmpty;
-      } else if (tx is HistoryStaking) {
-        return tx.type == HistoryItemTypeName.addValidator ||
-            tx.type == HistoryItemTypeName.addDelegator;
-      } else {
-        return tx.type != HistoryItemTypeName.notSupported;
-      }
-    }).toList();
-    for (var item in result) {
-      if (item is HistoryBaseTx) {
-        final token = item.tokens.firstWhereOrNull(
-            (token) => token.asset.assetId == getAvaxAssetId());
-        if (token == null || token.amount == BigInt.zero) {
-          continue;
-        }
-        var message = "Date = ${item.timestamp}\n";
-        if (token.amount < BigInt.zero) {
-          final amount = bnToLocaleString(
-            token.amount - item.fee,
-            decimals: int.tryParse(token.asset.denomination) ?? 0,
-          );
-          message += "Send = $amount ${token.asset.symbol}, to = ";
-        } else {
-          message +=
-              "Receive = ${token.amountDisplayValue} ${token.asset.symbol}, from = ";
-        }
-        message += "$chainAlias-${token.addresses.firstOrNull ?? ""}";
-        logger.i(message);
-      } else if (item is HistoryImportExport) {
-        if (item.amount > BigInt.zero) {
-          var message = "Date = ${item.timestamp}\n";
-          if (item.type == HistoryItemTypeName.import) {
-            message +=
-                "Import(${item.destination}) = ${item.amountDisplayValue} EZC";
-          } else if (item.type == HistoryItemTypeName.export) {
-            final amount =
-                bnToAvaxX((item.amount + item.fee) * BigInt.from(-1));
-            message += "Export(${item.source}) = $amount EZC";
-          }
-          logger.i(message);
-        }
-      } else if (item is HistoryStaking && validators != null) {
-        var message = "Date = ${item.timestamp}\n";
-
-        final stakeEndDate = DateTime.fromMillisecondsSinceEpoch(item.stakeEnd);
-        final dateFormatter = DateFormat("MM/dd/yyyy, HH:mm:ss a");
-        message += "Stake End Date = ${dateFormatter.format(stakeEndDate)}\n";
-        String? potentialReward;
-        final validator = validators.firstWhereOrNull((validator) {
-          final nodeId = validator.nodeId.split("-")[1];
-          return nodeId == item.nodeId;
-        });
-        if (validator != null) {
-          if (item.type == HistoryItemTypeName.addValidator) {
-            potentialReward = validator.potentialReward;
-            message += "Add Validator = ${item.amountDisplayValue}\n";
-          } else {
-            final delegators = validator.delegators;
-            if (delegators != null) {
-              final delegator = delegators
-                  .firstWhere((delegator) => delegator.txId == item.id);
-              potentialReward = delegator.potentialReward;
-              message += "Add Delegator = ${item.amountDisplayValue}\n";
-            }
-          }
-          if (potentialReward != null) {
-            final reward =
-                bnToAvaxP(BigInt.tryParse(potentialReward) ?? BigInt.zero);
-            message += "Reward Pending = $reward";
-          } else {
-            message += "Reward Pending = ?";
-          }
-        }
-        logger.i(message);
-      }
-    }
-  }
-
-  getHistoryTx(String txId) async {
+  getXPTransaction(String txId) async {
     try {
       final transaction = await wallet.getTransaction(txId);
 
@@ -643,6 +551,135 @@ class _SplashScreenState extends State<SplashScreen> {
       logger.i(message);
     } catch (e) {
       logger.e(e);
+    }
+  }
+
+  getCTransactions() async {
+    try {
+      final transactions = await wallet.getCChainTransactions();
+      for (var tx in transactions) {
+        final value = bnToAvaxC(BigInt.tryParse(tx.value) ?? BigInt.zero);
+        final gasPrice = BigInt.tryParse(tx.gasPrice) ?? BigInt.zero;
+        final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
+        final fee = bnToAvaxC(gasPrice * gasUsed);
+
+        final message =
+            "txID = ${tx.hash}\nFrom -> To = ${tx.from} -> ${tx.to}\nBlock = #${tx.blockNumber}, amount = $value EZC, fee = $fee EZC";
+        logger.i(message);
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  getCTransaction(String txHash) async {
+    try {
+      final tx = await wallet.getCChainTransaction(txHash);
+      final value = bnToAvaxC(BigInt.tryParse(tx.value) ?? BigInt.zero);
+      final gasPrice = BigInt.tryParse(tx.gasPrice) ?? BigInt.zero;
+      final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
+      final fee = bnToAvaxC(gasPrice * gasUsed);
+      final message = "Transaction Hash = ${tx.hash}\n"
+          "Result = ${tx.success ? "Success" : "Fail"}\n"
+          "Status = , Confirmed by ${tx.confirmations}\n"
+          "Block = ${tx.blockNumber}\n"
+          "Timestamp = ${tx.timestamp}\n"
+          "From = ${tx.from}\n"
+          "To = ${tx.to}\n"
+          "Value = $value EZC\n"
+          "Transaction Fee = $fee EZC\n"
+          "Gas Price = ${bnToAvaxX(gasPrice)} wEZC\n"
+          "Gas Limit = ${tx.gasLimit}\n"
+          "Gas Used by Transaction = ${tx.gasUsed} | ${(int.parse(tx.gasUsed) ~/ int.parse(tx.gasLimit)) * 100}%\n"
+          "Nonce = ";
+      logger.i(message);
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  _parseXPTransactions(
+    String chainAlias,
+    List<HistoryItem> items, {
+    List<Validator>? validators, // for only platform chain
+  }) {
+    final result = items.where((tx) {
+      if (tx is HistoryBaseTx) {
+        return tx.tokens.isNotEmpty;
+      } else if (tx is HistoryStaking) {
+        return tx.type == HistoryItemTypeName.addValidator ||
+            tx.type == HistoryItemTypeName.addDelegator;
+      } else {
+        return tx.type != HistoryItemTypeName.notSupported;
+      }
+    }).toList();
+    for (var item in result) {
+      if (item is HistoryBaseTx) {
+        final token = item.tokens.firstWhereOrNull(
+            (token) => token.asset.assetId == getAvaxAssetId());
+        if (token == null || token.amount == BigInt.zero) {
+          continue;
+        }
+        var message = "Date = ${item.timestamp}\n";
+        if (token.amount < BigInt.zero) {
+          final amount = bnToLocaleString(
+            token.amount - item.fee,
+            decimals: int.tryParse(token.asset.denomination) ?? 0,
+          );
+          message += "Send = $amount ${token.asset.symbol}, to = ";
+        } else {
+          message +=
+              "Receive = ${token.amountDisplayValue} ${token.asset.symbol}, from = ";
+        }
+        message += "$chainAlias-${token.addresses.firstOrNull ?? ""}";
+        logger.i(message);
+      } else if (item is HistoryImportExport) {
+        if (item.amount > BigInt.zero) {
+          var message = "Date = ${item.timestamp}\n";
+          if (item.type == HistoryItemTypeName.import) {
+            message +=
+                "Import(${item.destination}) = ${item.amountDisplayValue} EZC";
+          } else if (item.type == HistoryItemTypeName.export) {
+            final amount =
+                bnToAvaxX((item.amount + item.fee) * BigInt.from(-1));
+            message += "Export(${item.source}) = $amount EZC";
+          }
+          logger.i(message);
+        }
+      } else if (item is HistoryStaking && validators != null) {
+        var message = "Date = ${item.timestamp}\n";
+
+        final stakeEndDate = DateTime.fromMillisecondsSinceEpoch(item.stakeEnd);
+        final dateFormatter = DateFormat("MM/dd/yyyy, HH:mm:ss a");
+        message += "Stake End Date = ${dateFormatter.format(stakeEndDate)}\n";
+        String? potentialReward;
+        final validator = validators.firstWhereOrNull((validator) {
+          final nodeId = validator.nodeId.split("-")[1];
+          return nodeId == item.nodeId;
+        });
+        if (validator != null) {
+          if (item.type == HistoryItemTypeName.addValidator) {
+            potentialReward = validator.potentialReward;
+            message += "Add Validator = ${item.amountDisplayValue}\n";
+          } else {
+            final delegators = validator.delegators;
+            if (delegators != null) {
+              final delegator = delegators
+                  .firstWhere((delegator) => delegator.txId == item.id);
+              potentialReward = delegator.potentialReward;
+              message += "Add Delegator = ${item.amountDisplayValue}\n";
+            }
+          }
+          if (potentialReward != null) {
+            final reward =
+                bnToAvaxP(BigInt.tryParse(potentialReward) ?? BigInt.zero);
+            message += "Reward Pending = $reward";
+          } else {
+            message += "Reward Pending = ?";
+          }
+        }
+        logger.i(message);
+      }
     }
   }
 }
