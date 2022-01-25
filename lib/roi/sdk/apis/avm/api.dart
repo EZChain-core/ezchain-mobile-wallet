@@ -6,7 +6,7 @@ import 'package:wallet/roi/sdk/apis/avm/model/get_asset_description.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/get_tx_status.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/get_utxos.dart';
 import 'package:wallet/roi/sdk/apis/avm/model/issue_tx.dart';
-import 'package:wallet/roi/sdk/apis/avm/rest/avm_rest_client.dart';
+import 'package:wallet/roi/sdk/apis/avm/rest_client.dart';
 import 'package:wallet/roi/sdk/apis/avm/tx.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';

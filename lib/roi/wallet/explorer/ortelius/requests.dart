@@ -1,4 +1,4 @@
-import 'package:wallet/roi/wallet/explorer/ortelius/ortelius_rest_client.dart';
+import 'package:wallet/roi/wallet/explorer/ortelius/rest_client.dart';
 import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/roi/wallet/network/network.dart' as ezc_network;
 
@@ -9,6 +9,7 @@ Future<List<OrteliusEvmTx>> getAddressHistoryEVM(String address) async {
   if (explorerApi == null) throw Exception("Explorer API not found.");
   final explorerClient = OrteliusRestClient(explorerApi);
   final response = await explorerClient.getEvmTransactions(address);
+  // TODO handle sort
   return response.transactions ?? [];
 }
 
@@ -19,6 +20,7 @@ Future<OrteliusEvmTx> getEvmTx(String txHash) async {
   if (explorerApi == null) throw Exception("Explorer API not found.");
   final explorerClient = OrteliusRestClient(explorerApi);
   final response = await explorerClient.getEvmTransaction(txHash);
+  // TODO handle exception
   return response.transactions![0];
 }
 

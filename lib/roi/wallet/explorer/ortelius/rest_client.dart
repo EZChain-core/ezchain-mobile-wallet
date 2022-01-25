@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 
-part 'ortelius_rest_client.g.dart';
+part 'rest_client.g.dart';
 
 @RestApi()
 abstract class OrteliusRestClient {

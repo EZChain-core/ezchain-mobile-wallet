@@ -8,7 +8,7 @@ import 'package:wallet/roi/sdk/apis/pvm/model/get_staking_asset_id.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_tx_status.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_utxos.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/issue_tx.dart';
-import 'package:wallet/roi/sdk/apis/pvm/rest/pvm_rest_client.dart';
+import 'package:wallet/roi/sdk/apis/pvm/rest_client.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';

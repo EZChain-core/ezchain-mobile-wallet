@@ -18,6 +18,9 @@ import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/asset/assets.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
+import 'package:wallet/roi/wallet/explorer/cchain/requests.dart'
+    as cchain_explorer_request;
+import 'package:wallet/roi/wallet/explorer/cchain/types.dart';
 import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/roi/wallet/helpers/tx_helper.dart';
 import 'package:wallet/roi/wallet/helpers/utxo_helper.dart';
@@ -696,6 +699,19 @@ abstract class WalletProvider {
   /// @param txId
   Future<OrteliusEvmTx> getEvmTransaction(String txId) async {
     return await getEvmTx(txId);
+  }
+
+  Future<List<CChainExplorerTx>> getCChainTransactions({
+    int page = 0,
+    int offset = 0,
+  }) async {
+    final address = getAddressC();
+    return await cchain_explorer_request.getCChainTransactions(address,
+        page: page, offset: offset);
+  }
+
+  Future<CChainExplorerTxInfo> getCChainTransaction(String txHash) async {
+    return await cchain_explorer_request.getCChainTransaction(txHash);
   }
 
   /// Fetches information about the given txId and parses it from the wallet's perspective

@@ -9,7 +9,7 @@ import 'package:wallet/roi/sdk/apis/pvm/model/issue_tx.dart';
 import 'package:wallet/roi/sdk/common/rpc/rpc_request.dart';
 import 'package:wallet/roi/sdk/common/rpc/rpc_response.dart';
 
-part 'pvm_rest_client.g.dart';
+part 'rest_client.g.dart';
 
 /// https://docs.avax.network/build/avalanchego-apis/platform-chain-p-chain-api#platformgetutxos
 @RestApi()
