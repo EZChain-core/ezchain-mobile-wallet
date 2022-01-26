@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
 import 'package:wallet/roi/sdk/apis/avm/credentials.dart';
 import 'package:wallet/roi/sdk/common/credentials.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 
 void main() {
   test("credential", () {

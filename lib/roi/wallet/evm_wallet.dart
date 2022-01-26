@@ -4,7 +4,7 @@ import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 
 import 'package:wallet/roi/sdk/crypto/secp256k1.dart';
 import 'package:wallet/roi/sdk/utils/bigint.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 import 'package:web3dart/web3dart.dart';

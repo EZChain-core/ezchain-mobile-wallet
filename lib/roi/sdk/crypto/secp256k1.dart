@@ -15,7 +15,7 @@ import "package:pointycastle/digests/sha256.dart";
 import 'package:wallet/roi/sdk/crypto/ecdsa_signer.dart';
 import 'package:wallet/roi/sdk/crypto/key_pair.dart';
 import 'package:wallet/roi/sdk/utils/bigint.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 
 /// https://github.com/bcgit/pc-dart
 /// https://github.com/shareven/wallet_hd/blob/master/lib/src/ecurve.dart
@@ -55,9 +55,10 @@ Uint8List sign(Uint8List messageHash, Uint8List privateKeyBytes) {
   }
 
   Uint8List buffer = Uint8List(ROIECSignature.signatureSize);
-  buffer.setRange(0, ROIECSignature.rEnd, encodeBigInt(sig.r, length: ROIECSignature.rEnd));
   buffer.setRange(
-      ROIECSignature.rEnd, ROIECSignature.sEnd, encodeBigInt(sig.s, length: ROIECSignature.sEnd - ROIECSignature.rEnd));
+      0, ROIECSignature.rEnd, encodeBigInt(sig.r, length: ROIECSignature.rEnd));
+  buffer.setRange(ROIECSignature.rEnd, ROIECSignature.sEnd,
+      encodeBigInt(sig.s, length: ROIECSignature.sEnd - ROIECSignature.rEnd));
 
   buffer.setRange(
       ROIECSignature.sEnd, ROIECSignature.signatureSize, [sig.recoveryId]);

@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:wallet/roi/sdk/apis/pvm/constants.dart';
 import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_min_stake.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_pending_validators.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_staking_asset_id.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_tx_status.dart';
@@ -13,11 +15,10 @@ import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/roi_api.dart';
 import 'package:wallet/roi/sdk/roi.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart' as bindtools;
+import 'package:wallet/roi/sdk/utils/bintools.dart' as bintools;
 
 abstract class PvmApi implements ROIChainApi {
   BigInt getTxFee();
@@ -48,6 +49,22 @@ abstract class PvmApi implements ROIChainApi {
     int threshold = 1,
   });
 
+  Future<PvmUnsignedTx> buildAddDelegatorTx(
+    PvmUTXOSet utxoSet,
+    List<String> toAddresses,
+    List<String> fromAddresses,
+    List<String> changeAddresses,
+    String nodeId,
+    BigInt startTime,
+    BigInt endTime,
+    BigInt stakeAmount,
+    List<String> rewardAddresses, {
+    BigInt? rewardLockTime,
+    int rewardThreshold = 1,
+    Uint8List? memo,
+    BigInt? asOf,
+  });
+
   Future<String> issueTx(PvmTx tx);
 
   Future<GetUTXOsResponse> getUTXOs(
@@ -65,8 +82,17 @@ abstract class PvmApi implements ROIChainApi {
 
   Future<GetTxStatusResponse> getTxStatus(String txId);
 
-  Future<List<Validator>> getCurrentValidators(
-      {String? subnetId, List<String>? nodeIds});
+  Future<List<Validator>> getCurrentValidators({
+    String? subnetId,
+    List<String>? nodeIds,
+  });
+
+  Future<GetPendingValidatorsResponse> getPendingValidators({
+    String? subnetId,
+    List<String>? nodeIds,
+  });
+
+  Future<GetMinStakeResponse> getMinStake();
 
   factory PvmApi.create(
       {required ROINetwork roiNetwork, String endPoint = "/ext/bc/P"}) {
@@ -147,7 +173,7 @@ class _PvmApiImpl implements PvmApi {
   @override
   Uint8List parseAddress(String address) {
     final alias = getBlockchainAlias();
-    return bindtools.parseAddress(address, blockChainId,
+    return bintools.parseAddress(address, blockChainId,
         alias: alias, addressLength: ADDRESSLENGTH);
   }
 
@@ -162,7 +188,7 @@ class _PvmApiImpl implements PvmApi {
     if (avaxAssetId == null || refresh) {
       try {
         final response = await getStakingAssetId();
-        avaxAssetId = cb58Decode(response.assetId);
+        avaxAssetId = bintools.cb58Decode(response.assetId);
       } catch (e) {}
     }
     return avaxAssetId;
@@ -238,15 +264,13 @@ class _PvmApiImpl implements PvmApi {
     asOf ??= unixNow();
     lockTime ??= BigInt.zero;
 
-    final to = toAddresses.map((a) => bindtools.stringToAddress(a)).toList();
-    final from =
-        fromAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    final to = toAddresses.map((a) => bintools.stringToAddress(a)).toList();
+    final from = fromAddresses.map((a) => bintools.stringToAddress(a)).toList();
     final List<Uint8List>? change;
     if (changeAddresses == null) {
       change = null;
     } else {
-      change =
-          changeAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+      change = changeAddresses.map((a) => bintools.stringToAddress(a)).toList();
     }
 
     final atomicUTXOs =
@@ -258,12 +282,12 @@ class _PvmApiImpl implements PvmApi {
 
     final buildUnsignedTx = utxoSet.buildImportTx(
       roiNetwork.networkId,
-      bindtools.cb58Decode(blockChainId),
+      bintools.cb58Decode(blockChainId),
       atomics,
       to,
       from,
       changeAddresses: change,
-      sourceChain: bindtools.cb58Decode(sourceChain),
+      sourceChain: bintools.cb58Decode(sourceChain),
       fee: getTxFee(),
       feeAssetId: avaxAssetId,
       memo: memo,
@@ -301,29 +325,27 @@ class _PvmApiImpl implements PvmApi {
           "Error - PVMAPI.buildExportTx: To addresses must have the same chainID prefix.");
     }
 
-    final destinationChain = bindtools.cb58Decode(destinationChainId);
+    final destinationChain = bintools.cb58Decode(destinationChainId);
 
     if (destinationChain.length != 32) {
       throw Exception(
           "Error - PVMAPI.buildExportTx: Destination ChainID must be 32 bytes in length.");
     }
 
-    final to = toAddresses.map((a) => bindtools.stringToAddress(a)).toList();
-    final from =
-        fromAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    final to = toAddresses.map((a) => bintools.stringToAddress(a)).toList();
+    final from = fromAddresses.map((a) => bintools.stringToAddress(a)).toList();
     final List<Uint8List>? change;
     if (changeAddresses == null) {
       change = null;
     } else {
-      change =
-          changeAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+      change = changeAddresses.map((a) => bintools.stringToAddress(a)).toList();
     }
 
     final avaxAssetId = await getAVAXAssetId();
 
     final builtUnsignedTx = utxoSet.buildExportTx(
       roiNetwork.networkId,
-      bindtools.cb58Decode(blockChainId),
+      bintools.cb58Decode(blockChainId),
       amount,
       avaxAssetId!,
       destinationChain,
@@ -345,8 +367,72 @@ class _PvmApiImpl implements PvmApi {
   }
 
   @override
-  Future<List<Validator>> getCurrentValidators(
-      {String? subnetId, List<String>? nodeIds}) async {
+  Future<PvmUnsignedTx> buildAddDelegatorTx(
+    PvmUTXOSet utxoSet,
+    List<String> toAddresses,
+    List<String> fromAddresses,
+    List<String> changeAddresses,
+    String nodeId,
+    BigInt startTime,
+    BigInt endTime,
+    BigInt stakeAmount,
+    List<String> rewardAddresses, {
+    BigInt? rewardLockTime,
+    int rewardThreshold = 1,
+    Uint8List? memo,
+    BigInt? asOf,
+  }) async {
+    final to = toAddresses.map((a) => bintools.stringToAddress(a)).toList();
+    final from = fromAddresses.map((a) => bintools.stringToAddress(a)).toList();
+    final change =
+        changeAddresses.map((a) => bintools.stringToAddress(a)).toList();
+    final rewards =
+        rewardAddresses.map((a) => bintools.stringToAddress(a)).toList();
+
+    final minStake = await getMinStake();
+    final minDelegatorStakeBN = minStake.minDelegatorStakeBN;
+    if (stakeAmount < minDelegatorStakeBN) {
+      throw Exception(
+          "PlatformVMAPI.buildAddDelegatorTx -- stake amount must be at least $minDelegatorStakeBN");
+    }
+    final avaxAssetId = await getAVAXAssetId();
+    final now = unixNow();
+    if (startTime < now || endTime <= startTime) {
+      throw Exception(
+          "PlatformVMAPI.buildAddDelegatorTx -- startTime must be in the future and endTime must come after startTime");
+    }
+
+    final builtUnsignedTx = utxoSet.buildAddDelegatorTx(
+      roiNetwork.networkId,
+      bintools.cb58Decode(blockChainId),
+      avaxAssetId!,
+      to,
+      from,
+      change,
+      nodeIdStringToBuffer(nodeId),
+      startTime,
+      endTime,
+      stakeAmount,
+      rewardLockTime ?? BigInt.zero,
+      rewardThreshold,
+      rewards,
+      fee: BigInt.zero,
+      feeAssetId: avaxAssetId,
+      memo: memo,
+      asOf: asOf,
+    );
+
+    if (!await _checkGooseEgg(builtUnsignedTx)) {
+      throw Exception("Error - PVMAPI.buildExportTx:Failed Goose Egg Check");
+    }
+    return builtUnsignedTx;
+  }
+
+  @override
+  Future<List<Validator>> getCurrentValidators({
+    String? subnetId,
+    List<String>? nodeIds,
+  }) async {
     final request =
         GetCurrentValidatorsRequest(subnetId: subnetId, nodeIds: nodeIds)
             .toRpc();
@@ -354,6 +440,29 @@ class _PvmApiImpl implements PvmApi {
     final result = response.result;
     if (result == null) throw Exception(response.error?.message);
     return result.validators;
+  }
+
+  @override
+  Future<GetPendingValidatorsResponse> getPendingValidators({
+    String? subnetId,
+    List<String>? nodeIds,
+  }) async {
+    final request =
+        GetPendingValidatorsRequest(subnetId: subnetId, nodeIds: nodeIds)
+            .toRpc();
+    final response = await pvmRestClient.getPendingValidators(request);
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result;
+  }
+
+  @override
+  Future<GetMinStakeResponse> getMinStake() async {
+    final request = GetMinStakeRequest().toRpc();
+    final response = await pvmRestClient.getMinStake(request);
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result;
   }
 
   BigInt _getDefaultTxFee() {

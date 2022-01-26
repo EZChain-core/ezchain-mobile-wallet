@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:hdkey/hdkey.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 

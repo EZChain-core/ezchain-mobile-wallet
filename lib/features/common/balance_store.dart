@@ -168,7 +168,7 @@ abstract class _BalanceStore with Store {
     final totalAvaxBalanceDecimal = avaxBalance.totalDecimal;
 
     final staked = await _wallet.getStake();
-    final stakedDecimal = bnToDecimalAvaxP(staked.stakedBI);
+    final stakedDecimal = bnToDecimalAvaxP(staked.stakedBN);
 
     totalRoi = totalAvaxBalanceDecimal + stakedDecimal;
   }

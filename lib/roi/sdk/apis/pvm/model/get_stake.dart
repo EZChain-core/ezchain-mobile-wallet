@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wallet/roi/sdk/apis/pvm/outputs.dart';
 import 'package:wallet/roi/sdk/common/rpc/rpc_request_wrapper.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 
 part 'get_stake.g.dart';
 
@@ -28,7 +28,7 @@ class GetStakeResponse {
   final String staked;
   final List<String> stakedOutputs;
 
-  BigInt get stakedBI => BigInt.tryParse(staked) ?? BigInt.zero;
+  BigInt get stakedBN => BigInt.tryParse(staked) ?? BigInt.zero;
 
   GetStakeResponse({required this.staked, required this.stakedOutputs});
 

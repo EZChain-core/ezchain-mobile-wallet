@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
 import 'package:collection/collection.dart';
 
@@ -12,7 +13,9 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bigint.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
+import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/wallet/explorer/cchain/types.dart';
 import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
@@ -44,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    setRpcNetwork(testNetConfig);
+    setRpcNetwork(testnetConfig);
     // wallet = SingletonWallet(
     //     privateKey:
     //         "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
@@ -54,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // updateX();
     // updateP();
     // updateC();
-    // _startTimer();
+    _startTimer();
   }
 
   @override
@@ -75,12 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           getCTransaction(
-    //             "0xcd22f4f1a30ef9e51033e8a98389f51172b95c149d30672aa4964f6cf61d7159",
-    //             "22",
-    //             CChainExplorerTxReceiptStatus.ok,
-    //           );
-    //           // getCTransactions();
+    //           delegate();
     //         },
     //       ),
     //     ),
@@ -181,7 +179,7 @@ class _SplashScreenState extends State<SplashScreen> {
   getStakeP() async {
     try {
       final response = await wallet.getStake();
-      logger.i("getStakeP = ${bnToAvaxP(response.stakedBI)}");
+      logger.i("getStakeP = ${bnToAvaxP(response.stakedBN)}");
     } catch (e) {
       logger.e(e);
     }
@@ -687,6 +685,102 @@ class _SplashScreenState extends State<SplashScreen> {
         }
         logger.i(message);
       }
+    }
+  }
+
+  getNodeIds() async {
+    try {
+      // tạo ra 1 shared store để share validators với case getPTransactions
+      final validators = await wallet.getPlatformValidators();
+      validators.sort((a, b) {
+        final amtA = a.stakeAmountBN;
+        final amtB = b.stakeAmountBN;
+
+        if (amtA > amtB) {
+          return -1;
+        } else if (amtA < amtB) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+      final pendingValidators = await wallet.getPlatformPendingValidators();
+      final pendingDelegators = pendingValidators.delegators;
+      final minStake = await wallet.getMinStake();
+      final minStakeDelegation = minStake.minDelegatorStakeBN;
+      for (var validator in validators) {
+        final now = DateTime.now().millisecondsSinceEpoch;
+        final endTime = (int.tryParse(validator.endTime) ?? 0) * 1000;
+        final diff = endTime - now;
+
+        const MINUTE_MS = 60000;
+        const HOUR_MS = MINUTE_MS * 60;
+        const DAY_MS = HOUR_MS * 24;
+
+        /// If End time is less than 2 weeks + 1 hour, remove from list they are no use
+        if (diff <= ((14 * DAY_MS) + (10 * MINUTE_MS))) {
+          continue;
+        }
+
+        final validatorStakeAmountBN = validator.stakeAmountBN;
+        final stakeAmountDecimal = bnToDecimalAvaxP(validatorStakeAmountBN);
+        final stakeAmount =
+            decimalToLocaleString(stakeAmountDecimal, decimals: 0);
+        final fee = decimalToLocaleString(
+            Decimal.tryParse(validator.delegationFee) ?? Decimal.zero,
+            decimals: 2);
+
+        // max token validator là 3tr
+        final absMaxStake = ONEAVAX * BigInt.parse("3000000");
+        final relativeMaxStake = validatorStakeAmountBN * BigInt.from(4);
+
+        var remainingStakeBN =
+            min(absMaxStake - validatorStakeAmountBN, relativeMaxStake);
+
+        final delegators = validator.delegators;
+        if (delegators != null) {
+          final sumOfStakeAmountDelegators = delegators.fold<BigInt>(
+              BigInt.zero, (amt, delegator) => amt + delegator.stakeAmountBN);
+
+          remainingStakeBN -= sumOfStakeAmountDelegators;
+        }
+
+        final sumOfStakeAmountPendingDelegators = pendingDelegators
+            .where((delegator) => delegator.nodeId == validator.nodeId)
+            .fold<BigInt>(
+                BigInt.zero, (amt, delegator) => amt + delegator.stakeAmountBN);
+
+        remainingStakeBN -= sumOfStakeAmountPendingDelegators;
+
+        if (remainingStakeBN < minStakeDelegation) continue;
+
+        final remainingStakeDecimal = bnToDecimalAvaxP(remainingStakeBN);
+        final remainingStake =
+            decimalToLocaleString(remainingStakeDecimal, decimals: 0);
+
+        final message = "Node ID = ${validator.nodeId}\n"
+            "Validator Stake = $stakeAmount\n"
+            "Available = $remainingStake\n"
+            "Number of Delegators = ${validator.delegators?.length ?? 0}\n"
+            "End Time = ${validator.endTime}\n"
+            "Fee = $fee%";
+        logger.i(message);
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  delegate() async {
+    try {
+      const nodeId = "NodeID-LkiLFbmocMydnZ45jJgfoeLVTMN4nn83h";
+      final amount = numberToBNAvaxX(100);
+      final start = DateTime(2022, 3, 15, 12, 00).millisecondsSinceEpoch;
+      final end = DateTime(2023, 1, 15, 12, 00).millisecondsSinceEpoch;
+      final txId = await wallet.delegate(nodeId, amount, start, end);
+      logger.i("txId = $txId");
+    } catch (e) {
+      logger.e(e);
     }
   }
 }

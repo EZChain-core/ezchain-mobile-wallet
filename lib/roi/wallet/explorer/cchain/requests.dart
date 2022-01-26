@@ -6,12 +6,12 @@ import 'package:wallet/roi/wallet/explorer/cchain/types.dart';
 import 'package:wallet/roi/wallet/explorer/cchain/utils.dart';
 import 'package:wallet/roi/wallet/network/utils.dart';
 
-Dio _createCChainExplorerApi({bool isMainNet = true}) {
+Dio _createCChainExplorerApi({bool isMainnet = true}) {
   String baseUrl = "";
-  if (isMainNet) {
-    baseUrl = cChainExplorerMainNet;
+  if (isMainnet) {
+    baseUrl = cChainExplorerMainnet;
   } else {
-    baseUrl = cChainExplorerTestNet;
+    baseUrl = cChainExplorerTestnet;
   }
   return Dio(BaseOptions(baseUrl: baseUrl))..interceptors.add(prettyDioLogger);
 }
@@ -21,7 +21,7 @@ Future<List<CChainExplorerTx>> getCChainTransactions(
   int page = 0,
   int offset = 0,
 }) async {
-  final dio = _createCChainExplorerApi(isMainNet: isMainNetNetwork);
+  final dio = _createCChainExplorerApi(isMainnet: isMainnetNetwork);
   final cChainRestClient = CChainExplorerRestClient(dio);
   final response = await cChainRestClient.getCChainTransactions(
     address,
@@ -32,7 +32,7 @@ Future<List<CChainExplorerTx>> getCChainTransactions(
 }
 
 Future<CChainExplorerTxInfo> getCChainTransaction(String txHash) async {
-  final dio = _createCChainExplorerApi(isMainNet: isMainNetNetwork);
+  final dio = _createCChainExplorerApi(isMainnet: isMainnetNetwork);
   final cChainRestClient = CChainExplorerRestClient(dio);
   final response = await cChainRestClient.getCChainTransaction(txHash);
   return response.result;

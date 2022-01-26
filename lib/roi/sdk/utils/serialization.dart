@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 
 const SERIALIZATIONVERSION = 0;
@@ -118,7 +118,7 @@ class Serialization {
         final hrp = args.getOrNull(0);
         return stringToAddress(v, hrp: hrp);
       case SerializedType.nodeId:
-        return nodeIDStringToBuffer(v);
+        return nodeIdStringToBuffer(v);
       case SerializedType.privateKey:
         return privateKeyStringToBuffer(v);
       case SerializedType.cb58:

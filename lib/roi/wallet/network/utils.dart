@@ -1,9 +1,9 @@
 import 'package:wallet/roi/wallet/network/constants.dart';
 import 'package:wallet/roi/wallet/network/network.dart';
 
-bool get isMainNetNetwork => activeNetwork.networkId == mainNetConfig.networkId;
+bool get isMainnetNetwork => activeNetwork.networkId == mainnetConfig.networkId;
 
-bool get isFujiNetNetwork => activeNetwork.networkId == testNetConfig.networkId;
+bool get isTestnetNetwork => activeNetwork.networkId == testnetConfig.networkId;
 
 String getAvaxAssetId() {
   return activeNetwork.avaxId;

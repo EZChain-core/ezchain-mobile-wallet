@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/common/input.dart';
 import 'package:wallet/roi/sdk/common/output.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 
 class AssetAmount {
   final Uint8List assetId;

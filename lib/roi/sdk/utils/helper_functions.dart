@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:wallet/roi/sdk/apis/evm/export_tx.dart';
 import 'package:wallet/roi/sdk/apis/evm/import_tx.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
 
 String getPreferredHRP(int networkId) {
@@ -14,7 +14,7 @@ String bufferToNodeIdString(Uint8List pk) {
   return "$nodeIdPrefix${cb58Encode(pk)}";
 }
 
-Uint8List nodeIDStringToBuffer(String pk) {
+Uint8List nodeIdStringToBuffer(String pk) {
   assert(pk.startsWith(nodeIdPrefix));
   final pkSplit = pk.split("-");
   return cb58Decode(pkSplit[pkSplit.length - 1]);

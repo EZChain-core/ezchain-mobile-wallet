@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/crypto/key_pair.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 
 abstract class StandardKeyPair {
   late KeyPair keyPair;

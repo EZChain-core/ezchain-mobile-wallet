@@ -8,7 +8,7 @@ import 'package:wallet/roi/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/avm/utxos.dart';
 import 'package:wallet/roi/sdk/common/input.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 
 void main() {
   group("Inputs", () {
@@ -92,16 +92,13 @@ void main() {
 
     test("Input comparator", () {
       final inpt1 = AvmSECPTransferInput(
-        amount: (utxos[0].getOutput() as AvmAmountOutput).getAmount()
-      );
+          amount: (utxos[0].getOutput() as AvmAmountOutput).getAmount());
 
       final inpt2 = AvmSECPTransferInput(
-        amount: (utxos[1].getOutput() as AvmAmountOutput).getAmount()
-      );
+          amount: (utxos[1].getOutput() as AvmAmountOutput).getAmount());
 
       final inpt3 = AvmSECPTransferInput(
-        amount: (utxos[2].getOutput() as AvmAmountOutput).getAmount()
-      );
+          amount: (utxos[2].getOutput() as AvmAmountOutput).getAmount());
 
       final cmp = Input.comparator();
       expect(cmp(inpt1, inpt2), -1);
@@ -113,8 +110,7 @@ void main() {
 
     test("SECPTransferIn input codecIDs", () {
       final input = AvmSECPTransferInput(
-        amount: (utxos[0].getOutput() as AvmAmountOutput).getAmount()
-      );
+          amount: (utxos[0].getOutput() as AvmAmountOutput).getAmount());
 
       expect(input.getCodecId(), codecID_zero);
       expect(input.getInputId(), SECPINPUTID);
@@ -130,11 +126,10 @@ void main() {
 
     test("Invalid SECPTransferInput codecID", () {
       final input = AvmSECPTransferInput(
-        amount: (utxos[0].getOutput() as AvmAmountOutput).getAmount()
-      );
+          amount: (utxos[0].getOutput() as AvmAmountOutput).getAmount());
 
-      expect(() => input.setCodecId(2),
-          throwsA(predicate((e) => e is Exception)));
+      expect(
+          () => input.setCodecId(2), throwsA(predicate((e) => e is Exception)));
     });
   });
 }

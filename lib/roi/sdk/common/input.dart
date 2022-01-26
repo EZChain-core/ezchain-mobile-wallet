@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/common/credentials.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
@@ -32,7 +32,8 @@ abstract class Input extends Serializable {
   }
 
   @override
-  void deserialize(fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     sigIdxs = (fields["sigIdxs"] as List)
         .map((e) => SigIdx()..deserialize(e, encoding: encoding))
@@ -171,7 +172,8 @@ abstract class StandardTransferableInput extends StandardParseableInput {
   }
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     txId = Serialization.instance.decoder(fields["txId"], encoding,
         SerializedType.decimalString, SerializedType.Buffer,
@@ -233,7 +235,8 @@ abstract class StandardAmountInput extends Input {
   }
 
   @override
-  void deserialize(dynamic fields, {SerializedEncoding encoding = SerializedEncoding.hex}) {
+  void deserialize(dynamic fields,
+      {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
     amount = Serialization.instance.decoder(fields["amount"], encoding,
         SerializedType.decimalString, SerializedType.Buffer,

@@ -1,4 +1,4 @@
-const cChainExplorerMainNet =
+const cChainExplorerMainnet =
     'https://testnet-cchain-explorer.ezchain.com/api/';
-const cChainExplorerTestNet =
+const cChainExplorerTestnet =
     'https://testnet-cchain-explorer.ezchain.com/api/';
