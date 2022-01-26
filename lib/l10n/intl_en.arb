@@ -115,5 +115,7 @@
   "transactionsNoRecord": "No transaction record",
   "transactionsForm": "Form:",
   "transactionsSignature": "Signature:",
-  "transactionsTo": "To:"
+  "transactionsTo": "To:",
+  "transactionsNoInputs": "No input UTXOs found for this transaction.",
+  "transactionsNoOutputs": "No output UTXOs found for this transaction."
 }

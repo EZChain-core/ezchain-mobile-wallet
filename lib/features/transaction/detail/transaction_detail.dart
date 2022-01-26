@@ -39,8 +39,10 @@ class TransactionDetailScreen extends StatelessWidget {
                   if (snapshot.hasData) {
                     final transaction = snapshot.data;
                     return transaction != null
-                        ? _TransactionDetailInfoWidget(
-                            transaction: transaction,
+                        ? Expanded(
+                            child: _TransactionDetailInfoWidget(
+                              transaction: transaction,
+                            ),
                           )
                         : const SizedBox.shrink();
                   } else {
@@ -71,120 +73,165 @@ class _TransactionDetailInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-            margin: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
-                color: provider.themeMode.bg),
-            child: Column(
+      builder: (context, provider, child) => SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              margin: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(16)),
+                  color: provider.themeMode.bg),
+              child: Column(
+                children: [
+                  Text(
+                    transaction.id,
+                    style: EZCTitleLargeTextStyle(
+                        color: provider.themeMode.secondary),
+                  ),
+                  const SizedBox(height: 22),
+                  if (transaction.accepted.isNotNullOrEmpty)
+                    _TransactionDetailHorizontalText(
+                        leftText: Strings.current.sharedAccepted,
+                        rightText: transaction.accepted!),
+                  const SizedBox(height: 12),
+                  if (transaction.value.isNotNullOrEmpty)
+                    _TransactionDetailHorizontalText(
+                        leftText: Strings.current.sharedValue,
+                        rightText: transaction.value!),
+                  const SizedBox(height: 12),
+                  if (transaction.burned.isNotNullOrEmpty)
+                    _TransactionDetailHorizontalText(
+                        leftText: Strings.current.sharedBurned,
+                        rightText: transaction.burned!),
+                  const SizedBox(height: 12),
+                  if (transaction.blockchain != null)
+                    _TransactionDetailHorizontalText(
+                        leftText: Strings.current.sharedBlockchain,
+                        rightText: transaction.blockchain!.name),
+                  const SizedBox(height: 12),
+                  if (transaction.memo.isNotNullOrEmpty)
+                    _TransactionDetailHorizontalText(
+                        leftText: Strings.current.sharedMemo,
+                        rightText: transaction.memo!),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, bottom: 8),
+              child: Text(
+                Strings.current.sharedInput,
+                style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
+              ),
+            ),
+            transaction.inputs.isNotEmpty
+                ? Column(
+                    children: transaction.inputs
+                        .map((e) => _TransactionDetailInputWidget(input: e))
+                        .toList())
+                : Text(Strings.current.transactionsNoInputs),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, bottom: 8),
+              child: Text(
+                Strings.current.sharedOutput,
+                style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
+              ),
+            ),
+            transaction.outputs.isNotEmpty
+                ? Column(
+                    children: transaction.outputs
+                        .map((e) => _TransactionDetailOutputWidget(output: e))
+                        .toList())
+                : Text(Strings.current.transactionsNoOutputs),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TransactionDetailInputWidget extends StatelessWidget {
+  final TransactionDetailInputViewData input;
+
+  const _TransactionDetailInputWidget({Key? key, required this.input})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final from = input.from ?? '';
+    final signature = input.signature ?? '';
+
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => Container(
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            color: provider.themeMode.bg),
+        child: Stack(
+          children: [
+            Column(
               children: [
-                Text(
-                  transaction.id,
-                  style: EZCTitleLargeTextStyle(
-                      color: provider.themeMode.secondary),
-                ),
-                const SizedBox(height: 22),
-                if (transaction.accepted.isNotNullOrEmpty())
-                  _TransactionDetailHorizontalText(
-                      leftText: Strings.current.sharedAccepted,
-                      rightText: transaction.accepted!),
+                if (from.isNotEmpty)
+                  _TransactionDetailVerticalText(
+                    title: Strings.current.transactionsForm,
+                    content: from,
+                  ),
                 const SizedBox(height: 12),
-                if (transaction.value.isNotNullOrEmpty())
-                  _TransactionDetailHorizontalText(
-                      leftText: Strings.current.sharedValue,
-                      rightText: transaction.value!),
-                const SizedBox(height: 12),
-                if (transaction.burned.isNotNullOrEmpty())
-                  _TransactionDetailHorizontalText(
-                      leftText: Strings.current.sharedBurned,
-                      rightText: transaction.burned!),
-                const SizedBox(height: 12),
-                if (transaction.blockchain != null)
-                  _TransactionDetailHorizontalText(
-                      leftText: Strings.current.sharedBlockchain,
-                      rightText: transaction.blockchain!.name),
-                const SizedBox(height: 12),
-                if (transaction.memo.isNotNullOrEmpty())
-                  _TransactionDetailHorizontalText(
-                      leftText: Strings.current.sharedMemo,
-                      rightText: transaction.memo!),
+                if (signature.isNotEmpty)
+                  _TransactionDetailVerticalText(
+                    title: Strings.current.transactionsSignature,
+                    content: signature,
+                  )
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, bottom: 8),
-            child: Text(
-              Strings.current.sharedInput,
-              style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(16),
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
-                color: provider.themeMode.bg),
-            child: Stack(
+            Align(
+              alignment: Alignment.topRight,
+              child: _TransactionDetailIndexWidget(index: input.index),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TransactionDetailOutputWidget extends StatelessWidget {
+  final TransactionDetailOutputViewData output;
+
+  const _TransactionDetailOutputWidget({Key? key, required this.output})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final to = output.to ?? '';
+
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => Container(
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            color: provider.themeMode.bg),
+        child: Stack(
+          children: [
+            Column(
               children: [
-                Column(
-                  children: [
-                    _TransactionDetailVerticalText(
-                      title: Strings.current.transactionsForm,
-                      content:
-                          '2Z5ozYCLDqxZqDAJggm9eSH8dNVfVdfhp4bJ4Y3DvZXzqobzm1',
-                    ),
-                    const SizedBox(height: 12),
-                    _TransactionDetailVerticalText(
-                      title: Strings.current.transactionsSignature,
-                      content:
-                          '2Z5ozYCLDqxZqDAJggm9eSH8dNVfVdfhp4bJ4Y3DvZXzqobzm1',
-                    )
-                  ],
-                ),
-                const Align(
-                  alignment: Alignment.topRight,
-                  child: _TransactionDetailIndexWidget(index: 1),
-                )
+                if (to.isNotEmpty)
+                  _TransactionDetailVerticalText(
+                    title: Strings.current.transactionsTo,
+                    content: to,
+                  ),
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16, left: 16, bottom: 8),
-            child: Text(
-              Strings.current.sharedOutput,
-              style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(16),
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
-                color: provider.themeMode.bg),
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    _TransactionDetailVerticalText(
-                      title: Strings.current.transactionsTo,
-                      content:
-                          '2Z5ozYCLDqxZqDAJggm9eSH8dNVfVdfhp4bJ4Y3DvZXzqobzm1',
-                    ),
-                  ],
-                ),
-                const Align(
-                  alignment: Alignment.topRight,
-                  child: _TransactionDetailIndexWidget(index: 1),
-                )
-              ],
-            ),
-          ),
-        ],
+            Align(
+              alignment: Alignment.topRight,
+              child: _TransactionDetailIndexWidget(index: output.index),
+            )
+          ],
+        ),
       ),
     );
   }

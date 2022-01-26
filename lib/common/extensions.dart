@@ -18,7 +18,7 @@ extension StringExtension on String {
 
 extension StringNullableExtension on String? {
 
-  bool isNotNullOrEmpty() =>
+  bool get isNotNullOrEmpty =>
       this != null && this != "";
 }
 
