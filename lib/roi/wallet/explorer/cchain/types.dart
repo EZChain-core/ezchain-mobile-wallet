@@ -40,7 +40,7 @@ class CChainExplorerTx {
   final String transactionIndex;
 
   @JsonKey(name: "txreceipt_status")
-  final String txReceiptStatus;
+  final CChainExplorerTxReceiptStatus txReceiptStatus;
 
   final String value;
 
@@ -69,6 +69,14 @@ class CChainExplorerTx {
       _$CChainExplorerTxFromJson(json);
 
   Map<String, dynamic> toJson() => _$CChainExplorerTxToJson(this);
+}
+
+enum CChainExplorerTxReceiptStatus {
+  @JsonValue("0")
+  error,
+
+  @JsonValue("1")
+  ok,
 }
 
 @JsonSerializable()

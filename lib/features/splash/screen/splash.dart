@@ -13,6 +13,7 @@ import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/wallet/explorer/cchain/types.dart';
 import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
@@ -53,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // updateX();
     // updateP();
     // updateC();
-    _startTimer();
+    // _startTimer();
   }
 
   @override
@@ -74,9 +75,12 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           // getCTransaction(
-    //           //     "0xcd22f4f1a30ef9e51033e8a98389f51172b95c149d30672aa4964f6cf61d7159");
-    //           getCTransactions();
+    //           getCTransaction(
+    //             "0xcd22f4f1a30ef9e51033e8a98389f51172b95c149d30672aa4964f6cf61d7159",
+    //             "22",
+    //             CChainExplorerTxReceiptStatus.ok,
+    //           );
+    //           // getCTransactions();
     //         },
     //       ),
     //     ),
@@ -564,7 +568,7 @@ class _SplashScreenState extends State<SplashScreen> {
         final fee = bnToAvaxC(gasPrice * gasUsed);
 
         final message =
-            "txID = ${tx.hash}\nFrom -> To = ${tx.from} -> ${tx.to}\nBlock = #${tx.blockNumber}, amount = $value EZC, fee = $fee EZC";
+            "txID = ${tx.hash}\nFrom -> To = ${tx.from} -> ${tx.to}\nBlock = #${tx.blockNumber}, Amount = $value EZC, Fee = $fee EZC";
         logger.i(message);
       }
     } catch (e) {
@@ -572,7 +576,11 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  getCTransaction(String txHash) async {
+  getCTransaction(
+    String txHash,
+    String nonce,
+    CChainExplorerTxReceiptStatus receiptStatus,
+  ) async {
     try {
       final tx = await wallet.getCChainTransaction(txHash);
       final value = bnToAvaxC(BigInt.tryParse(tx.value) ?? BigInt.zero);
@@ -581,17 +589,16 @@ class _SplashScreenState extends State<SplashScreen> {
       final fee = bnToAvaxC(gasPrice * gasUsed);
       final message = "Transaction Hash = ${tx.hash}\n"
           "Result = ${tx.success ? "Success" : "Fail"}\n"
-          "Status = , Confirmed by ${tx.confirmations}\n"
+          "Status = ${receiptStatus == CChainExplorerTxReceiptStatus.ok ? "Confirmed" : "Not Confirmed"}, Confirmed by ${tx.confirmations}\n"
           "Block = ${tx.blockNumber}\n"
-          "Timestamp = ${tx.timestamp}\n"
           "From = ${tx.from}\n"
           "To = ${tx.to}\n"
-          "Value = $value EZC\n"
+          "Amount = $value EZC\n"
           "Transaction Fee = $fee EZC\n"
           "Gas Price = ${bnToAvaxX(gasPrice)} wEZC\n"
           "Gas Limit = ${tx.gasLimit}\n"
           "Gas Used by Transaction = ${tx.gasUsed} | ${(int.parse(tx.gasUsed) ~/ int.parse(tx.gasLimit)) * 100}%\n"
-          "Nonce = ";
+          "Nonce = $nonce";
       logger.i(message);
     } catch (e) {
       logger.e(e);
