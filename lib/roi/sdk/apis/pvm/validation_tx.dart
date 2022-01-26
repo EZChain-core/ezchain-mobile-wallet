@@ -5,7 +5,7 @@ import 'package:wallet/roi/sdk/apis/pvm/constants.dart';
 import 'package:wallet/roi/sdk/apis/pvm/outputs.dart';
 import 'package:wallet/roi/sdk/common/input.dart';
 import 'package:wallet/roi/sdk/common/output.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
@@ -235,6 +235,9 @@ class PvmAddDelegatorTx extends PvmWeightedValidatorTx {
             endTime: endTime,
             weight: stakeAmount) {
     setTypeId(ADDDELEGATORTX);
+    if (rewardOwners != null) {
+      this.rewardOwners = rewardOwners;
+    }
   }
 
   factory PvmAddDelegatorTx.fromArgs(Map<String, dynamic> args) {

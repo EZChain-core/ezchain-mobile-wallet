@@ -10,11 +10,13 @@ import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 import 'package:wallet/roi/sdk/apis/evm/utxos.dart';
 import 'package:wallet/roi/sdk/apis/pvm/constants.dart' as pvm_constants;
 import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_min_stake.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_pending_validators.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/pvm/tx.dart';
 import 'package:wallet/roi/sdk/apis/pvm/utxos.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/asset/assets.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
@@ -647,9 +649,73 @@ abstract class WalletProvider {
     return await platformGetAtomicUTXOs(addresses, sourceChain);
   }
 
-  Future<List<Validator>> getPlatformValidators(
-      {String? subnetId, List<String>? nodeIds}) async {
+  Future<List<Validator>> getPlatformValidators({
+    String? subnetId,
+    List<String>? nodeIds,
+  }) async {
     return pChain.getCurrentValidators(subnetId: subnetId, nodeIds: nodeIds);
+  }
+
+  Future<GetPendingValidatorsResponse> getPlatformPendingValidators({
+    String? subnetId,
+    List<String>? nodeIds,
+  }) async {
+    return pChain.getPendingValidators(subnetId: subnetId, nodeIds: nodeIds);
+  }
+
+  Future<GetMinStakeResponse> getMinStake() async {
+    return pChain.getMinStake();
+  }
+
+  Future<String> delegate(
+    String nodeId,
+    BigInt amount,
+    num start,
+    num end, {
+    String? rewardAddress,
+    List<PvmUTXO>? utxos,
+  }) async {
+    var utxoSet = utxosP;
+    final pAddressStrings = await getAllAddressesP();
+
+    /// If given custom UTXO set use that
+    if (utxos != null) {
+      utxoSet = PvmUTXOSet();
+      utxoSet.addArray(utxos);
+    }
+
+    /// If reward address isn't given use current P address
+    rewardAddress ??= getAddressP();
+
+    final stakeReturnAddress = getAddressP();
+
+    /// For change address use the current platform chain
+    final changeAddress = getAddressP();
+
+    /// Convert dates to unix time
+    final startTime = BigInt.from(start / 1000);
+    final endTime = BigInt.from(end / 1000);
+
+    final unsignedTx = await pChain.buildAddDelegatorTx(
+        utxoSet,
+        [stakeReturnAddress],
+        pAddressStrings,
+        [changeAddress],
+        nodeId,
+        startTime,
+        endTime,
+        amount,
+        [rewardAddress]);
+    final signedTx = await signP(unsignedTx);
+    final String txId;
+    try {
+      txId = await pChain.issueTx(signedTx);
+    } catch (e) {
+      throw Exception("txId cannot be null");
+    }
+    await waitTxP(txId);
+    await updateUtxosP();
+    return txId;
   }
 
   Future<List<OrteliusTx>> getXTransactions({int limit = 0}) async {

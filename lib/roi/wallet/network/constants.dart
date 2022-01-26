@@ -1,7 +1,7 @@
 import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/wallet/network/types.dart';
 
-final mainNetConfig = NetworkConfig(
+final mainnetConfig = NetworkConfig(
   rawUrl: 'https://api.avax.network',
   apiProtocol: 'https',
   apiIp: 'api.avax.network',
@@ -16,7 +16,7 @@ final mainNetConfig = NetworkConfig(
   avaxId: networks[1]!.x.avaxAssetId,
 );
 
-final testNetConfig = NetworkConfig(
+final testnetConfig = NetworkConfig(
   rawUrl: 'https://testnet-api.ezchain.com',
   apiProtocol: 'https',
   apiIp: 'testnet-api.ezchain.com',

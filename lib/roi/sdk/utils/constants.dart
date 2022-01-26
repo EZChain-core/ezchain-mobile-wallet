@@ -4,7 +4,7 @@ const privateKeyPrefix = "PrivateKey-";
 const evmPrivateKeyPrefix = "0x";
 const nodeIdPrefix = "NodeID-";
 const primaryAssetAlias = "EZC";
-const mainNetAPI = "api.avax.network";
+const mainnetAPI = "api.avax.network";
 const fujiAPI = "api.avax-test.network";
 
 const networkIdToHRP = {

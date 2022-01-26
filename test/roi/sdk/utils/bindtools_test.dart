@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:test/test.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 
 const hexstr = "00112233445566778899aabbccddeeff";
 final buff = Uint8List.fromList(hexDecode(hexstr));

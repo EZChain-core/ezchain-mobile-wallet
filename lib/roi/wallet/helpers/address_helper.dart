@@ -1,4 +1,4 @@
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:web3dart/credentials.dart';
 
 bool validateAddress(String address) {

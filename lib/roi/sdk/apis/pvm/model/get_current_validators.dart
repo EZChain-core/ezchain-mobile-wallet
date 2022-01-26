@@ -58,9 +58,9 @@ class Validator {
 
   final String? weight;
 
-  final ValidatorRewardOwner rewardOwner;
+  final ValidatorRewardOwner? rewardOwner;
 
-  final String potentialReward;
+  final String? potentialReward;
 
   final String delegationFee;
 
@@ -68,7 +68,10 @@ class Validator {
 
   final bool connected;
 
-  final List<ValidatorDelegator>? delegators;
+  final List<Delegator>? delegators;
+
+  BigInt get stakeAmountBN =>
+      BigInt.tryParse(stakeAmount ?? "0") ?? BigInt.zero;
 
   Validator({
     required this.txId,
@@ -77,8 +80,8 @@ class Validator {
     this.stakeAmount,
     required this.nodeId,
     this.weight,
-    required this.rewardOwner,
-    required this.potentialReward,
+    this.rewardOwner,
+    this.potentialReward,
     required this.delegationFee,
     required this.uptime,
     required this.connected,
@@ -113,7 +116,7 @@ class ValidatorRewardOwner {
 }
 
 @JsonSerializable()
-class ValidatorDelegator {
+class Delegator {
   @JsonKey(name: "txID")
   final String txId;
 
@@ -126,22 +129,25 @@ class ValidatorDelegator {
   @JsonKey(name: "nodeID")
   final String nodeId;
 
-  final ValidatorRewardOwner rewardOwner;
+  final ValidatorRewardOwner? rewardOwner;
 
-  final String potentialReward;
+  final String? potentialReward;
 
-  ValidatorDelegator({
+  BigInt get stakeAmountBN =>
+      BigInt.tryParse(stakeAmount ?? "0") ?? BigInt.zero;
+
+  Delegator({
     required this.txId,
     required this.startTime,
     required this.endTime,
     this.stakeAmount,
     required this.nodeId,
-    required this.rewardOwner,
-    required this.potentialReward,
+    this.rewardOwner,
+    this.potentialReward,
   });
 
-  factory ValidatorDelegator.fromJson(Map<String, dynamic> json) =>
-      _$ValidatorDelegatorFromJson(json);
+  factory Delegator.fromJson(Map<String, dynamic> json) =>
+      _$DelegatorFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ValidatorDelegatorToJson(this);
+  Map<String, dynamic> toJson() => _$DelegatorToJson(this);
 }

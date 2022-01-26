@@ -7,7 +7,7 @@ import 'package:wallet/roi/wallet/network/helpers/rpc_from_config.dart';
 import 'package:wallet/roi/wallet/network/types.dart';
 import 'package:web3dart/web3dart.dart';
 
-var _activeNetwork = testNetConfig;
+var _activeNetwork = testnetConfig;
 
 NetworkConfig get activeNetwork => _activeNetwork;
 

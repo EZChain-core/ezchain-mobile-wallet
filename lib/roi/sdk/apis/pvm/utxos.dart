@@ -11,7 +11,7 @@ import 'package:wallet/roi/sdk/apis/pvm/validation_tx.dart';
 import 'package:wallet/roi/sdk/common/asset_amount.dart';
 import 'package:wallet/roi/sdk/common/output.dart';
 import 'package:wallet/roi/sdk/common/utxos.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/sdk/utils/serialization.dart';
 
@@ -513,18 +513,19 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
     );
 
     final delegatorTx = PvmAddValidatorTx(
-        networkId: networkId,
-        blockchainId: blockchainId,
-        outs: outs,
-        ins: ins,
-        memo: memo,
-        nodeId: nodeId,
-        startTime: startTime,
-        endTime: endTime,
-        stakeAmount: stakeAmount,
-        stakeOuts: stakeOuts,
-        rewardOwners: PvmParseableOutput(output: rewardOutputOwners),
-        delegationFee: delegationFee);
+      networkId: networkId,
+      blockchainId: blockchainId,
+      outs: outs,
+      ins: ins,
+      memo: memo,
+      nodeId: nodeId,
+      startTime: startTime,
+      endTime: endTime,
+      stakeAmount: stakeAmount,
+      stakeOuts: stakeOuts,
+      rewardOwners: PvmParseableOutput(output: rewardOutputOwners),
+      delegationFee: delegationFee,
+    );
 
     return PvmUnsignedTx(transaction: delegatorTx);
   }

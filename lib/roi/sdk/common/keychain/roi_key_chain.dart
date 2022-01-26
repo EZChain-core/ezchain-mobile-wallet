@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/common/keychain/base_key_chain.dart';
 import 'package:wallet/roi/sdk/common/keychain/secp256k1_key_chain.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 
 class ROIKeyPair extends SECP256k1KeyPair {
   String chainId;

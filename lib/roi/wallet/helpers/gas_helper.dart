@@ -3,7 +3,7 @@ import 'package:wallet/roi/sdk/apis/evm/inputs.dart';
 import 'package:wallet/roi/sdk/apis/evm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/evm/tx.dart';
 import 'package:wallet/roi/sdk/utils/bigint.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/roi/wallet/network/network.dart';

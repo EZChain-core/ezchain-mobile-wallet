@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:hash/hash.dart';
 import 'package:test/test.dart';
 import 'package:wallet/roi/sdk/apis/evm/key_chain.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 
 const alias = "C";
 const hrp = "tests";

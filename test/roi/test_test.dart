@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:decimal/decimal.dart';
 import 'package:test/test.dart';
 import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';

@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 import 'package:wallet/roi/sdk/apis/evm/export_tx.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
 
 const networkID = 12345;

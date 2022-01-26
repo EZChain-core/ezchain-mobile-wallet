@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:test/test.dart';
 
 import 'package:wallet/roi/sdk/common/keychain/roi_key_chain.dart';
-import 'package:wallet/roi/sdk/utils/bindtools.dart';
+import 'package:wallet/roi/sdk/utils/bintools.dart';
 
 void main() {
   final keyChain = ROIKeyChain(chainId: "X", hrp: "ezc");
