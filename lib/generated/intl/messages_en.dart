@@ -181,6 +181,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedValue": MessageLookupByLibrary.simpleMessage("Value"),
         "sharedXChain": MessageLookupByLibrary.simpleMessage("X chain"),
         "transactionsForm": MessageLookupByLibrary.simpleMessage("Form:"),
+        "transactionsNoInputs": MessageLookupByLibrary.simpleMessage(
+            "No input UTXOs found for this transaction."),
+        "transactionsNoOutputs": MessageLookupByLibrary.simpleMessage(
+            "No output UTXOs found for this transaction."),
         "transactionsNoRecord":
             MessageLookupByLibrary.simpleMessage("No transaction record"),
         "transactionsSignature":

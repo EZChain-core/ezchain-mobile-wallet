@@ -15,8 +15,8 @@ class TransactionDetailViewData {
   final String? burned;
   final EZCType? blockchain;
   final String? memo;
-  final List<TransactionDetailInputViewData>? inputs;
-  final List<TransactionDetailOutputViewData>? outputs;
+  final List<TransactionDetailInputViewData> inputs;
+  final List<TransactionDetailOutputViewData> outputs;
 
   TransactionDetailViewData(this.id, this.accepted, this.value, this.burned,
       this.blockchain, this.memo, this.inputs, this.outputs);
@@ -25,14 +25,16 @@ class TransactionDetailViewData {
 class TransactionDetailInputViewData {
   final String? from;
   final String? signature;
+  final int index;
 
-  TransactionDetailInputViewData(this.from, this.signature);
+  TransactionDetailInputViewData(this.from, this.signature, this.index);
 }
 
 class TransactionDetailOutputViewData {
   final String? to;
+  final int index;
 
-  TransactionDetailOutputViewData(this.to);
+  TransactionDetailOutputViewData(this.to, this.index);
 }
 
 extension TransactionDetailExtension on OrteliusTx {
@@ -106,7 +108,7 @@ extension TransactionDetailExtension on OrteliusTx {
             bnToLocaleString(BigInt.tryParse(output.amount) ?? BigInt.zero);
         final addresses = output.addresses;
         inputs.add(TransactionDetailInputViewData(
-            addresses?.firstOrNull, signatures?.firstOrNull));
+            addresses?.firstOrNull, signatures?.firstOrNull, i + 1));
       }
 
       final List<TransactionDetailOutputViewData> outputs = [];
@@ -116,7 +118,7 @@ extension TransactionDetailExtension on OrteliusTx {
         final amount =
             bnToLocaleString(BigInt.tryParse(output.amount) ?? BigInt.zero);
         final addresses = output.addresses;
-        outputs.add(TransactionDetailOutputViewData(addresses?.firstOrNull));
+        outputs.add(TransactionDetailOutputViewData(addresses?.firstOrNull, i + 1));
         final stakeLockTime = output.stakeLockTime;
         if (stakeLockTime != null && stakeLockTime != 0) {
           final stakeLockTimeDate =
