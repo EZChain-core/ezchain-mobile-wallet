@@ -1223,6 +1223,26 @@ class Strings {
       args: [],
     );
   }
+
+  /// `No input UTXOs found for this transaction.`
+  String get transactionsNoInputs {
+    return Intl.message(
+      'No input UTXOs found for this transaction.',
+      name: 'transactionsNoInputs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No output UTXOs found for this transaction.`
+  String get transactionsNoOutputs {
+    return Intl.message(
+      'No output UTXOs found for this transaction.',
+      name: 'transactionsNoOutputs',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Strings> {
