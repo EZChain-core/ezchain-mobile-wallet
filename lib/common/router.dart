@@ -19,6 +19,7 @@ import 'package:wallet/features/setting/general/setting_general.dart';
 import 'package:wallet/features/setting/security/setting_security.dart';
 import 'package:wallet/features/splash/screen/splash.dart';
 import 'package:wallet/features/transaction/detail/transaction_detail.dart';
+import 'package:wallet/features/transaction/detail_c/transaction_c_detail.dart';
 import 'package:wallet/features/transaction/transactions.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
 import 'package:wallet/features/wallet/send/avm/wallet_send_avm.dart';
@@ -58,6 +59,7 @@ import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.
     AutoRoute(page: QrCodeScreen),
     AutoRoute(page: TransactionsScreen),
     AutoRoute(page: TransactionDetailScreen),
+    AutoRoute(page: TransactionCDetailScreen),
     dashboardRoutes,
   ],
 )

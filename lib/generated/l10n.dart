@@ -594,6 +594,46 @@ class Strings {
     );
   }
 
+  /// `Success`
+  String get sharedSuccess {
+    return Intl.message(
+      'Success',
+      name: 'sharedSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fail`
+  String get sharedFail {
+    return Intl.message(
+      'Fail',
+      name: 'sharedFail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirmed`
+  String get sharedConfirmed {
+    return Intl.message(
+      'Confirmed',
+      name: 'sharedConfirmed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not Confirm`
+  String get sharedNotConfirm {
+    return Intl.message(
+      'Not Confirm',
+      name: 'sharedNotConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(

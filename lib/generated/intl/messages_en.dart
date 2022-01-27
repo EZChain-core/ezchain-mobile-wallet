@@ -128,6 +128,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedCChain": MessageLookupByLibrary.simpleMessage("C chain"),
         "sharedCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "sharedConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "sharedConfirmed": MessageLookupByLibrary.simpleMessage("Confirmed"),
         "sharedCopy": MessageLookupByLibrary.simpleMessage("Copy"),
         "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
         "sharedDestination":
@@ -135,6 +136,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedEZChain": MessageLookupByLibrary.simpleMessage("EZChain"),
         "sharedError": MessageLookupByLibrary.simpleMessage("Error"),
         "sharedExport": MessageLookupByLibrary.simpleMessage("Export"),
+        "sharedFail": MessageLookupByLibrary.simpleMessage("Fail"),
         "sharedHourAgo": m1,
         "sharedImport": MessageLookupByLibrary.simpleMessage("Import"),
         "sharedInput": MessageLookupByLibrary.simpleMessage("Input"),
@@ -149,6 +151,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Lock Stakeable"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
         "sharedMinuteAgo": m2,
+        "sharedNotConfirm": MessageLookupByLibrary.simpleMessage("Not Confirm"),
         "sharedOutput": MessageLookupByLibrary.simpleMessage("Output"),
         "sharedPChain": MessageLookupByLibrary.simpleMessage("P chain"),
         "sharedPassphrase": MessageLookupByLibrary.simpleMessage("Passphrase"),
@@ -167,6 +170,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedShare": MessageLookupByLibrary.simpleMessage("Share"),
         "sharedSource": MessageLookupByLibrary.simpleMessage("Source"),
         "sharedStartAgain": MessageLookupByLibrary.simpleMessage("Start Again"),
+        "sharedSuccess": MessageLookupByLibrary.simpleMessage("Success"),
         "sharedToken": MessageLookupByLibrary.simpleMessage("Token"),
         "sharedTotal": MessageLookupByLibrary.simpleMessage("Total"),
         "sharedTransaction":
