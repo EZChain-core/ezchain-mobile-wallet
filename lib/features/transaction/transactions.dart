@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
-import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/transaction/transactions_store.dart';
@@ -138,7 +137,7 @@ class TransactionsScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: FutureBuilder<List<TransactionsItemViewData>>(
+                child: FutureBuilder<List<TransactionsItem>>(
                   future: _transactionsStore.getTransactions(ezcType),
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {
@@ -148,13 +147,8 @@ class TransactionsScreen extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 12),
                               itemCount: transactions.length,
-                              itemBuilder: (_, index) => TransactionsItemWidget(
-                                item: transactions[index],
-                                onPressed: () {
-                                  context.pushRoute(TransactionDetailRoute(
-                                      txId: transactions[index].txId));
-                                },
-                              ),
+                              itemBuilder: (_, index) =>
+                                  buildTransactionWidget(transactions[index]),
                               separatorBuilder: (_, index) => Divider(
                                   color: provider.themeMode.text10, height: 25),
                             )

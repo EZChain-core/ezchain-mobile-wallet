@@ -7,9 +7,11 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/common/price_store.dart';
+import 'package:wallet/features/common/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 
 part 'transactions_store.g.dart';
@@ -21,6 +23,7 @@ abstract class _TransactionsStore with Store {
 
   final _balanceStore = getIt<BalanceStore>();
   final _priceStore = getIt<PriceStore>();
+  final _validatorsStore = getIt<ValidatorsStore>();
 
   @observable
   EZCType ezcType = EZCType.xChain;
@@ -36,6 +39,9 @@ abstract class _TransactionsStore with Store {
 
   @observable
   List<OrteliusTx> transactions = [];
+
+  @computed
+  List<Validator> get validators => _validatorsStore.validators;
 
   @action
   setEzcType(EZCType type) {
@@ -62,24 +68,24 @@ abstract class _TransactionsStore with Store {
     }
   }
 
-  Future<List<TransactionsItemViewData>> getTransactions(EZCType type) async {
+  Future<List<TransactionsItem>> getTransactions(EZCType type) async {
     await Future.delayed(const Duration(milliseconds: 300));
     try {
       switch (ezcType) {
         case EZCType.xChain:
-          final transactions = await _wallet.getXTransactions(limit: 20);
+          final transactions = await _wallet.getXTransactions();
           final histories = await Future.wait(
               transactions.map((tx) => _wallet.parseOrteliusTx(tx)));
 
-          return mapToTransactionsItemViewData(histories);
+          return mapToTransactionsItem(histories);
         case EZCType.pChain:
-          final validators = await _wallet.getPlatformValidators();
-          final transactions = await _wallet.getPTransactions(limit: 20);
+          final transactions = await _wallet.getPTransactions();
           final histories = await Future.wait(
               transactions.map((tx) => _wallet.parseOrteliusTx(tx)));
-          return mapToTransactionsItemViewData(histories, validators: validators);
+          return mapToTransactionsItem(histories, validators: validators);
         case EZCType.cChain:
-          return [];
+          final transactions = await _wallet.getCChainTransactions();
+          return mapCChainToTransactionsItem(transactions);
       }
     } catch (e) {
       logger.e(e);
@@ -87,4 +93,3 @@ abstract class _TransactionsStore with Store {
     }
   }
 }
-
