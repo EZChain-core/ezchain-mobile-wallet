@@ -161,6 +161,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedProcessing": MessageLookupByLibrary.simpleMessage("Processing"),
         "sharedReceive": MessageLookupByLibrary.simpleMessage("Receive"),
         "sharedReceived": MessageLookupByLibrary.simpleMessage("Received"),
+        "sharedResult": MessageLookupByLibrary.simpleMessage("Result"),
         "sharedSend": MessageLookupByLibrary.simpleMessage("Send"),
         "sharedSendTo": MessageLookupByLibrary.simpleMessage("Send to"),
         "sharedSendTransaction":

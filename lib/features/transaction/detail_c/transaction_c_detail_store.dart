@@ -29,7 +29,7 @@ abstract class _TransactionCDetailStore with Store {
 
 class TransactionCChainViewData {
   final String hash;
-  final String result;
+  final bool result;
   final String status;
   final String block;
   final String from;
@@ -66,7 +66,7 @@ class TransactionCChainViewData {
     final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
     final fee = '${bnToAvaxC(gasPrice * gasUsed)} EZC';
     final result =
-        tx.success ? Strings.current.sharedSuccess : Strings.current.sharedFail;
+        tx.success;
     final status = receiptStatus == CChainExplorerTxReceiptStatus.ok
         ? Strings.current.sharedConfirmed
         : Strings.current.sharedNotConfirm;
