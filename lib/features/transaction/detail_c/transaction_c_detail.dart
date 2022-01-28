@@ -3,10 +3,12 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/transaction/detail_c/transaction_c_detail_store.dart';
+import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/roi/wallet/explorer/cchain/types.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
+import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
 class TransactionCDetailScreen extends StatelessWidget {
@@ -74,8 +76,55 @@ class _TransactionCDetailInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => Column(
-        children: [],
+      builder: (context, provider, child) => SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+        child: Column(
+          children: [
+            Text(
+              transaction.hash,
+              style: EZCTitleMediumTextStyle(color: provider.themeMode.text),
+            ),
+            Divider(
+              color: provider.themeMode.text10,
+              height: 25,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    Strings.current.sharedResult,
+                    style: EZCTitleMediumTextStyle(
+                        color: provider.themeMode.text60),
+                  ),
+                ),
+                if (transaction.result) ...[
+                  Assets.icons.icTickCircleGreen.svg(width: 16, height: 16),
+                  const SizedBox(width: 4),
+                  Text(
+                    Strings.current.sharedSuccess,
+                    style: EZCBodyMediumTextStyle(
+                        color: provider.themeMode.stateSuccess),
+                  )
+                ] else ...[
+                  Assets.icons.icInfoCircleRed.svg(width: 16, height: 16),
+                  const SizedBox(width: 4),
+                  Text(
+                    Strings.current.sharedFail,
+                    style: EZCBodyMediumTextStyle(
+                        color: provider.themeMode.stateDanger),
+                  )
+                ],
+              ],
+            ),
+            Divider(
+              color: provider.themeMode.text10,
+              height: 25,
+            ),
+            Row(
+
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -634,6 +634,16 @@ class Strings {
     );
   }
 
+  /// `Result`
+  String get sharedResult {
+    return Intl.message(
+      'Result',
+      name: 'sharedResult',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
