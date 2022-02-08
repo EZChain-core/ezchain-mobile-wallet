@@ -58,6 +58,14 @@
   "sharedConfirmed": "Confirmed",
   "sharedNotConfirm": "Not Confirm",
   "sharedResult": "Result",
+  "sharedStatus": "Status",
+  "sharedBlock": "Block",
+  "sharedFrom": "Form",
+  "sharedTo": "To",
+  "sharedFee": "Fee",
+  "sharedGasPrice": "Gas Price",
+  "sharedGasLimit": "Gas Limit",
+  "sharedNonce": "Nonce",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",
@@ -122,5 +130,6 @@
   "transactionsSignature": "Signature:",
   "transactionsTo": "To:",
   "transactionsNoInputs": "No input UTXOs found for this transaction.",
-  "transactionsNoOutputs": "No output UTXOs found for this transaction."
+  "transactionsNoOutputs": "No output UTXOs found for this transaction.",
+  "transactionsGasUsedByTransaction": "Gas Used by Transaction"
 }

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/transaction/detail/transaction_detail.dart';
 import 'package:wallet/features/transaction/detail_c/transaction_c_detail_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -70,7 +71,9 @@ class TransactionCDetailScreen extends StatelessWidget {
 class _TransactionCDetailInfoWidget extends StatelessWidget {
   final TransactionCChainViewData transaction;
 
-  const _TransactionCDetailInfoWidget({Key? key, required this.transaction})
+  final _divider = _TransactionCDetailInfoDivider();
+
+  _TransactionCDetailInfoWidget({Key? key, required this.transaction})
       : super(key: key);
 
   @override
@@ -84,10 +87,7 @@ class _TransactionCDetailInfoWidget extends StatelessWidget {
               transaction.hash,
               style: EZCTitleMediumTextStyle(color: provider.themeMode.text),
             ),
-            Divider(
-              color: provider.themeMode.text10,
-              height: 25,
-            ),
+            _divider,
             Row(
               children: [
                 Expanded(
@@ -116,15 +116,162 @@ class _TransactionCDetailInfoWidget extends StatelessWidget {
                 ],
               ],
             ),
-            Divider(
-              color: provider.themeMode.text10,
-              height: 25,
-            ),
+            _divider,
             Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    Strings.current.sharedStatus,
+                    style: EZCTitleMediumTextStyle(
+                        color: provider.themeMode.text60),
+                  ),
+                ),
+                if (transaction.result) ...[
+                  Assets.icons.icTickCircleGreen.svg(width: 16, height: 16),
+                  const SizedBox(width: 4),
+                  Text(
+                    Strings.current.sharedSuccess,
+                    style: EZCBodyMediumTextStyle(
+                        color: provider.themeMode.stateSuccess),
+                  )
+                ] else ...[
+                  Assets.icons.icInfoCircleRed.svg(width: 16, height: 16),
+                  const SizedBox(width: 4),
+                  Text(
+                    Strings.current.sharedFail,
+                    style: EZCBodyMediumTextStyle(
+                        color: provider.themeMode.stateDanger),
+                  )
+                ],
+              ],
+            ),
+            _divider,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  Strings.current.sharedBlock,
+                  style:
+                      EZCTitleMediumTextStyle(color: provider.themeMode.text60),
+                ),
+                Text(
+                  transaction.block,
+                  style: EZCTitleMediumTextStyle(color: provider.themeMode.text)
+                      .copyWith(decoration: TextDecoration.underline),
+                )
+              ],
+            ),
+            _divider,
+            _TransactionCDetailVerticalText(
+                title: Strings.current.sharedFrom, content: transaction.from),
+            _divider,
+            _TransactionCDetailVerticalText(
+                title: Strings.current.sharedTo, content: transaction.to),
+            _divider,
+            _TransactionCDetailHorizontalText(
+                leftText: Strings.current.sharedAmount,
+                rightText: transaction.amount),
+            _divider,
+            _TransactionCDetailHorizontalText(
+                leftText: Strings.current.sharedFee,
+                rightText: transaction.fee),
+            _divider,
+            _TransactionCDetailHorizontalText(
+                leftText: Strings.current.sharedGasPrice,
+                rightText: transaction.gasPrice),
+            _divider,
+            _TransactionCDetailHorizontalText(
+                leftText: Strings.current.sharedGasLimit,
+                rightText: transaction.gasLimit),
+            _divider,
+            _TransactionCDetailHorizontalText(
+                leftText: Strings.current.transactionsGasUsedByTransaction,
+                rightText: transaction.gasUsed),
+            _divider,
+            _TransactionCDetailHorizontalText(
+                leftText: Strings.current.sharedNonce,
+                rightText: transaction.nonce),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
+class _TransactionCDetailHorizontalText extends StatelessWidget {
+  final String leftText;
+  final String rightText;
+
+  const _TransactionCDetailHorizontalText({
+    Key? key,
+    required this.leftText,
+    required this.rightText,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => SizedBox(
+        width: double.infinity,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              leftText,
+              style: EZCTitleMediumTextStyle(color: provider.themeMode.text60),
+            ),
+            Text(
+              rightText,
+              style: EZCTitleMediumTextStyle(color: provider.themeMode.text),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _TransactionCDetailVerticalText extends StatelessWidget {
+  final String title;
+  final String content;
+
+  const _TransactionCDetailVerticalText({
+    Key? key,
+    required this.title,
+    required this.content,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => SizedBox(
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: EZCTitleMediumTextStyle(color: provider.themeMode.text60),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              content,
+              style: EZCTitleMediumTextStyle(color: provider.themeMode.text),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TransactionCDetailInfoDivider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => Divider(
+        color: provider.themeMode.text10,
+        height: 25,
       ),
     );
   }
