@@ -644,6 +644,86 @@ class Strings {
     );
   }
 
+  /// `Status`
+  String get sharedStatus {
+    return Intl.message(
+      'Status',
+      name: 'sharedStatus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Block`
+  String get sharedBlock {
+    return Intl.message(
+      'Block',
+      name: 'sharedBlock',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Form`
+  String get sharedFrom {
+    return Intl.message(
+      'Form',
+      name: 'sharedFrom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To`
+  String get sharedTo {
+    return Intl.message(
+      'To',
+      name: 'sharedTo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fee`
+  String get sharedFee {
+    return Intl.message(
+      'Fee',
+      name: 'sharedFee',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Price`
+  String get sharedGasPrice {
+    return Intl.message(
+      'Gas Price',
+      name: 'sharedGasPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Limit`
+  String get sharedGasLimit {
+    return Intl.message(
+      'Gas Limit',
+      name: 'sharedGasLimit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nonce`
+  String get sharedNonce {
+    return Intl.message(
+      'Nonce',
+      name: 'sharedNonce',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -1289,6 +1369,16 @@ class Strings {
     return Intl.message(
       'No output UTXOs found for this transaction.',
       name: 'transactionsNoOutputs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas Used by Transaction`
+  String get transactionsGasUsedByTransaction {
+    return Intl.message(
+      'Gas Used by Transaction',
+      name: 'transactionsGasUsedByTransaction',
       desc: '',
       args: [],
     );

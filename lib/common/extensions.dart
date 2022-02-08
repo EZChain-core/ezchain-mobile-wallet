@@ -14,6 +14,15 @@ extension StringExtension on String {
       return null;
     }
   }
+
+  DateTime? parseDateTimeFromTimestamp() {
+    try {
+      final timestamp = int.parse(this);
+      return DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 extension StringNullableExtension on String? {

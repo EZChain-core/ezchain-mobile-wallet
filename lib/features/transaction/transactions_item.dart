@@ -51,9 +51,10 @@ class TransactionsCChainItem extends TransactionsItem {
   final String to;
   final String amount;
   final String fee;
+  final CChainExplorerTx cChainExplorerTx;
 
   TransactionsCChainItem(String id, String time, this.blockNumber, this.from,
-      this.to, this.amount, this.fee)
+      this.to, this.amount, this.fee, this.cChainExplorerTx)
       : super(id, time);
 }
 
@@ -107,6 +108,71 @@ class TransactionsSendImportExportItemWidget extends StatelessWidget {
   }
 }
 
+class TransactionsStakingItemWidget extends StatelessWidget {
+  final TransactionsStakingItem item;
+  final VoidCallback onPressed;
+
+  const TransactionsStakingItemWidget(
+      {Key? key, required this.item, required this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => GestureDetector(
+        onTap: onPressed,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  item.time,
+                  style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
+                ),
+                Assets.icons.icSearchBlack.svg()
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TransactionsCChainItemWidget extends StatelessWidget {
+  final TransactionsCChainItem item;
+  final VoidCallback onPressed;
+
+  const TransactionsCChainItemWidget(
+      {Key? key, required this.item, required this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    logger.i("vit ${item.id} ${item.time} ${item.from} ${item.to}");
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => GestureDetector(
+        onTap: onPressed,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  item.time,
+                  style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
+                ),
+                Assets.icons.icSearchBlack.svg()
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class TransactionsItemViewData {
   final String txId;
   final String time;
@@ -126,9 +192,25 @@ Widget buildTransactionWidget(TransactionsItem transaction) {
         walletContext?.pushRoute(TransactionDetailRoute(txId: transaction.id));
       },
     );
-  } else {
-    return const SizedBox.shrink();
   }
+  if (transaction is TransactionsCChainItem) {
+    return TransactionsCChainItemWidget(
+      item: transaction,
+      onPressed: () {
+        walletContext?.pushRoute(TransactionCDetailRoute(
+            cChainExplorerTx: transaction.cChainExplorerTx));
+      },
+    );
+  }
+  if (transaction is TransactionsStakingItem) {
+    return TransactionsStakingItemWidget(
+      item: transaction,
+      onPressed: () {
+        walletContext?.pushRoute(TransactionDetailRoute(txId: transaction.id));
+      },
+    );
+  }
+  return const SizedBox.shrink();
 }
 
 List<TransactionsItem> mapToTransactionsItem(List<HistoryItem> items,
@@ -238,7 +320,8 @@ List<TransactionsItem> mapCChainToTransactionsItem(
   final List<TransactionsItem> transactions = [];
   try {
     for (var tx in cTransactions) {
-      final time = tx.timeStamp.parseDateTime()?.parseTimeAgo() ?? '';
+      final time =
+          tx.timeStamp.parseDateTimeFromTimestamp()?.parseTimeAgo() ?? '';
       final blockNumber = '#${tx.blockNumber}';
       final value = bnToAvaxC(BigInt.tryParse(tx.value) ?? BigInt.zero);
       final gasPrice = BigInt.tryParse(tx.gasPrice) ?? BigInt.zero;
@@ -246,7 +329,7 @@ List<TransactionsItem> mapCChainToTransactionsItem(
       final fee = '${bnToAvaxC(gasPrice * gasUsed)} EZC';
       final amount = '$value EZC';
       transactions.add(TransactionsCChainItem(
-          tx.hash, time, blockNumber, tx.from, tx.to, amount, fee));
+          tx.hash, time, blockNumber, tx.from, tx.to, amount, fee, tx));
     }
   } catch (e) {
     logger.e(e);

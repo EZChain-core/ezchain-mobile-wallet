@@ -123,6 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedAmount": MessageLookupByLibrary.simpleMessage("Amount"),
         "sharedAvailable": MessageLookupByLibrary.simpleMessage("Available"),
         "sharedBalance": MessageLookupByLibrary.simpleMessage("Balance"),
+        "sharedBlock": MessageLookupByLibrary.simpleMessage("Block"),
         "sharedBlockchain": MessageLookupByLibrary.simpleMessage("Blockchain"),
         "sharedBurned": MessageLookupByLibrary.simpleMessage("Burned"),
         "sharedCChain": MessageLookupByLibrary.simpleMessage("C chain"),
@@ -137,6 +138,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedError": MessageLookupByLibrary.simpleMessage("Error"),
         "sharedExport": MessageLookupByLibrary.simpleMessage("Export"),
         "sharedFail": MessageLookupByLibrary.simpleMessage("Fail"),
+        "sharedFee": MessageLookupByLibrary.simpleMessage("Fee"),
+        "sharedFrom": MessageLookupByLibrary.simpleMessage("Form"),
+        "sharedGasLimit": MessageLookupByLibrary.simpleMessage("Gas Limit"),
+        "sharedGasPrice": MessageLookupByLibrary.simpleMessage("Gas Price"),
         "sharedHourAgo": m1,
         "sharedImport": MessageLookupByLibrary.simpleMessage("Import"),
         "sharedInput": MessageLookupByLibrary.simpleMessage("Input"),
@@ -151,6 +156,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Lock Stakeable"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
         "sharedMinuteAgo": m2,
+        "sharedNonce": MessageLookupByLibrary.simpleMessage("Nonce"),
         "sharedNotConfirm": MessageLookupByLibrary.simpleMessage("Not Confirm"),
         "sharedOutput": MessageLookupByLibrary.simpleMessage("Output"),
         "sharedPChain": MessageLookupByLibrary.simpleMessage("P chain"),
@@ -171,7 +177,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedShare": MessageLookupByLibrary.simpleMessage("Share"),
         "sharedSource": MessageLookupByLibrary.simpleMessage("Source"),
         "sharedStartAgain": MessageLookupByLibrary.simpleMessage("Start Again"),
+        "sharedStatus": MessageLookupByLibrary.simpleMessage("Status"),
         "sharedSuccess": MessageLookupByLibrary.simpleMessage("Success"),
+        "sharedTo": MessageLookupByLibrary.simpleMessage("To"),
         "sharedToken": MessageLookupByLibrary.simpleMessage("Token"),
         "sharedTotal": MessageLookupByLibrary.simpleMessage("Total"),
         "sharedTransaction":
@@ -186,6 +194,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedValue": MessageLookupByLibrary.simpleMessage("Value"),
         "sharedXChain": MessageLookupByLibrary.simpleMessage("X chain"),
         "transactionsForm": MessageLookupByLibrary.simpleMessage("Form:"),
+        "transactionsGasUsedByTransaction":
+            MessageLookupByLibrary.simpleMessage("Gas Used by Transaction"),
         "transactionsNoInputs": MessageLookupByLibrary.simpleMessage(
             "No input UTXOs found for this transaction."),
         "transactionsNoOutputs": MessageLookupByLibrary.simpleMessage(
