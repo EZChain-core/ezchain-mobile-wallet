@@ -724,6 +724,16 @@ class Strings {
     );
   }
 
+  /// `Delegate`
+  String get sharedDelegate {
+    return Intl.message(
+      'Delegate',
+      name: 'sharedDelegate',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -1379,6 +1389,56 @@ class Strings {
     return Intl.message(
       'Gas Used by Transaction',
       name: 'transactionsGasUsedByTransaction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You do not own an ROIChain node, but you want to stake using another node.`
+  String get earnDelegateDescription {
+    return Intl.message(
+      'You do not own an ROIChain node, but you want to stake using another node.',
+      name: 'earnDelegateDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You must have at least 1 ROI on the P chain to become a validator.`
+  String get earnDelegateValidMess {
+    return Intl.message(
+      'You must have at least 1 ROI on the P chain to become a validator.',
+      name: 'earnDelegateValidMess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Delegator`
+  String get earnDelegateAdd {
+    return Intl.message(
+      'Add Delegator',
+      name: 'earnDelegateAdd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cross Chain Transfer`
+  String get earnCrossTransfer {
+    return Intl.message(
+      'Cross Chain Transfer',
+      name: 'earnCrossTransfer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Estimated Rewards`
+  String get earnEstimatedRewards {
+    return Intl.message(
+      'Estimated Rewards',
+      name: 'earnEstimatedRewards',
       desc: '',
       args: [],
     );

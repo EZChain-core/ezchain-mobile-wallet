@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/logger.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -61,16 +60,20 @@ class EZCMediumPrimaryButton extends StatelessWidget {
 
   final bool? isLoading;
 
+  final bool? enabled;
+
   const EZCMediumPrimaryButton(
       {required this.text,
       this.onPressed,
       this.onLongPress,
       this.padding,
       this.width,
-      this.isLoading});
+      this.isLoading,
+      this.enabled});
 
   @override
   Widget build(BuildContext context) {
+    final isDisable = enabled == false;
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
         height: ezcButtonMediumHeight,
@@ -83,9 +86,14 @@ class EZCMediumPrimaryButton extends StatelessWidget {
                   strokeWidth: 2)
               : Text(text,
                   textAlign: TextAlign.center,
-                  style: EZCButtonTextStyle(color: provider.themeMode.text90)),
+                  style: EZCButtonTextStyle(
+                      color: isDisable
+                          ? provider.themeMode.text40
+                          : provider.themeMode.text90)),
           style: EZCButtonStyle(
-              bgColor: provider.themeMode.primary,
+              bgColor: isDisable
+                  ? provider.themeMode.text10
+                  : provider.themeMode.primary,
               buttonPadding: padding ?? ezcButtonMediumPadding),
           onPressed: onPressed,
           onLongPress: onLongPress,

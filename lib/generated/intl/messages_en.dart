@@ -79,6 +79,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "dashboardEarn": MessageLookupByLibrary.simpleMessage("Earn"),
         "dashboardSetting": MessageLookupByLibrary.simpleMessage("Setting"),
         "dashboardWallet": MessageLookupByLibrary.simpleMessage("Wallet"),
+        "earnCrossTransfer":
+            MessageLookupByLibrary.simpleMessage("Cross Chain Transfer"),
+        "earnDelegateAdd":
+            MessageLookupByLibrary.simpleMessage("Add Delegator"),
+        "earnDelegateDescription": MessageLookupByLibrary.simpleMessage(
+            "You do not own an ROIChain node, but you want to stake using another node."),
+        "earnDelegateValidMess": MessageLookupByLibrary.simpleMessage(
+            "You must have at least 1 ROI on the P chain to become a validator."),
+        "earnEstimatedRewards":
+            MessageLookupByLibrary.simpleMessage("Estimated Rewards"),
         "onBoardCreateWallet":
             MessageLookupByLibrary.simpleMessage("Create Wallet"),
         "pageHomeWelcome": m0,
@@ -132,6 +142,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedConfirmed": MessageLookupByLibrary.simpleMessage("Confirmed"),
         "sharedCopy": MessageLookupByLibrary.simpleMessage("Copy"),
         "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
+        "sharedDelegate": MessageLookupByLibrary.simpleMessage("Delegate"),
         "sharedDestination":
             MessageLookupByLibrary.simpleMessage("Destination"),
         "sharedEZChain": MessageLookupByLibrary.simpleMessage("EZChain"),
