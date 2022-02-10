@@ -11,6 +11,12 @@ import 'package:flutter/material.dart';
 class ColorName {
   ColorName._();
 
+  /// Color: #EBF4F1
+  static const Color aquaGreenDark = Color(0xFFEBF4F1);
+
+  /// Color: #EBF4F1
+  static const Color aquaGreenLight = Color(0xFFEBF4F1);
+
   /// Color: #F8F8FB
   static const Color bgDark = Color(0xFFF8F8FB);
 
