@@ -67,6 +67,7 @@
   "sharedGasLimit": "Gas Limit",
   "sharedNonce": "Nonce",
   "sharedDelegate": "Delegate",
+  "sharedNodeId": "Node ID",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",

@@ -276,12 +276,12 @@ class _TransactionCDetailStatusLabel extends StatelessWidget {
         decoration: BoxDecoration(
             color: confirmed
                 ? provider.themeMode.aquaGreen
-                : provider.themeMode.white,
+                : provider.themeMode.wispPink,
             borderRadius: const BorderRadius.all(Radius.circular(10)),
             border: Border.all(
                 color: confirmed
                     ? provider.themeMode.stateSuccess
-                    : provider.themeMode.text)),
+                    : provider.themeMode.stateDanger)),
         child: Text(
           confirmed
               ? Strings.current.sharedConfirmed
@@ -289,7 +289,7 @@ class _TransactionCDetailStatusLabel extends StatelessWidget {
           style: EZCTitleSmallTextStyle(
               color: confirmed
                   ? provider.themeMode.stateSuccess
-                  : provider.themeMode.text),
+                  : provider.themeMode.stateDanger),
         ),
       ),
     );

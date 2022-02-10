@@ -43,90 +43,88 @@ class WalletSendAvmScreen extends StatelessWidget {
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Assets.icons.icEzc64.svg(width: 32, height: 32),
-                            const SizedBox(width: 8),
-                            Text(
-                              'EZC',
-                              style: EZCBodyLargeTextStyle(
-                                  color: provider.themeMode.text),
-                            ),
-                            const SizedBox(width: 16),
-                            const EZCChainLabelText(text: 'X-Chain'),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Observer(
-                          builder: (_) => EZCAddressTextField(
-                            label: Strings.current.sharedSendTo,
-                            hint: Strings.current.sharedPasteAddress,
-                            controller: _addressController,
-                            error: _walletSendAvmStore.addressError,
-                            onChanged: (_) =>
-                                _walletSendAvmStore.removeAddressError(),
-                            onSuffixPressed: () {
-                              context.pushRoute(const QrCodeRoute());
-                            },
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Assets.icons.icEzc64.svg(width: 32, height: 32),
+                          const SizedBox(width: 8),
+                          Text(
+                            'EZC',
+                            style: EZCBodyLargeTextStyle(
+                                color: provider.themeMode.text),
                           ),
+                          const SizedBox(width: 16),
+                          const EZCChainLabelText(text: 'X-Chain'),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Observer(
+                        builder: (_) => EZCAddressTextField(
+                          label: Strings.current.sharedSendTo,
+                          hint: Strings.current.sharedPasteAddress,
+                          controller: _addressController,
+                          error: _walletSendAvmStore.addressError,
+                          onChanged: (_) =>
+                              _walletSendAvmStore.removeAddressError(),
+                          onSuffixPressed: () {
+                            context.pushRoute(const QrCodeRoute());
+                          },
                         ),
-                        const SizedBox(height: 16),
-                        Observer(
-                          builder: (_) => EZCAmountTextField(
-                            label: Strings.current.sharedSetAmount,
-                            hint: '0.0',
-                            suffixText: Strings.current.walletSendBalance(
-                                _walletSendAvmStore.balanceXString),
-                            rateUsd: _walletSendAvmStore.avaxPrice,
-                            error: _walletSendAvmStore.amountError,
-                            onChanged: (amount) {
-                              _walletSendAvmStore.amount =
-                                  Decimal.tryParse(amount) ?? Decimal.zero;
-                              _walletSendAvmStore.removeAmountError();
-                            },
-                            controller: _amountController,
-                            onSuffixPressed: () {
-                              _amountController.text =
-                                  _walletSendAvmStore.maxAmount.toString();
-                            },
-                          ),
+                      ),
+                      const SizedBox(height: 16),
+                      Observer(
+                        builder: (_) => EZCAmountTextField(
+                          label: Strings.current.sharedSetAmount,
+                          hint: '0.0',
+                          suffixText: Strings.current.walletSendBalance(
+                              _walletSendAvmStore.balanceXString),
+                          rateUsd: _walletSendAvmStore.avaxPrice,
+                          error: _walletSendAvmStore.amountError,
+                          onChanged: (amount) {
+                            _walletSendAvmStore.amount =
+                                Decimal.tryParse(amount) ?? Decimal.zero;
+                            _walletSendAvmStore.removeAmountError();
+                          },
+                          controller: _amountController,
+                          onSuffixPressed: () {
+                            _amountController.text =
+                                _walletSendAvmStore.maxAmount.toString();
+                          },
                         ),
-                        const SizedBox(height: 16),
-                        EZCTextField(
-                          label: Strings.current.walletSendMemo,
-                          hint: Strings.current.sharedMemo,
-                          maxLines: 3,
-                          controller: _memoController,
+                      ),
+                      const SizedBox(height: 16),
+                      EZCTextField(
+                        label: Strings.current.walletSendMemo,
+                        hint: Strings.current.sharedMemo,
+                        maxLines: 3,
+                        controller: _memoController,
+                      ),
+                      const SizedBox(height: 16),
+                      Observer(
+                        builder: (_) => WalletSendHorizontalText(
+                          title: Strings.current.sharedTransactionFee,
+                          content: '${_walletSendAvmStore.fee} EZC',
+                          rightColor: provider.themeMode.text60,
                         ),
-                        const SizedBox(height: 16),
-                        Observer(
-                          builder: (_) => WalletSendHorizontalText(
-                            title: Strings.current.sharedTransactionFee,
-                            content: '${_walletSendAvmStore.fee} EZC',
-                            rightColor: provider.themeMode.text60,
-                          ),
+                      ),
+                      const SizedBox(height: 4),
+                      Observer(
+                        builder: (_) => WalletSendHorizontalText(
+                          title: Strings.current.sharedTotal,
+                          content: '${_walletSendAvmStore.total} USD',
+                          rightColor: provider.themeMode.text60,
                         ),
-                        const SizedBox(height: 4),
-                        Observer(
-                          builder: (_) => WalletSendHorizontalText(
-                            title: Strings.current.sharedTotal,
-                            content: '${_walletSendAvmStore.total} USD',
-                            rightColor: provider.themeMode.text60,
-                          ),
-                        ),
-                        const SizedBox(height: 157),
-                        EZCMediumPrimaryButton(
-                          text: Strings.current.sharedConfirm,
-                          width: 185,
-                          padding: const EdgeInsets.symmetric(),
-                          onPressed: _onClickConfirm,
-                        )
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 157),
+                      EZCMediumPrimaryButton(
+                        text: Strings.current.sharedConfirm,
+                        width: 185,
+                        padding: const EdgeInsets.symmetric(),
+                        onPressed: _onClickConfirm,
+                      )
+                    ],
                   ),
                 ),
               )
