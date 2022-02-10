@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/auth/access/mnemonic/access_mnemonic_key.dart';
@@ -11,6 +11,10 @@ import 'package:wallet/features/auth/pin/pin_code_confirm.dart';
 import 'package:wallet/features/auth/pin/pin_code_setup.dart';
 import 'package:wallet/features/cross/transfer/cross_transfer.dart';
 import 'package:wallet/features/dashboard/routes.dart';
+import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm.dart';
+import 'package:wallet/features/earn/delegate/input/earn_delegate_input.dart';
+import 'package:wallet/features/earn/delegate/nodes/earn_delegate_nodes.dart';
+import 'package:wallet/features/earn/estimate_rewards/earn_estimate_rewards.dart';
 import 'package:wallet/features/onboard/on_board.dart';
 import 'package:wallet/features/qrcode/qr_code.dart';
 import 'package:wallet/features/setting/about/setting_about.dart';
@@ -22,10 +26,10 @@ import 'package:wallet/features/transaction/detail/transaction_detail.dart';
 import 'package:wallet/features/transaction/detail_c/transaction_c_detail.dart';
 import 'package:wallet/features/transaction/transactions.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
-import 'package:wallet/features/wallet/send/avm/wallet_send_avm.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.dart';
-import 'package:wallet/features/wallet/send/evm/wallet_send_evm.dart';
+import 'package:wallet/features/wallet/send/avm/wallet_send_avm.dart';
 import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.dart';
+import 'package:wallet/features/wallet/send/evm/wallet_send_evm.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Screen,Route',
@@ -60,6 +64,10 @@ import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.
     AutoRoute(page: TransactionsScreen),
     AutoRoute(page: TransactionDetailScreen),
     AutoRoute(page: TransactionCDetailScreen),
+    AutoRoute(page: EarnDelegateNodesScreen),
+    AutoRoute(page: EarnDelegateInputScreen),
+    AutoRoute(page: EarnDelegateConfirmScreen),
+    AutoRoute(page: EarnEstimateRewardsScreen),
     dashboardRoutes,
   ],
 )

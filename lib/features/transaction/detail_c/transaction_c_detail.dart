@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/transaction/detail/transaction_detail.dart';
 import 'package:wallet/features/transaction/detail_c/transaction_c_detail_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -126,23 +125,9 @@ class _TransactionCDetailInfoWidget extends StatelessWidget {
                         color: provider.themeMode.text60),
                   ),
                 ),
-                if (transaction.result) ...[
-                  Assets.icons.icTickCircleGreen.svg(width: 16, height: 16),
-                  const SizedBox(width: 4),
-                  Text(
-                    Strings.current.sharedSuccess,
-                    style: EZCBodyMediumTextStyle(
-                        color: provider.themeMode.stateSuccess),
-                  )
-                ] else ...[
-                  Assets.icons.icInfoCircleRed.svg(width: 16, height: 16),
-                  const SizedBox(width: 4),
-                  Text(
-                    Strings.current.sharedFail,
-                    style: EZCBodyMediumTextStyle(
-                        color: provider.themeMode.stateDanger),
-                  )
-                ],
+                _TransactionCDetailStatusLabel(
+                  confirmed: transaction.status,
+                )
               ],
             ),
             _divider,
@@ -272,6 +257,40 @@ class _TransactionCDetailInfoDivider extends StatelessWidget {
       builder: (context, provider, child) => Divider(
         color: provider.themeMode.text10,
         height: 25,
+      ),
+    );
+  }
+}
+
+class _TransactionCDetailStatusLabel extends StatelessWidget {
+  final bool confirmed;
+
+  const _TransactionCDetailStatusLabel({Key? key, required this.confirmed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+        decoration: BoxDecoration(
+            color: confirmed
+                ? provider.themeMode.aquaGreen
+                : provider.themeMode.white,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            border: Border.all(
+                color: confirmed
+                    ? provider.themeMode.stateSuccess
+                    : provider.themeMode.text)),
+        child: Text(
+          confirmed
+              ? Strings.current.sharedConfirmed
+              : Strings.current.sharedNotConfirm,
+          style: EZCTitleSmallTextStyle(
+              color: confirmed
+                  ? provider.themeMode.stateSuccess
+                  : provider.themeMode.text),
+        ),
       ),
     );
   }

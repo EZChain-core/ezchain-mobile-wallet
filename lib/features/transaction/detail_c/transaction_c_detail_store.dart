@@ -30,7 +30,7 @@ abstract class _TransactionCDetailStore with Store {
 class TransactionCChainViewData {
   final String hash;
   final bool result;
-  final String status;
+  final bool status;
   final String block;
   final String from;
   final String to;
@@ -65,11 +65,8 @@ class TransactionCChainViewData {
     final gasPriceText = '${bnToAvaxX(gasPrice)} wEZC';
     final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
     final fee = '${bnToAvaxC(gasPrice * gasUsed)} EZC';
-    final result =
-        tx.success;
-    final status = receiptStatus == CChainExplorerTxReceiptStatus.ok
-        ? Strings.current.sharedConfirmed
-        : Strings.current.sharedNotConfirm;
+    final result = tx.success;
+    final status = receiptStatus == CChainExplorerTxReceiptStatus.ok;
     final block = '#${tx.blockNumber}';
     final gasUsedText =
         '${tx.gasUsed} | ${(int.parse(tx.gasUsed) ~/ int.parse(tx.gasLimit)) * 100}%';
