@@ -167,6 +167,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Lock Stakeable"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
         "sharedMinuteAgo": m2,
+        "sharedNodeId": MessageLookupByLibrary.simpleMessage("Node ID"),
         "sharedNonce": MessageLookupByLibrary.simpleMessage("Nonce"),
         "sharedNotConfirm": MessageLookupByLibrary.simpleMessage("Not Confirm"),
         "sharedOutput": MessageLookupByLibrary.simpleMessage("Output"),

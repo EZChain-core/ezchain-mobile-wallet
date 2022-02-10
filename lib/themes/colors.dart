@@ -85,4 +85,7 @@ extension BaseColor on ThemeMode {
 
   Color get aquaGreen =>
       isDark ? ColorName.aquaGreenDark : ColorName.aquaGreenLight;
+
+  Color get wispPink =>
+      isDark ? ColorName.wispPinkDark : ColorName.wispPinkLight;
 }

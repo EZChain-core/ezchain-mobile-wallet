@@ -211,4 +211,10 @@ class ColorName {
 
   /// Color: #FFFFFF
   static const Color whiteLight = Color(0xFFFFFFFF);
+
+  /// Color: #FDEFEF
+  static const Color wispPinkDark = Color(0xFFFDEFEF);
+
+  /// Color: #FDEFEF
+  static const Color wispPinkLight = Color(0xFFFDEFEF);
 }

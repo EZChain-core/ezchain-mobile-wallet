@@ -734,6 +734,16 @@ class Strings {
     );
   }
 
+  /// `Node ID`
+  String get sharedNodeId {
+    return Intl.message(
+      'Node ID',
+      name: 'sharedNodeId',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
