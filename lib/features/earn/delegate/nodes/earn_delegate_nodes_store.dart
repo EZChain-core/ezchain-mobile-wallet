@@ -16,7 +16,7 @@ class EarnDelegateNodesStore = _EarnDelegateNodesStore
     with _$EarnDelegateNodesStore;
 
 abstract class _EarnDelegateNodesStore with Store {
-  final wallet = getIt<WalletFactory>().activeWallet;
+  final _wallet = getIt<WalletFactory>().activeWallet;
   final _validatorsStore = getIt<ValidatorsStore>();
 
   getNodeIds() async {
@@ -35,9 +35,9 @@ abstract class _EarnDelegateNodesStore with Store {
           return 0;
         }
       });
-      final pendingValidators = await wallet.getPlatformPendingValidators();
+      final pendingValidators = await _wallet.getPlatformPendingValidators();
       final pendingDelegators = pendingValidators.delegators;
-      final minStake = await wallet.getMinStake();
+      final minStake = await _wallet.getMinStake();
       final minStakeDelegation = minStake.minDelegatorStakeBN;
       for (var validator in validators) {
         final now = DateTime.now().millisecondsSinceEpoch;

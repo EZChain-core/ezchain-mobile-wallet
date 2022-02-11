@@ -69,8 +69,11 @@ class TransactionsSendImportExportItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => GestureDetector(
-        onTap: onPressed,
+      builder: (context, provider, child) => TextButton(
+        onPressed: onPressed,
+        style: TextButton.styleFrom(
+            padding: const EdgeInsets.all(0),
+            splashFactory: NoSplash.splashFactory),
         child: Column(
           children: [
             Row(
@@ -119,8 +122,11 @@ class TransactionsStakingItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => GestureDetector(
-        onTap: onPressed,
+      builder: (context, provider, child) => TextButton(
+        onPressed: onPressed,
+        style: TextButton.styleFrom(
+            padding: const EdgeInsets.all(0),
+            splashFactory: NoSplash.splashFactory),
         child: Column(
           children: [
             Row(
@@ -152,8 +158,11 @@ class TransactionsCChainItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     logger.i("vit ${item.id} ${item.time} ${item.from} ${item.to}");
     return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => GestureDetector(
-        onTap: onPressed,
+      builder: (context, provider, child) => TextButton(
+        onPressed: onPressed,
+        style: TextButton.styleFrom(
+            padding: const EdgeInsets.all(0),
+            splashFactory: NoSplash.splashFactory),
         child: Column(
           children: [
             Row(

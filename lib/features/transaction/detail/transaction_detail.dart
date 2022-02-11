@@ -46,12 +46,14 @@ class TransactionDetailScreen extends StatelessWidget {
                           )
                         : const SizedBox.shrink();
                   } else {
-                    return Align(
-                      alignment: Alignment.topCenter,
-                      child: EZCLoading(
-                          color: provider.themeMode.secondary,
-                          size: 40,
-                          strokeWidth: 4),
+                    return Expanded(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: EZCLoading(
+                            color: provider.themeMode.secondary,
+                            size: 40,
+                            strokeWidth: 4),
+                      ),
                     );
                   }
                 },

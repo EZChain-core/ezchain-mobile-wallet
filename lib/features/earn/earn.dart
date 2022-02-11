@@ -100,7 +100,10 @@ class _EarnScreenState extends State<EarnScreen> {
                   children: [
                     EZCMediumNoneButton(
                       text: Strings.current.earnCrossTransfer,
-                      onPressed: () {},
+                      onPressed: () {
+                        context.navigateTo(
+                            const DashboardRoute(children: [CrossRoute()]));
+                      },
                     ),
                     EZCMediumNoneButton(
                       text: Strings.current.earnEstimatedRewards,
