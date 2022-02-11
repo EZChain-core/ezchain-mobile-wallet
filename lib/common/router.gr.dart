@@ -203,8 +203,11 @@ class AppRouter extends _i33.RootStackRouter {
               key: args.key, cChainExplorerTx: args.cChainExplorerTx));
     },
     EarnDelegateNodesRoute.name: (routeData) {
+      final args = routeData.argsAs<EarnDelegateNodesRouteArgs>(
+          orElse: () => const EarnDelegateNodesRouteArgs());
       return _i33.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i24.EarnDelegateNodesScreen());
+          routeData: routeData,
+          child: _i24.EarnDelegateNodesScreen(key: args.key));
     },
     EarnDelegateInputRoute.name: (routeData) {
       return _i33.AdaptivePage<dynamic>(
@@ -709,11 +712,25 @@ class TransactionCDetailRouteArgs {
 }
 
 /// generated route for [_i24.EarnDelegateNodesScreen]
-class EarnDelegateNodesRoute extends _i33.PageRouteInfo<void> {
-  const EarnDelegateNodesRoute()
-      : super(name, path: '/earn-delegate-nodes-screen');
+class EarnDelegateNodesRoute
+    extends _i33.PageRouteInfo<EarnDelegateNodesRouteArgs> {
+  EarnDelegateNodesRoute({_i34.Key? key})
+      : super(name,
+            path: '/earn-delegate-nodes-screen',
+            args: EarnDelegateNodesRouteArgs(key: key));
 
   static const String name = 'EarnDelegateNodesRoute';
+}
+
+class EarnDelegateNodesRouteArgs {
+  const EarnDelegateNodesRouteArgs({this.key});
+
+  final _i34.Key? key;
+
+  @override
+  String toString() {
+    return 'EarnDelegateNodesRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for [_i25.EarnDelegateInputScreen]

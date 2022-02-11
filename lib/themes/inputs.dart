@@ -416,3 +416,138 @@ class EZCAddressTextField extends StatelessWidget {
     );
   }
 }
+
+class EZCDateTimeTextField extends StatelessWidget {
+  final String? hint;
+
+  final String? label;
+
+  final String? error;
+
+  final String? prefixText;
+
+  final String? suffixText;
+
+  final VoidCallback? onSuffixPressed;
+
+  final ValueChanged<String>? onChanged;
+
+  final Color? backgroundColor;
+
+  final bool? enabled;
+
+  const EZCDateTimeTextField(
+      {Key? key,
+      this.hint,
+      this.label,
+      this.onSuffixPressed,
+      this.prefixText,
+      this.suffixText,
+      this.onChanged,
+      this.error,
+      this.backgroundColor,
+      this.enabled})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _hasError = error != null;
+    final hasBottomText = prefixText != null || suffixText != null;
+    final hasTopText = label != null || _hasError;
+
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => SizedBox(
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (label != null)
+                  Text(
+                    label!,
+                    style: EZCTitleLargeTextStyle(
+                        color: provider.themeMode.text60),
+                  ),
+                const Spacer(),
+                if (_hasError)
+                  Text(
+                    error!,
+                    style: EZCLabelMediumTextStyle(
+                        color: provider.themeMode.stateDanger),
+                  ),
+              ],
+            ),
+            if (hasTopText) const SizedBox(height: 4),
+            Container(
+              height: 48,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  border: Border.all(color: provider.themeMode.text10)),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '',
+                      style: EZCTitleLargeTextStyle(
+                          color: provider.themeMode.text),
+                    ),
+                  ),
+                  IconButton(
+                    iconSize: 50,
+                    icon: Text(
+                      'MAX',
+                      style: EZCTitleLargeTextStyle(
+                          color: provider.themeMode.text40),
+                    ),
+                    onPressed: () {
+
+                    },
+                  ),
+                ],
+              ),
+            ),
+            if (hasBottomText) ...[
+              const SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (prefixText != null)
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        prefixText!,
+                        maxLines: 1,
+                        textAlign: TextAlign.start,
+                        overflow: TextOverflow.fade,
+                        softWrap: false,
+                        style: EZCLabelMediumTextStyle(
+                            color: provider.themeMode.text60),
+                      ),
+                    ),
+                  if (suffixText != null) ...[
+                    const SizedBox(width: 4),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        suffixText!.useCorrectEllipsis(),
+                        maxLines: 1,
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: EZCLabelMediumTextStyle(
+                            color: provider.themeMode.text60),
+                      ),
+                    ),
+                  ]
+                ],
+              )
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -67,7 +67,10 @@
   "sharedGasLimit": "Gas Limit",
   "sharedNonce": "Nonce",
   "sharedDelegate": "Delegate",
+  "sharedDelegator": "Delegator",
   "sharedNodeId": "Node ID",
+  "sharedEndTime": "End Time",
+  "sharedSelect": "Select",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",
@@ -138,5 +141,11 @@
   "earnDelegateValidMess": "You must have at least 1 ROI on the P chain to become a validator.",
   "earnDelegateAdd": "Add Delegator",
   "earnCrossTransfer": "Cross Chain Transfer",
-  "earnEstimatedRewards": "Estimated Rewards"
+  "earnEstimatedRewards": "Estimated Rewards",
+  "earnValidatorStake": "Validator Stake",
+  "earnStakingEndDate": "Staking End Date",
+  "earnStakeAmount": "Stake Amount",
+  "earnStakingEndDateNote": "Your EZC tokens will be locked until this date.",
+  "earnRewardAddress": "Reward Address",
+  "earnCustomAddress": "Custom Address"
 }

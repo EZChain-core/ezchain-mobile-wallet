@@ -33,13 +33,14 @@ class EarnDelegateNodesScreen extends StatelessWidget {
                     if (snapshot.hasData) {
                       final nodes = snapshot.data!;
                       return nodes.isNotEmpty
-                          ? ListView.builder(
+                          ? ListView.separated(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 12),
                               itemCount: nodes.length,
                               itemBuilder: (_, index) =>
                                   EarnDelegateNodeItemWidget(
                                       item: nodes[index]),
+                              separatorBuilder: (_, index) => const SizedBox(height: 24),
                             )
                           : const SizedBox.shrink();
                     } else {

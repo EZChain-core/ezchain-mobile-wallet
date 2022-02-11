@@ -734,11 +734,41 @@ class Strings {
     );
   }
 
+  /// `Delegator`
+  String get sharedDelegator {
+    return Intl.message(
+      'Delegator',
+      name: 'sharedDelegator',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Node ID`
   String get sharedNodeId {
     return Intl.message(
       'Node ID',
       name: 'sharedNodeId',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `End Time`
+  String get sharedEndTime {
+    return Intl.message(
+      'End Time',
+      name: 'sharedEndTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select`
+  String get sharedSelect {
+    return Intl.message(
+      'Select',
+      name: 'sharedSelect',
       desc: '',
       args: [],
     );
@@ -1449,6 +1479,66 @@ class Strings {
     return Intl.message(
       'Estimated Rewards',
       name: 'earnEstimatedRewards',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Validator Stake`
+  String get earnValidatorStake {
+    return Intl.message(
+      'Validator Stake',
+      name: 'earnValidatorStake',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Staking End Date`
+  String get earnStakingEndDate {
+    return Intl.message(
+      'Staking End Date',
+      name: 'earnStakingEndDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stake Amount`
+  String get earnStakeAmount {
+    return Intl.message(
+      'Stake Amount',
+      name: 'earnStakeAmount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your EZC tokens will be locked until this date.`
+  String get earnStakingEndDateNote {
+    return Intl.message(
+      'Your EZC tokens will be locked until this date.',
+      name: 'earnStakingEndDateNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reward Address`
+  String get earnRewardAddress {
+    return Intl.message(
+      'Reward Address',
+      name: 'earnRewardAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Custom Address`
+  String get earnCustomAddress {
+    return Intl.message(
+      'Custom Address',
+      name: 'earnCustomAddress',
       desc: '',
       args: [],
     );

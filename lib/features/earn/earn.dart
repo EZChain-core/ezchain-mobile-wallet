@@ -89,7 +89,7 @@ class _EarnScreenState extends State<EarnScreen> {
                         text: Strings.current.earnDelegateAdd,
                         enabled: true,
                         onPressed: () {
-                          context.pushRoute(const EarnDelegateNodesRoute());
+                          context.pushRoute(EarnDelegateNodesRoute());
                         },
                       ),
                     ],
