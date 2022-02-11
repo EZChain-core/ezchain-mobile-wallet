@@ -10,7 +10,7 @@ class WalletSendAvmConfirmStore = _WalletSendAvmConfirmStore
     with _$WalletSendAvmConfirmStore;
 
 abstract class _WalletSendAvmConfirmStore with Store {
-  final wallet = getIt<WalletFactory>().activeWallet;
+  final _wallet = getIt<WalletFactory>().activeWallet;
 
   @observable
   bool sendSuccess = false;
@@ -22,8 +22,8 @@ abstract class _WalletSendAvmConfirmStore with Store {
   sendAvm(String address, Decimal amount, {String? memo}) async {
     isLoading = true;
     try {
-      await wallet.updateUtxosX();
-      final txId = await wallet
+      await _wallet.updateUtxosX();
+      final txId = await _wallet
           .sendAvaxX(address, numberToBNAvaxX(amount.toBigInt()), memo: memo);
       print("txId = $txId");
       sendSuccess = true;

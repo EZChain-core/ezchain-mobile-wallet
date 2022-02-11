@@ -54,7 +54,8 @@ class TransactionsScreen extends StatelessWidget {
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Observer(
                                       builder: (_) => Text(
@@ -66,7 +67,6 @@ class TransactionsScreen extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    const SizedBox(height: 8),
                                     Observer(
                                       builder: (_) => Text(
                                         '\$${_transactionsStore.balanceUsd}',
