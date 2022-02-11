@@ -1,6 +1,9 @@
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/generated/l10n.dart';
+import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -32,6 +35,7 @@ class EarnDelegateNodeItemWidget extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(16)),
             color: provider.themeMode.bg),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               Strings.current.sharedNodeId,
@@ -39,9 +43,44 @@ class EarnDelegateNodeItemWidget extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              Strings.current.sharedNodeId,
+              item.nodeId,
               style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
             ),
+            const SizedBox(height: 12),
+            _EarnDelegateNodeItemHorizontalText(
+              title: Strings.current.earnValidatorStake,
+              content: item.validatorStake,
+              bg: provider.themeMode.secondary10,
+            ),
+            _EarnDelegateNodeItemHorizontalText(
+              title: Strings.current.sharedAvailable,
+              content: item.available,
+            ),
+            _EarnDelegateNodeItemHorizontalText(
+              title: Strings.current.sharedDelegator,
+              content: '${item.numberOfDelegators}',
+              bg: provider.themeMode.secondary10,
+            ),
+            _EarnDelegateNodeItemHorizontalText(
+              title: Strings.current.sharedEndTime,
+              content: item.endTime,
+            ),
+            _EarnDelegateNodeItemHorizontalText(
+              title: Strings.current.sharedFee,
+              content: item.fee,
+              bg: provider.themeMode.secondary10,
+            ),
+            const SizedBox(height: 12),
+            Align(
+              alignment: Alignment.centerRight,
+              child: EZCMediumPrimaryButton(
+                text: Strings.current.sharedSelect,
+                width: 157,
+                onPressed: () {
+                  context.pushRoute(const EarnDelegateInputRoute());
+                },
+              ),
+            )
           ],
         ),
       ),
@@ -52,10 +91,10 @@ class EarnDelegateNodeItemWidget extends StatelessWidget {
 class _EarnDelegateNodeItemHorizontalText extends StatelessWidget {
   final String title;
   final String content;
-  final Color bg;
+  final Color? bg;
 
   const _EarnDelegateNodeItemHorizontalText(
-      {Key? key, required this.title, required this.content, required this.bg})
+      {Key? key, required this.title, required this.content, this.bg})
       : super(key: key);
 
   @override

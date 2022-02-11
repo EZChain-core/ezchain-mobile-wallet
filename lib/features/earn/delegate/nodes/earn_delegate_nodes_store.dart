@@ -19,7 +19,7 @@ abstract class _EarnDelegateNodesStore with Store {
   final _wallet = getIt<WalletFactory>().activeWallet;
   final _validatorsStore = getIt<ValidatorsStore>();
 
-  getNodeIds() async {
+  Future<List<EarnDelegateNodeItem>> getNodeIds() async {
     List<EarnDelegateNodeItem> nodes = [];
     try {
       final validators = _validatorsStore.validators;

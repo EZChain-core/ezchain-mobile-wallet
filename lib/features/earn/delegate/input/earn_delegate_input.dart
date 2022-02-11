@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
+import 'package:wallet/themes/inputs.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
@@ -51,6 +52,9 @@ class EarnDelegateInputScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 16),
+                      EZCDateTimeTextField(
+                        label: Strings.current.earnStakingEndDate,
+                      ),
                     ],
                   ),
                 ),

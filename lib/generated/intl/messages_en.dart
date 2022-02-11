@@ -81,6 +81,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "dashboardWallet": MessageLookupByLibrary.simpleMessage("Wallet"),
         "earnCrossTransfer":
             MessageLookupByLibrary.simpleMessage("Cross Chain Transfer"),
+        "earnCustomAddress":
+            MessageLookupByLibrary.simpleMessage("Custom Address"),
         "earnDelegateAdd":
             MessageLookupByLibrary.simpleMessage("Add Delegator"),
         "earnDelegateDescription": MessageLookupByLibrary.simpleMessage(
@@ -89,6 +91,15 @@ class MessageLookup extends MessageLookupByLibrary {
             "You must have at least 1 ROI on the P chain to become a validator."),
         "earnEstimatedRewards":
             MessageLookupByLibrary.simpleMessage("Estimated Rewards"),
+        "earnRewardAddress":
+            MessageLookupByLibrary.simpleMessage("Reward Address"),
+        "earnStakeAmount": MessageLookupByLibrary.simpleMessage("Stake Amount"),
+        "earnStakingEndDate":
+            MessageLookupByLibrary.simpleMessage("Staking End Date"),
+        "earnStakingEndDateNote": MessageLookupByLibrary.simpleMessage(
+            "Your EZC tokens will be locked until this date."),
+        "earnValidatorStake":
+            MessageLookupByLibrary.simpleMessage("Validator Stake"),
         "onBoardCreateWallet":
             MessageLookupByLibrary.simpleMessage("Create Wallet"),
         "pageHomeWelcome": m0,
@@ -143,9 +154,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedCopy": MessageLookupByLibrary.simpleMessage("Copy"),
         "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
         "sharedDelegate": MessageLookupByLibrary.simpleMessage("Delegate"),
+        "sharedDelegator": MessageLookupByLibrary.simpleMessage("Delegator"),
         "sharedDestination":
             MessageLookupByLibrary.simpleMessage("Destination"),
         "sharedEZChain": MessageLookupByLibrary.simpleMessage("EZChain"),
+        "sharedEndTime": MessageLookupByLibrary.simpleMessage("End Time"),
         "sharedError": MessageLookupByLibrary.simpleMessage("Error"),
         "sharedExport": MessageLookupByLibrary.simpleMessage("Export"),
         "sharedFail": MessageLookupByLibrary.simpleMessage("Fail"),
@@ -180,6 +193,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedReceive": MessageLookupByLibrary.simpleMessage("Receive"),
         "sharedReceived": MessageLookupByLibrary.simpleMessage("Received"),
         "sharedResult": MessageLookupByLibrary.simpleMessage("Result"),
+        "sharedSelect": MessageLookupByLibrary.simpleMessage("Select"),
         "sharedSend": MessageLookupByLibrary.simpleMessage("Send"),
         "sharedSendTo": MessageLookupByLibrary.simpleMessage("Send to"),
         "sharedSendTransaction":
