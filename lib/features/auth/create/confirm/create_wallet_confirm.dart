@@ -33,7 +33,6 @@ class CreateWalletConfirmScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logger.e('$randomIndex');
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
