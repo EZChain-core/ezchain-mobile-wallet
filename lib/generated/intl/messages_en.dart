@@ -217,6 +217,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedTransactionSent":
             MessageLookupByLibrary.simpleMessage("Transaction Sent"),
         "sharedTransfer": MessageLookupByLibrary.simpleMessage("Transfer"),
+        "sharedValidate": MessageLookupByLibrary.simpleMessage("Validate"),
         "sharedValue": MessageLookupByLibrary.simpleMessage("Value"),
         "sharedXChain": MessageLookupByLibrary.simpleMessage("X chain"),
         "transactionsForm": MessageLookupByLibrary.simpleMessage("Form:"),

@@ -774,6 +774,16 @@ class Strings {
     );
   }
 
+  /// `Validate`
+  String get sharedValidate {
+    return Intl.message(
+      'Validate',
+      name: 'sharedValidate',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
