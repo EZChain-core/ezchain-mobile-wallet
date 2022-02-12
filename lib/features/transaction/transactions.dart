@@ -89,7 +89,7 @@ class TransactionsScreen extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (ezcType != EZCType.pChain)
+                            if (ezcType != EZCType.pChain) ...[
                               _HistoryButton(
                                 text: Strings.current.sharedSend,
                                 icon: Assets.icons.icArrowUpPrimary.svg(),
@@ -100,7 +100,8 @@ class TransactionsScreen extends StatelessWidget {
                                   }
                                 },
                               ),
-                            const SizedBox(width: 40),
+                              const SizedBox(width: 40),
+                            ],
                             _HistoryButton(
                               text: Strings.current.sharedReceive,
                               icon: Assets.icons.icArrowDownPrimary.svg(),
