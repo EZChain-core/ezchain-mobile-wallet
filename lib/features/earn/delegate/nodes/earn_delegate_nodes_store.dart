@@ -4,6 +4,7 @@ import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/roi/sdk/utils/bigint.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
@@ -19,10 +20,12 @@ abstract class _EarnDelegateNodesStore with Store {
   final _wallet = getIt<WalletFactory>().activeWallet;
   final _validatorsStore = getIt<ValidatorsStore>();
 
+  @computed
+  List<Validator> get validators => _validatorsStore.validators;
+
   Future<List<EarnDelegateNodeItem>> getNodeIds() async {
     List<EarnDelegateNodeItem> nodes = [];
     try {
-      final validators = _validatorsStore.validators;
       validators.sort((a, b) {
         final amtA = a.stakeAmountBN;
         final amtB = b.stakeAmountBN;

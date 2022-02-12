@@ -4,6 +4,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
+import 'package:wallet/common/router.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 import 'package:wallet/themes/colors.dart';
@@ -417,7 +418,7 @@ class EZCAddressTextField extends StatelessWidget {
   }
 }
 
-class EZCDateTimeTextField extends StatelessWidget {
+class EZCDateTimeTextField extends StatefulWidget {
   final String? hint;
 
   final String? label;
@@ -436,6 +437,12 @@ class EZCDateTimeTextField extends StatelessWidget {
 
   final bool? enabled;
 
+  final DateTime? initDate;
+
+  final DateTime? firstDate;
+
+  final DateTime? lastDate;
+
   const EZCDateTimeTextField(
       {Key? key,
       this.hint,
@@ -446,14 +453,27 @@ class EZCDateTimeTextField extends StatelessWidget {
       this.onChanged,
       this.error,
       this.backgroundColor,
-      this.enabled})
+      this.enabled,
+      this.initDate,
+      this.firstDate,
+      this.lastDate})
       : super(key: key);
 
   @override
+  State<EZCDateTimeTextField> createState() => _EZCDateTimeTextFieldState();
+}
+
+class _EZCDateTimeTextFieldState extends State<EZCDateTimeTextField> {
+  DateTime? selectedDate;
+
+  @override
   Widget build(BuildContext context) {
-    final _hasError = error != null;
-    final hasBottomText = prefixText != null || suffixText != null;
-    final hasTopText = label != null || _hasError;
+    final _hasError = widget.error != null;
+    final hasBottomText =
+        widget.prefixText != null || widget.suffixText != null;
+    final hasTopText = widget.label != null || _hasError;
+    selectedDate ??= widget.initDate ?? DateTime.now();
+    final String selectedTime = selectedDate!.formatDateHoursTime();
 
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
@@ -464,61 +484,66 @@ class EZCDateTimeTextField extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (label != null)
+                if (widget.label != null)
                   Text(
-                    label!,
+                    widget.label!,
                     style: EZCTitleLargeTextStyle(
                         color: provider.themeMode.text60),
                   ),
-                const Spacer(),
-                if (_hasError)
-                  Text(
-                    error!,
+                    const Spacer(),
+                    if (_hasError)
+                      Text(
+                        widget.error!,
                     style: EZCLabelMediumTextStyle(
                         color: provider.themeMode.stateDanger),
                   ),
-              ],
-            ),
-            if (hasTopText) const SizedBox(height: 4),
-            Container(
-              height: 48,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  border: Border.all(color: provider.themeMode.text10)),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      '',
-                      style: EZCTitleLargeTextStyle(
-                          color: provider.themeMode.text),
+                  ],
+                ),
+                if (hasTopText) const SizedBox(height: 4),
+                Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      border: Border.all(color: provider.themeMode.text10)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                          alignment: Alignment.centerLeft,
+                          splashFactory: NoSplash.splashFactory),
+                      child: Text(
+                        selectedTime,
+                        style: EZCTitleLargeTextStyle(
+                            color: provider.themeMode.text),
+                      ),
+                      onPressed: () {
+                        _showDatePicker();
+                      },
                     ),
                   ),
-                  IconButton(
-                    iconSize: 50,
+                      IconButton(
+                        iconSize: 50,
                     icon: Text(
                       'MAX',
                       style: EZCTitleLargeTextStyle(
                           color: provider.themeMode.text40),
                     ),
-                    onPressed: () {
-
-                    },
+                    onPressed: () {},
                   ),
-                ],
-              ),
-            ),
-            if (hasBottomText) ...[
-              const SizedBox(height: 4),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (prefixText != null)
+                    ],
+                  ),
+                ),
+                if (hasBottomText) ...[
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (widget.prefixText != null)
                     Expanded(
                       flex: 1,
                       child: Text(
-                        prefixText!,
+                        widget.prefixText!,
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.fade,
@@ -526,13 +551,13 @@ class EZCDateTimeTextField extends StatelessWidget {
                         style: EZCLabelMediumTextStyle(
                             color: provider.themeMode.text60),
                       ),
-                    ),
-                  if (suffixText != null) ...[
+                        ),
+                      if (widget.suffixText != null) ...[
                     const SizedBox(width: 4),
                     Expanded(
                       flex: 1,
                       child: Text(
-                        suffixText!.useCorrectEllipsis(),
+                        widget.suffixText!.useCorrectEllipsis(),
                         maxLines: 1,
                         softWrap: false,
                         overflow: TextOverflow.ellipsis,
@@ -549,5 +574,30 @@ class EZCDateTimeTextField extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _showDatePicker() async {
+    final context = walletContext;
+    final initDate = selectedDate;
+    if (context == null || initDate == null) return;
+    final DateTime? date = await showDatePicker(
+        context: context,
+        initialDate: initDate,
+        firstDate: widget.firstDate ?? DateTime.now(),
+        lastDate: widget.lastDate ?? DateTime(2101));
+    if (date != null) {
+      final TimeOfDay? selectedTime = await showTimePicker(
+        initialTime: TimeOfDay.fromDateTime(initDate),
+        context: context,
+      );
+      if (selectedTime != null) {
+        final dateTime = date.applied(selectedTime);
+        if (dateTime != selectedDate) {
+          setState(() {
+            selectedDate = dateTime;
+          });
+        }
+      }
+    }
   }
 }
