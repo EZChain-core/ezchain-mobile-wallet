@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/dialog_extensions.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -32,6 +33,7 @@ class CreateWalletConfirmScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    logger.e('$randomIndex');
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -43,58 +45,58 @@ class CreateWalletConfirmScreen extends StatelessWidget {
                 child: Text(
                   Strings.current.sharedConfirm,
                   style: EZCHeadlineMediumTextStyle(
-                    color: provider.themeMode.text,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
-                child: Text(
-                  Strings.current.createWalletConfirmDes,
-                  style: EZCBodyLargeTextStyle(
-                    color: provider.themeMode.text70,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: provider.themeMode.bg,
-                    borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  ),
-                  margin: const EdgeInsets.only(left: 16, right: 16, top: 72),
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(16),
-                    child: Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: _buildRandomMnemonicList()),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Center(
-                  child: SizedBox(
-                    width: 169,
-                    child: Observer(
-                      builder: (_) => EZCMediumPrimaryButton(
-                        text: Strings.current.sharedConfirm,
-                        onPressed: () {
-                          _onClickConfirm();
-                        },
-                        isLoading: _createWalletConfirmStore.isLoading,
+                        color: provider.themeMode.text,
                       ),
                     ),
                   ),
-                ),
-              )
-            ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+                    child: Text(
+                      Strings.current.createWalletConfirmDes,
+                      style: EZCBodyLargeTextStyle(
+                        color: provider.themeMode.text70,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: provider.themeMode.bg,
+                        borderRadius: const BorderRadius.all(Radius.circular(16)),
+                      ),
+                      margin: const EdgeInsets.only(left: 16, right: 16, top: 72),
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(16),
+                        child: Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: _buildRandomMnemonicList()),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: SizedBox(
+                        width: 169,
+                        child: Observer(
+                          builder: (_) => EZCMediumPrimaryButton(
+                            text: Strings.current.sharedConfirm,
+                            onPressed: () {
+                              _onClickConfirm();
+                            },
+                            isLoading: _createWalletConfirmStore.isLoading,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
     );
   }
 
