@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wallet/generated/l10n.dart';
 
 extension StringExtension on String {
-
   String useCorrectEllipsis() {
     return replaceAll('', '\u200B');
   }
@@ -26,9 +26,7 @@ extension StringExtension on String {
 }
 
 extension StringNullableExtension on String? {
-
-  bool get isNotNullOrEmpty =>
-      this != null && this != "";
+  bool get isNotNullOrEmpty => this != null && this != "";
 }
 
 T? tryCast<T>(dynamic x) => x is T ? x : null;
@@ -54,4 +52,10 @@ extension DateTimeExtension on DateTime {
   String format(String pattern) {
     return DateFormat(pattern).format(this);
   }
+
+  DateTime applied(TimeOfDay time) {
+    return DateTime(year, month, day, time.hour, time.minute);
+  }
+
+  String formatDateHoursTime() => DateFormat.yMMMd().add_jm().format(this);
 }

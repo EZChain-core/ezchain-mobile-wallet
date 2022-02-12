@@ -20,18 +20,30 @@ import 'package:wallet/themes/typography.dart';
 class TransactionsItem {
   final String id;
   final String time;
+  final String type;
+  final List<TransactionsItemFrom> from;
+  final List<TransactionsItemTo> to;
 
-  TransactionsItem(this.id, this.time);
+  TransactionsItem(this.id, this.time, this.type, this.from, this.to);
+}
+
+class TransactionsItemFrom {
+  final String from;
+
+  TransactionsItemFrom(this.from);
+}
+
+class TransactionsItemTo {
+  final String to;
+  final String amount;
+
+  TransactionsItemTo(this.to, this.amount);
 }
 
 class TransactionsBaseImportExportItem extends TransactionsItem {
-  final String type;
-  final String amount;
-  final bool isIncrease;
-
-  TransactionsBaseImportExportItem(
-      String id, String time, this.type, this.amount, this.isIncrease)
-      : super(id, time);
+  TransactionsBaseImportExportItem(String id, String time, String type,
+      List<TransactionsItemFrom> from, List<TransactionsItemTo> to)
+      : super(id, time, type, from, to);
 }
 
 class TransactionsStakingItem extends TransactionsItem {
@@ -40,22 +52,36 @@ class TransactionsStakingItem extends TransactionsItem {
   final String addDelegator;
   final String addValidator;
 
-  TransactionsStakingItem(String id, String time, this.stakeEndDate,
-      this.rewardPending, this.addDelegator, this.addValidator)
-      : super(id, time);
+  TransactionsStakingItem(
+      String id,
+      String time,
+      String type,
+      List<TransactionsItemFrom> from,
+      List<TransactionsItemTo> to,
+      this.stakeEndDate,
+      this.rewardPending,
+      this.addDelegator,
+      this.addValidator)
+      : super(id, time, type, from, to);
 }
 
 class TransactionsCChainItem extends TransactionsItem {
   final String blockNumber;
-  final String from;
-  final String to;
   final String amount;
   final String fee;
   final CChainExplorerTx cChainExplorerTx;
 
-  TransactionsCChainItem(String id, String time, this.blockNumber, this.from,
-      this.to, this.amount, this.fee, this.cChainExplorerTx)
-      : super(id, time);
+  TransactionsCChainItem(
+      String id,
+      String time,
+      String type,
+      List<TransactionsItemFrom> from,
+      List<TransactionsItemTo> to,
+      this.blockNumber,
+      this.amount,
+      this.fee,
+      this.cChainExplorerTx)
+      : super(id, time, type, from, to);
 }
 
 class TransactionsSendImportExportItemWidget extends StatelessWidget {
@@ -93,14 +119,6 @@ class TransactionsSendImportExportItemWidget extends StatelessWidget {
                   item.type,
                   style:
                       EZCBodyLargeTextStyle(color: provider.themeMode.text60),
-                ),
-                Text(
-                  item.amount,
-                  style: EZCBodyLargeTextStyle(
-                    color: item.isIncrease
-                        ? provider.themeMode.stateSuccess
-                        : provider.themeMode.stateDanger,
-                  ),
                 ),
               ],
             ),
@@ -182,17 +200,6 @@ class TransactionsCChainItemWidget extends StatelessWidget {
   }
 }
 
-class TransactionsItemViewData {
-  final String txId;
-  final String time;
-  final String type;
-  final String amount;
-  final bool isIncrease;
-
-  TransactionsItemViewData(
-      this.txId, this.time, this.type, this.amount, this.isIncrease);
-}
-
 Widget buildTransactionWidget(TransactionsItem transaction) {
   if (transaction is TransactionsBaseImportExportItem) {
     return TransactionsSendImportExportItemWidget(
@@ -240,9 +247,9 @@ List<TransactionsItem> mapToTransactionsItem(List<HistoryItem> items,
     for (var item in result) {
       final transId = item.id;
       final transTime = item.timestamp?.parseDateTime()?.parseTimeAgo() ?? '';
-      String transAmount = '';
       String transType = '';
-      bool transIncrease = false;
+      final List<TransactionsItemFrom> from;
+      final List<TransactionsItemTo> to;
 
       if (item is HistoryBaseTx) {
         final token = item.tokens.firstWhereOrNull(
@@ -258,32 +265,32 @@ List<TransactionsItem> mapToTransactionsItem(List<HistoryItem> items,
           );
 
           transType = Strings.current.sharedSent;
-          transAmount = '$amount ${token.asset.symbol}';
-          transIncrease = false;
+          // transAmount = '$amount ${token.asset.symbol}';
+          // transIncrease = false;
         } else {
           transType = Strings.current.sharedReceived;
-          transAmount = '${token.amountDisplayValue} ${token.asset.symbol}';
-          transIncrease = true;
+          // transAmount = '${token.amountDisplayValue} ${token.asset.symbol}';
+          // transIncrease = true;
         }
-        transactions.add(TransactionsBaseImportExportItem(
-            transId, transTime, transType, transAmount, transIncrease));
+        // transactions.add(TransactionsBaseImportExportItem(
+        //     transId, transTime, transType, transAmount, transIncrease));
       } else if (item is HistoryImportExport) {
         if (item.amount > BigInt.zero) {
           if (item.type == HistoryItemTypeName.import) {
             transType = Strings.current.sharedImport;
-            transAmount = "${item.amountDisplayValue} EZC";
-            transIncrease = true;
+            // transAmount = "${item.amountDisplayValue} EZC";
+            // transIncrease = true;
           } else if (item.type == HistoryItemTypeName.export) {
             final amount =
                 bnToAvaxX((item.amount + item.fee) * BigInt.from(-1));
 
             transType = Strings.current.sharedExport;
-            transAmount = '$amount EZC';
-            transIncrease = false;
+            // transAmount = '$amount EZC';
+            // transIncrease = false;
           }
         }
-        transactions.add(TransactionsBaseImportExportItem(
-            transId, transTime, transType, transAmount, transIncrease));
+        // transactions.add(TransactionsBaseImportExportItem(
+        //     transId, transTime, transType, transAmount, transIncrease));
       } else if (item is HistoryStaking && validators != null) {
         String reward = '';
         String addValidator = '';
@@ -313,8 +320,8 @@ List<TransactionsItem> mapToTransactionsItem(List<HistoryItem> items,
                 '${bnToAvaxP(BigInt.tryParse(potentialReward) ?? BigInt.zero)} EZC';
           }
         }
-        transactions.add(TransactionsStakingItem(transId, transTime,
-            stakeEndTime, reward, addDelegator, addValidator));
+        // transactions.add(TransactionsStakingItem(transId, transTime,
+        //     stakeEndTime, reward, addDelegator, addValidator));
       }
     }
   } catch (e) {
@@ -337,8 +344,8 @@ List<TransactionsItem> mapCChainToTransactionsItem(
       final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
       final fee = '${bnToAvaxC(gasPrice * gasUsed)} EZC';
       final amount = '$value EZC';
-      transactions.add(TransactionsCChainItem(
-          tx.hash, time, blockNumber, tx.from, tx.to, amount, fee, tx));
+      // transactions.add(TransactionsCChainItem(
+      //     tx.hash, time, blockNumber, tx.from, tx.to, amount, fee, tx));
     }
   } catch (e) {
     logger.e(e);

@@ -30,21 +30,27 @@ class EarnDelegateNodeItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(16)),
             color: provider.themeMode.bg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              Strings.current.sharedNodeId,
-              style: EZCTitleLargeTextStyle(color: provider.themeMode.text60),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(
+                Strings.current.sharedNodeId,
+                style: EZCTitleLargeTextStyle(color: provider.themeMode.text60),
+              ),
             ),
             const SizedBox(height: 4),
-            Text(
-              item.nodeId,
-              style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(
+                item.nodeId,
+                style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
+              ),
             ),
             const SizedBox(height: 12),
             _EarnDelegateNodeItemHorizontalText(
@@ -73,12 +79,15 @@ class EarnDelegateNodeItemWidget extends StatelessWidget {
             const SizedBox(height: 12),
             Align(
               alignment: Alignment.centerRight,
-              child: EZCMediumPrimaryButton(
-                text: Strings.current.sharedSelect,
-                width: 157,
-                onPressed: () {
-                  context.pushRoute(const EarnDelegateInputRoute());
-                },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: EZCMediumPrimaryButton(
+                  text: Strings.current.sharedSelect,
+                  width: 157,
+                  onPressed: () {
+                    context.pushRoute(const EarnDelegateInputRoute());
+                  },
+                ),
               ),
             )
           ],
