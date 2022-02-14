@@ -20,17 +20,20 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(name) => "Welcome ${name}";
+  static String m0(balance) => "Balance: ${balance}";
 
-  static String m1(count) =>
-      "${Intl.plural(count, one: '1 hour ago', other: '${count} hours ago')}";
+  static String m1(name) => "Welcome ${name}";
 
   static String m2(count) =>
+      "${Intl.plural(count, one: '1 hour ago', other: '${count} hours ago')}";
+
+  static String m3(count) =>
       "${Intl.plural(count, one: '1 minute ago', other: '${count} minutes ago')}";
 
-  static String m3(balance) => "Balance: ${balance}";
+  static String m4(balance) => "Balance: ${balance}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
+
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accessMnemonicKeyDes": MessageLookupByLibrary.simpleMessage(
             "Hit ‘SPACE’ after every successful word entry."),
@@ -94,6 +97,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "earnRewardAddress":
             MessageLookupByLibrary.simpleMessage("Reward Address"),
         "earnStakeAmount": MessageLookupByLibrary.simpleMessage("Stake Amount"),
+        "earnStakeBalance": m0,
         "earnStakingEndDate":
             MessageLookupByLibrary.simpleMessage("Staking End Date"),
         "earnStakingEndDateNote": MessageLookupByLibrary.simpleMessage(
@@ -102,7 +106,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Validator Stake"),
         "onBoardCreateWallet":
             MessageLookupByLibrary.simpleMessage("Create Wallet"),
-        "pageHomeWelcome": m0,
+        "pageHomeWelcome": m1,
         "pinCodeDes": MessageLookupByLibrary.simpleMessage(
             "Set up your PIN code to unlock the wallet, confirm transactions and other activities tha require your permission"),
         "pinCodeSetNewPin":
@@ -166,7 +170,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedFrom": MessageLookupByLibrary.simpleMessage("Form"),
         "sharedGasLimit": MessageLookupByLibrary.simpleMessage("Gas Limit"),
         "sharedGasPrice": MessageLookupByLibrary.simpleMessage("Gas Price"),
-        "sharedHourAgo": m1,
+        "sharedHourAgo": m2,
         "sharedImport": MessageLookupByLibrary.simpleMessage("Import"),
         "sharedInput": MessageLookupByLibrary.simpleMessage("Input"),
         "sharedInvalidAddress":
@@ -179,7 +183,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedLockStakeable":
             MessageLookupByLibrary.simpleMessage("Lock Stakeable"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
-        "sharedMinuteAgo": m2,
+        "sharedMinuteAgo": m3,
         "sharedNodeId": MessageLookupByLibrary.simpleMessage("Node ID"),
         "sharedNonce": MessageLookupByLibrary.simpleMessage("Nonce"),
         "sharedNotConfirm": MessageLookupByLibrary.simpleMessage("Not Confirm"),
@@ -240,7 +244,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Set Amount"),
         "walletReceiveToThis": MessageLookupByLibrary.simpleMessage(
             " to this address\nSending any other coins my result in permanent loss"),
-        "walletSendBalance": m3,
+        "walletSendBalance": m4,
         "walletSendCChainErrorAddress": MessageLookupByLibrary.simpleMessage(
             "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\""),
         "walletSendGasGWEI": MessageLookupByLibrary.simpleMessage("GWEI"),

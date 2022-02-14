@@ -148,5 +148,6 @@
   "earnStakeAmount": "Stake Amount",
   "earnStakingEndDateNote": "Your EZC tokens will be locked until this date.",
   "earnRewardAddress": "Reward Address",
-  "earnCustomAddress": "Custom Address"
+  "earnCustomAddress": "Custom Address",
+  "earnStakeBalance": "Balance: {balance}"
 }
