@@ -1,7 +1,9 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/generated/l10n.dart';
+import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/inputs.dart';
 import 'package:wallet/themes/theme.dart';
@@ -37,6 +39,7 @@ class EarnDelegateInputScreen extends StatelessWidget {
                               const BorderRadius.all(Radius.circular(16)),
                         ),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               Strings.current.sharedNodeId,
@@ -54,7 +57,26 @@ class EarnDelegateInputScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       EZCDateTimeTextField(
                         label: Strings.current.earnStakingEndDate,
+                        prefixText: Strings.current.earnStakingEndDateNote,
                       ),
+                      const SizedBox(height: 16),
+                      EZCAmountTextField(
+                        label: Strings.current.earnStakeAmount,
+                        prefixText: Strings.current.earnStakeBalance(1234),
+                      ),
+                      const SizedBox(height: 16),
+                      EZCAddressTextField(
+                        label: Strings.current.earnRewardAddress,
+                      ),
+                      const SizedBox(height: 100),
+                      EZCMediumPrimaryButton(
+                        text: Strings.current.sharedConfirm,
+                        width: 169,
+                        isLoading: false,
+                        onPressed: () {
+                          context.pushRoute(const EarnDelegateConfirmRoute());
+                        },
+                      )
                     ],
                   ),
                 ),

@@ -1553,6 +1553,16 @@ class Strings {
       args: [],
     );
   }
+
+  /// `Balance: {balance}`
+  String earnStakeBalance(Object balance) {
+    return Intl.message(
+      'Balance: $balance',
+      name: 'earnStakeBalance',
+      desc: '',
+      args: [balance],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Strings> {
