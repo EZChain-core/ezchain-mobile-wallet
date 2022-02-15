@@ -85,7 +85,7 @@ class EarnDelegateNodeItemWidget extends StatelessWidget {
                   text: Strings.current.sharedSelect,
                   width: 157,
                   onPressed: () {
-                    context.pushRoute(const EarnDelegateInputRoute());
+                    context.pushRoute(EarnDelegateInputRoute());
                   },
                 ),
               ),

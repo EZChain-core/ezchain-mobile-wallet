@@ -72,6 +72,10 @@
   "sharedEndTime": "End Time",
   "sharedSelect": "Select",
   "sharedValidate": "Validate",
+  "sharedStartDate": "Start date",
+  "sharedEndDate": "End date",
+  "sharedSubmit": "Submit",
+  "sharedWalletAddress": "Wallet address",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",
@@ -149,5 +153,10 @@
   "earnStakingEndDateNote": "Your EZC tokens will be locked until this date.",
   "earnRewardAddress": "Reward Address",
   "earnCustomAddress": "Custom Address",
-  "earnStakeBalance": "Balance: {balance}"
+  "earnStakeBalance": "Balance: {balance}",
+  "earnStakingAmount": "Staking Amount",
+  "earnDelegationFee": "Delegation Fee",
+  "earnEstimatedReward": "Estimated Reward",
+  "earnStakingDuration": "Staking Duration",
+  "earnUseYourWallet": "Use your wallet"
 }

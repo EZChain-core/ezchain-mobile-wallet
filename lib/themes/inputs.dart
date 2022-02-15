@@ -327,6 +327,8 @@ class EZCAddressTextField extends StatelessWidget {
 
   final ValueChanged<String>? onChanged;
 
+  final bool? enabled;
+
   const EZCAddressTextField({
     Key? key,
     this.hint,
@@ -336,6 +338,7 @@ class EZCAddressTextField extends StatelessWidget {
     this.onSuffixPressed,
     this.onChanged,
     this.error,
+    this.enabled,
   }) : super(key: key);
 
   @override
@@ -369,11 +372,14 @@ class EZCAddressTextField extends StatelessWidget {
             SizedBox(
               height: 48,
               child: TextField(
+                enabled: enabled,
                 style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
                 cursorColor: provider.themeMode.text,
                 controller: controller,
                 onChanged: onChanged,
                 decoration: InputDecoration(
+                  filled: enabled == false,
+                  fillColor: provider.themeMode.text10,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                   hintText: hint,
                   hintStyle:
@@ -405,6 +411,10 @@ class EZCAddressTextField extends StatelessWidget {
                         color: _hasError
                             ? provider.themeMode.red
                             : provider.themeMode.borderActive),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: ezcBorder,
+                    borderSide: BorderSide(color: provider.themeMode.border),
                   ),
                 ),
                 keyboardType: inputType ?? TextInputType.text,
