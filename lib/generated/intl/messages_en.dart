@@ -33,7 +33,6 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m4(balance) => "Balance: ${balance}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accessMnemonicKeyDes": MessageLookupByLibrary.simpleMessage(
             "Hit ‘SPACE’ after every successful word entry."),
@@ -92,16 +91,26 @@ class MessageLookup extends MessageLookupByLibrary {
             "You do not own an ROIChain node, but you want to stake using another node."),
         "earnDelegateValidMess": MessageLookupByLibrary.simpleMessage(
             "You must have at least 1 ROI on the P chain to become a validator."),
+        "earnDelegationFee":
+            MessageLookupByLibrary.simpleMessage("Delegation Fee"),
+        "earnEstimatedReward":
+            MessageLookupByLibrary.simpleMessage("Estimated Reward"),
         "earnEstimatedRewards":
             MessageLookupByLibrary.simpleMessage("Estimated Rewards"),
         "earnRewardAddress":
             MessageLookupByLibrary.simpleMessage("Reward Address"),
         "earnStakeAmount": MessageLookupByLibrary.simpleMessage("Stake Amount"),
         "earnStakeBalance": m0,
+        "earnStakingAmount":
+            MessageLookupByLibrary.simpleMessage("Staking Amount"),
+        "earnStakingDuration":
+            MessageLookupByLibrary.simpleMessage("Staking Duration"),
         "earnStakingEndDate":
             MessageLookupByLibrary.simpleMessage("Staking End Date"),
         "earnStakingEndDateNote": MessageLookupByLibrary.simpleMessage(
             "Your EZC tokens will be locked until this date."),
+        "earnUseYourWallet":
+            MessageLookupByLibrary.simpleMessage("Use your wallet"),
         "earnValidatorStake":
             MessageLookupByLibrary.simpleMessage("Validator Stake"),
         "onBoardCreateWallet":
@@ -162,6 +171,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedDestination":
             MessageLookupByLibrary.simpleMessage("Destination"),
         "sharedEZChain": MessageLookupByLibrary.simpleMessage("EZChain"),
+        "sharedEndDate": MessageLookupByLibrary.simpleMessage("End date"),
         "sharedEndTime": MessageLookupByLibrary.simpleMessage("End Time"),
         "sharedError": MessageLookupByLibrary.simpleMessage("Error"),
         "sharedExport": MessageLookupByLibrary.simpleMessage("Export"),
@@ -207,7 +217,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedShare": MessageLookupByLibrary.simpleMessage("Share"),
         "sharedSource": MessageLookupByLibrary.simpleMessage("Source"),
         "sharedStartAgain": MessageLookupByLibrary.simpleMessage("Start Again"),
+        "sharedStartDate": MessageLookupByLibrary.simpleMessage("Start date"),
         "sharedStatus": MessageLookupByLibrary.simpleMessage("Status"),
+        "sharedSubmit": MessageLookupByLibrary.simpleMessage("Submit"),
         "sharedSuccess": MessageLookupByLibrary.simpleMessage("Success"),
         "sharedTo": MessageLookupByLibrary.simpleMessage("To"),
         "sharedToken": MessageLookupByLibrary.simpleMessage("Token"),
@@ -223,6 +235,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedTransfer": MessageLookupByLibrary.simpleMessage("Transfer"),
         "sharedValidate": MessageLookupByLibrary.simpleMessage("Validate"),
         "sharedValue": MessageLookupByLibrary.simpleMessage("Value"),
+        "sharedWalletAddress":
+            MessageLookupByLibrary.simpleMessage("Wallet address"),
         "sharedXChain": MessageLookupByLibrary.simpleMessage("X chain"),
         "transactionsForm": MessageLookupByLibrary.simpleMessage("Form:"),
         "transactionsGasUsedByTransaction":

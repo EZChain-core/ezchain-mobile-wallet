@@ -210,8 +210,11 @@ class AppRouter extends _i33.RootStackRouter {
           child: _i24.EarnDelegateNodesScreen(key: args.key));
     },
     EarnDelegateInputRoute.name: (routeData) {
+      final args = routeData.argsAs<EarnDelegateInputRouteArgs>(
+          orElse: () => const EarnDelegateInputRouteArgs());
       return _i33.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i25.EarnDelegateInputScreen());
+          routeData: routeData,
+          child: _i25.EarnDelegateInputScreen(key: args.key));
     },
     EarnDelegateConfirmRoute.name: (routeData) {
       return _i33.AdaptivePage<dynamic>(
@@ -734,11 +737,25 @@ class EarnDelegateNodesRouteArgs {
 }
 
 /// generated route for [_i25.EarnDelegateInputScreen]
-class EarnDelegateInputRoute extends _i33.PageRouteInfo<void> {
-  const EarnDelegateInputRoute()
-      : super(name, path: '/earn-delegate-input-screen');
+class EarnDelegateInputRoute
+    extends _i33.PageRouteInfo<EarnDelegateInputRouteArgs> {
+  EarnDelegateInputRoute({_i34.Key? key})
+      : super(name,
+            path: '/earn-delegate-input-screen',
+            args: EarnDelegateInputRouteArgs(key: key));
 
   static const String name = 'EarnDelegateInputRoute';
+}
+
+class EarnDelegateInputRouteArgs {
+  const EarnDelegateInputRouteArgs({this.key});
+
+  final _i34.Key? key;
+
+  @override
+  String toString() {
+    return 'EarnDelegateInputRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for [_i26.EarnDelegateConfirmScreen]

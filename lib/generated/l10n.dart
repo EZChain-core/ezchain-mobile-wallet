@@ -784,6 +784,46 @@ class Strings {
     );
   }
 
+  /// `Start date`
+  String get sharedStartDate {
+    return Intl.message(
+      'Start date',
+      name: 'sharedStartDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `End date`
+  String get sharedEndDate {
+    return Intl.message(
+      'End date',
+      name: 'sharedEndDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submit`
+  String get sharedSubmit {
+    return Intl.message(
+      'Submit',
+      name: 'sharedSubmit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wallet address`
+  String get sharedWalletAddress {
+    return Intl.message(
+      'Wallet address',
+      name: 'sharedWalletAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -1561,6 +1601,56 @@ class Strings {
       name: 'earnStakeBalance',
       desc: '',
       args: [balance],
+    );
+  }
+
+  /// `Staking Amount`
+  String get earnStakingAmount {
+    return Intl.message(
+      'Staking Amount',
+      name: 'earnStakingAmount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delegation Fee`
+  String get earnDelegationFee {
+    return Intl.message(
+      'Delegation Fee',
+      name: 'earnDelegationFee',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Estimated Reward`
+  String get earnEstimatedReward {
+    return Intl.message(
+      'Estimated Reward',
+      name: 'earnEstimatedReward',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Staking Duration`
+  String get earnStakingDuration {
+    return Intl.message(
+      'Staking Duration',
+      name: 'earnStakingDuration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use your wallet`
+  String get earnUseYourWallet {
+    return Intl.message(
+      'Use your wallet',
+      name: 'earnUseYourWallet',
+      desc: '',
+      args: [],
     );
   }
 }

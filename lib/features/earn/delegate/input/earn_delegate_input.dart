@@ -11,7 +11,11 @@ import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
 class EarnDelegateInputScreen extends StatelessWidget {
-  const EarnDelegateInputScreen({Key? key}) : super(key: key);
+  EarnDelegateInputScreen({Key? key}) : super(key: key);
+
+  final intDate = DateTime.now().add(const Duration(days: 21));
+  final firstDate = DateTime.now().add(const Duration(days: 14));
+  final lastDate = DateTime.now().add(const Duration(days: 365));
 
   @override
   Widget build(BuildContext context) {
@@ -58,15 +62,20 @@ class EarnDelegateInputScreen extends StatelessWidget {
                       EZCDateTimeTextField(
                         label: Strings.current.earnStakingEndDate,
                         prefixText: Strings.current.earnStakingEndDateNote,
+                        initDate: intDate,
+                        firstDate: firstDate,
+                        lastDate: lastDate,
                       ),
                       const SizedBox(height: 16),
                       EZCAmountTextField(
                         label: Strings.current.earnStakeAmount,
+                        hint: '0.0',
                         prefixText: Strings.current.earnStakeBalance(1234),
                       ),
                       const SizedBox(height: 16),
                       EZCAddressTextField(
                         label: Strings.current.earnRewardAddress,
+                        enabled: false,
                       ),
                       const SizedBox(height: 100),
                       EZCMediumPrimaryButton(
