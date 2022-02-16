@@ -402,9 +402,6 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
     BigInt? asOf,
   }) {
     asOf ??= unixNow();
-    final ins = <PvmTransferableInput>[];
-    final outs = <PvmTransferableOutput>[];
-    final stakeOuts = <PvmTransferableOutput>[];
     final now = unixNow();
     if (startTime < now || endTime <= startTime) {
       throw Exception(
@@ -428,7 +425,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       }
     }
 
-    _getMinimumSpendable(aad, asOf: asOf);
+    _getMinimumSpendable(aad, asOf: asOf, stakeable: true);
 
     final rewardOutputOwners = PvmSECPOwnerOutput(
       lockTime: rewardLockTime,
@@ -439,14 +436,14 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
     final delegatorTx = PvmAddDelegatorTx(
       networkId: networkId,
       blockchainId: blockchainId,
-      outs: outs,
-      ins: ins,
+      outs: aad.getChangeOutputs(),
+      ins: aad.getInputs(),
       memo: memo,
       nodeId: nodeId,
       startTime: startTime,
       endTime: endTime,
       stakeAmount: stakeAmount,
-      stakeOuts: stakeOuts,
+      stakeOuts: aad.getOutputs(),
       rewardOwners: PvmParseableOutput(output: rewardOutputOwners),
     );
 
@@ -474,17 +471,14 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
     BigInt? asOf,
   }) {
     asOf ??= unixNow();
-    final ins = <PvmTransferableInput>[];
-    final outs = <PvmTransferableOutput>[];
-    final stakeOuts = <PvmTransferableOutput>[];
     final now = unixNow();
     if (startTime < now || endTime <= startTime) {
       throw Exception(
-          "UTXOSet.buildAddDelegatorTx -- startTime must be in the future and endTime must come after startTime");
+          "UTXOSet.buildAddValidatorTx -- startTime must be in the future and endTime must come after startTime");
     }
     if (delegationFee > 100 || delegationFee < 0) {
       throw Exception(
-          "UTXOSet.buildAddValidatorTx -- startTime must be in the range of 0 to 100, inclusively");
+          "UTXOSet.buildAddValidatorTx -- delegationFee must be in the range of 0 to 100, inclusively");
     }
 
     final aad = PvmAssetAmountDestination(
@@ -504,7 +498,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       }
     }
 
-    _getMinimumSpendable(aad, asOf: asOf);
+    _getMinimumSpendable(aad, asOf: asOf, stakeable: true);
 
     final rewardOutputOwners = PvmSECPOwnerOutput(
       lockTime: rewardLockTime,
@@ -515,14 +509,14 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
     final delegatorTx = PvmAddValidatorTx(
       networkId: networkId,
       blockchainId: blockchainId,
-      outs: outs,
-      ins: ins,
+      outs: aad.getChangeOutputs(),
+      ins: aad.getInputs(),
       memo: memo,
       nodeId: nodeId,
       startTime: startTime,
       endTime: endTime,
       stakeAmount: stakeAmount,
-      stakeOuts: stakeOuts,
+      stakeOuts: aad.getOutputs(),
       rewardOwners: PvmParseableOutput(output: rewardOutputOwners),
       delegationFee: delegationFee,
     );
@@ -541,11 +535,13 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
     }).toList();
   }
 
-  void _getMinimumSpendable(PvmAssetAmountDestination aad,
-      {BigInt? asOf,
-      BigInt? lockTime,
-      int threshold = 1,
-      bool stakeable = false}) {
+  void _getMinimumSpendable(
+    PvmAssetAmountDestination aad, {
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+    bool stakeable = false,
+  }) {
     asOf ??= unixNow();
     lockTime ??= BigInt.zero;
 

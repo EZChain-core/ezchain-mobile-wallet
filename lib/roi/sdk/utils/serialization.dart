@@ -6,7 +6,7 @@ import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 const SERIALIZATIONVERSION = 0;
 
 abstract class Serializable {
-  String typeName = "";
+  String get typeName;
 
   var _typeId = 0;
 

@@ -296,7 +296,7 @@ class _PvmApiImpl implements PvmApi {
       threshold: threshold,
     );
     if (!await _checkGooseEgg(buildUnsignedTx)) {
-      throw Exception("Error - PVMAPI.buildBaseTx:Failed Goose Egg Check");
+      throw Exception("Error - PVMAPI.buildImportTx:Failed Goose Egg Check");
     }
     return buildUnsignedTx;
   }
@@ -382,6 +382,7 @@ class _PvmApiImpl implements PvmApi {
     Uint8List? memo,
     BigInt? asOf,
   }) async {
+    asOf ??= unixNow();
     final to = toAddresses.map((a) => bintools.stringToAddress(a)).toList();
     final from = fromAddresses.map((a) => bintools.stringToAddress(a)).toList();
     final change =
@@ -423,7 +424,8 @@ class _PvmApiImpl implements PvmApi {
     );
 
     if (!await _checkGooseEgg(builtUnsignedTx)) {
-      throw Exception("Error - PVMAPI.buildExportTx:Failed Goose Egg Check");
+      throw Exception(
+          "Error - PVMAPI.buildAddDelegatorTx:Failed Goose Egg Check");
     }
     return builtUnsignedTx;
   }

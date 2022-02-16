@@ -245,7 +245,7 @@ class _AvmApiImpl implements AvmApi {
       threshold: threshold,
     );
     if (!await _checkGooseEgg(buildUnsignedTx)) {
-      throw Exception("Error - AVMAPI.buildBaseTx:Failed Goose Egg Check");
+      throw Exception("Error - AVMAPI.buildImportTx:Failed Goose Egg Check");
     }
     return buildUnsignedTx;
   }

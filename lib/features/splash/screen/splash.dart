@@ -773,10 +773,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   delegate() async {
     try {
-      const nodeId = "NodeID-LkiLFbmocMydnZ45jJgfoeLVTMN4nn83h";
+      const nodeId = "NodeID-FRouddSdqsz9SqFddmcpX3kMcTUuczYWW";
       final amount = numberToBNAvaxX(100);
-      final start = DateTime(2022, 3, 15, 12, 00).millisecondsSinceEpoch;
-      final end = DateTime(2023, 1, 15, 12, 00).millisecondsSinceEpoch;
+
+      /// Start delegation in 5 minutes
+      final start = DateTime.now().millisecondsSinceEpoch + 5 * 60000;
+      final end = DateTime(2022, 6, 6, 12, 00).millisecondsSinceEpoch;
       final txId = await wallet.delegate(nodeId, amount, start, end);
       logger.i("txId = $txId");
     } catch (e) {
