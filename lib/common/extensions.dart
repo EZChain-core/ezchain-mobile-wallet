@@ -57,5 +57,7 @@ extension DateTimeExtension on DateTime {
     return DateTime(year, month, day, time.hour, time.minute);
   }
 
-  String formatDateHoursTime() => DateFormat.yMMMd().add_jm().format(this);
+  String formatYMMdDateHoursTime() => DateFormat.yMMMd().add_jm().format(this);
+
+  String formatYMdDateHoursTime() => DateFormat.yMd().add_jm().format(this);
 }

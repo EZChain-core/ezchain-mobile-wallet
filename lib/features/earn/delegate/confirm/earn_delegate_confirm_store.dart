@@ -10,3 +10,4 @@ class EarnDelegateConfirmStore = _EarnDelegateConfirmStore
 abstract class _EarnDelegateConfirmStore with Store {
   final wallet = getIt<WalletFactory>().activeWallet;
 }
+

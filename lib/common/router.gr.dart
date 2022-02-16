@@ -210,15 +210,17 @@ class AppRouter extends _i33.RootStackRouter {
           child: _i24.EarnDelegateNodesScreen(key: args.key));
     },
     EarnDelegateInputRoute.name: (routeData) {
-      final args = routeData.argsAs<EarnDelegateInputRouteArgs>(
-          orElse: () => const EarnDelegateInputRouteArgs());
+      final args = routeData.argsAs<EarnDelegateInputRouteArgs>();
       return _i33.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i25.EarnDelegateInputScreen(key: args.key));
+          child: _i25.EarnDelegateInputScreen(key: args.key, args: args.args));
     },
     EarnDelegateConfirmRoute.name: (routeData) {
+      final args = routeData.argsAs<EarnDelegateConfirmRouteArgs>();
       return _i33.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i26.EarnDelegateConfirmScreen());
+          routeData: routeData,
+          child:
+              _i26.EarnDelegateConfirmScreen(key: args.key, args: args.args));
     },
     EarnEstimateRewardsRoute.name: (routeData) {
       return _i33.AdaptivePage<dynamic>(
@@ -739,31 +741,51 @@ class EarnDelegateNodesRouteArgs {
 /// generated route for [_i25.EarnDelegateInputScreen]
 class EarnDelegateInputRoute
     extends _i33.PageRouteInfo<EarnDelegateInputRouteArgs> {
-  EarnDelegateInputRoute({_i34.Key? key})
+  EarnDelegateInputRoute(
+      {_i34.Key? key, required _i25.EarnDelegateInputArgs args})
       : super(name,
             path: '/earn-delegate-input-screen',
-            args: EarnDelegateInputRouteArgs(key: key));
+            args: EarnDelegateInputRouteArgs(key: key, args: args));
 
   static const String name = 'EarnDelegateInputRoute';
 }
 
 class EarnDelegateInputRouteArgs {
-  const EarnDelegateInputRouteArgs({this.key});
+  const EarnDelegateInputRouteArgs({this.key, required this.args});
 
   final _i34.Key? key;
 
+  final _i25.EarnDelegateInputArgs args;
+
   @override
   String toString() {
-    return 'EarnDelegateInputRouteArgs{key: $key}';
+    return 'EarnDelegateInputRouteArgs{key: $key, args: $args}';
   }
 }
 
 /// generated route for [_i26.EarnDelegateConfirmScreen]
-class EarnDelegateConfirmRoute extends _i33.PageRouteInfo<void> {
-  const EarnDelegateConfirmRoute()
-      : super(name, path: '/earn-delegate-confirm-screen');
+class EarnDelegateConfirmRoute
+    extends _i33.PageRouteInfo<EarnDelegateConfirmRouteArgs> {
+  EarnDelegateConfirmRoute(
+      {_i34.Key? key, required _i26.EarnDelegateConfirmArgs args})
+      : super(name,
+            path: '/earn-delegate-confirm-screen',
+            args: EarnDelegateConfirmRouteArgs(key: key, args: args));
 
   static const String name = 'EarnDelegateConfirmRoute';
+}
+
+class EarnDelegateConfirmRouteArgs {
+  const EarnDelegateConfirmRouteArgs({this.key, required this.args});
+
+  final _i34.Key? key;
+
+  final _i26.EarnDelegateConfirmArgs args;
+
+  @override
+  String toString() {
+    return 'EarnDelegateConfirmRouteArgs{key: $key, args: $args}';
+  }
 }
 
 /// generated route for [_i27.EarnEstimateRewardsScreen]

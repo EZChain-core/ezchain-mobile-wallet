@@ -441,7 +441,7 @@ class EZCDateTimeTextField extends StatefulWidget {
 
   final VoidCallback? onSuffixPressed;
 
-  final ValueChanged<String>? onChanged;
+  final ValueChanged<DateTime>? onChanged;
 
   final Color? backgroundColor;
 
@@ -483,7 +483,8 @@ class _EZCDateTimeTextFieldState extends State<EZCDateTimeTextField> {
         widget.prefixText != null || widget.suffixText != null;
     final hasTopText = widget.label != null || _hasError;
     selectedDate ??= widget.initDate ?? DateTime.now();
-    final String selectedTime = selectedDate!.formatDateHoursTime();
+    widget.onChanged?.call(selectedDate!);
+    final String selectedTime = selectedDate!.formatYMMdDateHoursTime();
 
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(

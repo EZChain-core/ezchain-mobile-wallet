@@ -145,6 +145,7 @@
   "earnDelegateDescription": "You do not own an ROIChain node, but you want to stake using another node.",
   "earnDelegateValidMess": "You must have at least 1 ROI on the P chain to become a validator.",
   "earnDelegateAdd": "Add Delegator",
+  "earnDelegateConfirmStartDate": "Your validation will start at least 5 minutes after you submit this form.",
   "earnCrossTransfer": "Cross Chain Transfer",
   "earnEstimatedRewards": "Estimated Rewards",
   "earnValidatorStake": "Validator Stake",
@@ -158,5 +159,6 @@
   "earnDelegationFee": "Delegation Fee",
   "earnEstimatedReward": "Estimated Reward",
   "earnStakingDuration": "Staking Duration",
-  "earnUseYourWallet": "Use your wallet"
+  "earnUseYourWallet": "Use your wallet",
+  "earnDelegateInvalidAddress": "Invalid address. Reward address must be a valid P chain address."
 }
