@@ -1514,6 +1514,16 @@ class Strings {
     );
   }
 
+  /// `Your validation will start at least 5 minutes after you submit this form.`
+  String get earnDelegateConfirmStartDate {
+    return Intl.message(
+      'Your validation will start at least 5 minutes after you submit this form.',
+      name: 'earnDelegateConfirmStartDate',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Cross Chain Transfer`
   String get earnCrossTransfer {
     return Intl.message(
@@ -1649,6 +1659,16 @@ class Strings {
     return Intl.message(
       'Use your wallet',
       name: 'earnUseYourWallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid address. Reward address must be a valid P chain address.`
+  String get earnDelegateInvalidAddress {
+    return Intl.message(
+      'Invalid address. Reward address must be a valid P chain address.',
+      name: 'earnDelegateInvalidAddress',
       desc: '',
       args: [],
     );

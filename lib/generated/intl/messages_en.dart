@@ -87,8 +87,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Custom Address"),
         "earnDelegateAdd":
             MessageLookupByLibrary.simpleMessage("Add Delegator"),
+        "earnDelegateConfirmStartDate": MessageLookupByLibrary.simpleMessage(
+            "Your validation will start at least 5 minutes after you submit this form."),
         "earnDelegateDescription": MessageLookupByLibrary.simpleMessage(
             "You do not own an ROIChain node, but you want to stake using another node."),
+        "earnDelegateInvalidAddress": MessageLookupByLibrary.simpleMessage(
+            "Invalid address. Reward address must be a valid P chain address."),
         "earnDelegateValidMess": MessageLookupByLibrary.simpleMessage(
             "You must have at least 1 ROI on the P chain to become a validator."),
         "earnDelegationFee":

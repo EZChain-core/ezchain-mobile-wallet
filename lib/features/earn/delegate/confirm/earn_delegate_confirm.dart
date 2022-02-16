@@ -1,6 +1,8 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/extensions.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
@@ -9,7 +11,10 @@ import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
 class EarnDelegateConfirmScreen extends StatelessWidget {
-  const EarnDelegateConfirmScreen({Key? key}) : super(key: key);
+  final EarnDelegateConfirmArgs args;
+
+  const EarnDelegateConfirmScreen({Key? key, required this.args})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +50,7 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                                   color: provider.themeMode.text60),
                             ),
                             Text(
-                              'NodeID-3u3PQSJ3Bz1kQsB5BGm8P8iNVt2qbf4FU',
+                              args.nodeId,
                               style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
@@ -54,13 +59,14 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       _EarnDelegateVerticalText(
-                          title: Strings.current.sharedStartDate,
-                          content:
-                              'Your validation will start at least 5 minutes after you submit this form.'),
+                        title: Strings.current.sharedStartDate,
+                        content: Strings.current.earnDelegateConfirmStartDate,
+                      ),
                       const SizedBox(height: 12),
                       _EarnDelegateVerticalText(
-                          title: Strings.current.sharedEndDate,
-                          content: '15/12/2021, 15:02:14'),
+                        title: Strings.current.sharedEndDate,
+                        content: args.endDate.formatYMdDateHoursTime(),
+                      ),
                       const SizedBox(height: 12),
                       _EarnDelegateVerticalText(
                           title: Strings.current.earnStakingDuration,
@@ -71,7 +77,7 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                       ),
                       _EarnDelegateHorizontalText(
                           leftText: Strings.current.earnStakingAmount,
-                          rightText: '200 EZC'),
+                          rightText: '${args.amount} EZC'),
                       const SizedBox(height: 12),
                       _EarnDelegateHorizontalText(
                           leftText: Strings.current.earnDelegationFee,
@@ -86,8 +92,7 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                       ),
                       _EarnDelegateVerticalText(
                           title: Strings.current.earnRewardAddress,
-                          content:
-                              'X-fuji1qen0kzvn34zc8jsdatymtacukgdfepyk9ees2'),
+                          content: args.address),
                       const SizedBox(height: 32),
                       EZCMediumPrimaryButton(
                         text: Strings.current.sharedSubmit,
@@ -172,4 +177,13 @@ class _EarnDelegateVerticalText extends StatelessWidget {
       ),
     );
   }
+}
+
+class EarnDelegateConfirmArgs {
+  final String nodeId;
+  final String address;
+  final Decimal amount;
+  final DateTime endDate;
+
+  EarnDelegateConfirmArgs(this.nodeId, this.address, this.amount, this.endDate);
 }
