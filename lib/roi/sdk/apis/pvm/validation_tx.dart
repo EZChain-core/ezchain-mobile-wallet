@@ -235,6 +235,10 @@ class PvmAddDelegatorTx extends PvmWeightedValidatorTx {
             endTime: endTime,
             weight: stakeAmount) {
     setTypeId(ADDDELEGATORTX);
+    if (stakeOuts != null) {
+      this.stakeOuts.clear();
+      this.stakeOuts.addAll(stakeOuts);
+    }
     if (rewardOwners != null) {
       this.rewardOwners = rewardOwners;
     }
