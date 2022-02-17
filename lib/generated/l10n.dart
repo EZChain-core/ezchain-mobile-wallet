@@ -544,6 +544,52 @@ class Strings {
     );
   }
 
+  /// `{dayCount,plural, =1{1 day} other{{dayCount} days}} {hourCount,plural, =1{1 hour} other{{hourCount} hours}} {minuteCount,plural, =1{1 minute} other{{minuteCount} minutes}}`
+  String sharedDateDuration(num dayCount, num hourCount, num minuteCount) {
+    return Intl.message(
+      '${Intl.plural(dayCount, one: '1 day', other: '$dayCount days')} ${Intl.plural(hourCount, one: '1 hour', other: '$hourCount hours')} ${Intl.plural(minuteCount, one: '1 minute', other: '$minuteCount minutes')}',
+      name: 'sharedDateDuration',
+      desc: '',
+      args: [dayCount, hourCount, minuteCount],
+    );
+  }
+
+  /// `{count,plural, =1{1 day} other{{count} days}}`
+  String sharedDays(num count) {
+    return Intl.plural(
+      count,
+      one: '1 day',
+      other: '$count days',
+      name: 'sharedDays',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count,plural, =1{1 hour} other{{count} hours}}`
+  String sharedHours(num count) {
+    return Intl.plural(
+      count,
+      one: '1 hour',
+      other: '$count hours',
+      name: 'sharedHours',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count,plural, =1{1 minute} other{{count} minutes}}`
+  String sharedMinutes(num count) {
+    return Intl.plural(
+      count,
+      one: '1 minute',
+      other: '$count minutes',
+      name: 'sharedMinutes',
+      desc: '',
+      args: [count],
+    );
+  }
+
   /// `Value`
   String get sharedValue {
     return Intl.message(

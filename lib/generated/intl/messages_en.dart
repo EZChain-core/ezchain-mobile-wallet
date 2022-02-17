@@ -24,15 +24,28 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m1(name) => "Welcome ${name}";
 
-  static String m2(count) =>
-      "${Intl.plural(count, one: '1 hour ago', other: '${count} hours ago')}";
+  static String m2(dayCount, hourCount, minuteCount) =>
+      "${Intl.plural(dayCount, one: '1 day', other: '${dayCount} days')} ${Intl.plural(hourCount, one: '1 hour', other: '${hourCount} hours')} ${Intl.plural(minuteCount, one: '1 minute', other: '${minuteCount} minutes')}";
 
   static String m3(count) =>
+      "${Intl.plural(count, one: '1 day', other: '${count} days')}";
+
+  static String m4(count) =>
+      "${Intl.plural(count, one: '1 hour ago', other: '${count} hours ago')}";
+
+  static String m5(count) =>
+      "${Intl.plural(count, one: '1 hour', other: '${count} hours')}";
+
+  static String m6(count) =>
       "${Intl.plural(count, one: '1 minute ago', other: '${count} minutes ago')}";
 
-  static String m4(balance) => "Balance: ${balance}";
+  static String m7(count) =>
+      "${Intl.plural(count, one: '1 minute', other: '${count} minutes')}";
+
+  static String m8(balance) => "Balance: ${balance}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
+
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accessMnemonicKeyDes": MessageLookupByLibrary.simpleMessage(
             "Hit ‘SPACE’ after every successful word entry."),
@@ -170,6 +183,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedConfirmed": MessageLookupByLibrary.simpleMessage("Confirmed"),
         "sharedCopy": MessageLookupByLibrary.simpleMessage("Copy"),
         "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
+        "sharedDateDuration": m2,
+        "sharedDays": m3,
         "sharedDelegate": MessageLookupByLibrary.simpleMessage("Delegate"),
         "sharedDelegator": MessageLookupByLibrary.simpleMessage("Delegator"),
         "sharedDestination":
@@ -184,7 +199,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedFrom": MessageLookupByLibrary.simpleMessage("Form"),
         "sharedGasLimit": MessageLookupByLibrary.simpleMessage("Gas Limit"),
         "sharedGasPrice": MessageLookupByLibrary.simpleMessage("Gas Price"),
-        "sharedHourAgo": m2,
+        "sharedHourAgo": m4,
+        "sharedHours": m5,
         "sharedImport": MessageLookupByLibrary.simpleMessage("Import"),
         "sharedInput": MessageLookupByLibrary.simpleMessage("Input"),
         "sharedInvalidAddress":
@@ -197,7 +213,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedLockStakeable":
             MessageLookupByLibrary.simpleMessage("Lock Stakeable"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
-        "sharedMinuteAgo": m3,
+        "sharedMinuteAgo": m6,
+        "sharedMinutes": m7,
         "sharedNodeId": MessageLookupByLibrary.simpleMessage("Node ID"),
         "sharedNonce": MessageLookupByLibrary.simpleMessage("Nonce"),
         "sharedNotConfirm": MessageLookupByLibrary.simpleMessage("Not Confirm"),
@@ -262,7 +279,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Set Amount"),
         "walletReceiveToThis": MessageLookupByLibrary.simpleMessage(
             " to this address\nSending any other coins my result in permanent loss"),
-        "walletSendBalance": m4,
+        "walletSendBalance": m8,
         "walletSendCChainErrorAddress": MessageLookupByLibrary.simpleMessage(
             "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\""),
         "walletSendGasGWEI": MessageLookupByLibrary.simpleMessage("GWEI"),

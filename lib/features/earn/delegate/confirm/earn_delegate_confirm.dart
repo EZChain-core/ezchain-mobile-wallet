@@ -1,8 +1,10 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
+import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm_store.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
@@ -13,8 +15,9 @@ import 'package:wallet/themes/widgets.dart';
 class EarnDelegateConfirmScreen extends StatelessWidget {
   final EarnDelegateConfirmArgs args;
 
-  const EarnDelegateConfirmScreen({Key? key, required this.args})
-      : super(key: key);
+  final _earnDelegateConfirmStore = EarnDelegateConfirmStore();
+
+  EarnDelegateConfirmScreen({Key? key, required this.args}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +73,7 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                       const SizedBox(height: 12),
                       _EarnDelegateVerticalText(
                           title: Strings.current.earnStakingDuration,
-                          content: '21 days '),
+                          content: args.stakingDuration()),
                       Divider(
                         height: 25,
                         color: provider.themeMode.text10,
@@ -94,12 +97,23 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                           title: Strings.current.earnRewardAddress,
                           content: args.address),
                       const SizedBox(height: 32),
-                      EZCMediumPrimaryButton(
-                        text: Strings.current.sharedSubmit,
-                        width: 162,
+                      Observer(
+                        builder: (_) => EZCMediumPrimaryButton(
+                          text: Strings.current.sharedSubmit,
+                          width: 162,
+                          isLoading: _earnDelegateConfirmStore.isLoading,
+                          onPressed: () {
+                            _earnDelegateConfirmStore.delegate(args);
+                          },
+                        ),
                       ),
                       const SizedBox(height: 4),
-                      EZCMediumNoneButton(text: Strings.current.sharedCancel)
+                      EZCMediumNoneButton(
+                        text: Strings.current.sharedCancel,
+                        onPressed: () {
+                          context.popRoute();
+                        },
+                      )
                     ],
                   ),
                 ),
@@ -184,6 +198,21 @@ class EarnDelegateConfirmArgs {
   final String address;
   final Decimal amount;
   final DateTime endDate;
+  late DateTime startDate;
 
-  EarnDelegateConfirmArgs(this.nodeId, this.address, this.amount, this.endDate);
+  EarnDelegateConfirmArgs(
+      this.nodeId, this.address, this.amount, this.endDate) {
+    /// Start delegation in 5 minutes after submit
+    startDate = DateTime.now().add(const Duration(minutes: 5));
+  }
+
+  String stakingDuration() {
+    final diffDays = endDate.difference(startDate).inDays;
+    final diffHours =
+        endDate.difference(startDate.add(Duration(days: diffDays))).inHours;
+    final diffMinutes = endDate
+        .difference(startDate.add(Duration(days: diffDays, hours: diffHours)))
+        .inMinutes;
+    return Strings.current.sharedDateDuration(diffDays, diffHours, diffMinutes);
+  }
 }
