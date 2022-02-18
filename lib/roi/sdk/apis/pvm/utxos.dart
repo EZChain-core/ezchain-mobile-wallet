@@ -506,7 +506,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       threshold: rewardThreshold,
     );
 
-    final delegatorTx = PvmAddValidatorTx(
+    final validatorTx = PvmAddValidatorTx(
       networkId: networkId,
       blockchainId: blockchainId,
       outs: aad.getChangeOutputs(),
@@ -521,7 +521,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       delegationFee: delegationFee,
     );
 
-    return PvmUnsignedTx(transaction: delegatorTx);
+    return PvmUnsignedTx(transaction: validatorTx);
   }
 
   List<PvmUTXO> _getConsumableUXTO({BigInt? asOf, bool stakeable = false}) {

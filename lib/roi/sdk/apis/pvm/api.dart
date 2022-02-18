@@ -92,7 +92,9 @@ abstract class PvmApi implements ROIChainApi {
     List<String>? nodeIds,
   });
 
-  Future<GetMinStakeResponse> getMinStake();
+  Future<GetMinStakeResponse> getMinStake({bool refresh = false});
+
+  void setMinStake(BigInt minValidatorStake, BigInt minDelegatorStake);
 
   factory PvmApi.create(
       {required ROINetwork roiNetwork, String endPoint = "/ext/bc/P"}) {
@@ -119,6 +121,10 @@ class _PvmApiImpl implements PvmApi {
   Uint8List? avaxAssetId;
 
   BigInt? _txFee;
+
+  BigInt? minValidatorStake;
+
+  BigInt? minDelegatorStake;
 
   late PvmRestClient pvmRestClient;
 
@@ -459,7 +465,21 @@ class _PvmApiImpl implements PvmApi {
   }
 
   @override
-  Future<GetMinStakeResponse> getMinStake() async {
+  void setMinStake(BigInt minValidatorStake, BigInt minDelegatorStake) {
+    this.minValidatorStake = minValidatorStake;
+    this.minDelegatorStake = minDelegatorStake;
+  }
+
+  @override
+  Future<GetMinStakeResponse> getMinStake({bool refresh = false}) async {
+    final minValidatorStake = this.minValidatorStake;
+    final minDelegatorStake = this.minDelegatorStake;
+    if (!refresh && minValidatorStake != null && minDelegatorStake != null) {
+      return GetMinStakeResponse(
+        minValidatorStake: minValidatorStake.toString(),
+        minDelegatorStake: minDelegatorStake.toString(),
+      );
+    }
     final request = GetMinStakeRequest().toRpc();
     final response = await pvmRestClient.getMinStake(request);
     final result = response.result;
