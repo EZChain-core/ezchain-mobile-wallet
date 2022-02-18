@@ -180,7 +180,7 @@ class AppRouter extends _i33.RootStackRouter {
               key: args.key, crossTransferInfo: args.crossTransferInfo));
     },
     QrCodeRoute.name: (routeData) {
-      return _i33.AdaptivePage<dynamic>(
+      return _i33.AdaptivePage<String>(
           routeData: routeData, child: const _i20.QrCodeScreen());
     },
     TransactionsRoute.name: (routeData) {

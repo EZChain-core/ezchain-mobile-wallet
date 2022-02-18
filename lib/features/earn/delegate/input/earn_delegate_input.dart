@@ -250,7 +250,7 @@ class _EarnAddressTextFieldState extends State<_EarnAddressTextField> {
                         Assets.icons.icScanBarcode.svg()
                       ],
                     ),
-                    onPressed: () {},
+                    onPressed: _onClickQrScanner,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: ezcBorder,
@@ -287,6 +287,13 @@ class _EarnAddressTextFieldState extends State<_EarnAddressTextField> {
         ),
       ),
     );
+  }
+
+  _onClickQrScanner() async {
+    final address = await walletContext?.pushRoute<String>(const QrCodeRoute());
+    if (address != null && widget.controller != null) {
+      widget.controller!.text = address;
+    }
   }
 }
 

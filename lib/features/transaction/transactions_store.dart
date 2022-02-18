@@ -69,7 +69,7 @@ abstract class _TransactionsStore with Store {
   }
 
   Future<List<TransactionsItem>> getTransactions(EZCType type) async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    // await Future.delayed(const Duration(milliseconds: 300));
     try {
       switch (ezcType) {
         case EZCType.xChain:
