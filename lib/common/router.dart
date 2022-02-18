@@ -60,7 +60,7 @@ import 'package:wallet/features/wallet/send/evm/wallet_send_evm.dart';
     AutoRoute(page: SettingAboutScreen),
     AutoRoute(page: SettingSecurityScreen),
     AutoRoute<bool>(page: CrossTransferScreen),
-    AutoRoute(page: QrCodeScreen),
+    AutoRoute<String>(page: QrCodeScreen),
     AutoRoute(page: TransactionsScreen),
     AutoRoute(page: TransactionDetailScreen),
     AutoRoute(page: TransactionCDetailScreen),

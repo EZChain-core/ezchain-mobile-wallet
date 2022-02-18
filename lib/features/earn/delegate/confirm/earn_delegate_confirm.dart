@@ -98,22 +98,50 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                           content: args.address),
                       const SizedBox(height: 32),
                       Observer(
-                        builder: (_) => EZCMediumPrimaryButton(
-                          text: Strings.current.sharedSubmit,
-                          width: 162,
-                          isLoading: _earnDelegateConfirmStore.isLoading,
-                          onPressed: () {
-                            _earnDelegateConfirmStore.delegate(args);
-                          },
+                        builder: (_) => Column(
+                          children: [
+                            if (_earnDelegateConfirmStore.submitSuccess) ...[
+                              Observer(
+                                builder: (_) => EZCMediumPrimaryButton(
+                                  text: Strings.current.sharedSubmit,
+                                  width: 162,
+                                  isLoading:
+                                      _earnDelegateConfirmStore.isLoading,
+                                  onPressed: () {
+                                    _earnDelegateConfirmStore.delegate(args);
+                                  },
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              EZCMediumNoneButton(
+                                width: 162,
+                                text: Strings.current.sharedCancel,
+                                textColor: provider.themeMode.text90,
+                                onPressed: () {
+                                  context.popRoute();
+                                },
+                              )
+                            ] else ...[
+                              Text(
+                                Strings.current.sharedCommitted,
+                                style: EZCBodyMediumTextStyle(
+                                    color: provider.themeMode.stateSuccess),
+                              ),
+                              const SizedBox(height: 8),
+                              EZCMediumSuccessButton(
+                                text: Strings.current.earnDelegateBackToEarn,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 56,
+                                  vertical: 8,
+                                ),
+                                onPressed: () {
+                                  context.router.popUntilRoot();
+                                },
+                              )
+                            ],
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      EZCMediumNoneButton(
-                        text: Strings.current.sharedCancel,
-                        onPressed: () {
-                          context.popRoute();
-                        },
-                      )
                     ],
                   ),
                 ),

@@ -860,6 +860,16 @@ class Strings {
     );
   }
 
+  /// `Committed`
+  String get sharedCommitted {
+    return Intl.message(
+      'Committed',
+      name: 'sharedCommitted',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Wallet address`
   String get sharedWalletAddress {
     return Intl.message(
@@ -1555,6 +1565,16 @@ class Strings {
     return Intl.message(
       'Add Delegator',
       name: 'earnDelegateAdd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back to Earn`
+  String get earnDelegateBackToEarn {
+    return Intl.message(
+      'Back to Earn',
+      name: 'earnDelegateBackToEarn',
       desc: '',
       args: [],
     );

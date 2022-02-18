@@ -45,7 +45,6 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m8(balance) => "Balance: ${balance}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accessMnemonicKeyDes": MessageLookupByLibrary.simpleMessage(
             "Hit ‘SPACE’ after every successful word entry."),
@@ -100,6 +99,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Custom Address"),
         "earnDelegateAdd":
             MessageLookupByLibrary.simpleMessage("Add Delegator"),
+        "earnDelegateBackToEarn":
+            MessageLookupByLibrary.simpleMessage("Back to Earn"),
         "earnDelegateConfirmStartDate": MessageLookupByLibrary.simpleMessage(
             "Your validation will start at least 5 minutes after you submit this form."),
         "earnDelegateDescription": MessageLookupByLibrary.simpleMessage(
@@ -179,6 +180,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedBurned": MessageLookupByLibrary.simpleMessage("Burned"),
         "sharedCChain": MessageLookupByLibrary.simpleMessage("C chain"),
         "sharedCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "sharedCommitted": MessageLookupByLibrary.simpleMessage("Committed"),
         "sharedConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "sharedConfirmed": MessageLookupByLibrary.simpleMessage("Confirmed"),
         "sharedCopy": MessageLookupByLibrary.simpleMessage("Copy"),

@@ -1,10 +1,14 @@
 import 'dart:ui';
-
+import 'package:auto_route/src/router/auto_router_x.dart';
+import 'package:wallet/common/logger.dart';
+import 'package:wallet/common/router.dart';
+import 'package:wallet/common/router.gr.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/common/router.dart';
+import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 import 'package:wallet/themes/colors.dart';
@@ -396,7 +400,7 @@ class EZCAddressTextField extends StatelessWidget {
                         Assets.icons.icScanBarcode.svg()
                       ],
                     ),
-                    onPressed: () {},
+                    onPressed: _onClickQrScanner,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: ezcBorder,
@@ -425,6 +429,13 @@ class EZCAddressTextField extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _onClickQrScanner() async {
+    final address = await walletContext?.pushRoute<String>(const QrCodeRoute());
+    if (address != null && controller != null) {
+      controller!.text = address;
+    }
   }
 }
 

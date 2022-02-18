@@ -3,6 +3,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.dart';
@@ -68,9 +69,6 @@ class WalletSendAvmScreen extends StatelessWidget {
                           error: _walletSendAvmStore.addressError,
                           onChanged: (_) =>
                               _walletSendAvmStore.removeAddressError(),
-                          onSuffixPressed: () {
-                            context.pushRoute(const QrCodeRoute());
-                          },
                         ),
                       ),
                       const SizedBox(height: 16),

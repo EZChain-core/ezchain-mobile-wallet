@@ -16,6 +16,9 @@ abstract class _EarnDelegateConfirmStore with Store {
   @observable
   bool isLoading = false;
 
+  @observable
+  bool submitSuccess = false;
+
   @action
   delegate(EarnDelegateConfirmArgs args) async {
     try {
