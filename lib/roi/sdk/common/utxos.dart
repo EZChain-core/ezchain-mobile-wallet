@@ -247,9 +247,7 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
       for (int i = 0; i < utxoIds.length; i++) {
         final utxoId = utxoIds[i];
         final utxo = utxos[utxoId];
-        if (utxos.keys.contains(utxoId) &&
-            utxo != null &&
-            !results.contains(utxo)) {
+        if (utxo != null && !results.contains(utxo)) {
           results.add(utxo);
         }
       }
