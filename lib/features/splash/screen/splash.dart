@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math' as dart_math;
 import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
 import 'package:collection/collection.dart';
@@ -78,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           delegate();
+    //           estimateRewards();
     //         },
     //       ),
     //     ),
@@ -784,5 +785,78 @@ class _SplashScreenState extends State<SplashScreen> {
     } catch (e) {
       logger.e(e);
     }
+  }
+
+  estimateRewards() async {
+    // tạo ra 1 shared store để share validators với case estimateRewards
+    final validators = await wallet.getPlatformValidators();
+    final delegators = validators
+        .where((element) =>
+            element.delegators != null && element.delegators!.isNotEmpty)
+        .map((e) => e.delegators!)
+        .expand((element) => element)
+        .toList();
+
+    final userAddresses = await wallet.getAllAddressesP();
+
+    final resV = cleanList(userAddresses, validators) as List<Validator>;
+    final resD = cleanList(userAddresses, delegators) as List<Delegator>;
+
+    final validatorsReward = resV.fold<BigInt>(BigInt.zero,
+        (previousValue, element) => previousValue + element.potentialRewardBN);
+    final delegatorsReward = resD.fold<BigInt>(BigInt.zero,
+        (previousValue, element) => previousValue + element.potentialRewardBN);
+
+    final totalReward = bnToAvaxP(validatorsReward + delegatorsReward);
+
+    logger.i("totalReward = $totalReward EZC");
+
+    resV.forEach((element) {
+      final startTime = (int.tryParse(element.startTime) ?? 0) * 1000;
+      final endTime = (int.tryParse(element.endTime) ?? 0) * 1000;
+      final now = DateTime.now().millisecondsSinceEpoch;
+      final percent =
+          dart_math.min((now - startTime) / (endTime - startTime), 1);
+      final rewardAmt = bnToAvaxP(element.potentialRewardBN);
+      final stakingAmt = bnToAvaxP(element.stakeAmountBN);
+      logger.i(
+          "Validator: NodeId = ${element.nodeId}, percent = ${percent * 100}%, stakingAmt = $stakingAmt EZC, rewardAmt = $rewardAmt EZC");
+    });
+    resD.forEach((element) {
+      final startTime = (int.tryParse(element.startTime) ?? 0) * 1000;
+      final endTime = (int.tryParse(element.endTime) ?? 0) * 1000;
+      final now = DateTime.now().millisecondsSinceEpoch;
+      final percent =
+          dart_math.min((now - startTime) / (endTime - startTime), 1);
+      final rewardAmt = bnToAvaxP(element.potentialRewardBN);
+      final stakingAmt = bnToAvaxP(element.stakeAmountBN);
+      logger.i(
+          "Delegator: NodeId = ${element.nodeId}, percent = ${percent * 100}%, stakingAmt = $stakingAmt EZC, rewardAmt = $rewardAmt EZC");
+    });
+  }
+
+  List<dynamic> cleanList(List<String> userAddresses, List<dynamic> list) {
+    final res = list.where((element) {
+      final rewardAddresses = element.rewardOwner?.addresses;
+      if (rewardAddresses == null) return false;
+      final filtered =
+          rewardAddresses.where((element) => userAddresses.contains(element));
+      return filtered.isNotEmpty;
+    }).toList();
+
+    res.sort((a, b) {
+      final startA = int.tryParse(a.startTime) ?? 0;
+      final startB = int.tryParse(b.startTime) ?? 0;
+
+      if (startA < startB) {
+        return -1;
+      } else if (startA > startB) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
+    return res;
   }
 }
