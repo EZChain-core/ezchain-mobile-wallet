@@ -658,28 +658,26 @@ class _SplashScreenState extends State<SplashScreen> {
         final stakeEndDate = DateTime.fromMillisecondsSinceEpoch(item.stakeEnd);
         final dateFormatter = DateFormat("MM/dd/yyyy, HH:mm:ss a");
         message += "Stake End Date = ${dateFormatter.format(stakeEndDate)}\n";
-        String? potentialReward;
+        BigInt? potentialReward;
         final validator = validators.firstWhereOrNull((validator) {
           final nodeId = validator.nodeId.split("-")[1];
           return nodeId == item.nodeId;
         });
         if (validator != null) {
           if (item.type == HistoryItemTypeName.addValidator) {
-            potentialReward = validator.potentialReward;
-            message += "Add Validator = ${item.amountDisplayValue}\n";
+            potentialReward = validator.potentialRewardBN;
+            message += "Add Validator = ${item.amountDisplayValue} EZC\n";
           } else {
             final delegators = validator.delegators;
             if (delegators != null) {
               final delegator = delegators
                   .firstWhere((delegator) => delegator.txId == item.id);
-              potentialReward = delegator.potentialReward;
-              message += "Add Delegator = ${item.amountDisplayValue}\n";
+              potentialReward = delegator.potentialRewardBN;
+              message += "Add Delegator = ${item.amountDisplayValue} EZC\n";
             }
           }
           if (potentialReward != null) {
-            final reward =
-                bnToAvaxP(BigInt.tryParse(potentialReward) ?? BigInt.zero);
-            message += "Reward Pending = $reward";
+            message += "Reward Pending = ${bnToAvaxP(potentialReward)} EZC";
           } else {
             message += "Reward Pending = ?";
           }
@@ -811,7 +809,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     logger.i("totalReward = $totalReward EZC");
 
-    resV.forEach((element) {
+    for (var element in resV) {
       final startTime = (int.tryParse(element.startTime) ?? 0) * 1000;
       final endTime = (int.tryParse(element.endTime) ?? 0) * 1000;
       final now = DateTime.now().millisecondsSinceEpoch;
@@ -821,8 +819,8 @@ class _SplashScreenState extends State<SplashScreen> {
       final stakingAmt = bnToAvaxP(element.stakeAmountBN);
       logger.i(
           "Validator: NodeId = ${element.nodeId}, percent = ${percent * 100}%, stakingAmt = $stakingAmt EZC, rewardAmt = $rewardAmt EZC");
-    });
-    resD.forEach((element) {
+    }
+    for (var element in resD) {
       final startTime = (int.tryParse(element.startTime) ?? 0) * 1000;
       final endTime = (int.tryParse(element.endTime) ?? 0) * 1000;
       final now = DateTime.now().millisecondsSinceEpoch;
@@ -832,7 +830,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final stakingAmt = bnToAvaxP(element.stakeAmountBN);
       logger.i(
           "Delegator: NodeId = ${element.nodeId}, percent = ${percent * 100}%, stakingAmt = $stakingAmt EZC, rewardAmt = $rewardAmt EZC");
-    });
+    }
   }
 
   List<dynamic> cleanList(List<String> userAddresses, List<dynamic> list) {
