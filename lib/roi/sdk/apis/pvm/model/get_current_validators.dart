@@ -73,6 +73,9 @@ class Validator {
   BigInt get stakeAmountBN =>
       BigInt.tryParse(stakeAmount ?? "0") ?? BigInt.zero;
 
+  BigInt get potentialRewardBN =>
+      BigInt.tryParse(potentialReward ?? "0") ?? BigInt.zero;
+
   Validator({
     required this.txId,
     required this.startTime,
@@ -135,6 +138,9 @@ class Delegator {
 
   BigInt get stakeAmountBN =>
       BigInt.tryParse(stakeAmount ?? "0") ?? BigInt.zero;
+
+  BigInt get potentialRewardBN =>
+      BigInt.tryParse(potentialReward ?? "0") ?? BigInt.zero;
 
   Delegator({
     required this.txId,
