@@ -88,4 +88,6 @@ extension BaseColor on ThemeMode {
 
   Color get wispPink =>
       isDark ? ColorName.wispPinkDark : ColorName.wispPinkLight;
+
+  Color get blue1 => isDark ? ColorName.blue1Dark : ColorName.blue1Light;
 }

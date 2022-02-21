@@ -1,5 +1,6 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/earn/delegate/nodes/earn_delegate_node_item.dart';
 import 'package:wallet/features/earn/delegate/nodes/earn_delegate_nodes_store.dart';
@@ -27,32 +28,35 @@ class EarnDelegateNodesScreen extends StatelessWidget {
                 },
               ),
               Expanded(
-                child: FutureBuilder<List<EarnDelegateNodeItem>>(
-                  future: _earnDelegateNodesStore.getNodeIds(),
-                  builder: (_, snapshot) {
-                    if (snapshot.hasData) {
-                      final nodes = snapshot.data!;
-                      return nodes.isNotEmpty
-                          ? ListView.separated(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 12),
-                              itemCount: nodes.length,
-                              itemBuilder: (_, index) =>
-                                  EarnDelegateNodeItemWidget(
-                                      item: nodes[index]),
-                              separatorBuilder: (_, index) => const SizedBox(height: 24),
-                            )
-                          : const SizedBox.shrink();
-                    } else {
-                      return Align(
-                        alignment: Alignment.center,
-                        child: EZCLoading(
-                            color: provider.themeMode.secondary,
-                            size: 40,
-                            strokeWidth: 4),
-                      );
-                    }
-                  },
+                child: Observer(
+                  builder: (_) => FutureBuilder<List<EarnDelegateNodeItem>>(
+                    future: _earnDelegateNodesStore.getNodeIds(),
+                    builder: (_, snapshot) {
+                      if (snapshot.hasData) {
+                        final nodes = snapshot.data!;
+                        return nodes.isNotEmpty
+                            ? ListView.separated(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 12),
+                                itemCount: nodes.length,
+                                itemBuilder: (_, index) =>
+                                    EarnDelegateNodeItemWidget(
+                                        item: nodes[index]),
+                                separatorBuilder: (_, index) =>
+                                    const SizedBox(height: 24),
+                              )
+                            : const SizedBox.shrink();
+                      } else {
+                        return Align(
+                          alignment: Alignment.center,
+                          child: EZCLoading(
+                              color: provider.themeMode.secondary,
+                              size: 40,
+                              strokeWidth: 4),
+                        );
+                      }
+                    },
+                  ),
                 ),
               ),
             ],

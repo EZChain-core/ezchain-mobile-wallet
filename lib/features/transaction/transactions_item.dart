@@ -316,14 +316,14 @@ List<TransactionsItem> mapToTransactionsItem(List<HistoryItem> items,
         String addDelegator = '';
         final stakeEndTime = DateTime.fromMillisecondsSinceEpoch(item.stakeEnd)
             .format('MM/dd/yyyy, HH:mm:ss a');
-        String? potentialReward;
+        BigInt? potentialReward;
         final validator = validators.firstWhereOrNull((validator) {
           final nodeId = validator.nodeId.split("-")[1];
           return nodeId == item.nodeId;
         });
         if (validator != null) {
           if (item.type == HistoryItemTypeName.addValidator) {
-            potentialReward = validator.potentialReward;
+            potentialReward = validator.potentialRewardBN;
             addValidator = "${item.amountDisplayValue} EZC";
             transType = Strings.current.sharedValidate;
           } else {
@@ -331,14 +331,13 @@ List<TransactionsItem> mapToTransactionsItem(List<HistoryItem> items,
             if (delegators != null) {
               final delegator = delegators
                   .firstWhere((delegator) => delegator.txId == item.id);
-              potentialReward = delegator.potentialReward;
+              potentialReward = delegator.potentialRewardBN;
               addDelegator = "${item.amountDisplayValue} EZC";
               transType = Strings.current.sharedDelegate;
             }
           }
           if (potentialReward != null) {
-            reward =
-                '${bnToAvaxP(BigInt.tryParse(potentialReward) ?? BigInt.zero)} EZC';
+            reward = '${bnToAvaxP(potentialReward)} EZC';
           }
         }
         transactions.add(TransactionsStakingItem(transId, transTime, transType,
