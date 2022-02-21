@@ -880,6 +880,26 @@ class Strings {
     );
   }
 
+  /// `Stake`
+  String get sharedStake {
+    return Intl.message(
+      'Stake',
+      name: 'sharedStake',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Potential Reward`
+  String get sharedPotentialReward {
+    return Intl.message(
+      'Potential Reward',
+      name: 'sharedPotentialReward',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -1735,6 +1755,26 @@ class Strings {
     return Intl.message(
       'Invalid address. Reward address must be a valid P chain address.',
       name: 'earnDelegateInvalidAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Rewards`
+  String get earnTotalRewards {
+    return Intl.message(
+      'Total Rewards',
+      name: 'earnTotalRewards',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delegation`
+  String get earnDelegation {
+    return Intl.message(
+      'Delegation',
+      name: 'earnDelegation',
       desc: '',
       args: [],
     );

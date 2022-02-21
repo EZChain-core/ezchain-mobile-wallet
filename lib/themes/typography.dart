@@ -181,8 +181,12 @@ class EZCSemiBoldSmallTextStyle extends EZCTextStyle {
   final Color color;
 
   const EZCSemiBoldSmallTextStyle({required this.color})
-      : super(
-            color: color,
-            fontSize: 12,
-            fontWeight: FontWeight.w600);
+      : super(color: color, fontSize: 12, fontWeight: FontWeight.w600);
+}
+
+class EZCBoldMediumTextStyle extends EZCTextStyle {
+  final Color color;
+
+  const EZCBoldMediumTextStyle({required this.color})
+      : super(color: color, fontSize: 16, fontWeight: FontWeight.w700);
 }

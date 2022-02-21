@@ -109,6 +109,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Invalid address. Reward address must be a valid P chain address."),
         "earnDelegateValidMess": MessageLookupByLibrary.simpleMessage(
             "You must have at least 1 ROI on the P chain to become a validator."),
+        "earnDelegation": MessageLookupByLibrary.simpleMessage("Delegation"),
         "earnDelegationFee":
             MessageLookupByLibrary.simpleMessage("Delegation Fee"),
         "earnEstimatedReward":
@@ -127,6 +128,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Staking End Date"),
         "earnStakingEndDateNote": MessageLookupByLibrary.simpleMessage(
             "Your EZC tokens will be locked until this date."),
+        "earnTotalRewards":
+            MessageLookupByLibrary.simpleMessage("Total Rewards"),
         "earnUseYourWallet":
             MessageLookupByLibrary.simpleMessage("Use your wallet"),
         "earnValidatorStake":
@@ -225,6 +228,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedPassphrase": MessageLookupByLibrary.simpleMessage("Passphrase"),
         "sharedPasteAddress":
             MessageLookupByLibrary.simpleMessage("Paste Address"),
+        "sharedPotentialReward":
+            MessageLookupByLibrary.simpleMessage("Potential Reward"),
         "sharedPrivateKey": MessageLookupByLibrary.simpleMessage("Private Key"),
         "sharedProcessing": MessageLookupByLibrary.simpleMessage("Processing"),
         "sharedReceive": MessageLookupByLibrary.simpleMessage("Receive"),
@@ -239,6 +244,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedSetAmount": MessageLookupByLibrary.simpleMessage("Set amount"),
         "sharedShare": MessageLookupByLibrary.simpleMessage("Share"),
         "sharedSource": MessageLookupByLibrary.simpleMessage("Source"),
+        "sharedStake": MessageLookupByLibrary.simpleMessage("Stake"),
         "sharedStartAgain": MessageLookupByLibrary.simpleMessage("Start Again"),
         "sharedStartDate": MessageLookupByLibrary.simpleMessage("Start date"),
         "sharedStatus": MessageLookupByLibrary.simpleMessage("Status"),

@@ -223,8 +223,11 @@ class AppRouter extends _i33.RootStackRouter {
               _i26.EarnDelegateConfirmScreen(key: args.key, args: args.args));
     },
     EarnEstimateRewardsRoute.name: (routeData) {
+      final args = routeData.argsAs<EarnEstimateRewardsRouteArgs>(
+          orElse: () => const EarnEstimateRewardsRouteArgs());
       return _i33.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i27.EarnEstimateRewardsScreen());
+          routeData: routeData,
+          child: _i27.EarnEstimateRewardsScreen(key: args.key));
     },
     DashboardRoute.name: (routeData) {
       return _i33.AdaptivePage<dynamic>(
@@ -789,11 +792,25 @@ class EarnDelegateConfirmRouteArgs {
 }
 
 /// generated route for [_i27.EarnEstimateRewardsScreen]
-class EarnEstimateRewardsRoute extends _i33.PageRouteInfo<void> {
-  const EarnEstimateRewardsRoute()
-      : super(name, path: '/earn-estimate-rewards-screen');
+class EarnEstimateRewardsRoute
+    extends _i33.PageRouteInfo<EarnEstimateRewardsRouteArgs> {
+  EarnEstimateRewardsRoute({_i34.Key? key})
+      : super(name,
+            path: '/earn-estimate-rewards-screen',
+            args: EarnEstimateRewardsRouteArgs(key: key));
 
   static const String name = 'EarnEstimateRewardsRoute';
+}
+
+class EarnEstimateRewardsRouteArgs {
+  const EarnEstimateRewardsRouteArgs({this.key});
+
+  final _i34.Key? key;
+
+  @override
+  String toString() {
+    return 'EarnEstimateRewardsRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for [_i28.DashboardScreen]
