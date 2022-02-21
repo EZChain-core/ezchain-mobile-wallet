@@ -21,6 +21,8 @@ abstract class _EarnEstimateRewardsStore with Store {
   final _wallet = getIt<WalletFactory>().activeWallet;
   final _validatorsStore = getIt<ValidatorsStore>();
 
+  late String totalRewards;
+
   @computed
   List<Validator> get validators => _validatorsStore.validators;
 
@@ -50,7 +52,7 @@ abstract class _EarnEstimateRewardsStore with Store {
 
       final totalReward = bnToAvaxP(validatorsReward + delegatorsReward);
 
-      logger.i("totalReward = $totalReward EZC");
+      totalRewards = "$totalReward EZC";
 
       for (var element in resV) {
         final startTime = (int.tryParse(element.startTime) ?? 0) * 1000;

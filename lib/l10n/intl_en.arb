@@ -168,5 +168,7 @@
   "earnEstimatedReward": "Estimated Reward",
   "earnStakingDuration": "Staking Duration",
   "earnUseYourWallet": "Use your wallet",
-  "earnDelegateInvalidAddress": "Invalid address. Reward address must be a valid P chain address."
+  "earnDelegateInvalidAddress": "Invalid address. Reward address must be a valid P chain address.",
+  "earnTotalRewards": "Total Rewards",
+  "earnDelegation": "Delegation"
 }

@@ -1759,6 +1759,26 @@ class Strings {
       args: [],
     );
   }
+
+  /// `Total Rewards`
+  String get earnTotalRewards {
+    return Intl.message(
+      'Total Rewards',
+      name: 'earnTotalRewards',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delegation`
+  String get earnDelegation {
+    return Intl.message(
+      'Delegation',
+      name: 'earnDelegation',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Strings> {
