@@ -108,7 +108,7 @@ class _EarnScreenState extends State<EarnScreen> {
                     EZCMediumNoneButton(
                       text: Strings.current.earnEstimatedRewards,
                       onPressed: () {
-                        context.pushRoute(const EarnEstimateRewardsRoute());
+                        context.pushRoute(EarnEstimateRewardsRoute());
                       },
                     )
                   ],
