@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:wallet/roi/sdk/apis/pvm/constants.dart';
 import 'package:wallet/roi/sdk/apis/pvm/key_chain.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_current_supply.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_min_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_pending_validators.dart';
@@ -95,6 +96,8 @@ abstract class PvmApi implements ROIChainApi {
   Future<GetMinStakeResponse> getMinStake({bool refresh = false});
 
   void setMinStake(BigInt minValidatorStake, BigInt minDelegatorStake);
+
+  Future<BigInt> getCurrentSupply();
 
   factory PvmApi.create(
       {required ROINetwork roiNetwork, String endPoint = "/ext/bc/P"}) {
@@ -487,6 +490,15 @@ class _PvmApiImpl implements PvmApi {
     this.minValidatorStake = result.minValidatorStakeBN;
     this.minDelegatorStake = result.minDelegatorStakeBN;
     return result;
+  }
+
+  @override
+  Future<BigInt> getCurrentSupply() async {
+    final request = GetCurrentSupplyRequest().toRpc();
+    final response = await pvmRestClient.getCurrentSupply(request);
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result.supplyBN;
   }
 
   BigInt _getDefaultTxFee() {

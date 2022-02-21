@@ -21,6 +21,7 @@ import 'package:wallet/roi/wallet/explorer/cchain/types.dart';
 import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
 import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
+import 'package:wallet/roi/wallet/helpers/staking_helper.dart';
 import 'package:wallet/roi/wallet/history/history_helpers.dart';
 import 'package:wallet/roi/wallet/history/types.dart';
 import 'package:wallet/roi/wallet/network/constants.dart';
@@ -775,11 +776,35 @@ class _SplashScreenState extends State<SplashScreen> {
       const nodeId = "NodeID-FRouddSdqsz9SqFddmcpX3kMcTUuczYWW";
       final amount = numberToBNAvaxX(100);
 
-      /// Start delegation in 5 minutes
+      // ONLY FOR EXAMPLE: fetch to get selected node
+      final validators = await wallet.getPlatformValidators();
+      final selectedNode =
+          validators.where((element) => element.nodeId == nodeId).first;
+
       final start = DateTime.now().millisecondsSinceEpoch + 5 * 60000;
       final end = DateTime(2022, 6, 6, 12, 00).millisecondsSinceEpoch;
-      final txId = await wallet.delegate(nodeId, amount, start, end);
-      logger.i("txId = $txId");
+
+      final duration = end - start;
+
+      // store lại current supply tránh việc mỗi khi thay đổi amount phải gọi lại
+      final currentSupply = await wallet.getCurrentSupply();
+      final estimation = calculateStakingReward(
+        amount,
+        duration ~/ 1000,
+        currentSupply,
+      );
+      final estimatedReward = bnToDecimal(estimation, denomination: 9);
+      logger.i("estimatedReward = $estimatedReward");
+      final delegationFee =
+          Decimal.tryParse(selectedNode.delegationFee) ?? Decimal.zero;
+      final cut =
+          estimatedReward * (delegationFee / Decimal.fromInt(100)).toDecimal();
+      final totalFee = getTxFeeP() + decimalToBn(cut, denomination: 9);
+      logger.i("totalFee = $totalFee");
+
+      /// Start delegation in 5 minutes
+      // final txId = await wallet.delegate(nodeId, amount, start, end);
+      // logger.i("txId = $txId");
     } catch (e) {
       logger.e(e);
     }

@@ -667,6 +667,10 @@ abstract class WalletProvider {
     return pChain.getMinStake();
   }
 
+  Future<BigInt> getCurrentSupply() async {
+    return pChain.getCurrentSupply();
+  }
+
   Future<String> delegate(
     String nodeId,
     BigInt amount,
