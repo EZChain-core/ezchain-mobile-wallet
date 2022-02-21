@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_current_supply.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_min_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_pending_validators.dart';
@@ -49,4 +50,8 @@ abstract class PvmRestClient {
   @POST("")
   Future<RpcResponse<GetMinStakeResponse>> getMinStake(
       @Body() RpcRequest<GetMinStakeRequest> request);
+
+  @POST("")
+  Future<RpcResponse<GetCurrentSupplyResponse>> getCurrentSupply(
+      @Body() RpcRequest<GetCurrentSupplyRequest> request);
 }

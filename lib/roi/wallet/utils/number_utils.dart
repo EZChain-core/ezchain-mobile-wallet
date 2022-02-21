@@ -115,8 +115,8 @@ BigInt stringToBn(String value, int decimals) {
   return BigInt.tryParse(rawStr) ?? BigInt.zero;
 }
 
-BigInt decimalToBn(Decimal value, int denom) {
-  final bnBig = value * Decimal.fromInt(10).pow(denom);
+BigInt decimalToBn(Decimal value, {int denomination = 0}) {
+  final bnBig = value * Decimal.fromInt(10).pow(denomination);
   final bnString = bnBig.toStringAsFixed(0);
   return BigInt.tryParse(bnString) ?? BigInt.zero;
 }
