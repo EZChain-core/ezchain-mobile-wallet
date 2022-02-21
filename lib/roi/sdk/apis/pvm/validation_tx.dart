@@ -34,7 +34,7 @@ abstract class PvmValidatorTx extends PvmBaseTx {
             ins: ins,
             memo: memo) {
     if (nodeId != null) {
-      this.nodeId;
+      this.nodeId = nodeId;
     }
     if (startTime != null) {
       this.startTime = fromBNToBuffer(startTime, length: 8);
