@@ -880,6 +880,26 @@ class Strings {
     );
   }
 
+  /// `Stake`
+  String get sharedStake {
+    return Intl.message(
+      'Stake',
+      name: 'sharedStake',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Potential Reward`
+  String get sharedPotentialReward {
+    return Intl.message(
+      'Potential Reward',
+      name: 'sharedPotentialReward',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(

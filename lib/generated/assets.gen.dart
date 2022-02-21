@@ -31,6 +31,10 @@ class $AssetsIconsGen {
   SvgGenImage get icArrowLeftWhite =>
       const SvgGenImage('assets/icons/ic_arrow_left_white.svg');
 
+  /// File path: assets/icons/ic_arrow_right_black.svg
+  SvgGenImage get icArrowRightBlack =>
+      const SvgGenImage('assets/icons/ic_arrow_right_black.svg');
+
   /// File path: assets/icons/ic_arrow_up.svg
   SvgGenImage get icArrowUp =>
       const SvgGenImage('assets/icons/ic_arrow_up.svg');

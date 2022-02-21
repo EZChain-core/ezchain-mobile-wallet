@@ -225,6 +225,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedPassphrase": MessageLookupByLibrary.simpleMessage("Passphrase"),
         "sharedPasteAddress":
             MessageLookupByLibrary.simpleMessage("Paste Address"),
+        "sharedPotentialReward":
+            MessageLookupByLibrary.simpleMessage("Potential Reward"),
         "sharedPrivateKey": MessageLookupByLibrary.simpleMessage("Private Key"),
         "sharedProcessing": MessageLookupByLibrary.simpleMessage("Processing"),
         "sharedReceive": MessageLookupByLibrary.simpleMessage("Receive"),
@@ -239,6 +241,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedSetAmount": MessageLookupByLibrary.simpleMessage("Set amount"),
         "sharedShare": MessageLookupByLibrary.simpleMessage("Share"),
         "sharedSource": MessageLookupByLibrary.simpleMessage("Source"),
+        "sharedStake": MessageLookupByLibrary.simpleMessage("Stake"),
         "sharedStartAgain": MessageLookupByLibrary.simpleMessage("Start Again"),
         "sharedStartDate": MessageLookupByLibrary.simpleMessage("Start date"),
         "sharedStatus": MessageLookupByLibrary.simpleMessage("Status"),
