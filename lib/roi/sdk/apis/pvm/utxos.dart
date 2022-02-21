@@ -581,7 +581,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       if (output is! PvmAmountOutput ||
           !aad.assetExists(assetKey) ||
           !output.meetsThreshold(fromAddresses, asOf: asOf)) {
-        return;
+        continue;
       }
 
       final assetAmount = aad.getAssetAmount(assetKey);

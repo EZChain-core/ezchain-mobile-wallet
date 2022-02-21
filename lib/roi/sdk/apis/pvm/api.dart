@@ -484,6 +484,8 @@ class _PvmApiImpl implements PvmApi {
     final response = await pvmRestClient.getMinStake(request);
     final result = response.result;
     if (result == null) throw Exception(response.error?.message);
+    this.minValidatorStake = result.minValidatorStakeBN;
+    this.minDelegatorStake = result.minDelegatorStakeBN;
     return result;
   }
 

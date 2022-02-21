@@ -161,7 +161,7 @@ abstract class WalletProvider {
       throw Exception("txId cannot be null");
     }
     await waitTxX(txId);
-    updateUtxosX();
+    await updateUtxosX();
     return txId;
   }
 
