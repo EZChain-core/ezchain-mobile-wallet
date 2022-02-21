@@ -461,7 +461,7 @@ abstract class WalletProvider {
     BigInt? fee,
     EvmUTXOSet? utxoSet,
   }) async {
-    final bechAddress = getEvmAddressBech();
+    final bechAddress = await getEvmAddressBech();
 
     utxoSet ??= await getAtomicUTXOsC(sourceChain);
 
@@ -793,11 +793,16 @@ abstract class WalletProvider {
     return await getTransactionSummary(transaction, addressesX, addressesC);
   }
 
-  Future<HistoryItem> parseOrteliusTx(OrteliusTx tx) async {
-    final addressesX = await getAllAddressesX();
-    final addressBechC = getEvmAddressBech();
-    final addresses = [...addressesX, addressBechC];
-    final addressesC = getAddressC();
+  /// final addresses = [
+  ///   ...await _wallet.getAllAddressesX(),
+  ///   _wallet.getEvmAddressBech()
+  /// ];
+  /// final addressesC = _wallet.getAddressC();
+  Future<HistoryItem> parseOrteliusTx(
+    OrteliusTx tx,
+    List<String> addresses,
+    String addressesC,
+  ) async {
     return await getTransactionSummary(tx, addresses, addressesC);
   }
 }

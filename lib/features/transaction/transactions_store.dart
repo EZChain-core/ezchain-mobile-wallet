@@ -69,19 +69,22 @@ abstract class _TransactionsStore with Store {
   }
 
   Future<List<TransactionsItem>> getTransactions(EZCType type) async {
-    // await Future.delayed(const Duration(milliseconds: 300));
     try {
+      final addresses = [
+        ...await _wallet.getAllAddressesX(),
+        _wallet.getEvmAddressBech()
+      ];
+      final addressesC = _wallet.getAddressC();
       switch (ezcType) {
         case EZCType.xChain:
           final transactions = await _wallet.getXTransactions();
-          final histories = await Future.wait(
-              transactions.map((tx) => _wallet.parseOrteliusTx(tx)));
-
+          final histories = await Future.wait(transactions
+              .map((tx) => _wallet.parseOrteliusTx(tx, addresses, addressesC)));
           return mapToTransactionsItem(histories);
         case EZCType.pChain:
           final transactions = await _wallet.getPTransactions();
-          final histories = await Future.wait(
-              transactions.map((tx) => _wallet.parseOrteliusTx(tx)));
+          final histories = await Future.wait(transactions
+              .map((tx) => _wallet.parseOrteliusTx(tx, addresses, addressesC)));
           return mapToTransactionsItem(histories, validators: validators);
         case EZCType.cChain:
           final transactions = await _wallet.getCChainTransactions();
