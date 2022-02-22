@@ -128,7 +128,7 @@ class AppRouter extends _i33.RootStackRouter {
       return _i33.AdaptivePage<dynamic>(
           routeData: routeData,
           child: _i10.WalletReceiveScreen(
-              key: args.key, walletReceiveInfo: args.walletReceiveInfo));
+              key: args.key, args: args.walletReceiveInfo));
     },
     WalletSendAvmRoute.name: (routeData) {
       final args = routeData.argsAs<WalletSendAvmRouteArgs>(
@@ -169,8 +169,11 @@ class AppRouter extends _i33.RootStackRouter {
           routeData: routeData, child: const _i17.SettingAboutScreen());
     },
     SettingSecurityRoute.name: (routeData) {
+      final args = routeData.argsAs<SettingSecurityRouteArgs>(
+          orElse: () => const SettingSecurityRouteArgs());
       return _i33.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i18.SettingSecurityScreen());
+          routeData: routeData,
+          child: _i18.SettingSecurityScreen(key: args.key));
     },
     CrossTransferRoute.name: (routeData) {
       final args = routeData.argsAs<CrossTransferRouteArgs>();
@@ -465,7 +468,7 @@ class PinCodeConfirmRouteArgs {
 /// generated route for [_i10.WalletReceiveScreen]
 class WalletReceiveRoute extends _i33.PageRouteInfo<WalletReceiveRouteArgs> {
   WalletReceiveRoute(
-      {_i34.Key? key, required _i10.WalletReceiveInfo walletReceiveInfo})
+      {_i34.Key? key, required _i10.WalletReceiveArgs walletReceiveInfo})
       : super(name,
             path: '/wallet-receive-screen',
             args: WalletReceiveRouteArgs(
@@ -479,7 +482,7 @@ class WalletReceiveRouteArgs {
 
   final _i34.Key? key;
 
-  final _i10.WalletReceiveInfo walletReceiveInfo;
+  final _i10.WalletReceiveArgs walletReceiveInfo;
 
   @override
   String toString() {
@@ -608,10 +611,25 @@ class SettingAboutRoute extends _i33.PageRouteInfo<void> {
 }
 
 /// generated route for [_i18.SettingSecurityScreen]
-class SettingSecurityRoute extends _i33.PageRouteInfo<void> {
-  const SettingSecurityRoute() : super(name, path: '/setting-security-screen');
+class SettingSecurityRoute
+    extends _i33.PageRouteInfo<SettingSecurityRouteArgs> {
+  SettingSecurityRoute({_i34.Key? key})
+      : super(name,
+            path: '/setting-security-screen',
+            args: SettingSecurityRouteArgs(key: key));
 
   static const String name = 'SettingSecurityRoute';
+}
+
+class SettingSecurityRouteArgs {
+  const SettingSecurityRouteArgs({this.key});
+
+  final _i34.Key? key;
+
+  @override
+  String toString() {
+    return 'SettingSecurityRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for [_i19.CrossTransferScreen]

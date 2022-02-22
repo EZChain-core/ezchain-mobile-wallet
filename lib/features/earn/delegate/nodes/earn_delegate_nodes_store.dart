@@ -23,6 +23,10 @@ abstract class _EarnDelegateNodesStore with Store {
   @computed
   List<Validator> get validators => _validatorsStore.validators;
 
+  _EarnDelegateNodesStore() {
+    _validatorsStore.updateValidators();
+  }
+
   Future<List<EarnDelegateNodeItem>> getNodeIds() async {
     List<EarnDelegateNodeItem> nodes = [];
     try {

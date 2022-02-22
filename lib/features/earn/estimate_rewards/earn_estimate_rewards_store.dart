@@ -26,6 +26,10 @@ abstract class _EarnEstimateRewardsStore with Store {
   @computed
   List<Validator> get validators => _validatorsStore.validators;
 
+  _EarnEstimateRewardsStore() {
+    _validatorsStore.updateValidators();
+  }
+
   Future<List<EarnEstimateRewardsItem>> getEstimateRewards() async {
     List<EarnEstimateRewardsItem> items = [];
     try {
@@ -75,8 +79,6 @@ abstract class _EarnEstimateRewardsStore with Store {
           (percent * 100).toInt(),
         ));
 
-        logger.i(
-            "Validator: NodeId = ${element.nodeId}, percent = ${percent * 100}%, stakingAmt = $stakingAmt EZC, rewardAmt = $rewardAmt EZC");
       }
       for (var element in resD) {
         final startTime = (int.tryParse(element.startTime) ?? 0) * 1000;
@@ -86,8 +88,6 @@ abstract class _EarnEstimateRewardsStore with Store {
             dart_math.min((now - startTime) / (endTime - startTime), 1);
         final rewardAmt = bnToAvaxP(element.potentialRewardBN);
         final stakingAmt = bnToAvaxP(element.stakeAmountBN);
-        logger.i(
-            "Delegator: NodeId = ${element.nodeId}, percent = ${percent * 100}%, stakingAmt = $stakingAmt EZC, rewardAmt = $rewardAmt EZC");
 
         final startDate = element.startTime.parseDateTimeFromTimestamp();
         final endDate = element.startTime.parseDateTimeFromTimestamp();
