@@ -784,7 +784,7 @@ class _SplashScreenState extends State<SplashScreen> {
   delegate() async {
     try {
       const nodeId = "NodeID-FRouddSdqsz9SqFddmcpX3kMcTUuczYWW";
-      final amount = numberToBNAvaxX(100);
+      const amount = 100;
 
       // ONLY FOR EXAMPLE: fetch to get selected node
       final validators = await wallet.getPlatformValidators();
@@ -798,22 +798,24 @@ class _SplashScreenState extends State<SplashScreen> {
 
       // store lại current supply tránh việc mỗi khi thay đổi amount phải gọi lại
       final currentSupply = await wallet.getCurrentSupply();
-      final estimation = calculateStakingReward(
-        amount,
+      final estimation = await calculateStakingReward(
+        numberToBN(amount, 18),
         duration ~/ 1000,
-        currentSupply,
+        currentSupply * BigInt.from(10).pow(9),
       );
-      final estimatedReward = bnToDecimal(estimation, denomination: 9);
-      logger.i("estimatedReward = $estimatedReward");
+      final estimatedReward = bnToDecimal(estimation, denomination: 18);
+      logger.i("estimatedReward = ${estimatedReward.toStringAsFixed(2)}");
       final delegationFee =
           Decimal.tryParse(selectedNode.delegationFee) ?? Decimal.zero;
       final cut =
           estimatedReward * (delegationFee / Decimal.fromInt(100)).toDecimal();
-      final totalFee = getTxFeeP() + decimalToBn(cut, denomination: 9);
-      logger.i("totalFee = $totalFee");
+      final totalFee = getTxFeeP() * BigInt.from(10).pow(9) +
+          decimalToBn(cut, denomination: 18);
+      logger.i(
+          "totalFee = ${bnToDecimal(totalFee, denomination: 18).toStringAsFixed(2)}");
 
       /// Start delegation in 5 minutes
-      // final txId = await wallet.delegate(nodeId, amount, start, end);
+      // final txId = await wallet.delegate(nodeId, numberToBNAvaxP(100), start, end);
       // logger.i("txId = $txId");
     } catch (e) {
       logger.e(e);

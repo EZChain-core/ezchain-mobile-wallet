@@ -8,6 +8,7 @@ import 'package:wallet/roi/sdk/apis/pvm/model/get_min_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_pending_validators.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_staking_asset_id.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_total_of_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_tx_status.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_utxos.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/issue_tx.dart';
@@ -98,6 +99,8 @@ abstract class PvmApi implements ROIChainApi {
   void setMinStake(BigInt minValidatorStake, BigInt minDelegatorStake);
 
   Future<BigInt> getCurrentSupply();
+
+  Future<BigInt> getTotalOfStake();
 
   factory PvmApi.create(
       {required ROINetwork roiNetwork, String endPoint = "/ext/bc/P"}) {
@@ -499,6 +502,15 @@ class _PvmApiImpl implements PvmApi {
     final result = response.result;
     if (result == null) throw Exception(response.error?.message);
     return result.supplyBN;
+  }
+
+  @override
+  Future<BigInt> getTotalOfStake() async {
+    final request = GetTotalOfStakeRequest().toRpc();
+    final response = await pvmRestClient.getTotalOfStake(request);
+    final result = response.result;
+    if (result == null) throw Exception(response.error?.message);
+    return result.totalStakeBN;
   }
 
   BigInt _getDefaultTxFee() {
