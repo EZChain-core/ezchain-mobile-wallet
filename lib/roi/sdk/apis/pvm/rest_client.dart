@@ -6,6 +6,7 @@ import 'package:wallet/roi/sdk/apis/pvm/model/get_min_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_pending_validators.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_staking_asset_id.dart';
+import 'package:wallet/roi/sdk/apis/pvm/model/get_total_of_stake.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_tx_status.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_utxos.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/issue_tx.dart';
@@ -54,4 +55,8 @@ abstract class PvmRestClient {
   @POST("")
   Future<RpcResponse<GetCurrentSupplyResponse>> getCurrentSupply(
       @Body() RpcRequest<GetCurrentSupplyRequest> request);
+
+  @POST("")
+  Future<RpcResponse<GetTotalOfStakeResponse>> getTotalOfStake(
+      @Body() RpcRequest<GetTotalOfStakeRequest> request);
 }
