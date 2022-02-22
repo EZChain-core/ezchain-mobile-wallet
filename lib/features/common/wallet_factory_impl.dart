@@ -70,4 +70,9 @@ class WalletFactoryImpl extends WalletFactory {
     }
     return false;
   }
+
+  @override
+  Future<String> getAccessKey() async {
+    return await _storage.read(key: accessKey) ?? '';
+  }
 }

@@ -12,4 +12,6 @@ abstract class WalletFactory {
   Future<bool> isExpired();
 
   Future<bool> initWallet();
+
+  Future<String> getAccessKey();
 }

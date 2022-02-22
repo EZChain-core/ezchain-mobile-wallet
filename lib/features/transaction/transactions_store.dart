@@ -58,13 +58,13 @@ abstract class _TransactionsStore with Store {
     switch (ezcType) {
       case EZCType.xChain:
         return WalletReceiveRoute(
-            walletReceiveInfo: WalletReceiveInfo(ezcType.name, addressX));
+            walletReceiveInfo: WalletReceiveArgs(ezcType.name, addressX));
       case EZCType.pChain:
         return WalletReceiveRoute(
-            walletReceiveInfo: WalletReceiveInfo(ezcType.name, addressP));
+            walletReceiveInfo: WalletReceiveArgs(ezcType.name, addressP));
       case EZCType.cChain:
         return WalletReceiveRoute(
-            walletReceiveInfo: WalletReceiveInfo(ezcType.name, addressC));
+            walletReceiveInfo: WalletReceiveArgs(ezcType.name, addressC));
     }
   }
 

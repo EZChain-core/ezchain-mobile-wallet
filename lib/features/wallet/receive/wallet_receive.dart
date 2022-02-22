@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -13,10 +14,9 @@ import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
 class WalletReceiveScreen extends StatelessWidget {
-  final WalletReceiveInfo walletReceiveInfo;
+  final WalletReceiveArgs args;
 
-  const WalletReceiveScreen({Key? key, required this.walletReceiveInfo})
-      : super(key: key);
+  const WalletReceiveScreen({Key? key, required this.args}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class WalletReceiveScreen extends StatelessWidget {
                                   color: provider.themeMode.text),
                             ),
                             const SizedBox(width: 16),
-                            EZCChainLabelText(text: walletReceiveInfo.chain),
+                            EZCChainLabelText(text: args.chain),
                           ],
                         ),
                       ),
@@ -65,34 +65,17 @@ class WalletReceiveScreen extends StatelessWidget {
                             Assets.images.imgLogoRoiSecondary
                                 .image(width: 77, height: 61),
                             const SizedBox(height: 8),
-                            CachedNetworkImage(
-                              imageUrl:
-                                  "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png",
-                              width: 180,
-                              height: 180,
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.fitWidth),
-                                ),
-                              ),
-                              placeholder: (context, url) =>
-                                  ColoredBox(color: provider.themeMode.text10),
-                              errorWidget: (context, url, error) =>
-                                  ColoredBox(color: provider.themeMode.text10),
-                              fadeInCurve: Curves.linear,
-                              fadeInDuration: const Duration(milliseconds: 0),
-                              fadeOutCurve: Curves.linear,
-                              fadeOutDuration: const Duration(milliseconds: 0),
+                            QrImage(
+                              data: args.address,
+                              version: QrVersions.auto,
+                              size: 180,
                             ),
                             const Spacer(),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 45),
                               child: Text(
-                                walletReceiveInfo.address.useCorrectEllipsis(),
+                                args.address.useCorrectEllipsis(),
                                 maxLines: 3,
                                 style: EZCBodyLargeTextStyle(
                                     color: provider.themeMode.text),
@@ -170,9 +153,9 @@ class WalletReceiveScreen extends StatelessWidget {
   }
 }
 
-class WalletReceiveInfo {
+class WalletReceiveArgs {
   final String chain;
   final String address;
 
-  WalletReceiveInfo(this.chain, this.address);
+  WalletReceiveArgs(this.chain, this.address);
 }

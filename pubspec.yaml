@@ -55,6 +55,7 @@ dependencies:
   sha3: ^0.2.0
   eventify: ^1.0.0
   decimal: ^2.1.0
+  qr_flutter: ^4.0.0
 
 dev_dependencies:
 #  flutter_test:
