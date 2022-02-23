@@ -64,9 +64,7 @@ abstract class _EarnDelegateNodesStore with Store {
         final stakeAmountDecimal = bnToDecimalAvaxP(validatorStakeAmountBN);
         final stakeAmount =
             decimalToLocaleString(stakeAmountDecimal, decimals: 0);
-        final fee = decimalToLocaleString(
-            Decimal.tryParse(validator.delegationFee) ?? Decimal.zero,
-            decimals: 2);
+        final fee = Decimal.tryParse(validator.delegationFee) ?? Decimal.zero;
 
         // max token validator là 3tr
         final absMaxStake = ONEAVAX * BigInt.parse("3000000");
@@ -96,13 +94,8 @@ abstract class _EarnDelegateNodesStore with Store {
         final remainingStake =
             decimalToLocaleString(remainingStakeDecimal, decimals: 0);
 
-        nodes.add(EarnDelegateNodeItem(
-            validator.nodeId,
-            stakeAmount,
-            remainingStake,
-            validator.delegators?.length ?? 0,
-            endTime,
-            "$fee%"));
+        nodes.add(EarnDelegateNodeItem(validator.nodeId, stakeAmount,
+            remainingStake, validator.delegators?.length ?? 0, endTime, fee));
       }
     } catch (e) {
       logger.e(e);

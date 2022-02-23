@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:auto_route/src/router/auto_router_x.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:wallet/common/extensions.dart';

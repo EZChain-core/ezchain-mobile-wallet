@@ -8,6 +8,7 @@ import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm.dart';
 import 'package:wallet/features/earn/delegate/input/earn_delegate_input_store.dart';
+import 'package:wallet/features/earn/delegate/nodes/earn_delegate_node_item.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -65,7 +66,7 @@ class EarnDelegateInputScreen extends StatelessWidget {
                                   color: provider.themeMode.text60),
                             ),
                             Text(
-                              args.nodeId.useCorrectEllipsis(),
+                              args.delegateItem.nodeId.useCorrectEllipsis(),
                               style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
@@ -137,7 +138,7 @@ class EarnDelegateInputScreen extends StatelessWidget {
     if (_earnDelegateInputStore.validate(address, amount)) {
       walletContext?.pushRoute(EarnDelegateConfirmRoute(
           args: EarnDelegateConfirmArgs(
-        args.nodeId,
+            args.delegateItem,
         address,
         amount,
         _stakingEndDate,
@@ -311,10 +312,10 @@ class _EarnAddressTextFieldState extends State<_EarnAddressTextField> {
 }
 
 class EarnDelegateInputArgs {
-  final String nodeId;
-  final int endTime;
+  final EarnDelegateNodeItem delegateItem;
 
-  EarnDelegateInputArgs(this.nodeId, this.endTime);
+  EarnDelegateInputArgs(this.delegateItem);
 
-  DateTime get endDate => DateTime.fromMillisecondsSinceEpoch(endTime);
+  DateTime get endDate =>
+      DateTime.fromMillisecondsSinceEpoch(delegateItem.endTime);
 }

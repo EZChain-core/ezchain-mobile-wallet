@@ -1,10 +1,12 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/earn/delegate/input/earn_delegate_input.dart';
 import 'package:wallet/generated/l10n.dart';
+import 'package:wallet/roi/wallet/utils/number_utils.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
@@ -16,14 +18,16 @@ class EarnDelegateNodeItem {
   final String available;
   final int numberOfDelegators;
   final int endTime;
-  final String fee;
+  final Decimal delegationFee;
 
   EarnDelegateNodeItem(this.nodeId, this.validatorStake, this.available,
-      this.numberOfDelegators, this.endTime, this.fee);
+      this.numberOfDelegators, this.endTime, this.delegationFee);
 
   String get endTimeDuration {
     return DateTime.fromMillisecondsSinceEpoch(endTime).parseDurationTime();
   }
+
+  String get fee => '${decimalToLocaleString(delegationFee, decimals: 2)}%';
 }
 
 class EarnDelegateNodeItemWidget extends StatelessWidget {
@@ -92,10 +96,7 @@ class EarnDelegateNodeItemWidget extends StatelessWidget {
                   width: 157,
                   onPressed: () {
                     context.pushRoute(EarnDelegateInputRoute(
-                      args: EarnDelegateInputArgs(
-                        item.nodeId,
-                        item.endTime,
-                      ),
+                      args: EarnDelegateInputArgs(item),
                     ));
                   },
                 ),
