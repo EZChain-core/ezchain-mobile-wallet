@@ -13,10 +13,14 @@ import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
+import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/roi/sdk/utils/bigint.dart';
 import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
+import 'package:wallet/roi/sdk/utils/helper_functions.dart';
+import 'package:wallet/roi/wallet/asset/assets.dart';
+import 'package:wallet/roi/wallet/asset/types.dart';
 import 'package:wallet/roi/wallet/explorer/cchain/types.dart';
 import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
@@ -80,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           estimateRewards();
+    //           fetchAssets();
     //         },
     //       ),
     //     ),
@@ -815,8 +819,9 @@ class _SplashScreenState extends State<SplashScreen> {
           "totalFee = ${bnToDecimal(totalFee, denomination: 18).toStringAsFixed(2)}");
 
       /// Start delegation in 5 minutes
-      // final txId = await wallet.delegate(nodeId, numberToBNAvaxP(100), start, end);
-      // logger.i("txId = $txId");
+      final txId =
+          await wallet.delegate(nodeId, numberToBNAvaxP(amount), start, end);
+      logger.i("txId = $txId");
     } catch (e) {
       logger.e(e);
     }
@@ -893,5 +898,50 @@ class _SplashScreenState extends State<SplashScreen> {
     });
 
     return res;
+  }
+
+  fetchAssets() async {
+    final avaAssetId = getAvaxAssetId();
+    final stake = await wallet
+        .getStake(); // <-- cho mục đích ví dụ, impl có thể phải cần thiết kế để shared
+    // cần thiết kế để lắng nghe khi update đc utxosX thì mới map data
+    final balanceDict = wallet.getBalanceX();
+    final assets = wallet.getUnknownAssets().map((asset) {
+      final avaAsset = AvaAsset(
+        id: asset.assetId,
+        name: asset.name,
+        symbol: asset.symbol,
+        denomination: int.tryParse(asset.denomination) ?? 0,
+      );
+
+      final balanceAmt = balanceDict[avaAsset.id];
+      if (balanceAmt == null) {
+        avaAsset.resetBalance();
+      } else {
+        avaAsset.resetBalance();
+        avaAsset.addBalance(balanceAmt.unlocked);
+        avaAsset.addBalanceLocked(balanceAmt.locked);
+      }
+
+      // Add extras for AVAX token
+      if (avaAsset.id == avaAssetId) {
+        final balanceP = wallet.getBalanceP();
+        avaAsset.addExtra(stake.stakedBN);
+        avaAsset.addExtra(balanceP.unlocked);
+        avaAsset.addExtra(balanceP.locked);
+        avaAsset.addExtra(balanceP.lockedStakeable);
+      }
+      return avaAsset;
+    }).toList();
+
+    assets.customSort(avaAssetId);
+
+    var stringAssets = "\n";
+    for (var element in assets) {
+      stringAssets +=
+          "isEZC = ${element.id == avaAssetId}, name = ${element.name}, symbol = ${element.symbol}, amount = ${element.toString()}\n";
+    }
+
+    logger.i(stringAssets);
   }
 }
