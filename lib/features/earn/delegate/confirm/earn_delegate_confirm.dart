@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm_store.dart';
+import 'package:wallet/features/earn/delegate/nodes/earn_delegate_node_item.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
@@ -21,6 +22,8 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _earnDelegateConfirmStore.calculateFee(args);
+
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -31,47 +34,47 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                 onPressed: () {
                   context.router.pop();
                 },
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: provider.themeMode.bg,
-                          borderRadius:
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: provider.themeMode.bg,
+                              borderRadius:
                               const BorderRadius.all(Radius.circular(16)),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              Strings.current.sharedNodeId,
-                              style: EZCTitleLargeTextStyle(
-                                  color: provider.themeMode.text60),
                             ),
-                            Text(
-                              args.nodeId.useCorrectEllipsis(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  Strings.current.sharedNodeId,
+                                  style: EZCTitleLargeTextStyle(
+                                      color: provider.themeMode.text60),
+                                ),
+                                Text(
+                                  args.delegateItem.nodeId.useCorrectEllipsis(),
                               style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      _EarnDelegateVerticalText(
-                        title: Strings.current.sharedStartDate,
-                        content: Strings.current.earnDelegateConfirmStartDate,
-                      ),
-                      const SizedBox(height: 12),
-                      _EarnDelegateVerticalText(
-                        title: Strings.current.sharedEndDate,
-                        content: args.endDate.formatYMdDateHoursTime(),
-                      ),
-                      const SizedBox(height: 12),
-                      _EarnDelegateVerticalText(
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          _EarnDelegateVerticalText(
+                            title: Strings.current.sharedStartDate,
+                            content: Strings.current.earnDelegateConfirmStartDate,
+                          ),
+                          const SizedBox(height: 12),
+                          _EarnDelegateVerticalText(
+                            title: Strings.current.sharedEndDate,
+                            content: args.endDate.formatYMdDateHoursTime(),
+                          ),
+                          const SizedBox(height: 12),
+                          _EarnDelegateVerticalText(
                           title: Strings.current.earnStakingDuration,
                           content: args.stakingDuration()),
                       Divider(
@@ -82,13 +85,18 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                           leftText: Strings.current.earnStakingAmount,
                           rightText: '${args.amount} EZC'),
                       const SizedBox(height: 12),
-                      _EarnDelegateHorizontalText(
-                          leftText: Strings.current.earnDelegationFee,
-                          rightText: '2 %'),
+                      Observer(
+                        builder: (_) => _EarnDelegateHorizontalText(
+                            leftText: Strings.current.earnDelegationFee,
+                            rightText: _earnDelegateConfirmStore.feeText),
+                      ),
                       const SizedBox(height: 12),
-                      _EarnDelegateHorizontalText(
-                          leftText: Strings.current.earnEstimatedReward,
-                          rightText: '1.13 EZC'),
+                      Observer(
+                        builder: (_) => _EarnDelegateHorizontalText(
+                            leftText: Strings.current.earnEstimatedReward,
+                            rightText:
+                                _earnDelegateConfirmStore.estimatedRewardText),
+                      ),
                       Divider(
                         height: 25,
                         color: provider.themeMode.text10,
@@ -100,7 +108,7 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                       Observer(
                         builder: (_) => Column(
                           children: [
-                            if (_earnDelegateConfirmStore.submitSuccess) ...[
+                                    if (!_earnDelegateConfirmStore.submitSuccess) ...[
                               Observer(
                                 builder: (_) => EZCMediumPrimaryButton(
                                   text: Strings.current.sharedSubmit,
@@ -112,44 +120,44 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              const SizedBox(height: 4),
-                              EZCMediumNoneButton(
-                                width: 162,
-                                text: Strings.current.sharedCancel,
-                                textColor: provider.themeMode.text90,
-                                onPressed: () {
-                                  context.popRoute();
-                                },
-                              )
-                            ] else ...[
-                              Text(
-                                Strings.current.sharedCommitted,
-                                style: EZCBodyMediumTextStyle(
-                                    color: provider.themeMode.stateSuccess),
-                              ),
-                              const SizedBox(height: 8),
-                              EZCMediumSuccessButton(
-                                text: Strings.current.earnDelegateBackToEarn,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 56,
-                                  vertical: 8,
+                                      const SizedBox(height: 4),
+                                      EZCMediumNoneButton(
+                                        width: 162,
+                                        text: Strings.current.sharedCancel,
+                                        textColor: provider.themeMode.text90,
+                                        onPressed: () {
+                                          context.popRoute();
+                                        },
+                                      )
+                                    ] else ...[
+                                      Text(
+                                        Strings.current.sharedCommitted,
+                                        style: EZCBodyMediumTextStyle(
+                                            color: provider.themeMode.stateSuccess),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      EZCMediumSuccessButton(
+                                        text: Strings.current.earnDelegateBackToEarn,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 56,
+                                          vertical: 8,
+                                        ),
+                                        onPressed: () {
+                                          context.router.popUntilRoot();
+                                        },
+                                      )
+                                    ],
+                                  ],
                                 ),
-                                onPressed: () {
-                                  context.router.popUntilRoot();
-                                },
-                              )
-                            ],
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
     );
   }
 }
@@ -222,14 +230,14 @@ class _EarnDelegateVerticalText extends StatelessWidget {
 }
 
 class EarnDelegateConfirmArgs {
-  final String nodeId;
+  final EarnDelegateNodeItem delegateItem;
   final String address;
   final Decimal amount;
   final DateTime endDate;
   late DateTime startDate;
 
   EarnDelegateConfirmArgs(
-      this.nodeId, this.address, this.amount, this.endDate) {
+      this.delegateItem, this.address, this.amount, this.endDate) {
     /// Start delegation in 5 minutes after submit
     startDate = DateTime.now().add(const Duration(minutes: 5));
   }
