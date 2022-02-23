@@ -19,6 +19,7 @@ import 'package:wallet/roi/sdk/apis/pvm/utxos.dart';
 import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/helper_functions.dart';
 import 'package:wallet/roi/wallet/asset/assets.dart';
+import 'package:wallet/roi/wallet/asset/types.dart';
 import 'package:wallet/roi/wallet/evm_wallet.dart';
 import 'package:wallet/roi/wallet/explorer/cchain/requests.dart'
     as cchain_explorer_request;
@@ -52,6 +53,8 @@ abstract class WalletProvider {
   PvmUTXOSet utxosP = PvmUTXOSet();
 
   WalletBalanceX balanceX = {};
+
+  final unknownAssets = <AssetDescriptionClean>[];
 
   EventEmitter emitter = EventEmitter();
 
@@ -182,7 +185,8 @@ abstract class WalletProvider {
     final assetIds =
         utxos.map((utxo) => cb58Encode(utxo.getAssetId())).toSet().toList();
     final futures = assetIds.map((id) => getAssetDescription(id));
-    await Future.wait(futures);
+    unknownAssets.clear();
+    unknownAssets.addAll(await Future.wait(futures));
   }
 
   /// Uses the X chain UTXOs owned by this wallet, gets asset description for unknown assets,
@@ -244,9 +248,9 @@ abstract class WalletProvider {
 
   /// A helpful method that returns the EZC balance on X, P, C chains.
   /// Internally calls chain specific getEzcBalance methods.
-  WalletBalanceX getBalanceX() {
-    return balanceX;
-  }
+  WalletBalanceX getBalanceX() => balanceX;
+
+  List<AssetDescriptionClean> getUnknownAssets() => unknownAssets;
 
   /// Returns the X chain EZC balance of the current wallet state.
   /// - Does not make a network request.
