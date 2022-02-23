@@ -25,28 +25,57 @@ abstract class _EarnDelegateConfirmStore with Store {
   @observable
   bool submitSuccess = false;
 
+  @observable
+  String estimatedRewardText = '';
+
+  @observable
+  String feeText = '';
+
   @computed
   List<Validator> get validators => _validatorsStore.validators;
 
-  _EarnDelegateConfirmStore() {
-    _validatorsStore.updateValidators();
+  @action
+  calculateFee(EarnDelegateConfirmArgs args) async {
+    try {
+      final amount = args.amount.toDouble();
+      final start = args.startDate.millisecondsSinceEpoch;
+      final end = args.endDate.millisecondsSinceEpoch;
+      final duration = end - start;
+
+      final currentSupply = await _wallet.getCurrentSupply();
+      final estimation = await calculateStakingReward(
+        numberToBN(amount, 18),
+        duration ~/ 1000,
+        currentSupply * BigInt.from(10).pow(9),
+      );
+      final estimatedReward = bnToDecimal(estimation, denomination: 18);
+      estimatedRewardText = '${estimatedReward.toStringAsFixed(2)} EZC';
+      final delegationFee = args.delegateItem.delegationFee;
+      final cut =
+          estimatedReward * (delegationFee / Decimal.fromInt(100)).toDecimal();
+      final totalFee = getTxFeeP() * BigInt.from(10).pow(9) +
+          decimalToBn(cut, denomination: 18);
+      feeText =
+          '${bnToDecimal(totalFee, denomination: 18).toStringAsFixed(2)} EZC';
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   @action
   delegate(EarnDelegateConfirmArgs args) async {
     try {
-      final nodeId = args.nodeId;
-      final amount = numberToBNAvaxX(args.amount.toDouble());
+      final nodeId = args.delegateItem.nodeId;
+      final amount = args.amount.toDouble();
 
       final start = args.startDate.millisecondsSinceEpoch;
       final end = args.endDate.millisecondsSinceEpoch;
       isLoading = true;
-      logger.i("nodeId = $nodeId");
-      logger.i("start = $start");
-      logger.i("end = $end");
-      logger.i("amount = $amount");
-      final txId = await _wallet.delegate(nodeId, amount, start, end);
 
+      /// Start delegation in 5 minutes
+      final txId =
+          await _wallet.delegate(nodeId, numberToBNAvaxP(amount), start, end);
+      submitSuccess = true;
       logger.i("txId = $txId");
     } catch (e) {
       logger.e(e);
