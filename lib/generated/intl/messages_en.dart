@@ -37,14 +37,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "${Intl.plural(count, one: '1 hour', other: '${count} hours')}";
 
   static String m6(count) =>
-      "${Intl.plural(count, one: '1 minute ago', other: '${count} minutes ago')}";
+      "${Intl.plural(count, one: 'in a day', other: 'in ${count} days')}";
 
   static String m7(count) =>
+      "${Intl.plural(count, one: 'in a year', other: 'in ${count} years')}";
+
+  static String m8(count) =>
+      "${Intl.plural(count, one: '1 minute ago', other: '${count} minutes ago')}";
+
+  static String m9(count) =>
       "${Intl.plural(count, one: '1 minute', other: '${count} minutes')}";
 
-  static String m8(balance) => "Balance: ${balance}";
+  static String m10(balance) => "Balance: ${balance}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
+
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accessMnemonicKeyDes": MessageLookupByLibrary.simpleMessage(
             "Hit ‘SPACE’ after every successful word entry."),
@@ -107,6 +114,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "You do not own an ROIChain node, but you want to stake using another node."),
         "earnDelegateInvalidAddress": MessageLookupByLibrary.simpleMessage(
             "Invalid address. Reward address must be a valid P chain address."),
+        "earnDelegateInvalidEndDate":
+            MessageLookupByLibrary.simpleMessage("Invalid end date"),
         "earnDelegateValidMess": MessageLookupByLibrary.simpleMessage(
             "You must have at least 1 ROI on the P chain to become a validator."),
         "earnDelegation": MessageLookupByLibrary.simpleMessage("Delegation"),
@@ -186,6 +195,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedCommitted": MessageLookupByLibrary.simpleMessage("Committed"),
         "sharedConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "sharedConfirmed": MessageLookupByLibrary.simpleMessage("Confirmed"),
+        "sharedCopied": MessageLookupByLibrary.simpleMessage("Copied"),
         "sharedCopy": MessageLookupByLibrary.simpleMessage("Copy"),
         "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
         "sharedDateDuration": m2,
@@ -207,6 +217,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedHourAgo": m4,
         "sharedHours": m5,
         "sharedImport": MessageLookupByLibrary.simpleMessage("Import"),
+        "sharedInDays": m6,
+        "sharedInYears": m7,
         "sharedInput": MessageLookupByLibrary.simpleMessage("Input"),
         "sharedInvalidAddress":
             MessageLookupByLibrary.simpleMessage("Invalid Address"),
@@ -218,8 +230,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedLockStakeable":
             MessageLookupByLibrary.simpleMessage("Lock Stakeable"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
-        "sharedMinuteAgo": m6,
-        "sharedMinutes": m7,
+        "sharedMinuteAgo": m8,
+        "sharedMinutes": m9,
         "sharedNodeId": MessageLookupByLibrary.simpleMessage("Node ID"),
         "sharedNonce": MessageLookupByLibrary.simpleMessage("Nonce"),
         "sharedNotConfirm": MessageLookupByLibrary.simpleMessage("Not Confirm"),
@@ -287,7 +299,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Set Amount"),
         "walletReceiveToThis": MessageLookupByLibrary.simpleMessage(
             " to this address\nSending any other coins my result in permanent loss"),
-        "walletSendBalance": m8,
+        "walletSendBalance": m10,
         "walletSendCChainErrorAddress": MessageLookupByLibrary.simpleMessage(
             "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\""),
         "walletSendGasGWEI": MessageLookupByLibrary.simpleMessage("GWEI"),

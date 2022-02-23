@@ -590,6 +590,30 @@ class Strings {
     );
   }
 
+  /// `{count,plural, =1{in a year} other{in {count} years}}`
+  String sharedInYears(num count) {
+    return Intl.plural(
+      count,
+      one: 'in a year',
+      other: 'in $count years',
+      name: 'sharedInYears',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count,plural, =1{in a day} other{in {count} days}}`
+  String sharedInDays(num count) {
+    return Intl.plural(
+      count,
+      one: 'in a day',
+      other: 'in $count days',
+      name: 'sharedInDays',
+      desc: '',
+      args: [count],
+    );
+  }
+
   /// `Value`
   String get sharedValue {
     return Intl.message(
@@ -895,6 +919,16 @@ class Strings {
     return Intl.message(
       'Potential Reward',
       name: 'sharedPotentialReward',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copied`
+  String get sharedCopied {
+    return Intl.message(
+      'Copied',
+      name: 'sharedCopied',
       desc: '',
       args: [],
     );
@@ -1595,6 +1629,16 @@ class Strings {
     return Intl.message(
       'Back to Earn',
       name: 'earnDelegateBackToEarn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid end date`
+  String get earnDelegateInvalidEndDate {
+    return Intl.message(
+      'Invalid end date',
+      name: 'earnDelegateInvalidEndDate',
       desc: '',
       args: [],
     );

@@ -3,6 +3,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm.dart';
@@ -22,17 +23,16 @@ class EarnDelegateInputScreen extends StatelessWidget {
   EarnDelegateInputScreen({Key? key, required this.args}) : super(key: key);
 
   final _earnDelegateInputStore = EarnDelegateInputStore();
-  final initDate = DateTime.now().add(const Duration(days: 21));
-  final firstDate = DateTime.now().add(const Duration(days: 14));
-  final lastDate = DateTime.now().add(const Duration(days: 365));
   final _addressController = TextEditingController();
   final _amountController = TextEditingController();
+
+  final _firstDate = DateTime.now().add(const Duration(days: 14));
 
   late DateTime _stakingEndDate;
 
   @override
   Widget build(BuildContext context) {
-    _stakingEndDate = initDate;
+    _stakingEndDate = _getIntDate();
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -44,41 +44,41 @@ class EarnDelegateInputScreen extends StatelessWidget {
                   context.router.pop();
                 },
               ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: provider.themeMode.bg,
-                              borderRadius:
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: provider.themeMode.bg,
+                          borderRadius:
                               const BorderRadius.all(Radius.circular(16)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              Strings.current.sharedNodeId,
+                              style: EZCTitleLargeTextStyle(
+                                  color: provider.themeMode.text60),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  Strings.current.sharedNodeId,
-                                  style: EZCTitleLargeTextStyle(
-                                      color: provider.themeMode.text60),
-                                ),
-                                Text(
-                                  args.nodeId,
+                            Text(
+                              args.nodeId.useCorrectEllipsis(),
                               style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          EZCDateTimeTextField(
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      EZCDateTimeTextField(
                         label: Strings.current.earnStakingEndDate,
                         prefixText: Strings.current.earnStakingEndDateNote,
-                        initDate: initDate,
-                        firstDate: firstDate,
-                        lastDate: lastDate,
+                        initDate: _getIntDate(),
+                        firstDate: _firstDate,
+                        lastDate: args.endDate,
                         onChanged: (selectedDate) {
                           _stakingEndDate = selectedDate;
                         },
@@ -137,8 +137,21 @@ class EarnDelegateInputScreen extends StatelessWidget {
     if (_earnDelegateInputStore.validate(address, amount)) {
       walletContext?.pushRoute(EarnDelegateConfirmRoute(
           args: EarnDelegateConfirmArgs(
-              args.nodeId, address, amount, _stakingEndDate)));
+        args.nodeId,
+        address,
+        amount,
+        _stakingEndDate,
+      )));
     }
+  }
+
+  DateTime _getIntDate() {
+    final now = DateTime.now();
+    final diffDays = args.endDate.difference(now).inDays;
+    if (diffDays > 21) {
+      return DateTime.now().add(const Duration(days: 21));
+    }
+    return _firstDate;
   }
 }
 
@@ -299,6 +312,9 @@ class _EarnAddressTextFieldState extends State<_EarnAddressTextField> {
 
 class EarnDelegateInputArgs {
   final String nodeId;
+  final int endTime;
 
-  EarnDelegateInputArgs(this.nodeId);
+  EarnDelegateInputArgs(this.nodeId, this.endTime);
+
+  DateTime get endDate => DateTime.fromMillisecondsSinceEpoch(endTime);
 }

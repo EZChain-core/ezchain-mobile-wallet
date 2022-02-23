@@ -3,6 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 
 import 'common/router.gr.dart';
@@ -25,6 +26,7 @@ class WalletApp extends StatelessWidget {
           title: "Strings.current.appName",
           theme: ThemeData.light().copyWith(
             scaffoldBackgroundColor: Colors.white,
+            primaryColor: provider.themeMode.secondary,
           ),
           darkTheme: ThemeData.dark(),
           themeMode: provider.themeMode,

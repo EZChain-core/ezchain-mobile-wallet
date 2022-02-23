@@ -53,7 +53,7 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                                   color: provider.themeMode.text60),
                             ),
                             Text(
-                              args.nodeId,
+                              args.nodeId.useCorrectEllipsis(),
                               style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),

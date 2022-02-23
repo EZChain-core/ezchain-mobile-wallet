@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
@@ -114,7 +115,7 @@ class TransactionsScreen extends StatelessWidget {
                             _HistoryButton(
                               text: Strings.current.sharedCopy,
                               icon: Assets.icons.icCopyPrimary.svg(),
-                              onPressed: () {},
+                              onPressed: _onClickCopy,
                             ),
                           ],
                         ),
@@ -171,6 +172,11 @@ class TransactionsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _onClickCopy() {
+    Clipboard.setData(ClipboardData(text: _transactionsStore.address));
+    showSnackBar(Strings.current.sharedCopied);
   }
 }
 

@@ -96,7 +96,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                         context.router.push(WalletSendAvmRoute()),
                     onReceivePressed: () => context.router.push(
                       WalletReceiveRoute(
-                        walletReceiveInfo: WalletReceiveArgs(
+                        args: WalletReceiveArgs(
                             'X-Chain', _walletEZCStore.addressX),
                       ),
                     ),
@@ -115,7 +115,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                     hasSend: false,
                     onReceivePressed: () => context.router.push(
                       WalletReceiveRoute(
-                        walletReceiveInfo: WalletReceiveArgs(
+                        args: WalletReceiveArgs(
                             'P-Chain', _walletEZCStore.addressP),
                       ),
                     ),
@@ -133,7 +133,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                         context.router.push(WalletSendEvmRoute()),
                     onReceivePressed: () => context.router.push(
                       WalletReceiveRoute(
-                        walletReceiveInfo: WalletReceiveArgs(
+                        args: WalletReceiveArgs(
                             'C-Chain', _walletEZCStore.addressC),
                       ),
                     ),

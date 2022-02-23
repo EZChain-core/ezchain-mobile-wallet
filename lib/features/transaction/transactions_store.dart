@@ -48,23 +48,34 @@ abstract class _TransactionsStore with Store {
     ezcType = type;
   }
 
-  String get addressX => _wallet.getAddressX();
+  String get _addressX => _wallet.getAddressX();
 
-  String get addressP => _wallet.getAddressP();
+  String get _addressP => _wallet.getAddressP();
 
-  String get addressC => _wallet.getAddressC();
+  String get _addressC => _wallet.getAddressC();
+
+  String get address {
+    switch (ezcType) {
+      case EZCType.xChain:
+        return _addressX;
+      case EZCType.pChain:
+        return _addressP;
+      case EZCType.cChain:
+        return _addressC;
+    }
+  }
 
   PageRouteInfo get receiveRoute {
     switch (ezcType) {
       case EZCType.xChain:
         return WalletReceiveRoute(
-            walletReceiveInfo: WalletReceiveArgs(ezcType.name, addressX));
+            args: WalletReceiveArgs(ezcType.name, _addressX));
       case EZCType.pChain:
         return WalletReceiveRoute(
-            walletReceiveInfo: WalletReceiveArgs(ezcType.name, addressP));
+            args: WalletReceiveArgs(ezcType.name, _addressP));
       case EZCType.cChain:
         return WalletReceiveRoute(
-            walletReceiveInfo: WalletReceiveArgs(ezcType.name, addressC));
+            args: WalletReceiveArgs(ezcType.name, _addressC));
     }
   }
 
