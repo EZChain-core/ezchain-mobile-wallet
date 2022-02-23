@@ -101,7 +101,7 @@ abstract class _EarnDelegateNodesStore with Store {
             stakeAmount,
             remainingStake,
             validator.delegators?.length ?? 0,
-            validator.endTime,
+            endTime,
             "$fee%"));
       }
     } catch (e) {

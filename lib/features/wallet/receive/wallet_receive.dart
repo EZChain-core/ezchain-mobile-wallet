@@ -1,6 +1,7 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -12,6 +13,7 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
+import 'package:share_plus/share_plus.dart';
 
 class WalletReceiveScreen extends StatelessWidget {
   final WalletReceiveArgs args;
@@ -91,7 +93,7 @@ class WalletReceiveScreen extends StatelessWidget {
                                   iconLeft: Assets.icons.icCopyPrimary.svg(),
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8, horizontal: 16),
-                                  onPressed: () => {},
+                                  onPressed: _onClickCopy,
                                 ),
                                 const SizedBox(width: 16),
                                 EZCMediumNoneButton(
@@ -99,7 +101,7 @@ class WalletReceiveScreen extends StatelessWidget {
                                   iconLeft: Assets.icons.icSharePrimary.svg(),
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8, horizontal: 16),
-                                  onPressed: () => {},
+                                  onPressed: _onClickShare,
                                 )
                               ],
                             ),
@@ -150,6 +152,15 @@ class WalletReceiveScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _onClickCopy() {
+    Clipboard.setData(ClipboardData(text: args.address));
+    showSnackBar(Strings.current.sharedCopied);
+  }
+
+  _onClickShare() {
+    Share.share(args.address);
   }
 }
 

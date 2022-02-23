@@ -127,8 +127,7 @@ class AppRouter extends _i33.RootStackRouter {
       final args = routeData.argsAs<WalletReceiveRouteArgs>();
       return _i33.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i10.WalletReceiveScreen(
-              key: args.key, args: args.walletReceiveInfo));
+          child: _i10.WalletReceiveScreen(key: args.key, args: args.args));
     },
     WalletSendAvmRoute.name: (routeData) {
       final args = routeData.argsAs<WalletSendAvmRouteArgs>(
@@ -467,26 +466,24 @@ class PinCodeConfirmRouteArgs {
 
 /// generated route for [_i10.WalletReceiveScreen]
 class WalletReceiveRoute extends _i33.PageRouteInfo<WalletReceiveRouteArgs> {
-  WalletReceiveRoute(
-      {_i34.Key? key, required _i10.WalletReceiveArgs walletReceiveInfo})
+  WalletReceiveRoute({_i34.Key? key, required _i10.WalletReceiveArgs args})
       : super(name,
             path: '/wallet-receive-screen',
-            args: WalletReceiveRouteArgs(
-                key: key, walletReceiveInfo: walletReceiveInfo));
+            args: WalletReceiveRouteArgs(key: key, args: args));
 
   static const String name = 'WalletReceiveRoute';
 }
 
 class WalletReceiveRouteArgs {
-  const WalletReceiveRouteArgs({this.key, required this.walletReceiveInfo});
+  const WalletReceiveRouteArgs({this.key, required this.args});
 
   final _i34.Key? key;
 
-  final _i10.WalletReceiveArgs walletReceiveInfo;
+  final _i10.WalletReceiveArgs args;
 
   @override
   String toString() {
-    return 'WalletReceiveRouteArgs{key: $key, walletReceiveInfo: $walletReceiveInfo}';
+    return 'WalletReceiveRouteArgs{key: $key, args: $args}';
   }
 }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:wallet/common/router.dart';
 import 'package:wallet/generated/l10n.dart';
+import 'package:wallet/themes/typography.dart';
 
 extension StringExtension on String {
   String useCorrectEllipsis() {
@@ -49,6 +51,18 @@ extension DateTimeExtension on DateTime {
     }
   }
 
+  String parseDurationTime() {
+    final now = DateTime.now();
+    final diffDays = difference(now).inDays;
+    final diffYears = diffDays ~/ 365;
+
+    if (diffYears > 0) {
+      return Strings.current.sharedInYears(diffYears);
+    } else {
+      return Strings.current.sharedInDays(diffDays);
+    }
+  }
+
   String format(String pattern) {
     return DateFormat(pattern).format(this);
   }
@@ -60,4 +74,19 @@ extension DateTimeExtension on DateTime {
   String formatYMMdDateHoursTime() => DateFormat.yMMMd().add_jm().format(this);
 
   String formatYMdDateHoursTime() => DateFormat.yMd().add_jm().format(this);
+}
+
+showSnackBar(String text) {
+  final context = walletContext;
+  if (context == null) return;
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      duration: const Duration(milliseconds: 2000),
+      backgroundColor: Theme.of(context).primaryColor,
+      content: Text(
+        text,
+        style: const EZCTitleMediumTextStyle(color: Colors.white),
+      ),
+    ),
+  );
 }
