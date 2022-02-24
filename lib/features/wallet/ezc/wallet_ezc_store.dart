@@ -18,7 +18,7 @@ abstract class _WalletEZCStore with Store {
 
   @computed
   WalletEZCBalanceViewData get balanceX => WalletEZCBalanceViewData(
-      _balanceStore.balanceX, _balanceStore.balanceLockedX, null);
+      _balanceStore.balanceX, _balanceStore.balanceLockedX);
 
   @computed
   WalletEZCBalanceViewData get balanceP => WalletEZCBalanceViewData(
@@ -28,11 +28,15 @@ abstract class _WalletEZCStore with Store {
 
   @computed
   WalletEZCBalanceViewData get balanceC =>
-      WalletEZCBalanceViewData(_balanceStore.balanceC, null, null);
+      WalletEZCBalanceViewData(_balanceStore.balanceC);
 
   @computed
   String get totalRoi =>
       decimalToLocaleString(_balanceStore.totalRoi, decimals: decimalNumber);
+
+  @computed
+  String get staking =>
+      decimalToLocaleString(_balanceStore.staking, decimals: decimalNumber);
 
   @computed
   String get totalUsd {
@@ -73,5 +77,5 @@ class WalletEZCBalanceViewData {
       decimalToLocaleString(lockStakeable ?? Decimal.zero,
           decimals: decimalNumber);
 
-  WalletEZCBalanceViewData(this.available, this.lock, this.lockStakeable);
+  WalletEZCBalanceViewData(this.available, [this.lock, this.lockStakeable]);
 }
