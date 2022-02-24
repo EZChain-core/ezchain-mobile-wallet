@@ -86,6 +86,7 @@
   "sharedStake": "Stake",
   "sharedPotentialReward": "Potential Reward",
   "sharedCopied": "Copied",
+  "sharedStaking": "Staking",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",

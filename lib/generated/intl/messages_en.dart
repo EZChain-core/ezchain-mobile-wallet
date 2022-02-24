@@ -51,7 +51,6 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m10(balance) => "Balance: ${balance}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accessMnemonicKeyDes": MessageLookupByLibrary.simpleMessage(
             "Hit ‘SPACE’ after every successful word entry."),
@@ -257,6 +256,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedShare": MessageLookupByLibrary.simpleMessage("Share"),
         "sharedSource": MessageLookupByLibrary.simpleMessage("Source"),
         "sharedStake": MessageLookupByLibrary.simpleMessage("Stake"),
+        "sharedStaking": MessageLookupByLibrary.simpleMessage("Staking"),
         "sharedStartAgain": MessageLookupByLibrary.simpleMessage("Start Again"),
         "sharedStartDate": MessageLookupByLibrary.simpleMessage("Start date"),
         "sharedStatus": MessageLookupByLibrary.simpleMessage("Status"),

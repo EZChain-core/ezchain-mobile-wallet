@@ -24,6 +24,9 @@ abstract class _BalanceStore with Store {
   Decimal totalRoi = Decimal.zero;
 
   @observable
+  Decimal staking = Decimal.zero;
+
+  @observable
   Decimal balanceX = Decimal.zero;
 
   @observable
@@ -167,9 +170,9 @@ abstract class _BalanceStore with Store {
     final totalAvaxBalanceDecimal = avaxBalance.totalDecimal;
 
     final staked = await _wallet.getStake();
-    final stakedDecimal = bnToDecimalAvaxP(staked.stakedBN);
+    staking = bnToDecimalAvaxP(staked.stakedBN);
 
-    totalRoi = totalAvaxBalanceDecimal + stakedDecimal;
+    totalRoi = totalAvaxBalanceDecimal + staking;
   }
 
   String decimalBalance(Decimal balance) {

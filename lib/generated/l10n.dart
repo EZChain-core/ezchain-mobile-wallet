@@ -934,6 +934,16 @@ class Strings {
     );
   }
 
+  /// `Staking`
+  String get sharedStaking {
+    return Intl.message(
+      'Staking',
+      name: 'sharedStaking',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(

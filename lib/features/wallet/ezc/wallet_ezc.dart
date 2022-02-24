@@ -85,8 +85,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                     const SizedBox(width: 16),
                   ],
                 ),
-                const SizedBox(height: 22),
-                const SizedBox(height: 20),
+                const SizedBox(height: 42),
                 Observer(
                   builder: (_) => _WalletChainWidget(
                     chain: Strings.current.sharedXChain,
@@ -139,6 +138,33 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                     ),
                     onPressed: () => context
                         .pushRoute(TransactionsRoute(ezcType: EZCType.cChain)),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Observer(
+                  builder: (_) => Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
+                        color: provider.themeMode.primary10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          Strings.current.sharedStaking,
+                          style: EZCHeadlineSmallTextStyle(
+                              color: provider.themeMode.text),
+                        ),
+                        Text(
+                          '${_walletEZCStore.staking} EZC',
+                          style: EZCTitleMediumTextStyle(
+                              color: provider.themeMode.text),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
