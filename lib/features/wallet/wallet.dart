@@ -52,10 +52,10 @@ class WalletScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: TabBarView(
                       children: [
-                        WalletEZCScreen(),
+                        const WalletEZCScreen(),
                         WalletTokenScreen(),
                       ],
                     ),
