@@ -54,7 +54,7 @@ abstract class WalletProvider {
 
   WalletBalanceX balanceX = {};
 
-  final unknownAssets = <AssetDescriptionClean>[];
+  var _unknownAssets = <AssetDescriptionClean>[];
 
   EventEmitter emitter = EventEmitter();
 
@@ -185,8 +185,7 @@ abstract class WalletProvider {
     final assetIds =
         utxos.map((utxo) => cb58Encode(utxo.getAssetId())).toSet().toList();
     final futures = assetIds.map((id) => getAssetDescription(id));
-    unknownAssets.clear();
-    unknownAssets.addAll(await Future.wait(futures));
+    _unknownAssets = await Future.wait(futures);
   }
 
   /// Uses the X chain UTXOs owned by this wallet, gets asset description for unknown assets,
@@ -250,7 +249,7 @@ abstract class WalletProvider {
   /// Internally calls chain specific getEzcBalance methods.
   WalletBalanceX getBalanceX() => balanceX;
 
-  List<AssetDescriptionClean> getUnknownAssets() => unknownAssets;
+  List<AssetDescriptionClean> getUnknownAssets() => _unknownAssets;
 
   /// Returns the X chain EZC balance of the current wallet state.
   /// - Does not make a network request.
