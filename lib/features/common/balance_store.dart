@@ -44,6 +44,9 @@ abstract class _BalanceStore with Store {
   @observable
   Decimal balanceLockedStakeableP = Decimal.zero;
 
+  @observable
+  bool isTotalLoaded = false;
+
   bool _isXLoaded = false;
   bool _isPLoaded = false;
   bool _isCLoaded = false;
@@ -173,6 +176,7 @@ abstract class _BalanceStore with Store {
     staking = bnToDecimalAvaxP(staked.stakedBN);
 
     totalRoi = totalAvaxBalanceDecimal + staking;
+    isTotalLoaded = true;
   }
 
   String decimalBalance(Decimal balance) {
