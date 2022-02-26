@@ -31,18 +31,22 @@ class _WalletTokenScreenState extends State<WalletTokenScreen>
               overscroll.disallowIndicator();
               return true;
             },
-            child: Observer(
-              builder: (_) => ListView.separated(
-                  padding: const EdgeInsets.all(0),
-                  itemBuilder: (BuildContext context, int index) => index == 0
-                      ? _WalletTokenHeaderWidget()
-                      : WalletTokenItemWidget(
-                          token: _walletTokenStore.tokens[index - 1]),
-                  separatorBuilder: (BuildContext context, int index) =>
-                      index == 0
-                          ? const SizedBox.shrink()
-                          : Divider(color: provider.themeMode.text10),
-                  itemCount: _walletTokenStore.tokens.length + 1),
+            child: Column(
+              children: [
+                _WalletTokenHeaderWidget(),
+                Expanded(
+                  child: Observer(
+                    builder: (_) => ListView.separated(
+                        padding: const EdgeInsets.all(0),
+                        itemBuilder: (BuildContext context, int index) =>
+                            WalletTokenItemWidget(
+                                token: _walletTokenStore.tokens[index]),
+                        separatorBuilder: (BuildContext context, int index) =>
+                            Divider(color: provider.themeMode.text10),
+                        itemCount: _walletTokenStore.tokens.length),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
