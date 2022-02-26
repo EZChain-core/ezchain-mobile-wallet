@@ -24,7 +24,7 @@ abstract class _EarnDelegateNodesStore with Store {
   List<Validator> get validators => _validatorsStore.validators;
 
   _EarnDelegateNodesStore() {
-    _validatorsStore.updateValidators();
+    Future.delayed(Duration.zero, () => _validatorsStore.updateValidators);
   }
 
   Future<List<EarnDelegateNodeItem>> getNodeIds() async {

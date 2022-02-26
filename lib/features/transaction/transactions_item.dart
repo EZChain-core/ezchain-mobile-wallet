@@ -364,7 +364,7 @@ List<TransactionsItem> mapCChainToTransactionsItem(
       final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
       final fee = '${bnToAvaxC(gasPrice * gasUsed)} EZC';
       final amount = '$value EZC';
-      final transType = Strings.current.sharedImport;
+      final transType = '';
       transactions.add(TransactionsCChainItem(tx.hash, time, transType,
           blockNumber, tx.from, tx.to, amount, fee, tx));
     }

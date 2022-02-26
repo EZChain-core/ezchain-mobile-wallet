@@ -1,10 +1,10 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -13,7 +13,6 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
-import 'package:share_plus/share_plus.dart';
 
 class WalletReceiveScreen extends StatelessWidget {
   final WalletReceiveArgs args;
@@ -64,8 +63,10 @@ class WalletReceiveScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             const SizedBox(height: 24),
-                            Assets.images.imgLogoRoiSecondary
-                                .image(width: 77, height: 61),
+                            Assets.images.imgEzcAbout.image(
+                              width: 151,
+                              height: 48,
+                            ),
                             const SizedBox(height: 8),
                             QrImage(
                               data: args.address,

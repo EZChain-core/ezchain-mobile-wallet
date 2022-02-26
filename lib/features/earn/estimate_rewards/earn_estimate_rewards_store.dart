@@ -27,7 +27,7 @@ abstract class _EarnEstimateRewardsStore with Store {
   List<Validator> get validators => _validatorsStore.validators;
 
   _EarnEstimateRewardsStore() {
-    _validatorsStore.updateValidators();
+    Future.delayed(Duration.zero, () => _validatorsStore.updateValidators);
   }
 
   Future<List<EarnEstimateRewardsItem>> getEstimateRewards() async {
