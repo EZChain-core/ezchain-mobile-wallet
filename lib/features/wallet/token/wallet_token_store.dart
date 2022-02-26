@@ -5,7 +5,6 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/features/wallet/token/wallet_token.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/roi/wallet/asset/types.dart';
 import 'package:wallet/roi/wallet/network/utils.dart';
@@ -52,7 +51,6 @@ abstract class _WalletTokenStore with Store {
   refresh() async {
     _priceStore.updateAvaxPrice();
     _balanceStore.updateTotalBalance();
-    test();
   }
 
   List<WalletTokenItem> fetchAssets() {
@@ -67,9 +65,15 @@ abstract class _WalletTokenStore with Store {
         denomination: int.tryParse(asset.denomination) ?? 0,
       );
 
-      avaAsset.resetBalance();
-      avaAsset.addBalance(_unlockedX);
-      avaAsset.addBalanceLocked(_lockedX);
+      final balanceDict = _wallet.getBalanceX();
+      final balanceAmt = balanceDict[avaAsset.id];
+      if (balanceAmt == null) {
+        avaAsset.resetBalance();
+      } else {
+        avaAsset.resetBalance();
+        avaAsset.addBalance(balanceAmt.unlocked);
+        avaAsset.addBalanceLocked(balanceAmt.locked);
+      }
 
       // Add extras for AVAX token
       if (avaAsset.id == avaAssetId) {
@@ -87,57 +91,14 @@ abstract class _WalletTokenStore with Store {
     for (var element in assets) {
       stringAssets +=
           "isEZC = ${element.id == avaAssetId}, name = ${element.name}, symbol = ${element.symbol}, amount = ${element.toString()}\n";
-
+      final amount =
+          bnToDecimal(element.amount, denomination: element.denomination)
+              .text();
       list.add(WalletTokenItem('', element.name, element.symbol,
-          element.getAmount(), ezcPrice, element.toString()));
+          element.getAmount(), ezcPrice, amount, 'X-Chain'));
     }
     logger.i(stringAssets);
 
     return list;
-  }
-
-  test() async {
-    final avaAssetId = getAvaxAssetId();
-    final stake = await _wallet
-        .getStake(); // <-- cho mục đích ví dụ, impl có thể phải cần thiết kế để shared
-    // cần thiết kế để lắng nghe khi update đc utxosX thì mới map data
-    final balanceDict = _wallet.getBalanceX();
-    final assets = _wallet.getUnknownAssets().map((asset) {
-      final avaAsset = AvaAsset(
-        id: asset.assetId,
-        name: asset.name,
-        symbol: asset.symbol,
-        denomination: int.tryParse(asset.denomination) ?? 0,
-      );
-
-      final balanceAmt = balanceDict[avaAsset.id];
-      if (balanceAmt == null) {
-        avaAsset.resetBalance();
-      } else {
-        avaAsset.resetBalance();
-        avaAsset.addBalance(balanceAmt.unlocked);
-        avaAsset.addBalanceLocked(balanceAmt.locked);
-      }
-
-      // Add extras for AVAX token
-      if (avaAsset.id == avaAssetId) {
-        final balanceP = _wallet.getBalanceP();
-        avaAsset.addExtra(stake.stakedBN);
-        avaAsset.addExtra(balanceP.unlocked);
-        avaAsset.addExtra(balanceP.locked);
-        avaAsset.addExtra(balanceP.lockedStakeable);
-      }
-      return avaAsset;
-    }).toList();
-
-    assets.customSort(avaAssetId);
-
-    var stringAssets = "\n";
-    for (var element in assets) {
-      stringAssets +=
-          "isEZC = ${element.id == avaAssetId}, name = ${element.name}, symbol = ${element.symbol}, amount = ${element.toString()}\n";
-    }
-
-    logger.i(stringAssets);
   }
 }

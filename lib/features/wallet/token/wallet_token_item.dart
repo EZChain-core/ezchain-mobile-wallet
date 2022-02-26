@@ -19,7 +19,7 @@ class WalletTokenItem {
 
   const WalletTokenItem(
       this.logo, this.name, this.code, this.amount, this.price, this.amountText,
-      [this.rate, this.type]);
+      [this.type, this.rate]);
 
   bool? get isGainer => rate != null ? rate! > 0 : null;
 

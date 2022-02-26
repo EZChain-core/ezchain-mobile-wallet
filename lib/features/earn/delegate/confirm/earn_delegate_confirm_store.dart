@@ -1,10 +1,12 @@
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/common/extensions.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm.dart';
+import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/roi/wallet/helpers/staking_helper.dart';
 import 'package:wallet/roi/wallet/utils/fee_utils.dart';
@@ -72,12 +74,12 @@ abstract class _EarnDelegateConfirmStore with Store {
       final end = args.endDate.millisecondsSinceEpoch;
       isLoading = true;
 
-      /// Start delegation in 5 minutes
       final txId =
           await _wallet.delegate(nodeId, numberToBNAvaxP(amount), start, end);
       submitSuccess = true;
       logger.i("txId = $txId");
     } catch (e) {
+      showSnackBar(Strings.current.sharedCommonError);
       logger.e(e);
     }
     isLoading = false;
