@@ -44,8 +44,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
               overscroll.disallowIndicator();
               return true;
             },
-            child: ListView(
-              padding: const EdgeInsets.all(0),
+            child: Column(
               children: [
                 const SizedBox(height: 24),
                 Row(
@@ -86,87 +85,97 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                   ],
                 ),
                 const SizedBox(height: 42),
-                Observer(
-                  builder: (_) => _WalletChainWidget(
-                    chain: Strings.current.sharedXChain,
-                    availableRoi: _walletEZCStore.balanceX.availableString,
-                    lockRoi: _walletEZCStore.balanceX.lockString,
-                    onSendPressed: () =>
-                        context.router.push(WalletSendAvmRoute()),
-                    onReceivePressed: () => context.router.push(
-                      WalletReceiveRoute(
-                        args: WalletReceiveArgs(
-                            'X-Chain', _walletEZCStore.addressX),
-                      ),
-                    ),
-                    onPressed: () => context
-                        .pushRoute(TransactionsRoute(ezcType: EZCType.xChain)),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Observer(
-                  builder: (_) => _WalletChainWidget(
-                    chain: Strings.current.sharedPChain,
-                    availableRoi: _walletEZCStore.balanceP.availableString,
-                    lockRoi: _walletEZCStore.balanceP.lockString,
-                    lockStakeableRoi:
-                        _walletEZCStore.balanceP.lockStakeableString,
-                    hasSend: false,
-                    onReceivePressed: () => context.router.push(
-                      WalletReceiveRoute(
-                        args: WalletReceiveArgs(
-                            'P-Chain', _walletEZCStore.addressP),
-                      ),
-                    ),
-                    onPressed: () => context
-                        .pushRoute(TransactionsRoute(ezcType: EZCType.pChain)),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Observer(
-                  builder: (_) => _WalletChainWidget(
-                    chain: Strings.current.sharedCChain,
-                    availableRoi: _walletEZCStore.balanceC.availableString,
-                    lockRoi: _walletEZCStore.balanceC.lockString,
-                    onSendPressed: () =>
-                        context.router.push(WalletSendEvmRoute()),
-                    onReceivePressed: () => context.router.push(
-                      WalletReceiveRoute(
-                        args: WalletReceiveArgs(
-                            'C-Chain', _walletEZCStore.addressC),
-                      ),
-                    ),
-                    onPressed: () => context
-                        .pushRoute(TransactionsRoute(ezcType: EZCType.cChain)),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Observer(
-                  builder: (_) => Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8)),
-                        color: provider.themeMode.primary10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          Strings.current.sharedStaking,
-                          style: EZCHeadlineSmallTextStyle(
-                              color: provider.themeMode.text),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.all(0),
+                    children: [
+                      Observer(
+                        builder: (_) => _WalletChainWidget(
+                          chain: Strings.current.sharedXChain,
+                          availableRoi:
+                              _walletEZCStore.balanceX.availableString,
+                          lockRoi: _walletEZCStore.balanceX.lockString,
+                          onSendPressed: () =>
+                              context.router.push(WalletSendAvmRoute()),
+                          onReceivePressed: () => context.router.push(
+                            WalletReceiveRoute(
+                              args: WalletReceiveArgs(
+                                  'X-Chain', _walletEZCStore.addressX),
+                            ),
+                          ),
+                          onPressed: () => context.pushRoute(
+                              TransactionsRoute(ezcType: EZCType.xChain)),
                         ),
-                        Text(
-                          '${_walletEZCStore.staking} EZC',
-                          style: EZCTitleMediumTextStyle(
-                              color: provider.themeMode.text),
+                      ),
+                      const SizedBox(height: 12),
+                      Observer(
+                        builder: (_) => _WalletChainWidget(
+                          chain: Strings.current.sharedPChain,
+                          availableRoi:
+                              _walletEZCStore.balanceP.availableString,
+                          lockRoi: _walletEZCStore.balanceP.lockString,
+                          lockStakeableRoi:
+                              _walletEZCStore.balanceP.lockStakeableString,
+                          hasSend: false,
+                          onReceivePressed: () => context.router.push(
+                            WalletReceiveRoute(
+                              args: WalletReceiveArgs(
+                                  'P-Chain', _walletEZCStore.addressP),
+                            ),
+                          ),
+                          onPressed: () => context.pushRoute(
+                              TransactionsRoute(ezcType: EZCType.pChain)),
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 12),
+                      Observer(
+                        builder: (_) => _WalletChainWidget(
+                          chain: Strings.current.sharedCChain,
+                          availableRoi:
+                              _walletEZCStore.balanceC.availableString,
+                          lockRoi: _walletEZCStore.balanceC.lockString,
+                          onSendPressed: () =>
+                              context.router.push(WalletSendEvmRoute()),
+                          onReceivePressed: () => context.router.push(
+                            WalletReceiveRoute(
+                              args: WalletReceiveArgs(
+                                  'C-Chain', _walletEZCStore.addressC),
+                            ),
+                          ),
+                          onPressed: () => context.pushRoute(
+                              TransactionsRoute(ezcType: EZCType.cChain)),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Observer(
+                        builder: (_) => Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(8)),
+                              color: provider.themeMode.primary10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                Strings.current.sharedStaking,
+                                style: EZCHeadlineSmallTextStyle(
+                                    color: provider.themeMode.text),
+                              ),
+                              Text(
+                                '${_walletEZCStore.staking} EZC',
+                                style: EZCTitleMediumTextStyle(
+                                    color: provider.themeMode.text),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                )
               ],
             ),
           ),
