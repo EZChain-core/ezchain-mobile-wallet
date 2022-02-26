@@ -158,10 +158,6 @@ class $AssetsImagesGen {
   SvgGenImage get imgLogoEzc =>
       const SvgGenImage('assets/images/img_logo_ezc.svg');
 
-  /// File path: assets/images/img_logo_roi_secondary.png
-  AssetGenImage get imgLogoRoiSecondary =>
-      const AssetGenImage('assets/images/img_logo_roi_secondary.png');
-
   /// File path: assets/images/img_no_data.svg
   SvgGenImage get imgNoData =>
       const SvgGenImage('assets/images/img_no_data.svg');
