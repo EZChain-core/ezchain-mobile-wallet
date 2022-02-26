@@ -234,13 +234,12 @@ class EarnDelegateConfirmArgs {
   final String address;
   final Decimal amount;
   final DateTime endDate;
-  late DateTime startDate;
 
   EarnDelegateConfirmArgs(
-      this.delegateItem, this.address, this.amount, this.endDate) {
-    /// Start delegation in 5 minutes after submit
-    startDate = DateTime.now().add(const Duration(minutes: 5));
-  }
+      this.delegateItem, this.address, this.amount, this.endDate);
+
+  /// Start delegation in 5 minutes after submit
+  get startDate => DateTime.now().add(const Duration(minutes: 5));
 
   String stakingDuration() {
     final diffDays = endDate.difference(startDate).inDays;

@@ -18,6 +18,9 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
+const _delegateBufferEndDateMinutes = 15;
+const _delegateBufferEndDateDays = 21;
+
 class EarnDelegateInputScreen extends StatelessWidget {
   final EarnDelegateInputArgs args;
 
@@ -27,7 +30,8 @@ class EarnDelegateInputScreen extends StatelessWidget {
   final _addressController = TextEditingController();
   final _amountController = TextEditingController();
 
-  final _firstDate = DateTime.now().add(const Duration(days: 14));
+  final _firstDate = DateTime.now()
+      .add(const Duration(days: 14, minutes: _delegateBufferEndDateMinutes));
 
   late DateTime _stakingEndDate;
 
@@ -149,8 +153,10 @@ class EarnDelegateInputScreen extends StatelessWidget {
   DateTime _getIntDate() {
     final now = DateTime.now();
     final diffDays = args.endDate.difference(now).inDays;
-    if (diffDays > 21) {
-      return DateTime.now().add(const Duration(days: 21));
+    if (diffDays > _delegateBufferEndDateDays) {
+      return DateTime.now().add(const Duration(
+          days: _delegateBufferEndDateDays,
+          minutes: _delegateBufferEndDateMinutes));
     }
     return _firstDate;
   }

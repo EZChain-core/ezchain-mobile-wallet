@@ -1,8 +1,6 @@
 import 'dart:ui';
+
 import 'package:auto_route/src/router/auto_router_x.dart';
-import 'package:wallet/common/logger.dart';
-import 'package:wallet/common/router.dart';
-import 'package:wallet/common/router.gr.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -512,24 +510,24 @@ class _EZCDateTimeTextFieldState extends State<EZCDateTimeTextField> {
                     style: EZCTitleLargeTextStyle(
                         color: provider.themeMode.text60),
                   ),
-                    const Spacer(),
-                    if (_hasError)
-                      Text(
-                        widget.error!,
+                const Spacer(),
+                if (_hasError)
+                  Text(
+                    widget.error!,
                     style: EZCLabelMediumTextStyle(
                         color: provider.themeMode.stateDanger),
                   ),
-                  ],
-                ),
-                if (hasTopText) const SizedBox(height: 4),
-                Container(
-                  height: 48,
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      border: Border.all(color: provider.themeMode.text10)),
-                  child: Row(
-                    children: [
-                      Expanded(
+              ],
+            ),
+            if (hasTopText) const SizedBox(height: 4),
+            Container(
+              height: 48,
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  border: Border.all(color: provider.themeMode.text10)),
+              child: Row(
+                children: [
+                  Expanded(
                     child: TextButton(
                       style: TextButton.styleFrom(
                           alignment: Alignment.centerLeft,
@@ -544,24 +542,28 @@ class _EZCDateTimeTextFieldState extends State<EZCDateTimeTextField> {
                       },
                     ),
                   ),
-                      IconButton(
-                        iconSize: 50,
+                  IconButton(
+                    iconSize: 50,
                     icon: Text(
                       'MAX',
                       style: EZCTitleLargeTextStyle(
                           color: provider.themeMode.text40),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        selectedDate = widget.lastDate;
+                      });
+                    },
                   ),
-                    ],
-                  ),
-                ),
-                if (hasBottomText) ...[
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      if (widget.prefixText != null)
+                ],
+              ),
+            ),
+            if (hasBottomText) ...[
+              const SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (widget.prefixText != null)
                     Expanded(
                       flex: 1,
                       child: Text(
@@ -573,8 +575,8 @@ class _EZCDateTimeTextFieldState extends State<EZCDateTimeTextField> {
                         style: EZCLabelMediumTextStyle(
                             color: provider.themeMode.text60),
                       ),
-                        ),
-                      if (widget.suffixText != null) ...[
+                    ),
+                  if (widget.suffixText != null) ...[
                     const SizedBox(width: 4),
                     Expanded(
                       flex: 1,
@@ -601,12 +603,14 @@ class _EZCDateTimeTextFieldState extends State<EZCDateTimeTextField> {
   _showDatePicker() async {
     final context = walletContext;
     final initDate = selectedDate;
+    final firstDate = widget.firstDate ?? DateTime.now();
+    final lastDate = widget.lastDate ?? DateTime(2101);
     if (context == null || initDate == null) return;
     final DateTime? date = await showDatePicker(
         context: context,
         initialDate: initDate,
-        firstDate: widget.firstDate ?? DateTime.now(),
-        lastDate: widget.lastDate ?? DateTime(2101));
+        firstDate: firstDate,
+        lastDate: lastDate);
     if (date != null) {
       final TimeOfDay? selectedTime = await showTimePicker(
         initialTime: TimeOfDay.fromDateTime(initDate),
@@ -614,11 +618,17 @@ class _EZCDateTimeTextFieldState extends State<EZCDateTimeTextField> {
       );
       if (selectedTime != null) {
         final dateTime = date.applied(selectedTime);
-        if (dateTime != selectedDate) {
-          setState(() {
-            selectedDate = dateTime;
-          });
+        if (dateTime.millisecondsSinceEpoch - firstDate.millisecondsSinceEpoch <
+            0) {
+          selectedDate = firstDate;
+        } else if (dateTime.millisecondsSinceEpoch -
+                lastDate.millisecondsSinceEpoch >
+            0) {
+          selectedDate = lastDate;
+        } else if (dateTime != selectedDate) {
+          selectedDate = dateTime;
         }
+        setState(() {});
       }
     }
   }

@@ -944,6 +944,16 @@ class Strings {
     );
   }
 
+  /// `Something went wrong, please try again later!`
+  String get sharedCommonError {
+    return Intl.message(
+      'Something went wrong, please try again later!',
+      name: 'sharedCommonError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -1334,10 +1344,10 @@ class Strings {
     );
   }
 
-  /// `Bitcoin(BTC)`
+  /// `Bitcoin (BTC)`
   String get walletReceiveBitcoin {
     return Intl.message(
-      'Bitcoin(BTC)',
+      'Bitcoin (BTC)',
       name: 'walletReceiveBitcoin',
       desc: '',
       args: [],
@@ -1604,10 +1614,10 @@ class Strings {
     );
   }
 
-  /// `You do not own an ROIChain node, but you want to stake using another node.`
+  /// `You do not own an EZChain node, but you want to stake using another node.`
   String get earnDelegateDescription {
     return Intl.message(
-      'You do not own an ROIChain node, but you want to stake using another node.',
+      'You do not own an EZChain node, but you want to stake using another node.',
       name: 'earnDelegateDescription',
       desc: '',
       args: [],

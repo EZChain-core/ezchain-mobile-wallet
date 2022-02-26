@@ -110,7 +110,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "earnDelegateConfirmStartDate": MessageLookupByLibrary.simpleMessage(
             "Your validation will start at least 5 minutes after you submit this form."),
         "earnDelegateDescription": MessageLookupByLibrary.simpleMessage(
-            "You do not own an ROIChain node, but you want to stake using another node."),
+            "You do not own an EZChain node, but you want to stake using another node."),
         "earnDelegateInvalidAddress": MessageLookupByLibrary.simpleMessage(
             "Invalid address. Reward address must be a valid P chain address."),
         "earnDelegateInvalidEndDate":
@@ -192,6 +192,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedCChain": MessageLookupByLibrary.simpleMessage("C chain"),
         "sharedCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "sharedCommitted": MessageLookupByLibrary.simpleMessage("Committed"),
+        "sharedCommonError": MessageLookupByLibrary.simpleMessage(
+            "Something went wrong, please try again later!"),
         "sharedConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "sharedConfirmed": MessageLookupByLibrary.simpleMessage("Confirmed"),
         "sharedCopied": MessageLookupByLibrary.simpleMessage("Copied"),
@@ -292,7 +294,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Signature:"),
         "transactionsTo": MessageLookupByLibrary.simpleMessage("To:"),
         "walletReceiveBitcoin":
-            MessageLookupByLibrary.simpleMessage("Bitcoin(BTC)"),
+            MessageLookupByLibrary.simpleMessage("Bitcoin (BTC)"),
         "walletReceiveSendOnly":
             MessageLookupByLibrary.simpleMessage("Send only "),
         "walletReceiveSetAmount":
