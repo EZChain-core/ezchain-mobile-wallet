@@ -1334,6 +1334,36 @@ class Strings {
     );
   }
 
+  /// `Switch Networks`
+  String get settingSwitchNetworks {
+    return Intl.message(
+      'Switch Networks',
+      name: 'settingSwitchNetworks',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `EZChain Mainnet`
+  String get settingEzcMainnet {
+    return Intl.message(
+      'EZChain Mainnet',
+      name: 'settingEzcMainnet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `EZChain Testnet`
+  String get settingEzcTestnet {
+    return Intl.message(
+      'EZChain Testnet',
+      name: 'settingEzcTestnet',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Send only `
   String get walletReceiveSendOnly {
     return Intl.message(

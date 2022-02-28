@@ -250,8 +250,10 @@ class AppRouter extends _i33.RootStackRouter {
           routeData: routeData, child: const _i31.EarnScreen());
     },
     SettingRoute.name: (routeData) {
+      final args = routeData.argsAs<SettingRouteArgs>(
+          orElse: () => const SettingRouteArgs());
       return _i33.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i32.SettingScreen());
+          routeData: routeData, child: _i32.SettingScreen(key: args.key));
     }
   };
 
@@ -897,8 +899,21 @@ class EarnRoute extends _i33.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i32.SettingScreen]
-class SettingRoute extends _i33.PageRouteInfo<void> {
-  const SettingRoute() : super(SettingRoute.name, path: 'setting');
+class SettingRoute extends _i33.PageRouteInfo<SettingRouteArgs> {
+  SettingRoute({_i34.Key? key})
+      : super(SettingRoute.name,
+            path: 'setting', args: SettingRouteArgs(key: key));
 
   static const String name = 'SettingRoute';
+}
+
+class SettingRouteArgs {
+  const SettingRouteArgs({this.key});
+
+  final _i34.Key? key;
+
+  @override
+  String toString() {
+    return 'SettingRouteArgs{key: $key}';
+  }
 }

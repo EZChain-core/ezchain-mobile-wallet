@@ -163,6 +163,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please enter new PIN"),
         "settingEnterOldPin":
             MessageLookupByLibrary.simpleMessage("Please enter old PIN"),
+        "settingEzcMainnet":
+            MessageLookupByLibrary.simpleMessage("EZChain Mainnet"),
+        "settingEzcTestnet":
+            MessageLookupByLibrary.simpleMessage("EZChain Testnet"),
         "settingGeneral":
             MessageLookupByLibrary.simpleMessage("General Setting"),
         "settingGeneralDeactivateAccount":
@@ -177,6 +181,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Never disclose this key. Anyone with your private keys can steal any assets held in your wallet."),
         "settingSecurityWalletAddress":
             MessageLookupByLibrary.simpleMessage("Wallet Address"),
+        "settingSwitchNetworks":
+            MessageLookupByLibrary.simpleMessage("Switch Networks"),
         "settingTouchId": MessageLookupByLibrary.simpleMessage("Touch ID"),
         "settingWalletSecurity":
             MessageLookupByLibrary.simpleMessage("Wallet Security"),

@@ -122,6 +122,9 @@ class $AssetsIconsGen {
   SvgGenImage get icTickCircleGreen =>
       const SvgGenImage('assets/icons/ic_tick_circle_green.svg');
 
+  /// File path: assets/icons/ic_token.svg
+  SvgGenImage get icToken => const SvgGenImage('assets/icons/ic_token.svg');
+
   /// File path: assets/icons/ic_touch_id.svg
   SvgGenImage get icTouchId =>
       const SvgGenImage('assets/icons/ic_touch_id.svg');

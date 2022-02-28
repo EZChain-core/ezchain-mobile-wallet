@@ -1,6 +1,7 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/images.dart';
@@ -33,7 +34,7 @@ class WalletTokenItem {
 
   String get amountCode => '$amountText $code';
 
-  String get totalPrice => '\$${amount * price}';
+  String get totalPrice => '\$${(amount * price).text()}';
 }
 
 class WalletTokenItemWidget extends StatelessWidget {
@@ -51,8 +52,10 @@ class WalletTokenItemWidget extends StatelessWidget {
           children: [
             EZCCircleImage(
               src: token.logo,
-              size: 48,
-              placeholder: Assets.icons.icEzc64.svg(),
+              size: 40,
+              placeholder: token.type != null
+                  ? Assets.icons.icEzc64.svg()
+                  : Assets.icons.icToken.svg(),
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -63,7 +66,7 @@ class WalletTokenItemWidget extends StatelessWidget {
                     children: [
                       Text(
                         token.name,
-                        style: EZCBodyLargeTextStyle(
+                        style: EZCBodyMediumTextStyle(
                           color: provider.themeMode.text,
                         ),
                       ),
@@ -99,7 +102,7 @@ class WalletTokenItemWidget extends StatelessWidget {
               children: [
                 Text(
                   token.amountCode,
-                  style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
+                  style: EZCBodyMediumTextStyle(color: provider.themeMode.text),
                 ),
                 const SizedBox(height: 6),
                 Text(
