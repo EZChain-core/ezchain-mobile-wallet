@@ -19,10 +19,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => AutoTabsScaffold(
-        routes: const [
-          WalletRoute(),
-          CrossRoute(),
-          EarnRoute(),
+        routes: [
+          const WalletRoute(),
+          const CrossRoute(),
+          const EarnRoute(),
           SettingRoute(),
         ],
         homeIndex: 0,

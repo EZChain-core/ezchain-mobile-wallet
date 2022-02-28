@@ -43,7 +43,7 @@ class EZCChainLabelText extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         child: Text(
           text,
-          style: EZCTitleMediumTextStyle(color: provider.themeMode.text90),
+          style: EZCTitleSmallTextStyle(color: provider.themeMode.text90),
         ),
       ),
     );
