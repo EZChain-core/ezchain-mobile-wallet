@@ -129,6 +129,7 @@
   "settingSwitchNetworks": "Switch Networks",
   "settingEzcMainnet": "EZChain Mainnet",
   "settingEzcTestnet": "EZChain Testnet",
+  "settingNetworkConnected": "Network connected",
   "walletReceiveSendOnly": "Send only ",
   "walletReceiveBitcoin": "Bitcoin (BTC)",
   "walletReceiveToThis": " to this address\nSending any other coins my result in permanent loss",
