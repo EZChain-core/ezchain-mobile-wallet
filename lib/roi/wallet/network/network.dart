@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:http/http.dart';
+import 'package:wallet/roi/sdk/apis/avm/api.dart';
+import 'package:wallet/roi/sdk/apis/evm/api.dart';
+import 'package:wallet/roi/sdk/apis/pvm/api.dart';
 import 'package:wallet/roi/sdk/roi.dart';
 import 'package:wallet/roi/sdk/utils/dio_logger.dart';
 import 'package:wallet/roi/wallet/network/constants.dart';
@@ -15,9 +18,9 @@ var _roi = _createROIProvider(activeNetwork);
 
 ROI get roi => _roi;
 
-final xChain = roi.avmApi;
-final cChain = roi.evmApi;
-final pChain = roi.pvmApi;
+AvmApi get xChain => roi.avmApi;
+EvmApi get cChain => roi.evmApi;
+PvmApi get pChain => roi.pvmApi;
 
 Dio? _explorerApi;
 

@@ -36,6 +36,7 @@ import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/fee_utils.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:wallet/roi/wallet/wallet.dart';
 import 'package:wallet/themes/buttons.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -46,23 +47,15 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late SingletonWallet wallet;
-
   final WalletFactory _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get wallet => _walletFactory.activeWallet;
 
   @override
   void initState() {
     super.initState();
-    setRpcNetwork(testnetConfig);
-    // wallet = SingletonWallet(
-    //     privateKey:
-    //         "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
-    // wallet.on(WalletEventType.balanceChangedX, _handleCallback);
-    // wallet.on(WalletEventType.balanceChangedP, _handleCallback);
-    // wallet.on(WalletEventType.balanceChangedC, _handleCallback);
-    // updateX();
-    // updateP();
-    // updateC();
+    // setRpcNetwork(testnetConfig);
+    // initWallet();
     _startTimer();
   }
 
@@ -84,7 +77,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           fetchAssets();
+    //           changeNetwork();
     //         },
     //       ),
     //     ),
@@ -147,6 +140,29 @@ class _SplashScreenState extends State<SplashScreen> {
     // final totalUsd = totalDecimal * avaxPrice;
     // final totalUsdString = decimalToLocaleString(totalUsd, decimals: 2);
     // logger.i("totalUsd = $totalUsdString");
+  }
+
+  initWallet() {
+    final wallet = SingletonWallet(
+        privateKey:
+            "PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M");
+    wallet.on(WalletEventType.balanceChangedX, _handleCallback);
+    wallet.on(WalletEventType.balanceChangedP, _handleCallback);
+    wallet.on(WalletEventType.balanceChangedC, _handleCallback);
+    _walletFactory.addWallet(wallet);
+    updateX();
+    updateP();
+    updateC();
+  }
+
+  changeNetwork() {
+    // đừng quên xoá callback
+    wallet.off(WalletEventType.balanceChangedX, _handleCallback);
+    wallet.off(WalletEventType.balanceChangedP, _handleCallback);
+    wallet.off(WalletEventType.balanceChangedC, _handleCallback);
+    _walletFactory.clear();
+    setRpcNetwork(mainnetConfig);
+    initWallet();
   }
 
   /// don't delete: to Address of PrivateKey-JaCCSxdoWfo3ao5KwenXrJjJR7cBTQ287G1C5qpv2hr2tCCdb
