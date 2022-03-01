@@ -65,6 +65,7 @@ class WalletFactoryImpl extends WalletFactory {
       wallet = SingletonWallet.access(key);
     }
     if (wallet != null) {
+      _wallets.clear();
       _wallets.add(wallet);
       return true;
     }
