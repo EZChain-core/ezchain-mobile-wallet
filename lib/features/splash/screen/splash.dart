@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // setRpcNetwork(testnetConfig);
+    setRpcNetwork(testnetConfig);
     // initWallet();
     _startTimer();
   }
