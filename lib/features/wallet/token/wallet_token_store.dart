@@ -22,11 +22,6 @@ abstract class _WalletTokenStore with Store {
 
   BigInt get _stakedBN => numberToBNAvaxP(_balanceStore.staking.toDouble());
 
-  BigInt get _lockedX =>
-      numberToBNAvaxX(_balanceStore.balanceLockedX.toDouble());
-
-  BigInt get _unlockedX => numberToBNAvaxX(_balanceStore.balanceX.toDouble());
-
   BigInt get _lockedP =>
       numberToBNAvaxP(_balanceStore.balanceLockedP.toDouble());
 
@@ -86,11 +81,8 @@ abstract class _WalletTokenStore with Store {
     }).toList();
 
     assets.customSort(avaAssetId);
-    var stringAssets = "\n";
 
     for (var element in assets) {
-      stringAssets +=
-          "isEZC = ${element.id == avaAssetId}, name = ${element.name}, symbol = ${element.symbol}, amount = ${element.toString()}\n";
       final amount =
           bnToDecimal(element.amount, denomination: element.denomination)
               .text();
@@ -99,7 +91,6 @@ abstract class _WalletTokenStore with Store {
       list.add(WalletTokenItem('', element.name, element.symbol,
           element.getAmount(), ezcPrice, amount, type));
     }
-    logger.i(stringAssets);
 
     return list;
   }

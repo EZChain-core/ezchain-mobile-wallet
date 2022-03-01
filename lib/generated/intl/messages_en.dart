@@ -173,6 +173,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Deactivate Account"),
         "settingGeneralRemoveWallet":
             MessageLookupByLibrary.simpleMessage("Remove Wallet"),
+        "settingNetworkConnected":
+            MessageLookupByLibrary.simpleMessage("Network connected"),
         "settingOldPinWrong":
             MessageLookupByLibrary.simpleMessage("PIN Code Wrong!"),
         "settingSecurityCPrivateKey":

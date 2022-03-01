@@ -1364,6 +1364,16 @@ class Strings {
     );
   }
 
+  /// `Network connected`
+  String get settingNetworkConnected {
+    return Intl.message(
+      'Network connected',
+      name: 'settingNetworkConnected',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Send only `
   String get walletReceiveSendOnly {
     return Intl.message(

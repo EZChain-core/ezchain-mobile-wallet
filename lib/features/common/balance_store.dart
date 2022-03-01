@@ -9,6 +9,7 @@ import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/roi/wallet/network/utils.dart';
 import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:wallet/roi/wallet/wallet.dart';
 
 part 'balance_store.g.dart';
 
@@ -18,7 +19,7 @@ const decimalNumber = 3;
 class BalanceStore = _BalanceStore with _$BalanceStore;
 
 abstract class _BalanceStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  WalletProvider get _wallet => getIt<WalletFactory>().activeWallet;
 
   @observable
   Decimal totalRoi = Decimal.zero;
