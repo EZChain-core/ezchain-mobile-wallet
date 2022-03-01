@@ -111,9 +111,10 @@ final n0C = C(
 // End Manhattan
 
 // Start mainnet
-const avaxAssetId = "2hnSEtkBGTb11GJUmeoWUXPC7zSaBG818c1GZc3WtCpbqZQS11";
+const avaxAssetId = "pxpYcmAAUaV4SRXtjWFErFRZ8UPVq4YsnSm5icU3fXLURhxYt";
+
 final n1X = X(
-    blockchainId: "2bUiRRqUr9ZkDAVehjeaM4J8PsW52X2EbuGW1K5e56KZcT6yi7",
+    blockchainId: "dnu9PBuDAETU5m781cT9EmKceN7VMq95iKSKEssxhDsMYAgXj",
     avaxAssetId: avaxAssetId,
     alias: xChainAlias,
     vm: xChainVMName,
@@ -140,7 +141,7 @@ final n1P = P(
     minDelegationFee: BigInt.from(2));
 
 final n1C = C(
-    blockchainId: "2XNs8nmfB8HdDeHhf41yTd1KQ5md3PBsnz3mvFevtr3DzBAiib",
+    blockchainId: "cfCABZEHySQ4KuHLUhYDYZokQWL1L5dafrxmR9WdX7i55WEB1",
     alias: cChainAlias,
     vm: cChainVMName,
     txBytesGas: 1,
@@ -149,7 +150,7 @@ final n1C = C(
     gasPrice: GWEI * BigInt.from(225),
     minGasPrice: GWEI * BigInt.from(25),
     maxGasPrice: GWEI * BigInt.from(1000),
-    chainId: 43114);
+    chainId: 0xa86a);
 // End Mainnet
 
 // Start Cascade

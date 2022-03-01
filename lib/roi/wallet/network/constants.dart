@@ -2,12 +2,12 @@ import 'package:wallet/roi/sdk/utils/constants.dart';
 import 'package:wallet/roi/wallet/network/types.dart';
 
 final mainnetConfig = NetworkConfig(
-  rawUrl: 'https://api.avax.network',
+  rawUrl: 'https://api.ezchain.com',
   apiProtocol: 'https',
-  apiIp: 'api.avax.network',
+  apiIp: 'api.ezchain.com',
   apiPort: 443,
-  explorerURL: 'https://explorerapi.avax.network',
-  explorerSiteURL: 'https://explorer.avax.network',
+  explorerURL: 'https://index-api.ezchain.com',
+  explorerSiteURL: 'https://explorer.ezchain.com',
   networkId: 1,
   xChainId: networks[1]!.x.blockchainId,
   pChainId: networks[1]!.p.blockchainId,
