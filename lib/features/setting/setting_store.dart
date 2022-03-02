@@ -2,6 +2,7 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/balance_store.dart';
+import 'package:wallet/features/common/network_config_type.dart';
 import 'package:wallet/features/common/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -18,18 +19,20 @@ abstract class _SettingStore with Store {
   final _validatorsStore = getIt<ValidatorsStore>();
 
   @observable
-  NetworkConfig activeNetworkConfig = activeNetwork;
+  NetworkConfigType activeNetworkConfig =
+      getNetworkConfigTypeFromConfig(activeNetwork);
 
   @action
-  setNetworkConfig(NetworkConfig network) async {
+  setNetworkConfig(NetworkConfigType network) async {
     _balanceStore.dispose();
     _walletFactory.clearWallets();
-    setRpcNetwork(network);
+    setRpcNetwork(network.config);
     await _walletFactory.initWallet();
     _balanceStore.init();
     _balanceStore.updateTotalBalance();
     _validatorsStore.updateValidators();
     activeNetworkConfig = network;
+
     showSnackBar(Strings.current.settingNetworkConnected);
   }
 }

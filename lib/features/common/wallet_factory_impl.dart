@@ -6,12 +6,15 @@ import 'package:wallet/roi/wallet/mnemonic_wallet.dart';
 import 'package:wallet/roi/wallet/singleton_wallet.dart';
 import 'package:wallet/roi/wallet/wallet.dart';
 
+import 'network_config_type.dart';
+
 @LazySingleton(as: WalletFactory)
 class WalletFactoryImpl extends WalletFactory {
   static const expiredTimeInMinutes = 5;
   static const expiredTimeKey = 'expiredTimeKey';
   static const accessKey = 'accessKey';
   static const pinCode = 'pinCode';
+  static const networkConfig = 'networkConfig';
 
   final List<WalletProvider> _wallets = [];
 
@@ -92,5 +95,16 @@ class WalletFactoryImpl extends WalletFactory {
   Future<bool> isPinCodeCorrect(String pin) async {
     final correctPin = await _storage.read(key: pinCode) ?? '';
     return correctPin == pin;
+  }
+
+  @override
+  saveNetworkConfig(NetworkConfigType network) {
+    _storage.write(key: networkConfig, value: network.name);
+  }
+
+  @override
+  Future<NetworkConfigType> getNetworkConfig() async {
+    final networkName = await _storage.read(key: networkConfig) ?? '';
+    return getNetworkConfigType(networkName);
   }
 }
