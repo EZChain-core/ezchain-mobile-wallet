@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/network_config_type.dart';
 import 'package:wallet/features/setting/setting_store.dart';
 import 'package:wallet/features/setting/widgets/setting_item.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -71,23 +72,25 @@ class SettingScreen extends StatelessWidget {
                   builder: (_) => Column(
                     children: [
                       _SettingSwitchNetworkWidget(
-                        isActive:
-                            _settingStore.activeNetworkConfig == mainnetConfig,
+                        isActive: _settingStore.activeNetworkConfig ==
+                            NetworkConfigType.mainnest,
                         title: Strings.current.settingEzcMainnet,
                         host:
                             '${mainnetConfig.rawUrl}:${mainnetConfig.apiPort}',
                         onPressed: () {
-                          _settingStore.setNetworkConfig(mainnetConfig);
+                          _settingStore
+                              .setNetworkConfig(NetworkConfigType.mainnest);
                         },
                       ),
                       _SettingSwitchNetworkWidget(
-                        isActive:
-                            _settingStore.activeNetworkConfig == testnetConfig,
+                        isActive: _settingStore.activeNetworkConfig ==
+                            NetworkConfigType.testnet,
                         title: Strings.current.settingEzcTestnet,
                         host:
                             '${testnetConfig.rawUrl}:${testnetConfig.apiPort}',
                         onPressed: () {
-                          _settingStore.setNetworkConfig(testnetConfig);
+                          _settingStore
+                              .setNetworkConfig(NetworkConfigType.testnet);
                         },
                       ),
                     ],

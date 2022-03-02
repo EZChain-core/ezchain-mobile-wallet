@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
 
 part 'setting_change_pin_store.freezed.dart';
@@ -12,6 +13,8 @@ class SettingChangePinStore = _SettingChangePinStore
     with _$SettingChangePinStore;
 
 abstract class _SettingChangePinStore with Store {
+  final _walletFactory = getIt<WalletFactory>();
+
   @observable
   SettingChangePinState state = const SettingChangePinState.oldPin();
 
@@ -23,8 +26,11 @@ abstract class _SettingChangePinStore with Store {
   }
 
   @action
-  verifyOldPin(String pin) {
-    state = const SettingChangePinState.newPin();
+  verifyOldPin(String pin) async {
+    final isCorrect = await _walletFactory.isPinCodeCorrect(pin);
+    state = isCorrect
+        ? const SettingChangePinState.newPin()
+        : const SettingChangePinState.oldPinError();
   }
 
   @action
@@ -35,10 +41,10 @@ abstract class _SettingChangePinStore with Store {
 
   @action
   verifyNewPin(String pin) {
-    if(newPin != pin) {
+    if (newPin != pin) {
       state = const SettingChangePinState.confirmNewPinError();
     } else {
-      // change pin from database
+      _walletFactory.savePinCode(pin);
       getIt<AppRouter>().pop();
     }
   }

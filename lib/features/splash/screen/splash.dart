@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/network_config_type.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
@@ -54,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    setRpcNetwork(testnetConfig);
+    _setNetworkConfig();
     // initWallet();
     _startTimer();
   }
@@ -83,6 +84,11 @@ class _SplashScreenState extends State<SplashScreen> {
     //     ),
     //   ),
     // );
+  }
+
+  _setNetworkConfig() async {
+    final networkType = await _walletFactory.getNetworkConfig();
+    setRpcNetwork(networkType.config);
   }
 
   _startTimer() {
