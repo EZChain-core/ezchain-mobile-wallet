@@ -954,6 +954,16 @@ class Strings {
     );
   }
 
+  /// `Please try again`
+  String get sharedTryAgain {
+    return Intl.message(
+      'Please try again',
+      name: 'sharedTryAgain',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -1109,6 +1119,26 @@ class Strings {
     return Intl.message(
       'PIN code',
       name: 'pinCodeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm your PIN`
+  String get pinCodeConfirm {
+    return Intl.message(
+      'Confirm your PIN',
+      name: 'pinCodeConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `PIN Code Wrong!`
+  String get pinCodeConfirmWrong {
+    return Intl.message(
+      'PIN Code Wrong!',
+      name: 'pinCodeConfirmWrong',
       desc: '',
       args: [],
     );

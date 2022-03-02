@@ -145,6 +145,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "onBoardCreateWallet":
             MessageLookupByLibrary.simpleMessage("Create Wallet"),
         "pageHomeWelcome": m1,
+        "pinCodeConfirm":
+            MessageLookupByLibrary.simpleMessage("Confirm your PIN"),
+        "pinCodeConfirmWrong":
+            MessageLookupByLibrary.simpleMessage("PIN Code Wrong!"),
         "pinCodeDes": MessageLookupByLibrary.simpleMessage(
             "Set up your PIN code to unlock the wallet, confirm transactions and other activities tha require your permission"),
         "pinCodeSetNewPin":
@@ -284,6 +288,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedTransactionSent":
             MessageLookupByLibrary.simpleMessage("Transaction Sent"),
         "sharedTransfer": MessageLookupByLibrary.simpleMessage("Transfer"),
+        "sharedTryAgain":
+            MessageLookupByLibrary.simpleMessage("Please try again"),
         "sharedValidate": MessageLookupByLibrary.simpleMessage("Validate"),
         "sharedValue": MessageLookupByLibrary.simpleMessage("Value"),
         "sharedWalletAddress":

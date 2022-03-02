@@ -13,7 +13,18 @@ class PinCodeVerifyStore = _PinCodeVerifyStore with _$PinCodeVerifyStore;
 abstract class _PinCodeVerifyStore with Store {
   final _walletFactory = getIt<WalletFactory>();
 
-  Future<bool> isPinCorrect(String pin) {
-    return _walletFactory.isPinCodeCorrect(pin);
+  @observable
+  bool isPinWrong = false;
+
+  @action
+  removeError() {
+    isPinWrong = false;
+  }
+
+  @action
+  Future<bool> isPinCorrect(String pin) async {
+    final isCorrect = await _walletFactory.isPinCodeCorrect(pin);
+    isPinWrong = !isCorrect;
+    return isCorrect;
   }
 }
