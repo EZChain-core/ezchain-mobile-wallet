@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
@@ -29,6 +30,15 @@ abstract class _WalletTokenStore with Store {
 
   BigInt get _lockedStakeableP =>
       numberToBNAvaxP(_balanceStore.balanceLockedStakeableP.toDouble());
+
+  @computed
+  String get tokenBalance {
+    Decimal total = Decimal.zero;
+    for (var element in tokens) {
+      total += (element.amount * element.price);
+    }
+    return total.text(decimals: 1);
+  }
 
   @computed
   Decimal get ezcPrice => _priceStore.avaxPrice;
@@ -88,7 +98,6 @@ abstract class _WalletTokenStore with Store {
       list.add(WalletTokenItem('', element.name, element.symbol,
           element.getAmount(), ezcPrice, element.toString(), type));
     }
-
     return list;
   }
 }
