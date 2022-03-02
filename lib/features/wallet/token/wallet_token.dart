@@ -33,7 +33,11 @@ class _WalletTokenScreenState extends State<WalletTokenScreen>
             },
             child: Column(
               children: [
-                _WalletTokenHeaderWidget(),
+                Observer(
+                  builder: (_) => _WalletTokenHeaderWidget(
+                    balance: _walletTokenStore.tokenBalance,
+                  ),
+                ),
                 Expanded(
                   child: Observer(
                     builder: (_) => ListView.separated(
@@ -64,6 +68,11 @@ class _WalletTokenScreenState extends State<WalletTokenScreen>
 }
 
 class _WalletTokenHeaderWidget extends StatelessWidget {
+  final String balance;
+
+  const _WalletTokenHeaderWidget({Key? key, required this.balance})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
@@ -74,32 +83,32 @@ class _WalletTokenHeaderWidget extends StatelessWidget {
           Row(
             children: [
               const SizedBox(width: 16),
-              Text(
-                Strings.current.sharedBalance,
-                style:
+                  Text(
+                    Strings.current.sharedBalance,
+                    style:
                     EZCHeadlineSmallTextStyle(color: provider.themeMode.white),
-              ),
-              Expanded(
-                child: Text(
-                  r'$ 4.000.000',
+                  ),
+                  Expanded(
+                    child: Text(
+                      '\$ $balance',
                   textAlign: TextAlign.end,
                   style: EZCHeadlineSmallTextStyle(
                       color: provider.themeMode.primary),
                 ),
+                  ),
+                  const SizedBox(width: 16),
+                ],
               ),
-              const SizedBox(width: 16),
+              const SizedBox(height: 65),
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Text(
+                  Strings.current.sharedToken,
+                  style: EZCHeadlineSmallTextStyle(color: provider.themeMode.text),
+                ),
+              ),
             ],
           ),
-          const SizedBox(height: 65),
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Text(
-              Strings.current.sharedToken,
-              style: EZCHeadlineSmallTextStyle(color: provider.themeMode.text),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
