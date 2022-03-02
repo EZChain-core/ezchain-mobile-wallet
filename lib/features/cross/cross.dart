@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/cross/cross_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -241,6 +242,8 @@ class _CrossScreenState extends State<CrossScreen> {
   }
 
   Future<void> _onClickTransfer() async {
+    if (!await verifyPinCode()) return;
+
     final isRefreshCrossScreen = await context.router.push<bool>(
         CrossTransferRoute(crossTransferInfo: _crossStore.crossTransferInfo));
     if (isRefreshCrossScreen == true) {

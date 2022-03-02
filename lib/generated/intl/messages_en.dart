@@ -116,7 +116,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "earnDelegateInvalidEndDate":
             MessageLookupByLibrary.simpleMessage("Invalid end date"),
         "earnDelegateValidMess": MessageLookupByLibrary.simpleMessage(
-            "You must have at least 1 ROI on the P chain to become a validator."),
+            "You must have at least 1 EZC on the P chain to become a validator."),
         "earnDelegation": MessageLookupByLibrary.simpleMessage("Delegation"),
         "earnDelegationFee":
             MessageLookupByLibrary.simpleMessage("Delegation Fee"),

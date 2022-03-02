@@ -109,7 +109,7 @@ class AccessMnemonicKeyScreen extends StatelessWidget {
       final isSuccess =
           await _accessMnemonicKeyStore.accessWithMnemonicKey(mnemonic);
       if (isSuccess) {
-        walletContext?.router.replaceAll([const DashboardRoute()]);
+        walletContext?.router.push(const PinCodeSetupRoute());
       } else {
         _showWarningDialog();
       }

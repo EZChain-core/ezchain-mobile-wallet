@@ -105,7 +105,7 @@ class AccessPrivateKeyScreen extends StatelessWidget {
     bool isSuccess = await _accessPrivateKeyStore
         .accessWithPrivateKey(_privateKeyInputController.text);
     if (isSuccess) {
-      walletContext?.router.replaceAll([const DashboardRoute()]);
+      walletContext?.router.push(const PinCodeSetupRoute());
     } else {
       _showWarningDialog();
     }

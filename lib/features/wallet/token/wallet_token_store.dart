@@ -83,13 +83,10 @@ abstract class _WalletTokenStore with Store {
     assets.customSort(avaAssetId);
 
     for (var element in assets) {
-      final amount =
-          bnToDecimal(element.amount, denomination: element.denomination)
-              .text();
       final isEzc = element.id == avaAssetId;
-      final type = isEzc ? 'X-Chain' : null;
+      final type = isEzc ? 'XChain' : null;
       list.add(WalletTokenItem('', element.name, element.symbol,
-          element.getAmount(), ezcPrice, amount, type));
+          element.getAmount(), ezcPrice, element.toString(), type));
     }
 
     return list;

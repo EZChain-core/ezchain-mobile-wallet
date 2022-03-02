@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/features/auth/pin/verify/pin_code_verify_store.dart';
 import 'package:wallet/features/auth/pin/widgets/pin_code_input.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -10,18 +12,10 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-class PinCodeConfirmScreen extends StatefulWidget {
-  final String pin;
+class PinCodeVerifyScreen extends StatelessWidget {
+  final _pinCodeVerifyStore = PinCodeVerifyStore();
 
-  const PinCodeConfirmScreen({Key? key, required this.pin}) : super(key: key);
-
-  @override
-  State<PinCodeConfirmScreen> createState() => _PinCodeConfirmScreenState();
-}
-
-class _PinCodeConfirmScreenState extends State<PinCodeConfirmScreen> {
-  bool isPinCorrect = true;
-  final _walletFactory = getIt<WalletFactory>();
+  PinCodeVerifyScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +36,7 @@ class _PinCodeConfirmScreenState extends State<PinCodeConfirmScreen> {
               ),
               Expanded(
                 flex: 1,
-                child: isPinCorrect
+                child: true
                     ? const SizedBox.shrink()
                     : SizedBox(
                         width: double.infinity,
@@ -81,19 +75,12 @@ class _PinCodeConfirmScreenState extends State<PinCodeConfirmScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 80),
                   child: PinCodeInput(
-                    onChanged: () {
-                      setState(() {
-                        isPinCorrect = true;
-                      });
-                    },
-                    onSuccess: (String confirmPin) {
-                      if (confirmPin == widget.pin) {
-                        _walletFactory.savePinCode(confirmPin);
-                        context.router.replaceAll([const DashboardRoute()]);
-                      } else {
-                        setState(() {
-                          isPinCorrect = false;
-                        });
+                    onChanged: () {},
+                    onSuccess: (String confirmPin) async {
+                      final isCorrect =
+                          await _pinCodeVerifyStore.isPinCorrect(confirmPin);
+                      if (isCorrect) {
+                        context.popRoute<bool>(true);
                       }
                     },
                   ),
@@ -105,4 +92,8 @@ class _PinCodeConfirmScreenState extends State<PinCodeConfirmScreen> {
       ),
     );
   }
+}
+
+Future<bool> verifyPinCode() async {
+  return await walletContext?.pushRoute<bool>(PinCodeVerifyRoute()) ?? false;
 }

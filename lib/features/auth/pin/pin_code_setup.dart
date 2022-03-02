@@ -46,7 +46,7 @@ class PinCodeSetupScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 80),
                   child: PinCodeInput(
                     onSuccess: (String pin) {
-                      context.router.navigate(PinCodeConfirmRoute(pin: pin));
+                      context.pushRoute(PinCodeConfirmRoute(pin: pin));
                     },
                   ),
                 ),

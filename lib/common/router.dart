@@ -9,6 +9,7 @@ import 'package:wallet/features/auth/create/confirm/create_wallet_confirm.dart';
 import 'package:wallet/features/auth/create/create_wallet.dart';
 import 'package:wallet/features/auth/pin/pin_code_confirm.dart';
 import 'package:wallet/features/auth/pin/pin_code_setup.dart';
+import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/cross/transfer/cross_transfer.dart';
 import 'package:wallet/features/dashboard/routes.dart';
 import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm.dart';
@@ -50,6 +51,7 @@ import 'package:wallet/features/wallet/send/evm/wallet_send_evm.dart';
     AutoRoute(page: AccessMnemonicKeyScreen),
     AutoRoute(page: PinCodeSetupScreen),
     AutoRoute(page: PinCodeConfirmScreen),
+    AutoRoute<bool>(page: PinCodeVerifyScreen),
     AutoRoute(page: WalletReceiveScreen),
     AutoRoute(page: WalletSendAvmScreen),
     AutoRoute(page: WalletSendAvmConfirmScreen),
