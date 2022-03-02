@@ -32,7 +32,7 @@ abstract class _SettingStore with Store {
     _balanceStore.updateTotalBalance();
     _validatorsStore.updateValidators();
     activeNetworkConfig = network;
-
+    _walletFactory.saveNetworkConfig(network);
     showSnackBar(Strings.current.settingNetworkConnected);
   }
 }
