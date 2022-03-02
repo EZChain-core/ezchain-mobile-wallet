@@ -255,7 +255,7 @@ abstract class WalletProvider {
   /// - Does not make a network request.
   /// - Does not refresh wallet balance.
   AssetBalanceRawX getAvaxBalanceX() {
-    return getBalanceX()[getAvaxAssetId] ??
+    return getBalanceX()[getAvaxAssetId()] ??
         AssetBalanceRawX(locked: BigInt.zero, unlocked: BigInt.zero);
   }
 
