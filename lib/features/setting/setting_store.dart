@@ -27,6 +27,7 @@ abstract class _SettingStore with Store {
     setRpcNetwork(network);
     await _walletFactory.initWallet();
     _balanceStore.init();
+    _balanceStore.updateTotalBalance();
     _validatorsStore.updateValidators();
     activeNetworkConfig = network;
     showSnackBar(Strings.current.settingNetworkConnected);
