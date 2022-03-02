@@ -9,9 +9,15 @@ abstract class WalletFactory {
 
   clear();
 
+  clearWallets();
+
   Future<bool> isExpired();
 
   Future<bool> initWallet();
 
   Future<String> getAccessKey();
+
+  savePinCode(String pin);
+
+  Future<bool> isPinCodeCorrect(String pin);
 }

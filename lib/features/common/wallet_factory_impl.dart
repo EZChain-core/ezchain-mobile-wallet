@@ -11,6 +11,7 @@ class WalletFactoryImpl extends WalletFactory {
   static const expiredTimeInMinutes = 5;
   static const expiredTimeKey = 'expiredTimeKey';
   static const accessKey = 'accessKey';
+  static const pinCode = 'pinCode';
 
   final List<WalletProvider> _wallets = [];
 
@@ -34,6 +35,11 @@ class WalletFactoryImpl extends WalletFactory {
   clear() {
     _wallets.clear();
     _storage.deleteAll();
+  }
+
+  @override
+  clearWallets() {
+    _wallets.clear();
   }
 
   @override
@@ -75,5 +81,16 @@ class WalletFactoryImpl extends WalletFactory {
   @override
   Future<String> getAccessKey() async {
     return await _storage.read(key: accessKey) ?? '';
+  }
+
+  @override
+  savePinCode(String pin) {
+    _storage.write(key: pinCode, value: pin);
+  }
+
+  @override
+  Future<bool> isPinCodeCorrect(String pin) async {
+    final correctPin = await _storage.read(key: pinCode) ?? '';
+    return correctPin == pin;
   }
 }

@@ -32,9 +32,7 @@ class WalletTokenItem {
     }
   }
 
-  String get amountCode => '$amountText $code';
-
-  String get totalPrice => '\$${(amount * price).text()}';
+  String get totalPrice => '\$${(amount * price).text(decimals: 9)}';
 }
 
 class WalletTokenItemWidget extends StatelessWidget {
@@ -60,38 +58,39 @@ class WalletTokenItemWidget extends StatelessWidget {
             const SizedBox(width: 8),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        token.name,
-                        style: EZCBodyMediumTextStyle(
-                          color: provider.themeMode.text,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      if (token.type != null)
-                        EZCChainLabelText(text: token.type!)
-                    ],
+                  Text(
+                    token.name,
+                    style: EZCBodyMediumTextStyle(
+                      color: provider.themeMode.text,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Text(
-                        '\$${token.price}',
-                        style: EZCTitleSmallTextStyle(
-                            color: provider.themeMode.text50),
-                      ),
-                      const SizedBox(width: 4),
-                      if (token.rate != null)
-                        Text(
-                          token.rateString!,
+                      RichText(
+                        text: TextSpan(
+                          text: token.code,
                           style: EZCTitleSmallTextStyle(
-                              color: token.isGainer!
-                                  ? provider.themeMode.stateSuccess
-                                  : provider.themeMode.stateDanger),
+                              color: provider.themeMode.text60),
+                          children: [
+                            if (token.type != null)
+                              TextSpan(
+                                text: '  •  ',
+                                style: EZCTitleSmallTextStyle(
+                                    color: provider.themeMode.text60),
+                              ),
+                            if (token.type != null)
+                              TextSpan(
+                                text: token.type!,
+                                style: EZCTitleSmallTextStyle(
+                                    color: provider.themeMode.primary),
+                              ),
+                          ],
                         ),
+                      )
                     ],
                   ),
                 ],
@@ -101,7 +100,7 @@ class WalletTokenItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  token.amountCode,
+                  token.amountText,
                   style: EZCBodyMediumTextStyle(color: provider.themeMode.text),
                 ),
                 const SizedBox(height: 6),

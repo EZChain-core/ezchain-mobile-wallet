@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -153,12 +154,15 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
     );
   }
 
-  void _onClickSendTransaction() {
-    _walletSendAvmStore.sendAvm(
-      transactionInfo.address,
-      transactionInfo.amount,
-      memo: transactionInfo.memo,
-    );
+  void _onClickSendTransaction() async {
+    final verified = await verifyPinCode();
+    if (verified) {
+      _walletSendAvmStore.sendAvm(
+        transactionInfo.address,
+        transactionInfo.amount,
+        memo: transactionInfo.memo,
+      );
+    }
     // _showWarningDialog();
   }
 }

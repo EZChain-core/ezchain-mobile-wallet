@@ -1,11 +1,11 @@
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
-import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/roi/wallet/helpers/address_helper.dart';
+import 'package:wallet/roi/wallet/utils/number_utils.dart';
 
 part 'earn_delegate_input_store.g.dart';
 
@@ -30,9 +30,11 @@ abstract class _EarnDelegateInputStore with Store {
   String get addressP => _wallet.getAddressP();
 
   @action
-  bool validate(String address, Decimal amount) {
+  Future<bool> validate(String address, Decimal amount) async {
     final isAddressValid = validateAddressP(address);
-    final isAmountValid = balanceP >= amount && amount > Decimal.zero;
+    final minStake =
+        bnToDecimalAvaxP((await _wallet.getMinStake()).minDelegatorStakeBN);
+    final isAmountValid = balanceP >= amount && amount > minStake;
     if (!isAddressValid) {
       addressError = Strings.current.earnDelegateInvalidAddress;
     }

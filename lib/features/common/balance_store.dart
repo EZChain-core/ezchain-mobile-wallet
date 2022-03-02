@@ -19,7 +19,7 @@ const decimalNumber = 3;
 class BalanceStore = _BalanceStore with _$BalanceStore;
 
 abstract class _BalanceStore with Store {
-  WalletProvider get _wallet => getIt<WalletFactory>().activeWallet;
+  final _wallet = getIt<WalletFactory>().activeWallet;
 
   @observable
   Decimal totalRoi = Decimal.zero;
@@ -68,6 +68,12 @@ abstract class _BalanceStore with Store {
     _wallet.on(WalletEventType.balanceChangedP, _handleCallback);
     _wallet.on(WalletEventType.balanceChangedC, _handleCallback);
     updateBalance();
+  }
+
+  dispose() {
+    _wallet.off(WalletEventType.balanceChangedX, _handleCallback);
+    _wallet.off(WalletEventType.balanceChangedP, _handleCallback);
+    _wallet.off(WalletEventType.balanceChangedC, _handleCallback);
   }
 
   @action

@@ -1664,10 +1664,10 @@ class Strings {
     );
   }
 
-  /// `You must have at least 1 ROI on the P chain to become a validator.`
+  /// `You must have at least 1 EZC on the P chain to become a validator.`
   String get earnDelegateValidMess {
     return Intl.message(
-      'You must have at least 1 ROI on the P chain to become a validator.',
+      'You must have at least 1 EZC on the P chain to become a validator.',
       name: 'earnDelegateValidMess',
       desc: '',
       args: [],

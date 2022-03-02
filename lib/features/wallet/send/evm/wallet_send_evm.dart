@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.dart';
 import 'package:wallet/features/wallet/send/evm/wallet_send_evm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
@@ -192,6 +193,9 @@ class WalletSendEvmScreen extends StatelessWidget {
   }
 
   Future<void> _onClickSendTransaction() async {
+    final verified = await verifyPinCode();
+    if (!verified) return;
+
     final address = _addressController.text;
     final sendSuccess = await _walletSendEvmStore.sendEvm(address);
     if (sendSuccess) {

@@ -136,13 +136,13 @@ class EarnDelegateInputScreen extends StatelessWidget {
     );
   }
 
-  _onClickConfirm() {
+  _onClickConfirm() async {
     final address = _addressController.text;
     final amount = Decimal.tryParse(_amountController.text) ?? Decimal.zero;
-    if (_earnDelegateInputStore.validate(address, amount)) {
+    if (await _earnDelegateInputStore.validate(address, amount)) {
       walletContext?.pushRoute(EarnDelegateConfirmRoute(
           args: EarnDelegateConfirmArgs(
-            args.delegateItem,
+        args.delegateItem,
         address,
         amount,
         _stakingEndDate,
