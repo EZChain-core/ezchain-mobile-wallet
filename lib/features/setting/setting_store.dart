@@ -3,6 +3,7 @@ import 'package:wallet/common/extensions.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/network_config_type.dart';
+import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/features/common/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -15,6 +16,7 @@ class SettingStore = _SettingStore with _$SettingStore;
 
 abstract class _SettingStore with Store {
   final _walletFactory = getIt<WalletFactory>();
+  final _walletSetting = getIt<WalletSetting>();
   final _balanceStore = getIt<BalanceStore>();
   final _validatorsStore = getIt<ValidatorsStore>();
 
@@ -32,7 +34,11 @@ abstract class _SettingStore with Store {
     _balanceStore.updateTotalBalance();
     _validatorsStore.updateValidators();
     activeNetworkConfig = network;
-    _walletFactory.saveNetworkConfig(network);
+    _walletSetting.saveNetworkConfig(network);
     showSnackBar(Strings.current.settingNetworkConnected);
+  }
+
+  enableTouchId(bool enabled) {
+    _walletSetting.enableTouchId(enabled);
   }
 }

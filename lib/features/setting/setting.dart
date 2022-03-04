@@ -36,14 +36,14 @@ class SettingScreen extends StatelessWidget {
                 text: Strings.current.settingWalletSecurity,
                 icon: Assets.icons.icSecurity.svg(),
                 onPressed: () => context.router.push(SettingSecurityRoute()),
-                  ),
-                  SettingItem(
-                    text: Strings.current.settingGeneral,
-                    icon: Assets.icons.icGeneralSetting.svg(),
-                    onPressed: () =>
-                        context.router.push(const SettingGeneralRoute()),
-                  ),
-                  SettingItem(
+              ),
+              SettingItem(
+                text: Strings.current.settingGeneral,
+                icon: Assets.icons.icGeneralSetting.svg(),
+                onPressed: () =>
+                    context.router.push(const SettingGeneralRoute()),
+              ),
+              SettingItem(
                 text: Strings.current.settingAboutEZC,
                 icon: Assets.icons.icQuestion.svg(),
                 onPressed: () => context.router.push(const SettingAboutRoute()),
@@ -52,7 +52,9 @@ class SettingScreen extends StatelessWidget {
                 text: Strings.current.settingTouchId,
                 icon: Assets.icons.icTouchId.svg(),
                 isSwitch: true,
-                onSwitch: (value) => {},
+                onSwitch: (value) {
+                  _settingStore.enableTouchId(value);
+                },
               ),
               const Spacer(),
               Padding(
