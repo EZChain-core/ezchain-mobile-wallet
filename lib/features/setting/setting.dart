@@ -48,13 +48,16 @@ class SettingScreen extends StatelessWidget {
                 icon: Assets.icons.icQuestion.svg(),
                 onPressed: () => context.router.push(const SettingAboutRoute()),
               ),
-              SettingItem(
-                text: Strings.current.settingTouchId,
-                icon: Assets.icons.icTouchId.svg(),
-                isSwitch: true,
-                onSwitch: (value) {
-                  _settingStore.enableTouchId(value);
-                },
+              Observer(
+                builder: (_) => _settingStore.touchIdAvailable
+                    ? SettingItem(
+                        text: Strings.current.settingTouchId,
+                        icon: Assets.icons.icTouchId.svg(),
+                        isSwitch: true,
+                        initSwitch: _settingStore.touchIdEnabled,
+                        onSwitch: (value) => _settingStore.enableTouchId(value),
+                      )
+                    : const SizedBox.shrink(),
               ),
               const Spacer(),
               Padding(
@@ -79,10 +82,8 @@ class SettingScreen extends StatelessWidget {
                         title: Strings.current.settingEzcMainnet,
                         host:
                             '${mainnetConfig.rawUrl}:${mainnetConfig.apiPort}',
-                        onPressed: () {
-                          _settingStore
-                              .setNetworkConfig(NetworkConfigType.mainnest);
-                        },
+                        onPressed: () => _settingStore
+                            .setNetworkConfig(NetworkConfigType.mainnest),
                       ),
                       _SettingSwitchNetworkWidget(
                         isActive: _settingStore.activeNetworkConfig ==
@@ -90,10 +91,8 @@ class SettingScreen extends StatelessWidget {
                         title: Strings.current.settingEzcTestnet,
                         host:
                             '${testnetConfig.rawUrl}:${testnetConfig.apiPort}',
-                        onPressed: () {
-                          _settingStore
-                              .setNetworkConfig(NetworkConfigType.testnet);
-                        },
+                        onPressed: () => _settingStore
+                            .setNetworkConfig(NetworkConfigType.testnet),
                       ),
                     ],
                   ),
