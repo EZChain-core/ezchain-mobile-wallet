@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/auth/pin/widgets/pin_code_input.dart';
+import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
@@ -21,7 +22,7 @@ class PinCodeConfirmScreen extends StatefulWidget {
 
 class _PinCodeConfirmScreenState extends State<PinCodeConfirmScreen> {
   bool isPinCorrect = true;
-  final _walletFactory = getIt<WalletFactory>();
+  final _walletSetting = getIt<WalletSetting>();
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +89,7 @@ class _PinCodeConfirmScreenState extends State<PinCodeConfirmScreen> {
                     },
                     onSuccess: (String confirmPin) {
                       if (confirmPin == widget.pin) {
-                        _walletFactory.savePinCode(confirmPin);
+                        _walletSetting.savePinCode(confirmPin);
                         context.router.replaceAll([const DashboardRoute()]);
                       } else {
                         setState(() {

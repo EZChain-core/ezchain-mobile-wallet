@@ -1,26 +1,24 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as dart_math;
-import 'package:decimal/decimal.dart';
-import 'package:intl/intl.dart';
-import 'package:collection/collection.dart';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:collection/collection.dart';
+import 'package:decimal/decimal.dart';
 import 'package:eventify/eventify.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/network_config_type.dart';
+import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
-import 'package:wallet/roi/sdk/apis/avm/outputs.dart';
 import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/roi/sdk/utils/bigint.dart';
 import 'package:wallet/roi/sdk/utils/bintools.dart';
 import 'package:wallet/roi/sdk/utils/constants.dart';
-import 'package:wallet/roi/sdk/utils/helper_functions.dart';
-import 'package:wallet/roi/wallet/asset/assets.dart';
 import 'package:wallet/roi/wallet/asset/types.dart';
 import 'package:wallet/roi/wallet/explorer/cchain/types.dart';
 import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
@@ -38,7 +36,6 @@ import 'package:wallet/roi/wallet/types.dart';
 import 'package:wallet/roi/wallet/utils/fee_utils.dart';
 import 'package:wallet/roi/wallet/utils/number_utils.dart';
 import 'package:wallet/roi/wallet/wallet.dart';
-import 'package:wallet/themes/buttons.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -49,6 +46,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final WalletFactory _walletFactory = getIt<WalletFactory>();
+  final _walletSetting = getIt<WalletSetting>();
 
   WalletProvider get wallet => _walletFactory.activeWallet;
 
@@ -87,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _setNetworkConfig() async {
-    final networkType = await _walletFactory.getNetworkConfig();
+    final networkType = await _walletSetting.getNetworkConfig();
     setRpcNetwork(networkType.config);
   }
 

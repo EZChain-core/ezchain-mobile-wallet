@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
@@ -15,10 +16,13 @@ import 'package:wallet/themes/widgets.dart';
 class PinCodeVerifyScreen extends StatelessWidget {
   final _pinCodeVerifyStore = PinCodeVerifyStore();
 
+  final _localAuthentication = LocalAuthentication();
+
   PinCodeVerifyScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    checkTouchId();
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -27,9 +31,7 @@ class PinCodeVerifyScreen extends StatelessWidget {
             children: [
               EZCAppBar(
                 title: Strings.current.pinCodeConfirm,
-                onPressed: () {
-                  context.router.pop();
-                },
+                onPressed: context.popRoute,
               ),
               Expanded(
                 flex: 1,
@@ -81,6 +83,19 @@ class PinCodeVerifyScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  checkTouchId() async {
+    bool enabled = await _pinCodeVerifyStore.isTouchIdEnable();
+    bool canCheckBiometrics = await _localAuthentication.canCheckBiometrics;
+    if (!enabled || !canCheckBiometrics) return;
+    final isAuthenticated = await _localAuthentication.authenticate(
+      localizedReason: 'Please complete the biometrics to proceed.',
+      biometricOnly: true,
+    );
+    if (isAuthenticated) {
+      walletContext?.popRoute<bool>(true);
+    }
   }
 }
 
