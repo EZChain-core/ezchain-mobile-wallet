@@ -964,6 +964,16 @@ class Strings {
     );
   }
 
+  /// `Please complete the biometrics to proceed.`
+  String get sharedCompleteBiometrics {
+    return Intl.message(
+      'Please complete the biometrics to proceed.',
+      name: 'sharedCompleteBiometrics',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(

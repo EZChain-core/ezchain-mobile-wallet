@@ -89,6 +89,7 @@
   "sharedStaking": "Staking",
   "sharedCommonError": "Something went wrong, please try again later!",
   "sharedTryAgain": "Please try again",
+  "sharedCompleteBiometrics": "Please complete the biometrics to proceed.",
   "onBoardCreateWallet": "Create Wallet",
   "accessWalletOptionsTitle": "How do you want to access your wallet?",
   "accessWalletOptionsMnemonic": "Mnemonic Key Phrase",

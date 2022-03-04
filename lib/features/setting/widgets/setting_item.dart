@@ -5,13 +5,14 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-class SettingItem extends StatefulWidget {
+class SettingItem extends StatelessWidget {
   final String text;
   final Color? textColor;
   final String? rightText;
   final Widget? icon;
   final VoidCallback? onPressed;
   final bool? isSwitch;
+  final bool? initSwitch;
   final Function(bool value)? onSwitch;
 
   const SettingItem(
@@ -22,25 +23,19 @@ class SettingItem extends StatefulWidget {
       this.isSwitch,
       this.onSwitch,
       this.rightText,
-      this.textColor})
+      this.textColor,
+      this.initSwitch})
       : super(key: key);
 
   @override
-  State<SettingItem> createState() => _SettingItemState();
-}
-
-class _SettingItemState extends State<SettingItem> {
-  bool _switchValue = true;
-
-  bool get hasLeftIcon => widget.icon != null;
-
-  bool get hasRightText => widget.rightText != null;
-
-  @override
   Widget build(BuildContext context) {
+    final hasLeftIcon = icon != null;
+
+    final hasRightText = rightText != null;
+
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => GestureDetector(
-        onTap: widget.onPressed,
+        onTap: onPressed,
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -52,36 +47,31 @@ class _SettingItemState extends State<SettingItem> {
           ),
           child: Row(
             children: [
-              if (hasLeftIcon) ...[widget.icon!, const SizedBox(width: 8)],
+              if (hasLeftIcon) ...[icon!, const SizedBox(width: 8)],
               Text(
-                widget.text,
+                text,
                 style: EZCTitleLargeTextStyle(
-                    color: widget.textColor ?? provider.themeMode.text),
+                    color: textColor ?? provider.themeMode.text),
               ),
               const Spacer(),
               if (hasRightText)
                 Text(
-                  widget.rightText!,
+                  rightText!,
                   style:
                       EZCBodyLargeTextStyle(color: provider.themeMode.text70),
                 ),
-              if (widget.isSwitch == true)
+              if (isSwitch == true)
                 FlutterSwitch(
                   width: 49,
                   height: 24,
-                  value: _switchValue,
+                  value: initSwitch ?? false,
                   toggleSize: 20,
                   borderRadius: 12,
                   padding: 2,
                   activeColor: provider.themeMode.primary,
                   inactiveColor: provider.themeMode.text70,
                   onToggle: (val) {
-                    widget.onSwitch!(val);
-                    setState(
-                      () {
-                        _switchValue = val;
-                      },
-                    );
+                    onSwitch?.call(val);
                   },
                 ),
             ],

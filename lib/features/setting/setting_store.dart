@@ -1,3 +1,4 @@
+import 'package:local_auth/local_auth.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/di/di.dart';
@@ -20,6 +21,18 @@ abstract class _SettingStore with Store {
   final _balanceStore = getIt<BalanceStore>();
   final _validatorsStore = getIt<ValidatorsStore>();
 
+  final _localAuthentication = LocalAuthentication();
+
+  _SettingStore() {
+    _init();
+  }
+
+  @observable
+  bool touchIdEnabled = false;
+
+  @observable
+  bool touchIdAvailable = false;
+
   @observable
   NetworkConfigType activeNetworkConfig =
       getNetworkConfigTypeFromConfig(activeNetwork);
@@ -38,7 +51,20 @@ abstract class _SettingStore with Store {
     showSnackBar(Strings.current.settingNetworkConnected);
   }
 
-  enableTouchId(bool enabled) {
-    _walletSetting.enableTouchId(enabled);
+  enableTouchId(bool enabled) async {
+    bool useTouchId = enabled;
+    if(enabled) {
+      useTouchId = await _localAuthentication.authenticate(
+        localizedReason: Strings.current.sharedCompleteBiometrics,
+        biometricOnly: true,
+      );
+    }
+    touchIdEnabled = useTouchId;
+    _walletSetting.enableTouchId(useTouchId);
+  }
+
+  _init() async{
+    touchIdEnabled = await _walletSetting.touchIdEnabled();
+    touchIdAvailable = await _localAuthentication.canCheckBiometrics;
   }
 }

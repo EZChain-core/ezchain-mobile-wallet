@@ -57,5 +57,7 @@
 			<key>NSAllowsLocalNetworking</key>
 			<true/>
 		</dict>
+		<key>NSFaceIDUsageDescription</key>
+        <string>Biometric authentication for accessing secrets</string>
 	</dict>
 </plist>

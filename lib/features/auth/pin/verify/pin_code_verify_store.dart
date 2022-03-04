@@ -1,10 +1,9 @@
 import 'package:injectable/injectable.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:mobx/mobx.dart';
-import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/setting/wallet_setting.dart';
-import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
+import 'package:wallet/generated/l10n.dart';
 
 part 'pin_code_verify_store.g.dart';
 
@@ -13,9 +12,10 @@ class PinCodeVerifyStore = _PinCodeVerifyStore with _$PinCodeVerifyStore;
 
 abstract class _PinCodeVerifyStore with Store {
   final _walletSetting = getIt<WalletSetting>();
+  final _localAuthentication = LocalAuthentication();
 
   _PinCodeVerifyStore() {
-    init();
+    _init();
   }
 
   @observable
@@ -23,11 +23,6 @@ abstract class _PinCodeVerifyStore with Store {
 
   @observable
   bool touchIdEnabled = false;
-
-  init() async {
-    touchIdEnabled = await _walletSetting.touchIdEnabled();
-    logger.e('vit $touchIdEnabled');
-  }
 
   @action
   removeError() {
@@ -41,6 +36,17 @@ abstract class _PinCodeVerifyStore with Store {
     return isCorrect;
   }
 
-  Future<bool> isTouchIdEnable() => _walletSetting.touchIdEnabled();
+  Future<bool> verifyByTouchId() async {
+    bool enabled = await _walletSetting.touchIdEnabled();
+    if (!enabled) return false;
+    final isAuthenticated = await _localAuthentication.authenticate(
+      localizedReason: Strings.current.sharedCompleteBiometrics,
+      biometricOnly: true,
+    );
+    return isAuthenticated;
+  }
 
+  _init() async {
+    touchIdEnabled = await _walletSetting.touchIdEnabled();
+  }
 }

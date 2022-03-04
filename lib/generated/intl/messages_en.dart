@@ -206,6 +206,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedCommitted": MessageLookupByLibrary.simpleMessage("Committed"),
         "sharedCommonError": MessageLookupByLibrary.simpleMessage(
             "Something went wrong, please try again later!"),
+        "sharedCompleteBiometrics": MessageLookupByLibrary.simpleMessage(
+            "Please complete the biometrics to proceed."),
         "sharedConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "sharedConfirmed": MessageLookupByLibrary.simpleMessage("Confirmed"),
         "sharedCopied": MessageLookupByLibrary.simpleMessage("Copied"),

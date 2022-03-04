@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
@@ -16,13 +15,11 @@ import 'package:wallet/themes/widgets.dart';
 class PinCodeVerifyScreen extends StatelessWidget {
   final _pinCodeVerifyStore = PinCodeVerifyStore();
 
-  final _localAuthentication = LocalAuthentication();
-
   PinCodeVerifyScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    checkTouchId();
+    _checkTouchId();
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -32,6 +29,14 @@ class PinCodeVerifyScreen extends StatelessWidget {
               EZCAppBar(
                 title: Strings.current.pinCodeConfirm,
                 onPressed: context.popRoute,
+              ),
+              Observer(
+                builder: (_) => _pinCodeVerifyStore.touchIdEnabled
+                    ? InkWell(
+                        child: const Text('Use Touch Id'),
+                        onTap: _checkTouchId,
+                      )
+                    : const SizedBox.shrink(),
               ),
               Expanded(
                 flex: 1,
@@ -85,14 +90,8 @@ class PinCodeVerifyScreen extends StatelessWidget {
     );
   }
 
-  checkTouchId() async {
-    bool enabled = await _pinCodeVerifyStore.isTouchIdEnable();
-    bool canCheckBiometrics = await _localAuthentication.canCheckBiometrics;
-    if (!enabled || !canCheckBiometrics) return;
-    final isAuthenticated = await _localAuthentication.authenticate(
-      localizedReason: 'Please complete the biometrics to proceed.',
-      biometricOnly: true,
-    );
+  _checkTouchId() async {
+    bool isAuthenticated = await _pinCodeVerifyStore.verifyByTouchId();
     if (isAuthenticated) {
       walletContext?.popRoute<bool>(true);
     }
