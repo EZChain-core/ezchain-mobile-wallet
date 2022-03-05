@@ -7,9 +7,9 @@ import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
-import 'package:wallet/roi/wallet/asset/types.dart';
-import 'package:wallet/roi/wallet/network/utils.dart';
-import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/asset/types.dart';
+import 'package:wallet/ezc/wallet/network/utils.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 
 part 'wallet_token_store.g.dart';
 

@@ -15,27 +15,27 @@ import 'package:wallet/features/common/network_config_type.dart';
 import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
-import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
-import 'package:wallet/roi/sdk/utils/bigint.dart';
-import 'package:wallet/roi/sdk/utils/bintools.dart';
-import 'package:wallet/roi/sdk/utils/constants.dart';
-import 'package:wallet/roi/wallet/asset/types.dart';
-import 'package:wallet/roi/wallet/explorer/cchain/types.dart';
-import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
-import 'package:wallet/roi/wallet/helpers/address_helper.dart';
-import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
-import 'package:wallet/roi/wallet/helpers/staking_helper.dart';
-import 'package:wallet/roi/wallet/history/history_helpers.dart';
-import 'package:wallet/roi/wallet/history/types.dart';
-import 'package:wallet/roi/wallet/network/constants.dart';
-import 'package:wallet/roi/wallet/network/helpers/alias_from_network_id.dart';
-import 'package:wallet/roi/wallet/network/network.dart';
-import 'package:wallet/roi/wallet/network/utils.dart';
-import 'package:wallet/roi/wallet/singleton_wallet.dart';
-import 'package:wallet/roi/wallet/types.dart';
-import 'package:wallet/roi/wallet/utils/fee_utils.dart';
-import 'package:wallet/roi/wallet/utils/number_utils.dart';
-import 'package:wallet/roi/wallet/wallet.dart';
+import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
+import 'package:wallet/ezc/sdk/utils/bigint.dart';
+import 'package:wallet/ezc/sdk/utils/bintools.dart';
+import 'package:wallet/ezc/sdk/utils/constants.dart';
+import 'package:wallet/ezc/wallet/asset/types.dart';
+import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
+import 'package:wallet/ezc/wallet/explorer/ortelius/types.dart';
+import 'package:wallet/ezc/wallet/helpers/address_helper.dart';
+import 'package:wallet/ezc/wallet/helpers/gas_helper.dart';
+import 'package:wallet/ezc/wallet/helpers/staking_helper.dart';
+import 'package:wallet/ezc/wallet/history/history_helpers.dart';
+import 'package:wallet/ezc/wallet/history/types.dart';
+import 'package:wallet/ezc/wallet/network/constants.dart';
+import 'package:wallet/ezc/wallet/network/helpers/alias_from_network_id.dart';
+import 'package:wallet/ezc/wallet/network/network.dart';
+import 'package:wallet/ezc/wallet/network/utils.dart';
+import 'package:wallet/ezc/wallet/singleton_wallet.dart';
+import 'package:wallet/ezc/wallet/types.dart';
+import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -136,10 +136,10 @@ class _SplashScreenState extends State<SplashScreen> {
     //
     // final totalDecimal = totalAvaxBalanceDecimal + stakedDecimal;
     // final totalString = decimalToLocaleString(totalDecimal);
-    // logger.i("total ROI = $totalString");
+    // logger.i("total EZC = $totalString");
     //
     // final avaxPrice = await getAvaxPriceDecimal();
-    // logger.i("1 ROI = ${decimalToLocaleString(avaxPrice, decimals: 2)}");
+    // logger.i("1 EZC = ${decimalToLocaleString(avaxPrice, decimals: 2)}");
     //
     // final totalUsd = totalDecimal * avaxPrice;
     // final totalUsdString = decimalToLocaleString(totalUsd, decimals: 2);

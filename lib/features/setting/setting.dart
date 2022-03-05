@@ -8,7 +8,7 @@ import 'package:wallet/features/setting/setting_store.dart';
 import 'package:wallet/features/setting/widgets/setting_item.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/wallet/network/constants.dart';
+import 'package:wallet/ezc/wallet/network/constants.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';

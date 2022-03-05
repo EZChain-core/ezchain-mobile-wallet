@@ -1,6 +1,6 @@
 # wallet
 
-ROI Wallet
+EZC Wallet
 
 ## Getting Started
 

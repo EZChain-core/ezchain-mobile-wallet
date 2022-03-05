@@ -1,5 +1,5 @@
-import 'package:wallet/roi/wallet/network/constants.dart';
-import 'package:wallet/roi/wallet/network/types.dart';
+import 'package:wallet/ezc/wallet/network/constants.dart';
+import 'package:wallet/ezc/wallet/network/types.dart';
 
 enum NetworkConfigType { mainnest, testnet }
 

@@ -7,8 +7,8 @@ import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
-import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 
 import 'earn_estimate_rewards_item.dart';
 
@@ -78,7 +78,6 @@ abstract class _EarnEstimateRewardsStore with Store {
           endDate != null ? DateFormat.yMd().format(endDate) : '',
           (percent * 100).toInt(),
         ));
-
       }
       for (var element in resD) {
         final startTime = (int.tryParse(element.startTime) ?? 0) * 1000;

@@ -1,7 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/roi/sdk/utils/mnemonic.dart';
+import 'package:wallet/ezc/sdk/utils/mnemonic.dart';
 
 part 'setting_security_store.g.dart';
 

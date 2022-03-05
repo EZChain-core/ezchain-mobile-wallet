@@ -6,9 +6,9 @@ import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/wallet/helpers/address_helper.dart';
-import 'package:wallet/roi/wallet/helpers/gas_helper.dart';
-import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/helpers/address_helper.dart';
+import 'package:wallet/ezc/wallet/helpers/gas_helper.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 
 part 'wallet_send_evm_store.g.dart';
 

@@ -3,10 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
-import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
-import 'package:wallet/roi/wallet/history/history_helpers.dart';
-import 'package:wallet/roi/wallet/network/helpers/alias_from_network_id.dart';
-import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/explorer/ortelius/types.dart';
+import 'package:wallet/ezc/wallet/history/history_helpers.dart';
+import 'package:wallet/ezc/wallet/network/helpers/alias_from_network_id.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 
 class TransactionDetailViewData {
   final String id;
@@ -118,7 +118,8 @@ extension TransactionDetailExtension on OrteliusTx {
         final amount =
             bnToLocaleString(BigInt.tryParse(output.amount) ?? BigInt.zero);
         final addresses = output.addresses;
-        outputs.add(TransactionDetailOutputViewData(addresses?.firstOrNull, i + 1));
+        outputs.add(
+            TransactionDetailOutputViewData(addresses?.firstOrNull, i + 1));
         final stakeLockTime = output.stakeLockTime;
         if (stakeLockTime != null && stakeLockTime != 0) {
           final stakeLockTimeDate =

@@ -11,8 +11,8 @@ import 'package:wallet/features/common/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
-import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
-import 'package:wallet/roi/wallet/explorer/ortelius/types.dart';
+import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
+import 'package:wallet/ezc/wallet/explorer/ortelius/types.dart';
 
 part 'transactions_store.g.dart';
 

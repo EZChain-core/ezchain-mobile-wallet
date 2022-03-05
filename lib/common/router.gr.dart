@@ -12,6 +12,7 @@
 
 import 'package:auto_route/auto_route.dart' as _i34;
 import 'package:flutter/material.dart' as _i35;
+import 'package:wallet/ezc/wallet/explorer/cchain/types.dart' as _i37;
 import 'package:wallet/features/auth/access/mnemonic/access_mnemonic_key.dart'
     as _i7;
 import 'package:wallet/features/auth/access/options/access_wallet_options.dart'
@@ -59,7 +60,6 @@ import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.
     as _i15;
 import 'package:wallet/features/wallet/send/evm/wallet_send_evm.dart' as _i14;
 import 'package:wallet/features/wallet/wallet.dart' as _i30;
-import 'package:wallet/roi/wallet/explorer/cchain/types.dart' as _i37;
 
 class AppRouter extends _i34.RootStackRouter {
   AppRouter([_i35.GlobalKey<_i35.NavigatorState>? navigatorKey])

@@ -6,7 +6,7 @@ import 'package:wallet/common/extensions.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/earn/delegate/input/earn_delegate_input.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';

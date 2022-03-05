@@ -8,8 +8,8 @@ import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/features/common/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/wallet/network/network.dart';
-import 'package:wallet/roi/wallet/network/types.dart';
+import 'package:wallet/ezc/wallet/network/network.dart';
+import 'package:wallet/ezc/wallet/network/types.dart';
 
 part 'setting_store.g.dart';
 
@@ -53,7 +53,7 @@ abstract class _SettingStore with Store {
 
   enableTouchId(bool enabled) async {
     bool useTouchId = enabled;
-    if(enabled) {
+    if (enabled) {
       useTouchId = await _localAuthentication.authenticate(
         localizedReason: Strings.current.sharedCompleteBiometrics,
         biometricOnly: true,
@@ -63,7 +63,7 @@ abstract class _SettingStore with Store {
     _walletSetting.enableTouchId(useTouchId);
   }
 
-  _init() async{
+  _init() async {
     touchIdEnabled = await _walletSetting.touchIdEnabled();
     touchIdAvailable = await _localAuthentication.canCheckBiometrics;
   }

@@ -58,7 +58,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                         children: [
                           Observer(
                             builder: (_) => Text(
-                              '${_walletEZCStore.totalRoi} EZC'
+                              '${_walletEZCStore.totalEzc} EZC'
                                   .useCorrectEllipsis(),
                               style: EZCHeadlineSmallTextStyle(
                                   color: provider.themeMode.primary),
@@ -92,9 +92,9 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                       Observer(
                         builder: (_) => _WalletChainWidget(
                           chain: Strings.current.sharedXChain,
-                          availableRoi:
+                          availableEzc:
                               _walletEZCStore.balanceX.availableString,
-                          lockRoi: _walletEZCStore.balanceX.lockString,
+                          lockEzc: _walletEZCStore.balanceX.lockString,
                           onSendPressed: () =>
                               context.router.push(WalletSendAvmRoute()),
                           onReceivePressed: () => context.router.push(
@@ -111,10 +111,10 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                       Observer(
                         builder: (_) => _WalletChainWidget(
                           chain: Strings.current.sharedPChain,
-                          availableRoi:
+                          availableEzc:
                               _walletEZCStore.balanceP.availableString,
-                          lockRoi: _walletEZCStore.balanceP.lockString,
-                          lockStakeableRoi:
+                          lockEzc: _walletEZCStore.balanceP.lockString,
+                          lockStakeableEzc:
                               _walletEZCStore.balanceP.lockStakeableString,
                           hasSend: false,
                           onReceivePressed: () => context.router.push(
@@ -131,9 +131,9 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                       Observer(
                         builder: (_) => _WalletChainWidget(
                           chain: Strings.current.sharedCChain,
-                          availableRoi:
+                          availableEzc:
                               _walletEZCStore.balanceC.availableString,
-                          lockRoi: _walletEZCStore.balanceC.lockString,
+                          lockEzc: _walletEZCStore.balanceC.lockString,
                           onSendPressed: () =>
                               context.router.push(WalletSendEvmRoute()),
                           onReceivePressed: () => context.router.push(
@@ -233,9 +233,9 @@ class _WalletButton extends StatelessWidget {
 
 class _WalletChainWidget extends StatelessWidget {
   final String chain;
-  final String availableRoi;
-  final String? lockRoi;
-  final String? lockStakeableRoi;
+  final String availableEzc;
+  final String? lockEzc;
+  final String? lockStakeableEzc;
   final bool? hasSend;
   final VoidCallback? onSendPressed;
   final VoidCallback? onReceivePressed;
@@ -244,12 +244,12 @@ class _WalletChainWidget extends StatelessWidget {
   const _WalletChainWidget(
       {Key? key,
       required this.chain,
-      required this.availableRoi,
-      this.lockRoi,
+      required this.availableEzc,
+      this.lockEzc,
       this.hasSend,
       this.onSendPressed,
       this.onReceivePressed,
-      this.lockStakeableRoi,
+      this.lockStakeableEzc,
       this.onPressed})
       : super(key: key);
 
@@ -301,14 +301,14 @@ class _WalletChainWidget extends StatelessWidget {
                         color: provider.themeMode.secondary60),
                   ),
                   Text(
-                    '$availableRoi EZC',
+                    '$availableEzc EZC',
                     style:
                         EZCTitleMediumTextStyle(color: provider.themeMode.text),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
-              if (lockRoi != null)
+              if (lockEzc != null)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -318,13 +318,13 @@ class _WalletChainWidget extends StatelessWidget {
                           color: provider.themeMode.secondary60),
                     ),
                     Text(
-                      '$lockRoi EZC',
+                      '$lockEzc EZC',
                       style: EZCTitleMediumTextStyle(
                           color: provider.themeMode.text),
                     ),
                   ],
                 ),
-              if (lockStakeableRoi != null) ...[
+              if (lockStakeableEzc != null) ...[
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -335,7 +335,7 @@ class _WalletChainWidget extends StatelessWidget {
                           color: provider.themeMode.secondary60),
                     ),
                     Text(
-                      '$lockStakeableRoi EZC',
+                      '$lockStakeableEzc EZC',
                       style: EZCTitleMediumTextStyle(
                           color: provider.themeMode.text),
                     ),
