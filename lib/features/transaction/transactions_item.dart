@@ -8,11 +8,11 @@ import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/sdk/apis/pvm/model/get_current_validators.dart';
-import 'package:wallet/roi/wallet/explorer/cchain/types.dart';
-import 'package:wallet/roi/wallet/history/types.dart';
-import 'package:wallet/roi/wallet/network/utils.dart';
-import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
+import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
+import 'package:wallet/ezc/wallet/history/types.dart';
+import 'package:wallet/ezc/wallet/network/utils.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -248,8 +248,10 @@ Widget buildTransactionWidget(TransactionsItem transaction) {
   return const SizedBox.shrink();
 }
 
-List<TransactionsItem> mapToTransactionsItem(List<HistoryItem> items,
-    {List<Validator>? validators}) {
+List<TransactionsItem> mapToTransactionsItem(
+  List<HistoryItem> items, {
+  List<Validator>? validators,
+}) {
   final List<TransactionsItem> transactions = [];
 
   try {

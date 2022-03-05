@@ -6,10 +6,10 @@ import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/roi/wallet/network/utils.dart';
-import 'package:wallet/roi/wallet/types.dart';
-import 'package:wallet/roi/wallet/utils/number_utils.dart';
-import 'package:wallet/roi/wallet/wallet.dart';
+import 'package:wallet/ezc/wallet/network/utils.dart';
+import 'package:wallet/ezc/wallet/types.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 
 part 'balance_store.g.dart';
 
@@ -22,7 +22,7 @@ abstract class _BalanceStore with Store {
   final _wallet = getIt<WalletFactory>().activeWallet;
 
   @observable
-  Decimal totalRoi = Decimal.zero;
+  Decimal totalEzc = Decimal.zero;
 
   @observable
   Decimal staking = Decimal.zero;
@@ -182,7 +182,7 @@ abstract class _BalanceStore with Store {
     final staked = await _wallet.getStake();
     staking = bnToDecimalAvaxP(staked.stakedBN);
 
-    totalRoi = totalAvaxBalanceDecimal + staking;
+    totalEzc = totalAvaxBalanceDecimal + staking;
     isTotalLoaded = true;
   }
 

@@ -4,7 +4,7 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 
 part 'wallet_ezc_store.g.dart';
 
@@ -31,8 +31,8 @@ abstract class _WalletEZCStore with Store {
       WalletEZCBalanceViewData(_balanceStore.balanceC);
 
   @computed
-  String get totalRoi =>
-      decimalToLocaleString(_balanceStore.totalRoi, decimals: decimalNumber);
+  String get totalEzc =>
+      decimalToLocaleString(_balanceStore.totalEzc, decimals: decimalNumber);
 
   @computed
   String get staking =>
@@ -40,7 +40,7 @@ abstract class _WalletEZCStore with Store {
 
   @computed
   String get totalUsd {
-    final totalUsdNumber = _balanceStore.totalRoi * _priceStore.avaxPrice;
+    final totalUsdNumber = _balanceStore.totalEzc * _priceStore.avaxPrice;
     return decimalToLocaleString(totalUsdNumber, decimals: decimalNumber);
   }
 

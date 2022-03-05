@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:wallet/features/transaction/detail_c/transaction_c_detail_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/wallet/explorer/cchain/types.dart';
+import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';

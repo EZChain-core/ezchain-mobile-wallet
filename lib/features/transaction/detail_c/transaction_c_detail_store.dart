@@ -3,8 +3,8 @@ import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/wallet/explorer/cchain/types.dart';
-import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 
 part 'transaction_c_detail_store.g.dart';
 

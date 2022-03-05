@@ -1,10 +1,10 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/roi/sdk/utils/mnemonic.dart';
-import 'package:wallet/roi/wallet/mnemonic_wallet.dart';
-import 'package:wallet/roi/wallet/singleton_wallet.dart';
-import 'package:wallet/roi/wallet/wallet.dart';
+import 'package:wallet/ezc/sdk/utils/mnemonic.dart';
+import 'package:wallet/ezc/wallet/mnemonic_wallet.dart';
+import 'package:wallet/ezc/wallet/singleton_wallet.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 
 import 'network_config_type.dart';
 

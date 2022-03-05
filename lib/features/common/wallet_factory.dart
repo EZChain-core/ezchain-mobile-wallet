@@ -1,4 +1,4 @@
-import 'package:wallet/roi/wallet/wallet.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 
 abstract class WalletFactory {
   WalletProvider get activeWallet;

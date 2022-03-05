@@ -1,5 +1,5 @@
 import 'package:mobx/mobx.dart';
-import 'package:wallet/roi/wallet/mnemonic_wallet.dart';
+import 'package:wallet/ezc/wallet/mnemonic_wallet.dart';
 
 part 'create_wallet_store.g.dart';
 

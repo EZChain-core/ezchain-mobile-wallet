@@ -7,9 +7,9 @@ import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/cross/transfer/cross_transfer.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/roi/wallet/types.dart';
-import 'package:wallet/roi/wallet/utils/fee_utils.dart';
-import 'package:wallet/roi/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/types.dart';
+import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 
 part 'cross_store.g.dart';
 
