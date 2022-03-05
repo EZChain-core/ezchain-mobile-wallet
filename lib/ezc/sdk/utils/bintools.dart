@@ -43,6 +43,7 @@ Uint8List stringToAddress(String address, {String? hrp}) {
   if (humanReadablePart != "ezc" &&
       humanReadablePart != "fuji" &&
       humanReadablePart != "local" &&
+      humanReadablePart != "custom" &&
       humanReadablePart != hrp) {
     throw Exception("Error - Invalid HRP");
   }
