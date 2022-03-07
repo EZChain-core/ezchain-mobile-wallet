@@ -1,4 +1,6 @@
 import 'package:wallet/ezc/wallet/asset/types.dart';
+import 'package:wallet/ezc/wallet/explorer/ortelius/types.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 
 enum HistoryItemTypeName {
   import,
@@ -97,34 +99,51 @@ class HistoryImportExport extends HistoryItem {
 class HistoryBaseTx extends HistoryItem {
   final List<HistoryBaseTxToken> tokens;
 
-  HistoryBaseTx({
-    required String id,
-    required HistoryItemTypeName type,
-    required BigInt fee,
-    String? timestamp,
-    String? memo,
-    required this.tokens,
-  }) : super(
+  final HistoryBaseTxNFT collectibles;
+
+  HistoryBaseTx(
+      {required String id,
+      required HistoryItemTypeName type,
+      required BigInt fee,
+      String? timestamp,
+      String? memo,
+      required this.tokens,
+      required this.collectibles})
+      : super(
           id: id,
           type: type,
           fee: fee,
           timestamp: timestamp,
           memo: memo,
         );
+
+  List<HistoryBaseTxToken> get sentTokens =>
+      tokens.where((token) => token.amount < BigInt.zero).toList();
+
+  List<HistoryBaseTxToken> get receivedTokens =>
+      tokens.where((token) => token.amount >= BigInt.zero).toList();
 }
 
 class HistoryBaseTxToken {
-  final BigInt amount;
-  final String amountDisplayValue;
+  BigInt amount;
   final List<String> addresses;
   final AssetDescriptionClean asset;
 
   HistoryBaseTxToken(
     this.amount,
-    this.amountDisplayValue,
     this.addresses,
     this.asset,
   );
+
+  bool get isProfit => amount >= BigInt.zero;
+
+  String get amountDisplayValue =>
+      bnToLocaleString(
+        amount,
+        decimals: int.tryParse(asset.denomination) ?? 0,
+      ) +
+      " " +
+      asset.symbol;
 }
 
 class HistoryBaseTxTokenLossGain {
@@ -137,4 +156,18 @@ class HistoryBaseTxTokenOwners {
   final Map<String, List<String>> result;
 
   HistoryBaseTxTokenOwners(this.result);
+}
+
+class HistoryBaseTxNFT {
+  final HistoryBaseTxNFTSummaryResultDict sent;
+  final HistoryBaseTxNFTSummaryResultDict received;
+
+  HistoryBaseTxNFT({required this.sent, required this.received});
+}
+
+class HistoryBaseTxNFTSummaryResultDict {
+  final Map<String, List<OrteliusTxOutput>> assets;
+  final List<String> addresses;
+
+  HistoryBaseTxNFTSummaryResultDict(this.assets, this.addresses);
 }

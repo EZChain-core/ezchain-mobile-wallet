@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/wallet/utils/utils.dart';
 import 'package:wallet/features/common/network_config_type.dart';
 import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
@@ -36,6 +37,7 @@ import 'package:wallet/ezc/wallet/types.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
+import 'package:wallet/themes/buttons.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -53,7 +55,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _setNetworkConfig();
     // initWallet();
     _startTimer();
   }
@@ -76,17 +77,14 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           changeNetwork();
+    //           getXTransactions();
+    //           // getXPTransaction(
+    //           //     "Cyd5nfqXqBBoDo6gktuRgv1XGuRY9AipUDtTe6qnVxqtbTJ8o");
     //         },
     //       ),
     //     ),
     //   ),
     // );
-  }
-
-  _setNetworkConfig() async {
-    final networkType = await _walletSetting.getNetworkConfig();
-    setRpcNetwork(networkType.config);
   }
 
   _startTimer() {
@@ -438,7 +436,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   getXTransactions() async {
     try {
-      final transactions = await wallet.getXTransactions(limit: 20);
+      final transactions = (await wallet.getXTransactions(limit: 20))
+          .where((tx) =>
+              tx.id == "25SVimzQ5eL7kbRbPfYhVPgZp39Ch79UsoccAuLrvJJXYvzEgK" ||
+              tx.id == "X7RnhdHFAD5RGS1rPHKuAxXFMnkEjXL3vfEmc5Gf1phNu5Toc" ||
+              tx.id == "Cyd5nfqXqBBoDo6gktuRgv1XGuRY9AipUDtTe6qnVxqtbTJ8o")
+          .toList();
       final addresses = [
         ...await wallet.getAllAddressesX(),
         wallet.getEvmAddressBech()
@@ -583,7 +586,11 @@ class _SplashScreenState extends State<SplashScreen> {
               DateTime.fromMillisecondsSinceEpoch(stakeLockTime * 1000);
           final dateFormatter = DateFormat("MM/dd/yyyy, HH:mm:ss a");
           message +=
-              "Output can be spent in a year (${dateFormatter.format(stakeLockTimeDate)})";
+              "Output can be spent in a year (${dateFormatter.format(stakeLockTimeDate)})\n";
+        }
+        final payload = parseNFTPayload(output.payload);
+        if (payload != null && payload.isNotEmpty) {
+          message += "Payload = $payload\n";
         }
       }
       logger.i(message);
@@ -644,35 +651,37 @@ class _SplashScreenState extends State<SplashScreen> {
     List<HistoryItem> items, {
     List<Validator>? validators, // for only platform chain
   }) {
-    final result = items.where((tx) {
-      if (tx is HistoryBaseTx) {
-        return tx.tokens.isNotEmpty;
-      } else if (tx is HistoryStaking) {
-        return tx.type == HistoryItemTypeName.addValidator ||
-            tx.type == HistoryItemTypeName.addDelegator;
-      } else {
-        return tx.type != HistoryItemTypeName.notSupported;
-      }
-    }).toList();
+    final result = items
+        .where((tx) => tx.type != HistoryItemTypeName.notSupported)
+        .toList();
     for (var item in result) {
       if (item is HistoryBaseTx) {
-        final token = item.tokens.firstWhereOrNull(
-            (token) => token.asset.assetId == getAvaxAssetId());
-        if (token == null || token.amount == BigInt.zero) {
-          continue;
-        }
+        final collectibles = item.collectibles;
+        final sentTokens = item.sentTokens;
+        final receivedTokens = item.receivedTokens;
+        final hasSent =
+            sentTokens.isNotEmpty || collectibles.sent.assets.isNotEmpty;
+
+        final hasReceived = receivedTokens.isNotEmpty ||
+            collectibles.received.assets.isNotEmpty;
+
         var message = "Date = ${item.timestamp}\n";
-        if (token.amount < BigInt.zero) {
-          final amount = bnToLocaleString(
-            token.amount - item.fee,
-            decimals: int.tryParse(token.asset.denomination) ?? 0,
+
+        if (hasSent) {
+          message = _parserXBaseTX(
+            sentTokens,
+            collectibles.sent.assets,
+            message,
           );
-          message += "Send = $amount ${token.asset.symbol}, to = ";
-        } else {
-          message +=
-              "Receive = ${token.amountDisplayValue} ${token.asset.symbol}, from = ";
         }
-        message += "$chainAlias-${token.addresses.firstOrNull ?? ""}";
+        message += "\n";
+        if (hasReceived) {
+          message = _parserXBaseTX(
+            receivedTokens,
+            collectibles.received.assets,
+            message,
+          );
+        }
         logger.i(message);
       } else if (item is HistoryImportExport) {
         if (item.amount > BigInt.zero) {
@@ -689,7 +698,6 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       } else if (item is HistoryStaking && validators != null) {
         var message = "Date = ${item.timestamp}\n";
-
         final stakeEndDate = DateTime.fromMillisecondsSinceEpoch(item.stakeEnd);
         final dateFormatter = DateFormat("MM/dd/yyyy, HH:mm:ss a");
         message += "Stake End Date = ${dateFormatter.format(stakeEndDate)}\n";
@@ -720,6 +728,47 @@ class _SplashScreenState extends State<SplashScreen> {
         logger.i(message);
       }
     }
+  }
+
+  String _parserXBaseTX(
+    List<HistoryBaseTxToken> tokens,
+    Map<String, List<OrteliusTxOutput>> assets,
+    String message,
+  ) {
+    for (var token in tokens) {
+      if (token.isProfit) {
+        message += "Received ";
+      } else {
+        message += "Send ";
+      }
+      for (var address in token.addresses) {
+        if (token.isProfit) {
+          message += "From: X-";
+        } else {
+          message += "To: X-";
+        }
+        message += "$address: ";
+      }
+      message += "Amount: ${token.amountDisplayValue}";
+    }
+    final groupDict = <int, List<OrteliusTxOutput>>{};
+    final utxos = assets.values.expand((list) => list);
+    for (var utxo in utxos) {
+      final groupId = utxo.groupId;
+      final exists = groupDict[groupId];
+      if (exists != null) {
+        exists.add(utxo);
+      } else {
+        groupDict[groupId] = [utxo];
+      }
+    }
+    for (var utxos in groupDict.values) {
+      final firstUtxo = utxos.firstOrNull;
+      if (firstUtxo != null) {
+        message += "\nPayload: ${parseNFTPayload(firstUtxo.payload)}\n";
+      }
+    }
+    return message;
   }
 
   getNodeIds() async {

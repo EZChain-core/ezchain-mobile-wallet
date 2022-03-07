@@ -7,6 +7,17 @@ bool isArraysOverlap(List<dynamic> arr1, List<dynamic> arr2) {
 }
 
 /// Returns true if this utxo is owned by any of the given addresses
+/// @param ownerAddresses Addresses to check against
+/// @param output The UTXO
+bool isOutputOwner(List<String> ownerAddresses, OrteliusTxOutput output) {
+  final outAddresses = output.addresses;
+  if (outAddresses == null) return false;
+  final totalAddresses =
+      outAddresses.where((address) => ownerAddresses.contains(address));
+  return totalAddresses.isNotEmpty;
+}
+
+/// Returns true if this utxo is owned by any of the given addresses
 /// @param ownerAddrs Addresses to check against
 /// @param output The UTXO
 bool isOutputOwnerC(String ownerAddress, OrteliusTxOutput output) {

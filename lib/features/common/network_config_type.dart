@@ -1,11 +1,11 @@
 import 'package:wallet/ezc/wallet/network/constants.dart';
 import 'package:wallet/ezc/wallet/network/types.dart';
 
-enum NetworkConfigType { mainnest, testnet }
+enum NetworkConfigType { mainnet, testnet }
 
 extension NetworkConfigTypeExtension on NetworkConfigType {
   String get name {
-    return ["mainnest", "testnet"][index];
+    return ["mainnet", "testnet"][index];
   }
 
   NetworkConfig get config {
