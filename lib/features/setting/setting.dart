@@ -78,12 +78,12 @@ class SettingScreen extends StatelessWidget {
                     children: [
                       _SettingSwitchNetworkWidget(
                         isActive: _settingStore.activeNetworkConfig ==
-                            NetworkConfigType.mainnest,
+                            NetworkConfigType.mainnet,
                         title: Strings.current.settingEzcMainnet,
                         host:
                             '${mainnetConfig.rawUrl}:${mainnetConfig.apiPort}',
                         onPressed: () => _settingStore
-                            .setNetworkConfig(NetworkConfigType.mainnest),
+                            .setNetworkConfig(NetworkConfigType.mainnet),
                       ),
                       _SettingSwitchNetworkWidget(
                         isActive: _settingStore.activeNetworkConfig ==

@@ -30,6 +30,7 @@ Future<HistoryItem> getTransactionSummary(
     case OrteliusTxType.addValidator:
     case OrteliusTxType.addDelegator:
       return getStakingSummary(tx, cleanAddressesXP);
+    case OrteliusTxType.createAsset:
     case OrteliusTxType.operation:
     case OrteliusTxType.base:
       return getBaseTxSummary(tx, cleanAddressesXP);

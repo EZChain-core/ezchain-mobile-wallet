@@ -273,28 +273,28 @@ List<TransactionsItem> mapToTransactionsItem(
       bool transIncrease = false;
 
       if (item is HistoryBaseTx) {
-        final token = item.tokens.firstWhereOrNull(
-            (token) => token.asset.assetId == getAvaxAssetId());
-
-        if (token == null || token.amount == BigInt.zero) {
-          continue;
-        }
-        if (token.amount < BigInt.zero) {
-          final amount = bnToLocaleString(
-            token.amount - item.fee,
-            decimals: int.tryParse(token.asset.denomination) ?? 0,
-          );
-
-          transType = Strings.current.sharedSent;
-          transAmount = '$amount ${token.asset.symbol}';
-          transIncrease = false;
-        } else {
-          transType = Strings.current.sharedReceived;
-          transAmount = '${token.amountDisplayValue} ${token.asset.symbol}';
-          transIncrease = true;
-        }
-        transactions.add(TransactionsBaseImportExportItem(
-            transId, transTime, transType, transAmount, transIncrease));
+        // final token = item.tokens.firstWhereOrNull(
+        //     (token) => token.asset.assetId == getAvaxAssetId());
+        //
+        // if (token == null || token.amount == BigInt.zero) {
+        //   continue;
+        // }
+        // if (token.amount < BigInt.zero) {
+        //   final amount = bnToLocaleString(
+        //     token.amount - item.fee,
+        //     decimals: int.tryParse(token.asset.denomination) ?? 0,
+        //   );
+        //
+        //   transType = Strings.current.sharedSent;
+        //   transAmount = '$amount ${token.asset.symbol}';
+        //   transIncrease = false;
+        // } else {
+        //   transType = Strings.current.sharedReceived;
+        //   transAmount = '${token.amountDisplayValue} ${token.asset.symbol}';
+        //   transIncrease = true;
+        // }
+        // transactions.add(TransactionsBaseImportExportItem(
+        //     transId, transTime, transType, transAmount, transIncrease));
       } else if (item is HistoryImportExport) {
         if (item.amount > BigInt.zero) {
           if (item.type == HistoryItemTypeName.import) {
