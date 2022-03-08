@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/ezc/wallet/network/constants.dart';
 import 'package:wallet/features/common/network_config_type.dart';
 import 'package:wallet/features/setting/setting_store.dart';
 import 'package:wallet/features/setting/widgets/setting_item.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/ezc/wallet/network/constants.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -52,7 +52,7 @@ class SettingScreen extends StatelessWidget {
                 builder: (_) => _settingStore.touchIdAvailable
                     ? SettingItem(
                         text: Strings.current.settingTouchId,
-                        icon: Assets.icons.icTouchId.svg(),
+                        icon: Assets.icons.icTouchId.svg(width: 24, height: 24),
                         isSwitch: true,
                         initSwitch: _settingStore.touchIdEnabled,
                         onSwitch: (value) => _settingStore.enableTouchId(value),

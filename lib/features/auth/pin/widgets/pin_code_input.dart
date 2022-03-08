@@ -10,7 +10,16 @@ class PinCodeInput extends StatefulWidget {
 
   final VoidCallback? onChanged;
 
-  const PinCodeInput({Key? key, required this.onSuccess, this.onChanged})
+  final bool? touchIdEnabled;
+
+  final VoidCallback? onTouchIdPressed;
+
+  const PinCodeInput(
+      {Key? key,
+      required this.onSuccess,
+      this.onChanged,
+      this.touchIdEnabled,
+      this.onTouchIdPressed})
       : super(key: key);
 
   @override
@@ -115,21 +124,26 @@ class _PinCodeInputState extends State<PinCodeInput> {
                       onPressed: (int number) {
                         _addPin(number);
                       }),
-                  const SizedBox.shrink(),
+                  widget.touchIdEnabled == true
+                      ? IconButton(
+                          icon: Assets.icons.icTouchId.svg(
+                            width: 56,
+                            height: 56,
+                          ),
+                          padding: const EdgeInsets.all(0),
+                          onPressed: widget.onTouchIdPressed,
+                        )
+                      : const SizedBox.shrink(),
                   _CircleDigitKey(
                       number: 0,
                       onPressed: (int number) {
                         _addPin(number);
                       }),
-                  TextButton(
-                    onPressed: () {
-                      _removePin();
-                    },
-                    child: Padding(
-                        padding: const EdgeInsets.all(1),
-                        child: Assets.icons.icBackspaceSecondary.svg(
-                          color: provider.themeMode.secondary
-                        )),
+                  IconButton(
+                    onPressed: _removePin,
+                    padding: const EdgeInsets.all(1),
+                    icon: Assets.icons.icBackspaceSecondary
+                        .svg(color: provider.themeMode.secondary),
                   ),
                 ],
               ),

@@ -11,11 +11,6 @@ import 'package:intl/intl.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
-import 'package:wallet/ezc/wallet/utils/utils.dart';
-import 'package:wallet/features/common/network_config_type.dart';
-import 'package:wallet/features/common/setting/wallet_setting.dart';
-import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/ezc/sdk/utils/bigint.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
@@ -36,8 +31,13 @@ import 'package:wallet/ezc/wallet/singleton_wallet.dart';
 import 'package:wallet/ezc/wallet/types.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/utils/utils.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
-import 'package:wallet/themes/buttons.dart';
+import 'package:wallet/features/common/setting/wallet_setting.dart';
+import 'package:wallet/features/common/wallet_factory.dart';
+import 'package:wallet/generated/assets.gen.dart';
+
+import '../../auth/pin/verify/pin_code_verify.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -92,16 +92,15 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _navigate() async {
-    if (await _walletFactory.isExpired()) {
-      _walletFactory.clear();
-      context.router.replaceAll([const OnBoardRoute()]);
-    } else {
-      final result = await _walletFactory.initWallet();
-      if (result) {
+    final result = await _walletFactory.initWallet();
+
+    if (result) {
+      final verify = await verifyPinCode();
+      if (verify) {
         context.router.replaceAll([const DashboardRoute()]);
-      } else {
-        context.router.replaceAll([const OnBoardRoute()]);
       }
+    } else {
+      context.router.replaceAll([const OnBoardRoute()]);
     }
   }
 

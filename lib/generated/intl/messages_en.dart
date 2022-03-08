@@ -158,6 +158,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "PIN Code doesn’t match! Try Again"),
         "settingAboutEZC":
             MessageLookupByLibrary.simpleMessage("About EZChain"),
+        "settingBiometricSystemsNotEnabled":
+            MessageLookupByLibrary.simpleMessage(
+                "Biometric systems is not enabled"),
         "settingChangePin": MessageLookupByLibrary.simpleMessage("Change PIN"),
         "settingConfirmNewPin":
             MessageLookupByLibrary.simpleMessage("Please confirm new PIN"),
