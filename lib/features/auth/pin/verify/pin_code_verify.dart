@@ -30,14 +30,6 @@ class PinCodeVerifyScreen extends StatelessWidget {
                 title: Strings.current.pinCodeConfirm,
                 onPressed: context.popRoute,
               ),
-              Observer(
-                builder: (_) => _pinCodeVerifyStore.touchIdEnabled
-                    ? InkWell(
-                        child: const Text('Use Touch Id'),
-                        onTap: _checkTouchId,
-                      )
-                    : const SizedBox.shrink(),
-              ),
               Expanded(
                 flex: 1,
                 child: Observer(
@@ -71,15 +63,19 @@ class PinCodeVerifyScreen extends StatelessWidget {
                 flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 80),
-                  child: PinCodeInput(
-                    onChanged: _pinCodeVerifyStore.removeError,
-                    onSuccess: (String confirmPin) async {
-                      final isCorrect =
-                          await _pinCodeVerifyStore.isPinCorrect(confirmPin);
-                      if (isCorrect) {
-                        context.popRoute<bool>(true);
-                      }
-                    },
+                  child: Observer(
+                    builder: (_) => PinCodeInput(
+                      onChanged: _pinCodeVerifyStore.removeError,
+                      onSuccess: (String confirmPin) async {
+                        final isCorrect =
+                            await _pinCodeVerifyStore.isPinCorrect(confirmPin);
+                        if (isCorrect) {
+                          context.popRoute<bool>(true);
+                        }
+                      },
+                      touchIdEnabled: _pinCodeVerifyStore.touchIdEnabled,
+                      onTouchIdPressed: _checkTouchId,
+                    ),
                   ),
                 ),
               ),

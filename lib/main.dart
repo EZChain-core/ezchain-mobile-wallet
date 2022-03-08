@@ -14,8 +14,8 @@ import 'features/common/setting/wallet_setting.dart';
 
 Future<void> main() async {
   await configureDependencies();
-  await _setNetworkConfig();
   WidgetsFlutterBinding.ensureInitialized();
+  await _setNetworkConfig();
   await Firebase.initializeApp();
   await Strings.load(const Locale("en"));
   runZonedGuarded(() {

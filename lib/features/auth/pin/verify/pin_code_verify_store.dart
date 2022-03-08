@@ -1,9 +1,12 @@
+import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/generated/l10n.dart';
+
+import '../../../../common/extensions.dart';
 
 part 'pin_code_verify_store.g.dart';
 
@@ -39,11 +42,17 @@ abstract class _PinCodeVerifyStore with Store {
   Future<bool> verifyByTouchId() async {
     bool enabled = await _walletSetting.touchIdEnabled();
     if (!enabled) return false;
-    final isAuthenticated = await _localAuthentication.authenticate(
-      localizedReason: Strings.current.sharedCompleteBiometrics,
-      biometricOnly: true,
-    );
-    return isAuthenticated;
+    try {
+      final isAuthenticated = await _localAuthentication.authenticate(
+        localizedReason: Strings.current.sharedCompleteBiometrics,
+        biometricOnly: true,
+      );
+      return isAuthenticated;
+    } on PlatformException catch (e) {
+      showSnackBar(Strings.current.settingBiometricSystemsNotEnabled);
+      return false;
+    }
+
   }
 
   _init() async {

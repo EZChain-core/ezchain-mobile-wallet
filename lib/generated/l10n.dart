@@ -1414,6 +1414,16 @@ class Strings {
     );
   }
 
+  /// `Biometric systems is not enabled`
+  String get settingBiometricSystemsNotEnabled {
+    return Intl.message(
+      'Biometric systems is not enabled',
+      name: 'settingBiometricSystemsNotEnabled',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Send only `
   String get walletReceiveSendOnly {
     return Intl.message(
