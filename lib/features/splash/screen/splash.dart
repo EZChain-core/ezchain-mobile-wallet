@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as dart_math;
+import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
@@ -15,6 +16,7 @@ import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/ezc/sdk/utils/bigint.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
+import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/ezc/wallet/explorer/ortelius/types.dart';
@@ -27,6 +29,7 @@ import 'package:wallet/ezc/wallet/network/constants.dart';
 import 'package:wallet/ezc/wallet/network/helpers/alias_from_network_id.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/network/utils.dart';
+import 'package:wallet/ezc/wallet/nft/types.dart';
 import 'package:wallet/ezc/wallet/singleton_wallet.dart';
 import 'package:wallet/ezc/wallet/types.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
@@ -36,6 +39,7 @@ import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
+import 'package:wallet/themes/buttons.dart';
 
 import '../../auth/pin/verify/pin_code_verify.dart';
 
@@ -48,7 +52,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final WalletFactory _walletFactory = getIt<WalletFactory>();
-  final _walletSetting = getIt<WalletSetting>();
 
   WalletProvider get wallet => _walletFactory.activeWallet;
 
@@ -77,7 +80,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           getXTransactions();
+    //           fetchAssets();
     //           // getXPTransaction(
     //           //     "Cyd5nfqXqBBoDo6gktuRgv1XGuRY9AipUDtTe6qnVxqtbTJ8o");
     //         },
@@ -435,12 +438,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   getXTransactions() async {
     try {
-      final transactions = (await wallet.getXTransactions(limit: 20))
-          .where((tx) =>
-              tx.id == "25SVimzQ5eL7kbRbPfYhVPgZp39Ch79UsoccAuLrvJJXYvzEgK" ||
-              tx.id == "X7RnhdHFAD5RGS1rPHKuAxXFMnkEjXL3vfEmc5Gf1phNu5Toc" ||
-              tx.id == "Cyd5nfqXqBBoDo6gktuRgv1XGuRY9AipUDtTe6qnVxqtbTJ8o")
-          .toList();
+      final transactions = await wallet.getXTransactions(limit: 20);
       final addresses = [
         ...await wallet.getAllAddressesX(),
         wallet.getEvmAddressBech()
@@ -746,7 +744,7 @@ class _SplashScreenState extends State<SplashScreen> {
         } else {
           message += "To: X-";
         }
-        message += "$address: ";
+        message += "$address ";
       }
       message += "Amount: ${token.amountDisplayValue}";
     }
@@ -764,7 +762,34 @@ class _SplashScreenState extends State<SplashScreen> {
     for (var utxos in groupDict.values) {
       final firstUtxo = utxos.firstOrNull;
       if (firstUtxo != null) {
-        message += "\nPayload: ${parseNFTPayload(firstUtxo.payload)}\n";
+        final payload = firstUtxo.payload;
+        if (payload != null) {
+          var payloadBuff = base64Decode(payload);
+          final lengthBuff = Uint8List(4)
+            ..buffer.asByteData().setUint8(0, payloadBuff.length);
+          payloadBuff = Uint8List.fromList([...lengthBuff, ...payloadBuff]);
+          final typeId = PayloadTypes.instance.getTypeId(payloadBuff);
+          final content = PayloadTypes.instance.getContent(payloadBuff);
+          final payloadBase = PayloadTypes.instance.select(typeId, content);
+          final text = utf8.decode(payloadBase.getContent());
+          if (payloadBase is JSONPayload) {
+            GenericNft? genericNft;
+            try {
+              genericNft = GenericFormType.fromJson(jsonDecode(text)).avalanche;
+            } catch (e) {
+              logger.e(e);
+            }
+            if (genericNft != null) {
+              message +=
+                  "\nPayload: title = ${genericNft.title}, desc = ${genericNft.desc}, img = ${genericNft.img}\n";
+            }
+          } else if (payloadBase is URLPayload) {
+            final url = text;
+            message += "\nPayload: url = $url\n";
+          } else {
+            message += "\nPayload: text = $text\n";
+          }
+        }
       }
     }
     return message;
@@ -1004,7 +1029,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     assets.customSort(avaAssetId);
 
+    final balanceC = wallet.getBalanceC();
+
     var stringAssets = "\n";
+
     for (var element in assets) {
       stringAssets +=
           "isEZC = ${element.id == avaAssetId}, name = ${element.name}, symbol = ${element.symbol}, amount = ${element.toString()}\n";
