@@ -229,7 +229,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedExport": MessageLookupByLibrary.simpleMessage("Export"),
         "sharedFail": MessageLookupByLibrary.simpleMessage("Fail"),
         "sharedFee": MessageLookupByLibrary.simpleMessage("Fee"),
-        "sharedFrom": MessageLookupByLibrary.simpleMessage("Form"),
+        "sharedFrom": MessageLookupByLibrary.simpleMessage("From"),
         "sharedGasLimit": MessageLookupByLibrary.simpleMessage("Gas Limit"),
         "sharedGasPrice": MessageLookupByLibrary.simpleMessage("Gas Price"),
         "sharedHourAgo": m4,

@@ -235,6 +235,8 @@ class OrteliusTxOutput {
     this.stakeLockTime,
   );
 
+  BigInt get amountBN => BigInt.tryParse(amount) ?? BigInt.zero;
+
   factory OrteliusTxOutput.fromJson(Map<String, dynamic> json) =>
       _$OrteliusTxOutputFromJson(json);
 
@@ -244,51 +246,68 @@ class OrteliusTxOutput {
 enum OrteliusTxType {
   @JsonValue("base")
   base,
-
   @JsonValue("create_asset")
   createAsset,
-
   @JsonValue("operation")
   operation,
-
   @JsonValue("import")
   import,
-
   @JsonValue("export")
   export,
-
   @JsonValue("add_validator")
   addValidator,
-
   @JsonValue("add_subnet_validator")
   addSubnetValidator,
-
   @JsonValue("add_delegator")
   addDelegator,
-
   @JsonValue("create_chain")
   createChain,
-
   @JsonValue("create_subnet")
   createSubnet,
-
   @JsonValue("pvm_import")
   pvmImport,
-
   @JsonValue("pvm_export")
   pvmExport,
-
   @JsonValue("atomic_import_tx")
   atomicImportTx,
-
   @JsonValue("atomic_export_tx")
   atomicExportTx,
-
   @JsonValue("advance_time")
   advanceTime,
-
   @JsonValue("reward_validator")
   rewardValidator,
+}
+
+extension OrteliusTxTypeString on OrteliusTxType {
+  String toTypeString() {
+    String type = "";
+    switch (this) {
+      case OrteliusTxType.import:
+      case OrteliusTxType.pvmImport:
+        type = "Import Transaction";
+        break;
+      case OrteliusTxType.pvmExport:
+      case OrteliusTxType.atomicExportTx:
+        type = "Export Transaction";
+        break;
+      case OrteliusTxType.createAsset:
+        type = "Mint Transaction";
+        break;
+      case OrteliusTxType.operation:
+        type = "NFT Transaction";
+        break;
+      case OrteliusTxType.addValidator:
+        type = "Validate Transaction";
+        break;
+      case OrteliusTxType.addDelegator:
+        type = "Delegate Transaction";
+        break;
+      default:
+        type = "Transaction";
+        break;
+    }
+    return type;
+  }
 }
 
 @JsonSerializable()

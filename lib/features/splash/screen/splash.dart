@@ -17,6 +17,7 @@ import 'package:wallet/ezc/sdk/utils/bigint.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 import 'package:wallet/ezc/sdk/utils/payload.dart';
+import 'package:wallet/ezc/wallet/asset/assets.dart';
 import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/ezc/wallet/explorer/ortelius/types.dart';
@@ -80,9 +81,9 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           fetchAssets();
+    //           getCTransactions();
     //           // getXPTransaction(
-    //           //     "Cyd5nfqXqBBoDo6gktuRgv1XGuRY9AipUDtTe6qnVxqtbTJ8o");
+    //           //     "29R6yTpxo5AvQ3N3pBBYuLkX6sbAToJZXWtsqL7kPos5sHBRcb");
     //         },
     //       ),
     //     ),
@@ -452,6 +453,15 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
+  getXTransactionsV2() async {
+    try {
+      final transactions = await wallet.getXTransactions(limit: 20);
+      _parseXPTransactionsV2(transactions);
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
   getPTransactions() async {
     try {
       // chỉ P Chain mới cần get validators.
@@ -465,6 +475,15 @@ class _SplashScreenState extends State<SplashScreen> {
       final histories = await Future.wait(transactions
           .map((tx) => wallet.parseOrteliusTx(tx, addresses, addressesC)));
       _parseXPTransactions("P", histories, validators: validators);
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  getPTransactionsV2() async {
+    try {
+      final transactions = await wallet.getPTransactions(limit: 20);
+      _parseXPTransactionsV2(transactions);
     } catch (e) {
       logger.e(e);
     }
@@ -711,8 +730,8 @@ class _SplashScreenState extends State<SplashScreen> {
             final delegators = validator.delegators;
             if (delegators != null) {
               final delegator = delegators
-                  .firstWhere((delegator) => delegator.txId == item.id);
-              potentialReward = delegator.potentialRewardBN;
+                  .firstWhereOrNull((delegator) => delegator.txId == item.id);
+              potentialReward = delegator?.potentialRewardBN;
               message += "Add Delegator = ${item.amountDisplayValue} EZC\n";
             }
           }
@@ -793,6 +812,63 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     }
     return message;
+  }
+
+  _parseXPTransactionsV2(List<OrteliusTx> transactions) async {
+    for (final transaction in transactions) {
+      var message = "";
+      final id = transaction.id;
+      message += "Id = $id\n";
+      final timestamp = transaction.timestamp;
+      message += "Time = $timestamp\n";
+      final type = transaction.type.toTypeString();
+      message += "Type = $type\n";
+      final inputs = transaction.inputs;
+      if (inputs == null || inputs.isEmpty) {
+        message +=
+            "No input UTXOs found for this transaction on the EZChain Explorer\n"; // chuyển vào strings.xml
+      } else {
+        inputs.sort((input1, input2) =>
+            input1.output.outputIndex.compareTo(input2.output.outputIndex));
+        for (final input in inputs) {
+          final output = input.output;
+          final chain = idToChainAlias(output.chainId);
+          final addresses =
+              output.addresses?.map((address) => "$chain-$address") ?? [];
+          message += "From = ${addresses.join("\n")}\n";
+          final amountBN = output.amountBN;
+          if (amountBN != BigInt.zero) {
+            final asset = await getAssetDescription(output.assetId);
+            final denomination = int.tryParse(asset.denomination) ?? 0;
+            final amount = bnToLocaleString(amountBN, decimals: denomination);
+            message += "Amount = $amount ${asset.symbol}\n";
+          }
+        }
+      }
+
+      final outputs = transaction.outputs;
+      if (outputs == null || outputs.isEmpty) {
+        message +=
+            "No output UTXOs found for this transaction on the EZChain Explorer\n"; // chuyển vào strings.xml
+      } else {
+        outputs.sort((output1, output2) =>
+            output1.outputIndex.compareTo(output2.outputIndex));
+        for (final output in outputs) {
+          final chain = idToChainAlias(output.chainId);
+          final addresses =
+              output.addresses?.map((address) => "$chain-$address") ?? [];
+          message += "To = ${addresses.join("\n")}\n";
+          final amountBN = output.amountBN;
+          if (amountBN != BigInt.zero) {
+            final asset = await getAssetDescription(output.assetId);
+            final denomination = int.tryParse(asset.denomination) ?? 0;
+            final amount = bnToLocaleString(amountBN, decimals: denomination);
+            message += "Amount = $amount ${asset.symbol}\n";
+          }
+        }
+      }
+      logger.i(message);
+    }
   }
 
   getNodeIds() async {
