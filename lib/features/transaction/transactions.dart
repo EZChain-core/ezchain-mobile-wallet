@@ -136,7 +136,8 @@ class TransactionsScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, top: 16, bottom: 10),
                 child: Text(
                   Strings.current.sharedTransactions,
-                  style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
+                  style:
+                      EZCHeadlineSmallTextStyle(color: provider.themeMode.text),
                 ),
               ),
               Expanded(
@@ -153,7 +154,9 @@ class TransactionsScreen extends StatelessWidget {
                               itemBuilder: (_, index) =>
                                   buildTransactionWidget(transactions[index]),
                               separatorBuilder: (_, index) => Divider(
-                                  color: provider.themeMode.text10, height: 25),
+                                color: provider.themeMode.text20,
+                                height: 1,
+                              ),
                             )
                           : _TransactionsNoData();
                     } else {
