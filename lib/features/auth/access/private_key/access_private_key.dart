@@ -6,6 +6,7 @@ import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/auth/access/private_key/access_private_key_store.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -18,7 +19,7 @@ class AccessPrivateKeyScreen extends StatelessWidget {
   final _accessPrivateKeyStore = AccessPrivateKeyStore();
 
   final _privateKeyInputController = TextEditingController(
-      text: 'PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M');
+      text: privateKeyTest);
 
   AccessPrivateKeyScreen({Key? key}) : super(key: key);
 

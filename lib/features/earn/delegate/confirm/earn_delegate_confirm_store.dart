@@ -3,6 +3,7 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm.dart';
@@ -51,14 +52,14 @@ abstract class _EarnDelegateConfirmStore with Store {
         currentSupply * BigInt.from(10).pow(9),
       );
       final estimatedReward = bnToDecimal(estimation, denomination: 18);
-      estimatedRewardText = '${estimatedReward.toStringAsFixed(2)} EZC';
+      estimatedRewardText = '${estimatedReward.toStringAsFixed(2)} $ezc';
       final delegationFee = args.delegateItem.delegationFee;
       final cut =
           estimatedReward * (delegationFee / Decimal.fromInt(100)).toDecimal();
       final totalFee = getTxFeeP() * BigInt.from(10).pow(9) +
           decimalToBn(cut, denomination: 18);
       feeText =
-          '${bnToDecimal(totalFee, denomination: 18).toStringAsFixed(2)} EZC';
+          '${bnToDecimal(totalFee, denomination: 18).toStringAsFixed(2)} $ezc';
     } catch (e) {
       logger.e(e);
     }

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/common/balance_store.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/cross/cross_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -47,7 +48,7 @@ class _CrossScreenState extends State<CrossScreen> {
                     Assets.icons.icEzc64.svg(width: 32, height: 32),
                     const SizedBox(width: 8),
                     Text(
-                      'EZC',
+                      ezc,
                       style:
                           EZCBodyLargeTextStyle(color: provider.themeMode.text),
                     ),
@@ -184,7 +185,7 @@ class _CrossScreenState extends State<CrossScreen> {
                       Expanded(
                         child: Observer(
                           builder: (_) => Text(
-                            '${_crossStore.fee} EZC',
+                            '${_crossStore.fee} $ezc',
                             textAlign: TextAlign.end,
                             style: EZCTitleLargeTextStyle(
                                 color: provider.themeMode.text60),

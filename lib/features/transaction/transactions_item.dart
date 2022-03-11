@@ -14,6 +14,7 @@ import 'package:wallet/ezc/wallet/history/types.dart';
 import 'package:wallet/ezc/wallet/network/helpers/alias_from_network_id.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
@@ -393,7 +394,7 @@ List<TransactionsItem> mapToTransactionsItem(
             }
           }
           if (potentialReward != null) {
-            reward = '${bnToAvaxP(potentialReward)} EZC';
+            reward = '${bnToAvaxP(potentialReward)} $ezc';
           }
         }
         // transactions.add(TransactionsStakingItem(transId, transTime, transType,
@@ -420,11 +421,11 @@ List<TransactionsItem> mapCChainToTransactionsItem(
       final amountBN = BigInt.tryParse(tx.value) ?? BigInt.zero;
       final gasPrice = BigInt.tryParse(tx.gasPrice) ?? BigInt.zero;
       final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
-      final fee = '${bnToAvaxC(gasPrice * gasUsed)} EZC';
+      final fee = '${bnToAvaxC(gasPrice * gasUsed)} $ezc';
       String? amount;
       if (amountBN != BigInt.zero) {
         final value = bnToAvaxC(amountBN);
-        amount = '$value EZC';
+        amount = '$value $ezc';
       }
       const transType = 'Transaction';
       final from = <TransactionsItemAddressInfo>[];

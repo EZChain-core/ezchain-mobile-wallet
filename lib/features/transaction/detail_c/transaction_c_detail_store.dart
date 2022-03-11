@@ -1,6 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
@@ -60,11 +61,11 @@ class TransactionCChainViewData {
       CChainExplorerTxReceiptStatus receiptStatus,
       String nonce) {
     final value = bnToAvaxC(BigInt.tryParse(tx.value) ?? BigInt.zero);
-    final amount = '$value EZC';
+    final amount = '$value $ezc';
     final gasPrice = BigInt.tryParse(tx.gasPrice) ?? BigInt.zero;
-    final gasPriceText = '${bnToAvaxX(gasPrice)} wEZC';
+    final gasPriceText = '${bnToAvaxX(gasPrice)} w$ezc';
     final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
-    final fee = '${bnToAvaxC(gasPrice * gasUsed)} EZC';
+    final fee = '${bnToAvaxC(gasPrice * gasUsed)} $ezc';
     final result = tx.success;
     final status = receiptStatus == CChainExplorerTxReceiptStatus.ok;
     final block = '#${tx.blockNumber}';

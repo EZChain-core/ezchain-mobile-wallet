@@ -7,6 +7,7 @@ import 'package:wallet/ezc/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/ezc/wallet/history/history_helpers.dart';
 import 'package:wallet/ezc/wallet/network/helpers/alias_from_network_id.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 
 class TransactionDetailViewData {
   final String id;
@@ -49,11 +50,11 @@ extension TransactionDetailExtension on OrteliusTx {
               previousValue + (BigInt.tryParse(element) ?? BigInt.zero));
 
       final value = valueBigInt != BigInt.zero
-          ? '${bnToLocaleString(valueBigInt)} EZC'
+          ? '${bnToLocaleString(valueBigInt)} $ezc'
           : null;
 
       final burned =
-          '${bnToDecimalAvaxX(BigInt.tryParse(txFee.toString()) ?? BigInt.zero)} EZC';
+          '${bnToDecimalAvaxX(BigInt.tryParse(txFee.toString()) ?? BigInt.zero)} $ezc';
 
       final ezcType = chainAliasToEZCType(idToChainAlias(chainId));
 

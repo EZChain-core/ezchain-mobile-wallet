@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
@@ -72,8 +73,8 @@ abstract class _EarnEstimateRewardsStore with Store {
 
         items.add(EarnEstimateRewardsItem(
           element.nodeId,
-          '$stakingAmt EZC',
-          '$rewardAmt EZC',
+          '$stakingAmt $ezc',
+          '$rewardAmt $ezc',
           startDate != null ? DateFormat.yMd().format(startDate) : '',
           endDate != null ? DateFormat.yMd().format(endDate) : '',
           (percent * 100).toInt(),
@@ -93,8 +94,8 @@ abstract class _EarnEstimateRewardsStore with Store {
 
         items.add(EarnEstimateRewardsItem(
           element.nodeId,
-          '$stakingAmt EZC',
-          '$rewardAmt EZC',
+          '$stakingAmt $ezc',
+          '$rewardAmt $ezc',
           startDate != null ? DateFormat.yMd().format(startDate) : '',
           endDate != null ? DateFormat.yMd().format(endDate) : '',
           (percent * 100).toInt(),
