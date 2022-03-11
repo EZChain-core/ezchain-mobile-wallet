@@ -63,6 +63,7 @@ class TransactionsItemWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
@@ -126,13 +127,13 @@ class TransactionsItemWidget extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               ...item.from
                   .map((e) => TransactionsItemAddressInfoWidget(info: e))
                   .toList()
             ],
             if (item.to.isNotEmpty) ...[
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               Text(
                 '${Strings.current.sharedTo}:',
                 style: EZCTitleMediumTextStyle(
@@ -141,11 +142,12 @@ class TransactionsItemWidget extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               ...item.to
                   .map((e) => TransactionsItemAddressInfoWidget(info: e))
                   .toList()
             ],
+            const SizedBox(height: 40),
           ],
         ),
       ),
