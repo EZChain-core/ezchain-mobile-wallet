@@ -247,8 +247,8 @@ Future<List<TransactionsItem>> mapToTransactionsItemsV2(
     final inputs = transaction.inputs;
     if (inputs == null || inputs.isEmpty) {
       from.add(TransactionsItemAddressInfo(
-        "No input UTXOs found for this transaction on the EZChain Explorer",
-      )); // chuyển vào strings.xml
+        Strings.current.transactionsNoInputs,
+      ));
     } else {
       inputs.sort((input1, input2) =>
           input1.output.outputIndex.compareTo(input2.output.outputIndex));
@@ -277,8 +277,8 @@ Future<List<TransactionsItem>> mapToTransactionsItemsV2(
     final outputs = transaction.outputs;
     if (outputs == null || outputs.isEmpty) {
       from.add(TransactionsItemAddressInfo(
-        "No output UTXOs found for this transaction on the EZChain Explorer",
-      )); // chuyển vào strings.xml
+        Strings.current.transactionsNoOutputs,
+      ));
     } else {
       outputs.sort((output1, output2) =>
           output1.outputIndex.compareTo(output2.outputIndex));
