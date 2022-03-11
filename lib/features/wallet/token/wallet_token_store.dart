@@ -45,6 +45,7 @@ abstract class _WalletTokenStore with Store {
 
   @computed
   List<WalletTokenItem> get tokens {
+    logger.e('vit isTotalLoaded ${_balanceStore.isTotalLoaded}');
     if (_balanceStore.isTotalLoaded) {
       return fetchAssets();
     } else {
@@ -95,9 +96,12 @@ abstract class _WalletTokenStore with Store {
     for (var element in assets) {
       final isEzc = element.id == avaAssetId;
       final type = isEzc ? 'XChain' : null;
+      final amountText = isEzc ? _balanceStore.totalEzc.text(decimals: 9) : element.toString();
+      final amount = isEzc ? _balanceStore.totalEzc : element.getAmount();
       list.add(WalletTokenItem('', element.name, element.symbol,
-          element.getAmount(), ezcPrice, element.toString(), type));
+          amount, ezcPrice, amountText, type));
     }
+    logger.e('vit tokens length ${list.length}');
     return list;
   }
 }

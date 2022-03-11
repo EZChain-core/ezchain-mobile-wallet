@@ -39,10 +39,6 @@ class SettingGeneralScreen extends StatelessWidget {
                 onPressed: () => {},
               ),
               SettingItem(
-                text: Strings.current.settingGeneralDeactivateAccount,
-                onPressed: () => {},
-              ),
-              SettingItem(
                 text: Strings.current.settingGeneralRemoveWallet,
                 textColor: provider.themeMode.stateDanger,
                 onPressed: () {
