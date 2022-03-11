@@ -175,6 +175,7 @@ abstract class _CrossTransferStore with Store {
     } catch (e) {
       importState = const CrossTransferringState.error();
       transferringState = const CrossTransferringState.error();
+      logger.e(e);
     }
   }
 

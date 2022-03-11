@@ -426,7 +426,7 @@ List<TransactionsItem> mapCChainToTransactionsItem(
         final value = bnToAvaxC(amountBN);
         amount = '$value EZC';
       }
-      const transType = 'Transactions';
+      const transType = 'Transaction';
       final from = <TransactionsItemAddressInfo>[];
       if (tx.from.isNotEmpty) {
         from.add(TransactionsItemAddressInfo(tx.from));

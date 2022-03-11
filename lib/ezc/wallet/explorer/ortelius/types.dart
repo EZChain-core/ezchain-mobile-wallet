@@ -284,23 +284,23 @@ extension OrteliusTxTypeString on OrteliusTxType {
     switch (this) {
       case OrteliusTxType.import:
       case OrteliusTxType.pvmImport:
-        type = "Import Transaction";
+        type = "Import";
         break;
       case OrteliusTxType.pvmExport:
       case OrteliusTxType.atomicExportTx:
-        type = "Export Transaction";
+        type = "Export";
         break;
       case OrteliusTxType.createAsset:
-        type = "Mint Transaction";
+        type = "Mint";
         break;
       case OrteliusTxType.operation:
-        type = "NFT Transaction";
+        type = "NFT";
         break;
       case OrteliusTxType.addValidator:
-        type = "Validate Transaction";
+        type = "Validate";
         break;
       case OrteliusTxType.addDelegator:
-        type = "Delegate Transaction";
+        type = "Delegate";
         break;
       default:
         type = "Transaction";
