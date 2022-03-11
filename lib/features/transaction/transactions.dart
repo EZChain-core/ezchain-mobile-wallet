@@ -134,7 +134,7 @@ class TransactionsScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 16, bottom: 10),
                 child: Text(
-                  Strings.current.sharedTransaction,
+                  Strings.current.sharedTransactions,
                   style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
                 ),
               ),

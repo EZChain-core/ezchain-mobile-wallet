@@ -229,7 +229,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedExport": MessageLookupByLibrary.simpleMessage("Export"),
         "sharedFail": MessageLookupByLibrary.simpleMessage("Fail"),
         "sharedFee": MessageLookupByLibrary.simpleMessage("Fee"),
-        "sharedFrom": MessageLookupByLibrary.simpleMessage("From"),
+        "sharedFrom": MessageLookupByLibrary.simpleMessage("Form"),
         "sharedGasLimit": MessageLookupByLibrary.simpleMessage("Gas Limit"),
         "sharedGasPrice": MessageLookupByLibrary.simpleMessage("Gas Price"),
         "sharedHourAgo": m4,
@@ -292,6 +292,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Transaction fee"),
         "sharedTransactionSent":
             MessageLookupByLibrary.simpleMessage("Transaction Sent"),
+        "sharedTransactions":
+            MessageLookupByLibrary.simpleMessage("Transactions"),
         "sharedTransfer": MessageLookupByLibrary.simpleMessage("Transfer"),
         "sharedTryAgain":
             MessageLookupByLibrary.simpleMessage("Please try again"),

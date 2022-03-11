@@ -500,6 +500,16 @@ class Strings {
     );
   }
 
+  /// `Transactions`
+  String get sharedTransactions {
+    return Intl.message(
+      'Transactions',
+      name: 'sharedTransactions',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Transaction Detail`
   String get sharedTransactionDetail {
     return Intl.message(
