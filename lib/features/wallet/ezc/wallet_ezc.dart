@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/wallet/ezc/wallet_ezc_store.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -58,7 +59,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                         children: [
                           Observer(
                             builder: (_) => Text(
-                              '${_walletEZCStore.totalEzc} EZC'
+                              '${_walletEZCStore.totalEzc} $ezc'
                                   .useCorrectEllipsis(),
                               style: EZCHeadlineSmallTextStyle(
                                   color: provider.themeMode.primary),
@@ -165,7 +166,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                                     color: provider.themeMode.text),
                               ),
                               Text(
-                                '${_walletEZCStore.staking} EZC',
+                                '${_walletEZCStore.staking} $ezc',
                                 style: EZCTitleMediumTextStyle(
                                     color: provider.themeMode.text),
                               ),
@@ -301,7 +302,7 @@ class _WalletChainWidget extends StatelessWidget {
                         color: provider.themeMode.secondary60),
                   ),
                   Text(
-                    '$availableEzc EZC',
+                    '$availableEzc $ezc',
                     style:
                         EZCTitleMediumTextStyle(color: provider.themeMode.text),
                   ),
@@ -318,7 +319,7 @@ class _WalletChainWidget extends StatelessWidget {
                           color: provider.themeMode.secondary60),
                     ),
                     Text(
-                      '$lockEzc EZC',
+                      '$lockEzc $ezc',
                       style: EZCTitleMediumTextStyle(
                           color: provider.themeMode.text),
                     ),
@@ -335,7 +336,7 @@ class _WalletChainWidget extends StatelessWidget {
                           color: provider.themeMode.secondary60),
                     ),
                     Text(
-                      '$lockStakeableEzc EZC',
+                      '$lockStakeableEzc $ezc',
                       style: EZCTitleMediumTextStyle(
                           color: provider.themeMode.text),
                     ),

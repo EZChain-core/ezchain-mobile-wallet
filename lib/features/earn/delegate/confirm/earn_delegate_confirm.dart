@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm_store.dart';
 import 'package:wallet/features/earn/delegate/nodes/earn_delegate_node_item.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -84,7 +85,7 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                       ),
                       _EarnDelegateHorizontalText(
                           leftText: Strings.current.earnStakingAmount,
-                          rightText: '${args.amount} EZC'),
+                          rightText: '${args.amount} $ezc'),
                       const SizedBox(height: 12),
                       Observer(
                         builder: (_) => _EarnDelegateHorizontalText(

@@ -7,6 +7,7 @@ import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.dart';
 import 'package:wallet/features/wallet/send/evm/wallet_send_evm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
@@ -25,7 +26,7 @@ class WalletSendEvmScreen extends StatelessWidget {
   final _walletSendEvmStore = WalletSendEvmStore();
   final _amountController = TextEditingController();
   final _addressController =
-      TextEditingController(text: '0xd30a9f6645a73f67b7850b9304b6a3172dda75bf');
+      TextEditingController(text: receiverAddressCTest);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,7 @@ class WalletSendEvmScreen extends StatelessWidget {
                             Assets.icons.icEzc64.svg(width: 32, height: 32),
                             const SizedBox(width: 8),
                             Text(
-                              'EZC',
+                              ezc,
                               style: EZCBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
@@ -148,7 +149,7 @@ class WalletSendEvmScreen extends StatelessWidget {
                         Observer(
                           builder: (_) => WalletSendHorizontalText(
                             title: Strings.current.sharedTransactionFee,
-                            content: '${_walletSendEvmStore.fee} EZC',
+                            content: '${_walletSendEvmStore.fee} $ezc',
                             rightColor: provider.themeMode.text60,
                           ),
                         ),

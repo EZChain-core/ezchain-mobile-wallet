@@ -7,6 +7,7 @@ import 'package:wallet/common/dialog_extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -49,7 +50,7 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                           Assets.icons.icEzc64.svg(width: 32, height: 32),
                           const SizedBox(width: 8),
                           Text(
-                            'EZC',
+                            ezc,
                             style: EZCBodyLargeTextStyle(
                                 color: provider.themeMode.text),
                           ),
@@ -77,12 +78,12 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedAmount,
-                        content: '${transactionInfo.amount} EZC',
+                        content: '${transactionInfo.amount} $ezc',
                       ),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedTransactionFee,
-                        content: '${transactionInfo.fee} EZC',
+                        content: '${transactionInfo.fee} $ezc',
                       ),
                       const SizedBox(height: 8),
                       EZCDashedLine(color: provider.themeMode.text10),

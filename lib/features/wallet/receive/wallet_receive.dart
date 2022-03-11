@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:wallet/common/extensions.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -43,7 +44,7 @@ class WalletReceiveScreen extends StatelessWidget {
                             Assets.icons.icEzc64.svg(width: 32, height: 32),
                             const SizedBox(width: 8),
                             Text(
-                              'EZC',
+                              ezc,
                               style: EZCBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),

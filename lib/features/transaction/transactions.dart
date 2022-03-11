@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/transaction/transactions_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -31,7 +32,7 @@ class TransactionsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               EZCAppBar(
-                title: 'EZC(${ezcType.name})',
+                title: '$ezc(${ezcType.name})',
                 onPressed: () {
                   context.router.pop();
                 },
@@ -60,7 +61,7 @@ class TransactionsScreen extends StatelessWidget {
                                   children: [
                                     Observer(
                                       builder: (_) => Text(
-                                        '${_transactionsStore.balanceText} EZC'
+                                        '${_transactionsStore.balanceText} $ezc'
                                             .useCorrectEllipsis(),
                                         style: EZCHeadlineSmallTextStyle(
                                             color: provider.themeMode.text),
