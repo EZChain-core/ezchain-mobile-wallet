@@ -12,8 +12,11 @@ import 'package:wallet/ezc/sdk/common/credentials.dart';
 import 'package:wallet/ezc/sdk/common/tx.dart';
 import 'package:wallet/ezc/sdk/utils/serialization.dart';
 
-PvmBaseTx selectTxClass(int inputId, {Map<String, dynamic> args = const {}}) {
-  switch (inputId) {
+PvmBaseTx selectTxClass(
+  int txType, {
+  Map<String, dynamic> args = const {},
+}) {
+  switch (txType) {
     case BASETX:
       return PvmBaseTx.fromArgs(args);
     case IMPORTTX:
@@ -25,7 +28,7 @@ PvmBaseTx selectTxClass(int inputId, {Map<String, dynamic> args = const {}}) {
     case ADDVALIDATORTX:
       return PvmAddValidatorTx.fromArgs(args);
     default:
-      throw Exception("Error - SelectTxClass: unknown inputId = $inputId");
+      throw Exception("Error - SelectTxClass: unknown txType = $txType");
   }
 }
 
@@ -34,8 +37,10 @@ class PvmUnsignedTx
   @override
   String get typeName => "PvmUnsignedTx";
 
-  PvmUnsignedTx({PvmBaseTx? transaction, int txCodecId = 0})
-      : super(transaction: transaction, codecId: txCodecId);
+  PvmUnsignedTx({
+    PvmBaseTx? transaction,
+    int txCodecId = 0,
+  }) : super(transaction: transaction, codecId: txCodecId);
 
   @override
   void deserialize(dynamic fields,

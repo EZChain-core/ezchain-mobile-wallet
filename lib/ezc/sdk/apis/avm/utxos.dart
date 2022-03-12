@@ -8,6 +8,8 @@ import 'package:wallet/ezc/sdk/apis/avm/initial_states.dart';
 
 import 'package:wallet/ezc/sdk/apis/avm/inputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/minter_set.dart';
+import 'package:wallet/ezc/sdk/apis/avm/operation_tx.dart';
+import 'package:wallet/ezc/sdk/apis/avm/ops.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
 import 'package:wallet/ezc/sdk/common/asset_amount.dart';
@@ -443,6 +445,75 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
       initialState: initialState,
     );
     return AvmUnsignedTx(transaction: createAssetTx);
+  }
+
+  AvmUnsignedTx buildCreateNFTMintTx(
+    int networkId,
+    Uint8List blockchainId,
+    List<OutputOwners> owners,
+    List<Uint8List> fromAddresses,
+    List<Uint8List> changeAddresses,
+    List<String> utxoIds,
+    int groupId,
+    Uint8List payload, {
+    BigInt? fee,
+    Uint8List? feeAssetId,
+    Uint8List? memo,
+    BigInt? asOf,
+  }) {
+    final aad = AvmAssetAmountDestination(
+      destinations: fromAddresses,
+      senders: fromAddresses,
+      changeAddresses: changeAddresses,
+    );
+    if (feeAssetId != null && _feeCheck(fee, feeAssetId)) {
+      aad.addAssetAmount(feeAssetId, BigInt.zero, fee ?? BigInt.zero);
+    }
+
+    _getMinimumSpendable(aad, asOf: asOf);
+
+    final ops = <AvmTransferableOperation>[];
+
+    final nftMintOperation = AvmNFTMintOperation(
+      groupId: groupId,
+      payload: payload,
+      owners: owners,
+    );
+
+    for (var i = 0; i < utxoIds.length; i++) {
+      final utxoId = utxoIds[i];
+      final utxo = getUTXO(utxoId);
+      if (utxo == null) continue;
+      final out = utxo.getOutput() as AvmNFTTransferOutput;
+      final spenders = out.getSpenders(fromAddresses, asOf: asOf);
+
+      for (int j = 0; j < spenders.length; j++) {
+        final spender = spenders[j];
+        final idx = out.getAddressIdx(spender);
+        if (idx == -1) {
+          throw Exception(
+              "Error - AvmUTXOSet.buildCreateNFTMintTx: no such address in output");
+        }
+        nftMintOperation.addSignatureIdx(idx, spender);
+      }
+
+      final transferableOperation = AvmTransferableOperation(
+        assetId: utxo.getAssetId(),
+        utxoIds: utxoIds,
+        operation: nftMintOperation,
+      );
+      ops.add(transferableOperation);
+    }
+
+    final operationTx = AvmOperationTx(
+      networkId: networkId,
+      blockchainId: blockchainId,
+      outs: aad.getAllOutputs(),
+      ins: aad.getInputs(),
+      memo: memo,
+      ops: ops,
+    );
+    return AvmUnsignedTx(transaction: operationTx);
   }
 
   void _getMinimumSpendable(

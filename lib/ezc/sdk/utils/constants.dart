@@ -141,7 +141,7 @@ final n1P = P(
     minDelegationFee: BigInt.from(2));
 
 final n1C = C(
-    blockchainId: "cfCABZEHySQ4KuHLUhYDYZokQWL1L5dafrxmR9WdX7i55WEB1",
+    blockchainId: "ApQXdDnBUBnDLMigPkSk79jkBXKdjNaEhQuGW37URtBkJRfjq",
     alias: cChainAlias,
     vm: cChainVMName,
     txBytesGas: 1,
@@ -150,7 +150,7 @@ final n1C = C(
     gasPrice: GWEI * BigInt.from(225),
     minGasPrice: GWEI * BigInt.from(25),
     maxGasPrice: GWEI * BigInt.from(1000),
-    chainId: 0xa86a);
+    chainId: 0xa34);
 // End Mainnet
 
 // Start Cascade

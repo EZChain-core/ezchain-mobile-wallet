@@ -18,13 +18,13 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
   @override
   String get typeName => "AvmBaseTx";
 
-  AvmBaseTx(
-      {int networkId = defaultNetworkId,
-      Uint8List? blockchainId,
-      List<StandardTransferableOutput>? outs,
-      List<StandardTransferableInput>? ins,
-      Uint8List? memo})
-      : super(
+  AvmBaseTx({
+    int networkId = defaultNetworkId,
+    Uint8List? blockchainId,
+    List<StandardTransferableOutput>? outs,
+    List<StandardTransferableInput>? ins,
+    Uint8List? memo,
+  }) : super(
             networkId: networkId,
             blockchainId: blockchainId,
             outs: outs,
@@ -35,11 +35,12 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
 
   factory AvmBaseTx.fromArgs(Map<String, dynamic> args) {
     return AvmBaseTx(
-        networkId: args["networkId"] ?? defaultNetworkId,
-        blockchainId: args["blockchainId"],
-        outs: args["outs"],
-        ins: args["ins"],
-        memo: args["memo"]);
+      networkId: args["networkId"] ?? defaultNetworkId,
+      blockchainId: args["blockchainId"],
+      outs: args["outs"],
+      ins: args["ins"],
+      memo: args["memo"],
+    );
   }
 
   @override

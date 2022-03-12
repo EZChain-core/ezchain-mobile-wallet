@@ -1,14 +1,16 @@
 import 'package:wallet/ezc/sdk/apis/pvm/constants.dart';
 import 'package:wallet/ezc/sdk/common/credentials.dart';
 
-Credential selectCredentialClass(int inputId,
-    {Map<String, dynamic> args = const {}}) {
-  switch (inputId) {
+Credential selectCredentialClass(
+  int credId, {
+  Map<String, dynamic> args = const {},
+}) {
+  switch (credId) {
     case SECPCREDENTIAL:
       return PvmSECPCredential();
     default:
       throw Exception(
-          "Error - SelectCredentialClass: unknown inputId = $inputId");
+          "Error - SelectCredentialClass: unknown credId = $credId");
   }
 }
 

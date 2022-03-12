@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:wallet/ezc/sdk/apis/avm/base_tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/inputs.dart';
+import 'package:wallet/ezc/sdk/apis/avm/ops.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 
@@ -16,6 +17,7 @@ class AvmOperationTx extends AvmBaseTx {
     List<AvmTransferableOutput>? outs,
     List<AvmTransferableInput>? ins,
     Uint8List? memo,
+    List<AvmTransferableOperation>? ops,
   }) : super(
             networkId: networkId,
             blockchainId: blockchainId,

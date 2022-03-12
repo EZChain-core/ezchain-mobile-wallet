@@ -8,7 +8,10 @@ import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 import 'package:wallet/ezc/sdk/utils/serialization.dart';
 
-Input selectInputClass(int inputId, {Map<String, dynamic> args = const {}}) {
+Input selectInputClass(
+  int inputId, {
+  Map<String, dynamic> args = const {},
+}) {
   switch (inputId) {
     case SECPINPUTID:
       return EvmSECPTransferInput.fromArgs(args);

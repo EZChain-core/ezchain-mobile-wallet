@@ -18,15 +18,15 @@ class PvmExportTx extends PvmBaseTx {
   List<PvmTransferableOutput> exportOuts = [];
   Uint8List exportNumOuts = Uint8List(4);
 
-  PvmExportTx(
-      {int networkId = defaultNetworkId,
-      Uint8List? blockchainId,
-      List<PvmTransferableOutput>? outs,
-      List<PvmTransferableInput>? ins,
-      Uint8List? memo,
-      Uint8List? destinationChain,
-      List<PvmTransferableOutput>? exportOuts})
-      : super(
+  PvmExportTx({
+    int networkId = defaultNetworkId,
+    Uint8List? blockchainId,
+    List<PvmTransferableOutput>? outs,
+    List<PvmTransferableInput>? ins,
+    Uint8List? memo,
+    Uint8List? destinationChain,
+    List<PvmTransferableOutput>? exportOuts,
+  }) : super(
             networkId: networkId,
             blockchainId: blockchainId,
             outs: outs,

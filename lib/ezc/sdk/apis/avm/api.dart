@@ -11,10 +11,12 @@ import 'package:wallet/ezc/sdk/apis/avm/rest_client.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
 import 'package:wallet/ezc/sdk/apis/ezc_api.dart';
+import 'package:wallet/ezc/sdk/common/output.dart';
 import 'package:wallet/ezc/sdk/ezc.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart' as bindtools;
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 import 'package:wallet/ezc/sdk/utils/helper_functions.dart';
+import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/sdk/utils/serialization.dart';
 
 abstract class AvmApi implements EZCApi {
@@ -65,6 +67,18 @@ abstract class AvmApi implements EZCApi {
     Uint8List? memo,
     BigInt? asOf,
     BigInt? lockTime,
+  });
+
+  Future<AvmUnsignedTx> buildCreateNFTMintTx(
+    AvmUTXOSet utxoSet,
+    List<OutputOwners> owners,
+    List<String> fromAddresses,
+    List<String> changeAddresses,
+    List<String> utxoIds,
+    int groupId,
+    PayloadBase payload, {
+    Uint8List? memo,
+    BigInt? asOf,
   });
 
   Future<GetUTXOsResponse> getUTXOs(
@@ -402,6 +416,47 @@ class _AvmApiImpl implements AvmApi {
     ))) {
       throw Exception(
           "Error - AVMAPI.buildCreateNFTAssetTx:Failed Goose Egg Check");
+    }
+    return builtUnsignedTx;
+  }
+
+  @override
+  Future<AvmUnsignedTx> buildCreateNFTMintTx(
+    AvmUTXOSet utxoSet,
+    List<OutputOwners> owners,
+    List<String> fromAddresses,
+    List<String> changeAddresses,
+    List<String> utxoIds,
+    int groupId,
+    PayloadBase payload, {
+    Uint8List? memo,
+    BigInt? asOf,
+  }) async {
+    asOf ??= unixNow();
+    final from =
+        fromAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    final change =
+        changeAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+
+    final avaxAssetId = await getAVAXAssetId();
+
+    final builtUnsignedTx = utxoSet.buildCreateNFTMintTx(
+      ezcNetwork.networkId,
+      bindtools.cb58Decode(blockChainId),
+      owners,
+      from,
+      change,
+      utxoIds,
+      groupId,
+      payload.payload,
+      fee: getTxFee(),
+      feeAssetId: avaxAssetId,
+      memo: memo,
+      asOf: asOf,
+    );
+    if (!(await _checkGooseEgg(builtUnsignedTx))) {
+      throw Exception(
+          "Error - AVMAPI.buildCreateNFTMintTx:Failed Goose Egg Check");
     }
     return builtUnsignedTx;
   }

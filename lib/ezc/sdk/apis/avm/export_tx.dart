@@ -18,15 +18,15 @@ class AvmExportTx extends AvmBaseTx {
   List<AvmTransferableOutput> exportOuts = [];
   Uint8List exportNumOuts = Uint8List(4);
 
-  AvmExportTx(
-      {int networkId = defaultNetworkId,
-      Uint8List? blockchainId,
-      List<AvmTransferableOutput>? outs,
-      List<AvmTransferableInput>? ins,
-      Uint8List? memo,
-      Uint8List? destinationChain,
-      List<AvmTransferableOutput>? exportOuts})
-      : super(
+  AvmExportTx({
+    int networkId = defaultNetworkId,
+    Uint8List? blockchainId,
+    List<AvmTransferableOutput>? outs,
+    List<AvmTransferableInput>? ins,
+    Uint8List? memo,
+    Uint8List? destinationChain,
+    List<AvmTransferableOutput>? exportOuts,
+  }) : super(
             networkId: networkId,
             blockchainId: blockchainId,
             outs: outs,

@@ -13,8 +13,11 @@ import 'package:wallet/ezc/sdk/common/credentials.dart';
 import 'package:wallet/ezc/sdk/common/tx.dart';
 import 'package:wallet/ezc/sdk/utils/serialization.dart';
 
-AvmBaseTx selectTxClass(int inputId, {Map<String, dynamic> args = const {}}) {
-  switch (inputId) {
+AvmBaseTx selectTxClass(
+  int txType, {
+  Map<String, dynamic> args = const {},
+}) {
+  switch (txType) {
     case BASETX:
       return AvmBaseTx.fromArgs(args);
     case CREATEASSETTX:
@@ -26,7 +29,7 @@ AvmBaseTx selectTxClass(int inputId, {Map<String, dynamic> args = const {}}) {
     case EXPORTTX:
       return AvmExportTx.fromArgs(args);
     default:
-      throw Exception("Error - SelectTxClass: unknown inputId = $inputId");
+      throw Exception("Error - SelectTxClass: unknown txType = $txType");
   }
 }
 
