@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/key_chain.dart';
+import 'package:wallet/ezc/sdk/apis/avm/minter_set.dart';
 import 'package:wallet/ezc/sdk/apis/avm/model/get_asset_description.dart';
 import 'package:wallet/ezc/sdk/apis/avm/model/get_tx_status.dart';
 import 'package:wallet/ezc/sdk/apis/avm/model/get_utxos.dart';
@@ -54,6 +55,18 @@ abstract class AvmApi implements EZCApi {
     String? assetId,
   });
 
+  Future<AvmUnsignedTx> buildCreateNFTAssetTx(
+    AvmUTXOSet utxoSet,
+    List<String> fromAddresses,
+    List<String> changeAddresses,
+    List<MinterSet> minterSets,
+    String name,
+    String symbol, {
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+  });
+
   Future<GetUTXOsResponse> getUTXOs(
     List<String> addresses, {
     String? sourceChain,
@@ -70,6 +83,8 @@ abstract class AvmApi implements EZCApi {
   Future<GetTxStatusResponse> getTxStatus(String txId);
 
   BigInt getTxFee();
+
+  BigInt getCreationTxFee();
 
   factory AvmApi.create(
       {required EZCNetwork ezcNetwork,
@@ -101,6 +116,7 @@ class _AvmApiImpl implements AvmApi {
   late AvmRestClient avmRestClient;
 
   BigInt? _txFee;
+  BigInt? _createTxFee;
 
   _AvmApiImpl(
       {required this.ezcNetwork,
@@ -168,6 +184,12 @@ class _AvmApiImpl implements AvmApi {
   BigInt getTxFee() {
     _txFee ??= _getDefaultTxFee();
     return _txFee!;
+  }
+
+  @override
+  BigInt getCreationTxFee() {
+    _createTxFee ??= _getDefaultCreateTxFee();
+    return _createTxFee!;
   }
 
   @override
@@ -310,23 +332,76 @@ class _AvmApiImpl implements AvmApi {
     }
 
     final builtUnsignedTx = utxoSet.buildExportTx(
-        ezcNetwork.networkId,
-        bindtools.cb58Decode(blockChainId),
-        amount,
-        bindtools.cb58Decode(assetId),
-        destinationChain,
-        to,
-        from,
-        changeAddresses: change,
-        fee: getTxFee(),
-        feeAssetId: avaxAssetId,
-        memo: memo,
-        asOf: asOf,
-        lockTime: lockTime,
-        threshold: threshold);
+      ezcNetwork.networkId,
+      bindtools.cb58Decode(blockChainId),
+      amount,
+      bindtools.cb58Decode(assetId),
+      destinationChain,
+      to,
+      from,
+      changeAddresses: change,
+      fee: getTxFee(),
+      feeAssetId: avaxAssetId,
+      memo: memo,
+      asOf: asOf,
+      lockTime: lockTime,
+      threshold: threshold,
+    );
 
     if (!await _checkGooseEgg(builtUnsignedTx)) {
       throw Exception("Error - AVMAPI.buildExportTx:Failed Goose Egg Check");
+    }
+    return builtUnsignedTx;
+  }
+
+  @override
+  Future<AvmUnsignedTx> buildCreateNFTAssetTx(
+    AvmUTXOSet utxoSet,
+    List<String> fromAddresses,
+    List<String> changeAddresses,
+    List<MinterSet> minterSets,
+    String name,
+    String symbol, {
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+  }) async {
+    asOf ??= unixNow();
+    lockTime ??= BigInt.zero;
+    final from =
+        fromAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+    final change =
+        changeAddresses.map((a) => bindtools.stringToAddress(a)).toList();
+
+    if (name.length > ASSETNAMELEN) {
+      throw Exception(
+          "Error - AVMAPI.buildCreateNFTAssetTx: Names may not exceed length of $ASSETNAMELEN");
+    }
+    if (symbol.length > SYMBOLMAXLEN) {
+      throw Exception(
+          "Error - AVMAPI.buildCreateNFTAssetTx: Symbols may not exceed length of $SYMBOLMAXLEN");
+    }
+    final avaxAssetId = await getAVAXAssetId();
+    final builtUnsignedTx = utxoSet.buildCreateNFTAssetTx(
+      ezcNetwork.networkId,
+      bindtools.cb58Decode(blockChainId),
+      from,
+      change,
+      minterSets,
+      name,
+      symbol,
+      fee: getCreationTxFee(),
+      feeAssetId: avaxAssetId,
+      memo: memo,
+      asOf: asOf,
+      lockTime: lockTime,
+    );
+    if (!(await _checkGooseEgg(
+      builtUnsignedTx,
+      outTotal: getCreationTxFee(),
+    ))) {
+      throw Exception(
+          "Error - AVMAPI.buildCreateNFTAssetTx:Failed Goose Egg Check");
     }
     return builtUnsignedTx;
   }
@@ -407,5 +482,10 @@ class _AvmApiImpl implements AvmApi {
   BigInt _getDefaultTxFee() {
     final networkId = ezcNetwork.networkId;
     return networks[networkId]?.x.txFee ?? BigInt.zero;
+  }
+
+  BigInt _getDefaultCreateTxFee() {
+    final networkId = ezcNetwork.networkId;
+    return networks[networkId]?.x.creationTxFee ?? BigInt.zero;
   }
 }

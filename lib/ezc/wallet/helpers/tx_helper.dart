@@ -1,3 +1,4 @@
+import 'package:wallet/ezc/sdk/apis/avm/minter_set.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
 import 'package:wallet/ezc/sdk/apis/evm/tx.dart';
@@ -111,6 +112,32 @@ Future<EvmUnsignedTx> buildEvmExportTransaction(
     [toAddress],
     nonce: nonce,
     fee: fee,
+  );
+  return unsignedTx;
+}
+
+Future<AvmUnsignedTx> buildCreateNFTFamilyTx(
+  String name,
+  String symbol,
+  int groupNum,
+  List<String> fromAddresses,
+  String minterAddress,
+  String changeAddress,
+  AvmUTXOSet utxoSet,
+) async {
+  final minterSets = <MinterSet>[];
+  for (var i = 0; i < groupNum; i++) {
+    final minterSet = MinterSet(threshold: 1, minters: [minterAddress]);
+    minterSets.add(minterSet);
+  }
+
+  final unsignedTx = await xChain.buildCreateNFTAssetTx(
+    utxoSet,
+    fromAddresses,
+    [changeAddress],
+    minterSets,
+    name,
+    symbol,
   );
   return unsignedTx;
 }

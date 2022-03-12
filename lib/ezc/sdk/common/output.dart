@@ -417,6 +417,21 @@ abstract class StandardAmountOutput extends Output {
 abstract class BaseNFTOutput extends Output {
   var groupId = Uint8List(4);
 
+  BaseNFTOutput({
+    List<Uint8List>? addresses,
+    BigInt? lockTime,
+    int? threshold,
+    int? groupId,
+  }) : super(
+          lockTime: lockTime,
+          threshold: threshold,
+          addresses: addresses,
+        ) {
+    if (groupId != null) {
+      this.groupId.buffer.asByteData().setUint32(0, groupId);
+    }
+  }
+
   @override
   String get typeName => "BaseNFTOutput";
 
@@ -439,9 +454,13 @@ abstract class BaseNFTOutput extends Output {
   void deserialize(dynamic fields,
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
-    groupId = Serialization.instance.decoder(fields["groupId"], encoding,
-        SerializedType.decimalString, SerializedType.Buffer,
-        args: [4]);
+    groupId = Serialization.instance.decoder(
+      fields["groupId"],
+      encoding,
+      SerializedType.decimalString,
+      SerializedType.Buffer,
+      args: [4],
+    );
   }
 
   int getGroupId() => groupId.buffer.asByteData().getUint32(0);
