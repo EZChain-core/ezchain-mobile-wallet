@@ -21,15 +21,15 @@ class PvmImportTx extends PvmBaseTx {
   List<PvmTransferableInput> importIns = [];
   Uint8List importNumIns = Uint8List(4);
 
-  PvmImportTx(
-      {int networkId = defaultNetworkId,
-      Uint8List? blockchainId,
-      List<PvmTransferableOutput>? outs,
-      List<PvmTransferableInput>? ins,
-      Uint8List? memo,
-      Uint8List? sourceChain,
-      List<PvmTransferableInput>? importIns})
-      : super(
+  PvmImportTx({
+    int networkId = defaultNetworkId,
+    Uint8List? blockchainId,
+    List<PvmTransferableOutput>? outs,
+    List<PvmTransferableInput>? ins,
+    Uint8List? memo,
+    Uint8List? sourceChain,
+    List<PvmTransferableInput>? importIns,
+  }) : super(
             networkId: networkId,
             blockchainId: blockchainId,
             outs: outs,

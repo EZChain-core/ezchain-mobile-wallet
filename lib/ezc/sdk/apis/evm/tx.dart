@@ -11,14 +11,17 @@ import 'package:wallet/ezc/sdk/common/credentials.dart';
 import 'package:wallet/ezc/sdk/common/evm_tx.dart';
 import 'package:wallet/ezc/sdk/utils/serialization.dart';
 
-EvmBaseTx selectTxClass(int inputId, {Map<String, dynamic> args = const {}}) {
-  switch (inputId) {
+EvmBaseTx selectTxClass(
+  int txType, {
+  Map<String, dynamic> args = const {},
+}) {
+  switch (txType) {
     case IMPORTTX:
       return EvmImportTx.fromArgs(args);
     case EXPORTTX:
       return EvmExportTx.fromArgs(args);
     default:
-      throw Exception("Error - SelectTxClass: unknown inputId = $inputId");
+      throw Exception("Error - SelectTxClass: unknown txType = $txType");
   }
 }
 

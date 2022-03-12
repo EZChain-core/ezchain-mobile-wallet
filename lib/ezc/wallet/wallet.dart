@@ -789,7 +789,7 @@ abstract class WalletProvider {
   }
 
   Future<String> mintNFT(
-    AvmUTXO mintUtxoO,
+    AvmUTXO mintUTXO,
     PayloadBase payload,
     int quantity,
   ) async {
@@ -797,6 +797,19 @@ abstract class WalletProvider {
     final changeAddress = getChangeAddressX();
     final sourceAddresses = await getAllAddressesX();
     final utxoSet = utxosX;
-    return "";
+    final unsignedTx = await buildMintNFTTx(
+      mintUTXO,
+      payload,
+      quantity,
+      ownerAddress,
+      changeAddress,
+      sourceAddresses,
+      utxoSet,
+    );
+    final signed = await signX(unsignedTx);
+    final txId = await xChain.issueTx(signed);
+    await waitTxX(txId);
+    await updateUtxosX();
+    return txId;
   }
 }

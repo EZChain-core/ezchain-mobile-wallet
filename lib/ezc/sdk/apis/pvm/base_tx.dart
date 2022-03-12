@@ -36,11 +36,12 @@ class PvmBaseTx extends StandardBaseTx<PvmKeyPair, PvmKeyChain> {
 
   factory PvmBaseTx.fromArgs(Map<String, dynamic> args) {
     return PvmBaseTx(
-        networkId: args["networkId"] ?? defaultNetworkId,
-        blockchainId: args["blockchainId"],
-        outs: args["outs"],
-        ins: args["ins"],
-        memo: args["memo"]);
+      networkId: args["networkId"] ?? defaultNetworkId,
+      blockchainId: args["blockchainId"],
+      outs: args["outs"],
+      ins: args["ins"],
+      memo: args["memo"],
+    );
   }
 
   @override

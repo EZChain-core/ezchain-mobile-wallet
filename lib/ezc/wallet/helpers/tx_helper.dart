@@ -1,10 +1,13 @@
 import 'package:wallet/ezc/sdk/apis/avm/minter_set.dart';
+import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
 import 'package:wallet/ezc/sdk/apis/evm/tx.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/tx.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/utxos.dart';
+import 'package:wallet/ezc/sdk/common/output.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
+import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/types.dart';
@@ -138,6 +141,39 @@ Future<AvmUnsignedTx> buildCreateNFTFamilyTx(
     minterSets,
     name,
     symbol,
+  );
+  return unsignedTx;
+}
+
+Future<AvmUnsignedTx> buildMintNFTTx(
+  AvmUTXO mintUtxo,
+  PayloadBase payload,
+  int quantity,
+  String ownerAddress,
+  String changeAddress,
+  List<String> fromAddresses,
+  AvmUTXOSet utxoSet,
+) async {
+  final addressBuff = parseAddress(ownerAddress, 'X');
+  final owners = <OutputOwners>[];
+
+  final sourceAddresses = fromAddresses;
+
+  for (var i = 0; i < quantity; i++) {
+    final owner = OutputOwners(addresses: [addressBuff]);
+    owners.add(owner);
+  }
+
+  final groupId = (mintUtxo.getOutput() as AvmNFTMintOutput).getGroupId();
+
+  final unsignedTx = await xChain.buildCreateNFTMintTx(
+    utxoSet,
+    owners,
+    sourceAddresses,
+    [changeAddress],
+    [mintUtxo.getUTXOId()],
+    groupId,
+    payload,
   );
   return unsignedTx;
 }
