@@ -35,7 +35,7 @@ class AvmImportTx extends AvmBaseTx {
             outs: outs,
             ins: ins,
             memo: memo) {
-    setTypeId(IMPORTTX);
+    setCodecId(LATESTCODEC);
     if (sourceChain != null) {
       this.sourceChain = sourceChain;
     }
@@ -86,6 +86,16 @@ class AvmImportTx extends AvmBaseTx {
         .map((e) => AvmTransferableInput()..deserialize(e, encoding: encoding))
         .toList();
     importNumIns.buffer.asByteData().setUint32(0, importIns.length);
+  }
+
+  @override
+  void setCodecId(int codecId) {
+    if (codecId != 0 && codecId != 1) {
+      throw Exception(
+          "Error - AvmImportTx.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
+    }
+    super.setCodecId(codecId);
+    setTypeId(codecId == 0 ? IMPORTTX : IMPORTTX_CODECONE);
   }
 
   @override

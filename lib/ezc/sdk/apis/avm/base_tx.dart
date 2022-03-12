@@ -127,7 +127,7 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
   void setCodecId(int codecId) {
     if (codecId != 0 && codecId != 1) {
       throw Exception(
-          "Error - BaseTx.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
+          "Error - AvmBaseTx.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
     }
     super.setCodecId(codecId);
     super.setTypeId(codecId == 0 ? BASETX : BASETX_CODECONE);

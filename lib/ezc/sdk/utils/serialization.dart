@@ -62,8 +62,11 @@ class Serialization {
 
   static Serialization get instance => _instance;
 
-  dynamic bufferToType(Uint8List vb, SerializedType type,
-      {List<dynamic> args = const []}) {
+  dynamic bufferToType(
+    Uint8List vb,
+    SerializedType type, {
+    List<dynamic> args = const [],
+  }) {
     switch (type) {
       case SerializedType.hex:
         return hexEncode(vb);
@@ -96,8 +99,11 @@ class Serialization {
     }
   }
 
-  Uint8List typeToBuffer(dynamic v, SerializedType type,
-      {List<dynamic> args = const []}) {
+  Uint8List typeToBuffer(
+    dynamic v,
+    SerializedType type, {
+    List<dynamic> args = const [],
+  }) {
     switch (type) {
       case SerializedType.hex:
         var value = v as String;
@@ -152,9 +158,13 @@ class Serialization {
     }
   }
 
-  dynamic encoder(dynamic value, SerializedEncoding encoding,
-      SerializedType inType, SerializedType outType,
-      {List<dynamic> args = const []}) {
+  dynamic encoder(
+    dynamic value,
+    SerializedEncoding encoding,
+    SerializedType inType,
+    SerializedType outType, {
+    List<dynamic> args = const [],
+  }) {
     assert(value != null);
     if (encoding != SerializedEncoding.display) {
       outType = SerializedType.values
@@ -164,9 +174,13 @@ class Serialization {
     return bufferToType(vb, outType, args: args);
   }
 
-  dynamic decoder(dynamic value, SerializedEncoding encoding,
-      SerializedType inType, SerializedType outType,
-      {List<dynamic> args = const []}) {
+  dynamic decoder(
+    dynamic value,
+    SerializedEncoding encoding,
+    SerializedType inType,
+    SerializedType outType, {
+    List<dynamic> args = const [],
+  }) {
     assert(value != null);
     if (encoding != SerializedEncoding.display) {
       inType = SerializedType.values
@@ -176,8 +190,12 @@ class Serialization {
     return bufferToType(vb, outType, args: args);
   }
 
-  Serialized serialize(Serializable serialize, String vm,
-      SerializedEncoding encoding, String? notes) {
+  Serialized serialize(
+    Serializable serialize,
+    String vm,
+    SerializedEncoding encoding,
+    String? notes,
+  ) {
     notes ??= serialize.typeName;
     return Serialized(
         vm: vm,

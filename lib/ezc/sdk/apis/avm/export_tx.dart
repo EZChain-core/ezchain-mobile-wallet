@@ -89,7 +89,7 @@ class AvmExportTx extends AvmBaseTx {
   void setCodecId(int codecId) {
     if (codecId != 0 && codecId != 1) {
       throw Exception(
-          "Error - ExportTx.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
+          "Error - AvmExportTx.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
     }
     super.setCodecId(codecId);
     super.setTypeId(codecId == 0 ? EXPORTTX : EXPORTTX_CODECONE);

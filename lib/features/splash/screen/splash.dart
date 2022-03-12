@@ -81,7 +81,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           getCTransactions();
+    //           createNFTFamily();
     //           // getXPTransaction(
     //           //     "29R6yTpxo5AvQ3N3pBBYuLkX6sbAToJZXWtsqL7kPos5sHBRcb");
     //         },
@@ -1105,8 +1105,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
     assets.customSort(avaAssetId);
 
-    final balanceC = wallet.getBalanceC();
-
     var stringAssets = "\n";
 
     for (var element in assets) {
@@ -1115,5 +1113,30 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     logger.i(stringAssets);
+  }
+
+  createNFTFamily() async {
+    const name = "FLUTTER";
+    const symbol = "KIEN";
+    const groupNum = 23;
+    if (symbol.isEmpty) {
+      logger.e('You must provide a symbol.');
+      return;
+    } else if (symbol.length > 4) {
+      logger.e('Symbol must be 4 characters max.');
+      return;
+    } else if (groupNum < 1) {
+      logger.e('Number of groups must be at least 1.');
+      return;
+    }
+    final fee = bnToDecimalAvaxX(xChain.getCreationTxFee());
+    logger.i("fee = $fee EZC");
+    try {
+      final txId =
+          await wallet.createNFTFamily(name.trim(), symbol.trim(), groupNum);
+      logger.i("createNFTFamily = $txId");
+    } catch (e) {
+      logger.e(e);
+    }
   }
 }

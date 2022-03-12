@@ -18,6 +18,7 @@ import 'package:wallet/ezc/sdk/apis/pvm/tx.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/utxos.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/helper_functions.dart';
+import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/wallet/asset/assets.dart';
 import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/ezc/wallet/evm_wallet.dart';
@@ -144,7 +145,7 @@ abstract class WalletProvider {
     } else {
       memoBuff = null;
     }
-    final froms = await getAllAddressesX();
+    final from = await getAllAddressesX();
     final changeAddress = getChangeAddressX();
     final utxoSet = utxosX;
     final tx = await xChain.buildBaseTx(
@@ -152,17 +153,12 @@ abstract class WalletProvider {
       amount,
       getAvaxAssetId(),
       [to],
-      froms,
+      from,
       [changeAddress],
       memo: memoBuff,
     );
     final signedTx = await signX(tx);
-    final String txId;
-    try {
-      txId = await xChain.issueTx(signedTx);
-    } catch (e) {
-      throw Exception("txId cannot be null");
-    }
+    final String txId = await xChain.issueTx(signedTx);
     await waitTxX(txId);
     await updateUtxosX();
     return txId;
@@ -284,19 +280,10 @@ abstract class WalletProvider {
       amount,
       changeAddress,
     );
-
     final signedTx = await signX(exportTx);
-
-    final String txId;
-    try {
-      txId = await xChain.issueTx(signedTx);
-    } catch (e) {
-      throw Exception("txId cannot be null");
-    }
-
+    final String txId = await xChain.issueTx(signedTx);
     await waitTxX(txId);
     await updateUtxosX();
-
     return txId;
   }
 
@@ -325,12 +312,7 @@ abstract class WalletProvider {
       changeAddresses: [xToAddress],
     );
     final signedTx = await signX(unsignedTx);
-    final String txId;
-    try {
-      txId = await xChain.issueTx(signedTx);
-    } catch (e) {
-      throw Exception("txId cannot be null");
-    }
+    final String txId = await xChain.issueTx(signedTx);
     await waitTxX(txId);
     await updateUtxosX();
     return txId;
@@ -374,9 +356,10 @@ abstract class WalletProvider {
   Future<BigInt> estimateGas(String to, String data) async {
     final from = web3_dart.EthereumAddress.fromHex(getAddressC());
     return await web3.estimateGas(
-        sender: from,
-        to: web3_dart.EthereumAddress.fromHex(to),
-        data: Uint8List.fromList(utf8.encode(data)));
+      sender: from,
+      to: web3_dart.EthereumAddress.fromHex(to),
+      data: Uint8List.fromList(utf8.encode(data)),
+    );
   }
 
   /// Estimate the gas needed for a EZC send transaction on the C chain.
@@ -401,11 +384,8 @@ abstract class WalletProvider {
 
   /// Returns the C chain EZC balance of the wallet in WEI format.
   Future<BigInt> updateAvaxBalanceC() async {
-    final balOld = evmWallet.getBalance();
     final balNew = await evmWallet.updateBalance();
-    if (balOld != balNew) {
-      emitBalanceChangeC();
-    }
+    emitBalanceChangeC();
     return balNew;
   }
 
@@ -445,12 +425,7 @@ abstract class WalletProvider {
     );
 
     final signedTx = await signC(unsignedTx);
-    final String txId;
-    try {
-      txId = await cChain.issueTx(signedTx);
-    } catch (e) {
-      throw Exception("txId cannot be null");
-    }
+    final String txId = await cChain.issueTx(signedTx);
     await waitTxC(txId);
     await updateAvaxBalanceC();
     return txId;
@@ -464,10 +439,8 @@ abstract class WalletProvider {
     BigInt? fee,
     EvmUTXOSet? utxoSet,
   }) async {
-    final bechAddress = await getEvmAddressBech();
-
+    final bechAddress = getEvmAddressBech();
     utxoSet ??= await getAtomicUTXOsC(sourceChain);
-
     final utxos = utxoSet.getAllUTXOs();
     if (utxos.isEmpty) {
       throw Exception('Nothing to import.');
@@ -491,12 +464,7 @@ abstract class WalletProvider {
       fee: fee,
     );
     final signedTx = await signC(unsignedTx);
-    final String txId;
-    try {
-      txId = await cChain.issueTx(signedTx);
-    } catch (e) {
-      throw Exception("txId cannot be null");
-    }
+    final String txId = await cChain.issueTx(signedTx);
     await waitTxC(txId);
     await updateAvaxBalanceC();
     return txId;
@@ -598,12 +566,7 @@ abstract class WalletProvider {
       changeAddresses: [walletAddressP],
     );
     final signedTx = await signP(unsignedTx);
-    final String txId;
-    try {
-      txId = await pChain.issueTx(signedTx);
-    } catch (e) {
-      throw Exception("txId cannot be null");
-    }
+    final String txId = await pChain.issueTx(signedTx);
     await waitTxP(txId);
     await updateUtxosP();
     return txId;
@@ -636,12 +599,7 @@ abstract class WalletProvider {
       destinationChain,
     );
     final signedTx = await signP(unsignedTx);
-    final String txId;
-    try {
-      txId = await pChain.issueTx(signedTx);
-    } catch (e) {
-      throw Exception("txId cannot be null");
-    }
+    final String txId = await pChain.issueTx(signedTx);
     await waitTxP(txId);
     await updateUtxosP();
     return txId;
@@ -714,12 +672,7 @@ abstract class WalletProvider {
         amount,
         [rewardAddress]);
     final signedTx = await signP(unsignedTx);
-    final String txId;
-    try {
-      txId = await pChain.issueTx(signedTx);
-    } catch (e) {
-      throw Exception("txId cannot be null");
-    }
+    final String txId = await pChain.issueTx(signedTx);
     await waitTxP(txId);
     await updateUtxosP();
     return txId;
@@ -807,5 +760,43 @@ abstract class WalletProvider {
     String addressesC,
   ) async {
     return await getTransactionSummary(tx, addresses, addressesC);
+  }
+
+  Future<String> createNFTFamily(
+    String name,
+    String symbol,
+    int groupNum,
+  ) async {
+    final fromAddresses = await getAllAddressesX();
+    final changeAddress = getChangeAddressX();
+    final minterAddress = getAddressX();
+    final utxoSet = utxosX;
+
+    final unsignedTx = await buildCreateNFTFamilyTx(
+      name,
+      symbol,
+      groupNum,
+      fromAddresses,
+      minterAddress,
+      changeAddress,
+      utxoSet,
+    );
+    final signed = await signX(unsignedTx);
+    final txId = await xChain.issueTx(signed);
+    await waitTxX(txId);
+    await updateUtxosX();
+    return txId;
+  }
+
+  Future<String> mintNFT(
+    AvmUTXO mintUtxoO,
+    PayloadBase payload,
+    int quantity,
+  ) async {
+    final ownerAddress = getAddressX();
+    final changeAddress = getChangeAddressX();
+    final sourceAddresses = await getAllAddressesX();
+    final utxoSet = utxosX;
+    return "";
   }
 }

@@ -3,10 +3,12 @@ import 'dart:typed_data';
 import 'package:hash/hash.dart';
 import 'package:wallet/ezc/sdk/apis/avm/base_tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
+import 'package:wallet/ezc/sdk/apis/avm/create_asset_tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/credentials.dart';
 import 'package:wallet/ezc/sdk/apis/avm/export_tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/import_tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/key_chain.dart';
+import 'package:wallet/ezc/sdk/apis/avm/operation_tx.dart';
 import 'package:wallet/ezc/sdk/common/credentials.dart';
 import 'package:wallet/ezc/sdk/common/tx.dart';
 import 'package:wallet/ezc/sdk/utils/serialization.dart';
@@ -15,6 +17,10 @@ AvmBaseTx selectTxClass(int inputId, {Map<String, dynamic> args = const {}}) {
   switch (inputId) {
     case BASETX:
       return AvmBaseTx.fromArgs(args);
+    case CREATEASSETTX:
+      return AvmCreateAssetTx.fromArgs(args);
+    case OPERATIONTX:
+      return AvmOperationTx.fromArgs(args);
     case IMPORTTX:
       return AvmImportTx.fromArgs(args);
     case EXPORTTX:

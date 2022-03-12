@@ -7,7 +7,7 @@ import 'package:wallet/ezc/sdk/apis/evm/model/get_atomic_tx_status.dart'
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:web3dart/web3dart.dart';
 
-Future<String> waitTxX(String txId, {int tryCount = 10}) async {
+Future<String> waitTxX(String txId, {int tryCount = 15}) async {
   assert(tryCount > 0, "Timeout");
   final avm_tx_status.TxStatus txStatus;
   String? reason;
@@ -30,7 +30,7 @@ Future<String> waitTxX(String txId, {int tryCount = 10}) async {
   return txId;
 }
 
-Future<String> waitTxP(String txId, {int tryCount = 10}) async {
+Future<String> waitTxP(String txId, {int tryCount = 15}) async {
   assert(tryCount > 0, "Timeout");
   final pvm_tx_status.TxStatus txStatus;
   String? reason;
@@ -53,7 +53,7 @@ Future<String> waitTxP(String txId, {int tryCount = 10}) async {
   return txId;
 }
 
-Future<String> waitTxC(String txId, {int tryCount = 10}) async {
+Future<String> waitTxC(String txId, {int tryCount = 15}) async {
   assert(tryCount > 0, "Timeout");
   final evm_tx_status.TxStatus txStatus;
   String? reason;
@@ -76,7 +76,7 @@ Future<String> waitTxC(String txId, {int tryCount = 10}) async {
   return txId;
 }
 
-Future<String> waitTxEvm(String txHash, {int tryCount = 10}) async {
+Future<String> waitTxEvm(String txHash, {int tryCount = 15}) async {
   assert(tryCount > 0, "Timeout");
   TransactionReceipt? receipt;
   try {

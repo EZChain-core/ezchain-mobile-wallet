@@ -69,7 +69,11 @@ class EvmImportTx extends EvmBaseTx {
     return {
       ...fields,
       "sourceChain": Serialization.instance.encoder(
-          sourceChain, encoding, SerializedType.Buffer, SerializedType.cb58),
+        sourceChain,
+        encoding,
+        SerializedType.Buffer,
+        SerializedType.cb58,
+      ),
       "importIns": importIns.map((e) => e.serialize(encoding: encoding))
     };
   }
@@ -78,9 +82,13 @@ class EvmImportTx extends EvmBaseTx {
   void deserialize(dynamic fields,
       {SerializedEncoding encoding = SerializedEncoding.hex}) {
     super.deserialize(fields, encoding: encoding);
-    sourceChain = Serialization.instance.decoder(fields["sourceChain"],
-        encoding, SerializedType.cb58, SerializedType.Buffer,
-        args: [32]);
+    sourceChain = Serialization.instance.decoder(
+      fields["sourceChain"],
+      encoding,
+      SerializedType.cb58,
+      SerializedType.Buffer,
+      args: [32],
+    );
     importIns = (fields["importIns"] as List<dynamic>)
         .map((e) => EvmTransferableInput()..deserialize(e, encoding: encoding))
         .toList();

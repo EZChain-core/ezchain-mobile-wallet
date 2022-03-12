@@ -1,9 +1,13 @@
 import 'dart:typed_data';
 import 'package:wallet/ezc/sdk/apis/avm/base_tx.dart';
+import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
+import 'package:wallet/ezc/sdk/apis/avm/create_asset_tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/export_tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/import_tx.dart';
+import 'package:wallet/ezc/sdk/apis/avm/initial_states.dart';
 
 import 'package:wallet/ezc/sdk/apis/avm/inputs.dart';
+import 'package:wallet/ezc/sdk/apis/avm/minter_set.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
 import 'package:wallet/ezc/sdk/common/asset_amount.dart';
@@ -355,9 +359,10 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
     feeAssetId ??= assetId;
 
     final aad = AvmAssetAmountDestination(
-        destinations: toAddresses,
-        senders: fromAddresses,
-        changeAddresses: changeAddresses);
+      destinations: toAddresses,
+      senders: fromAddresses,
+      changeAddresses: changeAddresses,
+    );
 
     if (hexEncode(assetId) == hexEncode(feeAssetId)) {
       aad.addAssetAmount(assetId, amount, fee ?? BigInt.zero);
@@ -368,8 +373,12 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
       }
     }
 
-    _getMinimumSpendable(aad,
-        asOf: asOf, lockTime: lockTime, threshold: threshold);
+    _getMinimumSpendable(
+      aad,
+      asOf: asOf,
+      lockTime: lockTime,
+      threshold: threshold,
+    );
 
     final exportTx = AvmExportTx(
       networkId: networkId,
@@ -384,8 +393,64 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
     return AvmUnsignedTx(transaction: exportTx);
   }
 
-  void _getMinimumSpendable(AvmAssetAmountDestination aad,
-      {BigInt? asOf, BigInt? lockTime, int threshold = 1}) {
+  AvmUnsignedTx buildCreateNFTAssetTx(
+    int networkId,
+    Uint8List blockchainId,
+    List<Uint8List> fromAddresses,
+    List<Uint8List> changeAddresses,
+    List<MinterSet> minterSets,
+    String name,
+    String symbol, {
+    BigInt? fee,
+    Uint8List? feeAssetId,
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+  }) {
+    final aad = AvmAssetAmountDestination(
+      destinations: fromAddresses,
+      senders: fromAddresses,
+      changeAddresses: changeAddresses,
+    );
+    if (feeAssetId != null && _feeCheck(fee, feeAssetId)) {
+      aad.addAssetAmount(feeAssetId, BigInt.zero, fee ?? BigInt.zero);
+    }
+
+    _getMinimumSpendable(aad, asOf: asOf);
+
+    final initialState = InitialStates();
+    for (var i = 0; i < minterSets.length; i++) {
+      final minter = minterSets[i];
+      final nftMintOutput = AvmNFTMintOutput(
+        groupId: i,
+        addresses: minter.minters,
+        lockTime: lockTime,
+        threshold: minter.threshold,
+      );
+      initialState.addOutput(nftMintOutput, fxId: NFTFXID);
+    }
+
+    const denomination = 0; // NFTs are non-fungible
+    final createAssetTx = AvmCreateAssetTx(
+      networkId: networkId,
+      blockchainId: blockchainId,
+      outs: aad.getAllOutputs(),
+      ins: aad.getInputs(),
+      memo: memo,
+      name: name,
+      symbol: symbol,
+      denomination: denomination,
+      initialState: initialState,
+    );
+    return AvmUnsignedTx(transaction: createAssetTx);
+  }
+
+  void _getMinimumSpendable(
+    AvmAssetAmountDestination aad, {
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+  }) {
     asOf ??= unixNow();
     lockTime ??= BigInt.zero;
 
@@ -444,10 +509,11 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
         final spendOut = selectOutputClass(
           outIds[assetKey],
           args: AvmSECPTransferOutput.createArgs(
-              amount: amount,
-              addresses: aad.getDestinations(),
-              lockTime: lockTime,
-              threshold: threshold),
+            amount: amount,
+            addresses: aad.getDestinations(),
+            lockTime: lockTime,
+            threshold: threshold,
+          ),
         ) as AvmAmountOutput;
 
         final xFerOut = AvmTransferableOutput(
