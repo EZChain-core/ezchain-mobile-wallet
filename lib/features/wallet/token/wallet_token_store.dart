@@ -3,6 +3,9 @@ import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
+import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
+import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
@@ -63,7 +66,16 @@ abstract class _WalletTokenStore with Store {
     List<WalletTokenItem> list = [];
     final avaAssetId = getAvaxAssetId();
 
-    final assets = _wallet.getUnknownAssets().map((asset) {
+    // cần xử lý lại để shared với hàm mintNFT và mỗi khi update lại utxosX
+    final assetUtxoMap = <String, AvmUTXO>{};
+    for (final utxo in _wallet.utxosX.utxos.values) {
+      assetUtxoMap[cb58Encode(utxo.assetId)] = utxo;
+    }
+    // cần xử lý lại để shared với hàm mintNFT và mỗi khi update lại utxosX
+    final assets = _wallet.getUnknownAssets().where((element) {
+      final output = assetUtxoMap[element.assetId]?.getOutput();
+      return output?.getOutputId() == SECPXFEROUTPUTID;
+    }).map((asset) {
       final avaAsset = AvaAsset(
         id: asset.assetId,
         name: asset.name,
@@ -96,12 +108,12 @@ abstract class _WalletTokenStore with Store {
     for (var element in assets) {
       final isEzc = element.id == avaAssetId;
       final type = isEzc ? 'XChain' : null;
-      final amountText = isEzc ? _balanceStore.totalEzc.text(decimals: 9) : element.toString();
+      final amountText =
+          isEzc ? _balanceStore.totalEzc.text(decimals: 9) : element.toString();
       final amount = isEzc ? _balanceStore.totalEzc : element.getAmount();
-      list.add(WalletTokenItem('', element.name, element.symbol,
-          amount, ezcPrice, amountText, type));
+      list.add(WalletTokenItem('', element.name, element.symbol, amount,
+          ezcPrice, amountText, type));
     }
-    logger.e('vit tokens length ${list.length}');
     return list;
   }
 }
