@@ -82,7 +82,7 @@ class AvmSECPTransferInput extends AvmAmountInput {
   void setCodecId(int codecId) {
     if (codecId != 0 && codecId != 1) {
       throw Exception(
-          "Error - SECPTransferInput.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
+          "Error - AvmSECPTransferInput.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
     }
     super.setCodecId(codecId);
     super.setTypeId(codecId == 0 ? SECPINPUTID : SECPINPUTID_CODECONE);

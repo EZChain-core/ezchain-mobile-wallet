@@ -152,7 +152,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
       avmUTXO.fromBuffer(utxo.toBuffer());
     } else {
       throw Exception(
-          "Error - UTXO.parseUTXO: utxo parameter is not a UTXO or string");
+          "Error - AvmUTXO.parseUTXO: utxo parameter is not a UTXO or string");
     }
     return avmUTXO;
   }
@@ -188,7 +188,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
     lockTime ??= BigInt.zero;
     if (threshold > toAddresses.length) {
       throw Exception(
-          "Error - UTXOSet.buildBaseTx: threshold is greater than number of addresses");
+          "Error - AvmUTXOSet.buildBaseTx: threshold is greater than number of addresses");
     }
 
     assert(amount > BigInt.zero);
@@ -280,7 +280,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
         final idx = output.getAddressIdx(spender);
         if (idx == -1) {
           throw Exception(
-              "Error - UTXOSet.buildImportTx: no such address in output: $spender");
+              "Error - AvmUTXOSet.buildImportTx: no such address in output: $spender");
         }
         xFerIn.getInput().addSignatureIdx(idx, spender);
       }
@@ -484,7 +484,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
       final utxoId = utxoIds[i];
       final utxo = getUTXO(utxoId);
       if (utxo == null) continue;
-      final out = utxo.getOutput() as AvmNFTTransferOutput;
+      final out = utxo.getOutput();
       final spenders = out.getSpenders(fromAddresses, asOf: asOf);
 
       for (int j = 0; j < spenders.length; j++) {
@@ -556,7 +556,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
             final idx = uOut.getAddressIdx(spender);
             if (idx == -1) {
               throw Exception(
-                  "Error - UTXOSet.getMinimumSpendable: no such address in output: $spender");
+                  "Error - AvmUTXOSet.getMinimumSpendable: no such address in output: $spender");
             }
             xFerIn.getInput().addSignatureIdx(idx, spender);
           }
@@ -569,7 +569,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
     }
     if (!aad.canComplete()) {
       throw Exception(
-          "Error - UTXOSet.getMinimumSpendable: insufficient funds to create the transaction");
+          "Error - AvmUTXOSet.getMinimumSpendable: insufficient funds to create the transaction");
     }
     final amounts = aad.getAmounts();
     for (int i = 0; i < amounts.length; i++) {

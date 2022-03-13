@@ -164,7 +164,7 @@ Future<AvmUnsignedTx> buildMintNFTTx(
     owners.add(owner);
   }
 
-  final groupId = (mintUtxo.getOutput() as AvmNFTMintOutput).getGroupId();
+  final groupId = (mintUtxo.getOutput() as AvmNFTOutput).getGroupId();
 
   final unsignedTx = await xChain.buildCreateNFTMintTx(
     utxoSet,

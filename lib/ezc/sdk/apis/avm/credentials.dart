@@ -9,6 +9,9 @@ Credential selectCredentialClass(
     case SECPCREDENTIAL:
     case SECPCREDENTIAL_CODECONE:
       return AvmSECPCredential();
+    case NFTCREDENTIAL:
+    case NFTCREDENTIAL_CODECONE:
+      return AvmNFTCredential();
     default:
       throw Exception(
           "Error - SelectCredentialClass: unknown credId = $credId");
@@ -47,9 +50,48 @@ class AvmSECPCredential extends Credential {
   void setCodecId(int codecId) {
     if (codecId != 0 && codecId != 1) {
       throw Exception(
-          "Error - SECPCredential.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
+          "Error - AvmSECPCredential.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
     }
     super.setCodecId(codecId);
     super.setTypeId(codecId == 0 ? SECPCREDENTIAL : SECPCREDENTIAL_CODECONE);
+  }
+}
+
+class AvmNFTCredential extends Credential {
+  @override
+  String get typeName => "AvmNFTCredential";
+
+  AvmNFTCredential() {
+    setCodecId(LATESTCODEC);
+  }
+
+  @override
+  int getCredentialId() {
+    return super.getTypeId();
+  }
+
+  @override
+  AvmNFTCredential clone() {
+    return create()..fromBuffer(toBuffer());
+  }
+
+  @override
+  AvmNFTCredential create({Map<String, dynamic> args = const {}}) {
+    return AvmNFTCredential();
+  }
+
+  @override
+  Credential select(int id, {Map<String, dynamic> args = const {}}) {
+    return selectCredentialClass(id, args: args);
+  }
+
+  @override
+  void setCodecId(int codecId) {
+    if (codecId != 0 && codecId != 1) {
+      throw Exception(
+          "Error - AvmNFTCredential.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
+    }
+    super.setCodecId(codecId);
+    super.setTypeId(codecId == 0 ? NFTCREDENTIAL : NFTCREDENTIAL_CODECONE);
   }
 }

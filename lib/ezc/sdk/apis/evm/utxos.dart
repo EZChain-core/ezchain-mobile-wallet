@@ -201,7 +201,7 @@ class EvmUTXOSet extends StandardUTXOSet<EvmUTXO> {
         final idx = output.getAddressIdx(spender);
         if (idx == -1) {
           throw Exception(
-              "Error - UTXOSet.buildImportTx: no such address in output: $spender");
+              "Error - EvmUTXOSet.buildImportTx: no such address in output: $spender");
         }
         xFerIn.getInput().addSignatureIdx(idx, spender);
       }
@@ -262,7 +262,7 @@ class EvmUTXOSet extends StandardUTXOSet<EvmUTXO> {
       feeAssetId = assetId;
     } else if (hexEncode(feeAssetId) != hexEncode(assetId)) {
       throw Exception(
-          "Error - UTXOSet.buildExportTx: feeAssetID must match avaxAssetID");
+          "Error - EvmUTXOSet.buildExportTx: feeAssetID must match avaxAssetID");
     }
 
     final ins = <EvmInput>[];
@@ -331,7 +331,7 @@ class EvmUTXOSet extends StandardUTXOSet<EvmUTXO> {
             final idx = uOut.getAddressIdx(spender);
             if (idx == -1) {
               throw Exception(
-                  "Error - UTXOSet.getMinimumSpendable: no such address in output: $spender");
+                  "Error - EvmUTXOSet.getMinimumSpendable: no such address in output: $spender");
             }
             xFerIn.getInput().addSignatureIdx(idx, spender);
           }
@@ -344,7 +344,7 @@ class EvmUTXOSet extends StandardUTXOSet<EvmUTXO> {
     }
     if (!aad.canComplete()) {
       throw Exception(
-          "Error - UTXOSet.getMinimumSpendable: insufficient funds to create the transaction");
+          "Error - EvmUTXOSet.getMinimumSpendable: insufficient funds to create the transaction");
     }
     final amounts = aad.getAmounts();
     for (int i = 0; i < amounts.length; i++) {

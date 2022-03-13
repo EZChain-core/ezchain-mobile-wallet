@@ -148,7 +148,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
       pvmUTXO.fromBuffer(utxo.toBuffer());
     } else {
       throw Exception(
-          "Error - UTXO.parseUTXO: utxo parameter is not a UTXO or string");
+          "Error - PvmUTXO.parseUTXO: utxo parameter is not a UTXO or string");
     }
     return pvmUTXO;
   }
@@ -184,7 +184,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
     lockTime ??= BigInt.zero;
     if (threshold > toAddresses.length) {
       throw Exception(
-          "Error - UTXOSet.buildBaseTx: threshold is greater than number of addresses");
+          "Error - PvmUTXOSet.buildBaseTx: threshold is greater than number of addresses");
     }
 
     assert(amount > BigInt.zero);
@@ -280,7 +280,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
         final idx = output.getAddressIdx(spender);
         if (idx == -1) {
           throw Exception(
-              "Error - UTXOSet.buildImportTx: no such address in output: $spender");
+              "Error - PvmUTXOSet.buildImportTx: no such address in output: $spender");
         }
         xFerIn.getInput().addSignatureIdx(idx, spender);
       }
@@ -360,7 +360,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
     feeAssetId ??= avaxAssetId;
 
     assert(hexEncode(feeAssetId) == hexEncode(avaxAssetId),
-        "Error - UTXOSet.buildExportTx: feeAssetID must match avaxAssetID");
+        "Error - PvmUTXOSet.buildExportTx: feeAssetID must match avaxAssetID");
 
     final aad = PvmAssetAmountDestination(
       destinations: toAddresses,
@@ -635,7 +635,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
         final idx = output.getAddressIdx(spender);
         if (idx == -1) {
           throw Exception(
-              "Error - UTXOSet.getMinimumSpendable: no such address in output: $spender");
+              "Error - PvmUTXOSet.getMinimumSpendable: no such address in output: $spender");
         }
         input.addSignatureIdx(idx, spender);
       }
@@ -653,7 +653,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
 
     if (!aad.canComplete()) {
       throw Exception(
-          "Error - UTXOSet.getMinimumSpendable: insufficient funds to create the transaction");
+          "Error - PvmUTXOSet.getMinimumSpendable: insufficient funds to create the transaction");
     }
 
     final assetAmounts = aad.getAmounts();
