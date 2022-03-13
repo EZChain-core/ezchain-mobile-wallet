@@ -44,7 +44,7 @@ class WalletReceiveScreen extends StatelessWidget {
                             Assets.icons.icEzc64.svg(width: 32, height: 32),
                             const SizedBox(width: 8),
                             Text(
-                              ezc,
+                              ezcCode,
                               style: EZCBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),

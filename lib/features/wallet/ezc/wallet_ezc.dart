@@ -59,7 +59,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                         children: [
                           Observer(
                             builder: (_) => Text(
-                              '${_walletEZCStore.totalEzc} $ezc'
+                              '${_walletEZCStore.totalEzc} $ezcCode'
                                   .useCorrectEllipsis(),
                               style: EZCHeadlineSmallTextStyle(
                                   color: provider.themeMode.primary),
@@ -166,7 +166,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                                     color: provider.themeMode.text),
                               ),
                               Text(
-                                '${_walletEZCStore.staking} $ezc',
+                                '${_walletEZCStore.staking} $ezcCode',
                                 style: EZCTitleMediumTextStyle(
                                     color: provider.themeMode.text),
                               ),
@@ -302,7 +302,7 @@ class _WalletChainWidget extends StatelessWidget {
                         color: provider.themeMode.secondary60),
                   ),
                   Text(
-                    '$availableEzc $ezc',
+                    '$availableEzc $ezcCode',
                     style:
                         EZCTitleMediumTextStyle(color: provider.themeMode.text),
                   ),
@@ -319,7 +319,7 @@ class _WalletChainWidget extends StatelessWidget {
                           color: provider.themeMode.secondary60),
                     ),
                     Text(
-                      '$lockEzc $ezc',
+                      '$lockEzc $ezcCode',
                       style: EZCTitleMediumTextStyle(
                           color: provider.themeMode.text),
                     ),
@@ -336,7 +336,7 @@ class _WalletChainWidget extends StatelessWidget {
                           color: provider.themeMode.secondary60),
                     ),
                     Text(
-                      '$lockStakeableEzc $ezc',
+                      '$lockStakeableEzc $ezcCode',
                       style: EZCTitleMediumTextStyle(
                           color: provider.themeMode.text),
                     ),

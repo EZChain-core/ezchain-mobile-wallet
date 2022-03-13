@@ -50,11 +50,11 @@ extension TransactionDetailExtension on OrteliusTx {
               previousValue + (BigInt.tryParse(element) ?? BigInt.zero));
 
       final value = valueBigInt != BigInt.zero
-          ? '${bnToLocaleString(valueBigInt)} $ezc'
+          ? '${bnToLocaleString(valueBigInt)} $ezcCode'
           : null;
 
       final burned =
-          '${bnToDecimalAvaxX(BigInt.tryParse(txFee.toString()) ?? BigInt.zero)} $ezc';
+          '${bnToDecimalAvaxX(BigInt.tryParse(txFee.toString()) ?? BigInt.zero)} $ezcCode';
 
       final ezcType = chainAliasToEZCType(idToChainAlias(chainId));
 

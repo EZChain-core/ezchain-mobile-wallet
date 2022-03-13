@@ -52,14 +52,14 @@ abstract class _EarnDelegateConfirmStore with Store {
         currentSupply * BigInt.from(10).pow(9),
       );
       final estimatedReward = bnToDecimal(estimation, denomination: 18);
-      estimatedRewardText = '${estimatedReward.toStringAsFixed(2)} $ezc';
+      estimatedRewardText = '${estimatedReward.toStringAsFixed(2)} $ezcCode';
       final delegationFee = args.delegateItem.delegationFee;
       final cut =
           estimatedReward * (delegationFee / Decimal.fromInt(100)).toDecimal();
       final totalFee = getTxFeeP() * BigInt.from(10).pow(9) +
           decimalToBn(cut, denomination: 18);
       feeText =
-          '${bnToDecimal(totalFee, denomination: 18).toStringAsFixed(2)} $ezc';
+          '${bnToDecimal(totalFee, denomination: 18).toStringAsFixed(2)} $ezcCode';
     } catch (e) {
       logger.e(e);
     }

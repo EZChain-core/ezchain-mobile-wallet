@@ -61,11 +61,11 @@ class TransactionCChainViewData {
       CChainExplorerTxReceiptStatus receiptStatus,
       String nonce) {
     final value = bnToAvaxC(BigInt.tryParse(tx.value) ?? BigInt.zero);
-    final amount = '$value $ezc';
+    final amount = '$value $ezcCode';
     final gasPrice = BigInt.tryParse(tx.gasPrice) ?? BigInt.zero;
-    final gasPriceText = '${bnToAvaxX(gasPrice)} w$ezc';
+    final gasPriceText = '${bnToAvaxX(gasPrice)} w$ezcCode';
     final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
-    final fee = '${bnToAvaxC(gasPrice * gasUsed)} $ezc';
+    final fee = '${bnToAvaxC(gasPrice * gasUsed)} $ezcCode';
     final result = tx.success;
     final status = receiptStatus == CChainExplorerTxReceiptStatus.ok;
     final block = '#${tx.blockNumber}';

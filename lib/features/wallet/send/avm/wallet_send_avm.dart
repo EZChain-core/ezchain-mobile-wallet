@@ -53,7 +53,7 @@ class WalletSendAvmScreen extends StatelessWidget {
                           Assets.icons.icEzc64.svg(width: 32, height: 32),
                           const SizedBox(width: 8),
                           Text(
-                            ezc,
+                            ezcCode,
                             style: EZCBodyLargeTextStyle(
                                 color: provider.themeMode.text),
                           ),
@@ -104,7 +104,7 @@ class WalletSendAvmScreen extends StatelessWidget {
                       Observer(
                         builder: (_) => WalletSendHorizontalText(
                           title: Strings.current.sharedTransactionFee,
-                          content: '${_walletSendAvmStore.fee} $ezc',
+                          content: '${_walletSendAvmStore.fee} $ezcCode',
                           rightColor: provider.themeMode.text60,
                         ),
                       ),
