@@ -4,7 +4,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
-import 'package:wallet/common/logger.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -59,6 +58,7 @@ class NftFamilyCreateScreen extends StatelessWidget {
                         EZCTextField(
                           label: Strings.current.nftSymbol,
                           controller: _symbolController,
+                          textCapitalization: TextCapitalization.characters,
                         ),
                         const SizedBox(height: 16),
                         EZCTextField(
@@ -73,12 +73,14 @@ class NftFamilyCreateScreen extends StatelessWidget {
                               color: provider.themeMode.text60),
                         ),
                         const SizedBox(height: 34),
-                        EZCMediumPrimaryButton(
-                          text: Strings.current.nftCreateFamily,
-                          width: 130,
-                          isLoading: false,
-                          onPressed: _onClickCreateFamily,
-                        )
+                        Observer(
+                          builder: (_) => EZCMediumPrimaryButton(
+                            text: Strings.current.nftCreateFamily,
+                            width: 130,
+                            isLoading: _nftFamilyCreateStore.isLoading,
+                            onPressed: _onClickCreateFamily,
+                          ),
+                        ),
                       ],
                     ),
                   ),

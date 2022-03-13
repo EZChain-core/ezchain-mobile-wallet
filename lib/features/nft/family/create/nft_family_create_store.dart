@@ -1,9 +1,11 @@
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
+import 'package:wallet/common/router.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
-import 'package:wallet/features/common/constant/wallet_constant.dart';
+import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
 
@@ -16,6 +18,9 @@ abstract class _NftFamilyCreateStore with Store {
 
   @observable
   String error = '';
+
+  @observable
+  bool isLoading = false;
 
   String fee = '${bnToDecimalAvaxX(xChain.getCreationTxFee())}';
 
@@ -35,12 +40,16 @@ abstract class _NftFamilyCreateStore with Store {
       return false;
     }
     try {
-      final txId =
-          await _wallet.createNFTFamily(name.trim(), symbol.trim(), groupNum);
-      logger.i("createNFTFamily = $txId");
+      if (!await verifyPinCode()) return false;
+      isLoading = true;
+      final txId = await _wallet.createNFTFamily(name, symbol, groupNum);
+      isLoading = false;
+      walletContext?.popRoute();
       return true;
     } catch (e) {
       logger.e(e);
+      error = Strings.current.sharedCommonError;
+      isLoading = false;
       return false;
     }
   }

@@ -3,6 +3,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/cross/cross_store.dart';
 import 'package:wallet/features/cross/transfer/cross_transfer_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -17,7 +18,8 @@ class CrossTransferScreen extends StatelessWidget {
   final CrossTransferInfo crossTransferInfo;
   final CrossTransferStore _crossTransferStore = CrossTransferStore();
 
-  CrossTransferScreen({Key? key, required this.crossTransferInfo}) : super(key: key) {
+  CrossTransferScreen({Key? key, required this.crossTransferInfo})
+      : super(key: key) {
     _crossTransferStore.setCrossTransferInfo(crossTransferInfo);
   }
 
@@ -70,7 +72,7 @@ class CrossTransferScreen extends StatelessWidget {
                             ),
                             Observer(
                               builder: (_) => Text(
-                                _crossTransferStore.sourceBalance.toString(),
+                                _crossTransferStore.sourceBalance.text(),
                                 style: EZCBodyLargeTextStyle(
                                     color: provider.themeMode.text),
                               ),
@@ -90,7 +92,8 @@ class CrossTransferScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Observer(
-                              builder: (_) => _crossTransferStore.exportState.when(
+                              builder: (_) =>
+                                  _crossTransferStore.exportState.when(
                                 loading: () => EZCLoading(
                                     color: provider.themeMode.text60,
                                     size: 12,
@@ -206,7 +209,7 @@ class CrossTransferScreen extends StatelessWidget {
                             ),
                             Observer(
                               builder: (_) => Text(
-                                _crossTransferStore.destinationBalance.toString(),
+                                _crossTransferStore.destinationBalance.text(),
                                 style: EZCBodyLargeTextStyle(
                                     color: provider.themeMode.text),
                               ),
@@ -226,7 +229,8 @@ class CrossTransferScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Observer(
-                              builder: (_) => _crossTransferStore.importState.when(
+                              builder: (_) =>
+                                  _crossTransferStore.importState.when(
                                 loading: () => EZCLoading(
                                     color: provider.themeMode.text60,
                                     size: 12,

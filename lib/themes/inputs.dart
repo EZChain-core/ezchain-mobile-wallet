@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
-import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -36,6 +36,8 @@ class EZCTextField extends StatelessWidget {
 
   final bool? enabled;
 
+  final TextCapitalization? textCapitalization;
+
   const EZCTextField(
       {Key? key,
       this.hint,
@@ -47,7 +49,8 @@ class EZCTextField extends StatelessWidget {
       this.maxLines,
       this.onChanged,
       this.error,
-      this.enabled})
+      this.enabled,
+      this.textCapitalization})
       : super(key: key);
 
   @override
@@ -90,6 +93,7 @@ class EZCTextField extends StatelessWidget {
               controller: controller,
               onChanged: onChanged,
               maxLines: maxLines,
+              textCapitalization: textCapitalization ?? TextCapitalization.none,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(12),
                 hintText: hint,
