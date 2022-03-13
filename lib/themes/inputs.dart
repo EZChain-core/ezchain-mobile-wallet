@@ -16,7 +16,7 @@ import 'package:wallet/themes/typography.dart';
 const ezcBorder = BorderRadius.all(Radius.circular(8));
 
 class EZCTextField extends StatelessWidget {
-  final String hint;
+  final String? hint;
 
   final TextInputType? inputType;
 
@@ -38,7 +38,7 @@ class EZCTextField extends StatelessWidget {
 
   const EZCTextField(
       {Key? key,
-      required this.hint,
+      this.hint,
       this.inputType,
       this.label,
       this.prefixIcon,

@@ -176,6 +176,7 @@ abstract class _BalanceStore with Store {
   }
 
   _fetchTotal() async {
+    logger.e('fetch total');
     final avaxBalance = _wallet.getAvaxBalance();
     final totalAvaxBalanceDecimal = avaxBalance.totalDecimal;
 

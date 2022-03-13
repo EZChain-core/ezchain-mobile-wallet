@@ -16,6 +16,7 @@ import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm.dart
 import 'package:wallet/features/earn/delegate/input/earn_delegate_input.dart';
 import 'package:wallet/features/earn/delegate/nodes/earn_delegate_nodes.dart';
 import 'package:wallet/features/earn/estimate_rewards/earn_estimate_rewards.dart';
+import 'package:wallet/features/nft/family/create/nft_family_create.dart';
 import 'package:wallet/features/onboard/on_board.dart';
 import 'package:wallet/features/qrcode/qr_code.dart';
 import 'package:wallet/features/setting/about/setting_about.dart';
@@ -70,6 +71,7 @@ import 'package:wallet/features/wallet/send/evm/wallet_send_evm.dart';
     AutoRoute(page: EarnDelegateInputScreen),
     AutoRoute(page: EarnDelegateConfirmScreen),
     AutoRoute(page: EarnEstimateRewardsScreen),
+    AutoRoute(page: NftFamilyCreateScreen),
     dashboardRoutes,
   ],
 )

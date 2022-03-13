@@ -120,7 +120,7 @@ abstract class _CrossTransferStore with Store {
         // p -> c
         final importFee = await estimateImportGasFee();
         final amountAvax = numberToBNAvaxX(_amountDouble) + importFee;
-        exportTxId = await _wallet.exportXChain(amountAvax, ExportChainsX.C);
+        exportTxId = await _wallet.exportPChain(amountAvax, ExportChainsP.C);
       } else if (sourceChain == CrossChainType.cChain &&
           destinationChain == CrossChainType.pChain) {
         // c -> p

@@ -23,6 +23,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const WalletRoute(),
           const CrossRoute(),
           const EarnRoute(),
+          const NftRoute(),
           SettingRoute(),
         ],
         homeIndex: 0,
@@ -53,6 +54,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 icon: Assets.icons.icEarnOutline.svg(),
                 activeIcon: Assets.icons.icEarnOutline
                     .svg(color: provider.themeMode.primary),
+                backgroundColor: provider.themeMode.white,
+              ),
+              BottomNavigationBarItem(
+                label: Strings.current.dashboardNft,
+                icon: Assets.icons.icDiamondOutline.svg(),
+                activeIcon: Assets.icons.icDiamond.svg(),
                 backgroundColor: provider.themeMode.white,
               ),
               BottomNavigationBarItem(

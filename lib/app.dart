@@ -23,7 +23,7 @@ class WalletApp extends StatelessWidget {
       ],
       child: Consumer<WalletThemeProvider>(
         builder: (context, provider, child) => MaterialApp.router(
-          title: "Strings.current.appName",
+          title: Strings.current.appName,
           theme: ThemeData.light().copyWith(
             scaffoldBackgroundColor: Colors.white,
             primaryColor: provider.themeMode.secondary,
