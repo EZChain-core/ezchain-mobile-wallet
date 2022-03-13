@@ -12,7 +12,11 @@ import 'package:intl/intl.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
+import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
+import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
+import 'package:wallet/ezc/sdk/common/output.dart';
 import 'package:wallet/ezc/sdk/utils/bigint.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
@@ -81,9 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           createNFTFamily();
-    //           // getXPTransaction(
-    //           //     "29R6yTpxo5AvQ3N3pBBYuLkX6sbAToJZXWtsqL7kPos5sHBRcb");
+    //           mintNFT();
     //         },
     //       ),
     //     ),
@@ -685,6 +687,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
         if (hasSent) {
           message = _parserXBaseTX(
+            item.id,
             sentTokens,
             collectibles.sent.assets,
             message,
@@ -693,6 +696,7 @@ class _SplashScreenState extends State<SplashScreen> {
         message += "\n";
         if (hasReceived) {
           message = _parserXBaseTX(
+            item.id,
             receivedTokens,
             collectibles.received.assets,
             message,
@@ -747,6 +751,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   String _parserXBaseTX(
+    String txId,
     List<HistoryBaseTxToken> tokens,
     Map<String, List<OrteliusTxOutput>> assets,
     String message,
@@ -783,30 +788,35 @@ class _SplashScreenState extends State<SplashScreen> {
       if (firstUtxo != null) {
         final payload = firstUtxo.payload;
         if (payload != null) {
-          var payloadBuff = base64Decode(payload);
-          final lengthBuff = Uint8List(4)
-            ..buffer.asByteData().setUint8(0, payloadBuff.length);
-          payloadBuff = Uint8List.fromList([...lengthBuff, ...payloadBuff]);
-          final typeId = PayloadTypes.instance.getTypeId(payloadBuff);
-          final content = PayloadTypes.instance.getContent(payloadBuff);
-          final payloadBase = PayloadTypes.instance.select(typeId, content);
-          final text = utf8.decode(payloadBase.getContent());
-          if (payloadBase is JSONPayload) {
-            GenericNft? genericNft;
-            try {
-              genericNft = GenericFormType.fromJson(jsonDecode(text)).avalanche;
-            } catch (e) {
-              logger.e(e);
+          try {
+            var payloadBuff = base64Decode(payload);
+            final lengthBuff = Uint8List(4)
+              ..buffer.asByteData().setUint8(0, payloadBuff.length);
+            payloadBuff = Uint8List.fromList([...lengthBuff, ...payloadBuff]);
+            final typeId = PayloadTypes.instance.getTypeId(payloadBuff);
+            final content = PayloadTypes.instance.getContent(payloadBuff);
+            final payloadBase = PayloadTypes.instance.select(typeId, content);
+            final text = utf8.decode(payloadBase.getContent());
+            if (payloadBase is JSONPayload) {
+              GenericNft? genericNft;
+              try {
+                genericNft =
+                    GenericFormType.fromJson(jsonDecode(text)).avalanche;
+              } catch (e) {
+                logger.e(e);
+              }
+              if (genericNft != null) {
+                message +=
+                    "\nPayload: title = ${genericNft.title}, desc = ${genericNft.desc}, img = ${genericNft.img}\n";
+              }
+            } else if (payloadBase is URLPayload) {
+              final url = text;
+              message += "\nPayload: url = $url\n";
+            } else {
+              message += "\nPayload: text = $text\n";
             }
-            if (genericNft != null) {
-              message +=
-                  "\nPayload: title = ${genericNft.title}, desc = ${genericNft.desc}, img = ${genericNft.img}\n";
-            }
-          } else if (payloadBase is URLPayload) {
-            final url = text;
-            message += "\nPayload: url = $url\n";
-          } else {
-            message += "\nPayload: text = $text\n";
+          } catch (e) {
+            logger.e("txId = $txId", e);
           }
         }
       }
@@ -1075,7 +1085,16 @@ class _SplashScreenState extends State<SplashScreen> {
         .getStake(); // <-- cho mục đích ví dụ, impl có thể phải cần thiết kế để shared
     // cần thiết kế để lắng nghe khi update đc utxosX thì mới map data
     final balanceDict = wallet.getBalanceX();
-    final assets = wallet.getUnknownAssets().map((asset) {
+    // cần xử lý lại để shared với hàm mintNFT và mỗi khi update lại utxosX
+    final assetUtxoMap = <String, AvmUTXO>{};
+    for (final utxo in wallet.utxosX.utxos.values) {
+      assetUtxoMap[cb58Encode(utxo.assetId)] = utxo;
+    }
+    // cần xử lý lại để shared với hàm mintNFT và mỗi khi update lại utxosX
+    final assets = wallet.getUnknownAssets().where((element) {
+      final output = assetUtxoMap[element.assetId]?.getOutput();
+      return output?.getOutputId() == SECPXFEROUTPUTID;
+    }).map((asset) {
       final avaAsset = AvaAsset(
         id: asset.assetId,
         name: asset.name,
@@ -1135,6 +1154,50 @@ class _SplashScreenState extends State<SplashScreen> {
       final txId =
           await wallet.createNFTFamily(name.trim(), symbol.trim(), groupNum);
       logger.i("createNFTFamily = $txId");
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  mintNFT() async {
+    try {
+      final fee = bnToDecimalAvaxX(xChain.getTxFee());
+      logger.i("fee = $fee EZC");
+
+      // cần xử lý lại để shared với hàm fetchAssets và mỗi khi update lại utxosX
+      final assetUtxoMap = <String, AvmUTXO>{};
+      for (final utxo in wallet.utxosX.utxos.values) {
+        assetUtxoMap[cb58Encode(utxo.assetId)] = utxo;
+      }
+
+      // cần xử lý lại để shared với hàm fetchAssets và mỗi khi update lại utxosX
+      final assets = wallet.getUnknownAssets().where((element) {
+        final utxo = assetUtxoMap[element.assetId];
+        final outputId = utxo?.output.getOutputId();
+        return outputId == NFTMINTOUTPUTID;
+      }).toList();
+
+      // Hiển thị màn hình list NFT assets
+      for (final asset in assets) {
+        logger.i("name = ${asset.name}, symbol = ${asset.symbol}");
+      }
+
+      // Chọn 1 asset, ví dụ first
+      final firstAsset = assets.firstOrNull;
+      if (firstAsset == null) return;
+
+      final utxo = assetUtxoMap[firstAsset.assetId]!;
+
+      final utf8Payload = UTF8Payload("KIEN MIN NFT = ${utxo.assetId}");
+      final genericPayload = JSONPayload("KIEN MIN NFT = ${utxo.assetId}");
+      final jsonPayload = JSONPayload("KIEN MIN NFT = ${utxo.assetId}");
+      final urlPayload = URLPayload("https://wallet.ezchain.com/");
+      final txId = await wallet.mintNFT(
+        utxo,
+        urlPayload,
+        1,
+      );
+      logger.i("mintNFT = $txId");
     } catch (e) {
       logger.e(e);
     }

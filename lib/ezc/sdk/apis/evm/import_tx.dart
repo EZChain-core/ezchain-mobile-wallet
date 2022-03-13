@@ -181,7 +181,7 @@ class EvmImportTx extends EvmBaseTx {
         final assetsSendToAddress = seenAssetSends[address]!;
         if (assetsSendToAddress.contains(assetId)) {
           throw Exception(
-              "Error - ImportTx: duplicate (address, assetId) pair found in outputs: (0x$address, $assetId)");
+              "Error - EvmImportTx: duplicate (address, assetId) pair found in outputs: (0x$address, $assetId)");
         }
         assetsSendToAddress.add(assetId);
       } else {
