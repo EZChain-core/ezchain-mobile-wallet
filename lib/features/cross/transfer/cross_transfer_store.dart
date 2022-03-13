@@ -100,7 +100,7 @@ abstract class _CrossTransferStore with Store {
         final destinationAddress = _wallet.getAddressX();
         final exportFee = await estimateExportGasFee(
           destinationChain,
-          numberToBNAvaxX(amount),
+          numberToBNAvaxX(_amountDouble),
           hexAddress,
           destinationAddress,
         );
@@ -129,7 +129,7 @@ abstract class _CrossTransferStore with Store {
         final destinationAddress = _wallet.getAddressP();
         final exportFee = await estimateExportGasFee(
           destinationChain,
-          numberToBNAvaxP(amount),
+          numberToBNAvaxP(_amountDouble),
           hexAddress,
           destinationAddress,
         );
