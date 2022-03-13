@@ -73,8 +73,8 @@ abstract class _EarnEstimateRewardsStore with Store {
 
         items.add(EarnEstimateRewardsItem(
           element.nodeId,
-          '$stakingAmt $ezc',
-          '$rewardAmt $ezc',
+          '$stakingAmt $ezcCode',
+          '$rewardAmt $ezcCode',
           startDate != null ? DateFormat.yMd().format(startDate) : '',
           endDate != null ? DateFormat.yMd().format(endDate) : '',
           (percent * 100).toInt(),
@@ -94,8 +94,8 @@ abstract class _EarnEstimateRewardsStore with Store {
 
         items.add(EarnEstimateRewardsItem(
           element.nodeId,
-          '$stakingAmt $ezc',
-          '$rewardAmt $ezc',
+          '$stakingAmt $ezcCode',
+          '$rewardAmt $ezcCode',
           startDate != null ? DateFormat.yMd().format(startDate) : '',
           endDate != null ? DateFormat.yMd().format(endDate) : '',
           (percent * 100).toInt(),
