@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wallet/common/extensions.dart';
@@ -28,7 +27,7 @@ class SettingSecurityScreen extends StatelessWidget {
             child: Column(
               children: [
                 EZCAppBar(
-                  title: Strings.current.settingWalletSecurity,
+                  title: Strings.current.settingSecurityWalletAddress,
                   onPressed: () {
                     context.router.pop();
                   },
@@ -41,11 +40,7 @@ class SettingSecurityScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            Strings.current.settingSecurityWalletAddress,
-                            style: EZCTitleLargeTextStyle(
-                                color: provider.themeMode.text),
-                          ),
+                          const SizedBox(height: 100),
                           SizedBox(
                             height: 260,
                             child: TabBarView(
@@ -88,47 +83,6 @@ class SettingSecurityScreen extends StatelessWidget {
                                 Tab(text: Strings.current.sharedXChain),
                                 Tab(text: Strings.current.sharedCChain),
                                 Tab(text: Strings.current.sharedPChain),
-                              ],
-                            ),
-                          ),
-                          Observer(
-                            builder: (_) => Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (_settingSecurityStore
-                                    .privateKey.isNotEmpty) ...[
-                                  const SizedBox(height: 24),
-                                  Divider(color: provider.themeMode.text10),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    Strings.current.sharedPrivateKey,
-                                    style: EZCTitleLargeTextStyle(
-                                        color: provider.themeMode.text),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    Strings
-                                        .current.settingSecurityPrivateKeyNote,
-                                    style: EZCBodySmallTextStyle(
-                                        color: provider.themeMode.text70),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  _WalletKeyInfoWidget(
-                                    title: Strings.current.sharedPrivateKey,
-                                    content: _settingSecurityStore.privateKey,
-                                  ),
-                                ],
-                                if (_settingSecurityStore
-                                    .mnemonicKey.isNotEmpty) ...[
-                                  const SizedBox(height: 24),
-                                  Divider(color: provider.themeMode.text10),
-                                  const SizedBox(height: 16),
-                                  _WalletKeyInfoWidget(
-                                    title: Strings.current.sharedPassphrase,
-                                    titleColor: provider.themeMode.text,
-                                    content: _settingSecurityStore.mnemonicKey,
-                                  ),
-                                ]
                               ],
                             ),
                           ),

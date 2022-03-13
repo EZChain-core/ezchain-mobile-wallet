@@ -185,7 +185,7 @@ class _CrossScreenState extends State<CrossScreen> {
                       Expanded(
                         child: Observer(
                           builder: (_) => Text(
-                            '${_crossStore.fee} $ezcCode',
+                            '${_crossStore.fee.text(decimals: 5)} $ezcCode',
                             textAlign: TextAlign.end,
                             style: EZCTitleLargeTextStyle(
                                 color: provider.themeMode.text60),

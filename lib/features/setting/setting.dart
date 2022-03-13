@@ -33,7 +33,7 @@ class SettingScreen extends StatelessWidget {
                     context.router.push(const SettingChangePinRoute()),
               ),
               SettingItem(
-                text: Strings.current.settingWalletSecurity,
+                text: Strings.current.settingSecurityWalletAddress,
                 icon: Assets.icons.icSecurity.svg(),
                 onPressed: () => context.router.push(SettingSecurityRoute()),
               ),
