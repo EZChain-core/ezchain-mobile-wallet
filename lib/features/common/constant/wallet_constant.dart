@@ -1,5 +1,5 @@
 
-const String ezc = 'EZC';
+const String ezcCode = 'EZC';
 
 const String privateKeyTest = 'PrivateKey-25UA2N5pAzFmLwQoCxTpp66YcRjYZwGFZ2hB6Jk6nf67qWDA8M';
 const String receiverAddressXTest = 'X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad';

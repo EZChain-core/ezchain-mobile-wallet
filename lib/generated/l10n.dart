@@ -1224,6 +1224,16 @@ class Strings {
     );
   }
 
+  /// `My NFT`
+  String get dashboardNft {
+    return Intl.message(
+      'My NFT',
+      name: 'dashboardNft',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Setting`
   String get dashboardSetting {
     return Intl.message(
@@ -1939,6 +1949,186 @@ class Strings {
     return Intl.message(
       'Delegation',
       name: 'earnDelegation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mint`
+  String get nftMint {
+    return Intl.message(
+      'Mint',
+      name: 'nftMint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Family`
+  String get nftNewFamily {
+    return Intl.message(
+      'New Family',
+      name: 'nftNewFamily',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create a new set of collectibles with a name and symbol.`
+  String get nftNewFamilyDesc {
+    return Intl.message(
+      'Create a new set of collectibles with a name and symbol.',
+      name: 'nftNewFamilyDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mint Collectible`
+  String get nftMintCollectible {
+    return Intl.message(
+      'Mint Collectible',
+      name: 'nftMintCollectible',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You do not own an EZChain node, but you want to stake using another node.`
+  String get nftMintCollectibleDesc {
+    return Intl.message(
+      'You do not own an EZChain node, but you want to stake using another node.',
+      name: 'nftMintCollectibleDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create Family`
+  String get nftCreateFamily {
+    return Intl.message(
+      'Create Family',
+      name: 'nftCreateFamily',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name`
+  String get nftName {
+    return Intl.message(
+      'Name',
+      name: 'nftName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Symbol`
+  String get nftSymbol {
+    return Intl.message(
+      'Symbol',
+      name: 'nftSymbol',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Number of Groups`
+  String get nftNumberOfGroups {
+    return Intl.message(
+      'Number of Groups',
+      name: 'nftNumberOfGroups',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `TxID`
+  String get nftTxId {
+    return Intl.message(
+      'TxID',
+      name: 'nftTxId',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start Date`
+  String get nftStartDate {
+    return Intl.message(
+      'Start Date',
+      name: 'nftStartDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sart at least 5 minutes after you submit this form.`
+  String get nftStartDateDesc {
+    return Intl.message(
+      'Sart at least 5 minutes after you submit this form.',
+      name: 'nftStartDateDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Family Name`
+  String get nftFamilyName {
+    return Intl.message(
+      'Family Name',
+      name: 'nftFamilyName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back to My NFT`
+  String get nftBackMyNFT {
+    return Intl.message(
+      'Back to My NFT',
+      name: 'nftBackMyNFT',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You must provide a name.`
+  String get nftNameEmptyError {
+    return Intl.message(
+      'You must provide a name.',
+      name: 'nftNameEmptyError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You must provide a symbol.`
+  String get nftSymbolEmptyError {
+    return Intl.message(
+      'You must provide a symbol.',
+      name: 'nftSymbolEmptyError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Symbol must be 4 characters max.`
+  String get nftSymbolLengthError {
+    return Intl.message(
+      'Symbol must be 4 characters max.',
+      name: 'nftSymbolLengthError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Number of groups must be at least 1.`
+  String get nftNumberLengthError {
+    return Intl.message(
+      'Number of groups must be at least 1.',
+      name: 'nftNumberLengthError',
       desc: '',
       args: [],
     );

@@ -97,6 +97,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Transferring..."),
         "dashboardCross": MessageLookupByLibrary.simpleMessage("Cross"),
         "dashboardEarn": MessageLookupByLibrary.simpleMessage("Earn"),
+        "dashboardNft": MessageLookupByLibrary.simpleMessage("My NFT"),
         "dashboardSetting": MessageLookupByLibrary.simpleMessage("Setting"),
         "dashboardWallet": MessageLookupByLibrary.simpleMessage("Wallet"),
         "earnCrossTransfer":
@@ -142,6 +143,34 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Use your wallet"),
         "earnValidatorStake":
             MessageLookupByLibrary.simpleMessage("Validator Stake"),
+        "nftBackMyNFT": MessageLookupByLibrary.simpleMessage("Back to My NFT"),
+        "nftCreateFamily":
+            MessageLookupByLibrary.simpleMessage("Create Family"),
+        "nftFamilyName": MessageLookupByLibrary.simpleMessage("Family Name"),
+        "nftMint": MessageLookupByLibrary.simpleMessage("Mint"),
+        "nftMintCollectible":
+            MessageLookupByLibrary.simpleMessage("Mint Collectible"),
+        "nftMintCollectibleDesc": MessageLookupByLibrary.simpleMessage(
+            "You do not own an EZChain node, but you want to stake using another node."),
+        "nftName": MessageLookupByLibrary.simpleMessage("Name"),
+        "nftNameEmptyError":
+            MessageLookupByLibrary.simpleMessage("You must provide a name."),
+        "nftNewFamily": MessageLookupByLibrary.simpleMessage("New Family"),
+        "nftNewFamilyDesc": MessageLookupByLibrary.simpleMessage(
+            "Create a new set of collectibles with a name and symbol."),
+        "nftNumberLengthError": MessageLookupByLibrary.simpleMessage(
+            "Number of groups must be at least 1."),
+        "nftNumberOfGroups":
+            MessageLookupByLibrary.simpleMessage("Number of Groups"),
+        "nftStartDate": MessageLookupByLibrary.simpleMessage("Start Date"),
+        "nftStartDateDesc": MessageLookupByLibrary.simpleMessage(
+            "Sart at least 5 minutes after you submit this form."),
+        "nftSymbol": MessageLookupByLibrary.simpleMessage("Symbol"),
+        "nftSymbolEmptyError":
+            MessageLookupByLibrary.simpleMessage("You must provide a symbol."),
+        "nftSymbolLengthError": MessageLookupByLibrary.simpleMessage(
+            "Symbol must be 4 characters max."),
+        "nftTxId": MessageLookupByLibrary.simpleMessage("TxID"),
         "onBoardCreateWallet":
             MessageLookupByLibrary.simpleMessage("Create Wallet"),
         "pageHomeWelcome": m1,

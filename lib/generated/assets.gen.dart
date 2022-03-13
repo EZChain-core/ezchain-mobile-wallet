@@ -59,6 +59,13 @@ class $AssetsIconsGen {
   SvgGenImage get icCopyPrimary =>
       const SvgGenImage('assets/icons/ic_copy_primary.svg');
 
+  /// File path: assets/icons/ic_diamond.svg
+  SvgGenImage get icDiamond => const SvgGenImage('assets/icons/ic_diamond.svg');
+
+  /// File path: assets/icons/ic_diamond_outline.svg
+  SvgGenImage get icDiamondOutline =>
+      const SvgGenImage('assets/icons/ic_diamond_outline.svg');
+
   /// File path: assets/icons/ic_doc_outline_black.svg
   SvgGenImage get icDocOutlineBlack =>
       const SvgGenImage('assets/icons/ic_doc_outline_black.svg');

@@ -396,7 +396,7 @@ List<TransactionsItem> mapToTransactionsItem(
             }
           }
           if (potentialReward != null) {
-            reward = '${bnToAvaxP(potentialReward)} $ezc';
+            reward = '${bnToAvaxP(potentialReward)} $ezcCode';
           }
         }
         // transactions.add(TransactionsStakingItem(transId, transTime, transType,
@@ -423,11 +423,11 @@ List<TransactionsItem> mapCChainToTransactionsItem(
       final amountBN = BigInt.tryParse(tx.value) ?? BigInt.zero;
       final gasPrice = BigInt.tryParse(tx.gasPrice) ?? BigInt.zero;
       final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
-      final fee = '${bnToAvaxC(gasPrice * gasUsed)} $ezc';
+      final fee = '${bnToAvaxC(gasPrice * gasUsed)} $ezcCode';
       String? amount;
       if (amountBN != BigInt.zero) {
         final value = bnToAvaxC(amountBN);
-        amount = '$value $ezc';
+        amount = '$value $ezcCode';
       }
       const transType = 'Transaction';
       final from = <TransactionsItemAddressInfo>[];
