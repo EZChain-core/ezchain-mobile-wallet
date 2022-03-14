@@ -85,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           mintNFT();
+    //           sendANT();
     //         },
     //       ),
     //     ),
@@ -191,6 +191,22 @@ class _SplashScreenState extends State<SplashScreen> {
       // Gửi AvaxX
       // phải dùng numberToBNAvaxX để convert
       final txId = await wallet.sendAvaxX(to, numberToBNAvaxX(1));
+      logger.i("txId = $txId");
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  sendANT() async {
+    try {
+      const to = "X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad";
+
+      assert(validateAddressX(to));
+      final fee = getTxFeeX();
+      // từ list asset tokens chọn 1 asset có asset id
+      const assetId = "2iMEUfDkiVPPHfQYQxPgT6eV7gqa6pbn6G1K1QTDLBtmS6fjuL";
+      // Send Avalanche Native Tokens on X chain
+      final txId = await wallet.sendANT(assetId, to, numberToBNAvaxX(69));
       logger.i("txId = $txId");
     } catch (e) {
       logger.e(e);
@@ -1128,7 +1144,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     for (var element in assets) {
       stringAssets +=
-          "isEZC = ${element.id == avaAssetId}, name = ${element.name}, symbol = ${element.symbol}, amount = ${element.toString()}\n";
+          "isEZC = ${element.id == avaAssetId}, assetId = ${element.id}, name = ${element.name}, symbol = ${element.symbol}, amount = ${element.toString()}\n";
     }
 
     logger.i(stringAssets);

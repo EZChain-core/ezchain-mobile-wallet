@@ -164,6 +164,41 @@ abstract class WalletProvider {
     return txId;
   }
 
+  /// Send Avalanche Native Tokens on X chain
+  /// @param assetID ID of the token to send
+  /// @param amount How many units of the token to send. Based on smallest divisible unit.
+  /// @param to X chain address to send tokens to
+  Future<String> sendANT(
+    String assetId,
+    String to,
+    BigInt amount, {
+    String? memo,
+  }) async {
+    final utxoSet = utxosX;
+    final fromAddresses = await getAllAddressesX();
+    final changeAddress = getChangeAddressX();
+    final Uint8List? memoBuff;
+    if (memo != null) {
+      memoBuff = Uint8List.fromList(utf8.encode(memo));
+    } else {
+      memoBuff = null;
+    }
+    final tx = await xChain.buildBaseTx(
+      utxoSet,
+      amount,
+      assetId,
+      [to],
+      fromAddresses,
+      [changeAddress],
+      memo: memoBuff,
+    );
+    final signedTx = await signX(tx);
+    final txId = await xChain.issueTx(signedTx);
+    await waitTxX(txId);
+    await updateUtxosX();
+    return txId;
+  }
+
   ///  Returns UTXOs on the X chain that belong to this wallet.
   ///  - Makes network request.
   ///  - Updates `this.utxosX` with new UTXOs
