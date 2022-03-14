@@ -6,7 +6,7 @@ part 'types.g.dart';
 class GenericFormType {
   final GenericNft? avalanche;
 
-  GenericFormType(this.avalanche);
+  GenericFormType({this.avalanche});
 
   factory GenericFormType.fromJson(Map<String, dynamic> json) =>
       _$GenericFormTypeFromJson(json);
@@ -19,9 +19,9 @@ class GenericNft {
   final int version;
   final String type;
   final String title;
-  final int? radius;
-  final String? desc;
   final String img;
+  final String? desc;
+  final int? radius;
 
   @JsonKey(name: "img_b")
   final String? imgB;
@@ -29,16 +29,16 @@ class GenericNft {
   @JsonKey(name: "img_m")
   final String? imgM;
 
-  GenericNft(
-    this.version,
-    this.type,
-    this.title,
-    this.radius,
+  GenericNft({
+    required this.version,
+    required this.type,
+    required this.title,
+    required this.img,
     this.desc,
-    this.img,
+    this.radius,
     this.imgB,
     this.imgM,
-  );
+  });
 
   factory GenericNft.fromJson(Map<String, dynamic> json) =>
       _$GenericNftFromJson(json);

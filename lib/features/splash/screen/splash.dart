@@ -1188,9 +1188,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
       final utxo = assetUtxoMap[firstAsset.assetId]!;
 
-      final utf8Payload = UTF8Payload("KIEN MIN NFT = ${utxo.assetId}");
-      final genericPayload = JSONPayload("KIEN MIN NFT = ${utxo.assetId}");
-      final jsonPayload = JSONPayload("KIEN MIN NFT = ${utxo.assetId}");
+      final generic = GenericFormType(
+        avalanche: GenericNft(
+          version: 1,
+          type: "generic",
+          title: "title",
+          img: "imgUrl",
+          desc: "description",
+        ),
+      );
+
+      final genericPayload = JSONPayload(generic.toJson());
+      final jsonPayload = JSONPayload("{\"test\": \"1\"}");
+      final utf8Payload = UTF8Payload("KIEN MIN NFT");
       final urlPayload = URLPayload("https://wallet.ezchain.com/");
       final txId = await wallet.mintNFT(
         utxo,
