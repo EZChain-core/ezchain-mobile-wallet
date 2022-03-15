@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
@@ -6,13 +5,13 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
+import 'package:wallet/ezc/wallet/asset/types.dart';
+import 'package:wallet/ezc/wallet/network/utils.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
-import 'package:wallet/ezc/wallet/asset/types.dart';
-import 'package:wallet/ezc/wallet/network/utils.dart';
-import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 
 part 'wallet_token_store.g.dart';
 
@@ -107,10 +106,10 @@ abstract class _WalletTokenStore with Store {
 
     for (var element in assets) {
       final isEzc = element.id == avaAssetId;
-      final type = isEzc ? 'XChain' : null;
-      final amountText =
-          isEzc ? _balanceStore.totalEzc.text(decimals: 9) : element.toString();
-      final amount = isEzc ? _balanceStore.totalEzc : element.getAmount();
+      if (isEzc) continue;
+      const type = null;
+      final amountText = element.toString();
+      final amount = element.getAmount();
       list.add(WalletTokenItem('', element.name, element.symbol, amount,
           ezcPrice, amountText, type));
     }

@@ -279,6 +279,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
         "sharedMinuteAgo": m8,
         "sharedMinutes": m9,
+        "sharedNext": MessageLookupByLibrary.simpleMessage("Next"),
         "sharedNodeId": MessageLookupByLibrary.simpleMessage("Node ID"),
         "sharedNonce": MessageLookupByLibrary.simpleMessage("Nonce"),
         "sharedNotConfirm": MessageLookupByLibrary.simpleMessage("Not Confirm"),
@@ -343,6 +344,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "transactionsSignature":
             MessageLookupByLibrary.simpleMessage("Signature:"),
         "transactionsTo": MessageLookupByLibrary.simpleMessage("To:"),
+        "walletAddToken": MessageLookupByLibrary.simpleMessage("Add Token"),
         "walletReceiveBitcoin":
             MessageLookupByLibrary.simpleMessage("Bitcoin (BTC)"),
         "walletReceiveSendOnly":
@@ -364,6 +366,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "walletSendGasPriceNote": MessageLookupByLibrary.simpleMessage(
             "Adjusted automatically according to network load."),
         "walletSendMemo":
-            MessageLookupByLibrary.simpleMessage("Memo (optional)")
+            MessageLookupByLibrary.simpleMessage("Memo (optional)"),
+        "walletTokenAddressInvalid":
+            MessageLookupByLibrary.simpleMessage("Invalid address"),
+        "walletTokenContractAddress":
+            MessageLookupByLibrary.simpleMessage("Token Contract Address"),
+        "walletTokenDecimal":
+            MessageLookupByLibrary.simpleMessage("Token Decimal"),
+        "walletTokenDecimalInvalid": MessageLookupByLibrary.simpleMessage(
+            "You must provide a token decimal."),
+        "walletTokenName": MessageLookupByLibrary.simpleMessage("Token Name"),
+        "walletTokenNameInvalid":
+            MessageLookupByLibrary.simpleMessage("You must provide a name."),
+        "walletTokenSymbol":
+            MessageLookupByLibrary.simpleMessage("Token Symbol"),
+        "walletTokenSymbolInvalid":
+            MessageLookupByLibrary.simpleMessage("You must provide a symbol."),
+        "walletTokenSymbolLengthInvalid": MessageLookupByLibrary.simpleMessage(
+            "Symbol must be 4 characters max.")
       };
 }

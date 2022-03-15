@@ -32,6 +32,8 @@ import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.
 import 'package:wallet/features/wallet/send/avm/wallet_send_avm.dart';
 import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.dart';
 import 'package:wallet/features/wallet/send/evm/wallet_send_evm.dart';
+import 'package:wallet/features/wallet/token/add/wallet_token_add.dart';
+import 'package:wallet/features/wallet/token/add_confirm/wallet_token_add_confirm.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Screen,Route',
@@ -58,6 +60,8 @@ import 'package:wallet/features/wallet/send/evm/wallet_send_evm.dart';
     AutoRoute(page: WalletSendAvmConfirmScreen),
     AutoRoute(page: WalletSendEvmScreen),
     AutoRoute(page: WalletSendEvmConfirmScreen),
+    AutoRoute(page: WalletTokenAddScreen),
+    AutoRoute(page: WalletTokenAddConfirmScreen),
     AutoRoute(page: SettingChangePinScreen),
     AutoRoute(page: SettingGeneralScreen),
     AutoRoute(page: SettingAboutScreen),

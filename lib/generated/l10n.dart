@@ -984,6 +984,16 @@ class Strings {
     );
   }
 
+  /// `Next`
+  String get sharedNext {
+    return Intl.message(
+      'Next',
+      name: 'sharedNext',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -1569,6 +1579,106 @@ class Strings {
     return Intl.message(
       'Invalid C Chain address. Make sure your address begins with "0x" or "C-0x"',
       name: 'walletSendCChainErrorAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Token`
+  String get walletAddToken {
+    return Intl.message(
+      'Add Token',
+      name: 'walletAddToken',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token Name`
+  String get walletTokenName {
+    return Intl.message(
+      'Token Name',
+      name: 'walletTokenName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token Contract Address`
+  String get walletTokenContractAddress {
+    return Intl.message(
+      'Token Contract Address',
+      name: 'walletTokenContractAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token Symbol`
+  String get walletTokenSymbol {
+    return Intl.message(
+      'Token Symbol',
+      name: 'walletTokenSymbol',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token Decimal`
+  String get walletTokenDecimal {
+    return Intl.message(
+      'Token Decimal',
+      name: 'walletTokenDecimal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid address`
+  String get walletTokenAddressInvalid {
+    return Intl.message(
+      'Invalid address',
+      name: 'walletTokenAddressInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You must provide a name.`
+  String get walletTokenNameInvalid {
+    return Intl.message(
+      'You must provide a name.',
+      name: 'walletTokenNameInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You must provide a symbol.`
+  String get walletTokenSymbolInvalid {
+    return Intl.message(
+      'You must provide a symbol.',
+      name: 'walletTokenSymbolInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Symbol must be 4 characters max.`
+  String get walletTokenSymbolLengthInvalid {
+    return Intl.message(
+      'Symbol must be 4 characters max.',
+      name: 'walletTokenSymbolLengthInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You must provide a token decimal.`
+  String get walletTokenDecimalInvalid {
+    return Intl.message(
+      'You must provide a token decimal.',
+      name: 'walletTokenDecimalInvalid',
       desc: '',
       args: [],
     );
