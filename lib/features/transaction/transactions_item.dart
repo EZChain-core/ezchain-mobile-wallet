@@ -265,7 +265,7 @@ Future<List<TransactionsItem>> mapToTransactionsItemsV2(
         if (amountBN != BigInt.zero) {
           final asset = await getAssetDescription(output.assetId);
           final denomination = int.tryParse(asset.denomination) ?? 0;
-          amount = bnToLocaleString(amountBN, decimals: denomination) +
+          amount = bnToLocaleString(amountBN, denomination: denomination) +
               " " +
               asset.symbol;
         }
@@ -294,7 +294,7 @@ Future<List<TransactionsItem>> mapToTransactionsItemsV2(
         if (amountBN != BigInt.zero) {
           final asset = await getAssetDescription(output.assetId);
           final denomination = int.tryParse(asset.denomination) ?? 0;
-          amount = bnToLocaleString(amountBN, decimals: denomination) +
+          amount = bnToLocaleString(amountBN, denomination: denomination) +
               " " +
               asset.symbol;
         }

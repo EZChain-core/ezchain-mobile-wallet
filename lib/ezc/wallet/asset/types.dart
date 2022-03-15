@@ -66,12 +66,12 @@ class AvaAsset {
   }
 
   String toStringTotal() {
-    return bnToLocaleString(getTotalAmount(), decimals: denomination);
+    return bnToLocaleString(getTotalAmount(), denomination: denomination);
   }
 
   @override
   String toString() {
-    return bnToLocaleString(amount, decimals: denomination);
+    return bnToLocaleString(amount, denomination: denomination);
   }
 }
 

@@ -140,7 +140,7 @@ class HistoryBaseTxToken {
   String get amountDisplayValue =>
       bnToLocaleString(
         amount,
-        decimals: int.tryParse(asset.denomination) ?? 0,
+        denomination: int.tryParse(asset.denomination) ?? 0,
       ) +
       " " +
       asset.symbol;
