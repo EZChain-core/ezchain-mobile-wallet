@@ -33,11 +33,11 @@ Decimal bnToDecimalAvaxC(BigInt value) {
 }
 
 String bnToAvaxC(BigInt value) {
-  return bnToLocaleString(value, decimals: 18);
+  return bnToLocaleString(value, denomination: 18);
 }
 
 String bnToAvaxX(BigInt value) {
-  return bnToLocaleString(value, decimals: 9);
+  return bnToLocaleString(value, denomination: 9);
 }
 
 String bnToAvaxP(BigInt value) {
@@ -71,8 +71,12 @@ BigInt numberToBNAvaxC(dynamic value) {
   return numberToBN(value, 18);
 }
 
-String bnToLocaleString(BigInt value, {int decimals = 9}) {
-  final bigVal = bnToDecimal(value, denomination: decimals);
+String bnToLocaleString(
+  BigInt value, {
+  int denomination = 9,
+  int decimals = 9,
+}) {
+  final bigVal = bnToDecimal(value, denomination: denomination);
   return decimalToLocaleString(bigVal, decimals: decimals);
 }
 

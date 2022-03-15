@@ -8,9 +8,11 @@ import 'package:collection/collection.dart';
 import 'package:decimal/decimal.dart';
 import 'package:eventify/eventify.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/common/storage.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
@@ -22,6 +24,8 @@ import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/wallet/asset/assets.dart';
+import 'package:wallet/ezc/wallet/asset/erc20/erc20.dart';
+import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
 import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/ezc/wallet/explorer/ortelius/types.dart';
@@ -45,6 +49,8 @@ import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/buttons.dart';
+import 'package:web3dart/contracts.dart';
+import 'package:web3dart/web3dart.dart';
 
 import '../../auth/pin/verify/pin_code_verify.dart';
 
@@ -85,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           getHistoryANT();
+    //           getERC20Tokens();
     //         },
     //       ),
     //     ),
@@ -866,7 +872,8 @@ class _SplashScreenState extends State<SplashScreen> {
           if (amountBN != BigInt.zero) {
             final asset = await getAssetDescription(output.assetId);
             final denomination = int.tryParse(asset.denomination) ?? 0;
-            final amount = bnToLocaleString(amountBN, decimals: denomination);
+            final amount =
+                bnToLocaleString(amountBN, denomination: denomination);
             message += "Amount = $amount ${asset.symbol}\n";
           }
         }
@@ -888,7 +895,8 @@ class _SplashScreenState extends State<SplashScreen> {
           if (amountBN != BigInt.zero) {
             final asset = await getAssetDescription(output.assetId);
             final denomination = int.tryParse(asset.denomination) ?? 0;
-            final amount = bnToLocaleString(amountBN, decimals: denomination);
+            final amount =
+                bnToLocaleString(amountBN, denomination: denomination);
             message += "Amount = $amount ${asset.symbol}\n";
           }
         }
@@ -912,7 +920,7 @@ class _SplashScreenState extends State<SplashScreen> {
         final amountBN = BigInt.tryParse(transaction.value) ?? BigInt.zero;
         final denomination = int.tryParse(transaction.tokenDecimal) ?? 0;
         message +=
-            "Amount = ${bnToLocaleString(amountBN, decimals: denomination)} ${transaction.tokenSymbol}\n";
+            "Amount = ${bnToLocaleString(amountBN, denomination: denomination)} ${transaction.tokenSymbol}\n";
         logger.i(message);
       }
     } catch (e) {
@@ -1206,8 +1214,11 @@ class _SplashScreenState extends State<SplashScreen> {
     final fee = bnToDecimalAvaxX(xChain.getCreationTxFee());
     logger.i("fee = $fee EZC");
     try {
-      final txId =
-          await wallet.createNFTFamily(name.trim(), symbol.trim(), groupNum);
+      final txId = await wallet.createNFTFamily(
+        name.trim(),
+        symbol.trim(),
+        groupNum,
+      );
       logger.i("createNFTFamily = $txId");
     } catch (e) {
       logger.e(e);
@@ -1263,6 +1274,68 @@ class _SplashScreenState extends State<SplashScreen> {
         1,
       );
       logger.i("mintNFT = $txId");
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  addERC20() async {
+    const contractAddress = "0x2f5b4CC31b736456dd331e40B202ED70100508F7";
+    final erc20TokenData = await Erc20TokenData.getData(
+      contractAddress,
+      web3,
+      activeNetwork.evmChainId,
+    );
+
+    if (erc20TokenData == null) {
+      logger.e("Invalid contract address.");
+      return;
+    }
+
+    await erc20TokenData.getBalance(
+      wallet.getAddressC(),
+      web3,
+    );
+    logger.i(
+        "name = ${erc20TokenData.name}, symbol = ${erc20TokenData.symbol}, decimals = ${erc20TokenData.decimals}, balance = ${erc20TokenData.balance}");
+  }
+
+  getERC20Tokens() async {
+    final token1 = await Erc20TokenData.getData(
+      "0x719191e8849EBFe2821525EBAc669c118ed08C1b",
+      web3,
+      activeNetwork.evmChainId,
+    );
+
+    final token2 = await Erc20TokenData.getData(
+      "0x2f5b4CC31b736456dd331e40B202ED70100508F7",
+      web3,
+      activeNetwork.evmChainId,
+    );
+
+    final erc20Tokens = <Erc20TokenData>[token1!, token2!];
+
+    final key = "${wallet.getAddressX()}_${activeNetwork.evmChainId}";
+
+    try {
+      String json = jsonEncode(erc20Tokens);
+      await storage.write(key: key, value: json);
+    } catch (e) {
+      logger.e(e);
+      return;
+    }
+
+    try {
+      final json = await storage.read(key: key);
+      logger.i("read = $json");
+      if (json == null || json.isEmpty) return;
+      final map = jsonDecode(json) as List<dynamic>;
+      final cachedErc20Tokens =
+          List<Erc20TokenData>.from(map.map((i) => Erc20TokenData.fromJson(i)));
+      final evmAddress = wallet.getAddressC();
+      await Future.wait(
+          cachedErc20Tokens.map((erc20) => erc20.getBalance(evmAddress, web3)));
+      logger.i(cachedErc20Tokens);
     } catch (e) {
       logger.e(e);
     }

@@ -1,5 +1,5 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
+import 'package:wallet/common/storage.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/ezc/sdk/utils/mnemonic.dart';
 import 'package:wallet/ezc/wallet/mnemonic_wallet.dart';
@@ -18,8 +18,6 @@ class WalletFactoryImpl extends WalletFactory {
 
   final List<WalletProvider> _wallets = [];
 
-  final _storage = const FlutterSecureStorage();
-
   @override
   WalletProvider get activeWallet => _wallets.first;
 
@@ -30,14 +28,14 @@ class WalletFactoryImpl extends WalletFactory {
 
   @override
   saveAccessKey(String key) {
-    _storage.write(key: accessKey, value: key);
+    storage.write(key: accessKey, value: key);
     _saveExpiredTime();
   }
 
   @override
   clear() {
     _wallets.clear();
-    _storage.deleteAll();
+    storage.deleteAll();
   }
 
   @override
@@ -48,7 +46,7 @@ class WalletFactoryImpl extends WalletFactory {
   @override
   Future<bool> isExpired() async {
     final timeMillis =
-        int.tryParse(await _storage.read(key: expiredTimeKey) ?? '');
+        int.tryParse(await storage.read(key: expiredTimeKey) ?? '');
     if (timeMillis == null) return true;
     final time = DateTime.fromMillisecondsSinceEpoch(timeMillis);
     final now = DateTime.now();
@@ -58,12 +56,12 @@ class WalletFactoryImpl extends WalletFactory {
 
   _saveExpiredTime() {
     final now = DateTime.now().millisecondsSinceEpoch;
-    _storage.write(key: expiredTimeKey, value: now.toString());
+    storage.write(key: expiredTimeKey, value: now.toString());
   }
 
   @override
   Future<bool> initWallet() async {
-    final key = await _storage.read(key: accessKey);
+    final key = await storage.read(key: accessKey);
     if (key == null || key.isEmpty) return false;
     WalletProvider? wallet;
     if (key.split(' ').length == Mnemonic.mnemonicLength) {
@@ -83,28 +81,28 @@ class WalletFactoryImpl extends WalletFactory {
 
   @override
   Future<String> getAccessKey() async {
-    return await _storage.read(key: accessKey) ?? '';
+    return await storage.read(key: accessKey) ?? '';
   }
 
   @override
   savePinCode(String pin) {
-    _storage.write(key: pinCode, value: pin);
+    storage.write(key: pinCode, value: pin);
   }
 
   @override
   Future<bool> isPinCodeCorrect(String pin) async {
-    final correctPin = await _storage.read(key: pinCode) ?? '';
+    final correctPin = await storage.read(key: pinCode) ?? '';
     return correctPin == pin;
   }
 
   @override
   saveNetworkConfig(NetworkConfigType network) {
-    _storage.write(key: networkConfig, value: network.name);
+    storage.write(key: networkConfig, value: network.name);
   }
 
   @override
   Future<NetworkConfigType> getNetworkConfig() async {
-    final networkName = await _storage.read(key: networkConfig) ?? '';
+    final networkName = await storage.read(key: networkConfig) ?? '';
     return getNetworkConfigType(networkName);
   }
 }
