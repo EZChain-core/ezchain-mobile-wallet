@@ -797,6 +797,19 @@ abstract class WalletProvider {
     return await getTransactionSummary(tx, addresses, addressesC);
   }
 
+  Future<List<CChainErc20Tx>> getHistoryERC2({
+    String? contractAddress,
+    int page = 0,
+    int offset = 0,
+  }) async {
+    return await cchain_explorer_request.getErc20History(
+      getAddressC(),
+      contractAddress: contractAddress,
+      page: page,
+      offset: offset,
+    );
+  }
+
   Future<String> createNFTFamily(
     String name,
     String symbol,

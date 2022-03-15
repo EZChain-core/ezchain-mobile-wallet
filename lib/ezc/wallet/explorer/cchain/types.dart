@@ -74,7 +74,6 @@ class CChainExplorerTx {
 enum CChainExplorerTxReceiptStatus {
   @JsonValue("0")
   error,
-
   @JsonValue("1")
   ok,
 }
@@ -135,4 +134,68 @@ class CChainExplorerTxInfo {
       _$CChainExplorerTxInfoFromJson(json);
 
   Map<String, dynamic> toJson() => _$CChainExplorerTxInfoToJson(this);
+}
+
+@JsonSerializable()
+class CChainErc20Tx {
+  final String blockNumber;
+  final String timeStamp;
+  final String hash;
+  final String nonce;
+  final String blockHash;
+  final String from;
+  final String contractAddress;
+  final String to;
+  final String value;
+  final String tokenName;
+  final String tokenSymbol;
+  final String tokenDecimal;
+  final String transactionIndex;
+  final String gas;
+  final String gasPrice;
+  final String gasUsed;
+  final String cumulativeGasUsed;
+  final String input;
+  final String confirmations;
+
+  CChainErc20Tx(
+    this.blockNumber,
+    this.timeStamp,
+    this.hash,
+    this.nonce,
+    this.blockHash,
+    this.from,
+    this.contractAddress,
+    this.to,
+    this.value,
+    this.tokenName,
+    this.tokenSymbol,
+    this.tokenDecimal,
+    this.transactionIndex,
+    this.gas,
+    this.gasPrice,
+    this.gasUsed,
+    this.cumulativeGasUsed,
+    this.input,
+    this.confirmations,
+  );
+
+  factory CChainErc20Tx.fromJson(Map<String, dynamic> json) =>
+      _$CChainErc20TxFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CChainErc20TxToJson(this);
+}
+
+@JsonSerializable()
+class CChainErc20Response {
+  String status;
+  String message;
+  List<CChainErc20Tx> result;
+
+  CChainErc20Response(this.status, this.message, this.result);
+
+  factory CChainErc20Response.fromJson(Map<String, dynamic> json) =>
+      _$CChainErc20ResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CChainErc20ResponseToJson(this);
 }
