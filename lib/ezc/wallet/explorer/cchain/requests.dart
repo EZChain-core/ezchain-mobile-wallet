@@ -37,3 +37,21 @@ Future<CChainExplorerTxInfo> getCChainTransaction(String txHash) async {
   final response = await cChainRestClient.getCChainTransaction(txHash);
   return response.result;
 }
+
+Future<List<CChainErc20Tx>> getErc20History(
+  String address, {
+  int page = 0,
+  int offset = 0,
+  String? contractAddress,
+}) async {
+  final dio = _createCChainExplorerApi(isMainnet: isMainnetNetwork);
+  final cChainRestClient = CChainExplorerRestClient(dio);
+  final response = await cChainRestClient.getErc20History(
+    address,
+    "desc",
+    page,
+    offset,
+    contractAddress,
+  );
+  return filterDuplicateERC20Txs(response.result);
+}

@@ -85,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           sendANT();
+    //           getHistoryERC20();
     //         },
     //       ),
     //     ),
@@ -894,6 +894,29 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       }
       logger.i(message);
+    }
+  }
+
+  getHistoryERC20() async {
+    try {
+      final transactions = await wallet.getHistoryERC2(
+        contractAddress: "0x2f5b4CC31b736456dd331e40B202ED70100508F7",
+      );
+      for (final transaction in transactions) {
+        var message = "";
+        message += "Id = ${transaction.hash}\n";
+        message += "Time = ${transaction.timeStamp}\n";
+        message += "Type = Transfer\n";
+        message += "From = ${transaction.from}\n";
+        message += "To = ${transaction.to}\n";
+        final amountBN = BigInt.tryParse(transaction.value) ?? BigInt.zero;
+        final denomination = int.tryParse(transaction.tokenDecimal) ?? 0;
+        message +=
+            "Amount = ${bnToLocaleString(amountBN, decimals: denomination)} ${transaction.tokenSymbol}\n";
+        logger.i(message);
+      }
+    } catch (e) {
+      logger.e(e);
     }
   }
 
