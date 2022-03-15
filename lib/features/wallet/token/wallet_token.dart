@@ -1,9 +1,14 @@
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/extensions.dart';
+import 'package:wallet/common/router.dart';
+import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/features/wallet/token/wallet_token_store.dart';
 import 'package:wallet/generated/l10n.dart';
+import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -50,6 +55,13 @@ class _WalletTokenScreenState extends State<WalletTokenScreen>
                         itemCount: _walletTokenStore.tokens.length),
                   ),
                 ),
+                const SizedBox(height: 10),
+                EZCMediumPrimaryButton(
+                  text: Strings.current.walletAddToken,
+                  width: 202,
+                  onPressed: _onClickAddToken,
+                ),
+                const SizedBox(height: 24),
               ],
             ),
           ),
@@ -64,6 +76,10 @@ class _WalletTokenScreenState extends State<WalletTokenScreen>
   Future<void> _refresh() {
     _walletTokenStore.refresh();
     return Future.delayed(const Duration(seconds: 1));
+  }
+
+  _onClickAddToken() {
+    walletContext?.pushRoute(WalletTokenAddRoute());
   }
 }
 
@@ -83,32 +99,34 @@ class _WalletTokenHeaderWidget extends StatelessWidget {
           Row(
             children: [
               const SizedBox(width: 16),
-                  Text(
-                    Strings.current.sharedBalance,
-                    style:
+              Text(
+                Strings.current.sharedBalance,
+                style:
                     EZCHeadlineSmallTextStyle(color: provider.themeMode.white),
-                  ),
-                  Expanded(
-                    child: Text(
-                      '\$ $balance',
+              ),
+              Expanded(
+                child: Text(
+                  '\$ $balance'.useCorrectEllipsis(),
                   textAlign: TextAlign.end,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: EZCHeadlineSmallTextStyle(
                       color: provider.themeMode.primary),
                 ),
-                  ),
-                  const SizedBox(width: 16),
-                ],
               ),
-              const SizedBox(height: 65),
-              Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: Text(
-                  Strings.current.sharedToken,
-                  style: EZCHeadlineSmallTextStyle(color: provider.themeMode.text),
-                ),
-              ),
+              const SizedBox(width: 16),
             ],
           ),
+          const SizedBox(height: 65),
+          Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Text(
+              Strings.current.sharedToken,
+              style: EZCHeadlineSmallTextStyle(color: provider.themeMode.text),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
