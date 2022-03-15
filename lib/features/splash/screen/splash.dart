@@ -85,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           getHistoryERC20();
+    //           getHistoryANT();
     //         },
     //       ),
     //     ),
@@ -915,6 +915,22 @@ class _SplashScreenState extends State<SplashScreen> {
             "Amount = ${bnToLocaleString(amountBN, decimals: denomination)} ${transaction.tokenSymbol}\n";
         logger.i(message);
       }
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  getHistoryANT() async {
+    try {
+      // từ list asset tokens chọn 1 asset có asset id
+      const assetId = "2iMEUfDkiVPPHfQYQxPgT6eV7gqa6pbn6G1K1QTDLBtmS6fjuL";
+      final transactions = await wallet.getXTransactions(limit: 20);
+      final filteredTransactions = transactions
+          .where((element) =>
+              element.inputTotals.keys.contains(assetId) ||
+              element.outputTotals.keys.contains(assetId))
+          .toList();
+      _parseXPTransactionsV2(filteredTransactions);
     } catch (e) {
       logger.e(e);
     }
