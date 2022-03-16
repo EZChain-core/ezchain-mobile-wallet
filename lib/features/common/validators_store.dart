@@ -28,4 +28,9 @@ abstract class _ValidatorsStore with Store {
       logger.e(e);
     }
   }
+
+  @action
+  clear() {
+    validators.clear();
+  }
 }

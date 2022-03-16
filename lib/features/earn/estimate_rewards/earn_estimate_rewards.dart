@@ -35,7 +35,6 @@ class EarnEstimateRewardsScreen extends StatelessWidget {
                   builder: (_) => FutureBuilder<List<EarnEstimateRewardsItem>>(
                     future: _earnEstimateRewardsStore.getEstimateRewards(),
                     builder: (_, snapshot) {
-                      logger.e('vit build');
                       if (snapshot.hasData) {
                         final nodes = snapshot.data!;
                         return nodes.isNotEmpty
@@ -47,17 +46,17 @@ class EarnEstimateRewardsScreen extends StatelessWidget {
                                   if (index == 0) {
                                     return _EarnEstimateRewardsHeader(
                                       totalRewards: _earnEstimateRewardsStore
-                                    .totalRewards,
-                              );
-                            } else {
-                              return EarnEstimateRewardsItemWidget(
-                                item: nodes[index - 1],
-                              );
-                            }
-                          },
-                          separatorBuilder: (_, index) =>
-                          const SizedBox(height: 16),
-                        )
+                                          .totalRewards,
+                                    );
+                                  } else {
+                                    return EarnEstimateRewardsItemWidget(
+                                      item: nodes[index - 1],
+                                    );
+                                  }
+                                },
+                                separatorBuilder: (_, index) =>
+                                    const SizedBox(height: 16),
+                              )
                             : const SizedBox.shrink();
                       } else {
                         return Align(

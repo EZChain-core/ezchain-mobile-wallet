@@ -3,6 +3,8 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
+import 'package:wallet/features/common/token/token_store.dart';
+import 'package:wallet/features/common/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 
@@ -15,6 +17,8 @@ abstract class _WalletEZCStore with Store {
 
   final _balanceStore = getIt<BalanceStore>();
   final _priceStore = getIt<PriceStore>();
+  final _tokenStore = getIt<TokenStore>();
+  final _validatorsStore = getIt<ValidatorsStore>();
 
   @computed
   WalletEZCBalanceViewData get balanceX => WalletEZCBalanceViewData(
@@ -52,8 +56,10 @@ abstract class _WalletEZCStore with Store {
 
   @action
   fetchData() async {
+    _balanceStore.init();
     _priceStore.updateAvaxPrice();
-    _balanceStore.updateTotalBalance();
+    _tokenStore.getToken();
+    _validatorsStore.updateValidators();
   }
 
   @action

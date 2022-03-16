@@ -9,6 +9,7 @@ import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:collection/collection.dart';
+
 part 'token_store.g.dart';
 
 @LazySingleton()
@@ -21,10 +22,6 @@ abstract class _TokenStore with Store {
 
   @observable
   List<Erc20TokenData> erc20Tokens = [];
-
-  _TokenStore() {
-    getToken();
-  }
 
   Future<bool> addToken(Erc20TokenData token) async {
     try {
@@ -41,7 +38,6 @@ abstract class _TokenStore with Store {
 
   getToken() async {
     try {
-      logger.e('vit $_key');
       final json = await storage.read(key: _key);
       if (json == null || json.isEmpty) return;
       final map = jsonDecode(json) as List<dynamic>;
@@ -51,9 +47,9 @@ abstract class _TokenStore with Store {
       await Future.wait(cachedErc20Tokens
           .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
       cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
-      logger.e('vit ${cachedErc20Tokens.length}');
       erc20Tokens = cachedErc20Tokens;
     } catch (e) {
+      erc20Tokens = [];
       logger.e(e);
     }
   }
