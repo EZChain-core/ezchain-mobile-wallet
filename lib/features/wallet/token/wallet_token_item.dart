@@ -93,7 +93,7 @@ class WalletTokenItemWidget extends StatelessWidget {
                                     color: provider.themeMode.text60),
                               ),
                               TextSpan(
-                                text: token.chain!,
+                                text: token.chain,
                                 style: EZCTitleSmallTextStyle(
                                     color: provider.themeMode.primary),
                               ),

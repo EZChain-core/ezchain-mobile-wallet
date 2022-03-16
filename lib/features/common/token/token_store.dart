@@ -43,14 +43,12 @@ abstract class _TokenStore with Store {
     try {
       final json = await storage.read(key: _key);
       if (json == null || json.isEmpty) return;
-      logger.e(json);
       final map = jsonDecode(json) as List<dynamic>;
       final cachedErc20Tokens =
           List<Erc20TokenData>.from(map.map((i) => Erc20TokenData.fromJson(i)));
       final evmAddress = _wallet.getAddressC();
       await Future.wait(
           cachedErc20Tokens.map((erc20) => erc20.getBalance(evmAddress, web3Client)));
-      logger.e(cachedErc20Tokens.length);
       cachedErc20Tokens.sort((a, b) => a.balanceBN.compareTo(b.balanceBN));
       erc20Tokens = cachedErc20Tokens;
     } catch (e) {

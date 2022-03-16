@@ -58,7 +58,7 @@ class EarnDelegateNodeItemWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: Text(
-                item.nodeId,
+                item.nodeId.useCorrectEllipsis(),
                 style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
               ),
             ),
