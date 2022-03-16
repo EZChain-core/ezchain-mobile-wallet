@@ -91,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           getERC20Tokens();
+    //           sendErc20();
     //         },
     //       ),
     //     ),
@@ -905,9 +905,9 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  getHistoryERC20() async {
+  getHistoryErc20() async {
     try {
-      final transactions = await wallet.getHistoryERC2(
+      final transactions = await wallet.getHistoryErc20(
         contractAddress: "0x2f5b4CC31b736456dd331e40B202ED70100508F7",
       );
       for (final transaction in transactions) {
@@ -1279,11 +1279,11 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  addERC20() async {
+  addErc20() async {
     const contractAddress = "0x2f5b4CC31b736456dd331e40B202ED70100508F7";
     final erc20TokenData = await Erc20TokenData.getData(
       contractAddress,
-      web3,
+      web3Client,
       activeNetwork.evmChainId,
     );
 
@@ -1294,22 +1294,22 @@ class _SplashScreenState extends State<SplashScreen> {
 
     await erc20TokenData.getBalance(
       wallet.getAddressC(),
-      web3,
+      web3Client,
     );
     logger.i(
         "name = ${erc20TokenData.name}, symbol = ${erc20TokenData.symbol}, decimals = ${erc20TokenData.decimals}, balance = ${erc20TokenData.balance}");
   }
 
-  getERC20Tokens() async {
+  getErc20Tokens() async {
     final token1 = await Erc20TokenData.getData(
       "0x719191e8849EBFe2821525EBAc669c118ed08C1b",
-      web3,
+      web3Client,
       activeNetwork.evmChainId,
     );
 
     final token2 = await Erc20TokenData.getData(
       "0x2f5b4CC31b736456dd331e40B202ED70100508F7",
-      web3,
+      web3Client,
       activeNetwork.evmChainId,
     );
 
@@ -1333,11 +1333,59 @@ class _SplashScreenState extends State<SplashScreen> {
       final cachedErc20Tokens =
           List<Erc20TokenData>.from(map.map((i) => Erc20TokenData.fromJson(i)));
       final evmAddress = wallet.getAddressC();
-      await Future.wait(
-          cachedErc20Tokens.map((erc20) => erc20.getBalance(evmAddress, web3)));
+      await Future.wait(cachedErc20Tokens
+          .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
       logger.i(cachedErc20Tokens);
     } catch (e) {
       logger.e(e);
     }
+  }
+
+  sendErc20() async {
+    // try {
+    const contractAddress = "0x719191e8849EBFe2821525EBAc669c118ed08C1b";
+    final token = await Erc20TokenData.getData(
+      contractAddress,
+      web3Client,
+      activeNetwork.evmChainId,
+    );
+    if (token == null) {
+      return;
+    }
+
+    const to = "0xd30a9f6645a73f67b7850b9304b6a3172dda75bf";
+
+    assert(validateAddressEvm(to));
+    const amount = 10;
+    final amountBN = numberToBN(amount, token.decimals);
+    BigInt gasPrice = BigInt.from(225000000000);
+    try {
+      gasPrice = await getAdjustedGasPrice();
+    } catch (e) {
+      logger.e(e);
+    }
+    final gasPriceNumber =
+        int.tryParse(bnToDecimalAvaxX(gasPrice).toStringAsFixed(0)) ?? 0;
+    logger.i("gasPrice = $gasPriceNumber");
+
+    BigInt gasLimit = BigInt.from(31000);
+    try {
+      gasLimit = await wallet.estimateErc20Gas(contractAddress, to, amountBN);
+    } catch (e) {
+      logger.e(e);
+    }
+    logger.i("gasLimit = $gasLimit");
+
+    final txHash = await wallet.sendErc20(
+      to,
+      amountBN,
+      gasPrice,
+      gasLimit.toInt(),
+      contractAddress,
+    );
+    logger.i("txHash = $txHash");
+    // } catch (e) {
+    //   logger.e(e);
+    // }
   }
 }
