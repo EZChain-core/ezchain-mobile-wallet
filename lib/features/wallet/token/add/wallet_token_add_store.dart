@@ -24,7 +24,7 @@ abstract class _WalletTokenAddStore with Store {
     final erc20TokenData = await Erc20TokenData.getData(
       address,
       web3Client,
-      activeNetwork.evmChainId,
+      getEvmChainId(),
     );
 
     if (erc20TokenData == null) {

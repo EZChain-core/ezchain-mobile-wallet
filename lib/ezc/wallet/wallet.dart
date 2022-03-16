@@ -523,7 +523,7 @@ abstract class WalletProvider {
     final token = await Erc20TokenData.getData(
       contractAddress,
       web3Client,
-      activeNetwork.evmChainId,
+      getEvmChainId(),
     );
     if (token == null) {
       throw Exception("Invalid contract address.");

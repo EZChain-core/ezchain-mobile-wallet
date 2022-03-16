@@ -119,6 +119,8 @@ extension TransactionDetailExtension on OrteliusTx {
 
       final List<TransactionDetailOutputViewData> outputs = [];
       final outs = this.outputs ?? [];
+      outs.sort((output1, output2) =>
+          output1.outputIndex.compareTo(output2.outputIndex));
       for (var i = 0; i < outs.length; i++) {
         final output = outs[i];
         final amount =
@@ -129,8 +131,7 @@ extension TransactionDetailExtension on OrteliusTx {
         if (address != null) {
           to = '$chain-$address';
         }
-        outputs.add(
-            TransactionDetailOutputViewData(to, i + 1));
+        outputs.add(TransactionDetailOutputViewData(to, i + 1));
         final stakeLockTime = output.stakeLockTime;
         if (stakeLockTime != null && stakeLockTime != 0) {
           final stakeLockTimeDate =

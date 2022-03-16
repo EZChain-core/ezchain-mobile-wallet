@@ -613,6 +613,8 @@ class _SplashScreenState extends State<SplashScreen> {
       }
 
       final outs = transaction.outputs ?? [];
+      outs.sort((output1, output2) =>
+          output1.outputIndex.compareTo(output2.outputIndex));
       message += "\n${prefixOutput}Output: ${outs.length}\n";
       for (var i = 0; i < outs.length; i++) {
         final output = outs[i];
@@ -1284,7 +1286,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final erc20TokenData = await Erc20TokenData.getData(
       contractAddress,
       web3Client,
-      activeNetwork.evmChainId,
+      getEvmChainId(),
     );
 
     if (erc20TokenData == null) {
@@ -1304,18 +1306,18 @@ class _SplashScreenState extends State<SplashScreen> {
     final token1 = await Erc20TokenData.getData(
       "0x719191e8849EBFe2821525EBAc669c118ed08C1b",
       web3Client,
-      activeNetwork.evmChainId,
+      getEvmChainId(),
     );
 
     final token2 = await Erc20TokenData.getData(
       "0x2f5b4CC31b736456dd331e40B202ED70100508F7",
       web3Client,
-      activeNetwork.evmChainId,
+      getEvmChainId(),
     );
 
     final erc20Tokens = <Erc20TokenData>[token1!, token2!];
 
-    final key = "${wallet.getAddressX()}_${activeNetwork.evmChainId}";
+    final key = "${wallet.getAddressX()}_${getEvmChainId()}";
 
     try {
       String json = jsonEncode(erc20Tokens);
@@ -1347,7 +1349,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final token = await Erc20TokenData.getData(
       contractAddress,
       web3Client,
-      activeNetwork.evmChainId,
+      getEvmChainId(),
     );
     if (token == null) {
       return;

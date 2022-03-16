@@ -1,5 +1,7 @@
 import 'package:injectable/injectable.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/storage.dart';
+import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/ezc/sdk/utils/mnemonic.dart';
 import 'package:wallet/ezc/wallet/mnemonic_wallet.dart';
@@ -34,6 +36,11 @@ class WalletFactoryImpl extends WalletFactory {
 
   @override
   clear() {
+    try {
+      web3Client.dispose();
+    } catch (e) {
+      logger.e(e);
+    }
     _wallets.clear();
     storage.deleteAll();
   }

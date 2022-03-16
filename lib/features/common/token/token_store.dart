@@ -17,7 +17,7 @@ class TokenStore = _TokenStore with _$TokenStore;
 abstract class _TokenStore with Store {
   final _wallet = getIt<WalletFactory>().activeWallet;
 
-  String get _key => "${_wallet.getAddressX()}_${activeNetwork.evmChainId}";
+  String get _key => "${_wallet.getAddressX()}_${getEvmChainId()}";
 
   @observable
   List<Erc20TokenData> erc20Tokens = [];
@@ -48,8 +48,8 @@ abstract class _TokenStore with Store {
       final cachedErc20Tokens =
           List<Erc20TokenData>.from(map.map((i) => Erc20TokenData.fromJson(i)));
       final evmAddress = _wallet.getAddressC();
-      await Future.wait(
-          cachedErc20Tokens.map((erc20) => erc20.getBalance(evmAddress, web3Client)));
+      await Future.wait(cachedErc20Tokens
+          .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
       cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
       logger.e('vit ${cachedErc20Tokens.length}');
       erc20Tokens = cachedErc20Tokens;
@@ -63,8 +63,8 @@ abstract class _TokenStore with Store {
     try {
       final cachedErc20Tokens = erc20Tokens;
       final evmAddress = _wallet.getAddressC();
-      await Future.wait(
-          cachedErc20Tokens.map((erc20) => erc20.getBalance(evmAddress, web3Client)));
+      await Future.wait(cachedErc20Tokens
+          .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
       cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
       erc20Tokens = cachedErc20Tokens;
     } catch (e) {
@@ -72,10 +72,10 @@ abstract class _TokenStore with Store {
     }
   }
 
-  Erc20TokenData? find(String id) => erc20Tokens.firstWhereOrNull((element) => element.contractAddress == id);
+  Erc20TokenData? find(String id) =>
+      erc20Tokens.firstWhereOrNull((element) => element.contractAddress == id);
 
   clear() {
     erc20Tokens.clear();
   }
-
 }
