@@ -37,9 +37,6 @@ abstract class _TransactionsStore with Store {
   @computed
   String get balanceUsd => _priceStore.getBalanceInUsd(balance);
 
-  @observable
-  List<OrteliusTx> transactions = [];
-
   @computed
   List<Validator> get validators => _validatorsStore.validators;
 
@@ -84,10 +81,10 @@ abstract class _TransactionsStore with Store {
       switch (ezcType) {
         case EZCType.xChain:
           final transactions = await _wallet.getXTransactions();
-          return await mapToTransactionsItemsV2(transactions, type);
+          return await mapToTransactionsItemsV2(transactions);
         case EZCType.pChain:
           final transactions = await _wallet.getPTransactions();
-          return await mapToTransactionsItemsV2(transactions, type);
+          return await mapToTransactionsItemsV2(transactions);
         case EZCType.cChain:
           final transactions = await _wallet.getCChainTransactions();
           return mapCChainToTransactionsItem(transactions, type);
