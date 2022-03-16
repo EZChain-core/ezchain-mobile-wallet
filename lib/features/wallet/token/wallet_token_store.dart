@@ -107,11 +107,11 @@ abstract class _WalletTokenStore with Store {
     for (var element in assets) {
       final isEzc = element.id == avaAssetId;
       if (isEzc) continue;
-      const type = null;
+      const type = 'X-Chain';
       final amountText = element.toString();
       final amount = element.getAmount();
-      list.add(WalletTokenItem('', element.name, element.symbol, amount,
-          ezcPrice, amountText, type));
+      list.add(WalletTokenItem(element.id, '', element.name, element.symbol,
+          amount, ezcPrice, amountText, type));
     }
     return list;
   }

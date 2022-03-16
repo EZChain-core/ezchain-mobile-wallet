@@ -239,7 +239,6 @@ Widget buildTransactionWidget(TransactionsItem transaction) {
 
 Future<List<TransactionsItem>> mapToTransactionsItemsV2(
   List<OrteliusTx> transactions,
-  EZCType chain,
 ) async {
   final futures = transactions.map((transaction) async {
     final id = transaction.id;

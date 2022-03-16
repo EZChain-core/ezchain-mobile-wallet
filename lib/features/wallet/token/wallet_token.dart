@@ -97,6 +97,7 @@ class _WalletTokenHeaderWidget extends StatelessWidget {
         children: [
           const SizedBox(height: 24),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(width: 16),
               Text(
@@ -104,6 +105,7 @@ class _WalletTokenHeaderWidget extends StatelessWidget {
                 style:
                     EZCHeadlineSmallTextStyle(color: provider.themeMode.white),
               ),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   '\$ $balance'.useCorrectEllipsis(),

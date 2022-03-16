@@ -300,7 +300,7 @@ class _TransactionDetailVerticalText extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              content,
+              content.useCorrectEllipsis(),
               style: EZCTitleMediumTextStyle(color: provider.themeMode.text),
             ),
           ],
