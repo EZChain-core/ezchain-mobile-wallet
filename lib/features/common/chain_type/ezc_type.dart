@@ -6,7 +6,7 @@ enum EZCType { xChain, pChain, cChain }
 
 extension EZCTypeExtension on EZCType {
   String get name {
-    return ["X-Chain", "P-Chain", "C-chain"][index];
+    return ["X-Chain", "P-Chain", "C-Chain"][index];
   }
 
   String get chainAlias {

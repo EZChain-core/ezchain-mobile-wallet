@@ -5,6 +5,7 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
+import 'package:wallet/features/common/token/token_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
@@ -16,8 +17,30 @@ class TransactionsAntStore = _TransactionsAntStore with _$TransactionsAntStore;
 abstract class _TransactionsAntStore with Store {
   final _wallet = getIt<WalletFactory>().activeWallet;
 
+  final _tokenStore = getIt<TokenStore>();
+
+  WalletTokenItem? _token;
+
+  @computed
+  String get balance {
+    final token = _token;
+    if (token == null) return '';
+    if (token.type == EZCTokenType.erc20 && token.id != null) {
+      final findToken = _tokenStore.find(token.id!);
+      if (findToken != null) {
+        return findToken.balance;
+      }
+    }
+    return token.balanceText;
+  }
+
   String get addressX => _wallet.getAddressX();
+
   String get addressC => _wallet.getAddressC();
+
+  setTokenItem(WalletTokenItem token) {
+    _token = token;
+  }
 
   Future<List<TransactionsItem>> getTransactions(WalletTokenItem token) async {
     try {
@@ -65,5 +88,6 @@ TransactionsItem mapErc20TransactionToTransactionsItem(CChainErc20Tx tx) {
   if (tx.to.isNotEmpty) {
     to.add(TransactionsItemAddressInfo(tx.to, amount));
   }
-  return TransactionsItem(tx.hash, time, transType, from, to, EZCType.cChain, tx.nonce);
+  return TransactionsItem(
+      tx.hash, time, transType, from, to, EZCType.cChain, tx.nonce);
 }

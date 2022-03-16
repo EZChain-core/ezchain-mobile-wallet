@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
@@ -56,6 +57,7 @@ abstract class _WalletTokenStore with Store {
   List<WalletTokenItem> get tokens {
     final List<WalletTokenItem> list = [];
     if (_balanceStore.isTotalLoaded) {
+      list.clear();
       list.addAll(fetchAssets());
     }
     list.addAll(erc20Tokens);

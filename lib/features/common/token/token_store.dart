@@ -8,7 +8,7 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
-
+import 'package:collection/collection.dart';
 part 'token_store.g.dart';
 
 @LazySingleton()
@@ -41,6 +41,7 @@ abstract class _TokenStore with Store {
 
   getToken() async {
     try {
+      logger.e('vit $_key');
       final json = await storage.read(key: _key);
       if (json == null || json.isEmpty) return;
       final map = jsonDecode(json) as List<dynamic>;
@@ -49,10 +50,32 @@ abstract class _TokenStore with Store {
       final evmAddress = _wallet.getAddressC();
       await Future.wait(
           cachedErc20Tokens.map((erc20) => erc20.getBalance(evmAddress, web3Client)));
-      cachedErc20Tokens.sort((a, b) => a.balanceBN.compareTo(b.balanceBN));
+      cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
+      logger.e('vit ${cachedErc20Tokens.length}');
       erc20Tokens = cachedErc20Tokens;
     } catch (e) {
       logger.e(e);
     }
   }
+
+  @action
+  updateBalance() async {
+    try {
+      final cachedErc20Tokens = erc20Tokens;
+      final evmAddress = _wallet.getAddressC();
+      await Future.wait(
+          cachedErc20Tokens.map((erc20) => erc20.getBalance(evmAddress, web3Client)));
+      cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
+      erc20Tokens = cachedErc20Tokens;
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  Erc20TokenData? find(String id) => erc20Tokens.firstWhereOrNull((element) => element.contractAddress == id);
+
+  clear() {
+    erc20Tokens.clear();
+  }
+
 }
