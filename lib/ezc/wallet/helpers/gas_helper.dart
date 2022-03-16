@@ -15,7 +15,7 @@ final MAX_GAS = BigInt.from(1000000000000);
 
 /// Returns the current gas price in WEI from the network
 Future<BigInt> getGasPrice() async {
-  final gasPrice = await web3.getGasPrice();
+  final gasPrice = await web3Client.getGasPrice();
   return gasPrice.getValueInUnitBI(EtherUnit.wei);
 }
 

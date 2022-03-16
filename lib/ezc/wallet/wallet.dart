@@ -20,13 +20,14 @@ import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/helper_functions.dart';
 import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/wallet/asset/assets.dart';
+import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
 import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/ezc/wallet/evm_wallet.dart';
 import 'package:wallet/ezc/wallet/explorer/cchain/requests.dart'
     as cchain_explorer_request;
 import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/ezc/wallet/explorer/ortelius/types.dart';
-import 'package:wallet/ezc/wallet/helpers/tx_helper.dart';
+import 'package:wallet/ezc/wallet/helpers/tx_helper.dart' as tx_hepler;
 import 'package:wallet/ezc/wallet/helpers/utxo_helper.dart';
 import 'package:wallet/ezc/wallet/history/types.dart';
 import 'package:wallet/ezc/wallet/network/helpers/id_from_alias.dart';
@@ -307,7 +308,7 @@ abstract class WalletProvider {
     final fromAddresses = await getAllAddressesX();
     final changeAddress = getChangeAddressX();
     final utxos = utxosX;
-    final exportTx = await buildAvmExportTransaction(
+    final exportTx = await tx_hepler.buildAvmExportTransaction(
       destinationChain,
       utxos,
       fromAddresses,
@@ -373,7 +374,7 @@ abstract class WalletProvider {
   ) async {
     assert(amount > BigInt.zero);
     final fromAddress = getAddressC();
-    final tx = await buildEvmTransferNativeTx(
+    final tx = await tx_hepler.buildEvmTransferNativeTx(
       fromAddress,
       to,
       amount,
@@ -390,7 +391,7 @@ abstract class WalletProvider {
   /// @param data
   Future<BigInt> estimateGas(String to, String data) async {
     final from = web3_dart.EthereumAddress.fromHex(getAddressC());
-    return await web3.estimateGas(
+    return await web3Client.estimateGas(
       sender: from,
       to: web3_dart.EthereumAddress.fromHex(to),
       data: Uint8List.fromList(utf8.encode(data)),
@@ -406,14 +407,14 @@ abstract class WalletProvider {
     BigInt gasPrice,
   ) async {
     final from = getAddressC();
-    return await estimateAvaxGas(from, to, amount, gasPrice);
+    return await tx_hepler.estimateAvaxGas(from, to, amount, gasPrice);
   }
 
   /// Given a `Transaction`, it will sign and issue it to the network.
   /// @param tx The unsigned transaction to issue.
   Future<String> issueEvmTx(web3_dart.Transaction tx) async {
     final signedTx = await signEvm(tx);
-    final txHash = await web3.sendRawTransaction(signedTx);
+    final txHash = await web3Client.sendRawTransaction(signedTx);
     return await waitTxEvm(txHash);
   }
 
@@ -450,7 +451,7 @@ abstract class WalletProvider {
       destinationAddress,
     );
 
-    final unsignedTx = await buildEvmExportTransaction(
+    final unsignedTx = await tx_hepler.buildEvmExportTransaction(
       fromAddresses,
       destinationAddress,
       amount,
@@ -503,6 +504,63 @@ abstract class WalletProvider {
     await waitTxC(txId);
     await updateAvaxBalanceC();
     return txId;
+  }
+
+  /// Makes a transfer call on a ERC20 contract.
+  /// @param to Hex address to transfer tokens to.
+  /// @param amount Amount of the ERC20 token to send, donated in the token's correct denomination.
+  /// @param gasPrice Gas price in WEI format
+  /// @param gasLimit Gas limit
+  /// @param contractAddress Contract address of the ERC20 token
+  Future<String> sendErc20(
+    String to,
+    BigInt amount,
+    BigInt gasPrice,
+    int gasLimit,
+    String contractAddress,
+  ) async {
+    final from = getAddressC();
+    final token = await Erc20TokenData.getData(
+      contractAddress,
+      web3Client,
+      activeNetwork.evmChainId,
+    );
+    if (token == null) {
+      throw Exception("Invalid contract address.");
+    }
+    final evmPrivateKey = evmWallet.getPrivateKeyHex();
+    final balOld = await token.getBalance(from, web3Client);
+    final tx = await tx_hepler.buildEvmTransferErc20Tx(
+      evmPrivateKey,
+      from,
+      to,
+      amount,
+      gasPrice,
+      gasLimit,
+      contractAddress,
+    );
+    final txHash = await issueEvmTx(tx);
+
+    final balNew = await token.getBalance(from, web3Client);
+    if (balOld != balNew) {
+      emitBalanceChangeC();
+    }
+
+    return txHash;
+  }
+
+  Future<BigInt> estimateErc20Gas(
+    String contractAddress,
+    String to,
+    BigInt amount,
+  ) async {
+    final from = getAddressC();
+    return await tx_hepler.estimateErc20Gas(
+      contractAddress,
+      from,
+      to,
+      amount,
+    );
   }
 
   Future<EvmUTXOSet> getAtomicUTXOsC(ExportChainsC sourceChain) async {
@@ -625,7 +683,7 @@ abstract class WalletProvider {
         : getEvmAddressBech();
     final utxoSet = utxosP;
 
-    final unsignedTx = await buildPvmExportTransaction(
+    final unsignedTx = await tx_hepler.buildPvmExportTransaction(
       utxoSet,
       fromAddresses,
       destinationAddress,
@@ -797,7 +855,7 @@ abstract class WalletProvider {
     return await getTransactionSummary(tx, addresses, addressesC);
   }
 
-  Future<List<CChainErc20Tx>> getHistoryERC2({
+  Future<List<CChainErc20Tx>> getHistoryErc20({
     String? contractAddress,
     int page = 0,
     int offset = 0,
@@ -820,7 +878,7 @@ abstract class WalletProvider {
     final minterAddress = getAddressX();
     final utxoSet = utxosX;
 
-    final unsignedTx = await buildCreateNFTFamilyTx(
+    final unsignedTx = await tx_hepler.buildCreateNFTFamilyTx(
       name,
       symbol,
       groupNum,
@@ -845,7 +903,7 @@ abstract class WalletProvider {
     final changeAddress = getChangeAddressX();
     final sourceAddresses = await getAllAddressesX();
     final utxoSet = utxosX;
-    final unsignedTx = await buildMintNFTTx(
+    final unsignedTx = await tx_hepler.buildMintNFTTx(
       mintUTXO,
       payload,
       quantity,

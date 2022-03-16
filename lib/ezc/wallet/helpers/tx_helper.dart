@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:wallet/ezc/sdk/apis/avm/minter_set.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
@@ -8,9 +10,11 @@ import 'package:wallet/ezc/sdk/apis/pvm/utxos.dart';
 import 'package:wallet/ezc/sdk/common/output.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/payload.dart';
+import 'package:wallet/ezc/wallet/asset/erc20/erc20.dart';
 import 'package:wallet/ezc/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/types.dart';
+import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 Future<Transaction> buildEvmTransferNativeTx(
@@ -21,7 +25,10 @@ Future<Transaction> buildEvmTransferNativeTx(
   int gasLimit,
 ) async {
   final etherFromAddress = EthereumAddress.fromHex(from);
-  final nonce = await web3.getTransactionCount(etherFromAddress);
+  final nonce = await web3Client.getTransactionCount(
+    etherFromAddress,
+    atBlock: const BlockNum.pending(),
+  );
   return Transaction(
     from: etherFromAddress,
     to: EthereumAddress.fromHex(to),
@@ -39,15 +46,97 @@ Future<BigInt> estimateAvaxGas(
   BigInt gasPrice,
 ) async {
   try {
-    final test = await web3.estimateGas(
+    return await web3Client.estimateGas(
       sender: EthereumAddress.fromHex(from),
       to: EthereumAddress.fromHex(to),
       gasPrice: EtherAmount.fromUnitAndValue(EtherUnit.wei, gasPrice),
       value: EtherAmount.fromUnitAndValue(EtherUnit.wei, amount),
     );
-    return test;
   } catch (e) {
     return BigInt.from(21000);
+  }
+}
+
+Future<Transaction> buildCustomEvmTx(
+  String from,
+  String to,
+  BigInt amount,
+  BigInt gasPrice,
+  int gasLimit, {
+  String? data,
+  int? nonce,
+}) async {
+  final etherFromAddress = EthereumAddress.fromHex(from);
+  nonce ??= await web3Client.getTransactionCount(
+    etherFromAddress,
+    atBlock: const BlockNum.pending(),
+  );
+  Uint8List? dataBytes;
+  if (data != null) {
+    hexToBytes(data);
+  }
+  return Transaction(
+    from: etherFromAddress,
+    to: EthereumAddress.fromHex(to),
+    maxGas: gasLimit,
+    gasPrice: EtherAmount.fromUnitAndValue(EtherUnit.wei, gasPrice),
+    nonce: nonce,
+    data: dataBytes,
+    value: EtherAmount.fromUnitAndValue(EtherUnit.wei, amount),
+  );
+}
+
+Future<Transaction> buildEvmTransferErc20Tx(
+  String evmPrivateKey,
+  String from,
+  String to,
+  BigInt amount,
+  BigInt gasPrice,
+  int gasLimit,
+  String contractAddress,
+) async {
+  final erc20 = ERC20(
+    address: EthereumAddress.fromHex(contractAddress),
+    client: web3Client,
+  );
+  final credentials = EthPrivateKey.fromHex(evmPrivateKey);
+  final tokenTx = await erc20.transfer(
+    EthereumAddress.fromHex(to),
+    amount,
+    credentials: credentials,
+  );
+  return await buildCustomEvmTx(
+    from,
+    to,
+    amount,
+    gasPrice,
+    gasLimit,
+    data: tokenTx,
+  );
+}
+
+Future<BigInt> estimateErc20Gas(
+  String contractAddress,
+  String from,
+  String to,
+  BigInt amount,
+) async {
+  try {
+    final erc20 = ERC20(
+      address: EthereumAddress.fromHex(contractAddress),
+      client: web3Client,
+    );
+    final method = erc20.self.function('transfer');
+
+    final gas = await web3Client.estimateGas(
+      sender: EthereumAddress.fromHex(from),
+      to: EthereumAddress.fromHex(contractAddress),
+      data: method.encodeCall([EthereumAddress.fromHex(to), amount]),
+    );
+
+    return BigInt.from(gas.toDouble() * 1.1);
+  } catch (e) {
+    return BigInt.from(31000);
   }
 }
 
@@ -101,8 +190,10 @@ Future<EvmUnsignedTx> buildEvmExportTransaction(
 ) async {
   final destinationChainId = chainIdFromAlias(destinationChain.value);
   final fromAddressHex = fromAddresses[0];
-  final nonce =
-      await web3.getTransactionCount(EthereumAddress.fromHex(fromAddressHex));
+  final nonce = await web3Client.getTransactionCount(
+    EthereumAddress.fromHex(fromAddressHex),
+    atBlock: const BlockNum.pending(),
+  );
   final avaxAssetIdBuff = await xChain.getAVAXAssetId();
   final avaxAssetIdString = cb58Encode(avaxAssetIdBuff!);
 

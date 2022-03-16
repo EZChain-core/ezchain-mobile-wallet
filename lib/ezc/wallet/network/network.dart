@@ -26,9 +26,9 @@ Dio? _explorerApi;
 
 Dio? get explorerApi => _explorerApi;
 
-var _web3 = Web3Client(getRpcC(activeNetwork), Client());
+var _web3Client = Web3Client(getRpcC(activeNetwork), Client());
 
-Web3Client get web3 => _web3;
+Web3Client get web3Client => _web3Client;
 
 EZC _createEZCProvider(NetworkConfig config) {
   return EZC.create(
@@ -55,7 +55,7 @@ void setRpcNetwork(NetworkConfig config) {
   } else {
     _explorerApi = null;
   }
-  _web3 = Web3Client(getRpcC(config), Client());
+  _web3Client = Web3Client(getRpcC(config), Client());
 
   _activeNetwork = config;
 }

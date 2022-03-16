@@ -53,16 +53,19 @@ class EvmWallet {
   }
 
   Future<BigInt> updateBalance() async {
-    final bal = await web3.getBalance(EthereumAddress.fromHex(_address));
+    final bal = await web3Client.getBalance(EthereumAddress.fromHex(_address));
     _balance = bal.getValueInUnitBI(EtherUnit.wei);
     return _balance;
   }
 
   Future<Uint8List> signEvm(Transaction tx) async {
     final credentials = EthPrivateKey.fromHex(getPrivateKeyHex());
-    final chainId = await web3.getChainId();
-    var signed =
-        await web3.signTransaction(credentials, tx, chainId: chainId.toInt());
+    final chainId = await web3Client.getChainId();
+    var signed = await web3Client.signTransaction(
+      credentials,
+      tx,
+      chainId: chainId.toInt(),
+    );
     if (tx.isEIP1559) {
       signed = prependTransactionType(0x02, signed);
     }

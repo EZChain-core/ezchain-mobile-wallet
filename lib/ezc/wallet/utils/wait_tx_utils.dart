@@ -8,7 +8,9 @@ import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:web3dart/web3dart.dart';
 
 Future<String> waitTxX(String txId, {int tryCount = 15}) async {
-  assert(tryCount > 0, "Timeout");
+  if (tryCount <= 0) {
+    return throw ("Wait Tx X Timeout");
+  }
   final avm_tx_status.TxStatus txStatus;
   String? reason;
   try {
@@ -31,7 +33,9 @@ Future<String> waitTxX(String txId, {int tryCount = 15}) async {
 }
 
 Future<String> waitTxP(String txId, {int tryCount = 15}) async {
-  assert(tryCount > 0, "Timeout");
+  if (tryCount <= 0) {
+    return throw ("Wait Tx P Timeout");
+  }
   final pvm_tx_status.TxStatus txStatus;
   String? reason;
   try {
@@ -54,7 +58,9 @@ Future<String> waitTxP(String txId, {int tryCount = 15}) async {
 }
 
 Future<String> waitTxC(String txId, {int tryCount = 15}) async {
-  assert(tryCount > 0, "Timeout");
+  if (tryCount <= 0) {
+    return throw ("Wait Tx C Timeout");
+  }
   final evm_tx_status.TxStatus txStatus;
   String? reason;
   try {
@@ -77,10 +83,12 @@ Future<String> waitTxC(String txId, {int tryCount = 15}) async {
 }
 
 Future<String> waitTxEvm(String txHash, {int tryCount = 15}) async {
-  assert(tryCount > 0, "Timeout");
+  if (tryCount <= 0) {
+    return throw ("Wait Tx Evm Timeout");
+  }
   TransactionReceipt? receipt;
   try {
-    receipt = await web3.getTransactionReceipt(txHash);
+    receipt = await web3Client.getTransactionReceipt(txHash);
   } catch (e) {
     throw Exception("Unable to get transaction receipt.");
   }
@@ -91,6 +99,7 @@ Future<String> waitTxEvm(String txHash, {int tryCount = 15}) async {
     if (receipt.status == true) {
       return txHash;
     } else {
+      print("txHash = $txHash, receipt = $receipt");
       throw Exception("Transaction reverted.");
     }
   }
