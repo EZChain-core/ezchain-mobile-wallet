@@ -19,7 +19,9 @@ var _ezc = _createEZCProvider(activeNetwork);
 EZC get ezc => _ezc;
 
 AvmApi get xChain => ezc.avmApi;
+
 EvmApi get cChain => ezc.evmApi;
+
 PvmApi get pChain => ezc.pvmApi;
 
 Dio? _explorerApi;
@@ -39,7 +41,7 @@ EZC _createEZCProvider(NetworkConfig config) {
   );
 }
 
-int? getEvmChainID() {
+int getEvmChainId() {
   return activeNetwork.evmChainId;
 }
 
@@ -55,6 +57,9 @@ void setRpcNetwork(NetworkConfig config) {
   } else {
     _explorerApi = null;
   }
+  try {
+    web3Client.dispose();
+  } catch (e) {}
   _web3Client = Web3Client(getRpcC(config), Client());
 
   _activeNetwork = config;

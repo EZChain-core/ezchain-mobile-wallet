@@ -45,13 +45,13 @@ abstract class _SettingStore with Store {
     _walletFactory.clearWallets();
     setRpcNetwork(network.config);
     await _walletFactory.initWallet();
+    activeNetworkConfig = network;
+    _walletSetting.saveNetworkConfig(network);
+    showSnackBar(Strings.current.settingNetworkConnected);
     _balanceStore.init();
     _balanceStore.updateTotalBalance();
     _validatorsStore.updateValidators();
     _tokenStore.getToken();
-    activeNetworkConfig = network;
-    _walletSetting.saveNetworkConfig(network);
-    showSnackBar(Strings.current.settingNetworkConnected);
   }
 
   enableTouchId(bool enabled) async {

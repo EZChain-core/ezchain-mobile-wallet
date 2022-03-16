@@ -286,6 +286,7 @@ extension OrteliusTxTypeString on OrteliusTxType {
       case OrteliusTxType.pvmImport:
         type = "Import";
         break;
+      case OrteliusTxType.export:
       case OrteliusTxType.pvmExport:
       case OrteliusTxType.atomicExportTx:
         type = "Export";
