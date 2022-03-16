@@ -287,7 +287,7 @@ final n5P = P(
     minDelegationFee: BigInt.from(2));
 
 final n5C = C(
-    blockchainId: "2XNs8nmfB8HdDeHhf41yTd1KQ5md3PBsnz3mvFevtr3DzBAiib",
+    blockchainId: "V2EVDYfeusw3xQu6wTQrC74NfbkEXaQu26y3da9eswQMGzhhv",
     alias: cChainAlias,
     vm: cChainVMName,
     txBytesGas: 1,
@@ -300,7 +300,7 @@ final n5C = C(
     gasPrice: GWEI * BigInt.from(225),
     minGasPrice: GWEI * BigInt.from(25),
     maxGasPrice: GWEI * BigInt.from(1000),
-    chainId: 0xa869);
+    chainId: 0xa35);
 // End Fuji
 
 // Start local network

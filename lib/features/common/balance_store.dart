@@ -59,21 +59,31 @@ abstract class _BalanceStore with Store {
 
   String get balancePString => decimalBalance(balanceP);
 
-  _BalanceStore() {
-    init();
-  }
-
   init() {
     _wallet.on(WalletEventType.balanceChangedX, _handleCallback);
     _wallet.on(WalletEventType.balanceChangedP, _handleCallback);
     _wallet.on(WalletEventType.balanceChangedC, _handleCallback);
-    updateBalance();
+    updateTotalBalance();
   }
 
+  @action
   dispose() {
     _wallet.off(WalletEventType.balanceChangedX, _handleCallback);
     _wallet.off(WalletEventType.balanceChangedP, _handleCallback);
     _wallet.off(WalletEventType.balanceChangedC, _handleCallback);
+    totalEzc = Decimal.zero;
+    staking = Decimal.zero;
+    balanceX = Decimal.zero;
+    balanceP = Decimal.zero;
+    balanceC = Decimal.zero;
+    balanceLockedX = Decimal.zero;
+    balanceLockedP = Decimal.zero;
+    balanceLockedStakeableP = Decimal.zero;
+    isTotalLoaded = false;
+    _isXLoaded = false;
+    _isPLoaded = false;
+    _isCLoaded = false;
+    _needFetchTotal = false;
   }
 
   @action

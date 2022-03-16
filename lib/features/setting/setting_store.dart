@@ -49,7 +49,7 @@ abstract class _SettingStore with Store {
     _walletSetting.saveNetworkConfig(network);
     showSnackBar(Strings.current.settingNetworkConnected);
     _balanceStore.init();
-    _balanceStore.updateTotalBalance();
+    _validatorsStore.clear();
     _validatorsStore.updateValidators();
     _tokenStore.getToken();
   }
