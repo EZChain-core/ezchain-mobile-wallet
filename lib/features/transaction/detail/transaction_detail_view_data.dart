@@ -108,9 +108,10 @@ extension TransactionDetailExtension on OrteliusTx {
         final amount =
             bnToLocaleString(BigInt.tryParse(output.amount) ?? BigInt.zero);
         final address = output.addresses?.firstOrNull;
+        final chain = idToChainAlias(output.chainId);
         String? from;
         if (address != null) {
-          from = '${ezcType.chainAlias}-$address';
+          from = '$chain-$address';
         }
         inputs.add(TransactionDetailInputViewData(
             from, signatures?.firstOrNull, i + 1));
@@ -123,9 +124,10 @@ extension TransactionDetailExtension on OrteliusTx {
         final amount =
             bnToLocaleString(BigInt.tryParse(output.amount) ?? BigInt.zero);
         final address = output.addresses?.firstOrNull;
+        final chain = idToChainAlias(output.chainId);
         String? to;
         if (address != null) {
-          to = '${ezcType.chainAlias}-$address';
+          to = '$chain-$address';
         }
         outputs.add(
             TransactionDetailOutputViewData(to, i + 1));
