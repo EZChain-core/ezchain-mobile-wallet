@@ -2,12 +2,12 @@ import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
-import 'package:wallet/features/common/validators_store.dart';
-import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/ezc/sdk/utils/bigint.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/features/common/validators_store.dart';
+import 'package:wallet/features/common/wallet_factory.dart';
 
 import 'earn_delegate_node_item.dart';
 
@@ -20,6 +20,11 @@ abstract class _EarnDelegateNodesStore with Store {
   final _wallet = getIt<WalletFactory>().activeWallet;
   final _validatorsStore = getIt<ValidatorsStore>();
 
+  final List<EarnDelegateNodeItem> _nodes = [];
+
+  @observable
+  String keySearch = '';
+
   @computed
   List<Validator> get validators => _validatorsStore.validators;
 
@@ -28,6 +33,11 @@ abstract class _EarnDelegateNodesStore with Store {
   }
 
   Future<List<EarnDelegateNodeItem>> getNodeIds() async {
+    if (keySearch.isNotEmpty) {
+      return _nodes.take(1).toList();
+    } else if(_nodes.isNotEmpty) {
+      return _nodes;
+    }
     List<EarnDelegateNodeItem> nodes = [];
     try {
       validators.sort((a, b) {
@@ -99,6 +109,9 @@ abstract class _EarnDelegateNodesStore with Store {
       }
     } catch (e) {
       logger.e(e);
+    }
+    if (_nodes.isEmpty) {
+      _nodes.addAll(nodes);
     }
     return nodes;
   }

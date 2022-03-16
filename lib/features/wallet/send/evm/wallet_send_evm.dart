@@ -11,6 +11,7 @@ import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.dart';
 import 'package:wallet/features/wallet/send/evm/wallet_send_evm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
+import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -21,7 +22,11 @@ import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
 class WalletSendEvmScreen extends StatelessWidget {
-  WalletSendEvmScreen({Key? key}) : super(key: key);
+  final WalletTokenItem? fromToken;
+
+  WalletSendEvmScreen({Key? key, this.fromToken}) : super(key: key) {
+    _walletSendEvmStore.setWalletToken(fromToken);
+  }
 
   final _walletSendEvmStore = WalletSendEvmStore();
   final _amountController = TextEditingController();

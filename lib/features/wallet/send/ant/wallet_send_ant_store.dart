@@ -13,7 +13,7 @@ class WalletSendAntStore = _WalletSendAntStore with _$WalletSendAntStore;
 abstract class _WalletSendAntStore with Store {
   WalletTokenItem? token;
 
-  Decimal get balanceToken => token?.amount ?? Decimal.zero;
+  Decimal get balanceToken => token?.balance ?? Decimal.zero;
 
   @observable
   String? addressError;

@@ -1,11 +1,10 @@
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
-import 'package:wallet/features/common/constant/wallet_constant.dart';
-import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
+import 'package:wallet/features/common/wallet_factory.dart';
 
 part 'transaction_c_detail_store.g.dart';
 
@@ -16,11 +15,11 @@ abstract class _TransactionCDetailStore with Store {
   final _wallet = getIt<WalletFactory>().activeWallet;
 
   Future<TransactionCChainViewData?> getTransactionDetail(String txHash,
-      String nonce, CChainExplorerTxReceiptStatus receiptStatus) async {
+      String nonce, CChainExplorerTxReceiptStatus? receiptStatus) async {
     try {
       final tx = await _wallet.getCChainTransaction(txHash);
       return TransactionCChainViewData.mapFromCChainExplorerTxInfo(
-          tx, receiptStatus, nonce);
+          tx, nonce, receiptStatus);
     } catch (e) {
       logger.e(e);
       return null;
@@ -31,7 +30,7 @@ abstract class _TransactionCDetailStore with Store {
 class TransactionCChainViewData {
   final String hash;
   final bool result;
-  final bool status;
+  final bool? status;
   final String block;
   final String from;
   final String to;
@@ -58,8 +57,8 @@ class TransactionCChainViewData {
 
   factory TransactionCChainViewData.mapFromCChainExplorerTxInfo(
       CChainExplorerTxInfo tx,
-      CChainExplorerTxReceiptStatus receiptStatus,
-      String nonce) {
+      String nonce,
+      CChainExplorerTxReceiptStatus? receiptStatus) {
     final value = bnToAvaxC(BigInt.tryParse(tx.value) ?? BigInt.zero);
     final amount = '$value $ezcCode';
     final gasPrice = BigInt.tryParse(tx.gasPrice) ?? BigInt.zero;
@@ -67,7 +66,9 @@ class TransactionCChainViewData {
     final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
     final fee = '${bnToAvaxC(gasPrice * gasUsed)} $ezcCode';
     final result = tx.success;
-    final status = receiptStatus == CChainExplorerTxReceiptStatus.ok;
+    final status = receiptStatus != null
+        ? receiptStatus == CChainExplorerTxReceiptStatus.ok
+        : null;
     final block = '#${tx.blockNumber}';
     final gasUsedText =
         '${tx.gasUsed} | ${(int.parse(tx.gasUsed) ~/ int.parse(tx.gasLimit)) * 100}%';

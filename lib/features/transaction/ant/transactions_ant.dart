@@ -4,13 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
+import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
-import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/transaction/ant/transactions_ant_store.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
-import 'package:wallet/features/transaction/transactions_store.dart';
 import 'package:wallet/features/transaction/widgets/transactions_widgets.dart';
+import 'package:wallet/features/wallet/receive/wallet_receive.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -34,7 +34,7 @@ class TransactionsAntScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               EZCAppBar(
-                title: '${token.code}(${token.type})',
+                title: '${token.symbol}(${token.chain})',
                 onPressed: () {
                   context.router.pop();
                 },
@@ -63,7 +63,7 @@ class TransactionsAntScreen extends StatelessWidget {
                                   children: [
                                     Observer(
                                       builder: (_) => Text(
-                                        '${token.amountText} ${token.code}'
+                                        '${token.balanceText} ${token.symbol}'
                                             .useCorrectEllipsis(),
                                         style: EZCHeadlineSmallTextStyle(
                                             color: provider.themeMode.text),
@@ -71,22 +71,24 @@ class TransactionsAntScreen extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    Observer(
-                                      builder: (_) => Text(
-                                        '\$${token.totalPrice}',
-                                        style: EZCTitleSmallTextStyle(
-                                            color: provider.themeMode.text40),
+                                    if (token.price != null)
+                                      Observer(
+                                        builder: (_) => Text(
+                                          '\$${token.totalPrice}',
+                                          style: EZCTitleSmallTextStyle(
+                                              color: provider.themeMode.text40),
+                                        ),
                                       ),
-                                    ),
                                   ],
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              if (token.type != null)
-                                Padding(
-                                    padding: const EdgeInsets.only(top: 8),
-                                    child:
-                                        EZCChainLabelText(text: token.type!)),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  EZCChainLabelText(text: token.chain),
+                                ],
+                              ),
                               const SizedBox(width: 16),
                             ],
                           ),
@@ -98,18 +100,13 @@ class TransactionsAntScreen extends StatelessWidget {
                             TransactionsButton(
                               text: Strings.current.sharedSend,
                               icon: Assets.icons.icArrowUpPrimary.svg(),
-                              onPressed: () {
-                                context.pushRoute(WalletSendAntRoute(token: token));
-                              },
+                              onPressed: _onClickSend,
                             ),
                             const SizedBox(width: 40),
                             TransactionsButton(
-                              text: Strings.current.sharedReceive,
-                              icon: Assets.icons.icArrowDownPrimary.svg(),
-                              onPressed: () {
-
-                              },
-                            ),
+                                text: Strings.current.sharedReceive,
+                                icon: Assets.icons.icArrowDownPrimary.svg(),
+                                onPressed: _onClickReceive),
                             const SizedBox(width: 40),
                             TransactionsButton(
                               text: Strings.current.sharedCopy,
@@ -140,7 +137,7 @@ class TransactionsAntScreen extends StatelessWidget {
               ),
               Expanded(
                 child: FutureBuilder<List<TransactionsItem>>(
-                  future: _transactionsAntStore.getTransactions(token.id),
+                  future: _transactionsAntStore.getTransactions(token),
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {
                       final transactions = snapshot.data!;
@@ -179,5 +176,28 @@ class TransactionsAntScreen extends StatelessWidget {
   _onClickCopy() {
     Clipboard.setData(ClipboardData(text: token.id));
     showSnackBar(Strings.current.sharedCopied);
+  }
+
+  _onClickReceive() {
+    String address = '';
+    if (token.type == EZCTokenType.ant) {
+      address = _transactionsAntStore.addressX;
+    } else {
+      address = _transactionsAntStore.addressC;
+    }
+    walletContext?.pushRoute(
+      WalletReceiveRoute(
+        args: WalletReceiveArgs(
+            token.type.chain, address, token.symbol, token.name),
+      ),
+    );
+  }
+
+  _onClickSend() {
+    if (token.type == EZCTokenType.ant) {
+      walletContext?.pushRoute(WalletSendAntRoute(token: token));
+    } else {
+      walletContext?.pushRoute(WalletSendEvmRoute(fromToken: token));
+    }
   }
 }

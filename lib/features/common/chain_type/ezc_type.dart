@@ -22,3 +22,15 @@ extension EZCTypeExtension on EZCType {
 EZCType chainAliasToEZCType(String chain) {
   return EZCType.values.firstWhere((element) => element.chainAlias == chain);
 }
+
+
+enum EZCTokenType { ant, erc20 }
+
+extension EZCTokenTypeExtension on EZCTokenType {
+
+  EZCType get ezcType {
+    return [EZCType.xChain, EZCType.cChain][index];
+  }
+
+  String get chain => ezcType.name;
+}

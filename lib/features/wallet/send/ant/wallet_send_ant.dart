@@ -52,13 +52,13 @@ class WalletSendAntScreen extends StatelessWidget {
                           Assets.icons.icEzc64.svg(width: 32, height: 32),
                           const SizedBox(width: 8),
                           Text(
-                            token.code,
+                            token.symbol,
                             style: EZCBodyLargeTextStyle(
                                 color: provider.themeMode.text),
                           ),
                           const SizedBox(width: 16),
-                          if (token.type != null)
-                            EZCChainLabelText(text: token.type!),
+                          if (token.chain != null)
+                            EZCChainLabelText(text: token.chain!),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -78,7 +78,7 @@ class WalletSendAntScreen extends StatelessWidget {
                           label: Strings.current.sharedSetAmount,
                           hint: '0.0',
                           suffixText: Strings.current
-                              .walletSendBalance(token.amountText),
+                              .walletSendBalance(token.balanceText),
                           rateUsd: token.price,
                           error: _walletSendAntStore.amountError,
                           onChanged: (amount) {
@@ -89,7 +89,7 @@ class WalletSendAntScreen extends StatelessWidget {
                           controller: _amountController,
                           onSuffixPressed: () {
                             _amountController.text =
-                                (token.amount - _walletSendAntStore.fee)
+                                (token.balance - _walletSendAntStore.fee)
                                     .toString();
                           },
                         ),

@@ -1634,10 +1634,10 @@ class Strings {
     );
   }
 
-  /// `Invalid address`
+  /// `Invalid contract address`
   String get walletTokenAddressInvalid {
     return Intl.message(
-      'Invalid address',
+      'Invalid contract address',
       name: 'walletTokenAddressInvalid',
       desc: '',
       args: [],
@@ -2059,6 +2059,16 @@ class Strings {
     return Intl.message(
       'Delegation',
       name: 'earnDelegation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Validator Address `
+  String get earnValidatorAddress {
+    return Intl.message(
+      'Validator Address ',
+      name: 'earnValidatorAddress',
       desc: '',
       args: [],
     );

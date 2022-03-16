@@ -141,6 +141,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Total Rewards"),
         "earnUseYourWallet":
             MessageLookupByLibrary.simpleMessage("Use your wallet"),
+        "earnValidatorAddress":
+            MessageLookupByLibrary.simpleMessage("Validator Address "),
         "earnValidatorStake":
             MessageLookupByLibrary.simpleMessage("Validator Stake"),
         "nftBackMyNFT": MessageLookupByLibrary.simpleMessage("Back to My NFT"),
@@ -368,7 +370,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "walletSendMemo":
             MessageLookupByLibrary.simpleMessage("Memo (optional)"),
         "walletTokenAddressInvalid":
-            MessageLookupByLibrary.simpleMessage("Invalid address"),
+            MessageLookupByLibrary.simpleMessage("Invalid contract address"),
         "walletTokenContractAddress":
             MessageLookupByLibrary.simpleMessage("Token Contract Address"),
         "walletTokenDecimal":
