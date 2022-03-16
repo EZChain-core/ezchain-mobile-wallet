@@ -4,11 +4,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/extensions.dart';
-import 'package:wallet/common/router.dart';
-import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/wallet/token/add/wallet_token_add_store.dart';
-import 'package:wallet/features/wallet/token/add_confirm/wallet_token_add_confirm.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
@@ -21,10 +18,7 @@ class WalletTokenAddScreen extends StatelessWidget {
   WalletTokenAddScreen({Key? key}) : super(key: key);
 
   final _walletTokenAddStore = WalletTokenAddStore();
-  final _addressController = TextEditingController(text: receiverAddressCTest);
-  final _nameController = TextEditingController();
-  final _symbolController = TextEditingController();
-  final _decimalController = TextEditingController();
+  final _addressController = TextEditingController(text: erc20AddressTest);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +41,7 @@ class WalletTokenAddScreen extends StatelessWidget {
                   onPressed: context.popRoute,
                 ),
                 Expanded(
-                  child: SingleChildScrollView(
+                  child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,25 +57,7 @@ class WalletTokenAddScreen extends StatelessWidget {
                           label: Strings.current.walletTokenContractAddress,
                           controller: _addressController,
                         ),
-                        const SizedBox(height: 16),
-                        EZCTextField(
-                          label: Strings.current.walletTokenName,
-                          controller: _nameController,
-                        ),
-                        const SizedBox(height: 16),
-                        EZCTextField(
-                          label: Strings.current.walletTokenSymbol,
-                          controller: _symbolController,
-                          textCapitalization: TextCapitalization.characters,
-                        ),
-                        const SizedBox(height: 16),
-                        EZCTextField(
-                          label: Strings.current.walletTokenDecimal,
-                          controller: _decimalController,
-                          hint: '0',
-                          inputType: TextInputType.number,
-                        ),
-                        const SizedBox(height: 115),
+                        const Spacer(),
                         Align(
                           alignment: Alignment.center,
                           child: EZCMediumPrimaryButton(
@@ -90,6 +66,7 @@ class WalletTokenAddScreen extends StatelessWidget {
                             onPressed: _onClickNext,
                           ),
                         ),
+                        const SizedBox(height: 24),
                       ],
                     ),
                   ),
@@ -104,11 +81,6 @@ class WalletTokenAddScreen extends StatelessWidget {
 
   _onClickNext() async {
     final address = _addressController.text.trim();
-    final name = _nameController.text.trim();
-    final symbol = _symbolController.text.trim();
-    final decimal = int.tryParse(_decimalController.text) ?? 0;
-    _walletTokenAddStore.validate(address, name, symbol, decimal);
-    // walletContext?.pushRoute(WalletTokenAddConfirmRoute(
-    //     args: WalletTokenAddConfirmArgs(address, name, symbol, decimal)));
+    _walletTokenAddStore.validate(address);
   }
 }

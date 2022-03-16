@@ -109,6 +109,10 @@ class $AssetsIconsGen {
   SvgGenImage get icSearchBlack =>
       const SvgGenImage('assets/icons/ic_search_black.svg');
 
+  /// File path: assets/icons/ic_search_outline.svg
+  SvgGenImage get icSearchOutline =>
+      const SvgGenImage('assets/icons/ic_search_outline.svg');
+
   /// File path: assets/icons/ic_security.svg
   SvgGenImage get icSecurity =>
       const SvgGenImage('assets/icons/ic_security.svg');

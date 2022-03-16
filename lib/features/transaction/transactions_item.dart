@@ -28,11 +28,12 @@ class TransactionsItem {
   final List<TransactionsItemAddressInfo> from;
   final List<TransactionsItemAddressInfo> to;
   final EZCType chain;
-  final CChainExplorerTx? cChainExplorerTx;
+  final String? nonce;
+  final CChainExplorerTxReceiptStatus? receiptStatus;
 
   TransactionsItem(
       this.id, this.time, this.type, this.from, this.to, this.chain,
-      [this.cChainExplorerTx]);
+      [this.nonce, this.receiptStatus]);
 }
 
 class TransactionsItemAddressInfo {
@@ -227,9 +228,12 @@ Widget buildTransactionWidget(TransactionsItem transaction) {
               ?.pushRoute(TransactionDetailRoute(txId: transaction.id));
           break;
         case EZCType.cChain:
-          if (transaction.cChainExplorerTx != null) {
+          if (transaction.nonce != null) {
             walletContext?.pushRoute(TransactionCDetailRoute(
-                cChainExplorerTx: transaction.cChainExplorerTx!));
+              txHash: transaction.id,
+              nonce: transaction.nonce!,
+              receiptStatus: transaction.receiptStatus,
+            ));
           }
           break;
       }
@@ -444,7 +448,8 @@ List<TransactionsItem> mapCChainToTransactionsItem(
         from,
         to,
         type,
-        tx,
+        tx.nonce,
+        tx.txReceiptStatus
       ));
     }
   } catch (e) {

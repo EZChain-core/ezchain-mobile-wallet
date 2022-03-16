@@ -101,7 +101,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                           onReceivePressed: () => context.router.push(
                             WalletReceiveRoute(
                               args: WalletReceiveArgs(
-                                  'X-Chain', _walletEZCStore.addressX),
+                                  EZCType.xChain.name, _walletEZCStore.addressX),
                             ),
                           ),
                           onPressed: () => context.pushRoute(
@@ -121,7 +121,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                           onReceivePressed: () => context.router.push(
                             WalletReceiveRoute(
                               args: WalletReceiveArgs(
-                                  'P-Chain', _walletEZCStore.addressP),
+                                  EZCType.pChain.name, _walletEZCStore.addressP),
                             ),
                           ),
                           onPressed: () => context.pushRoute(
@@ -140,7 +140,7 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                           onReceivePressed: () => context.router.push(
                             WalletReceiveRoute(
                               args: WalletReceiveArgs(
-                                  'C-Chain', _walletEZCStore.addressC),
+                                  EZCType.cChain.name, _walletEZCStore.addressC),
                             ),
                           ),
                           onPressed: () => context.pushRoute(

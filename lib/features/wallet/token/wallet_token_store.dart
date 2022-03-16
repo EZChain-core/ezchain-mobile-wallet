@@ -1,6 +1,5 @@
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
-import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
@@ -9,7 +8,9 @@ import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/ezc/wallet/network/utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/balance_store.dart';
+import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/common/price_store.dart';
+import 'package:wallet/features/common/token/token_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 
@@ -22,6 +23,7 @@ abstract class _WalletTokenStore with Store {
 
   final _balanceStore = getIt<BalanceStore>();
   final _priceStore = getIt<PriceStore>();
+  final _tokenStore = getIt<TokenStore>();
 
   BigInt get _stakedBN => numberToBNAvaxP(_balanceStore.staking.toDouble());
 
@@ -37,7 +39,7 @@ abstract class _WalletTokenStore with Store {
   String get tokenBalance {
     Decimal total = Decimal.zero;
     for (var element in tokens) {
-      total += (element.amount * element.price);
+      total += (element.balance * (element.price ?? Decimal.one));
     }
     return total.text(decimals: 1);
   }
@@ -46,13 +48,18 @@ abstract class _WalletTokenStore with Store {
   Decimal get ezcPrice => _priceStore.avaxPrice;
 
   @computed
+  List<WalletTokenItem> get erc20Tokens => _tokenStore.erc20Tokens
+      .map((e) => mapErc20TokenDataToWalletToken(e))
+      .toList();
+
+  @computed
   List<WalletTokenItem> get tokens {
-    logger.e('vit isTotalLoaded ${_balanceStore.isTotalLoaded}');
+    final List<WalletTokenItem> list = [];
     if (_balanceStore.isTotalLoaded) {
-      return fetchAssets();
-    } else {
-      return [];
+      list.addAll(fetchAssets());
     }
+    list.addAll(erc20Tokens);
+    return list;
   }
 
   @action
@@ -107,11 +114,10 @@ abstract class _WalletTokenStore with Store {
     for (var element in assets) {
       final isEzc = element.id == avaAssetId;
       if (isEzc) continue;
-      const type = 'X-Chain';
       final amountText = element.toString();
       final amount = element.getAmount();
-      list.add(WalletTokenItem(element.id, '', element.name, element.symbol,
-          amount, ezcPrice, amountText, type));
+      list.add(WalletTokenItem(
+          element.name, element.symbol, amount, amountText, EZCTokenType.ant, id: element.id));
     }
     return list;
   }

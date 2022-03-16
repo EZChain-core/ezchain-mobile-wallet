@@ -44,7 +44,7 @@ class WalletReceiveScreen extends StatelessWidget {
                             Assets.icons.icEzc64.svg(width: 32, height: 32),
                             const SizedBox(width: 8),
                             Text(
-                              ezcCode,
+                              args.symbol,
                               style: EZCBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
@@ -122,7 +122,7 @@ class WalletReceiveScreen extends StatelessWidget {
                                 color: provider.themeMode.text90),
                             children: <TextSpan>[
                               TextSpan(
-                                  text: Strings.current.walletReceiveBitcoin,
+                                  text: args.receiverName,
                                   style: EZCSemiBoldSmallTextStyle(
                                       color: provider.themeMode.text90)),
                               TextSpan(
@@ -169,6 +169,10 @@ class WalletReceiveScreen extends StatelessWidget {
 class WalletReceiveArgs {
   final String chain;
   final String address;
+  final String symbol;
+  final String name;
 
-  WalletReceiveArgs(this.chain, this.address);
+  WalletReceiveArgs(this.chain, this.address, [this.symbol = ezcCode, this.name = ezcName]);
+
+  String get receiverName => '$name ($symbol)';
 }

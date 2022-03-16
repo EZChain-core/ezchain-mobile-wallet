@@ -637,3 +637,49 @@ class _EZCDateTimeTextFieldState extends State<EZCDateTimeTextField> {
     }
   }
 }
+
+class EZCSearchTextField extends StatelessWidget {
+  final String? hint;
+
+  final TextEditingController? controller;
+
+  final ValueChanged<String>? onChanged;
+
+  const EZCSearchTextField({
+    Key? key,
+    this.hint,
+    this.controller,
+    this.onChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => SizedBox(
+        width: double.infinity,
+        child: TextField(
+          style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
+          cursorColor: provider.themeMode.text,
+          controller: controller,
+          onChanged: onChanged,
+          maxLines: 1,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(12),
+            hintText: hint,
+            hintStyle: EZCBodyLargeTextStyle(color: provider.themeMode.text40),
+            prefixIcon: Assets.icons.icSearchBlack.svg(width: 18, height: 18),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: ezcBorder,
+              borderSide: BorderSide(color: provider.themeMode.border),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: ezcBorder,
+              borderSide: BorderSide(color: provider.themeMode.borderActive),
+            ),
+          ),
+          textInputAction: TextInputAction.next,
+        ),
+      ),
+    );
+  }
+}

@@ -8,6 +8,7 @@ import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/transaction/transactions_store.dart';
+import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
@@ -244,4 +245,13 @@ class _TransactionsNoData extends StatelessWidget {
       ),
     );
   }
+}
+
+
+class TransactionsArgs {
+  final EZCType? ezcType;
+  final WalletTokenItem? token;
+
+  TransactionsArgs(this.ezcType, this.token);
+
 }

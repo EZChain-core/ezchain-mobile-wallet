@@ -2,8 +2,12 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/balance_store.dart';
+import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/images.dart';
@@ -11,19 +15,20 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
 class WalletTokenItem {
-  final String id;
-  final String logo;
   final String name;
-  final String code;
-  final Decimal amount;
-  final Decimal price;
-  final String amountText;
+  final String symbol;
+  final Decimal balance;
+  final String balanceText;
+  final EZCTokenType type;
   final double? rate;
-  final String? type;
+  final String? logo;
+  final String? id;
+  final Decimal? price;
+  final int? decimals;
 
-  const WalletTokenItem(this.id, this.logo, this.name, this.code, this.amount,
-      this.price, this.amountText,
-      [this.type, this.rate]);
+  const WalletTokenItem(
+      this.name, this.symbol, this.balance, this.balanceText, this.type,
+      {this.id, this.rate, this.logo, this.price, this.decimals});
 
   bool? get isGainer => rate != null ? rate! > 0 : null;
 
@@ -35,7 +40,10 @@ class WalletTokenItem {
     }
   }
 
-  String get totalPrice => '\$${(amount * price).text(decimals: 9)}';
+  String get totalPrice =>
+      price != null ? '\$${(balance * price!).text(decimals: 9)}' : '';
+
+  String get chain => type.chain;
 }
 
 class WalletTokenItemWidget extends StatelessWidget {
@@ -48,17 +56,15 @@ class WalletTokenItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => InkWell(
-        onTap: () => context.pushRoute(TransactionsAntRoute(token: token)),
+        onTap: _onClickToken,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
               EZCCircleImage(
-                src: token.logo,
+                src: token.logo ?? '',
                 size: 40,
-                placeholder: token.type != null
-                    ? Assets.icons.icEzc64.svg()
-                    : Assets.icons.icToken.svg(),
+                placeholder: Assets.icons.icEzc64.svg(),
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -77,22 +83,20 @@ class WalletTokenItemWidget extends StatelessWidget {
                       children: [
                         RichText(
                           text: TextSpan(
-                            text: token.code,
+                            text: token.symbol,
                             style: EZCTitleSmallTextStyle(
                                 color: provider.themeMode.text60),
                             children: [
-                              if (token.type != null)
-                                TextSpan(
-                                  text: '  •  ',
-                                  style: EZCTitleSmallTextStyle(
-                                      color: provider.themeMode.text60),
-                                ),
-                              if (token.type != null)
-                                TextSpan(
-                                  text: token.type!,
-                                  style: EZCTitleSmallTextStyle(
-                                      color: provider.themeMode.primary),
-                                ),
+                              TextSpan(
+                                text: '  •  ',
+                                style: EZCTitleSmallTextStyle(
+                                    color: provider.themeMode.text60),
+                              ),
+                              TextSpan(
+                                text: token.chain!,
+                                style: EZCTitleSmallTextStyle(
+                                    color: provider.themeMode.primary),
+                              ),
                             ],
                           ),
                         )
@@ -105,16 +109,18 @@ class WalletTokenItemWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    token.amountText,
+                    token.balanceText,
                     style:
                         EZCBodyMediumTextStyle(color: provider.themeMode.text),
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    token.totalPrice,
-                    style: EZCTitleSmallTextStyle(
-                        color: provider.themeMode.text50),
-                  ),
+                  if (token.price != null) ...[
+                    const SizedBox(height: 6),
+                    Text(
+                      token.totalPrice,
+                      style: EZCTitleSmallTextStyle(
+                          color: provider.themeMode.text50),
+                    ),
+                  ]
                 ],
               ),
             ],
@@ -123,4 +129,26 @@ class WalletTokenItemWidget extends StatelessWidget {
       ),
     );
   }
+
+  _onClickToken() {
+    switch (token.type) {
+      case EZCTokenType.ant:
+        walletContext?.pushRoute(TransactionsAntRoute(token: token));
+        break;
+      case EZCTokenType.erc20:
+        walletContext?.pushRoute(TransactionsAntRoute(token: token));
+        break;
+    }
+  }
+}
+
+WalletTokenItem mapErc20TokenDataToWalletToken(Erc20TokenData erc20Token) {
+  return WalletTokenItem(
+      erc20Token.name,
+      erc20Token.symbol,
+      bnToDecimal(erc20Token.balanceBN, denomination: erc20Token.decimals),
+      erc20Token.balance,
+      EZCTokenType.erc20,
+      id: erc20Token.contractAddress,
+      decimals: erc20Token.decimals);
 }

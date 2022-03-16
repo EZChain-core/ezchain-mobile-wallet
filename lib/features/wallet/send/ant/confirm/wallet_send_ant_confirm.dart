@@ -50,13 +50,13 @@ class WalletSendAntConfirmScreen extends StatelessWidget {
                           Assets.icons.icEzc64.svg(width: 32, height: 32),
                           const SizedBox(width: 8),
                           Text(
-                            args.token.code,
+                            args.token.symbol,
                             style: EZCBodyLargeTextStyle(
                                 color: provider.themeMode.text),
                           ),
                           const SizedBox(width: 16),
-                          if (args.token.type != null)
-                            EZCChainLabelText(text: args.token.type!),
+                          if (args.token.chain != null)
+                            EZCChainLabelText(text: args.token.chain!),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -177,5 +177,5 @@ class WalletSendAntConfirmArgs {
   WalletSendAntConfirmArgs(
       this.token, this.address, this.memo, this.amount, this.fee, this.total);
 
-  String get assetId => token.id;
+  String get assetId => token.id ?? '';
 }

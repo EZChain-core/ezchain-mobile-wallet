@@ -1,9 +1,12 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
-import 'package:wallet/features/wallet/token/add_confirm/wallet_token_add_confirm_store.dart';
+import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
+import 'package:wallet/features/common/token/token_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -18,7 +21,7 @@ class WalletTokenAddConfirmScreen extends StatelessWidget {
 
   WalletTokenAddConfirmScreen({Key? key, required this.args}) : super(key: key);
 
-  final _walletTokenAddConfirmStore = WalletTokenAddConfirmStore();
+  final _tokenStore = getIt<TokenStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +81,7 @@ class WalletTokenAddConfirmScreen extends StatelessWidget {
                           ),
                           const Spacer(),
                           Text(
-                            '0 ${args.symbol}',
+                            args.balance,
                             style: EZCBodyMediumTextStyle(
                                 color: provider.themeMode.text),
                           ),
@@ -110,17 +113,23 @@ class WalletTokenAddConfirmScreen extends StatelessWidget {
   }
 
   _onClickAddToken() async {
-    walletContext?.router.replaceAll([const DashboardRoute()]);
+    final isSuccess = await _tokenStore.addToken(args.token);
+    if (isSuccess) {
+      walletContext?.router.replaceAll([const DashboardRoute()]);
+    } else {
+      showSnackBar(Strings.current.sharedCommonError);
+    }
   }
 }
 
 class WalletTokenAddConfirmArgs {
-  final String address;
-  final String name;
-  final String symbol;
-  final int decimal;
+  final Erc20TokenData token;
 
-  WalletTokenAddConfirmArgs(this.address, this.name, this.symbol, this.decimal);
+  WalletTokenAddConfirmArgs(this.token);
 
-  get title => '$name ($symbol)';
+  get title => '${token.name} (${token.symbol})';
+
+  String get symbol => token.symbol;
+
+  String get balance => '${token.balance} ${token.symbol}';
 }

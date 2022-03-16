@@ -179,7 +179,9 @@ class AppRouter extends _i41.RootStackRouter {
       final args = routeData.argsAs<WalletSendEvmRouteArgs>(
           orElse: () => const WalletSendEvmRouteArgs());
       return _i41.AdaptivePage<dynamic>(
-          routeData: routeData, child: _i16.WalletSendEvmScreen(key: args.key));
+          routeData: routeData,
+          child: _i16.WalletSendEvmScreen(
+              key: args.key, fromToken: args.fromToken));
     },
     WalletSendEvmConfirmRoute.name: (routeData) {
       final args = routeData.argsAs<WalletSendEvmConfirmRouteArgs>();
@@ -255,7 +257,10 @@ class AppRouter extends _i41.RootStackRouter {
       return _i41.AdaptivePage<dynamic>(
           routeData: routeData,
           child: _i29.TransactionCDetailScreen(
-              key: args.key, cChainExplorerTx: args.cChainExplorerTx));
+              key: args.key,
+              txHash: args.txHash,
+              nonce: args.nonce,
+              receiptStatus: args.receiptStatus));
     },
     EarnDelegateNodesRoute.name: (routeData) {
       final args = routeData.argsAs<EarnDelegateNodesRouteArgs>(
@@ -709,22 +714,24 @@ class WalletSendAntConfirmRouteArgs {
 /// generated route for
 /// [_i16.WalletSendEvmScreen]
 class WalletSendEvmRoute extends _i41.PageRouteInfo<WalletSendEvmRouteArgs> {
-  WalletSendEvmRoute({_i42.Key? key})
+  WalletSendEvmRoute({_i42.Key? key, _i43.WalletTokenItem? fromToken})
       : super(WalletSendEvmRoute.name,
             path: '/wallet-send-evm-screen',
-            args: WalletSendEvmRouteArgs(key: key));
+            args: WalletSendEvmRouteArgs(key: key, fromToken: fromToken));
 
   static const String name = 'WalletSendEvmRoute';
 }
 
 class WalletSendEvmRouteArgs {
-  const WalletSendEvmRouteArgs({this.key});
+  const WalletSendEvmRouteArgs({this.key, this.fromToken});
 
   final _i42.Key? key;
 
+  final _i43.WalletTokenItem? fromToken;
+
   @override
   String toString() {
-    return 'WalletSendEvmRouteArgs{key: $key}';
+    return 'WalletSendEvmRouteArgs{key: $key, fromToken: $fromToken}';
   }
 }
 
@@ -968,25 +975,39 @@ class TransactionDetailRouteArgs {
 class TransactionCDetailRoute
     extends _i41.PageRouteInfo<TransactionCDetailRouteArgs> {
   TransactionCDetailRoute(
-      {_i42.Key? key, required _i45.CChainExplorerTx cChainExplorerTx})
+      {_i42.Key? key,
+      required String txHash,
+      required String nonce,
+      _i45.CChainExplorerTxReceiptStatus? receiptStatus})
       : super(TransactionCDetailRoute.name,
             path: '/transaction-cdetail-screen',
             args: TransactionCDetailRouteArgs(
-                key: key, cChainExplorerTx: cChainExplorerTx));
+                key: key,
+                txHash: txHash,
+                nonce: nonce,
+                receiptStatus: receiptStatus));
 
   static const String name = 'TransactionCDetailRoute';
 }
 
 class TransactionCDetailRouteArgs {
-  const TransactionCDetailRouteArgs({this.key, required this.cChainExplorerTx});
+  const TransactionCDetailRouteArgs(
+      {this.key,
+      required this.txHash,
+      required this.nonce,
+      this.receiptStatus});
 
   final _i42.Key? key;
 
-  final _i45.CChainExplorerTx cChainExplorerTx;
+  final String txHash;
+
+  final String nonce;
+
+  final _i45.CChainExplorerTxReceiptStatus? receiptStatus;
 
   @override
   String toString() {
-    return 'TransactionCDetailRouteArgs{key: $key, cChainExplorerTx: $cChainExplorerTx}';
+    return 'TransactionCDetailRouteArgs{key: $key, txHash: $txHash, nonce: $nonce, receiptStatus: $receiptStatus}';
   }
 }
 

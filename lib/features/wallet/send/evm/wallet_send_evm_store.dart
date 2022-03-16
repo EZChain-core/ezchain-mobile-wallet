@@ -2,13 +2,14 @@ import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
-import 'package:wallet/features/common/balance_store.dart';
-import 'package:wallet/features/common/price_store.dart';
-import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/ezc/wallet/helpers/address_helper.dart';
 import 'package:wallet/ezc/wallet/helpers/gas_helper.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/features/common/balance_store.dart';
+import 'package:wallet/features/common/price_store.dart';
+import 'package:wallet/features/common/wallet_factory.dart';
+import 'package:wallet/features/wallet/token/wallet_token_item.dart';
+import 'package:wallet/generated/l10n.dart';
 
 part 'wallet_send_evm_store.g.dart';
 
@@ -19,6 +20,9 @@ abstract class _WalletSendEvmStore with Store {
 
   final _balanceStore = getIt<BalanceStore>();
   final _priceStore = getIt<PriceStore>();
+
+  @observable
+  WalletTokenItem? _token;
 
   @observable
   int gasPriceNumber = 0;
@@ -33,9 +37,11 @@ abstract class _WalletSendEvmStore with Store {
   Decimal amount = Decimal.zero;
 
   @computed
-  Decimal get balanceC => _balanceStore.balanceC;
+  Decimal get balanceC =>
+      _token != null ? _token!.balance : _balanceStore.balanceC;
 
-  String get balanceCString => _balanceStore.balanceCString;
+  String get balanceCString =>
+      _token != null ? _token!.balanceText : _balanceStore.balanceCString;
 
   @observable
   String? addressError;
@@ -58,6 +64,18 @@ abstract class _WalletSendEvmStore with Store {
   Decimal get maxAmount => balanceC - fee;
 
   BigInt _gasPrice = BigInt.zero;
+
+  BigInt get amountBN {
+    if (_token != null) {
+      return numberToBN(amount.toBigInt(), _token!.decimals ?? 9);
+    } else {
+      return numberToBNAvaxC(amount.toBigInt());
+    }
+  }
+
+  setWalletToken(WalletTokenItem? tokenItem) {
+    _token = tokenItem;
+  }
 
   @action
   getBalanceC() async {
@@ -86,10 +104,15 @@ abstract class _WalletSendEvmStore with Store {
       amountError = Strings.current.sharedInvalidAmount;
     }
     if (isAddressValid && isAmountValid) {
-      final evmAmount = numberToBNAvaxC(amount.toBigInt());
-      gasLimit =
-          await _wallet.estimateAvaxGasLimit(address, evmAmount, _gasPrice);
+      if (_token != null) {
+        gasLimit =
+            await _wallet.estimateErc20Gas(_token!.id!, address, amountBN);
+      } else {
+        gasLimit =
+            await _wallet.estimateAvaxGasLimit(address, amountBN, _gasPrice);
+      }
       fee = bnToDecimalAvaxC(_gasPrice * gasLimit);
+
       confirmSuccess = true;
     }
   }
@@ -112,8 +135,13 @@ abstract class _WalletSendEvmStore with Store {
   Future<bool> sendEvm(String address) async {
     isLoading = true;
     try {
-      await _wallet.sendAvaxC(address, numberToBNAvaxC(amount.toBigInt()),
-          _gasPrice, gasLimit.toInt());
+      if (_token != null) {
+        await _wallet.sendErc20(
+            address, amountBN, _gasPrice, gasLimit.toInt(), _token!.id!);
+      } else {
+        await _wallet.sendAvaxC(address, amountBN, _gasPrice, gasLimit.toInt());
+      }
+
       isLoading = false;
       return true;
     } catch (e) {

@@ -2,21 +2,24 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/features/transaction/detail_c/transaction_c_detail_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
 class TransactionCDetailScreen extends StatelessWidget {
-  final CChainExplorerTx cChainExplorerTx;
+  final String txHash;
+  final String nonce;
+  final CChainExplorerTxReceiptStatus? receiptStatus;
 
   final _transactionCDetailStore = TransactionCDetailStore();
 
-  TransactionCDetailScreen({Key? key, required this.cChainExplorerTx})
+  TransactionCDetailScreen(
+      {Key? key, required this.txHash, required this.nonce, this.receiptStatus})
       : super(key: key);
 
   @override
@@ -35,9 +38,7 @@ class TransactionCDetailScreen extends StatelessWidget {
               ),
               FutureBuilder<TransactionCChainViewData?>(
                 future: _transactionCDetailStore.getTransactionDetail(
-                    cChainExplorerTx.hash,
-                    cChainExplorerTx.nonce,
-                    cChainExplorerTx.txReceiptStatus),
+                    txHash, nonce, receiptStatus),
                 builder: (_, snapshot) {
                   if (snapshot.hasData) {
                     final transaction = snapshot.data;
@@ -117,21 +118,23 @@ class _TransactionCDetailInfoWidget extends StatelessWidget {
                 ],
               ],
             ),
-            _divider,
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    Strings.current.sharedStatus,
-                    style: EZCTitleMediumTextStyle(
-                        color: provider.themeMode.text60),
+            if (transaction.status != null) ...[
+              _divider,
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      Strings.current.sharedStatus,
+                      style: EZCTitleMediumTextStyle(
+                          color: provider.themeMode.text60),
+                    ),
                   ),
-                ),
-                _TransactionCDetailStatusLabel(
-                  confirmed: transaction.status,
-                )
-              ],
-            ),
+                  _TransactionCDetailStatusLabel(
+                    confirmed: transaction.status!,
+                  )
+                ],
+              ),
+            ],
             _divider,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
