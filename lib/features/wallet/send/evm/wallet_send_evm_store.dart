@@ -31,7 +31,7 @@ abstract class _WalletSendEvmStore with Store {
   BigInt gasLimit = BigInt.zero;
 
   @computed
-  Decimal get avaxPrice => _priceStore.avaxPrice;
+  Decimal? get avaxPrice => _token != null ? _token!.price : _priceStore.avaxPrice;
 
   @observable
   Decimal amount = Decimal.zero;

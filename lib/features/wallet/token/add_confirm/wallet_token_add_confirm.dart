@@ -44,7 +44,7 @@ class WalletTokenAddConfirmScreen extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'C-Chain(ERC-20)',
+                          'C-Chain(ERP-20)',
                           style: EZCHeadlineSmallTextStyle(
                               color: provider.themeMode.text),
                         ),

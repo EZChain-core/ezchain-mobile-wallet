@@ -34,8 +34,10 @@ abstract class _EarnDelegateNodesStore with Store {
 
   Future<List<EarnDelegateNodeItem>> getNodeIds() async {
     if (keySearch.isNotEmpty) {
-      return _nodes.take(1).toList();
-    } else if(_nodes.isNotEmpty) {
+      return _nodes
+          .where((element) => element.nodeId.contains(keySearch))
+          .toList();
+    } else if (_nodes.isNotEmpty) {
       return _nodes;
     }
     List<EarnDelegateNodeItem> nodes = [];

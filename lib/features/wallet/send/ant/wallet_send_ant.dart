@@ -57,8 +57,7 @@ class WalletSendAntScreen extends StatelessWidget {
                                 color: provider.themeMode.text),
                           ),
                           const SizedBox(width: 16),
-                          if (token.chain != null)
-                            EZCChainLabelText(text: token.chain!),
+                          EZCChainLabelText(text: token.chain),
                         ],
                       ),
                       const SizedBox(height: 16),

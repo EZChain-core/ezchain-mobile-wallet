@@ -658,7 +658,7 @@ class EZCSearchTextField extends StatelessWidget {
       builder: (context, provider, child) => SizedBox(
         width: double.infinity,
         child: TextField(
-          style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
+          style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
           cursorColor: provider.themeMode.text,
           controller: controller,
           onChanged: onChanged,
@@ -666,8 +666,10 @@ class EZCSearchTextField extends StatelessWidget {
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(12),
             hintText: hint,
-            hintStyle: EZCBodyLargeTextStyle(color: provider.themeMode.text40),
-            prefixIcon: Assets.icons.icSearchBlack.svg(width: 18, height: 18),
+            hintStyle: EZCTitleLargeTextStyle(color: provider.themeMode.text40),
+            prefixIcon: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Assets.icons.icSearchBlack.svg()),
             enabledBorder: OutlineInputBorder(
               borderRadius: ezcBorder,
               borderSide: BorderSide(color: provider.themeMode.border),

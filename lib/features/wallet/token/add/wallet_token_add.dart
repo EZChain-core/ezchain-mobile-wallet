@@ -48,7 +48,7 @@ class WalletTokenAddScreen extends StatelessWidget {
                       children: [
                         const SizedBox(height: 24),
                         Text(
-                          'C-Chain(ERC-20)',
+                          'C-Chain(ERP-20)',
                           style: EZCHeadlineSmallTextStyle(
                               color: provider.themeMode.text),
                         ),
