@@ -23,7 +23,9 @@ class TransactionsAntScreen extends StatelessWidget {
   final WalletTokenItem token;
   final _transactionsAntStore = TransactionsAntStore();
 
-  TransactionsAntScreen({Key? key, required this.token}) : super(key: key);
+  TransactionsAntScreen({Key? key, required this.token}) : super(key: key) {
+    _transactionsAntStore.setTokenItem(token);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class TransactionsAntScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               EZCAppBar(
-                title: '${token.symbol}(${token.chain})',
+                title: '${token.symbol} (${token.chain})',
                 onPressed: () {
                   context.router.pop();
                 },
@@ -63,7 +65,7 @@ class TransactionsAntScreen extends StatelessWidget {
                                   children: [
                                     Observer(
                                       builder: (_) => Text(
-                                        '${token.balanceText} ${token.symbol}'
+                                        '${_transactionsAntStore.balance} ${token.symbol}'
                                             .useCorrectEllipsis(),
                                         style: EZCHeadlineSmallTextStyle(
                                             color: provider.themeMode.text),

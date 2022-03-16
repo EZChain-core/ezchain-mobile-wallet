@@ -78,7 +78,7 @@ class WalletSendAntConfirmScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedAmount,
-                        content: '${args.amount} $ezcCode',
+                        content: '${args.amount} ${args.token.symbol}',
                       ),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(

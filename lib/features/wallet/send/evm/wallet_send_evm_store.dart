@@ -7,6 +7,7 @@ import 'package:wallet/ezc/wallet/helpers/gas_helper.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/price_store.dart';
+import 'package:wallet/features/common/token/token_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -20,6 +21,7 @@ abstract class _WalletSendEvmStore with Store {
 
   final _balanceStore = getIt<BalanceStore>();
   final _priceStore = getIt<PriceStore>();
+  final _tokenStore = getIt<TokenStore>();
 
   @observable
   WalletTokenItem? _token;
@@ -138,6 +140,7 @@ abstract class _WalletSendEvmStore with Store {
       if (_token != null) {
         await _wallet.sendErc20(
             address, amountBN, _gasPrice, gasLimit.toInt(), _token!.id!);
+        _tokenStore.updateBalance();
       } else {
         await _wallet.sendAvaxC(address, amountBN, _gasPrice, gasLimit.toInt());
       }

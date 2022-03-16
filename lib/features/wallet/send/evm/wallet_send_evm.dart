@@ -204,6 +204,7 @@ class WalletSendEvmScreen extends StatelessWidget {
 
     final address = _addressController.text;
     final sendSuccess = await _walletSendEvmStore.sendEvm(address);
+    final symbol = fromToken != null ? fromToken!.symbol : ezcCode;
     if (sendSuccess) {
       walletContext?.router.push(
         WalletSendEvmConfirmRoute(
@@ -213,6 +214,7 @@ class WalletSendEvmScreen extends StatelessWidget {
             _walletSendEvmStore.gasLimit,
             _walletSendEvmStore.amount,
             _walletSendEvmStore.fee,
+            symbol
           ),
         ),
       );

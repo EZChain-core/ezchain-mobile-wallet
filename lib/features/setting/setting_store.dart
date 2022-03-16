@@ -7,6 +7,7 @@ import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/network_config_type.dart';
 import 'package:wallet/features/common/setting/wallet_setting.dart';
+import 'package:wallet/features/common/token/token_store.dart';
 import 'package:wallet/features/common/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -20,6 +21,7 @@ abstract class _SettingStore with Store {
   final _walletSetting = getIt<WalletSetting>();
   final _balanceStore = getIt<BalanceStore>();
   final _validatorsStore = getIt<ValidatorsStore>();
+  final _tokenStore = getIt<TokenStore>();
 
   final _localAuthentication = LocalAuthentication();
 
@@ -46,6 +48,7 @@ abstract class _SettingStore with Store {
     _balanceStore.init();
     _balanceStore.updateTotalBalance();
     _validatorsStore.updateValidators();
+    _tokenStore.getToken();
     activeNetworkConfig = network;
     _walletSetting.saveNetworkConfig(network);
     showSnackBar(Strings.current.settingNetworkConnected);
