@@ -4,12 +4,16 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
+import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
+import 'package:wallet/ezc/sdk/utils/bintools.dart';
+import 'package:wallet/ezc/sdk/utils/constants.dart';
+import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/ezc/wallet/network/utils.dart';
 import 'package:wallet/ezc/wallet/types.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
-import 'package:wallet/ezc/wallet/wallet.dart';
 
 part 'balance_store.g.dart';
 
@@ -48,6 +52,13 @@ abstract class _BalanceStore with Store {
   @observable
   bool isTotalLoaded = false;
 
+  @observable
+  ObservableList<AvaAsset> antAssets = ObservableList<AvaAsset>();
+
+  @observable
+  ObservableList<AssetDescriptionClean> nftAssets =
+      ObservableList<AssetDescriptionClean>();
+
   bool _isXLoaded = false;
   bool _isPLoaded = false;
   bool _isCLoaded = false;
@@ -79,6 +90,8 @@ abstract class _BalanceStore with Store {
     balanceLockedX = Decimal.zero;
     balanceLockedP = Decimal.zero;
     balanceLockedStakeableP = Decimal.zero;
+    antAssets = ObservableList.of([]);
+    nftAssets = ObservableList.of([]);
     isTotalLoaded = false;
     _isXLoaded = false;
     _isPLoaded = false;
@@ -106,6 +119,7 @@ abstract class _BalanceStore with Store {
         eventData is WalletBalanceX) {
       final x = eventData[getAvaxAssetId()];
       if (x != null) {
+        _getAssets();
         balanceX = bnToDecimalAvaxX(x.unlocked);
         balanceLockedX = bnToDecimalAvaxX(x.locked);
         if (_needFetchTotal) {
@@ -186,7 +200,6 @@ abstract class _BalanceStore with Store {
   }
 
   _fetchTotal() async {
-    logger.e('fetch total');
     final avaxBalance = _wallet.getAvaxBalance();
     final totalAvaxBalanceDecimal = avaxBalance.totalDecimal;
 
@@ -199,6 +212,56 @@ abstract class _BalanceStore with Store {
 
   String decimalBalance(Decimal balance) {
     return decimalToLocaleString(balance, decimals: decimalNumber);
+  }
+
+  _getAssets() {
+    final avaAssetId = getAvaxAssetId();
+    final assetUtxoMap = <String, AvmUTXO>{};
+    for (final utxo in _wallet.utxosX.utxos.values) {
+      assetUtxoMap[cb58Encode(utxo.assetId)] = utxo;
+    }
+    final unknownAssets = _wallet.getUnknownAssets();
+
+    final antAssets = <AssetDescriptionClean>[];
+    final nftAssets = <AssetDescriptionClean>[];
+
+    for (final unknownAsset in unknownAssets) {
+      final output = assetUtxoMap[unknownAsset.assetId]?.getOutput();
+      if (output == null) {
+        continue;
+      }
+      if (output.getOutputId() == SECPXFEROUTPUTID &&
+          unknownAsset.assetId != avaxAssetId) {
+        antAssets.add(unknownAsset);
+      }
+      if (output.getOutputId() == NFTMINTOUTPUTID) {
+        nftAssets.add(unknownAsset);
+      }
+    }
+
+    final balanceDict = _wallet.getBalanceX();
+    final assets = antAssets.map((asset) {
+      final avaAsset = AvaAsset(
+        id: asset.assetId,
+        name: asset.name,
+        symbol: asset.symbol,
+        denomination: int.tryParse(asset.denomination) ?? 0,
+      );
+      final balanceAmt = balanceDict[avaAsset.id];
+      if (balanceAmt == null) {
+        avaAsset.resetBalance();
+      } else {
+        avaAsset.resetBalance();
+        avaAsset.addBalance(balanceAmt.unlocked);
+        avaAsset.addBalanceLocked(balanceAmt.locked);
+      }
+      return avaAsset;
+    }).toList();
+
+    assets.customSort(avaAssetId);
+
+    this.antAssets = ObservableList.of(assets);
+    this.nftAssets = ObservableList.of(nftAssets);
   }
 }
 
