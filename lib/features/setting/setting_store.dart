@@ -6,6 +6,7 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/network_config_type.dart';
+import 'package:wallet/features/common/price_store.dart';
 import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/features/common/token/token_store.dart';
 import 'package:wallet/features/common/validators_store.dart';
@@ -22,6 +23,7 @@ abstract class _SettingStore with Store {
   final _balanceStore = getIt<BalanceStore>();
   final _validatorsStore = getIt<ValidatorsStore>();
   final _tokenStore = getIt<TokenStore>();
+  final _priceStore = getIt<PriceStore>();
 
   final _localAuthentication = LocalAuthentication();
 
@@ -43,15 +45,17 @@ abstract class _SettingStore with Store {
   setNetworkConfig(NetworkConfigType network) async {
     _balanceStore.dispose();
     _walletFactory.clearWallets();
+    _tokenStore.clear();
+    _validatorsStore.clear();
     setRpcNetwork(network.config);
     await _walletFactory.initWallet();
     activeNetworkConfig = network;
     _walletSetting.saveNetworkConfig(network);
     showSnackBar(Strings.current.settingNetworkConnected);
     _balanceStore.init();
-    _validatorsStore.clear();
+    _priceStore.updateAvaxPrice();
+    _tokenStore.getErc20Tokens();
     _validatorsStore.updateValidators();
-    _tokenStore.getToken();
   }
 
   enableTouchId(bool enabled) async {

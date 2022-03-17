@@ -33,7 +33,8 @@ abstract class _WalletSendEvmStore with Store {
   BigInt gasLimit = BigInt.zero;
 
   @computed
-  Decimal? get avaxPrice => _token != null ? _token!.price : _priceStore.avaxPrice;
+  Decimal? get avaxPrice =>
+      _token != null ? _token!.price : _priceStore.avaxPrice;
 
   @observable
   Decimal amount = Decimal.zero;
@@ -140,7 +141,7 @@ abstract class _WalletSendEvmStore with Store {
       if (_token != null) {
         await _wallet.sendErc20(
             address, amountBN, _gasPrice, gasLimit.toInt(), _token!.id!);
-        _tokenStore.updateBalance();
+        _tokenStore.updateErc20Balance();
       } else {
         await _wallet.sendAvaxC(address, amountBN, _gasPrice, gasLimit.toInt());
       }

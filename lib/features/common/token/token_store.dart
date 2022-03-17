@@ -21,14 +21,14 @@ abstract class _TokenStore with Store {
   String get _key => "${_wallet.getAddressX()}_${getEvmChainId()}";
 
   @observable
-  List<Erc20TokenData> erc20Tokens = [];
+  ObservableList<Erc20TokenData> erc20Tokens = ObservableList.of([]);
 
   Future<bool> addToken(Erc20TokenData token) async {
     try {
       erc20Tokens.add(token);
       String json = jsonEncode(erc20Tokens);
       await storage.write(key: _key, value: json);
-      getToken();
+      getErc20Tokens();
       return true;
     } catch (e) {
       logger.e(e);
@@ -36,7 +36,7 @@ abstract class _TokenStore with Store {
     }
   }
 
-  getToken() async {
+  getErc20Tokens() async {
     try {
       final json = await storage.read(key: _key);
       if (json == null || json.isEmpty) return;
@@ -47,22 +47,22 @@ abstract class _TokenStore with Store {
       await Future.wait(cachedErc20Tokens
           .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
       cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
-      erc20Tokens = cachedErc20Tokens;
+      erc20Tokens = ObservableList.of(cachedErc20Tokens);
     } catch (e) {
-      erc20Tokens = [];
+      erc20Tokens = ObservableList.of([]);
       logger.e(e);
     }
   }
 
   @action
-  updateBalance() async {
+  updateErc20Balance() async {
     try {
-      final cachedErc20Tokens = erc20Tokens;
+      final cachedErc20Tokens = erc20Tokens.toList();
       final evmAddress = _wallet.getAddressC();
       await Future.wait(cachedErc20Tokens
           .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
       cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
-      erc20Tokens = cachedErc20Tokens;
+      erc20Tokens = ObservableList.of(cachedErc20Tokens);
     } catch (e) {
       logger.e(e);
     }
@@ -71,6 +71,7 @@ abstract class _TokenStore with Store {
   Erc20TokenData? find(String id) =>
       erc20Tokens.firstWhereOrNull((element) => element.contractAddress == id);
 
+  @action
   clear() {
     erc20Tokens.clear();
   }

@@ -111,11 +111,11 @@ final n0C = C(
 // End Manhattan
 
 // Start mainnet
-const avaxAssetId = "pxpYcmAAUaV4SRXtjWFErFRZ8UPVq4YsnSm5icU3fXLURhxYt";
+const _avaxAssetId = "pxpYcmAAUaV4SRXtjWFErFRZ8UPVq4YsnSm5icU3fXLURhxYt";
 
 final n1X = X(
     blockchainId: "dnu9PBuDAETU5m781cT9EmKceN7VMq95iKSKEssxhDsMYAgXj",
-    avaxAssetId: avaxAssetId,
+    avaxAssetId: _avaxAssetId,
     alias: xChainAlias,
     vm: xChainVMName,
     txFee: MILLIAVAX,
@@ -123,7 +123,7 @@ final n1X = X(
 
 final n1P = P(
     blockchainId: platformChainId,
-    avaxAssetId: avaxAssetId,
+    avaxAssetId: _avaxAssetId,
     alias: pChainAlias,
     vm: pChainVMName,
     txFee: MILLIAVAX,
@@ -306,7 +306,7 @@ final n5C = C(
 // Start local network
 final n12345X = X(
     blockchainId: "2eNy1mUFdmaxXNj1eQHUe7Np4gju9sJsEtWQ4MX3ToiNKuADed",
-    avaxAssetId: avaxAssetId,
+    avaxAssetId: _avaxAssetId,
     alias: xChainAlias,
     vm: xChainVMName,
     txFee: MILLIAVAX,
@@ -333,7 +333,7 @@ final n12345P = P(
 
 final n12345C = C(
     blockchainId: "2CA6j5zYzasynPsFeNoqWkmTCt3VScMvXUZHbfDJ8k3oGzAPtU",
-    avaxAssetId: avaxAssetId,
+    avaxAssetId: _avaxAssetId,
     alias: cChainAlias,
     vm: cChainVMName,
     txBytesGas: 1,

@@ -64,5 +64,6 @@ abstract class _WalletTokenStore with Store {
   refresh() async {
     _priceStore.updateAvaxPrice();
     _balanceStore.updateTotalBalance();
+    _tokenStore.getErc20Tokens();
   }
 }
