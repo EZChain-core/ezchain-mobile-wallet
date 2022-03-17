@@ -7,7 +7,6 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
-import 'package:wallet/ezc/sdk/utils/constants.dart';
 import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
@@ -231,7 +230,7 @@ abstract class _BalanceStore with Store {
         continue;
       }
       if (output.getOutputId() == SECPXFEROUTPUTID &&
-          unknownAsset.assetId != avaxAssetId) {
+          unknownAsset.assetId != avaAssetId) {
         antAssets.add(unknownAsset);
       }
       if (output.getOutputId() == NFTMINTOUTPUTID) {
@@ -247,10 +246,10 @@ abstract class _BalanceStore with Store {
         symbol: asset.symbol,
         denomination: int.tryParse(asset.denomination) ?? 0,
       );
+      avaAsset.resetBalance();
+
       final balanceAmt = balanceDict[avaAsset.id];
-      if (balanceAmt == null) {
-        avaAsset.resetBalance();
-      } else {
+      if (balanceAmt != null) {
         avaAsset.resetBalance();
         avaAsset.addBalance(balanceAmt.unlocked);
         avaAsset.addBalanceLocked(balanceAmt.locked);
