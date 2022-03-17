@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
-import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
-import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/balance_store.dart';
 import 'package:wallet/features/common/chain_type/ezc_type.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -140,15 +138,4 @@ class WalletTokenItemWidget extends StatelessWidget {
         break;
     }
   }
-}
-
-WalletTokenItem mapErc20TokenDataToWalletToken(Erc20TokenData erc20Token) {
-  return WalletTokenItem(
-      erc20Token.name,
-      erc20Token.symbol,
-      bnToDecimal(erc20Token.balanceBN, denomination: erc20Token.decimals),
-      erc20Token.balance,
-      EZCTokenType.erc20,
-      id: erc20Token.contractAddress,
-      decimals: erc20Token.decimals);
 }
