@@ -54,7 +54,7 @@ abstract class _SettingStore with Store {
     _walletSetting.saveNetworkConfig(network);
     showSnackBar(Strings.current.settingNetworkConnected);
     _balanceStore.init();
-    _priceStore.updateAvaxPrice();
+    _priceStore.updatePrice();
     _tokenStore.getErc20Tokens();
     _validatorsStore.updateValidators();
   }

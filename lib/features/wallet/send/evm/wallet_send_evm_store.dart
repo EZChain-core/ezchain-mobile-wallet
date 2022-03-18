@@ -92,8 +92,6 @@ abstract class _WalletSendEvmStore with Store {
     }
     gasPriceNumber =
         int.tryParse(bnToDecimalAvaxX(_gasPrice).toStringAsFixed(0)) ?? 0;
-
-    _priceStore.updateAvaxPrice();
   }
 
   @action
