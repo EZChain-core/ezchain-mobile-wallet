@@ -1,3 +1,4 @@
+// ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -52,9 +53,9 @@ class _EarnScreenState extends State<EarnScreen> {
                         decoration: BoxDecoration(
                           color: provider.themeMode.primary10,
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(4)),
+                              const BorderRadius.all(Radius.circular(4)),
                           border:
-                          Border.all(color: provider.themeMode.primary80),
+                              Border.all(color: provider.themeMode.primary80),
                         ),
                         child: Stack(
                           children: [
@@ -71,7 +72,7 @@ class _EarnScreenState extends State<EarnScreen> {
                             Align(
                               child: Padding(
                                 padding:
-                                const EdgeInsets.symmetric(horizontal: 16),
+                                    const EdgeInsets.symmetric(horizontal: 16),
                                 child: Text(
                                   Strings.current.earnDelegateValidMess,
                                   style: EZCLabelMediumTextStyle(

@@ -1,3 +1,4 @@
+// ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -60,7 +61,7 @@ class SettingChangePinScreen extends StatelessWidget {
                               newPin: () =>
                                   settingChangePinStore.setNewPin(pin),
                               confirmNewPin: () {
-                                  settingChangePinStore.verifyNewPin(pin);
+                                settingChangePinStore.verifyNewPin(pin);
                               },
                               orElse: () {},
                             );

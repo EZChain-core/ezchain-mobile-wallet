@@ -3,8 +3,8 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/auth/create/confirm/create_wallet_confirm_store.dart';
 import 'package:wallet/features/common/dialog/dialog_extensions.dart';
-import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -13,8 +13,6 @@ import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
-
-import 'create_wallet_confirm_store.dart';
 
 class CreateWalletConfirmScreen extends StatelessWidget {
   final _createWalletConfirmStore = CreateWalletConfirmStore();

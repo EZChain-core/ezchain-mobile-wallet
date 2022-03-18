@@ -1,11 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:wallet/features/cross/cross.dart';
+import 'package:wallet/features/dashboard/dashboard.dart';
 import 'package:wallet/features/earn/earn.dart';
 import 'package:wallet/features/nft/nft.dart';
 import 'package:wallet/features/setting/setting.dart';
 import 'package:wallet/features/wallet/wallet.dart';
-
-import 'dashboard.dart';
 
 const dashboardRoutes =
     AutoRoute(path: '/dashboard', page: DashboardScreen, children: [

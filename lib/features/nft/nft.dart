@@ -1,3 +1,4 @@
+// ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -78,8 +79,7 @@ class NftScreen extends StatelessWidget {
                         width: 130,
                         text: Strings.current.nftMint,
                         enabled: true,
-                        onPressed: () {
-                        },
+                        onPressed: () {},
                       ),
                     ],
                   ),

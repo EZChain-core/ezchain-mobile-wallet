@@ -1,3 +1,4 @@
+// ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/router.dart';
