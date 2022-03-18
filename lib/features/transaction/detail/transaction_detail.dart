@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/extensions.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/transaction/detail/transaction_detail_store.dart';
 import 'package:wallet/features/transaction/detail/transaction_detail_view_data.dart';
 import 'package:wallet/generated/l10n.dart';

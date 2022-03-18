@@ -4,7 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/ezc/wallet/network/constants.dart';
-import 'package:wallet/features/common/network_config_type.dart';
+import 'package:wallet/features/common/type/network_config_type.dart';
 import 'package:wallet/features/setting/setting_store.dart';
 import 'package:wallet/features/setting/widgets/setting_item.dart';
 import 'package:wallet/generated/assets.gen.dart';

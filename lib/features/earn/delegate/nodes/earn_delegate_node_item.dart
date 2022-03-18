@@ -2,7 +2,7 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/extensions.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/earn/delegate/input/earn_delegate_input.dart';
 import 'package:wallet/generated/l10n.dart';

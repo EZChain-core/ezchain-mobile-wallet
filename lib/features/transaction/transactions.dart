@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/extensions.dart';
-import 'package:wallet/features/common/chain_type/ezc_type.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
+import 'package:wallet/features/common/type/ezc_type.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/transaction/transactions_store.dart';
@@ -247,11 +247,9 @@ class _TransactionsNoData extends StatelessWidget {
   }
 }
 
-
 class TransactionsArgs {
   final EZCType? ezcType;
   final WalletTokenItem? token;
 
   TransactionsArgs(this.ezcType, this.token);
-
 }

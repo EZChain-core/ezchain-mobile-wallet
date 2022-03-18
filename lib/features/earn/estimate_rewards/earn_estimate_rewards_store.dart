@@ -2,11 +2,11 @@ import 'dart:math' as dart_math;
 
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
-import 'package:wallet/common/extensions.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
-import 'package:wallet/features/common/validators_store.dart';
+import 'package:wallet/features/common/store/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';

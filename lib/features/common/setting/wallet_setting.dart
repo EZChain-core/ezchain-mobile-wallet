@@ -1,7 +1,6 @@
-import '../network_config_type.dart';
+import 'package:wallet/features/common/type/network_config_type.dart';
 
 abstract class WalletSetting {
-
   savePinCode(String pin);
 
   Future<bool> isPinCodeCorrect(String pin);
