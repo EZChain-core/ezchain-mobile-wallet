@@ -25,21 +25,21 @@ abstract class _TokenStore with Store {
 
   String get _key => "${_wallet.getAddressX()}_${getEvmChainId()}";
 
-  @observable
-  ObservableList<Erc20TokenData> erc20Tokens = ObservableList.of([]);
+  @readonly
+  ObservableList<Erc20TokenData> _erc20Tokens = ObservableList.of([]);
 
-  @observable
-  ObservableList<AvaAsset> antAssets = ObservableList<AvaAsset>();
+  @readonly
+  ObservableList<AvaAsset> _antAssets = ObservableList<AvaAsset>();
 
-  @observable
-  ObservableList<AssetDescriptionClean> nftAssets =
+  @readonly
+  ObservableList<AssetDescriptionClean> _nftAssets =
       ObservableList<AssetDescriptionClean>();
 
   @action
   Future<bool> addErc20Token(Erc20TokenData token) async {
     try {
-      erc20Tokens.add(token);
-      String json = jsonEncode(erc20Tokens);
+      _erc20Tokens.add(token);
+      String json = jsonEncode(_erc20Tokens);
       await storage.write(key: _key, value: json);
       getErc20Tokens();
       return true;
@@ -61,9 +61,9 @@ abstract class _TokenStore with Store {
       await Future.wait(cachedErc20Tokens
           .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
       cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
-      erc20Tokens = ObservableList.of(cachedErc20Tokens);
+      _erc20Tokens = ObservableList.of(cachedErc20Tokens);
     } catch (e) {
-      erc20Tokens = ObservableList.of([]);
+      _erc20Tokens = ObservableList.of([]);
       logger.e(e);
     }
   }
@@ -71,25 +71,25 @@ abstract class _TokenStore with Store {
   @action
   updateErc20Balance() async {
     try {
-      final cachedErc20Tokens = erc20Tokens.toList();
+      final cachedErc20Tokens = _erc20Tokens.toList();
       final evmAddress = _wallet.getAddressC();
       await Future.wait(cachedErc20Tokens
           .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
       cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
-      erc20Tokens = ObservableList.of(cachedErc20Tokens);
+      _erc20Tokens = ObservableList.of(cachedErc20Tokens);
     } catch (e) {
       logger.e(e);
     }
   }
 
   Erc20TokenData? findErc20(String id) =>
-      erc20Tokens.firstWhereOrNull((element) => element.contractAddress == id);
+      _erc20Tokens.firstWhereOrNull((element) => element.contractAddress == id);
 
   @action
   dispose() {
-    erc20Tokens.clear();
-    antAssets.clear();
-    nftAssets.clear();
+    _erc20Tokens.clear();
+    _antAssets.clear();
+    _nftAssets.clear();
   }
 
   @action
@@ -139,7 +139,7 @@ abstract class _TokenStore with Store {
 
     assets.customSort(avaAssetId);
 
-    this.antAssets = ObservableList.of(assets);
-    this.nftAssets = ObservableList.of(nftAssets);
+    _antAssets = ObservableList.of(assets);
+    _nftAssets = ObservableList.of(nftAssets);
   }
 }

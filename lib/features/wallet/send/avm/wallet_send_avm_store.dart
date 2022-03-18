@@ -44,7 +44,6 @@ abstract class _WalletSendAvmStore with Store {
   @action
   getBalanceX() async {
     _balanceStore.updateBalanceX();
-    _priceStore.updateAvaxPrice();
     fee = bnToDecimalAvaxX(getTxFeeX());
   }
 

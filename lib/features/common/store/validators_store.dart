@@ -13,14 +13,14 @@ class ValidatorsStore = _ValidatorsStore with _$ValidatorsStore;
 abstract class _ValidatorsStore with Store {
   final _wallet = getIt<WalletFactory>().activeWallet;
 
-  @observable
-  ObservableList<Validator> validators = ObservableList.of([]);
+  @readonly
+  ObservableList<Validator> _validators = ObservableList.of([]);
 
   @action
   updateValidators() async {
     try {
       final validators = await _wallet.getPlatformValidators();
-      this.validators = ObservableList.of(validators);
+      _validators = ObservableList.of(validators);
     } catch (e) {
       logger.e(e);
     }
@@ -28,6 +28,6 @@ abstract class _ValidatorsStore with Store {
 
   @action
   dispose() {
-    validators.clear();
+    _validators.clear();
   }
 }

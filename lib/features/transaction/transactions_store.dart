@@ -4,6 +4,7 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/type/ezc_type.dart';
 import 'package:wallet/features/common/store/price_store.dart';
@@ -35,7 +36,9 @@ abstract class _TransactionsStore with Store {
   String get balanceText => _balanceStore.decimalBalance(balance);
 
   @computed
-  String get balanceUsd => _priceStore.getBalanceInUsd(balance);
+  String get balanceUsd =>
+      decimalToLocaleString(balance * _priceStore.avaxPrice,
+          decimals: decimalNumber);
 
   @computed
   List<Validator> get validators => _validatorsStore.validators;

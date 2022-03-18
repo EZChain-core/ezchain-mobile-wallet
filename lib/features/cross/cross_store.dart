@@ -68,7 +68,6 @@ abstract class _CrossStore with Store {
 
   @action
   init() async {
-    _priceStore.updateAvaxPrice();
     setSourceChain(sourceChain);
   }
 

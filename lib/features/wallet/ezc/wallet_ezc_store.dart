@@ -57,7 +57,7 @@ abstract class _WalletEZCStore with Store {
   @action
   fetchData() async {
     _balanceStore.init();
-    _priceStore.updateAvaxPrice();
+    _priceStore.updatePrice();
     _tokenStore.getErc20Tokens();
     _validatorsStore.updateValidators();
   }
