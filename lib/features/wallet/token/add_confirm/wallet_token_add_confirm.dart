@@ -1,12 +1,12 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/extensions.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
-import 'package:wallet/features/common/token/token_store.dart';
+import 'package:wallet/features/common/store/token_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -113,7 +113,7 @@ class WalletTokenAddConfirmScreen extends StatelessWidget {
   }
 
   _onClickAddToken() async {
-    final isSuccess = await _tokenStore.addToken(args.token);
+    final isSuccess = await _tokenStore.addErc20Token(args.token);
     if (isSuccess) {
       walletContext?.router.replaceAll([const DashboardRoute()]);
     } else {

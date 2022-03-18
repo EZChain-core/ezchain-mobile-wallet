@@ -9,12 +9,12 @@ import 'package:injectable/injectable.dart' as _i2;
 
 import '../common/router.gr.dart' as _i3;
 import '../features/auth/pin/verify/pin_code_verify_store.dart' as _i5;
-import '../features/common/balance_store.dart' as _i4;
-import '../features/common/price_store.dart' as _i6;
 import '../features/common/setting/wallet_setting.dart' as _i11;
 import '../features/common/setting/wallet_setting_impl.dart' as _i12;
-import '../features/common/token/token_store.dart' as _i7;
-import '../features/common/validators_store.dart' as _i8;
+import '../features/common/store/balance_store.dart' as _i4;
+import '../features/common/store/price_store.dart' as _i6;
+import '../features/common/store/token_store.dart' as _i7;
+import '../features/common/store/validators_store.dart' as _i8;
 import '../features/common/wallet_factory.dart' as _i9;
 import '../features/common/wallet_factory_impl.dart' as _i10;
 import 'di.dart' as _i13; // ignore_for_file: unnecessary_lambdas

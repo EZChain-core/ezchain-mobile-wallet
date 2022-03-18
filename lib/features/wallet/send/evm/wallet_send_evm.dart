@@ -3,7 +3,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/dialog_extensions.dart';
+import 'package:wallet/features/common/dialog/dialog_extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
@@ -30,8 +30,7 @@ class WalletSendEvmScreen extends StatelessWidget {
 
   final _walletSendEvmStore = WalletSendEvmStore();
   final _amountController = TextEditingController();
-  final _addressController =
-      TextEditingController(text: receiverAddressCTest);
+  final _addressController = TextEditingController(text: receiverAddressCTest);
 
   @override
   Widget build(BuildContext context) {
@@ -210,13 +209,12 @@ class WalletSendEvmScreen extends StatelessWidget {
       walletContext?.router.push(
         WalletSendEvmConfirmRoute(
           transactionInfo: WalletSendEvmTransactionViewData(
-            _addressController.text,
-            _walletSendEvmStore.gasPriceNumber,
-            _walletSendEvmStore.gasLimit,
-            _walletSendEvmStore.amount,
-            _walletSendEvmStore.fee,
-            symbol
-          ),
+              _addressController.text,
+              _walletSendEvmStore.gasPriceNumber,
+              _walletSendEvmStore.gasLimit,
+              _walletSendEvmStore.amount,
+              _walletSendEvmStore.fee,
+              symbol),
         ),
       );
     }

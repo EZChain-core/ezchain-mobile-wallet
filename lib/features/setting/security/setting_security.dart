@@ -4,7 +4,7 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:wallet/common/extensions.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/setting/security/setting_security_store.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';

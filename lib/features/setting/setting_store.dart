@@ -1,15 +1,15 @@
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mobx/mobx.dart';
-import 'package:wallet/common/extensions.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
-import 'package:wallet/features/common/balance_store.dart';
-import 'package:wallet/features/common/network_config_type.dart';
-import 'package:wallet/features/common/price_store.dart';
+import 'package:wallet/features/common/store/balance_store.dart';
+import 'package:wallet/features/common/type/network_config_type.dart';
+import 'package:wallet/features/common/store/price_store.dart';
 import 'package:wallet/features/common/setting/wallet_setting.dart';
-import 'package:wallet/features/common/token/token_store.dart';
-import 'package:wallet/features/common/validators_store.dart';
+import 'package:wallet/features/common/store/token_store.dart';
+import 'package:wallet/features/common/store/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
 
@@ -43,10 +43,11 @@ abstract class _SettingStore with Store {
 
   @action
   setNetworkConfig(NetworkConfigType network) async {
-    _balanceStore.dispose();
     _walletFactory.clearWallets();
-    _tokenStore.clear();
-    _validatorsStore.clear();
+    _balanceStore.dispose();
+    _tokenStore.dispose();
+    _priceStore.dispose();
+    _validatorsStore.dispose();
     setRpcNetwork(network.config);
     await _walletFactory.initWallet();
     activeNetworkConfig = network;

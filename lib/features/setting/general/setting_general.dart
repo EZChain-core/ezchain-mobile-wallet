@@ -4,9 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
-import 'package:wallet/features/common/balance_store.dart';
-import 'package:wallet/features/common/token/token_store.dart';
-import 'package:wallet/features/common/validators_store.dart';
+import 'package:wallet/features/common/store/balance_store.dart';
+import 'package:wallet/features/common/store/price_store.dart';
+import 'package:wallet/features/common/store/token_store.dart';
+import 'package:wallet/features/common/store/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/setting/widgets/setting_item.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -21,6 +22,7 @@ class SettingGeneralScreen extends StatelessWidget {
   TokenStore get _tokenStore => getIt<TokenStore>();
   BalanceStore get _balanceStore => getIt<BalanceStore>();
   ValidatorsStore get _validatorsStore => getIt<ValidatorsStore>();
+  PriceStore get _priceStore => getIt<PriceStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +62,9 @@ class SettingGeneralScreen extends StatelessWidget {
   _onClickRemoveWallet() {
     walletFactory.clear();
     _balanceStore.dispose();
-    _tokenStore.clear();
-    _validatorsStore.clear();
+    _tokenStore.dispose();
+    _priceStore.dispose();
+    _validatorsStore.dispose();
     walletContext?.router.replaceAll([const OnBoardRoute()]);
   }
 }

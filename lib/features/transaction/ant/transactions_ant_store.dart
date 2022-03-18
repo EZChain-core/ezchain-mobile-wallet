@@ -1,11 +1,11 @@
 import 'package:mobx/mobx.dart';
-import 'package:wallet/common/extensions.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
-import 'package:wallet/features/common/chain_type/ezc_type.dart';
-import 'package:wallet/features/common/token/token_store.dart';
+import 'package:wallet/features/common/type/ezc_type.dart';
+import 'package:wallet/features/common/store/token_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
@@ -26,7 +26,7 @@ abstract class _TransactionsAntStore with Store {
     final token = _token;
     if (token == null) return '';
     if (token.type == EZCTokenType.erc20 && token.id != null) {
-      final findToken = _tokenStore.find(token.id!);
+      final findToken = _tokenStore.findErc20(token.id!);
       if (findToken != null) {
         return findToken.balance;
       }

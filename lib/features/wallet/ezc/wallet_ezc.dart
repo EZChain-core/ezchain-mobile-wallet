@@ -4,9 +4,9 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/extensions.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/router.gr.dart';
-import 'package:wallet/features/common/chain_type/ezc_type.dart';
+import 'package:wallet/features/common/type/ezc_type.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/wallet/ezc/wallet_ezc_store.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
@@ -100,8 +100,8 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                               context.router.push(WalletSendAvmRoute()),
                           onReceivePressed: () => context.router.push(
                             WalletReceiveRoute(
-                              args: WalletReceiveArgs(
-                                  EZCType.xChain.name, _walletEZCStore.addressX),
+                              args: WalletReceiveArgs(EZCType.xChain.name,
+                                  _walletEZCStore.addressX),
                             ),
                           ),
                           onPressed: () => context.pushRoute(
@@ -120,8 +120,8 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                           hasSend: false,
                           onReceivePressed: () => context.router.push(
                             WalletReceiveRoute(
-                              args: WalletReceiveArgs(
-                                  EZCType.pChain.name, _walletEZCStore.addressP),
+                              args: WalletReceiveArgs(EZCType.pChain.name,
+                                  _walletEZCStore.addressP),
                             ),
                           ),
                           onPressed: () => context.pushRoute(
@@ -139,8 +139,8 @@ class _WalletEZCScreenState extends State<WalletEZCScreen>
                               context.router.push(WalletSendEvmRoute()),
                           onReceivePressed: () => context.router.push(
                             WalletReceiveRoute(
-                              args: WalletReceiveArgs(
-                                  EZCType.cChain.name, _walletEZCStore.addressC),
+                              args: WalletReceiveArgs(EZCType.cChain.name,
+                                  _walletEZCStore.addressC),
                             ),
                           ),
                           onPressed: () => context.pushRoute(

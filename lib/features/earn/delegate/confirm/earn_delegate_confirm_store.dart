@@ -1,10 +1,10 @@
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
-import 'package:wallet/common/extensions.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
-import 'package:wallet/features/common/validators_store.dart';
+import 'package:wallet/features/common/store/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm.dart';
 import 'package:wallet/generated/l10n.dart';

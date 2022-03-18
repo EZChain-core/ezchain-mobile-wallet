@@ -25,7 +25,7 @@ import 'package:wallet/features/auth/create/create_wallet.dart' as _i4;
 import 'package:wallet/features/auth/pin/pin_code_confirm.dart' as _i9;
 import 'package:wallet/features/auth/pin/pin_code_setup.dart' as _i8;
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart' as _i10;
-import 'package:wallet/features/common/chain_type/ezc_type.dart' as _i44;
+import 'package:wallet/features/common/type/ezc_type.dart' as _i44;
 import 'package:wallet/features/cross/cross.dart' as _i37;
 import 'package:wallet/features/cross/transfer/cross_transfer.dart' as _i24;
 import 'package:wallet/features/dashboard/dashboard.dart' as _i35;

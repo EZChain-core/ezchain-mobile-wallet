@@ -6,7 +6,7 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/generated/l10n.dart';
 
-import '../../../../common/extensions.dart';
+import '../../../common/ext/extensions.dart';
 
 part 'pin_code_verify_store.g.dart';
 
@@ -52,7 +52,6 @@ abstract class _PinCodeVerifyStore with Store {
       showSnackBar(Strings.current.settingBiometricSystemsNotEnabled);
       return false;
     }
-
   }
 
   _init() async {

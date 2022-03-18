@@ -2,10 +2,10 @@ import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
-import 'package:wallet/features/common/balance_store.dart';
-import 'package:wallet/features/common/chain_type/ezc_type.dart';
-import 'package:wallet/features/common/price_store.dart';
-import 'package:wallet/features/common/token/token_store.dart';
+import 'package:wallet/features/common/store/balance_store.dart';
+import 'package:wallet/features/common/type/ezc_type.dart';
+import 'package:wallet/features/common/store/price_store.dart';
+import 'package:wallet/features/common/store/token_store.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 
 part 'wallet_token_store.g.dart';
@@ -45,7 +45,7 @@ abstract class _WalletTokenStore with Store {
 
   @computed
   ObservableList<WalletTokenItem> get antokens =>
-      ObservableList.of(_balanceStore.antAssets
+      ObservableList.of(_tokenStore.antAssets
           .map((token) => WalletTokenItem(
                 token.name,
                 token.symbol,

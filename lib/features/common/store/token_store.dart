@@ -5,8 +5,13 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/storage.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
+import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
+import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
+import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
+import 'package:wallet/ezc/wallet/network/utils.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:collection/collection.dart';
 
@@ -23,7 +28,15 @@ abstract class _TokenStore with Store {
   @observable
   ObservableList<Erc20TokenData> erc20Tokens = ObservableList.of([]);
 
-  Future<bool> addToken(Erc20TokenData token) async {
+  @observable
+  ObservableList<AvaAsset> antAssets = ObservableList<AvaAsset>();
+
+  @observable
+  ObservableList<AssetDescriptionClean> nftAssets =
+      ObservableList<AssetDescriptionClean>();
+
+  @action
+  Future<bool> addErc20Token(Erc20TokenData token) async {
     try {
       erc20Tokens.add(token);
       String json = jsonEncode(erc20Tokens);
@@ -36,6 +49,7 @@ abstract class _TokenStore with Store {
     }
   }
 
+  @action
   getErc20Tokens() async {
     try {
       final json = await storage.read(key: _key);
@@ -68,11 +82,64 @@ abstract class _TokenStore with Store {
     }
   }
 
-  Erc20TokenData? find(String id) =>
+  Erc20TokenData? findErc20(String id) =>
       erc20Tokens.firstWhereOrNull((element) => element.contractAddress == id);
 
   @action
-  clear() {
+  dispose() {
     erc20Tokens.clear();
+    antAssets.clear();
+    nftAssets.clear();
+  }
+
+  @action
+  getAvaAssets() {
+    final avaAssetId = getAvaxAssetId();
+    final assetUtxoMap = <String, AvmUTXO>{};
+    for (final utxo in _wallet.utxosX.utxos.values) {
+      assetUtxoMap[cb58Encode(utxo.assetId)] = utxo;
+    }
+    final unknownAssets = _wallet.getUnknownAssets();
+
+    final antAssets = <AssetDescriptionClean>[];
+    final nftAssets = <AssetDescriptionClean>[];
+
+    for (final unknownAsset in unknownAssets) {
+      final output = assetUtxoMap[unknownAsset.assetId]?.getOutput();
+      if (output == null) {
+        continue;
+      }
+      if (output.getOutputId() == SECPXFEROUTPUTID &&
+          unknownAsset.assetId != avaAssetId) {
+        antAssets.add(unknownAsset);
+      }
+      if (output.getOutputId() == NFTMINTOUTPUTID) {
+        nftAssets.add(unknownAsset);
+      }
+    }
+
+    final balanceDict = _wallet.getBalanceX();
+    final assets = antAssets.map((asset) {
+      final avaAsset = AvaAsset(
+        id: asset.assetId,
+        name: asset.name,
+        symbol: asset.symbol,
+        denomination: int.tryParse(asset.denomination) ?? 0,
+      );
+      avaAsset.resetBalance();
+
+      final balanceAmt = balanceDict[avaAsset.id];
+      if (balanceAmt != null) {
+        avaAsset.resetBalance();
+        avaAsset.addBalance(balanceAmt.unlocked);
+        avaAsset.addBalanceLocked(balanceAmt.locked);
+      }
+      return avaAsset;
+    }).toList();
+
+    assets.customSort(avaAssetId);
+
+    this.antAssets = ObservableList.of(assets);
+    this.nftAssets = ObservableList.of(nftAssets);
   }
 }

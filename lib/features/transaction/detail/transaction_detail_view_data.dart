@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
-import 'package:wallet/common/extensions.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/logger.dart';
-import 'package:wallet/features/common/chain_type/ezc_type.dart';
+import 'package:wallet/features/common/type/ezc_type.dart';
 import 'package:wallet/ezc/wallet/explorer/ortelius/types.dart';
 import 'package:wallet/ezc/wallet/history/history_helpers.dart';
 import 'package:wallet/ezc/wallet/network/helpers/alias_from_network_id.dart';

@@ -8,7 +8,7 @@ import 'package:wallet/ezc/wallet/mnemonic_wallet.dart';
 import 'package:wallet/ezc/wallet/singleton_wallet.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
 
-import 'network_config_type.dart';
+import 'type/network_config_type.dart';
 
 @LazySingleton(as: WalletFactory)
 class WalletFactoryImpl extends WalletFactory {

@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:wallet/common/extensions.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -172,7 +172,8 @@ class WalletReceiveArgs {
   final String symbol;
   final String name;
 
-  WalletReceiveArgs(this.chain, this.address, [this.symbol = ezcCode, this.name = ezcName]);
+  WalletReceiveArgs(this.chain, this.address,
+      [this.symbol = ezcCode, this.name = ezcName]);
 
   String get receiverName => '$name ($symbol)';
 }

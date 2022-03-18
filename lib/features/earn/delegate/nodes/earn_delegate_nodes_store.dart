@@ -6,7 +6,7 @@ import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/ezc/sdk/utils/bigint.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
-import 'package:wallet/features/common/validators_store.dart';
+import 'package:wallet/features/common/store/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 
 import 'earn_delegate_node_item.dart';
