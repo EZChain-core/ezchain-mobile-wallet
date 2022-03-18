@@ -15,6 +15,7 @@ abstract class _CreateWalletConfirmStore with Store {
   @observable
   bool isLoading = false;
 
+  @action
   Future<bool> accessWithMnemonicKey(String mnemonicKey) async {
     isLoading = true;
     final wallet = MnemonicWallet.import(mnemonicKey);

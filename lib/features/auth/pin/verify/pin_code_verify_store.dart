@@ -54,6 +54,7 @@ abstract class _PinCodeVerifyStore with Store {
     }
   }
 
+  @action
   _init() async {
     touchIdEnabled = await _walletSetting.touchIdEnabled();
   }

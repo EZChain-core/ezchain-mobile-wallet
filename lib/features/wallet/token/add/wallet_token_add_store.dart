@@ -1,6 +1,7 @@
 // ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
@@ -22,22 +23,26 @@ abstract class _WalletTokenAddStore with Store {
 
   @action
   validate(String address) async {
-    final erc20TokenData = await Erc20TokenData.getData(
-      address,
-      web3Client,
-      getEvmChainId(),
-    );
+    try {
+      final erc20TokenData = await Erc20TokenData.getData(
+        address,
+        web3Client,
+        getEvmChainId(),
+      );
 
-    if (erc20TokenData == null) {
-      error = Strings.current.walletTokenAddressInvalid;
-      return;
+      if (erc20TokenData == null) {
+        error = Strings.current.walletTokenAddressInvalid;
+        return;
+      }
+      await erc20TokenData.getBalance(
+        _wallet.getAddressC(),
+        web3Client,
+      );
+
+      walletContext?.pushRoute(WalletTokenAddConfirmRoute(
+          args: WalletTokenAddConfirmArgs(erc20TokenData)));
+    } catch (e) {
+      logger.e(e);
     }
-    await erc20TokenData.getBalance(
-      _wallet.getAddressC(),
-      web3Client,
-    );
-
-    walletContext?.pushRoute(WalletTokenAddConfirmRoute(
-        args: WalletTokenAddConfirmArgs(erc20TokenData)));
   }
 }
