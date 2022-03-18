@@ -1,3 +1,4 @@
+// ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +24,7 @@ class WalletSendAvmScreen extends StatelessWidget {
   WalletSendAvmScreen({Key? key}) : super(key: key);
 
   final _walletSendAvmStore = WalletSendAvmStore();
-  final _addressController = TextEditingController(
-      text: receiverAddressXTest);
+  final _addressController = TextEditingController(text: receiverAddressXTest);
   final _amountController = TextEditingController();
   final _memoController = TextEditingController();
 

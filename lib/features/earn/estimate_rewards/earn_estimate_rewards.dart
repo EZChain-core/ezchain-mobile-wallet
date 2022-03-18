@@ -1,16 +1,16 @@
+// ignore: implementation_imports
+// ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/logger.dart';
 import 'package:wallet/features/earn/estimate_rewards/earn_estimate_rewards_item.dart';
+import 'package:wallet/features/earn/estimate_rewards/earn_estimate_rewards_store.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
-
-import 'earn_estimate_rewards_store.dart';
 
 class EarnEstimateRewardsScreen extends StatelessWidget {
   final _earnEstimateRewardsStore = EarnEstimateRewardsStore();

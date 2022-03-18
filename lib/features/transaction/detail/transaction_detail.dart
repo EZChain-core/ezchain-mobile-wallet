@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+// ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

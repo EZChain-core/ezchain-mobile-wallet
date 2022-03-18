@@ -1,3 +1,4 @@
+// ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,8 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedAmount,
-                        content: '${transactionInfo.amount} ${transactionInfo.symbol}',
+                        content:
+                            '${transactionInfo.amount} ${transactionInfo.symbol}',
                       ),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
@@ -124,6 +126,6 @@ class WalletSendEvmTransactionViewData {
   final Decimal fee;
   final String symbol;
 
-  WalletSendEvmTransactionViewData(
-      this.address, this.gwei, this.gasPrice, this.amount, this.fee, this.symbol);
+  WalletSendEvmTransactionViewData(this.address, this.gwei, this.gasPrice,
+      this.amount, this.fee, this.symbol);
 }

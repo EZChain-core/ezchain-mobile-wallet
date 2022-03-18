@@ -7,10 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:wallet/app.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
+import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/features/common/type/network_config_type.dart';
 import 'package:wallet/generated/l10n.dart';
-
-import 'features/common/setting/wallet_setting.dart';
 
 Future<void> main() async {
   await configureDependencies();
