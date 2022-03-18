@@ -101,7 +101,8 @@ abstract class _BalanceStore with Store {
     updateBalance();
   }
 
-  _handleCallback(Event event, Object? context) async {
+  @action
+  _handleCallback(Event event, Object? context) {
     final eventName = event.eventName;
     final eventData = event.eventData;
     if (eventName == WalletEventType.balanceChangedX.type &&
@@ -188,6 +189,7 @@ abstract class _BalanceStore with Store {
     }
   }
 
+  @action
   _fetchTotal() async {
     final avaxBalance = _wallet.getAvaxBalance();
     final totalAvaxBalanceDecimal = avaxBalance.totalDecimal;

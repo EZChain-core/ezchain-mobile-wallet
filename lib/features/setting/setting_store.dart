@@ -59,6 +59,7 @@ abstract class _SettingStore with Store {
     _validatorsStore.updateValidators();
   }
 
+  @action
   enableTouchId(bool enabled) async {
     bool useTouchId = enabled;
     if (enabled) {
@@ -76,6 +77,7 @@ abstract class _SettingStore with Store {
     _walletSetting.enableTouchId(useTouchId);
   }
 
+  @action
   _init() async {
     touchIdEnabled = await _walletSetting.touchIdEnabled();
     touchIdAvailable = await _localAuthentication.canCheckBiometrics;

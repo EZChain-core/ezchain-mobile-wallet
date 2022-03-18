@@ -70,6 +70,7 @@ abstract class _CrossTransferStore with Store {
     await _import();
   }
 
+  @action
   setCrossTransferInfo(CrossTransferInfo info) {
     sourceChain = info.sourceChain;
     destinationChain = info.destinationChain;
@@ -77,6 +78,7 @@ abstract class _CrossTransferStore with Store {
     transferring();
   }
 
+  @action
   _export() async {
     try {
       final feeP = getTxFeeP();
@@ -149,6 +151,7 @@ abstract class _CrossTransferStore with Store {
     }
   }
 
+  @action
   _import() async {
     try {
       if (sourceChain == CrossChainType.xChain &&

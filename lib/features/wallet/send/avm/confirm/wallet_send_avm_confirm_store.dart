@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
@@ -25,10 +26,9 @@ abstract class _WalletSendAvmConfirmStore with Store {
       await _wallet.updateUtxosX();
       final txId = await _wallet
           .sendAvaxX(address, numberToBNAvaxX(amount.toBigInt()), memo: memo);
-      print("txId = $txId");
       sendSuccess = true;
     } catch (e) {
-      print(e);
+      logger.e(e);
     }
     isLoading = false;
   }
