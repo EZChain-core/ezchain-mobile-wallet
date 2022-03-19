@@ -36,17 +36,17 @@ abstract class _PriceStore with Store {
 
   _PriceStore() {
     _tokenStore.antAssets.observe((tokens) {
-      final contractAddresses = tokens.list.map((token) => token.id);
-      if (contractAddresses.isNotEmpty) {
+      if (tokens.list.isNotEmpty) {
+        final contractAddresses = tokens.list.map((token) => token.id);
         _contractAddresses.addAll(contractAddresses);
         updatePrice();
       }
     });
 
     _tokenStore.erc20Tokens.observe((tokens) {
-      final contractAddresses =
-          tokens.list.map((token) => token.contractAddress);
-      if (contractAddresses.isNotEmpty) {
+      if (tokens.list.isNotEmpty) {
+        final contractAddresses =
+            tokens.list.map((token) => token.contractAddress);
         _contractAddresses.addAll(contractAddresses);
         updatePrice();
       }
@@ -54,6 +54,9 @@ abstract class _PriceStore with Store {
   }
 
   updatePrice() {
+    if (_contractAddresses.isEmpty) {
+      _contractAddresses.add(getAvaxAssetId());
+    }
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(minutes: 5), (timer) {
       if (timer.isActive &&
@@ -73,7 +76,6 @@ abstract class _PriceStore with Store {
     _completer?.operation.cancel();
     _timer?.cancel();
     _contractAddresses.clear();
-    _contractAddresses.add(getAvaxAssetId());
     _prices.clear();
   }
 
