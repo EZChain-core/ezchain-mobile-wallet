@@ -48,6 +48,7 @@ int getEvmChainId() {
 /// Changes the connected network of the SDK.
 /// This is a synchronous call that does not do any network requests.
 void setRpcNetwork(NetworkConfig config) {
+  _activeNetwork = config;
   _ezc = _createEZCProvider(config);
 
   final explorerUrl = config.explorerURL;
@@ -61,8 +62,6 @@ void setRpcNetwork(NetworkConfig config) {
     web3Client.dispose();
   } catch (e) {}
   _web3Client = Web3Client(getRpcC(config), Client());
-
-  _activeNetwork = config;
 }
 
 Dio _createExplorerApi(String explorerApi) {
