@@ -44,7 +44,7 @@ abstract class _WalletEZCStore with Store {
 
   @computed
   String get totalUsd {
-    final totalUsdNumber = _balanceStore.totalEzc * _priceStore.avaxPrice;
+    final totalUsdNumber = _balanceStore.totalEzc * _priceStore.ezcPrice;
     return decimalToLocaleString(totalUsdNumber, decimals: decimalNumber);
   }
 

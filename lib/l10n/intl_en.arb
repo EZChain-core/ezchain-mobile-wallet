@@ -157,6 +157,7 @@
   "walletTokenSymbol": "Token Symbol",
   "walletTokenDecimal": "Token Decimal",
   "walletTokenAddressInvalid": "Invalid contract address",
+  "walletTokenAddressExists": "Contract address is already existed",
   "walletTokenNameInvalid": "You must provide a name.",
   "walletTokenSymbolInvalid": "You must provide a symbol.",
   "walletTokenSymbolLengthInvalid": "Symbol must be 4 characters max.",

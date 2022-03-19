@@ -105,7 +105,7 @@ class WalletSendAntScreen extends StatelessWidget {
                       Observer(
                         builder: (_) => WalletSendHorizontalText(
                           title: Strings.current.sharedTransactionFee,
-                          content: '${_walletSendAntStore.fee} $ezcCode',
+                          content: '${_walletSendAntStore.fee} $ezcSymbol',
                           rightColor: provider.themeMode.text60,
                         ),
                       ),

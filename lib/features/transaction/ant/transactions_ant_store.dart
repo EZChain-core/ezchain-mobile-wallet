@@ -25,8 +25,8 @@ abstract class _TransactionsAntStore with Store {
   String get balance {
     final token = _token;
     if (token == null) return '';
-    if (token.type == EZCTokenType.erc20 && token.id != null) {
-      final findToken = _tokenStore.findErc20(token.id!);
+    if (token.type == EZCTokenType.erc20) {
+      final findToken = _tokenStore.findErc20(token.id);
       if (findToken != null) {
         return findToken.balance;
       }
@@ -46,7 +46,6 @@ abstract class _TransactionsAntStore with Store {
     try {
       if (token.type == EZCTokenType.ant) {
         final assetId = token.id;
-        if (assetId == null) return [];
         final transactions = await _wallet.getXTransactions();
         final filteredTransactions = transactions
             .where((element) =>
@@ -56,7 +55,6 @@ abstract class _TransactionsAntStore with Store {
         return await mapToTransactionsItemsV2(filteredTransactions);
       } else {
         final contractAddress = token.id;
-        if (contractAddress == null) return [];
         final transactions = await _wallet.getHistoryErc20(
           contractAddress: contractAddress,
         );

@@ -6,7 +6,9 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
-import 'package:wallet/ezc/wallet/explorer/coingecko/requests.dart';
+import 'package:wallet/ezc/wallet/explorer/price/requests.dart';
+import 'package:wallet/ezc/wallet/explorer/price/types.dart';
+import 'package:wallet/ezc/wallet/network/utils.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/store/token_store.dart';
 
@@ -19,14 +21,37 @@ abstract class _PriceStore with Store {
   final _tokenStore = getIt<TokenStore>();
 
   @readonly
-  ObservableMap<String, Decimal> _prices = ObservableMap.of({});
+  //ignore: prefer_final_fields
+  ObservableMap<String, EzcPrice> _prices = ObservableMap.of({});
 
   @computed
-  Decimal get avaxPrice => _prices[ezcCode.toLowerCase()] ?? Decimal.zero;
+  Decimal get ezcPrice =>
+      _prices[ezcSymbol.toLowerCase()]?.currentPriceDecimal ?? Decimal.zero;
 
   Timer? _timer;
 
-  CancelableCompleter<Decimal>? _completer;
+  CancelableCompleter<Map<String, EzcPrice>>? _completer;
+
+  final _contractAddresses = {getAvaxAssetId()};
+
+  _PriceStore() {
+    _tokenStore.antAssets.observe((tokens) {
+      final contractAddresses = tokens.list.map((token) => token.id);
+      if (contractAddresses.isNotEmpty) {
+        _contractAddresses.addAll(contractAddresses);
+        updatePrice();
+      }
+    });
+
+    _tokenStore.erc20Tokens.observe((tokens) {
+      final contractAddresses =
+          tokens.list.map((token) => token.contractAddress);
+      if (contractAddresses.isNotEmpty) {
+        _contractAddresses.addAll(contractAddresses);
+        updatePrice();
+      }
+    });
+  }
 
   updatePrice() {
     _timer?.cancel();
@@ -39,10 +64,16 @@ abstract class _PriceStore with Store {
     _fetchPrice();
   }
 
+  Decimal getPrice(String symbol) {
+    return _prices[symbol.toLowerCase()]?.currentPriceDecimal ?? Decimal.zero;
+  }
+
   @action
   dispose() {
     _completer?.operation.cancel();
     _timer?.cancel();
+    _contractAddresses.clear();
+    _contractAddresses.add(getAvaxAssetId());
     _prices.clear();
   }
 
@@ -50,10 +81,12 @@ abstract class _PriceStore with Store {
   _fetchPrice() {
     _completer = CancelableCompleter();
     _completer?.operation.value.then((value) {
-      _prices[ezcCode.toLowerCase()] = value;
+      _prices.clear();
+      _prices.addAll(value);
     }, onError: (e) {
       logger.e(e);
     });
-    _completer?.complete(getAvaxPriceDecimal());
+    final future = fetchEzcPrices(_contractAddresses.toList());
+    _completer?.complete(future);
   }
 }

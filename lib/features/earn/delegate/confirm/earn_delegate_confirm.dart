@@ -86,7 +86,7 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
                       ),
                       _EarnDelegateHorizontalText(
                           leftText: Strings.current.earnStakingAmount,
-                          rightText: '${args.amount} $ezcCode'),
+                          rightText: '${args.amount} $ezcSymbol'),
                       const SizedBox(height: 12),
                       Observer(
                         builder: (_) => _EarnDelegateHorizontalText(

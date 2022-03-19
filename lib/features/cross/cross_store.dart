@@ -22,7 +22,7 @@ abstract class _CrossStore with Store {
   final _priceStore = getIt<PriceStore>();
 
   @computed
-  Decimal get avaxPrice => _priceStore.avaxPrice;
+  Decimal get avaxPrice => _priceStore.ezcPrice;
 
   @observable
   Decimal amount = Decimal.zero;

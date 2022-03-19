@@ -27,34 +27,40 @@ abstract class _WalletTokenStore with Store {
   }
 
   @computed
-  Decimal get ezcPrice => _priceStore.avaxPrice;
+  Decimal get ezcPrice => _priceStore.ezcPrice;
 
   @computed
   ObservableList<WalletTokenItem> get erc20Tokens =>
-      ObservableList.of(_tokenStore.erc20Tokens
-          .map((token) => WalletTokenItem(
-                token.name,
-                token.symbol,
-                bnToDecimal(token.balanceBN, denomination: token.decimals),
-                token.balance,
-                EZCTokenType.erc20,
-                id: token.contractAddress,
-                decimals: token.decimals,
-              ))
-          .toList());
+      ObservableList.of(_tokenStore.erc20Tokens.map((token) {
+        final price = _priceStore.prices[token.symbol.toLowerCase()];
+        return WalletTokenItem(
+            id: token.contractAddress,
+            name: token.name,
+            symbol: token.symbol,
+            balance: bnToDecimal(token.balanceBN, denomination: token.decimals),
+            balanceText: token.balance,
+            type: EZCTokenType.erc20,
+            decimals: token.decimals,
+            logo: price?.image,
+            price: price?.currentPriceDecimal);
+      }).toList());
 
   @computed
   ObservableList<WalletTokenItem> get antokens =>
-      ObservableList.of(_tokenStore.antAssets
-          .map((token) => WalletTokenItem(
-                token.name,
-                token.symbol,
-                token.getAmount(),
-                token.toString(),
-                EZCTokenType.ant,
-                id: token.id,
-              ))
-          .toList());
+      ObservableList.of(_tokenStore.antAssets.map((token) {
+        final price = _priceStore.prices[token.symbol.toLowerCase()];
+        return WalletTokenItem(
+          id: token.id,
+          name: token.name,
+          symbol: token.symbol,
+          balance: token.getAmount(),
+          balanceText: token.toString(),
+          type: EZCTokenType.ant,
+          decimals: token.denomination,
+          logo: price?.image,
+          price: price?.currentPriceDecimal,
+        );
+      }).toList());
 
   @computed
   ObservableList<WalletTokenItem> get tokens =>
@@ -63,6 +69,5 @@ abstract class _WalletTokenStore with Store {
   @action
   refresh() async {
     _balanceStore.updateTotalBalance();
-    _tokenStore.getErc20Tokens();
   }
 }

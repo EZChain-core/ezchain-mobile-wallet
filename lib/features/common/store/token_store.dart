@@ -26,14 +26,23 @@ abstract class _TokenStore with Store {
   String get _key => "${_wallet.getAddressX()}_${getEvmChainId()}";
 
   @readonly
+  //ignore: prefer_final_fields
   ObservableList<Erc20TokenData> _erc20Tokens = ObservableList.of([]);
 
   @readonly
+  //ignore: prefer_final_fields
   ObservableList<AvaAsset> _antAssets = ObservableList<AvaAsset>();
 
   @readonly
+  //ignore: prefer_final_fields
   ObservableList<AssetDescriptionClean> _nftAssets =
       ObservableList<AssetDescriptionClean>();
+
+  bool isErc20Exists(String contractAddress) {
+    return _erc20Tokens.firstWhereOrNull(
+            (element) => element.contractAddress == contractAddress) !=
+        null;
+  }
 
   @action
   Future<bool> addErc20Token(Erc20TokenData token) async {
@@ -61,9 +70,9 @@ abstract class _TokenStore with Store {
       await Future.wait(cachedErc20Tokens
           .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
       cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
-      _erc20Tokens = ObservableList.of(cachedErc20Tokens);
+      _erc20Tokens.clear();
+      _erc20Tokens.insertAll(0, cachedErc20Tokens);
     } catch (e) {
-      _erc20Tokens = ObservableList.of([]);
       logger.e(e);
     }
   }
@@ -76,7 +85,8 @@ abstract class _TokenStore with Store {
       await Future.wait(cachedErc20Tokens
           .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
       cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
-      _erc20Tokens = ObservableList.of(cachedErc20Tokens);
+      _erc20Tokens.clear();
+      _erc20Tokens.addAll(cachedErc20Tokens);
     } catch (e) {
       logger.e(e);
     }
@@ -139,7 +149,10 @@ abstract class _TokenStore with Store {
 
     assets.customSort(avaAssetId);
 
-    _antAssets = ObservableList.of(assets);
-    _nftAssets = ObservableList.of(nftAssets);
+    _antAssets.clear();
+    _antAssets.addAll(assets);
+
+    _nftAssets.clear();
+    _nftAssets.addAll(nftAssets);
   }
 }

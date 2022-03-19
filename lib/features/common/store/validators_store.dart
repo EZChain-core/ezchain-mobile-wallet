@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
@@ -14,13 +15,15 @@ abstract class _ValidatorsStore with Store {
   final _wallet = getIt<WalletFactory>().activeWallet;
 
   @readonly
+  //ignore: prefer_final_fields
   ObservableList<Validator> _validators = ObservableList.of([]);
 
   @action
   updateValidators() async {
     try {
       final validators = await _wallet.getPlatformValidators();
-      _validators = ObservableList.of(validators);
+      _validators.clear();
+      _validators.addAll(validators);
     } catch (e) {
       logger.e(e);
     }

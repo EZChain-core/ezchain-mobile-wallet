@@ -173,8 +173,12 @@ class WalletReceiveArgs {
   final String symbol;
   final String name;
 
-  WalletReceiveArgs(this.chain, this.address,
-      [this.symbol = ezcCode, this.name = ezcName]);
+  WalletReceiveArgs(
+    this.chain,
+    this.address, [
+    this.symbol = ezcSymbol,
+    this.name = ezcName,
+  ]);
 
   String get receiverName => '$name ($symbol)';
 }
