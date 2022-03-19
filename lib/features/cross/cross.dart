@@ -49,7 +49,7 @@ class _CrossScreenState extends State<CrossScreen> {
                     Assets.icons.icEzc64.svg(width: 32, height: 32),
                     const SizedBox(width: 8),
                     Text(
-                      ezcCode,
+                      ezcSymbol,
                       style:
                           EZCBodyLargeTextStyle(color: provider.themeMode.text),
                     ),
@@ -186,7 +186,7 @@ class _CrossScreenState extends State<CrossScreen> {
                       Expanded(
                         child: Observer(
                           builder: (_) => Text(
-                            '${_crossStore.fee.text(decimals: 5)} $ezcCode',
+                            '${_crossStore.fee.text(decimals: 5)} $ezcSymbol',
                             textAlign: TextAlign.end,
                             style: EZCTitleLargeTextStyle(
                                 color: provider.themeMode.text60),

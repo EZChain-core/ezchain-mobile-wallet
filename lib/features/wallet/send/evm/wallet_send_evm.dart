@@ -60,7 +60,7 @@ class WalletSendEvmScreen extends StatelessWidget {
                             Assets.icons.icEzc64.svg(width: 32, height: 32),
                             const SizedBox(width: 8),
                             Text(
-                              fromToken != null ? fromToken!.symbol : ezcCode,
+                              fromToken != null ? fromToken!.symbol : ezcSymbol,
                               style: EZCBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
@@ -154,7 +154,7 @@ class WalletSendEvmScreen extends StatelessWidget {
                         Observer(
                           builder: (_) => WalletSendHorizontalText(
                             title: Strings.current.sharedTransactionFee,
-                            content: '${_walletSendEvmStore.fee} $ezcCode',
+                            content: '${_walletSendEvmStore.fee} $ezcSymbol',
                             rightColor: provider.themeMode.text60,
                           ),
                         ),
@@ -205,7 +205,7 @@ class WalletSendEvmScreen extends StatelessWidget {
 
     final address = _addressController.text;
     final sendSuccess = await _walletSendEvmStore.sendEvm(address);
-    final symbol = fromToken != null ? fromToken!.symbol : ezcCode;
+    final symbol = fromToken != null ? fromToken!.symbol : ezcSymbol;
     if (sendSuccess) {
       walletContext?.router.push(
         WalletSendEvmConfirmRoute(

@@ -33,7 +33,7 @@ class TransactionsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               EZCAppBar(
-                title: '$ezcCode(${ezcType.name})',
+                title: '$ezcSymbol(${ezcType.name})',
                 onPressed: () {
                   context.router.pop();
                 },
@@ -62,7 +62,7 @@ class TransactionsScreen extends StatelessWidget {
                                   children: [
                                     Observer(
                                       builder: (_) => Text(
-                                        '${_transactionsStore.balanceText} $ezcCode'
+                                        '${_transactionsStore.balanceText} $ezcSymbol'
                                             .useCorrectEllipsis(),
                                         style: EZCHeadlineSmallTextStyle(
                                             color: provider.themeMode.text),

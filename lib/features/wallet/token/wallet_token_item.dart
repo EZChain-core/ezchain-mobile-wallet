@@ -14,6 +14,7 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
 class WalletTokenItem {
+  final String id;
   final String name;
   final String symbol;
   final Decimal balance;
@@ -21,13 +22,21 @@ class WalletTokenItem {
   final EZCTokenType type;
   final double? rate;
   final String? logo;
-  final String? id;
   final Decimal? price;
-  final int? decimals;
+  final int decimals;
 
-  const WalletTokenItem(
-      this.name, this.symbol, this.balance, this.balanceText, this.type,
-      {this.id, this.rate, this.logo, this.price, this.decimals});
+  const WalletTokenItem({
+    required this.id,
+    required this.name,
+    required this.symbol,
+    required this.balance,
+    required this.balanceText,
+    required this.type,
+    required this.decimals,
+    this.logo,
+    this.price,
+    this.rate,
+  });
 
   bool? get isGainer => rate != null ? rate! > 0 : null;
 
@@ -84,17 +93,20 @@ class WalletTokenItemWidget extends StatelessWidget {
                           text: TextSpan(
                             text: token.symbol,
                             style: EZCTitleSmallTextStyle(
-                                color: provider.themeMode.text60),
+                              color: provider.themeMode.text60,
+                            ),
                             children: [
                               TextSpan(
                                 text: '  •  ',
                                 style: EZCTitleSmallTextStyle(
-                                    color: provider.themeMode.text60),
+                                  color: provider.themeMode.text60,
+                                ),
                               ),
                               TextSpan(
                                 text: token.chain,
                                 style: EZCTitleSmallTextStyle(
-                                    color: provider.themeMode.primary),
+                                  color: provider.themeMode.primary,
+                                ),
                               ),
                             ],
                           ),
@@ -109,15 +121,17 @@ class WalletTokenItemWidget extends StatelessWidget {
                 children: [
                   Text(
                     token.balanceText,
-                    style:
-                        EZCBodyMediumTextStyle(color: provider.themeMode.text),
+                    style: EZCBodyMediumTextStyle(
+                      color: provider.themeMode.text,
+                    ),
                   ),
                   if (token.price != null) ...[
                     const SizedBox(height: 6),
                     Text(
                       token.totalPrice,
                       style: EZCTitleSmallTextStyle(
-                          color: provider.themeMode.text50),
+                        color: provider.themeMode.text50,
+                      ),
                     ),
                   ]
                 ],

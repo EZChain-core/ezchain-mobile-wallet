@@ -69,7 +69,7 @@ class NftFamilyCreateScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          '${Strings.current.sharedFee}: ${_nftFamilyCreateStore.fee} $ezcCode',
+                          '${Strings.current.sharedFee}: ${_nftFamilyCreateStore.fee} $ezcSymbol',
                           style: EZCTitleLargeTextStyle(
                               color: provider.themeMode.text60),
                         ),

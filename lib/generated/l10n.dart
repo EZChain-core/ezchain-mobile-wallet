@@ -1644,6 +1644,16 @@ class Strings {
     );
   }
 
+  /// `Contract address is already existed`
+  String get walletTokenAddressExists {
+    return Intl.message(
+      'Contract address is already existed',
+      name: 'walletTokenAddressExists',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `You must provide a name.`
   String get walletTokenNameInvalid {
     return Intl.message(

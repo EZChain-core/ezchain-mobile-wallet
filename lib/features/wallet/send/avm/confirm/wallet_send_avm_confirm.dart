@@ -51,7 +51,7 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                           Assets.icons.icEzc64.svg(width: 32, height: 32),
                           const SizedBox(width: 8),
                           Text(
-                            ezcCode,
+                            ezcSymbol,
                             style: EZCBodyLargeTextStyle(
                                 color: provider.themeMode.text),
                           ),
@@ -79,12 +79,12 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedAmount,
-                        content: '${transactionInfo.amount} $ezcCode',
+                        content: '${transactionInfo.amount} $ezcSymbol',
                       ),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedTransactionFee,
-                        content: '${transactionInfo.fee} $ezcCode',
+                        content: '${transactionInfo.fee} $ezcSymbol',
                       ),
                       const SizedBox(height: 8),
                       EZCDashedLine(color: provider.themeMode.text10),

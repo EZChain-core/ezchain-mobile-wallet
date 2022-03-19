@@ -84,7 +84,7 @@ class WalletSendAntConfirmScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedTransactionFee,
-                        content: '${args.fee} $ezcCode',
+                        content: '${args.fee} $ezcSymbol',
                       ),
                       const SizedBox(height: 8),
                       EZCDashedLine(color: provider.themeMode.text10),
@@ -175,7 +175,13 @@ class WalletSendAntConfirmArgs {
   final Decimal total;
 
   WalletSendAntConfirmArgs(
-      this.token, this.address, this.memo, this.amount, this.fee, this.total);
+    this.token,
+    this.address,
+    this.memo,
+    this.amount,
+    this.fee,
+    this.total,
+  );
 
-  String get assetId => token.id ?? '';
+  String get assetId => token.id;
 }

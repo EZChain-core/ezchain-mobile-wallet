@@ -34,7 +34,7 @@ abstract class _WalletSendEvmStore with Store {
 
   @computed
   Decimal? get avaxPrice =>
-      _token != null ? _token!.price : _priceStore.avaxPrice;
+      _token != null ? _token!.price : _priceStore.ezcPrice;
 
   @observable
   Decimal amount = Decimal.zero;
@@ -70,7 +70,7 @@ abstract class _WalletSendEvmStore with Store {
 
   BigInt get amountBN {
     if (_token != null) {
-      return numberToBN(amount.toBigInt(), _token!.decimals ?? 9);
+      return numberToBN(amount.toBigInt(), _token!.decimals);
     } else {
       return numberToBNAvaxC(amount.toBigInt());
     }
@@ -107,7 +107,7 @@ abstract class _WalletSendEvmStore with Store {
     if (isAddressValid && isAmountValid) {
       if (_token != null) {
         gasLimit =
-            await _wallet.estimateErc20Gas(_token!.id!, address, amountBN);
+            await _wallet.estimateErc20Gas(_token!.id, address, amountBN);
       } else {
         gasLimit =
             await _wallet.estimateAvaxGasLimit(address, amountBN, _gasPrice);
@@ -138,7 +138,7 @@ abstract class _WalletSendEvmStore with Store {
     try {
       if (_token != null) {
         await _wallet.sendErc20(
-            address, amountBN, _gasPrice, gasLimit.toInt(), _token!.id!);
+            address, amountBN, _gasPrice, gasLimit.toInt(), _token!.id);
         _tokenStore.updateErc20Balance();
       } else {
         await _wallet.sendAvaxC(address, amountBN, _gasPrice, gasLimit.toInt());

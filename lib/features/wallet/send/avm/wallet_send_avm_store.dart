@@ -17,7 +17,7 @@ abstract class _WalletSendAvmStore with Store {
   final _priceStore = getIt<PriceStore>();
 
   @computed
-  Decimal get avaxPrice => _priceStore.avaxPrice;
+  Decimal get avaxPrice => _priceStore.ezcPrice;
 
   @computed
   Decimal get balanceX => _balanceStore.balanceX;

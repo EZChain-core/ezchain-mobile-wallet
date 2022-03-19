@@ -36,9 +36,8 @@ abstract class _TransactionsStore with Store {
   String get balanceText => _balanceStore.decimalBalance(balance);
 
   @computed
-  String get balanceUsd =>
-      decimalToLocaleString(balance * _priceStore.avaxPrice,
-          decimals: decimalNumber);
+  String get balanceUsd => decimalToLocaleString(balance * _priceStore.ezcPrice,
+      decimals: decimalNumber);
 
   @computed
   List<Validator> get validators => _validatorsStore.validators;

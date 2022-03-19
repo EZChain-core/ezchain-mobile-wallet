@@ -82,7 +82,7 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedTransactionFee,
-                        content: '${transactionInfo.fee} $ezcCode',
+                        content: '${transactionInfo.fee} $ezcSymbol',
                       ),
                       const SizedBox(height: 8),
                       const Spacer(),
