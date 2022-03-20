@@ -6,6 +6,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/earn/estimate_rewards/earn_estimate_rewards_item.dart';
 import 'package:wallet/features/earn/estimate_rewards/earn_estimate_rewards_store.dart';
+import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
@@ -26,9 +27,7 @@ class EarnEstimateRewardsScreen extends StatelessWidget {
             children: [
               EZCAppBar(
                 title: Strings.current.earnEstimatedRewards,
-                onPressed: () {
-                  context.router.pop();
-                },
+                onPressed: context.router.pop,
               ),
               Expanded(
                 child: Observer(
@@ -57,7 +56,13 @@ class EarnEstimateRewardsScreen extends StatelessWidget {
                                 separatorBuilder: (_, index) =>
                                     const SizedBox(height: 16),
                               )
-                            : const SizedBox.shrink();
+                            : EZCEmpty(
+                                img: Assets.images.imgDelegationEmpty
+                                    .image(width: 182, height: 182),
+                                title: Strings.current.earnEstimateRewardsEmpty,
+                                des:
+                                    Strings.current.earnEstimateRewardsEmptyDes,
+                              );
                       } else {
                         return Align(
                           alignment: Alignment.center,

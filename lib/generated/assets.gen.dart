@@ -164,6 +164,10 @@ class $AssetsImagesGen {
   AssetGenImage get imgBgWallet =>
       const AssetGenImage('assets/images/img_bg_wallet.png');
 
+  /// File path: assets/images/img_delegation_empty.png
+  AssetGenImage get imgDelegationEmpty =>
+      const AssetGenImage('assets/images/img_delegation_empty.png');
+
   /// File path: assets/images/img_ezc_about.png
   AssetGenImage get imgEzcAbout =>
       const AssetGenImage('assets/images/img_ezc_about.png');
@@ -192,6 +196,10 @@ class $AssetsImagesGen {
   AssetGenImage get imgPrivateKeyWraning =>
       const AssetGenImage('assets/images/img_private_key_wraning.png');
 
+  /// File path: assets/images/img_search_empty.png
+  AssetGenImage get imgSearchEmpty =>
+      const AssetGenImage('assets/images/img_search_empty.png');
+
   /// File path: assets/images/img_send_chain_error.svg
   SvgGenImage get imgSendChainError =>
       const SvgGenImage('assets/images/img_send_chain_error.svg');
@@ -199,6 +207,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/img_splash.png
   AssetGenImage get imgSplash =>
       const AssetGenImage('assets/images/img_splash.png');
+
+  /// File path: assets/images/img_token_empty.png
+  AssetGenImage get imgTokenEmpty =>
+      const AssetGenImage('assets/images/img_token_empty.png');
 
   /// File path: assets/images/img_warning.svg
   SvgGenImage get imgWarning =>

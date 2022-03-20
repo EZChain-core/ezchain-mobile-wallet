@@ -1,6 +1,7 @@
 // ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -9,14 +10,13 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-class EarnScreen extends StatefulWidget {
-  const EarnScreen({Key? key}) : super(key: key);
+import 'earn_store.dart';
 
-  @override
-  State<StatefulWidget> createState() => _EarnScreenState();
-}
+class EarnScreen extends StatelessWidget {
+  EarnScreen({Key? key}) : super(key: key);
 
-class _EarnScreenState extends State<EarnScreen> {
+  final _earnStore = EarnStore();
+
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
@@ -46,52 +46,59 @@ class _EarnScreenState extends State<EarnScreen> {
                         style: EZCBodyLargeTextStyle(
                             color: provider.themeMode.text70),
                       ),
-                      const SizedBox(height: 16),
-                      Container(
-                        width: double.infinity,
-                        height: 52,
-                        decoration: BoxDecoration(
-                          color: provider.themeMode.primary10,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(4)),
-                          border:
-                              Border.all(color: provider.themeMode.primary80),
-                        ),
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: 4,
-                              height: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(4),
-                                    bottomLeft: Radius.circular(4)),
-                                color: provider.themeMode.primary,
-                              ),
-                            ),
-                            Align(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: Text(
-                                  Strings.current.earnDelegateValidMess,
-                                  style: EZCLabelMediumTextStyle(
-                                      color: provider.themeMode.primary),
+                      Observer(
+                        builder: (_) => !_earnStore.permittedAddDelegator
+                            ? Container(
+                                width: double.infinity,
+                                height: 52,
+                                margin: const EdgeInsets.only(top: 16),
+                                decoration: BoxDecoration(
+                                  color: provider.themeMode.primary10,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(4)),
+                                  border: Border.all(
+                                      color: provider.themeMode.primary80),
                                 ),
-                              ),
-                              alignment: Alignment.center,
-                            ),
-                          ],
-                        ),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 4,
+                                      height: double.infinity,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4),
+                                            bottomLeft: Radius.circular(4)),
+                                        color: provider.themeMode.primary,
+                                      ),
+                                    ),
+                                    Align(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Text(
+                                          Strings.current.earnDelegateValidMess,
+                                          style: EZCLabelMediumTextStyle(
+                                              color:
+                                                  provider.themeMode.primary),
+                                        ),
+                                      ),
+                                      alignment: Alignment.center,
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : const SizedBox.shrink(),
                       ),
                       const SizedBox(height: 16),
-                      EZCMediumPrimaryButton(
-                        width: 130,
-                        text: Strings.current.earnDelegateAdd,
-                        enabled: true,
-                        onPressed: () {
-                          context.pushRoute(EarnDelegateNodesRoute());
-                        },
+                      Observer(
+                        builder: (_) => EZCMediumPrimaryButton(
+                          width: 130,
+                          text: Strings.current.earnDelegateAdd,
+                          enabled: _earnStore.permittedAddDelegator,
+                          onPressed: () {
+                            context.pushRoute(EarnDelegateNodesRoute());
+                          },
+                        ),
                       ),
                     ],
                   ),

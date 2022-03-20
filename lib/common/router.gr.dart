@@ -309,8 +309,10 @@ class AppRouter extends _i41.RootStackRouter {
           routeData: routeData, child: const _i37.CrossScreen());
     },
     EarnRoute.name: (routeData) {
+      final args =
+          routeData.argsAs<EarnRouteArgs>(orElse: () => const EarnRouteArgs());
       return _i41.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i38.EarnScreen());
+          routeData: routeData, child: _i38.EarnScreen(key: args.key));
     },
     NftRoute.name: (routeData) {
       return _i41.AdaptivePage<dynamic>(
@@ -1160,10 +1162,22 @@ class CrossRoute extends _i41.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i38.EarnScreen]
-class EarnRoute extends _i41.PageRouteInfo<void> {
-  const EarnRoute() : super(EarnRoute.name, path: 'earn');
+class EarnRoute extends _i41.PageRouteInfo<EarnRouteArgs> {
+  EarnRoute({_i42.Key? key})
+      : super(EarnRoute.name, path: 'earn', args: EarnRouteArgs(key: key));
 
   static const String name = 'EarnRoute';
+}
+
+class EarnRouteArgs {
+  const EarnRouteArgs({this.key});
+
+  final _i42.Key? key;
+
+  @override
+  String toString() {
+    return 'EarnRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for

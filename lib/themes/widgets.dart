@@ -200,3 +200,38 @@ class EZCLoading extends StatelessWidget {
     );
   }
 }
+
+class EZCEmpty extends StatelessWidget {
+  final Widget img;
+  final String title;
+  final String? des;
+
+  const EZCEmpty({Key? key, required this.img, required this.title, this.des})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            img,
+            const SizedBox(height: 16),
+            Text(
+              title,
+              style: EZCTitleLargeTextStyle(color: provider.themeMode.text90),
+            ),
+            const SizedBox(height: 4),
+            if (des != null)
+              Text(
+                des!,
+                style: EZCBodyMediumTextStyle(color: provider.themeMode.text60),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
