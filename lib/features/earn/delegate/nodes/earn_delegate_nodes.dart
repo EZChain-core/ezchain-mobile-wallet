@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/earn/delegate/nodes/earn_delegate_node_item.dart';
 import 'package:wallet/features/earn/delegate/nodes/earn_delegate_nodes_store.dart';
+import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/inputs.dart';
@@ -55,7 +56,12 @@ class EarnDelegateNodesScreen extends StatelessWidget {
                                 separatorBuilder: (_, index) =>
                                     const SizedBox(height: 24),
                               )
-                            : const SizedBox.shrink();
+                            : EZCEmpty(
+                                img: Assets.images.imgSearchEmpty
+                                    .image(width: 181, height: 150),
+                                title: Strings.current.sharedNoResultFound,
+                                des: Strings.current.sharedNoResultFoundDes,
+                              );
                       } else {
                         return Align(
                           alignment: Alignment.center,

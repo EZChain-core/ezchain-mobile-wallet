@@ -994,6 +994,26 @@ class Strings {
     );
   }
 
+  /// `No result found`
+  String get sharedNoResultFound {
+    return Intl.message(
+      'No result found',
+      name: 'sharedNoResultFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We can’t find any item matching your search`
+  String get sharedNoResultFoundDes {
+    return Intl.message(
+      'We can’t find any item matching your search',
+      name: 'sharedNoResultFoundDes',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -1694,6 +1714,26 @@ class Strings {
     );
   }
 
+  /// `Empty Token`
+  String get walletTokenEmpty {
+    return Intl.message(
+      'Empty Token',
+      name: 'walletTokenEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tokens will appear here `
+  String get walletTokenEmptyDes {
+    return Intl.message(
+      'Tokens will appear here ',
+      name: 'walletTokenEmptyDes',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Fee (export + import)`
   String get crossFee {
     return Intl.message(
@@ -2079,6 +2119,26 @@ class Strings {
     return Intl.message(
       'Validator Address ',
       name: 'earnValidatorAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Empty Estimate Rewards`
+  String get earnEstimateRewardsEmpty {
+    return Intl.message(
+      'Empty Estimate Rewards',
+      name: 'earnEstimateRewardsEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rewards will appear here`
+  String get earnEstimateRewardsEmptyDes {
+    return Intl.message(
+      'Rewards will appear here',
+      name: 'earnEstimateRewardsEmptyDes',
       desc: '',
       args: [],
     );

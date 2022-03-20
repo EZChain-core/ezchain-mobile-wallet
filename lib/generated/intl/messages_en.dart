@@ -121,6 +121,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "earnDelegation": MessageLookupByLibrary.simpleMessage("Delegation"),
         "earnDelegationFee":
             MessageLookupByLibrary.simpleMessage("Delegation Fee"),
+        "earnEstimateRewardsEmpty":
+            MessageLookupByLibrary.simpleMessage("Empty Estimate Rewards"),
+        "earnEstimateRewardsEmptyDes":
+            MessageLookupByLibrary.simpleMessage("Rewards will appear here"),
         "earnEstimatedReward":
             MessageLookupByLibrary.simpleMessage("Estimated Reward"),
         "earnEstimatedRewards":
@@ -282,6 +286,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedMinuteAgo": m8,
         "sharedMinutes": m9,
         "sharedNext": MessageLookupByLibrary.simpleMessage("Next"),
+        "sharedNoResultFound":
+            MessageLookupByLibrary.simpleMessage("No result found"),
+        "sharedNoResultFoundDes": MessageLookupByLibrary.simpleMessage(
+            "We can’t find any item matching your search"),
         "sharedNodeId": MessageLookupByLibrary.simpleMessage("Node ID"),
         "sharedNonce": MessageLookupByLibrary.simpleMessage("Nonce"),
         "sharedNotConfirm": MessageLookupByLibrary.simpleMessage("Not Confirm"),
@@ -379,6 +387,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Token Decimal"),
         "walletTokenDecimalInvalid": MessageLookupByLibrary.simpleMessage(
             "You must provide a token decimal."),
+        "walletTokenEmpty": MessageLookupByLibrary.simpleMessage("Empty Token"),
+        "walletTokenEmptyDes":
+            MessageLookupByLibrary.simpleMessage("Tokens will appear here "),
         "walletTokenName": MessageLookupByLibrary.simpleMessage("Token Name"),
         "walletTokenNameInvalid":
             MessageLookupByLibrary.simpleMessage("You must provide a name."),

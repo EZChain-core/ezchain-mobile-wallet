@@ -95,8 +95,8 @@ class EZCMediumPrimaryButton extends StatelessWidget {
                   ? provider.themeMode.text10
                   : provider.themeMode.primary,
               buttonPadding: padding ?? ezcButtonMediumPadding),
-          onPressed: onPressed,
-          onLongPress: onLongPress,
+          onPressed: isDisable ? null : onPressed,
+          onLongPress: isDisable ? null : onLongPress,
         ),
       ),
     );
