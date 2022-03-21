@@ -43,7 +43,8 @@ class NftFamilyCollectibleScreen extends StatelessWidget {
                     ),
                     itemCount: _nftFamilyCollectibleStore.nftAssets.length,
                     itemBuilder: (_, index) => NftFamilyCollectibleItemWidget(
-                        item: _nftFamilyCollectibleStore.nftAssets[index]),
+                      item: _nftFamilyCollectibleStore.nftAssets[index],
+                    ),
                   );
                 }),
               ),

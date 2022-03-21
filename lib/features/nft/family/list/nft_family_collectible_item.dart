@@ -1,3 +1,4 @@
+// ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +13,16 @@ class NftFamilyCollectibleItem {
   final String id;
   final String name;
   final String symbol;
-  final int numberOfItem;
-  final String imageUrl;
+  final int quantity;
+  final String? imageUrl;
 
-  NftFamilyCollectibleItem(
-      this.id, this.name, this.symbol, this.numberOfItem, this.imageUrl);
+  NftFamilyCollectibleItem({
+    required this.id,
+    required this.name,
+    required this.symbol,
+    required this.quantity,
+    this.imageUrl,
+  });
 }
 
 class NftFamilyCollectibleItemWidget extends StatelessWidget {
@@ -43,7 +49,7 @@ class NftFamilyCollectibleItemWidget extends StatelessWidget {
                   AspectRatio(
                     aspectRatio: 1,
                     child: CachedNetworkImage(
-                      imageUrl: item.imageUrl,
+                      imageUrl: item.imageUrl ?? "",
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           borderRadius:
@@ -95,7 +101,7 @@ class NftFamilyCollectibleItemWidget extends StatelessWidget {
                   border: Border.all(color: provider.themeMode.text60),
                 ),
                 child: Text(
-                  '${item.numberOfItem} items',
+                  '${item.quantity} items',
                   style:
                       EZCTitleSmallTextStyle(color: provider.themeMode.text70),
                 ),
