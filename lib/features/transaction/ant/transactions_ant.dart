@@ -76,7 +76,7 @@ class TransactionsAntScreen extends StatelessWidget {
                                     if (token.price != null)
                                       Observer(
                                         builder: (_) => Text(
-                                          '\$${token.totalPrice}',
+                                          token.totalPrice,
                                           style: EZCTitleSmallTextStyle(
                                               color: provider.themeMode.text40),
                                         ),

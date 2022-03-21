@@ -29,9 +29,7 @@ class SettingSecurityScreen extends StatelessWidget {
               children: [
                 EZCAppBar(
                   title: Strings.current.settingSecurityWalletAddress,
-                  onPressed: () {
-                    context.router.pop();
-                  },
+                  onPressed: context.router.pop,
                 ),
                 Expanded(
                   child: SizedBox(

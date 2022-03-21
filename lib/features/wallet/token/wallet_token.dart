@@ -3,16 +3,18 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/features/wallet/token/wallet_token_store.dart';
+import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
+import 'package:wallet/themes/widgets.dart';
 
 class WalletTokenScreen extends StatefulWidget {
   const WalletTokenScreen({Key? key}) : super(key: key);
@@ -46,14 +48,22 @@ class _WalletTokenScreenState extends State<WalletTokenScreen>
                 ),
                 Expanded(
                   child: Observer(
-                    builder: (_) => ListView.separated(
-                        padding: const EdgeInsets.all(0),
-                        itemBuilder: (BuildContext context, int index) =>
-                            WalletTokenItemWidget(
-                                token: _walletTokenStore.tokens[index]),
-                        separatorBuilder: (BuildContext context, int index) =>
-                            Divider(color: provider.themeMode.text10),
-                        itemCount: _walletTokenStore.tokens.length),
+                    builder: (_) => _walletTokenStore.tokens.isNotEmpty
+                        ? ListView.separated(
+                            padding: const EdgeInsets.all(0),
+                            itemBuilder: (BuildContext context, int index) =>
+                                WalletTokenItemWidget(
+                                    token: _walletTokenStore.tokens[index]),
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    Divider(color: provider.themeMode.text10),
+                            itemCount: _walletTokenStore.tokens.length)
+                        : EZCEmpty(
+                            img: Assets.images.imgTokenEmpty
+                                .image(width: 188, height: 140),
+                            title: Strings.current.walletTokenEmpty,
+                            des: Strings.current.walletTokenEmptyDes,
+                          ),
                   ),
                 ),
                 const SizedBox(height: 10),
