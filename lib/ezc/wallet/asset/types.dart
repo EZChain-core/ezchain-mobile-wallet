@@ -1,5 +1,14 @@
+import 'dart:convert';
+
+import 'package:collection/collection.dart';
 import 'package:decimal/decimal.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
+import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
+import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+
+part 'types.g.dart';
 
 typedef AssetCache = Map<String, AssetDescriptionClean>;
 
@@ -100,4 +109,92 @@ extension AvaAssets on List<AvaAsset> {
       return symbolA.compareTo(symbolB);
     });
   }
+}
+
+class AvaNFTFamily {
+  final AssetDescriptionClean asset;
+  final AvmUTXO nftMintUTXO;
+  final List<AvmUTXO> nftUTXOs;
+
+  AvaNFTFamily({
+    required this.asset,
+    required this.nftMintUTXO,
+    this.nftUTXOs = const [],
+  });
+
+  int get quantity =>
+      (nftMintUTXO.getOutput() as AvmNFTMintOutput).getGroupId();
+
+  PayloadBase? get firstPayloadBase {
+    try {
+      final nftUTXO = nftUTXOs.firstOrNull;
+      if (nftUTXO == null) {
+        return null;
+      }
+      var payloadBuff =
+          (nftUTXO.getOutput() as AvmNFTTransferOutput).getPayloadBuffer();
+      final typeId = PayloadTypes.instance.getTypeId(payloadBuff);
+      final content = PayloadTypes.instance.getContent(payloadBuff);
+      return PayloadTypes.instance.select(typeId, content);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  GenericNft? get genericNft {
+    final payloadBase = firstPayloadBase;
+    if (payloadBase == null || payloadBase is! JSONPayload) {
+      return null;
+    }
+    try {
+      final json = utf8.decode(payloadBase.getContent());
+      return GenericFormType.fromJson(jsonDecode(json)).avalanche;
+    } catch (e) {
+      return null;
+    }
+  }
+}
+
+@JsonSerializable()
+class GenericFormType {
+  final GenericNft? avalanche;
+
+  GenericFormType({this.avalanche});
+
+  factory GenericFormType.fromJson(Map<String, dynamic> json) =>
+      _$GenericFormTypeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GenericFormTypeToJson(this);
+}
+
+@JsonSerializable()
+class GenericNft {
+  final int version;
+  final String type;
+  final String title;
+  final String img;
+  final String? desc;
+  final int? radius;
+
+  @JsonKey(name: "img_b")
+  final String? imgB;
+
+  @JsonKey(name: "img_m")
+  final String? imgM;
+
+  GenericNft({
+    required this.version,
+    required this.type,
+    required this.title,
+    required this.img,
+    this.desc,
+    this.radius,
+    this.imgB,
+    this.imgM,
+  });
+
+  factory GenericNft.fromJson(Map<String, dynamic> json) =>
+      _$GenericNftFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GenericNftToJson(this);
 }

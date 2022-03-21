@@ -38,7 +38,6 @@ import 'package:wallet/ezc/wallet/network/constants.dart';
 import 'package:wallet/ezc/wallet/network/helpers/alias_from_network_id.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/network/utils.dart';
-import 'package:wallet/ezc/wallet/nft/types.dart';
 import 'package:wallet/ezc/wallet/singleton_wallet.dart';
 import 'package:wallet/ezc/wallet/types.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
@@ -91,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //       child: EZCMediumPrimaryButton(
     //         text: "Test",
     //         onPressed: () {
-    //           sendErc20();
+    //           mintNFT();
     //         },
     //       ),
     //     ),
@@ -1232,29 +1231,99 @@ class _SplashScreenState extends State<SplashScreen> {
       final fee = bnToDecimalAvaxX(xChain.getTxFee());
       logger.i("fee = $fee EZC");
 
-      // cần xử lý lại để shared với hàm fetchAssets và mỗi khi update lại utxosX
-      final assetUtxoMap = <String, AvmUTXO>{};
-      for (final utxo in wallet.utxosX.utxos.values) {
-        assetUtxoMap[cb58Encode(utxo.assetId)] = utxo;
+      final utxos = wallet.utxosX.utxos.values;
+
+      final nftMintUTXOs = <AvmUTXO>[];
+      final nftUTXOs = <AvmUTXO>[];
+
+      for (final utxo in utxos) {
+        final outputId = utxo.output.getOutputId();
+        if (outputId == NFTMINTOUTPUTID) {
+          nftMintUTXOs.add(utxo);
+        }
+        if (outputId == NFTXFEROUTPUTID) {
+          nftUTXOs.add(utxo);
+        }
       }
 
-      // cần xử lý lại để shared với hàm fetchAssets và mỗi khi update lại utxosX
-      final assets = wallet.getUnknownAssets().where((element) {
-        final utxo = assetUtxoMap[element.assetId];
-        final outputId = utxo?.output.getOutputId();
-        return outputId == NFTMINTOUTPUTID;
-      }).toList();
-
-      // Hiển thị màn hình list NFT assets
-      for (final asset in assets) {
-        logger.i("name = ${asset.name}, symbol = ${asset.symbol}");
+      final nftUTXOsDict = <String, List<AvmUTXO>>{};
+      for (final nftUTXO in nftUTXOs) {
+        final assetId = cb58Encode(nftUTXO.getAssetId());
+        final current = nftUTXOsDict[assetId];
+        if (current == null) {
+          nftUTXOsDict[assetId] = [nftUTXO];
+        } else {
+          current.add(nftUTXO);
+        }
       }
 
-      // Chọn 1 asset, ví dụ first
-      final firstAsset = assets.firstOrNull;
-      if (firstAsset == null) return;
+      final nftMintUTXOsDict = <String, List<AvmUTXO>>{};
+      for (final nftMintUTXO in nftMintUTXOs) {
+        final assetId = cb58Encode(nftMintUTXO.getAssetId());
+        final current = nftMintUTXOsDict[assetId];
+        if (current == null) {
+          nftMintUTXOsDict[assetId] = [nftMintUTXO];
+        } else {
+          current.add(nftMintUTXO);
+        }
+      }
 
-      final utxo = assetUtxoMap[firstAsset.assetId]!;
+      nftMintUTXOsDict.forEach((key, value) {
+        value.sorted((a, b) {
+          final groupIdA = (a.getOutput() as AvmNFTMintOutput).getGroupId();
+          final groupIdB = (b.getOutput() as AvmNFTMintOutput).getGroupId();
+          return groupIdA.compareTo(groupIdB);
+        });
+      });
+
+      final assets = wallet.getUnknownAssets();
+
+      final nftFamilies = <AvaNFTFamily>[];
+      for (final entry in nftMintUTXOsDict.entries) {
+        final assetId = entry.key;
+        final mintUTXOS = entry.value;
+        if (mintUTXOS.isEmpty) {
+          continue;
+        }
+        final firstMintUTXO = mintUTXOS.first;
+        final ids = <int>[];
+        final nftAsset =
+            assets.firstWhereOrNull((element) => element.assetId == assetId);
+        if (nftAsset != null) {
+          final nftUtxos = nftUTXOsDict[assetId] ?? [];
+          final filtered = nftUtxos.where((utxo) {
+            final groupId =
+                (utxo.getOutput() as AvmNFTTransferOutput).getGroupId();
+            if (ids.contains(groupId)) {
+              return false;
+            } else {
+              ids.add(groupId);
+              return true;
+            }
+          }).toList();
+          filtered.sorted((a, b) {
+            final groupIdA =
+                (a.getOutput() as AvmNFTTransferOutput).getGroupId();
+            final groupIdB =
+                (b.getOutput() as AvmNFTTransferOutput).getGroupId();
+            return groupIdA.compareTo(groupIdB);
+          });
+          nftFamilies.add(AvaNFTFamily(
+            asset: nftAsset,
+            nftMintUTXO: firstMintUTXO,
+            nftUTXOs: filtered,
+          ));
+        }
+      }
+
+      for (final nftFamily in nftFamilies) {
+        final genericNft = nftFamily.genericNft;
+        logger.i(
+            "nftAsset: name = ${nftFamily.asset.name}, symbol = ${nftFamily.asset.symbol}, quantity = ${nftFamily.quantity}, genericNft = ${genericNft?.toJson()}");
+      }
+
+      final firstNftFamily = nftFamilies.firstOrNull;
+      if (firstNftFamily == null) return;
 
       final generic = GenericFormType(
         avalanche: GenericNft(
@@ -1271,9 +1340,9 @@ class _SplashScreenState extends State<SplashScreen> {
       final utf8Payload = UTF8Payload("KIEN MIN NFT");
       final urlPayload = URLPayload("https://wallet.ezchain.com/");
       final txId = await wallet.mintNFT(
-        utxo,
+        firstNftFamily.nftMintUTXO,
         urlPayload,
-        1,
+        firstNftFamily.quantity,
       );
       logger.i("mintNFT = $txId");
     } catch (e) {
