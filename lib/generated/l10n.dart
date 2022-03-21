@@ -270,6 +270,26 @@ class Strings {
     );
   }
 
+  /// `Generic`
+  String get sharedGeneric {
+    return Intl.message(
+      'Generic',
+      name: 'sharedGeneric',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Custom`
+  String get sharedCustom {
+    return Intl.message(
+      'Custom',
+      name: 'sharedCustom',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Transaction fee`
   String get sharedTransactionFee {
     return Intl.message(
@@ -994,6 +1014,66 @@ class Strings {
     );
   }
 
+  /// `Title`
+  String get sharedTitle {
+    return Intl.message(
+      'Title',
+      name: 'sharedTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type`
+  String get sharedType {
+    return Intl.message(
+      'Type',
+      name: 'sharedType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quantity`
+  String get sharedQuantity {
+    return Intl.message(
+      'Quantity',
+      name: 'sharedQuantity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Description`
+  String get sharedDescription {
+    return Intl.message(
+      'Description',
+      name: 'sharedDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No result found`
+  String get sharedNoResultFound {
+    return Intl.message(
+      'No result found',
+      name: 'sharedNoResultFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We can’t find any item matching your search`
+  String get sharedNoResultFoundDes {
+    return Intl.message(
+      'We can’t find any item matching your search',
+      name: 'sharedNoResultFoundDes',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -1694,6 +1774,26 @@ class Strings {
     );
   }
 
+  /// `Empty Token`
+  String get walletTokenEmpty {
+    return Intl.message(
+      'Empty Token',
+      name: 'walletTokenEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tokens will appear here `
+  String get walletTokenEmptyDes {
+    return Intl.message(
+      'Tokens will appear here ',
+      name: 'walletTokenEmptyDes',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Fee (export + import)`
   String get crossFee {
     return Intl.message(
@@ -2084,6 +2184,26 @@ class Strings {
     );
   }
 
+  /// `Empty Estimate Rewards`
+  String get earnEstimateRewardsEmpty {
+    return Intl.message(
+      'Empty Estimate Rewards',
+      name: 'earnEstimateRewardsEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rewards will appear here`
+  String get earnEstimateRewardsEmptyDes {
+    return Intl.message(
+      'Rewards will appear here',
+      name: 'earnEstimateRewardsEmptyDes',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Mint`
   String get nftMint {
     return Intl.message(
@@ -2164,6 +2284,36 @@ class Strings {
     );
   }
 
+  /// `About collectible`
+  String get nftAboutCollectible {
+    return Intl.message(
+      'About collectible',
+      name: 'nftAboutCollectible',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Image URL`
+  String get nftImageUrl {
+    return Intl.message(
+      'Image URL',
+      name: 'nftImageUrl',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose tittle`
+  String get nftChooseTitle {
+    return Intl.message(
+      'Choose tittle',
+      name: 'nftChooseTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Number of Groups`
   String get nftNumberOfGroups {
     return Intl.message(
@@ -2174,11 +2324,51 @@ class Strings {
     );
   }
 
+  /// `https://`
+  String get nftHttps {
+    return Intl.message(
+      'https://',
+      name: 'nftHttps',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `TxID`
   String get nftTxId {
     return Intl.message(
       'TxID',
       name: 'nftTxId',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `UTF-8`
+  String get nftUtf8 {
+    return Intl.message(
+      'UTF-8',
+      name: 'nftUtf8',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `URL`
+  String get nftUrl {
+    return Intl.message(
+      'URL',
+      name: 'nftUrl',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `JSON`
+  String get nftJson {
+    return Intl.message(
+      'JSON',
+      name: 'nftJson',
       desc: '',
       args: [],
     );

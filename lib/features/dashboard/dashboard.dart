@@ -22,7 +22,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         routes: [
           const WalletRoute(),
           const CrossRoute(),
-          const EarnRoute(),
+          EarnRoute(),
           const NftRoute(),
           SettingRoute(),
         ],
