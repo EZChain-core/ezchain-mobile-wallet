@@ -97,6 +97,10 @@ class $AssetsIconsGen {
   SvgGenImage get icKeyOutlineBlack =>
       const SvgGenImage('assets/icons/ic_key_outline_black.svg');
 
+  /// File path: assets/icons/ic_plus_circle.svg
+  SvgGenImage get icPlusCircle =>
+      const SvgGenImage('assets/icons/ic_plus_circle.svg');
+
   /// File path: assets/icons/ic_question.svg
   SvgGenImage get icQuestion =>
       const SvgGenImage('assets/icons/ic_question.svg');

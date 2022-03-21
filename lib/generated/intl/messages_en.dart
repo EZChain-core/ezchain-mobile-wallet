@@ -149,10 +149,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Validator Address "),
         "earnValidatorStake":
             MessageLookupByLibrary.simpleMessage("Validator Stake"),
+        "nftAboutCollectible":
+            MessageLookupByLibrary.simpleMessage("About collectible"),
         "nftBackMyNFT": MessageLookupByLibrary.simpleMessage("Back to My NFT"),
+        "nftChooseTitle": MessageLookupByLibrary.simpleMessage("Choose tittle"),
         "nftCreateFamily":
             MessageLookupByLibrary.simpleMessage("Create Family"),
         "nftFamilyName": MessageLookupByLibrary.simpleMessage("Family Name"),
+        "nftHttps": MessageLookupByLibrary.simpleMessage("https://"),
+        "nftImageUrl": MessageLookupByLibrary.simpleMessage("Image URL"),
+        "nftJson": MessageLookupByLibrary.simpleMessage("JSON"),
         "nftMint": MessageLookupByLibrary.simpleMessage("Mint"),
         "nftMintCollectible":
             MessageLookupByLibrary.simpleMessage("Mint Collectible"),
@@ -177,6 +183,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "nftSymbolLengthError": MessageLookupByLibrary.simpleMessage(
             "Symbol must be 4 characters max."),
         "nftTxId": MessageLookupByLibrary.simpleMessage("TxID"),
+        "nftUrl": MessageLookupByLibrary.simpleMessage("URL"),
+        "nftUtf8": MessageLookupByLibrary.simpleMessage("UTF-8"),
         "onBoardCreateWallet":
             MessageLookupByLibrary.simpleMessage("Create Wallet"),
         "pageHomeWelcome": m1,
@@ -251,10 +259,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedCopied": MessageLookupByLibrary.simpleMessage("Copied"),
         "sharedCopy": MessageLookupByLibrary.simpleMessage("Copy"),
         "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
+        "sharedCustom": MessageLookupByLibrary.simpleMessage("Custom"),
         "sharedDateDuration": m2,
         "sharedDays": m3,
         "sharedDelegate": MessageLookupByLibrary.simpleMessage("Delegate"),
         "sharedDelegator": MessageLookupByLibrary.simpleMessage("Delegator"),
+        "sharedDescription":
+            MessageLookupByLibrary.simpleMessage("Description"),
         "sharedDestination":
             MessageLookupByLibrary.simpleMessage("Destination"),
         "sharedEZChain": MessageLookupByLibrary.simpleMessage("EZChain"),
@@ -267,6 +278,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedFrom": MessageLookupByLibrary.simpleMessage("Form"),
         "sharedGasLimit": MessageLookupByLibrary.simpleMessage("Gas Limit"),
         "sharedGasPrice": MessageLookupByLibrary.simpleMessage("Gas Price"),
+        "sharedGeneric": MessageLookupByLibrary.simpleMessage("Generic"),
         "sharedHourAgo": m4,
         "sharedHours": m5,
         "sharedImport": MessageLookupByLibrary.simpleMessage("Import"),
@@ -302,6 +314,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Potential Reward"),
         "sharedPrivateKey": MessageLookupByLibrary.simpleMessage("Private Key"),
         "sharedProcessing": MessageLookupByLibrary.simpleMessage("Processing"),
+        "sharedQuantity": MessageLookupByLibrary.simpleMessage("Quantity"),
         "sharedReceive": MessageLookupByLibrary.simpleMessage("Receive"),
         "sharedReceived": MessageLookupByLibrary.simpleMessage("Received"),
         "sharedResult": MessageLookupByLibrary.simpleMessage("Result"),
@@ -321,6 +334,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedStatus": MessageLookupByLibrary.simpleMessage("Status"),
         "sharedSubmit": MessageLookupByLibrary.simpleMessage("Submit"),
         "sharedSuccess": MessageLookupByLibrary.simpleMessage("Success"),
+        "sharedTitle": MessageLookupByLibrary.simpleMessage("Title"),
         "sharedTo": MessageLookupByLibrary.simpleMessage("To"),
         "sharedToken": MessageLookupByLibrary.simpleMessage("Token"),
         "sharedTotal": MessageLookupByLibrary.simpleMessage("Total"),
@@ -337,6 +351,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedTransfer": MessageLookupByLibrary.simpleMessage("Transfer"),
         "sharedTryAgain":
             MessageLookupByLibrary.simpleMessage("Please try again"),
+        "sharedType": MessageLookupByLibrary.simpleMessage("Type"),
         "sharedValidate": MessageLookupByLibrary.simpleMessage("Validate"),
         "sharedValue": MessageLookupByLibrary.simpleMessage("Value"),
         "sharedWalletAddress":

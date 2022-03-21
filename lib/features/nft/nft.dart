@@ -79,7 +79,8 @@ class NftScreen extends StatelessWidget {
                         width: 130,
                         text: Strings.current.nftMint,
                         enabled: true,
-                        onPressed: () {},
+                        onPressed: () =>
+                            context.pushRoute(NftFamilyCollectibleRoute()),
                       ),
                     ],
                   ),
