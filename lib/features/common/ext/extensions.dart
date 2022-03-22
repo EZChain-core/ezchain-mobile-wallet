@@ -25,6 +25,10 @@ extension StringExtension on String {
       return null;
     }
   }
+
+  bool isValidUrl() {
+    return Uri.tryParse(this)?.hasAbsolutePath ?? false;
+  }
 }
 
 extension StringNullableExtension on String? {

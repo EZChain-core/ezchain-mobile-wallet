@@ -44,6 +44,8 @@ import 'package:wallet/features/nft/family/detail/nft_family_detail.dart'
     as _i35;
 import 'package:wallet/features/nft/family/list/nft_family_collectible.dart'
     as _i36;
+import 'package:wallet/features/nft/family/list/nft_family_collectible_item.dart'
+    as _i49;
 import 'package:wallet/features/nft/mint/nft_mint.dart' as _i37;
 import 'package:wallet/features/nft/nft.dart' as _i42;
 import 'package:wallet/features/onboard/on_board.dart' as _i2;
@@ -315,10 +317,10 @@ class AppRouter extends _i44.RootStackRouter {
           child: _i36.NftFamilyCollectibleScreen(key: args.key));
     },
     NftMintRoute.name: (routeData) {
-      final args = routeData.argsAs<NftMintRouteArgs>(
-          orElse: () => const NftMintRouteArgs());
+      final args = routeData.argsAs<NftMintRouteArgs>();
       return _i44.AdaptivePage<dynamic>(
-          routeData: routeData, child: _i37.NftMintScreen(key: args.key));
+          routeData: routeData,
+          child: _i37.NftMintScreen(key: args.key, nftFamily: args.nftFamily));
     },
     DashboardRoute.name: (routeData) {
       return _i44.AdaptivePage<dynamic>(
@@ -1214,21 +1216,25 @@ class NftFamilyCollectibleRouteArgs {
 /// generated route for
 /// [_i37.NftMintScreen]
 class NftMintRoute extends _i44.PageRouteInfo<NftMintRouteArgs> {
-  NftMintRoute({_i45.Key? key})
+  NftMintRoute(
+      {_i45.Key? key, required _i49.NftFamilyCollectibleItem nftFamily})
       : super(NftMintRoute.name,
-            path: '/nft-mint-screen', args: NftMintRouteArgs(key: key));
+            path: '/nft-mint-screen',
+            args: NftMintRouteArgs(key: key, nftFamily: nftFamily));
 
   static const String name = 'NftMintRoute';
 }
 
 class NftMintRouteArgs {
-  const NftMintRouteArgs({this.key});
+  const NftMintRouteArgs({this.key, required this.nftFamily});
 
   final _i45.Key? key;
 
+  final _i49.NftFamilyCollectibleItem nftFamily;
+
   @override
   String toString() {
-    return 'NftMintRouteArgs{key: $key}';
+    return 'NftMintRouteArgs{key: $key, nftFamily: $nftFamily}';
   }
 }
 

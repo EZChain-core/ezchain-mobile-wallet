@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
@@ -15,12 +16,14 @@ class NftFamilyCollectibleItem {
   final String symbol;
   final int quantity;
   final String? imageUrl;
+  final AvmUTXO nftMintUTXO;
 
   NftFamilyCollectibleItem({
     required this.id,
     required this.name,
     required this.symbol,
     required this.quantity,
+    required this.nftMintUTXO,
     this.imageUrl,
   });
 }
@@ -35,7 +38,7 @@ class NftFamilyCollectibleItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => InkWell(
-        onTap: () => context.pushRoute(NftMintRoute()),
+        onTap: () => context.pushRoute(NftMintRoute(nftFamily: item)),
         child: Container(
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(

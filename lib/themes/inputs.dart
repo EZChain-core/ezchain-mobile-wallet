@@ -30,6 +30,8 @@ class EZCTextField extends StatelessWidget {
 
   final int? maxLines;
 
+  final int? maxLength;
+
   final TextEditingController? controller;
 
   final ValueChanged<String>? onChanged;
@@ -47,6 +49,7 @@ class EZCTextField extends StatelessWidget {
       this.suffixIcon,
       this.controller,
       this.maxLines,
+      this.maxLength,
       this.onChanged,
       this.error,
       this.enabled,
@@ -93,6 +96,7 @@ class EZCTextField extends StatelessWidget {
               controller: controller,
               onChanged: onChanged,
               maxLines: maxLines,
+              maxLength: maxLength,
               textCapitalization: textCapitalization ?? TextCapitalization.none,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(12),
