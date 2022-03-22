@@ -22,33 +22,36 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(balance) => "Balance: ${balance}";
 
-  static String m1(name) => "Welcome ${name}";
+  static String m1(count) =>
+      "${Intl.plural(count, one: 'item', other: 'in ${count} items')}";
 
-  static String m2(dayCount, hourCount, minuteCount) =>
+  static String m2(name) => "Welcome ${name}";
+
+  static String m3(dayCount, hourCount, minuteCount) =>
       "${Intl.plural(dayCount, one: '1 day', other: '${dayCount} days')} ${Intl.plural(hourCount, one: '1 hour', other: '${hourCount} hours')} ${Intl.plural(minuteCount, one: '1 minute', other: '${minuteCount} minutes')}";
 
-  static String m3(count) =>
+  static String m4(count) =>
       "${Intl.plural(count, one: '1 day', other: '${count} days')}";
 
-  static String m4(count) =>
+  static String m5(count) =>
       "${Intl.plural(count, one: '1 hour ago', other: '${count} hours ago')}";
 
-  static String m5(count) =>
+  static String m6(count) =>
       "${Intl.plural(count, one: '1 hour', other: '${count} hours')}";
 
-  static String m6(count) =>
+  static String m7(count) =>
       "${Intl.plural(count, one: 'in a day', other: 'in ${count} days')}";
 
-  static String m7(count) =>
+  static String m8(count) =>
       "${Intl.plural(count, one: 'in a year', other: 'in ${count} years')}";
 
-  static String m8(count) =>
+  static String m9(count) =>
       "${Intl.plural(count, one: '1 minute ago', other: '${count} minutes ago')}";
 
-  static String m9(count) =>
+  static String m10(count) =>
       "${Intl.plural(count, one: '1 minute', other: '${count} minutes')}";
 
-  static String m10(balance) => "Balance: ${balance}";
+  static String m11(balance) => "Balance: ${balance}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -153,11 +156,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("About collectible"),
         "nftBackMyNFT": MessageLookupByLibrary.simpleMessage("Back to My NFT"),
         "nftChooseTitle": MessageLookupByLibrary.simpleMessage("Choose tittle"),
+        "nftCollectibles": MessageLookupByLibrary.simpleMessage("Collectibles"),
         "nftCreateFamily":
             MessageLookupByLibrary.simpleMessage("Create Family"),
         "nftFamilyName": MessageLookupByLibrary.simpleMessage("Family Name"),
         "nftHttps": MessageLookupByLibrary.simpleMessage("https://"),
         "nftImageUrl": MessageLookupByLibrary.simpleMessage("Image URL"),
+        "nftItems": m1,
         "nftJson": MessageLookupByLibrary.simpleMessage("JSON"),
         "nftJsonPayload": MessageLookupByLibrary.simpleMessage(
             "JSON Payload (MAX 1024 characters)"),
@@ -191,7 +196,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "nftUtf8": MessageLookupByLibrary.simpleMessage("UTF-8"),
         "onBoardCreateWallet":
             MessageLookupByLibrary.simpleMessage("Create Wallet"),
-        "pageHomeWelcome": m1,
+        "pageHomeWelcome": m2,
         "pinCodeConfirm":
             MessageLookupByLibrary.simpleMessage("Confirm your PIN"),
         "pinCodeConfirmWrong":
@@ -264,8 +269,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedCopy": MessageLookupByLibrary.simpleMessage("Copy"),
         "sharedCurrency": MessageLookupByLibrary.simpleMessage("Currency"),
         "sharedCustom": MessageLookupByLibrary.simpleMessage("Custom"),
-        "sharedDateDuration": m2,
-        "sharedDays": m3,
+        "sharedDateDuration": m3,
+        "sharedDays": m4,
         "sharedDelegate": MessageLookupByLibrary.simpleMessage("Delegate"),
         "sharedDelegator": MessageLookupByLibrary.simpleMessage("Delegator"),
         "sharedDescription":
@@ -283,11 +288,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedGasLimit": MessageLookupByLibrary.simpleMessage("Gas Limit"),
         "sharedGasPrice": MessageLookupByLibrary.simpleMessage("Gas Price"),
         "sharedGeneric": MessageLookupByLibrary.simpleMessage("Generic"),
-        "sharedHourAgo": m4,
-        "sharedHours": m5,
+        "sharedHourAgo": m5,
+        "sharedHours": m6,
         "sharedImport": MessageLookupByLibrary.simpleMessage("Import"),
-        "sharedInDays": m6,
-        "sharedInYears": m7,
+        "sharedInDays": m7,
+        "sharedInYears": m8,
         "sharedInput": MessageLookupByLibrary.simpleMessage("Input"),
         "sharedInvalidAddress":
             MessageLookupByLibrary.simpleMessage("Invalid Address"),
@@ -303,8 +308,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedLockStakeable":
             MessageLookupByLibrary.simpleMessage("Lock Stakeable"),
         "sharedMemo": MessageLookupByLibrary.simpleMessage("Memo"),
-        "sharedMinuteAgo": m8,
-        "sharedMinutes": m9,
+        "sharedMinuteAgo": m9,
+        "sharedMinutes": m10,
         "sharedNext": MessageLookupByLibrary.simpleMessage("Next"),
         "sharedNoResultFound":
             MessageLookupByLibrary.simpleMessage("No result found"),
@@ -386,7 +391,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Set Amount"),
         "walletReceiveToThis": MessageLookupByLibrary.simpleMessage(
             " to this address\nSending any other coins my result in permanent loss"),
-        "walletSendBalance": m10,
+        "walletSendBalance": m11,
         "walletSendCChainErrorAddress": MessageLookupByLibrary.simpleMessage(
             "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\""),
         "walletSendGasGWEI": MessageLookupByLibrary.simpleMessage("GWEI"),
