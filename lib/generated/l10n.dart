@@ -1044,6 +1044,16 @@ class Strings {
     );
   }
 
+  /// `Not a valid image URL.`
+  String get sharedInvalidUrlMess {
+    return Intl.message(
+      'Not a valid image URL.',
+      name: 'sharedInvalidUrlMess',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Description`
   String get sharedDescription {
     return Intl.message(
@@ -2449,6 +2459,26 @@ class Strings {
     return Intl.message(
       'Number of groups must be at least 1.',
       name: 'nftNumberLengthError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payload (MAX 1024 characters)`
+  String get nftPayload {
+    return Intl.message(
+      'Payload (MAX 1024 characters)',
+      name: 'nftPayload',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `JSON Payload (MAX 1024 characters)`
+  String get nftJsonPayload {
+    return Intl.message(
+      'JSON Payload (MAX 1024 characters)',
+      name: 'nftJsonPayload',
       desc: '',
       args: [],
     );

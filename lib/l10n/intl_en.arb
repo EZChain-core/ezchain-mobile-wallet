@@ -97,6 +97,7 @@
   "sharedTitle": "Title",
   "sharedType": "Type",
   "sharedQuantity": "Quantity",
+  "sharedInvalidUrlMess": "Not a valid image URL.",
   "sharedDescription": "Description",
   "sharedNoResultFound": "No result found",
   "sharedNoResultFoundDes": "We can’t find any item matching your search",
@@ -237,5 +238,7 @@
   "nftNameEmptyError": "You must provide a name.",
   "nftSymbolEmptyError": "You must provide a symbol.",
   "nftSymbolLengthError": "Symbol must be 4 characters max.",
-  "nftNumberLengthError": "Number of groups must be at least 1."
+  "nftNumberLengthError": "Number of groups must be at least 1.",
+  "nftPayload": "Payload (MAX 1024 characters)",
+  "nftJsonPayload": "JSON Payload (MAX 1024 characters)"
 }

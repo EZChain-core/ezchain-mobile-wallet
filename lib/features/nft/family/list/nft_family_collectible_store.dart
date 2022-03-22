@@ -1,7 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/store/token_store.dart';
-import 'package:wallet/features/common/wallet_factory.dart';
 
 import '../../family/list/nft_family_collectible_item.dart';
 
@@ -11,8 +10,6 @@ class NftFamilyCollectibleStore = _NftFamilyCollectibleStore
     with _$NftFamilyCollectibleStore;
 
 abstract class _NftFamilyCollectibleStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
-
   final _tokenStore = getIt<TokenStore>();
 
   @computed
@@ -23,5 +20,6 @@ abstract class _NftFamilyCollectibleStore with Store {
             symbol: nftFamily.asset.symbol,
             quantity: nftFamily.quantity,
             imageUrl: nftFamily.genericNft?.img,
+            nftMintUTXO: nftFamily.nftMintUTXO,
           )));
 }

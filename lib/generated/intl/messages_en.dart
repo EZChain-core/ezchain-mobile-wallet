@@ -159,6 +159,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "nftHttps": MessageLookupByLibrary.simpleMessage("https://"),
         "nftImageUrl": MessageLookupByLibrary.simpleMessage("Image URL"),
         "nftJson": MessageLookupByLibrary.simpleMessage("JSON"),
+        "nftJsonPayload": MessageLookupByLibrary.simpleMessage(
+            "JSON Payload (MAX 1024 characters)"),
         "nftMint": MessageLookupByLibrary.simpleMessage("Mint"),
         "nftMintCollectible":
             MessageLookupByLibrary.simpleMessage("Mint Collectible"),
@@ -174,6 +176,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Number of groups must be at least 1."),
         "nftNumberOfGroups":
             MessageLookupByLibrary.simpleMessage("Number of Groups"),
+        "nftPayload": MessageLookupByLibrary.simpleMessage(
+            "Payload (MAX 1024 characters)"),
         "nftStartDate": MessageLookupByLibrary.simpleMessage("Start Date"),
         "nftStartDateDesc": MessageLookupByLibrary.simpleMessage(
             "Sart at least 5 minutes after you submit this form."),
@@ -289,6 +293,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invalid Address"),
         "sharedInvalidAmount":
             MessageLookupByLibrary.simpleMessage("Invalid Amount"),
+        "sharedInvalidUrlMess":
+            MessageLookupByLibrary.simpleMessage("Not a valid image URL."),
         "sharedJustNow": MessageLookupByLibrary.simpleMessage("Just now"),
         "sharedLanguage": MessageLookupByLibrary.simpleMessage("Language"),
         "sharedLock": MessageLookupByLibrary.simpleMessage("Lock"),
