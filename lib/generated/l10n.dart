@@ -1054,6 +1054,16 @@ class Strings {
     );
   }
 
+  /// `Not a valid JSON.`
+  String get sharedInvalidJsonMess {
+    return Intl.message(
+      'Not a valid JSON.',
+      name: 'sharedInvalidJsonMess',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Description`
   String get sharedDescription {
     return Intl.message(

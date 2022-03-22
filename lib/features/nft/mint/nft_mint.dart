@@ -339,6 +339,7 @@ class _NftMintCustomTabState extends State<_NftMintCustomTab> {
               EZCTextField(
                 label: Strings.current.nftUrl,
                 controller: _payloadController,
+                hint: Strings.current.nftHttps,
                 maxLines: 1,
               ),
             if (_type == MintCustomType.json)
@@ -346,6 +347,7 @@ class _NftMintCustomTabState extends State<_NftMintCustomTab> {
                 label: Strings.current.nftJsonPayload,
                 controller: _payloadController,
                 maxLength: 1024,
+                hint: '{\n\n}',
                 maxLines: 3,
               ),
             const SizedBox(height: 16),
