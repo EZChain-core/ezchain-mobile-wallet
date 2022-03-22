@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wallet/common/router.dart';
@@ -28,6 +30,14 @@ extension StringExtension on String {
 
   bool isValidUrl() {
     return Uri.tryParse(this)?.hasAbsolutePath ?? false;
+  }
+  bool isValidJson() {
+    try {
+      json.decode(this) as Map<String, dynamic>;
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
 

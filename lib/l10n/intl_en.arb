@@ -98,6 +98,7 @@
   "sharedType": "Type",
   "sharedQuantity": "Quantity",
   "sharedInvalidUrlMess": "Not a valid image URL.",
+  "sharedInvalidJsonMess": "Not a valid JSON.",
   "sharedDescription": "Description",
   "sharedNoResultFound": "No result found",
   "sharedNoResultFoundDes": "We can’t find any item matching your search",

@@ -293,6 +293,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invalid Address"),
         "sharedInvalidAmount":
             MessageLookupByLibrary.simpleMessage("Invalid Amount"),
+        "sharedInvalidJsonMess":
+            MessageLookupByLibrary.simpleMessage("Not a valid JSON."),
         "sharedInvalidUrlMess":
             MessageLookupByLibrary.simpleMessage("Not a valid image URL."),
         "sharedJustNow": MessageLookupByLibrary.simpleMessage("Just now"),

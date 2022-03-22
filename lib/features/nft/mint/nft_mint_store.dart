@@ -1,5 +1,9 @@
+// ignore: implementation_imports
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
+import 'package:wallet/common/router.dart';
+import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
 import 'package:wallet/ezc/sdk/utils/payload.dart';
@@ -59,9 +63,17 @@ abstract class _NftMintStore with Store {
         payloadBase = UTF8Payload(payload);
         break;
       case MintCustomType.url:
+        if (!payload.isValidUrl()) {
+          _error = Strings.current.sharedInvalidUrlMess;
+          return;
+        }
         payloadBase = URLPayload(payload);
         break;
       case MintCustomType.json:
+        if (!payload.isValidJson()) {
+          _error = Strings.current.sharedInvalidJsonMess;
+          return;
+        }
         payloadBase = JSONPayload(payload);
     }
     mintNft(payloadBase, quantity);
@@ -74,10 +86,11 @@ abstract class _NftMintStore with Store {
       if (_nftMintUTXO == null) {
         throw Exception();
       }
-      logger.e('vit $_nftMintUTXO $quantity');
       await _wallet.mintNFT(_nftMintUTXO!, payload, quantity);
+      walletContext?.router.replaceAll([const DashboardRoute()]);
     } catch (e) {
       logger.e(e);
+      _error = Strings.current.sharedCommonError;
     }
     _isLoading = false;
   }
