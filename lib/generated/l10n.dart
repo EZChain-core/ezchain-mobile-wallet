@@ -2314,6 +2314,16 @@ class Strings {
     );
   }
 
+  /// `Collectibles`
+  String get nftCollectibles {
+    return Intl.message(
+      'Collectibles',
+      name: 'nftCollectibles',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Image URL`
   String get nftImageUrl {
     return Intl.message(
@@ -2381,6 +2391,18 @@ class Strings {
       name: 'nftUrl',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `{count,plural, =1{item} other{in {count} items}}`
+  String nftItems(num count) {
+    return Intl.plural(
+      count,
+      one: 'item',
+      other: 'in $count items',
+      name: 'nftItems',
+      desc: '',
+      args: [count],
     );
   }
 
