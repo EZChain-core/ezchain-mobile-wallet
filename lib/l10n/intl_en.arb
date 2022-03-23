@@ -242,6 +242,7 @@
   "nftSymbolEmptyError": "You must provide a symbol.",
   "nftSymbolLengthError": "Symbol must be 4 characters max.",
   "nftNumberLengthError": "Number of groups must be at least 1.",
+  "nftQuantityValidateError": "Quantity must be at least 1.",
   "nftPayload": "Payload (MAX 1024 characters)",
   "nftJsonPayload": "JSON Payload (MAX 1024 characters)"
 }

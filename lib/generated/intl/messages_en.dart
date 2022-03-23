@@ -183,6 +183,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Number of Groups"),
         "nftPayload": MessageLookupByLibrary.simpleMessage(
             "Payload (MAX 1024 characters)"),
+        "nftQuantityValidateError": MessageLookupByLibrary.simpleMessage(
+            "Quantity must be at least 1."),
         "nftStartDate": MessageLookupByLibrary.simpleMessage("Start Date"),
         "nftStartDateDesc": MessageLookupByLibrary.simpleMessage(
             "Sart at least 5 minutes after you submit this form."),

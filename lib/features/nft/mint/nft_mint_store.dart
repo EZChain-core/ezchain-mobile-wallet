@@ -43,6 +43,10 @@ abstract class _NftMintStore with Store {
       _error = Strings.current.sharedInvalidUrlMess;
       return;
     }
+    if (quantity < 1) {
+      _error = Strings.current.nftQuantityValidateError;
+      return;
+    }
     final generic = GenericFormType(
       avalanche: GenericNft(
         version: 1,
@@ -57,6 +61,10 @@ abstract class _NftMintStore with Store {
   }
 
   mintCustom(MintCustomType type, String payload, int quantity) {
+    if (quantity < 1) {
+      _error = Strings.current.nftQuantityValidateError;
+      return;
+    }
     PayloadBase payloadBase;
     switch (type) {
       case MintCustomType.utf8:

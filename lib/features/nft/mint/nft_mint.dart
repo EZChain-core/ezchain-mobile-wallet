@@ -362,6 +362,7 @@ class _NftMintCustomTabState extends State<_NftMintCustomTab> {
                 maxLength: 1024,
                 hint: '{\n\n}',
                 maxLines: 3,
+                inputType: TextInputType.multiline,
               ),
             const SizedBox(height: 16),
             Row(

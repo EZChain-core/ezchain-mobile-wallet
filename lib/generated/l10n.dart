@@ -2496,6 +2496,16 @@ class Strings {
     );
   }
 
+  /// `Quantity must be at least 1.`
+  String get nftQuantityValidateError {
+    return Intl.message(
+      'Quantity must be at least 1.',
+      name: 'nftQuantityValidateError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Payload (MAX 1024 characters)`
   String get nftPayload {
     return Intl.message(
