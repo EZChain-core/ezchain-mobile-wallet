@@ -4,10 +4,10 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
@@ -40,21 +40,24 @@ class EZCTextField extends StatelessWidget {
 
   final TextCapitalization? textCapitalization;
 
-  const EZCTextField(
-      {Key? key,
-      this.hint,
-      this.inputType,
-      this.label,
-      this.prefixIcon,
-      this.suffixIcon,
-      this.controller,
-      this.maxLines,
-      this.maxLength,
-      this.onChanged,
-      this.error,
-      this.enabled,
-      this.textCapitalization})
-      : super(key: key);
+  final TextInputAction? textInputAction;
+
+  const EZCTextField({
+    Key? key,
+    this.hint,
+    this.inputType,
+    this.label,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.controller,
+    this.maxLines,
+    this.maxLength,
+    this.onChanged,
+    this.error,
+    this.enabled,
+    this.textCapitalization,
+    this.textInputAction,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +128,7 @@ class EZCTextField extends StatelessWidget {
                 ),
               ),
               keyboardType: inputType,
-              textInputAction: TextInputAction.next,
+              textInputAction: textInputAction ?? TextInputAction.next,
             )
           ],
         ),
