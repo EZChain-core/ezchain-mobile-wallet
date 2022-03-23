@@ -33,7 +33,7 @@ class _PinCodeInputState extends State<PinCodeInput> {
   List<Widget> _buildPass() => List.generate(
       passSize, (index) => _PassCircle(isFilled: index < pin.length));
 
-  void _addPin(int number) {
+  void _addPin(int number) async{
     if (pin.length >= passSize) {
       return;
     }
@@ -44,6 +44,7 @@ class _PinCodeInputState extends State<PinCodeInput> {
       pin.add(number);
     });
     if (pin.length == passSize) {
+      await Future.delayed(const Duration(milliseconds: 150));
       var pinString = pin.join('');
       widget.onSuccess(pinString);
       setState(() {
@@ -80,50 +81,41 @@ class _PinCodeInputState extends State<PinCodeInput> {
                 mainAxisSpacing: 24,
                 children: [
                   _CircleDigitKey(
-                      number: 1,
-                      onPressed: (int number) {
-                        _addPin(number);
-                      }),
+                    number: 1,
+                    onPressed: _addPin,
+                  ),
                   _CircleDigitKey(
-                      number: 2,
-                      onPressed: (int number) {
-                        _addPin(number);
-                      }),
+                    number: 2,
+                    onPressed: _addPin,
+                  ),
                   _CircleDigitKey(
-                      number: 3,
-                      onPressed: (int number) {
-                        _addPin(number);
-                      }),
+                    number: 3,
+                    onPressed: _addPin,
+                  ),
                   _CircleDigitKey(
-                      number: 4,
-                      onPressed: (int number) {
-                        _addPin(number);
-                      }),
+                    number: 4,
+                    onPressed: _addPin,
+                  ),
                   _CircleDigitKey(
-                      number: 5,
-                      onPressed: (int number) {
-                        _addPin(number);
-                      }),
+                    number: 5,
+                    onPressed: _addPin,
+                  ),
                   _CircleDigitKey(
-                      number: 6,
-                      onPressed: (int number) {
-                        _addPin(number);
-                      }),
+                    number: 6,
+                    onPressed: _addPin,
+                  ),
                   _CircleDigitKey(
-                      number: 7,
-                      onPressed: (int number) {
-                        _addPin(number);
-                      }),
+                    number: 7,
+                    onPressed: _addPin,
+                  ),
                   _CircleDigitKey(
-                      number: 8,
-                      onPressed: (int number) {
-                        _addPin(number);
-                      }),
+                    number: 8,
+                    onPressed: _addPin,
+                  ),
                   _CircleDigitKey(
-                      number: 9,
-                      onPressed: (int number) {
-                        _addPin(number);
-                      }),
+                    number: 9,
+                    onPressed: _addPin,
+                  ),
                   widget.touchIdEnabled == true
                       ? IconButton(
                           icon: Assets.icons.icTouchId.svg(
@@ -135,10 +127,9 @@ class _PinCodeInputState extends State<PinCodeInput> {
                         )
                       : const SizedBox.shrink(),
                   _CircleDigitKey(
-                      number: 0,
-                      onPressed: (int number) {
-                        _addPin(number);
-                      }),
+                    number: 0,
+                    onPressed: _addPin,
+                  ),
                   IconButton(
                     onPressed: _removePin,
                     padding: const EdgeInsets.all(1),
