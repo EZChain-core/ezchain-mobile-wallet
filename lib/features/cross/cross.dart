@@ -6,8 +6,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
-import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
+import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/cross/cross_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -56,121 +56,261 @@ class _CrossScreenState extends State<CrossScreen> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    color: provider.themeMode.bg,
-                    borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Observer(
-                          builder: (_) => EZCDropdown<CrossChainType>(
-                            label: Strings.current.sharedSource,
-                            items: CrossChainType.values,
-                            onChanged: (type) {
-                              _crossStore.setSourceChain(type);
-                              _amountController.text = '';
-                            },
-                            parseString: (type) => type.name,
-                            initValue: _crossStore.sourceChain,
-                            enabled: !_crossStore.isConfirm,
+                Observer(
+                  builder: (_) => !_crossStore.isConfirm
+                      ? Container(
+                          decoration: BoxDecoration(
+                            color: provider.themeMode.bg,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(16)),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Observer(
-                          builder: (_) => EZCAmountTextField(
-                            label: Strings.current.sharedAmount,
-                            backgroundColor: provider.themeMode.white,
-                            hint: '0.0',
-                            suffixText: Strings.current.walletSendBalance(
-                                _crossStore.sourceBalance.text()),
-                            rateUsd: _crossStore.avaxPrice,
-                            error: _crossStore.amountError,
-                            onChanged: (amount) {
-                              _crossStore.amount =
-                                  Decimal.tryParse(amount) ?? Decimal.zero;
-                              _crossStore.removeAmountError();
-                              _crossStore.updateFee();
-                            },
-                            controller: _amountController,
-                            onSuffixPressed: () {
-                              _amountController.text =
-                                  (_crossStore.sourceBalance - _crossStore.fee)
-                                      .toString();
-                            },
-                            enabled: !_crossStore.isConfirm,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Stack(
-                        children: [
-                          Divider(
-                            height: 48,
-                            thickness: 1,
-                            color: provider.themeMode.text10,
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: GestureDetector(
-                              onTap: _crossStore.switchChain,
-                              child: Container(
-                                width: 48,
-                                height: 48,
-                                margin: const EdgeInsets.only(right: 16),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                    color: provider.themeMode.white,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        width: 1,
-                                        color: provider.themeMode.text10)),
-                                child: Assets.icons.icSwitchArrow.svg(),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Observer(
+                                  builder: (_) => EZCDropdown<CrossChainType>(
+                                    label: Strings.current.sharedSource,
+                                    items: CrossChainType.values,
+                                    onChanged: (type) {
+                                      _crossStore.setSourceChain(type);
+                                      _amountController.text = '';
+                                    },
+                                    parseString: (type) => type.name,
+                                    initValue: _crossStore.sourceChain,
+                                  ),
+                                ),
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Observer(
-                          builder: (_) => EZCDropdown<CrossChainType>(
-                            label: Strings.current.sharedDestination,
-                            items: _crossStore.destinationList,
-                            parseString: (type) => type.name,
-                            initValue: _crossStore.destinationChain,
-                            onChanged: (type) {
-                              _crossStore.destinationChain = type;
-                              _amountController.text = '';
-                            },
-                            enabled: !_crossStore.isConfirm,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Observer(
+                                  builder: (_) => EZCAmountTextField(
+                                    label: Strings.current.sharedAmount,
+                                    backgroundColor: provider.themeMode.white,
+                                    hint: '0.0',
+                                    suffixText: Strings.current
+                                        .walletSendBalance(
+                                            _crossStore.sourceBalance.text()),
+                                    rateUsd: _crossStore.avaxPrice,
+                                    error: _crossStore.amountError,
+                                    onChanged: (amount) {
+                                      _crossStore.amount =
+                                          Decimal.tryParse(amount) ??
+                                              Decimal.zero;
+                                      _crossStore.removeAmountError();
+                                      _crossStore.updateFee();
+                                    },
+                                    controller: _amountController,
+                                    onSuffixPressed: () {
+                                      _amountController.text =
+                                          (_crossStore.sourceBalance -
+                                                  _crossStore.fee)
+                                              .toString();
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                              Stack(
+                                children: [
+                                  Divider(
+                                    height: 48,
+                                    thickness: 1,
+                                    color: provider.themeMode.text10,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: GestureDetector(
+                                      onTap: _crossStore.switchChain,
+                                      child: Container(
+                                        width: 48,
+                                        height: 48,
+                                        margin:
+                                            const EdgeInsets.only(right: 16),
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                            color: provider.themeMode.white,
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                                width: 1,
+                                                color:
+                                                    provider.themeMode.text10)),
+                                        child: Assets.icons.icSwitchArrow.svg(),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Observer(
+                                  builder: (_) => EZCDropdown<CrossChainType>(
+                                    label: Strings.current.sharedDestination,
+                                    items: _crossStore.destinationList,
+                                    parseString: (type) => type.name,
+                                    initValue: _crossStore.destinationChain,
+                                    onChanged: (type) {
+                                      _crossStore.destinationChain = type;
+                                      _amountController.text = '';
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Observer(
+                                builder: (_) => Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.only(right: 16),
+                                  child: Text(
+                                    Strings.current.walletSendBalance(
+                                        _crossStore.destinationBalance.text()),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.fade,
+                                    textAlign: TextAlign.end,
+                                    style: EZCLabelMediumTextStyle(
+                                        color: provider.themeMode.text60),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                            color: provider.themeMode.bg,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(16)),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      Strings.current.sharedSource,
+                                      style: EZCTitleLargeTextStyle(
+                                          color: provider.themeMode.text60),
+                                    ),
+                                    Observer(
+                                      builder: (_) => Text(
+                                        _crossStore.sourceChain.name,
+                                        style: EZCBodyLargeTextStyle(
+                                            color: provider.themeMode.text),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      Strings.current.sharedAmount,
+                                      style: EZCTitleLargeTextStyle(
+                                          color: provider.themeMode.text60),
+                                    ),
+                                    Observer(
+                                      builder: (_) => Text(
+                                        '${_crossStore.amount}',
+                                        style: EZCBodyLargeTextStyle(
+                                            color: provider.themeMode.text),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Observer(
+                                builder: (_) => Padding(
+                                  padding: const EdgeInsets.only(right: 16),
+                                  child: Text(
+                                    Strings.current.walletSendBalance(
+                                        _crossStore.sourceBalance.text()),
+                                    style: EZCLabelMediumTextStyle(
+                                        color: provider.themeMode.text60),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                              Stack(
+                                children: [
+                                  Divider(
+                                    height: 48,
+                                    thickness: 1,
+                                    color: provider.themeMode.text10,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Container(
+                                      width: 48,
+                                      height: 48,
+                                      margin: const EdgeInsets.only(right: 16),
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: provider.themeMode.white,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          width: 1,
+                                          color: provider.themeMode.text10,
+                                        ),
+                                      ),
+                                      child:
+                                          Assets.icons.icArrowDownBlack.svg(),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(height: 24),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      Strings.current.sharedDestination,
+                                      style: EZCTitleLargeTextStyle(
+                                          color: provider.themeMode.text60),
+                                    ),
+                                    Observer(
+                                      builder: (_) => Text(
+                                        _crossStore.destinationChain.name,
+                                        style: EZCBodyLargeTextStyle(
+                                            color: provider.themeMode.text),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Observer(
+                                builder: (_) => Padding(
+                                  padding: const EdgeInsets.only(right: 16),
+                                  child: Text(
+                                    Strings.current.walletSendBalance(
+                                        _crossStore.destinationBalance.text()),
+                                    style: EZCLabelMediumTextStyle(
+                                        color: provider.themeMode.text60),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                            ],
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Observer(
-                        builder: (_) => Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.only(right: 16),
-                          child: Text(
-                            Strings.current.walletSendBalance(
-                                _crossStore.destinationBalance.text()),
-                            maxLines: 1,
-                            overflow: TextOverflow.fade,
-                            textAlign: TextAlign.end,
-                            style: EZCLabelMediumTextStyle(
-                                color: provider.themeMode.text60),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-                  ),
                 ),
                 const SizedBox(height: 8),
                 Padding(

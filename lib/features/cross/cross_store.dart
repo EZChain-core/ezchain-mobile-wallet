@@ -1,15 +1,14 @@
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
-import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/wallet/types.dart';
+import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/store/price_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/cross/transfer/cross_transfer.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/ezc/wallet/types.dart';
-import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
-import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 
 part 'cross_store.g.dart';
 
@@ -27,30 +26,24 @@ abstract class _CrossStore with Store {
   @observable
   Decimal amount = Decimal.zero;
 
-  @observable
-  Decimal fee = Decimal.zero;
+  @readonly
+  Decimal _fee = Decimal.zero;
 
-  @observable
-  String? amountError;
-
-  @observable
-  String exportTxId = '';
-
-  @observable
-  String importTxId = '';
+  @readonly
+  String? _amountError;
 
   @observable
   bool isConfirm = false;
 
-  @observable
-  CrossChainType sourceChain = CrossChainType.xChain;
+  @readonly
+  CrossChainType _sourceChain = CrossChainType.xChain;
 
   @observable
   CrossChainType destinationChain = CrossChainType.pChain;
 
   @computed
   Decimal get sourceBalance {
-    return _getBalance(sourceChain);
+    return _getBalance(_sourceChain);
   }
 
   @computed
@@ -59,21 +52,21 @@ abstract class _CrossStore with Store {
   }
 
   List<CrossChainType> get destinationList =>
-      CrossChainType.values.toList()..remove(sourceChain);
+      CrossChainType.values.toList()..remove(_sourceChain);
 
   CrossTransferInfo get crossTransferInfo =>
-      CrossTransferInfo(sourceChain, destinationChain, amount);
+      CrossTransferInfo(_sourceChain, destinationChain, amount);
 
   get _amountDouble => amount.toDouble();
 
   @action
   init() async {
-    setSourceChain(sourceChain);
+    setSourceChain(_sourceChain);
   }
 
   @action
   setSourceChain(CrossChainType type) async {
-    sourceChain = type;
+    _sourceChain = type;
     destinationChain = destinationList.first;
     updateFee();
   }
@@ -86,8 +79,8 @@ abstract class _CrossStore with Store {
 
   @action
   switchChain() {
-    final chain = sourceChain;
-    sourceChain = destinationChain;
+    final chain = _sourceChain;
+    _sourceChain = destinationChain;
     destinationChain = chain;
     updateFee();
   }
@@ -96,25 +89,25 @@ abstract class _CrossStore with Store {
   bool validate() {
     final isAmountValid = sourceBalance > amount && amount > Decimal.zero;
     if (!isAmountValid) {
-      amountError = Strings.current.sharedInvalidAmount;
+      _amountError = Strings.current.sharedInvalidAmount;
     }
     return isAmountValid;
   }
 
   @action
   removeAmountError() {
-    if (amountError != null) {
-      amountError = null;
+    if (_amountError != null) {
+      _amountError = null;
     }
   }
 
   @action
   updateFee() async {
-    fee = await _getFeeExport() + await _getFeeImport();
+    _fee = await _getFeeExport() + await _getFeeImport();
   }
 
   Future<Decimal> _getFeeExport() async {
-    switch (sourceChain) {
+    switch (_sourceChain) {
       case CrossChainType.xChain:
         return bnToDecimalAvaxX(getTxFeeX());
       case CrossChainType.pChain:

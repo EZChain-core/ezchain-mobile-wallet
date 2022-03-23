@@ -107,6 +107,19 @@ class NftMintScreen extends StatelessWidget {
                                     )
                                   ],
                                 ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  Strings.current.nftCollectibles,
+                                  style: EZCTitleLargeTextStyle(
+                                      color:
+                                      provider.themeMode.text60),
+                                ),
+                                const SizedBox(height: 4),
+                                ListView(
+                                  children: [
+
+                                  ],
+                                ),
                               ],
                             ),
                           ),
