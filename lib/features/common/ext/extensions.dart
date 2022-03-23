@@ -29,7 +29,12 @@ extension StringExtension on String {
   }
 
   bool isValidUrl() {
-    return Uri.tryParse(this)?.hasAbsolutePath ?? false;
+    String pattern = r'(http|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?';
+    RegExp regExp = RegExp(pattern);
+    if (length == 0) {
+      return false;
+    }
+    return regExp.hasMatch(this);
   }
   bool isValidJson() {
     try {
