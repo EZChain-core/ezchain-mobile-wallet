@@ -1269,7 +1269,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }
 
       nftMintUTXOsDict.forEach((key, value) {
-        value.sorted((a, b) {
+        value.sort((a, b) {
           final groupIdA = (a.getOutput() as AvmNFTMintOutput).getGroupId();
           final groupIdB = (b.getOutput() as AvmNFTMintOutput).getGroupId();
           return groupIdA.compareTo(groupIdB);
@@ -1301,7 +1301,7 @@ class _SplashScreenState extends State<SplashScreen> {
               return true;
             }
           }).toList();
-          filtered.sorted((a, b) {
+          filtered.sort((a, b) {
             final groupIdA =
                 (a.getOutput() as AvmNFTTransferOutput).getGroupId();
             final groupIdB =
@@ -1329,9 +1329,10 @@ class _SplashScreenState extends State<SplashScreen> {
         avalanche: GenericNft(
           version: 1,
           type: "generic",
-          title: "title",
-          img: "imgUrl",
-          desc: "description",
+          title: "Kien Avatar",
+          img:
+              "https://image-1.gapowork.vn/images/fd1a53de-80a7-457f-9162-7a9652838fe6.jpeg",
+          desc: "Kien Avatar",
         ),
       );
 
@@ -1342,7 +1343,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final txId = await wallet.mintNFT(
         firstNftFamily.nftMintUTXO,
         urlPayload,
-        firstNftFamily.quantity,
+        1,
       );
       logger.i("mintNFT = $txId");
     } catch (e) {

@@ -448,7 +448,7 @@ class _AvmApiImpl implements AvmApi {
       change,
       utxoIds,
       groupId,
-      payload.payload,
+      payload.getPayload(),
       fee: getTxFee(),
       feeAssetId: avaxAssetId,
       memo: memo,

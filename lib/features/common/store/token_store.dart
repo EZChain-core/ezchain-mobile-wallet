@@ -190,7 +190,7 @@ abstract class _TokenStore with Store {
     }
 
     nftMintUTXOsDict.forEach((key, value) {
-      value.sorted((a, b) {
+      value.sort((a, b) {
         final groupIdA = (a.getOutput() as AvmNFTMintOutput).getGroupId();
         final groupIdB = (b.getOutput() as AvmNFTMintOutput).getGroupId();
         return groupIdA.compareTo(groupIdB);
@@ -220,7 +220,7 @@ abstract class _TokenStore with Store {
             return true;
           }
         }).toList();
-        filtered.sorted((a, b) {
+        filtered.sort((a, b) {
           final groupIdA = (a.getOutput() as AvmNFTTransferOutput).getGroupId();
           final groupIdB = (b.getOutput() as AvmNFTTransferOutput).getGroupId();
           return groupIdA.compareTo(groupIdB);
