@@ -77,7 +77,7 @@ abstract class PayloadBase {
 
   /// Returns the payload (with typeID).
   Uint8List getPayload() {
-    final typeIdBuff = Uint8List(0);
+    final typeIdBuff = Uint8List(1);
     typeIdBuff.buffer.asByteData().setUint8(0, typeId);
     return Uint8List.fromList([...typeIdBuff, ...payload]);
   }
