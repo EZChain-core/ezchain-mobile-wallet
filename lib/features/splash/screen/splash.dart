@@ -908,7 +908,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   getHistoryErc20() async {
     try {
-      final transactions = await wallet.getHistoryErc20(
+      final transactions = await wallet.getErc20Transactions(
         contractAddress: "0x2f5b4CC31b736456dd331e40B202ED70100508F7",
       );
       for (final transaction in transactions) {

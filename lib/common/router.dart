@@ -27,9 +27,9 @@ import 'package:wallet/features/setting/change_pin/setting_change_pin.dart';
 import 'package:wallet/features/setting/general/setting_general.dart';
 import 'package:wallet/features/setting/security/setting_security.dart';
 import 'package:wallet/features/splash/screen/splash.dart';
-import 'package:wallet/features/transaction/ant/transactions_ant.dart';
 import 'package:wallet/features/transaction/detail/transaction_detail.dart';
 import 'package:wallet/features/transaction/detail_c/transaction_c_detail.dart';
+import 'package:wallet/features/transaction/token/transactions_token.dart';
 import 'package:wallet/features/transaction/transactions.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
 import 'package:wallet/features/wallet/send/ant/confirm/wallet_send_ant_confirm.dart';
@@ -78,7 +78,7 @@ import 'package:wallet/features/wallet/token/add_confirm/wallet_token_add_confir
     AutoRoute<bool>(page: CrossTransferScreen),
     AutoRoute<String>(page: QrCodeScreen),
     AutoRoute(page: TransactionsScreen),
-    AutoRoute(page: TransactionsAntScreen),
+    AutoRoute(page: TransactionsTokenScreen),
     AutoRoute(page: TransactionDetailScreen),
     AutoRoute(page: TransactionCDetailScreen),
     AutoRoute(page: EarnDelegateNodesScreen),

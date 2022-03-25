@@ -5,6 +5,7 @@ import 'package:wallet/ezc/wallet/explorer/cchain/rest_client.dart';
 import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/ezc/wallet/explorer/cchain/utils.dart';
 import 'package:wallet/ezc/wallet/network/utils.dart';
+import 'package:collection/collection.dart';
 
 Dio _createCChainExplorerApi({bool isMainnet = true}) {
   String baseUrl = "";
@@ -38,7 +39,7 @@ Future<CChainExplorerTxInfo> getCChainTransaction(String txHash) async {
   return response.result;
 }
 
-Future<List<CChainErc20Tx>> getErc20History(
+Future<List<CChainErc20Tx>> getErc20Transactions(
   String address, {
   int page = 0,
   int offset = 0,
@@ -46,7 +47,7 @@ Future<List<CChainErc20Tx>> getErc20History(
 }) async {
   final dio = _createCChainExplorerApi(isMainnet: isMainnetNetwork);
   final cChainRestClient = CChainExplorerRestClient(dio);
-  final response = await cChainRestClient.getErc20History(
+  final response = await cChainRestClient.getErc20Transactions(
     address,
     "desc",
     page,
@@ -54,4 +55,19 @@ Future<List<CChainErc20Tx>> getErc20History(
     contractAddress,
   );
   return filterDuplicateERC20Txs(response.result);
+}
+
+Future<CChainErc20Tx?> getErc20Transaction(
+  String txHash,
+  String address, {
+  String? contractAddress,
+}) async {
+  final dio = _createCChainExplorerApi(isMainnet: isMainnetNetwork);
+  final cChainRestClient = CChainExplorerRestClient(dio);
+  final response = await cChainRestClient.getErc20Transaction(
+    txHash,
+    address,
+    contractAddress,
+  );
+  return response.result.firstOrNull;
 }

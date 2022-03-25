@@ -157,6 +157,7 @@ class CChainErc20Tx {
   final String cumulativeGasUsed;
   final String input;
   final String confirmations;
+  final bool? success;
 
   CChainErc20Tx(
     this.blockNumber,
@@ -178,6 +179,7 @@ class CChainErc20Tx {
     this.cumulativeGasUsed,
     this.input,
     this.confirmations,
+    this.success,
   );
 
   factory CChainErc20Tx.fromJson(Map<String, dynamic> json) =>
@@ -187,15 +189,15 @@ class CChainErc20Tx {
 }
 
 @JsonSerializable()
-class CChainErc20Response {
-  String status;
-  String message;
+class GetErc20TransactionsResponse {
+  String? status;
+  String? message;
   List<CChainErc20Tx> result;
 
-  CChainErc20Response(this.status, this.message, this.result);
+  GetErc20TransactionsResponse(this.status, this.message, this.result);
 
-  factory CChainErc20Response.fromJson(Map<String, dynamic> json) =>
-      _$CChainErc20ResponseFromJson(json);
+  factory GetErc20TransactionsResponse.fromJson(Map<String, dynamic> json) =>
+      _$GetErc20TransactionsResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CChainErc20ResponseToJson(this);
+  Map<String, dynamic> toJson() => _$GetErc20TransactionsResponseToJson(this);
 }

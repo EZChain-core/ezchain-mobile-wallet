@@ -855,16 +855,27 @@ abstract class WalletProvider {
     return await getTransactionSummary(tx, addresses, addressesC);
   }
 
-  Future<List<CChainErc20Tx>> getHistoryErc20({
+  Future<List<CChainErc20Tx>> getErc20Transactions({
     String? contractAddress,
     int page = 0,
     int offset = 0,
   }) async {
-    return await cchain_explorer_request.getErc20History(
+    return await cchain_explorer_request.getErc20Transactions(
       getAddressC(),
       contractAddress: contractAddress,
       page: page,
       offset: offset,
+    );
+  }
+
+  Future<CChainErc20Tx?> getErc20Transaction(
+    String txHash, {
+    String? contractAddress,
+  }) async {
+    return await cchain_explorer_request.getErc20Transaction(
+      txHash,
+      getAddressC(),
+      contractAddress: contractAddress,
     );
   }
 
