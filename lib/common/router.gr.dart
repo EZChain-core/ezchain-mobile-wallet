@@ -12,7 +12,6 @@
 
 import 'package:auto_route/auto_route.dart' as _i44;
 import 'package:flutter/material.dart' as _i45;
-import 'package:wallet/ezc/wallet/explorer/cchain/types.dart' as _i48;
 import 'package:wallet/features/auth/access/mnemonic/access_mnemonic_key.dart'
     as _i7;
 import 'package:wallet/features/auth/access/options/access_wallet_options.dart'
@@ -45,7 +44,7 @@ import 'package:wallet/features/nft/family/detail/nft_family_detail.dart'
 import 'package:wallet/features/nft/family/list/nft_family_collectible.dart'
     as _i36;
 import 'package:wallet/features/nft/family/list/nft_family_collectible_item.dart'
-    as _i49;
+    as _i48;
 import 'package:wallet/features/nft/mint/nft_mint.dart' as _i37;
 import 'package:wallet/features/nft/nft.dart' as _i42;
 import 'package:wallet/features/onboard/on_board.dart' as _i2;
@@ -57,11 +56,12 @@ import 'package:wallet/features/setting/general/setting_general.dart' as _i21;
 import 'package:wallet/features/setting/security/setting_security.dart' as _i23;
 import 'package:wallet/features/setting/setting.dart' as _i43;
 import 'package:wallet/features/splash/screen/splash.dart' as _i1;
-import 'package:wallet/features/transaction/ant/transactions_ant.dart' as _i27;
 import 'package:wallet/features/transaction/detail/transaction_detail.dart'
     as _i28;
 import 'package:wallet/features/transaction/detail_c/transaction_c_detail.dart'
     as _i29;
+import 'package:wallet/features/transaction/token/transactions_token.dart'
+    as _i27;
 import 'package:wallet/features/transaction/transactions.dart' as _i26;
 import 'package:wallet/features/wallet/receive/wallet_receive.dart' as _i11;
 import 'package:wallet/features/wallet/send/ant/confirm/wallet_send_ant_confirm.dart'
@@ -247,11 +247,12 @@ class AppRouter extends _i44.RootStackRouter {
           routeData: routeData,
           child: _i26.TransactionsScreen(key: args.key, ezcType: args.ezcType));
     },
-    TransactionsAntRoute.name: (routeData) {
-      final args = routeData.argsAs<TransactionsAntRouteArgs>();
+    TransactionsTokenRoute.name: (routeData) {
+      final args = routeData.argsAs<TransactionsTokenRouteArgs>();
       return _i44.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i27.TransactionsAntScreen(key: args.key, token: args.token));
+          child:
+              _i27.TransactionsTokenScreen(key: args.key, token: args.token));
     },
     TransactionDetailRoute.name: (routeData) {
       final args = routeData.argsAs<TransactionDetailRouteArgs>();
@@ -266,8 +267,7 @@ class AppRouter extends _i44.RootStackRouter {
           child: _i29.TransactionCDetailScreen(
               key: args.key,
               txHash: args.txHash,
-              nonce: args.nonce,
-              receiptStatus: args.receiptStatus));
+              contractAddress: args.contractAddress));
     },
     EarnDelegateNodesRoute.name: (routeData) {
       final args = routeData.argsAs<EarnDelegateNodesRouteArgs>(
@@ -404,8 +404,8 @@ class AppRouter extends _i44.RootStackRouter {
             path: '/cross-transfer-screen'),
         _i44.RouteConfig(QrCodeRoute.name, path: '/qr-code-screen'),
         _i44.RouteConfig(TransactionsRoute.name, path: '/transactions-screen'),
-        _i44.RouteConfig(TransactionsAntRoute.name,
-            path: '/transactions-ant-screen'),
+        _i44.RouteConfig(TransactionsTokenRoute.name,
+            path: '/transactions-token-screen'),
         _i44.RouteConfig(TransactionDetailRoute.name,
             path: '/transaction-detail-screen'),
         _i44.RouteConfig(TransactionCDetailRoute.name,
@@ -954,19 +954,19 @@ class TransactionsRouteArgs {
 }
 
 /// generated route for
-/// [_i27.TransactionsAntScreen]
-class TransactionsAntRoute
-    extends _i44.PageRouteInfo<TransactionsAntRouteArgs> {
-  TransactionsAntRoute({_i45.Key? key, required _i46.WalletTokenItem token})
-      : super(TransactionsAntRoute.name,
-            path: '/transactions-ant-screen',
-            args: TransactionsAntRouteArgs(key: key, token: token));
+/// [_i27.TransactionsTokenScreen]
+class TransactionsTokenRoute
+    extends _i44.PageRouteInfo<TransactionsTokenRouteArgs> {
+  TransactionsTokenRoute({_i45.Key? key, required _i46.WalletTokenItem token})
+      : super(TransactionsTokenRoute.name,
+            path: '/transactions-token-screen',
+            args: TransactionsTokenRouteArgs(key: key, token: token));
 
-  static const String name = 'TransactionsAntRoute';
+  static const String name = 'TransactionsTokenRoute';
 }
 
-class TransactionsAntRouteArgs {
-  const TransactionsAntRouteArgs({this.key, required this.token});
+class TransactionsTokenRouteArgs {
+  const TransactionsTokenRouteArgs({this.key, required this.token});
 
   final _i45.Key? key;
 
@@ -974,7 +974,7 @@ class TransactionsAntRouteArgs {
 
   @override
   String toString() {
-    return 'TransactionsAntRouteArgs{key: $key, token: $token}';
+    return 'TransactionsTokenRouteArgs{key: $key, token: $token}';
   }
 }
 
@@ -1008,39 +1008,28 @@ class TransactionDetailRouteArgs {
 class TransactionCDetailRoute
     extends _i44.PageRouteInfo<TransactionCDetailRouteArgs> {
   TransactionCDetailRoute(
-      {_i45.Key? key,
-      required String txHash,
-      required String nonce,
-      _i48.CChainExplorerTxReceiptStatus? receiptStatus})
+      {_i45.Key? key, required String txHash, String? contractAddress})
       : super(TransactionCDetailRoute.name,
             path: '/transaction-cdetail-screen',
             args: TransactionCDetailRouteArgs(
-                key: key,
-                txHash: txHash,
-                nonce: nonce,
-                receiptStatus: receiptStatus));
+                key: key, txHash: txHash, contractAddress: contractAddress));
 
   static const String name = 'TransactionCDetailRoute';
 }
 
 class TransactionCDetailRouteArgs {
   const TransactionCDetailRouteArgs(
-      {this.key,
-      required this.txHash,
-      required this.nonce,
-      this.receiptStatus});
+      {this.key, required this.txHash, this.contractAddress});
 
   final _i45.Key? key;
 
   final String txHash;
 
-  final String nonce;
-
-  final _i48.CChainExplorerTxReceiptStatus? receiptStatus;
+  final String? contractAddress;
 
   @override
   String toString() {
-    return 'TransactionCDetailRouteArgs{key: $key, txHash: $txHash, nonce: $nonce, receiptStatus: $receiptStatus}';
+    return 'TransactionCDetailRouteArgs{key: $key, txHash: $txHash, contractAddress: $contractAddress}';
   }
 }
 
@@ -1217,7 +1206,7 @@ class NftFamilyCollectibleRouteArgs {
 /// [_i37.NftMintScreen]
 class NftMintRoute extends _i44.PageRouteInfo<NftMintRouteArgs> {
   NftMintRoute(
-      {_i45.Key? key, required _i49.NftFamilyCollectibleItem nftFamily})
+      {_i45.Key? key, required _i48.NftFamilyCollectibleItem nftFamily})
       : super(NftMintRoute.name,
             path: '/nft-mint-screen',
             args: NftMintRouteArgs(key: key, nftFamily: nftFamily));
@@ -1230,7 +1219,7 @@ class NftMintRouteArgs {
 
   final _i45.Key? key;
 
-  final _i49.NftFamilyCollectibleItem nftFamily;
+  final _i48.NftFamilyCollectibleItem nftFamily;
 
   @override
   String toString() {

@@ -146,10 +146,10 @@ class WalletTokenItemWidget extends StatelessWidget {
   _onClickToken() {
     switch (token.type) {
       case EZCTokenType.ant:
-        walletContext?.pushRoute(TransactionsAntRoute(token: token));
+        walletContext?.pushRoute(TransactionsTokenRoute(token: token));
         break;
       case EZCTokenType.erc20:
-        walletContext?.pushRoute(TransactionsAntRoute(token: token));
+        walletContext?.pushRoute(TransactionsTokenRoute(token: token));
         break;
     }
   }

@@ -22,11 +22,18 @@ abstract class CChainExplorerRestClient {
   );
 
   @GET("api?module=account&action=tokentx")
-  Future<CChainErc20Response> getErc20History(
+  Future<GetErc20TransactionsResponse> getErc20Transactions(
     @Query("address") String address,
     @Query("sort") String sort,
     @Query("page") int page,
     @Query("offset") int offset,
+    @Query("contractaddress") String? contractAddress,
+  );
+
+  @GET("api?module=account&action=tokentx")
+  Future<GetErc20TransactionsResponse> getErc20Transaction(
+    @Query("txHash") String txHash,
+    @Query("address") String address,
     @Query("contractaddress") String? contractAddress,
   );
 }

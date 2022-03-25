@@ -29,12 +29,17 @@ class TransactionsItem {
   final List<TransactionsItemAddressInfo> from;
   final List<TransactionsItemAddressInfo> to;
   final EZCType chain;
-  final String? nonce;
-  final CChainExplorerTxReceiptStatus? receiptStatus;
+  final String? contractAddress;
 
-  TransactionsItem(
-      this.id, this.time, this.type, this.from, this.to, this.chain,
-      [this.nonce, this.receiptStatus]);
+  TransactionsItem({
+    required this.id,
+    required this.time,
+    required this.type,
+    required this.from,
+    required this.to,
+    required this.chain,
+    this.contractAddress,
+  });
 }
 
 class TransactionsItemAddressInfo {
@@ -229,20 +234,17 @@ Widget buildTransactionWidget(TransactionsItem transaction) {
               ?.pushRoute(TransactionDetailRoute(txId: transaction.id));
           break;
         case EZCType.cChain:
-          if (transaction.nonce != null) {
-            walletContext?.pushRoute(TransactionCDetailRoute(
-              txHash: transaction.id,
-              nonce: transaction.nonce!,
-              receiptStatus: transaction.receiptStatus,
-            ));
-          }
+          walletContext?.pushRoute(TransactionCDetailRoute(
+            txHash: transaction.id,
+            contractAddress: transaction.contractAddress,
+          ));
           break;
       }
     },
   );
 }
 
-Future<List<TransactionsItem>> mapToTransactionsItemsV2(
+Future<List<TransactionsItem>> mapToTransactionsItems(
   List<OrteliusTx> transactions,
 ) async {
   final futures = transactions.map((transaction) async {
@@ -310,108 +312,16 @@ Future<List<TransactionsItem>> mapToTransactionsItemsV2(
     }
 
     return TransactionsItem(
-      id,
-      time,
-      type,
-      from,
-      to,
-      EZCType.xChain,
+      id: id,
+      time: time,
+      type: type,
+      from: from,
+      to: to,
+      chain: EZCType.xChain,
     );
   });
 
   return Future.wait(futures);
-}
-
-List<TransactionsItem> mapToTransactionsItem(
-  List<HistoryItem> items, {
-  List<Validator>? validators,
-}) {
-  final List<TransactionsItem> transactions = [];
-
-  try {
-    final result = items
-        .where((tx) => tx.type != HistoryItemTypeName.notSupported)
-        .toList();
-    for (var item in result) {
-      final transId = item.id;
-      final transTime = item.timestamp?.parseDateTime()?.parseTimeAgo() ?? '';
-      String transType = '';
-
-      if (item is HistoryBaseTx) {
-        // final token = item.tokens.firstWhereOrNull(
-        //     (token) => token.asset.assetId == getAvaxAssetId());
-        //
-        // if (token == null || token.amount == BigInt.zero) {
-        //   continue;
-        // }
-        // if (token.amount < BigInt.zero) {
-        //   final amount = bnToLocaleString(
-        //     token.amount - item.fee,
-        //     decimals: int.tryParse(token.asset.denomination) ?? 0,
-        //   );
-        //
-        //   transType = Strings.current.sharedSent;
-        //   transAmount = '$amount ${token.asset.symbol}';
-        //   transIncrease = false;
-        // } else {
-        //   transType = Strings.current.sharedReceived;
-        //   transAmount = '${token.amountDisplayValue} ${token.asset.symbol}';
-        //   transIncrease = true;
-        // }
-        // transactions.add(TransactionsBaseImportExportItem(
-        //     transId, transTime, transType, transAmount, transIncrease));
-      } else if (item is HistoryImportExport) {
-        if (item.amount > BigInt.zero) {
-          if (item.type == HistoryItemTypeName.import) {
-            transType = Strings.current.sharedImport;
-          } else if (item.type == HistoryItemTypeName.export) {
-            final amount =
-                bnToAvaxX((item.amount + item.fee) * BigInt.from(-1));
-
-            transType = Strings.current.sharedExport;
-          }
-        }
-        // transactions.add(TransactionsBaseImportExportItem(
-        //     transId, transTime, transType, transAmount, transIncrease));
-      } else if (item is HistoryStaking && validators != null) {
-        String reward = '';
-        String addValidator = '';
-        String addDelegator = '';
-        final stakeEndTime = DateTime.fromMillisecondsSinceEpoch(item.stakeEnd)
-            .format('MM/dd/yyyy, HH:mm:ss a');
-        BigInt? potentialReward;
-        final validator = validators.firstWhereOrNull((validator) {
-          final nodeId = validator.nodeId.split("-")[1];
-          return nodeId == item.nodeId;
-        });
-        if (validator != null) {
-          if (item.type == HistoryItemTypeName.addValidator) {
-            potentialReward = validator.potentialRewardBN;
-            addValidator = "${item.amountDisplayValue} EZC";
-            transType = Strings.current.sharedValidate;
-          } else {
-            final delegators = validator.delegators;
-            if (delegators != null) {
-              final delegator = delegators
-                  .firstWhereOrNull((delegator) => delegator.txId == item.id);
-              potentialReward = delegator?.potentialRewardBN;
-              addDelegator = "${item.amountDisplayValue} EZC";
-              transType = Strings.current.sharedDelegate;
-            }
-          }
-          if (potentialReward != null) {
-            reward = '${bnToAvaxP(potentialReward)} $ezcSymbol';
-          }
-        }
-        // transactions.add(TransactionsStakingItem(transId, transTime, transType,
-        //     stakeEndTime, reward, addDelegator, addValidator));
-      }
-    }
-  } catch (e) {
-    logger.e(e);
-  }
-
-  return transactions;
 }
 
 List<TransactionsItem> mapCChainToTransactionsItem(
@@ -442,8 +352,14 @@ List<TransactionsItem> mapCChainToTransactionsItem(
       if (tx.to.isNotEmpty) {
         to.add(TransactionsItemAddressInfo(tx.to, amount));
       }
-      transactions.add(TransactionsItem(tx.hash, time, transType, from, to,
-          type, tx.nonce, tx.txReceiptStatus));
+      transactions.add(TransactionsItem(
+        id: tx.hash,
+        time: time,
+        type: transType,
+        from: from,
+        to: to,
+        chain: type,
+      ));
     }
   } catch (e) {
     logger.e(e);

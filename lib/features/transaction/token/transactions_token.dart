@@ -7,7 +7,7 @@ import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/common/type/ezc_type.dart';
-import 'package:wallet/features/transaction/ant/transactions_ant_store.dart';
+import 'package:wallet/features/transaction/token/transactions_token_store.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/transaction/widgets/transactions_widgets.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
@@ -19,12 +19,12 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
-class TransactionsAntScreen extends StatelessWidget {
+class TransactionsTokenScreen extends StatelessWidget {
   final WalletTokenItem token;
-  final _transactionsAntStore = TransactionsAntStore();
+  final _transactionsTokenStore = TransactionsTokenStore();
 
-  TransactionsAntScreen({Key? key, required this.token}) : super(key: key) {
-    _transactionsAntStore.setTokenItem(token);
+  TransactionsTokenScreen({Key? key, required this.token}) : super(key: key) {
+    _transactionsTokenStore.setTokenItem(token);
   }
 
   @override
@@ -65,7 +65,7 @@ class TransactionsAntScreen extends StatelessWidget {
                                   children: [
                                     Observer(
                                       builder: (_) => Text(
-                                        '${_transactionsAntStore.balance} ${token.symbol}'
+                                        '${_transactionsTokenStore.balance} ${token.symbol}'
                                             .useCorrectEllipsis(),
                                         style: EZCHeadlineSmallTextStyle(
                                             color: provider.themeMode.text),
@@ -139,7 +139,7 @@ class TransactionsAntScreen extends StatelessWidget {
               ),
               Expanded(
                 child: FutureBuilder<List<TransactionsItem>>(
-                  future: _transactionsAntStore.getTransactions(token),
+                  future: _transactionsTokenStore.getTransactions(token),
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {
                       final transactions = snapshot.data!;
@@ -183,14 +183,18 @@ class TransactionsAntScreen extends StatelessWidget {
   _onClickReceive() {
     String address = '';
     if (token.type == EZCTokenType.ant) {
-      address = _transactionsAntStore.addressX;
+      address = _transactionsTokenStore.addressX;
     } else {
-      address = _transactionsAntStore.addressC;
+      address = _transactionsTokenStore.addressC;
     }
     walletContext?.pushRoute(
       WalletReceiveRoute(
         args: WalletReceiveArgs(
-            token.type.chain, address, token.symbol, token.name),
+          token.type.chain,
+          address,
+          token.symbol,
+          token.name,
+        ),
       ),
     );
   }

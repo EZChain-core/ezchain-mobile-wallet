@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+
 // ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
@@ -14,13 +15,12 @@ import 'package:wallet/themes/widgets.dart';
 
 class TransactionCDetailScreen extends StatelessWidget {
   final String txHash;
-  final String nonce;
-  final CChainExplorerTxReceiptStatus? receiptStatus;
+  final String? contractAddress;
 
   final _transactionCDetailStore = TransactionCDetailStore();
 
   TransactionCDetailScreen(
-      {Key? key, required this.txHash, required this.nonce, this.receiptStatus})
+      {Key? key, required this.txHash, this.contractAddress})
       : super(key: key);
 
   @override
@@ -39,7 +39,9 @@ class TransactionCDetailScreen extends StatelessWidget {
               ),
               FutureBuilder<TransactionCChainViewData?>(
                 future: _transactionCDetailStore.getTransactionDetail(
-                    txHash, nonce, receiptStatus),
+                  txHash,
+                  contractAddress,
+                ),
                 builder: (_, snapshot) {
                   if (snapshot.hasData) {
                     final transaction = snapshot.data;
@@ -55,9 +57,10 @@ class TransactionCDetailScreen extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.center,
                         child: EZCLoading(
-                            color: provider.themeMode.secondary,
-                            size: 40,
-                            strokeWidth: 4),
+                          color: provider.themeMode.secondary,
+                          size: 40,
+                          strokeWidth: 4,
+                        ),
                       ),
                     );
                   }
@@ -97,7 +100,8 @@ class _TransactionCDetailInfoWidget extends StatelessWidget {
                   child: Text(
                     Strings.current.sharedResult,
                     style: EZCTitleMediumTextStyle(
-                        color: provider.themeMode.text60),
+                      color: provider.themeMode.text60,
+                    ),
                   ),
                 ),
                 if (transaction.result) ...[
@@ -106,7 +110,8 @@ class _TransactionCDetailInfoWidget extends StatelessWidget {
                   Text(
                     Strings.current.sharedSuccess,
                     style: EZCBodyMediumTextStyle(
-                        color: provider.themeMode.stateSuccess),
+                      color: provider.themeMode.stateSuccess,
+                    ),
                   )
                 ] else ...[
                   Assets.icons.icInfoCircleRed.svg(width: 16, height: 16),
@@ -114,7 +119,8 @@ class _TransactionCDetailInfoWidget extends StatelessWidget {
                   Text(
                     Strings.current.sharedFail,
                     style: EZCBodyMediumTextStyle(
-                        color: provider.themeMode.stateDanger),
+                      color: provider.themeMode.stateDanger,
+                    ),
                   )
                 ],
               ],
@@ -127,7 +133,8 @@ class _TransactionCDetailInfoWidget extends StatelessWidget {
                     child: Text(
                       Strings.current.sharedStatus,
                       style: EZCTitleMediumTextStyle(
-                          color: provider.themeMode.text60),
+                        color: provider.themeMode.text60,
+                      ),
                     ),
                   ),
                   _TransactionCDetailStatusLabel(

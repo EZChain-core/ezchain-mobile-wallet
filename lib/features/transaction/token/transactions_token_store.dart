@@ -10,11 +10,12 @@ import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 
-part 'transactions_ant_store.g.dart';
+part 'transactions_token_store.g.dart';
 
-class TransactionsAntStore = _TransactionsAntStore with _$TransactionsAntStore;
+class TransactionsTokenStore = _TransactionsTokenStore
+    with _$TransactionsTokenStore;
 
-abstract class _TransactionsAntStore with Store {
+abstract class _TransactionsTokenStore with Store {
   final _wallet = getIt<WalletFactory>().activeWallet;
 
   final _tokenStore = getIt<TokenStore>();
@@ -52,10 +53,10 @@ abstract class _TransactionsAntStore with Store {
                 element.inputTotals.keys.contains(assetId) ||
                 element.outputTotals.keys.contains(assetId))
             .toList();
-        return await mapToTransactionsItemsV2(filteredTransactions);
+        return await mapToTransactionsItems(filteredTransactions);
       } else {
         final contractAddress = token.id;
-        final transactions = await _wallet.getHistoryErc20(
+        final transactions = await _wallet.getErc20Transactions(
           contractAddress: contractAddress,
         );
         return transactions
@@ -71,11 +72,9 @@ abstract class _TransactionsAntStore with Store {
 
 TransactionsItem mapErc20TransactionToTransactionsItem(CChainErc20Tx tx) {
   final amountBN = BigInt.tryParse(tx.value) ?? BigInt.zero;
-  String? amount;
-  if (amountBN != BigInt.zero) {
-    final value = bnToAvaxC(amountBN);
-    amount = '$value ${tx.tokenSymbol}';
-  }
+  final denomination = int.tryParse(tx.tokenDecimal) ?? 0;
+  String amount =
+      "${bnToLocaleString(amountBN, denomination: denomination)} ${tx.tokenSymbol}";
   final time = tx.timeStamp.parseDateTimeFromTimestamp()?.parseTimeAgo() ?? '';
   const transType = 'Transaction';
   final from = <TransactionsItemAddressInfo>[];
@@ -87,5 +86,12 @@ TransactionsItem mapErc20TransactionToTransactionsItem(CChainErc20Tx tx) {
     to.add(TransactionsItemAddressInfo(tx.to, amount));
   }
   return TransactionsItem(
-      tx.hash, time, transType, from, to, EZCType.cChain, tx.nonce);
+    id: tx.hash,
+    time: time,
+    type: transType,
+    from: from,
+    to: to,
+    chain: EZCType.cChain,
+    contractAddress: tx.contractAddress,
+  );
 }
