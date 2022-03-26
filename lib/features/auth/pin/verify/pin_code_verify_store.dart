@@ -3,10 +3,9 @@ import 'package:injectable/injectable.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/generated/l10n.dart';
-
-import '../../../common/ext/extensions.dart';
 
 part 'pin_code_verify_store.g.dart';
 

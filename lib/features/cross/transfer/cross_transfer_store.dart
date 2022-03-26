@@ -9,10 +9,9 @@ import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
+import 'package:wallet/features/cross/cross_store.dart';
 import 'package:wallet/features/cross/transfer/cross_transfer.dart';
 import 'package:wallet/generated/l10n.dart';
-
-import '../cross_store.dart';
 
 part 'cross_transfer_store.freezed.dart';
 
