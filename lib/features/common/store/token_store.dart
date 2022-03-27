@@ -9,6 +9,7 @@ import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
+import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
 import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
@@ -37,6 +38,11 @@ abstract class _TokenStore with Store {
   @readonly
   //ignore: prefer_final_fields
   ObservableList<AvaNFTFamily> _nftFamilies = ObservableList<AvaNFTFamily>();
+
+  @readonly
+  //ignore: prefer_final_fields
+  ObservableList<AvaNFTCollectible> _nftCollectibles =
+      ObservableList<AvaNFTCollectible>();
 
   bool isErc20Exists(String contractAddress) {
     return _erc20Tokens.firstWhereOrNull(
@@ -105,7 +111,7 @@ abstract class _TokenStore with Store {
   @action
   getAvaAssets() {
     final avaAssetId = getAvaxAssetId();
-    final assetUtxoDict = <String, AvmUTXO>{};
+    final antAssetIds = <String>{};
 
     final nftMintUTXOs = <AvmUTXO>[];
     final nftMintUTXOsDict = <String, List<AvmUTXO>>{};
@@ -116,8 +122,13 @@ abstract class _TokenStore with Store {
     final utxos = _wallet.utxosX.utxos.values;
 
     for (final utxo in utxos) {
-      assetUtxoDict[cb58Encode(utxo.assetId)] = utxo;
       final outputId = utxo.output.getOutputId();
+      if (outputId == SECPXFEROUTPUTID) {
+        final assetId = cb58Encode(utxo.assetId);
+        if (assetId != avaAssetId) {
+          antAssetIds.add(assetId);
+        }
+      }
       if (outputId == NFTMINTOUTPUTID) {
         nftMintUTXOs.add(utxo);
       }
@@ -125,49 +136,6 @@ abstract class _TokenStore with Store {
         nftUTXOs.add(utxo);
       }
     }
-
-    final unknownAssets = _wallet.getUnknownAssets();
-
-    final antAssets = <AssetDescriptionClean>[];
-    final nftAssets = <AssetDescriptionClean>[];
-
-    for (final unknownAsset in unknownAssets) {
-      final output = assetUtxoDict[unknownAsset.assetId]?.getOutput();
-      if (output == null) {
-        continue;
-      }
-      final outputId = output.getOutputId();
-      if (outputId == SECPXFEROUTPUTID && unknownAsset.assetId != avaAssetId) {
-        antAssets.add(unknownAsset);
-      }
-      if (outputId == NFTMINTOUTPUTID || outputId == NFTXFEROUTPUTID) {
-        nftAssets.add(unknownAsset);
-      }
-    }
-
-    final balanceDict = _wallet.getBalanceX();
-    final assets = antAssets.map((asset) {
-      final avaAsset = AvaAsset(
-        id: asset.assetId,
-        name: asset.name,
-        symbol: asset.symbol,
-        denomination: int.tryParse(asset.denomination) ?? 0,
-      );
-      avaAsset.resetBalance();
-
-      final balanceAmt = balanceDict[avaAsset.id];
-      if (balanceAmt != null) {
-        avaAsset.resetBalance();
-        avaAsset.addBalance(balanceAmt.unlocked);
-        avaAsset.addBalanceLocked(balanceAmt.locked);
-      }
-      return avaAsset;
-    }).toList();
-
-    assets.customSort(avaAssetId);
-
-    _antAssets.clear();
-    _antAssets.addAll(assets);
 
     for (final nftUTXO in nftUTXOs) {
       final assetId = cb58Encode(nftUTXO.getAssetId());
@@ -178,6 +146,14 @@ abstract class _TokenStore with Store {
         current.add(nftUTXO);
       }
     }
+
+    nftUTXOsDict.forEach((key, value) {
+      value.sort((a, b) {
+        final groupIdA = (a.getOutput() as AvmNFTTransferOutput).getGroupId();
+        final groupIdB = (b.getOutput() as AvmNFTTransferOutput).getGroupId();
+        return groupIdA.compareTo(groupIdB);
+      });
+    });
 
     for (final nftMintUTXO in nftMintUTXOs) {
       final assetId = cb58Encode(nftMintUTXO.getAssetId());
@@ -197,41 +173,94 @@ abstract class _TokenStore with Store {
       });
     });
 
+    final unknownAssets = _wallet.getUnknownAssets();
+
     final nftFamilies = <AvaNFTFamily>[];
-    for (final entry in nftMintUTXOsDict.entries) {
-      final assetId = entry.key;
-      final mintUTXOS = entry.value;
-      if (mintUTXOS.isEmpty) {
-        continue;
-      }
-      final firstMintUTXO = mintUTXOS.first;
-      final ids = <int>[];
-      final nftAsset =
-          nftAssets.firstWhereOrNull((element) => element.assetId == assetId);
-      if (nftAsset != null) {
-        final nftUtxos = nftUTXOsDict[assetId] ?? [];
-        final filtered = nftUtxos.where((utxo) {
+    final nftCollectibles = <AvaNFTCollectible>[];
+    final antAssets = <AssetDescriptionClean>[];
+
+    for (final asset in unknownAssets) {
+      final assetId = asset.assetId;
+      if (antAssetIds.contains(assetId)) {
+        antAssets.add(asset);
+      } else {
+        final nftMintUTXOs = nftMintUTXOsDict[assetId] ?? [];
+        final nftUTXOs = nftUTXOsDict[assetId] ?? [];
+
+        final filteredNftUTXOs = <AvmUTXO>[];
+        final nftUTXOGroupQuantityDict = <int, int>{};
+        final nftUTXOGroupIds = <int>{};
+
+        for (final nftUTXO in nftUTXOs) {
           final groupId =
-              (utxo.getOutput() as AvmNFTTransferOutput).getGroupId();
-          if (ids.contains(groupId)) {
-            return false;
+              (nftUTXO.getOutput() as AvmNFTTransferOutput).getGroupId();
+          if (nftUTXOGroupIds.add(groupId)) {
+            filteredNftUTXOs.add(nftUTXO);
+            nftUTXOGroupQuantityDict[groupId] = 1;
           } else {
-            ids.add(groupId);
-            return true;
+            nftUTXOGroupQuantityDict[groupId] =
+                nftUTXOGroupQuantityDict[groupId]! + 1;
           }
-        }).toList();
-        filtered.sort((a, b) {
-          final groupIdA = (a.getOutput() as AvmNFTTransferOutput).getGroupId();
-          final groupIdB = (b.getOutput() as AvmNFTTransferOutput).getGroupId();
-          return groupIdA.compareTo(groupIdB);
-        });
-        nftFamilies.add(AvaNFTFamily(
-          asset: nftAsset,
-          nftMintUTXO: firstMintUTXO,
-          nftUTXOs: filtered,
-        ));
+        }
+
+        final groupIdPayloadDict = <int, PayloadBase>{};
+
+        for (final utxo in filteredNftUTXOs) {
+          try {
+            final output = utxo.getOutput() as AvmNFTTransferOutput;
+            var payloadBuff = output.getPayloadBuffer();
+            final typeId = PayloadTypes.instance.getTypeId(payloadBuff);
+            final content = PayloadTypes.instance.getContent(payloadBuff);
+            groupIdPayloadDict[output.getGroupId()] =
+                PayloadTypes.instance.select(typeId, content);
+          } catch (e) {
+            logger.e(e);
+          }
+        }
+
+        if (nftMintUTXOs.isNotEmpty) {
+          nftFamilies.add(AvaNFTFamily(
+            asset: asset,
+            nftMintUTXO: nftMintUTXOs.first,
+            nftUTXOs: filteredNftUTXOs,
+            groupIdPayloadDict: groupIdPayloadDict,
+          ));
+        }
+
+        if (filteredNftUTXOs.isNotEmpty) {
+          nftCollectibles.add(AvaNFTCollectible(
+            asset: asset,
+            nftUTXOs: filteredNftUTXOs,
+            groupIdPayloadDict: groupIdPayloadDict,
+            groupIdQuantityDict: nftUTXOGroupQuantityDict,
+          ));
+        }
       }
     }
+
+    final balanceDict = _wallet.getBalanceX();
+    final assets = antAssets.map((asset) {
+      final avaAsset = AvaAsset(
+        id: asset.assetId,
+        name: asset.name,
+        symbol: asset.symbol,
+        denomination: int.tryParse(asset.denomination) ?? 0,
+      );
+      avaAsset.resetBalance();
+      final balanceAmt = balanceDict[avaAsset.id];
+      if (balanceAmt != null) {
+        avaAsset.addBalance(balanceAmt.unlocked);
+        avaAsset.addBalanceLocked(balanceAmt.locked);
+      }
+      return avaAsset;
+    }).toList()
+      ..customSort(avaAssetId);
+
+    _antAssets.clear();
+    _antAssets.addAll(assets);
+
+    _nftCollectibles.clear();
+    _nftCollectibles.addAll(nftCollectibles);
 
     _nftFamilies.clear();
     _nftFamilies.addAll(nftFamilies);

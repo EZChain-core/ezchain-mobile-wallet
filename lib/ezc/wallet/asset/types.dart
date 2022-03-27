@@ -115,34 +115,19 @@ class AvaNFTFamily {
   final AssetDescriptionClean asset;
   final AvmUTXO nftMintUTXO;
   final List<AvmUTXO> nftUTXOs;
+  final Map<int, PayloadBase> groupIdPayloadDict;
 
   AvaNFTFamily({
     required this.asset,
     required this.nftMintUTXO,
-    this.nftUTXOs = const [],
+    required this.nftUTXOs,
+    required this.groupIdPayloadDict,
   });
 
-  int get quantity =>
-      (nftMintUTXO.getOutput() as AvmNFTMintOutput).getGroupId();
+  int get groupId => (nftMintUTXO.getOutput() as AvmNFTMintOutput).getGroupId();
 
-  PayloadBase? get firstPayloadBase {
-    try {
-      final nftUTXO = nftUTXOs.firstOrNull;
-      if (nftUTXO == null) {
-        return null;
-      }
-      var payloadBuff =
-          (nftUTXO.getOutput() as AvmNFTTransferOutput).getPayloadBuffer();
-      final typeId = PayloadTypes.instance.getTypeId(payloadBuff);
-      final content = PayloadTypes.instance.getContent(payloadBuff);
-      return PayloadTypes.instance.select(typeId, content);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  GenericNft? get genericNft {
-    final payloadBase = firstPayloadBase;
+  GenericNft? get firstGenericNft {
+    final payloadBase = groupIdPayloadDict.values.firstOrNull;
     if (payloadBase == null || payloadBase is! JSONPayload) {
       return null;
     }
@@ -153,6 +138,20 @@ class AvaNFTFamily {
       return null;
     }
   }
+}
+
+class AvaNFTCollectible {
+  final AssetDescriptionClean asset;
+  final List<AvmUTXO> nftUTXOs;
+  final Map<int, PayloadBase> groupIdPayloadDict;
+  final Map<int, int> groupIdQuantityDict;
+
+  AvaNFTCollectible({
+    required this.asset,
+    required this.nftUTXOs,
+    required this.groupIdPayloadDict,
+    required this.groupIdQuantityDict,
+  });
 }
 
 @JsonSerializable()

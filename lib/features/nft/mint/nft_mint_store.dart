@@ -68,7 +68,7 @@ abstract class _NftMintStore with Store {
     PayloadBase payloadBase;
     switch (type) {
       case MintCustomType.utf8:
-        payloadBase = UTF8Payload(payload);
+        payloadBase = UTF8Payload(payload: payload);
         break;
       case MintCustomType.url:
         if (!payload.isValidUrl()) {
