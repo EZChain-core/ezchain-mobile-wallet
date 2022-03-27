@@ -139,8 +139,12 @@ String hexEncode(Uint8List input) {
   }
 }
 
-Uint8List parseAddress(String address, String blockChainId,
-    {String? alias, int addressLength = 20}) {
+Uint8List parseAddress(
+  String address,
+  String blockChainId, {
+  String? alias,
+  int addressLength = 20,
+}) {
   final abc = address.split("-");
   if (abc.length == 2 &&
       ((alias != null && abc[0] == alias) || abc[0] == blockChainId)) {}

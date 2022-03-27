@@ -17,8 +17,8 @@ abstract class _NftFamilyCollectibleStore with Store {
             id: nftFamily.asset.assetId,
             name: nftFamily.asset.name,
             symbol: nftFamily.asset.symbol,
-            quantity: nftFamily.quantity,
-            imageUrl: nftFamily.genericNft?.img,
+            groupId: nftFamily.groupId,
+            imageUrl: nftFamily.firstGenericNft?.img,
             nftMintUTXO: nftFamily.nftMintUTXO,
           )));
 }

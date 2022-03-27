@@ -1204,6 +1204,14 @@ class WalletExampleScreen extends StatelessWidget {
         }
       }
 
+      nftUTXOsDict.forEach((key, value) {
+        value.sort((a, b) {
+          final groupIdA = (a.getOutput() as AvmNFTTransferOutput).getGroupId();
+          final groupIdB = (b.getOutput() as AvmNFTTransferOutput).getGroupId();
+          return groupIdA.compareTo(groupIdB);
+        });
+      });
+
       final nftMintUTXOsDict = <String, List<AvmUTXO>>{};
       for (final nftMintUTXO in nftMintUTXOs) {
         final assetId = cb58Encode(nftMintUTXO.getAssetId());
@@ -1226,47 +1234,90 @@ class WalletExampleScreen extends StatelessWidget {
       final assets = wallet.getUnknownAssets();
 
       final nftFamilies = <AvaNFTFamily>[];
-      for (final entry in nftMintUTXOsDict.entries) {
-        final assetId = entry.key;
-        final mintUTXOS = entry.value;
-        if (mintUTXOS.isEmpty) {
-          continue;
+      final nftCollectibles = <AvaNFTCollectible>[];
+
+      for (final asset in assets) {
+        final assetId = asset.assetId;
+        final nftMintUTXOs = nftMintUTXOsDict[assetId] ?? [];
+        final nftUTXOs = nftUTXOsDict[assetId] ?? [];
+
+        final filteredNftUTXOs = <AvmUTXO>[];
+        final nftUTXOGroupQuantityDict = <int, int>{};
+        final nftUTXOGroupIds = <int>{};
+
+        for (final nftUTXO in nftUTXOs) {
+          final groupId =
+              (nftUTXO.getOutput() as AvmNFTTransferOutput).getGroupId();
+          if (nftUTXOGroupIds.add(groupId)) {
+            filteredNftUTXOs.add(nftUTXO);
+            nftUTXOGroupQuantityDict[groupId] = 1;
+          } else {
+            nftUTXOGroupQuantityDict[groupId] =
+                nftUTXOGroupQuantityDict[groupId]! + 1;
+          }
         }
-        final firstMintUTXO = mintUTXOS.first;
-        final ids = <int>[];
-        final nftAsset =
-            assets.firstWhereOrNull((element) => element.assetId == assetId);
-        if (nftAsset != null) {
-          final nftUtxos = nftUTXOsDict[assetId] ?? [];
-          final filtered = nftUtxos.where((utxo) {
-            final groupId =
-                (utxo.getOutput() as AvmNFTTransferOutput).getGroupId();
-            if (ids.contains(groupId)) {
-              return false;
-            } else {
-              ids.add(groupId);
-              return true;
-            }
-          }).toList();
-          filtered.sort((a, b) {
-            final groupIdA =
-                (a.getOutput() as AvmNFTTransferOutput).getGroupId();
-            final groupIdB =
-                (b.getOutput() as AvmNFTTransferOutput).getGroupId();
-            return groupIdA.compareTo(groupIdB);
-          });
+
+        final groupIdPayloadDict = <int, PayloadBase>{};
+
+        for (final utxo in filteredNftUTXOs) {
+          try {
+            final output = utxo.getOutput() as AvmNFTTransferOutput;
+            var payloadBuff = output.getPayloadBuffer();
+            final typeId = PayloadTypes.instance.getTypeId(payloadBuff);
+            final content = PayloadTypes.instance.getContent(payloadBuff);
+            groupIdPayloadDict[output.getGroupId()] =
+                PayloadTypes.instance.select(typeId, content);
+          } catch (e) {
+            logger.e(e);
+          }
+        }
+
+        if (nftMintUTXOs.isNotEmpty) {
           nftFamilies.add(AvaNFTFamily(
-            asset: nftAsset,
-            nftMintUTXO: firstMintUTXO,
-            nftUTXOs: filtered,
+            asset: asset,
+            nftMintUTXO: nftMintUTXOs.first,
+            nftUTXOs: filteredNftUTXOs,
+            groupIdPayloadDict: groupIdPayloadDict,
+          ));
+        }
+
+        if (filteredNftUTXOs.isNotEmpty) {
+          nftCollectibles.add(AvaNFTCollectible(
+            asset: asset,
+            nftUTXOs: filteredNftUTXOs,
+            groupIdPayloadDict: groupIdPayloadDict,
+            groupIdQuantityDict: nftUTXOGroupQuantityDict,
           ));
         }
       }
 
       for (final nftFamily in nftFamilies) {
-        final genericNft = nftFamily.genericNft;
         logger.i(
-            "nftAsset: name = ${nftFamily.asset.name}, symbol = ${nftFamily.asset.symbol}, quantity = ${nftFamily.quantity}, genericNft = ${genericNft?.toJson()}");
+            "nftFamily: name = ${nftFamily.asset.name}, symbol = ${nftFamily.asset.symbol}, groupId = ${nftFamily.groupId}, payload = ${nftFamily.firstGenericNft?.toJson()}");
+      }
+
+      for (final nftCollectible in nftCollectibles) {
+        var message =
+            "nftCollectible: name = ${nftCollectible.asset.name}, symbol = ${nftCollectible.asset.symbol}, assetId = ${nftCollectible.asset.assetId}\n";
+
+        nftCollectible.groupIdPayloadDict.forEach((groupId, payload) {
+          GenericNft? genericNft;
+          if (payload is JSONPayload) {
+            try {
+              final json = payload.getContentType();
+              genericNft = GenericFormType.fromJson(json).avalanche;
+            } catch (e) {}
+          }
+          final title = genericNft?.type;
+          final desc = genericNft?.desc;
+          final payloadTypeName = payload.getTypeName() ?? "Unknown Type";
+          final payloadContent = payload
+              .getContentType()
+              .toString(); // type BIN ko hiển thị ở log?
+          message +=
+              "group = $groupId, type = $payloadTypeName, count = ${nftCollectible.groupIdQuantityDict[groupId]}, payload = $payloadContent, title = $title, desc = $desc\n";
+        });
+        logger.i(message);
       }
 
       final firstNftFamily = nftFamilies.firstOrNull;
@@ -1285,7 +1336,7 @@ class WalletExampleScreen extends StatelessWidget {
 
       final genericPayload = JSONPayload(generic.toJson());
       final jsonPayload = JSONPayload("{\"test\": \"1\"}");
-      final utf8Payload = UTF8Payload("KIEN MIN NFT");
+      final utf8Payload = UTF8Payload(payload: "KIEN MIN NFT");
       final urlPayload = URLPayload("https://wallet.ezchain.com/");
       final txId = await wallet.mintNFT(
         firstNftFamily.nftMintUTXO,
