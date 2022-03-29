@@ -14,6 +14,7 @@ import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
 import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/network/utils.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:collection/collection.dart';
 
@@ -23,7 +24,9 @@ part 'token_store.g.dart';
 class TokenStore = _TokenStore with _$TokenStore;
 
 abstract class _TokenStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
 
   String get _key => "${_wallet.getAddressX()}_${getEvmChainId()}";
 

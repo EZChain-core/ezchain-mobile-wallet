@@ -5,6 +5,7 @@ import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/type/ezc_type.dart';
 import 'package:wallet/features/common/store/price_store.dart';
@@ -20,7 +21,9 @@ part 'transactions_store.g.dart';
 class TransactionsStore = _TransactionsStore with _$TransactionsStore;
 
 abstract class _TransactionsStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
 
   final _balanceStore = getIt<BalanceStore>();
   final _priceStore = getIt<PriceStore>();

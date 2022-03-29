@@ -7,6 +7,7 @@ import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/nft/family/detail/nft_family_detail.dart';
@@ -17,7 +18,9 @@ part 'nft_family_create_store.g.dart';
 class NftFamilyCreateStore = _NftFamilyCreateStore with _$NftFamilyCreateStore;
 
 abstract class _NftFamilyCreateStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
 
   @observable
   String error = '';

@@ -7,6 +7,7 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/types.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/cross/cross_store.dart';
@@ -20,7 +21,9 @@ part 'cross_transfer_store.g.dart';
 class CrossTransferStore = _CrossTransferStore with _$CrossTransferStore;
 
 abstract class _CrossTransferStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
 
   final _balanceStore = getIt<BalanceStore>();
 

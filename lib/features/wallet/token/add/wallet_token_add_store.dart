@@ -7,6 +7,7 @@ import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/store/token_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/wallet/token/add_confirm/wallet_token_add_confirm.dart';
@@ -17,7 +18,9 @@ part 'wallet_token_add_store.g.dart';
 class WalletTokenAddStore = _WalletTokenAddStore with _$WalletTokenAddStore;
 
 abstract class _WalletTokenAddStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
 
   final _tokenStore = getIt<TokenStore>();
 

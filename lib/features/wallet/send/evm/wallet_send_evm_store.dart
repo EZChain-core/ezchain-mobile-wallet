@@ -5,6 +5,7 @@ import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/helpers/address_helper.dart';
 import 'package:wallet/ezc/wallet/helpers/gas_helper.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/store/price_store.dart';
 import 'package:wallet/features/common/store/token_store.dart';
@@ -17,7 +18,9 @@ part 'wallet_send_evm_store.g.dart';
 class WalletSendEvmStore = _WalletSendEvmStore with _$WalletSendEvmStore;
 
 abstract class _WalletSendEvmStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
 
   final _balanceStore = getIt<BalanceStore>();
   final _priceStore = getIt<PriceStore>();

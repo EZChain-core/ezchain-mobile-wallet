@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
@@ -19,7 +20,10 @@ class EarnDelegateConfirmStore = _EarnDelegateConfirmStore
     with _$EarnDelegateConfirmStore;
 
 abstract class _EarnDelegateConfirmStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
+
   final _validatorsStore = getIt<ValidatorsStore>();
 
   @observable

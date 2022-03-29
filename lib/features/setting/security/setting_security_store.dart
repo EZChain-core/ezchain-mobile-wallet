@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/ezc/sdk/utils/mnemonic.dart';
 
@@ -9,7 +10,8 @@ class SettingSecurityStore = _SettingSecurityStore with _$SettingSecurityStore;
 
 abstract class _SettingSecurityStore with Store {
   final _walletFactory = getIt<WalletFactory>();
-  final _wallet = getIt<WalletFactory>().activeWallet;
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
 
   @observable
   String privateKey = '';

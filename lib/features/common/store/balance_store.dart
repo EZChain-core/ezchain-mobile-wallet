@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/type/ezc_type.dart';
 import 'package:wallet/features/common/store/token_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
@@ -19,7 +20,9 @@ const decimalNumber = 3;
 class BalanceStore = _BalanceStore with _$BalanceStore;
 
 abstract class _BalanceStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
 
   final _tokenStore = getIt<TokenStore>();
 

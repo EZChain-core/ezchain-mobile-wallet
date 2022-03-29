@@ -3,6 +3,7 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/wallet/send/ant/confirm/wallet_send_ant_confirm.dart';
 
@@ -12,7 +13,9 @@ class WalletSendAntConfirmStore = _WalletSendAntConfirmStore
     with _$WalletSendAntConfirmStore;
 
 abstract class _WalletSendAntConfirmStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
 
   @observable
   bool sendSuccess = false;

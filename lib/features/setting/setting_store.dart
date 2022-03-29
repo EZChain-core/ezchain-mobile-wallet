@@ -43,7 +43,6 @@ abstract class _SettingStore with Store {
 
   @action
   setNetworkConfig(NetworkConfigType network) async {
-    _walletFactory.clearWallets();
     _balanceStore.dispose();
     _tokenStore.dispose();
     _priceStore.dispose();

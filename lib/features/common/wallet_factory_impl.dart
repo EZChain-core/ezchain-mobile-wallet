@@ -41,7 +41,7 @@ class WalletFactoryImpl extends WalletFactory {
     } catch (e) {
       logger.e(e);
     }
-    _wallets.clear();
+    clearWallets();
     storage.deleteAll();
   }
 
@@ -79,8 +79,8 @@ class WalletFactoryImpl extends WalletFactory {
       wallet = SingletonWallet.access(key);
     }
     if (wallet != null) {
-      _wallets.clear();
-      _wallets.add(wallet);
+      clearWallets();
+      addWallet(wallet);
       return true;
     }
     return false;

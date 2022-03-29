@@ -1,6 +1,7 @@
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/store/price_store.dart';
 import 'package:wallet/features/common/store/token_store.dart';
@@ -13,7 +14,9 @@ part 'wallet_ezc_store.g.dart';
 class WalletEZCStore = _WalletEZCStore with _$WalletEZCStore;
 
 abstract class _WalletEZCStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
 
   final _balanceStore = getIt<BalanceStore>();
   final _priceStore = getIt<PriceStore>();
