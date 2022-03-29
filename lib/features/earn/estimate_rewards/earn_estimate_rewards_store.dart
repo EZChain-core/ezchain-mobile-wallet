@@ -2,6 +2,7 @@ import 'dart:math' as dart_math;
 
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
@@ -19,7 +20,10 @@ class EarnEstimateRewardsStore = _EarnEstimateRewardsStore
     with _$EarnEstimateRewardsStore;
 
 abstract class _EarnEstimateRewardsStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
+
   final _validatorsStore = getIt<ValidatorsStore>();
 
   late String totalRewards;

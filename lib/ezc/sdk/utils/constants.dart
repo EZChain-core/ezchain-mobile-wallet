@@ -111,10 +111,10 @@ final n0C = C(
 // End Manhattan
 
 // Start mainnet
-const _avaxAssetId = "pxpYcmAAUaV4SRXtjWFErFRZ8UPVq4YsnSm5icU3fXLURhxYt";
+const _avaxAssetId = "2rdddfp8Q8dPd1vLszNBYr4guX1Gs8so9aBkS3bqxL39qKzD39";
 
 final n1X = X(
-    blockchainId: "dnu9PBuDAETU5m781cT9EmKceN7VMq95iKSKEssxhDsMYAgXj",
+    blockchainId: "27zYmr1rRJqf9BFG8nYZYxeRdn1mXYwqkNVp4oSDg1ZtCZQTGi",
     avaxAssetId: _avaxAssetId,
     alias: xChainAlias,
     vm: xChainVMName,

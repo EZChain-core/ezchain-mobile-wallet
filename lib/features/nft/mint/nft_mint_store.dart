@@ -10,6 +10,7 @@ import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
@@ -22,7 +23,9 @@ part 'nft_mint_store.g.dart';
 class NftMintStore = _NftMintStore with _$NftMintStore;
 
 abstract class _NftMintStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
 
   @readonly
   bool _isLoading = false;

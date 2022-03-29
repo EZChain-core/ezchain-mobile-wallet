@@ -1,4 +1,5 @@
 import 'package:mobx/mobx.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
@@ -16,7 +17,9 @@ class TransactionsTokenStore = _TransactionsTokenStore
     with _$TransactionsTokenStore;
 
 abstract class _TransactionsTokenStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
 
   final _tokenStore = getIt<TokenStore>();
 

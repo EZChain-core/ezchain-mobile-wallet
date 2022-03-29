@@ -1,6 +1,7 @@
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -13,7 +14,10 @@ class EarnDelegateInputStore = _EarnDelegateInputStore
     with _$EarnDelegateInputStore;
 
 abstract class _EarnDelegateInputStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
+
   final _balanceStore = getIt<BalanceStore>();
 
   @computed

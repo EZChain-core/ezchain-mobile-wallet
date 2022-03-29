@@ -3,6 +3,7 @@ import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 
@@ -12,7 +13,9 @@ class TransactionCDetailStore = _TransactionCDetailStore
     with _$TransactionCDetailStore;
 
 abstract class _TransactionCDetailStore with Store {
-  final _wallet = getIt<WalletFactory>().activeWallet;
+  final _walletFactory = getIt<WalletFactory>();
+
+  WalletProvider get _wallet => _walletFactory.activeWallet;
 
   Future<TransactionCChainViewData?> getTransactionDetail(
     String txHash,

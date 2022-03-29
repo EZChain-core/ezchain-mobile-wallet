@@ -61,11 +61,11 @@ class SettingGeneralScreen extends StatelessWidget {
   }
 
   _onClickRemoveWallet() {
-    walletFactory.clear();
     _balanceStore.dispose();
     _tokenStore.dispose();
     _priceStore.dispose();
     _validatorsStore.dispose();
+    walletFactory.clear();
     walletContext?.router.replaceAll([const OnBoardRoute()]);
   }
 }
