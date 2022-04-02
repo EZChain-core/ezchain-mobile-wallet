@@ -1,19 +1,18 @@
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/store/token_store.dart';
-import 'package:wallet/features/nft/family/list/nft_family_collectible_item.dart';
+import 'package:wallet/features/nft/family/list/nft_family_item.dart';
 
-part 'nft_family_collectible_store.g.dart';
+part 'nft_store.g.dart';
 
-class NftFamilyCollectibleStore = _NftFamilyCollectibleStore
-    with _$NftFamilyCollectibleStore;
+class NftStore = _NftStore with _$NftStore;
 
-abstract class _NftFamilyCollectibleStore with Store {
+abstract class _NftStore with Store {
   final _tokenStore = getIt<TokenStore>();
 
   @computed
-  ObservableList<NftFamilyCollectibleItem> get nftAssets => ObservableList.of(
-      _tokenStore.nftFamilies.map((nftFamily) => NftFamilyCollectibleItem(
+  ObservableList<NftFamilyItem> get nftAssets => ObservableList.of(
+      _tokenStore.nftFamilies.map((nftFamily) => NftFamilyItem(
             id: nftFamily.asset.assetId,
             name: nftFamily.asset.name,
             symbol: nftFamily.asset.symbol,

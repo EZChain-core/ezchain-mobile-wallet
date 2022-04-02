@@ -11,7 +11,7 @@ import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-class NftFamilyCollectibleItem {
+class NftFamilyItem {
   final String id;
   final String name;
   final String symbol;
@@ -19,7 +19,7 @@ class NftFamilyCollectibleItem {
   final String? imageUrl;
   final AvmUTXO nftMintUTXO;
 
-  NftFamilyCollectibleItem({
+  NftFamilyItem({
     required this.id,
     required this.name,
     required this.symbol,
@@ -29,11 +29,10 @@ class NftFamilyCollectibleItem {
   });
 }
 
-class NftFamilyCollectibleItemWidget extends StatelessWidget {
-  final NftFamilyCollectibleItem item;
+class NftFamilyItemWidget extends StatelessWidget {
+  final NftFamilyItem item;
 
-  const NftFamilyCollectibleItemWidget({Key? key, required this.item})
-      : super(key: key);
+  const NftFamilyItemWidget({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +94,97 @@ class NftFamilyCollectibleItemWidget extends StatelessWidget {
               Text(
                 item.symbol,
                 style: EZCTitleSmallTextStyle(color: provider.themeMode.text70),
+              ),
+              const SizedBox(height: 4),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  border: Border.all(color: provider.themeMode.text60),
+                ),
+                child: Text(
+                  Strings.current.nftItems(item.groupId),
+                  style:
+                      EZCTitleSmallTextStyle(color: provider.themeMode.text70),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class NftFamilyHorizontalItemWidget extends StatelessWidget {
+  final NftFamilyItem item;
+
+  const NftFamilyHorizontalItemWidget({Key? key, required this.item})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => InkWell(
+        onTap: () => context.pushRoute(NftMintRoute(nftFamily: item)),
+        child: Container(
+          width: 132,
+          height: 205,
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            color: provider.themeMode.bg,
+          ),
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: CachedNetworkImage(
+                      imageUrl: item.imageUrl ?? "",
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
+                      ),
+                      placeholder: (context, url) => Container(
+                        decoration: BoxDecoration(
+                          color: provider.themeMode.text30,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        decoration: BoxDecoration(
+                          color: provider.themeMode.text30,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Assets.icons.icPlusCircle.svg(),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                item.name,
+                style: EZCTitleSmallTextStyle(color: provider.themeMode.text),
+              ),
+              Text(
+                item.symbol,
+                style: EZCLabelSmallTextStyle(color: provider.themeMode.text70),
               ),
               const SizedBox(height: 4),
               Container(

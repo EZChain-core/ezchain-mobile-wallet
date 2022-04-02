@@ -41,10 +41,8 @@ import 'package:wallet/features/nft/family/create/nft_family_create.dart'
     as _i34;
 import 'package:wallet/features/nft/family/detail/nft_family_detail.dart'
     as _i35;
-import 'package:wallet/features/nft/family/list/nft_family_collectible.dart'
-    as _i36;
-import 'package:wallet/features/nft/family/list/nft_family_collectible_item.dart'
-    as _i48;
+import 'package:wallet/features/nft/family/list/nft_family.dart' as _i36;
+import 'package:wallet/features/nft/family/list/nft_family_item.dart' as _i48;
 import 'package:wallet/features/nft/mint/nft_mint.dart' as _i37;
 import 'package:wallet/features/nft/nft.dart' as _i42;
 import 'package:wallet/features/onboard/on_board.dart' as _i2;
@@ -341,8 +339,10 @@ class AppRouter extends _i44.RootStackRouter {
           routeData: routeData, child: _i41.EarnScreen(key: args.key));
     },
     NftRoute.name: (routeData) {
+      final args =
+          routeData.argsAs<NftRouteArgs>(orElse: () => const NftRouteArgs());
       return _i44.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i42.NftScreen());
+          routeData: routeData, child: _i42.NftScreen(key: args.key));
     },
     SettingRoute.name: (routeData) {
       final args = routeData.argsAs<SettingRouteArgs>(
@@ -1205,8 +1205,7 @@ class NftFamilyCollectibleRouteArgs {
 /// generated route for
 /// [_i37.NftMintScreen]
 class NftMintRoute extends _i44.PageRouteInfo<NftMintRouteArgs> {
-  NftMintRoute(
-      {_i45.Key? key, required _i48.NftFamilyCollectibleItem nftFamily})
+  NftMintRoute({_i45.Key? key, required _i48.NftFamilyItem nftFamily})
       : super(NftMintRoute.name,
             path: '/nft-mint-screen',
             args: NftMintRouteArgs(key: key, nftFamily: nftFamily));
@@ -1219,7 +1218,7 @@ class NftMintRouteArgs {
 
   final _i45.Key? key;
 
-  final _i48.NftFamilyCollectibleItem nftFamily;
+  final _i48.NftFamilyItem nftFamily;
 
   @override
   String toString() {
@@ -1275,10 +1274,22 @@ class EarnRouteArgs {
 
 /// generated route for
 /// [_i42.NftScreen]
-class NftRoute extends _i44.PageRouteInfo<void> {
-  const NftRoute() : super(NftRoute.name, path: 'nft');
+class NftRoute extends _i44.PageRouteInfo<NftRouteArgs> {
+  NftRoute({_i45.Key? key})
+      : super(NftRoute.name, path: 'nft', args: NftRouteArgs(key: key));
 
   static const String name = 'NftRoute';
+}
+
+class NftRouteArgs {
+  const NftRouteArgs({this.key});
+
+  final _i45.Key? key;
+
+  @override
+  String toString() {
+    return 'NftRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for
