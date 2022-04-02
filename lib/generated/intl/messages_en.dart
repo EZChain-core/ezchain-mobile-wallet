@@ -157,6 +157,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "nftBackMyNFT": MessageLookupByLibrary.simpleMessage("Back to My NFT"),
         "nftChooseTitle": MessageLookupByLibrary.simpleMessage("Choose tittle"),
         "nftCollectibles": MessageLookupByLibrary.simpleMessage("Collectibles"),
+        "nftCollectiblesEmpty":
+            MessageLookupByLibrary.simpleMessage("Empty Collectibles"),
+        "nftCollectiblesEmptyDesc": MessageLookupByLibrary.simpleMessage(
+            "Collectibles will appear here"),
         "nftCreateFamily":
             MessageLookupByLibrary.simpleMessage("Create Family"),
         "nftFamilyName": MessageLookupByLibrary.simpleMessage("Family Name"),

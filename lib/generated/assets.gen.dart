@@ -187,6 +187,10 @@ class $AssetsImagesGen {
   SvgGenImage get imgLogoEzc =>
       const SvgGenImage('assets/images/img_logo_ezc.svg');
 
+  /// File path: assets/images/img_nft_family_empty.png
+  AssetGenImage get imgNftFamilyEmpty =>
+      const AssetGenImage('assets/images/img_nft_family_empty.png');
+
   /// File path: assets/images/img_no_data.svg
   SvgGenImage get imgNoData =>
       const SvgGenImage('assets/images/img_no_data.svg');

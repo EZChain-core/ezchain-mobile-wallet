@@ -73,7 +73,7 @@ class TransactionCChainViewData {
     String amount =
         "${bnToLocaleString(amountBN, denomination: denomination)} ${tx.tokenSymbol}";
     final gasPrice = BigInt.tryParse(tx.gasPrice) ?? BigInt.zero;
-    final gasPriceText = '${bnToAvaxX(gasPrice)} w$ezcSymbol';
+    final gasPriceText = '${bnToAvaxX(gasPrice)} wei';
     final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
     final fee = '${bnToAvaxC(gasPrice * gasUsed)} $ezcSymbol';
     final result = tx.success ?? false;

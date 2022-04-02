@@ -238,6 +238,8 @@
   "nftStartDateDesc": "Sart at least 5 minutes after you submit this form.",
   "nftFamilyName": "Family Name",
   "nftBackMyNFT": "Back to My NFT",
+  "nftCollectiblesEmpty": "Empty Collectibles",
+  "nftCollectiblesEmptyDesc": "Collectibles will appear here",
   "nftNameEmptyError": "You must provide a name.",
   "nftSymbolEmptyError": "You must provide a symbol.",
   "nftSymbolLengthError": "Symbol must be 4 characters max.",

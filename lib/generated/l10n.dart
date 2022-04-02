@@ -2456,6 +2456,26 @@ class Strings {
     );
   }
 
+  /// `Empty Collectibles`
+  String get nftCollectiblesEmpty {
+    return Intl.message(
+      'Empty Collectibles',
+      name: 'nftCollectiblesEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Collectibles will appear here`
+  String get nftCollectiblesEmptyDesc {
+    return Intl.message(
+      'Collectibles will appear here',
+      name: 'nftCollectiblesEmptyDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `You must provide a name.`
   String get nftNameEmptyError {
     return Intl.message(

@@ -18,7 +18,7 @@ import 'package:wallet/features/earn/delegate/nodes/earn_delegate_nodes.dart';
 import 'package:wallet/features/earn/estimate_rewards/earn_estimate_rewards.dart';
 import 'package:wallet/features/nft/family/create/nft_family_create.dart';
 import 'package:wallet/features/nft/family/detail/nft_family_detail.dart';
-import 'package:wallet/features/nft/family/list/nft_family_collectible.dart';
+import 'package:wallet/features/nft/family/list/nft_family.dart';
 import 'package:wallet/features/nft/mint/nft_mint.dart';
 import 'package:wallet/features/onboard/on_board.dart';
 import 'package:wallet/features/qrcode/qr_code.dart';
