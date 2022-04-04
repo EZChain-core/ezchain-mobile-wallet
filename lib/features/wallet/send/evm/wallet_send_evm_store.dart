@@ -29,11 +29,11 @@ abstract class _WalletSendEvmStore with Store {
   @observable
   WalletTokenItem? _token;
 
-  @observable
-  int gasPriceNumber = 0;
+  @readonly
+  int _gasPriceNumber = 0;
 
-  @observable
-  BigInt gasLimit = BigInt.zero;
+  @readonly
+  BigInt _gasLimit = BigInt.zero;
 
   @computed
   Decimal? get avaxPrice =>
@@ -49,25 +49,22 @@ abstract class _WalletSendEvmStore with Store {
   String get balanceCString =>
       _token != null ? _token!.balanceText : _balanceStore.balanceCString;
 
-  @observable
-  String? addressError;
+  @readonly
+  String? _addressError;
 
-  @observable
-  String? amountError;
+  @readonly
+  String? _amountError;
 
-  @observable
-  bool sendSuccess = false;
+  @readonly
+  bool _confirmSuccess = false;
 
-  @observable
-  bool confirmSuccess = false;
+  @readonly
+  Decimal _fee = Decimal.zero;
 
-  @observable
-  Decimal fee = Decimal.zero;
+  @readonly
+  bool _isLoading = false;
 
-  @observable
-  bool isLoading = false;
-
-  Decimal get maxAmount => balanceC - fee;
+  Decimal get maxAmount => balanceC - _fee;
 
   BigInt _gasPrice = BigInt.zero;
 
@@ -93,7 +90,7 @@ abstract class _WalletSendEvmStore with Store {
     } catch (e) {
       logger.e(e);
     }
-    gasPriceNumber =
+    _gasPriceNumber =
         int.tryParse(bnToDecimalAvaxX(_gasPrice).toStringAsFixed(0)) ?? 0;
   }
 
@@ -102,56 +99,56 @@ abstract class _WalletSendEvmStore with Store {
     final isAddressValid = validateAddressEvm(address);
     final isAmountValid = balanceC >= amount && amount > Decimal.zero;
     if (!isAddressValid) {
-      addressError = Strings.current.sharedInvalidAddress;
+      _addressError = Strings.current.sharedInvalidAddress;
     }
     if (!isAmountValid) {
-      amountError = Strings.current.sharedInvalidAmount;
+      _amountError = Strings.current.sharedInvalidAmount;
     }
     if (isAddressValid && isAmountValid) {
       if (_token != null) {
-        gasLimit =
+        _gasLimit =
             await _wallet.estimateErc20Gas(_token!.id, address, amountBN);
       } else {
-        gasLimit =
+        _gasLimit =
             await _wallet.estimateAvaxGasLimit(address, amountBN, _gasPrice);
       }
-      fee = bnToDecimalAvaxC(_gasPrice * gasLimit);
+      _fee = bnToDecimalAvaxC(_gasPrice * _gasLimit);
 
-      confirmSuccess = true;
+      _confirmSuccess = true;
     }
   }
 
   @action
   removeAmountError() {
-    if (amountError != null) {
-      amountError = null;
+    if (_amountError != null) {
+      _amountError = null;
     }
   }
 
   @action
   removeAddressError() {
-    if (addressError != null) {
-      addressError = null;
+    if (_addressError != null) {
+      _addressError = null;
     }
   }
 
   @action
   Future<bool> sendEvm(String address) async {
-    isLoading = true;
+    _isLoading = true;
     try {
       if (_token != null) {
         await _wallet.sendErc20(
-            address, amountBN, _gasPrice, gasLimit.toInt(), _token!.id);
+            address, amountBN, _gasPrice, _gasLimit.toInt(), _token!.id);
         _tokenStore.updateErc20Balance();
       } else {
-        await _wallet.sendAvaxC(address, amountBN, _gasPrice, gasLimit.toInt());
+        await _wallet.sendAvaxC(address, amountBN, _gasPrice, _gasLimit.toInt());
       }
 
-      isLoading = false;
+      _isLoading = false;
       return true;
     } catch (e) {
       logger.e(e);
-      isLoading = false;
+      _isLoading = false;
       return false;
     }
   }

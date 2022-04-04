@@ -30,7 +30,7 @@ abstract class _EarnDelegateNodesStore with Store {
   String keySearch = '';
 
   @computed
-  List<Validator> get validators => _validatorsStore.validators;
+  ObservableList<Validator> get validators => _validatorsStore.validators;
 
   _EarnDelegateNodesStore() {
     Future.delayed(Duration.zero, () => _validatorsStore.updateValidators);

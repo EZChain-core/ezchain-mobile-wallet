@@ -17,24 +17,24 @@ abstract class _WalletSendAntConfirmStore with Store {
 
   WalletProvider get _wallet => _walletFactory.activeWallet;
 
-  @observable
-  bool sendSuccess = false;
+  @readonly
+  bool _sendSuccess = false;
 
-  @observable
-  bool isLoading = false;
+  @readonly
+  bool _isLoading = false;
 
   @action
   sendAnt(WalletSendAntConfirmArgs args) async {
-    isLoading = true;
+    _isLoading = true;
     try {
       await _wallet.updateUtxosX();
       final txId = await _wallet.sendANT(
           args.assetId, args.address, numberToBNAvaxX(args.amount.toBigInt()),
           memo: args.memo);
-      sendSuccess = true;
+      _sendSuccess = true;
     } catch (e) {
       logger.e(e);
     }
-    isLoading = false;
+    _isLoading = false;
   }
 }

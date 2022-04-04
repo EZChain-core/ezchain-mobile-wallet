@@ -15,20 +15,20 @@ abstract class _WalletSendAntStore with Store {
 
   Decimal get balanceToken => token?.balance ?? Decimal.zero;
 
-  @observable
-  String? addressError;
+  @readonly
+  String? _addressError;
 
-  @observable
-  String? amountError;
+  @readonly
+  String? _amountError;
 
   @observable
   Decimal amount = Decimal.zero;
 
-  @observable
-  Decimal fee = bnToDecimalAvaxX(getTxFeeX());
+  @readonly
+  Decimal _fee = bnToDecimalAvaxX(getTxFeeX());
 
   @computed
-  Decimal get total => (amount + fee) * (token?.price ?? Decimal.zero);
+  Decimal get total => (amount + _fee) * (token?.price ?? Decimal.zero);
 
   setToken(WalletTokenItem token) {
     this.token = token;
@@ -38,27 +38,27 @@ abstract class _WalletSendAntStore with Store {
   bool validate(String address) {
     final isAddressValid = validateAddressX(address);
     final isAmountValid =
-        balanceToken >= (amount + fee) && amount > Decimal.zero;
+        balanceToken >= (amount + _fee) && amount > Decimal.zero;
     if (!isAddressValid) {
-      addressError = Strings.current.sharedInvalidAddress;
+      _addressError = Strings.current.sharedInvalidAddress;
     }
     if (!isAmountValid) {
-      amountError = Strings.current.sharedInvalidAmount;
+      _amountError = Strings.current.sharedInvalidAmount;
     }
     return isAddressValid && isAmountValid;
   }
 
   @action
   removeAmountError() {
-    if (amountError != null) {
-      amountError = null;
+    if (_amountError != null) {
+      _amountError = null;
     }
   }
 
   @action
   removeAddressError() {
-    if (addressError != null) {
-      addressError = null;
+    if (_addressError != null) {
+      _addressError = null;
     }
   }
 }

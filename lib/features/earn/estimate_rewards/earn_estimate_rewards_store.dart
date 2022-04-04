@@ -29,7 +29,7 @@ abstract class _EarnEstimateRewardsStore with Store {
   late String totalRewards;
 
   @computed
-  List<Validator> get validators => _validatorsStore.validators;
+  ObservableList<Validator> get validators => _validatorsStore.validators;
 
   _EarnEstimateRewardsStore() {
     Future.delayed(Duration.zero, () => _validatorsStore.updateValidators);

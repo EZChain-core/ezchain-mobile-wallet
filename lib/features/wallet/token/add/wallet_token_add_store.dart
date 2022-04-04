@@ -24,14 +24,14 @@ abstract class _WalletTokenAddStore with Store {
 
   final _tokenStore = getIt<TokenStore>();
 
-  @observable
-  String error = '';
+  @readonly
+  String _error = '';
 
   @action
   validate(String address) async {
     try {
       if (_tokenStore.isErc20Exists(address)) {
-        error = Strings.current.walletTokenAddressExists;
+        _error = Strings.current.walletTokenAddressExists;
         return;
       }
       final erc20TokenData = await Erc20TokenData.getData(
@@ -41,7 +41,7 @@ abstract class _WalletTokenAddStore with Store {
       );
 
       if (erc20TokenData == null) {
-        error = Strings.current.walletTokenAddressInvalid;
+        _error = Strings.current.walletTokenAddressInvalid;
         return;
       }
       await erc20TokenData.getBalance(
@@ -52,7 +52,7 @@ abstract class _WalletTokenAddStore with Store {
       walletContext?.pushRoute(WalletTokenAddConfirmRoute(
           args: WalletTokenAddConfirmArgs(erc20TokenData)));
     } catch (e) {
-      error = Strings.current.walletTokenAddressInvalid;
+      _error = Strings.current.walletTokenAddressInvalid;
       logger.e(e);
     }
   }

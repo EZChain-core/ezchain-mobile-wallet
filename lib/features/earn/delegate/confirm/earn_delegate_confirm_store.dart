@@ -26,20 +26,20 @@ abstract class _EarnDelegateConfirmStore with Store {
 
   final _validatorsStore = getIt<ValidatorsStore>();
 
-  @observable
-  bool isLoading = false;
+  @readonly
+  bool _isLoading = false;
 
-  @observable
-  bool submitSuccess = false;
+  @readonly
+  bool _submitSuccess = false;
 
-  @observable
-  String estimatedRewardText = '';
+  @readonly
+  String _estimatedRewardText = '';
 
-  @observable
-  String feeText = '';
+  @readonly
+  String _feeText = '';
 
   @computed
-  List<Validator> get validators => _validatorsStore.validators;
+  ObservableList<Validator> get validators => _validatorsStore.validators;
 
   @action
   calculateFee(EarnDelegateConfirmArgs args) async {
@@ -56,13 +56,13 @@ abstract class _EarnDelegateConfirmStore with Store {
         currentSupply * BigInt.from(10).pow(9),
       );
       final estimatedReward = bnToDecimal(estimation, denomination: 18);
-      estimatedRewardText = '${estimatedReward.toStringAsFixed(2)} $ezcSymbol';
+      _estimatedRewardText = '${estimatedReward.toStringAsFixed(2)} $ezcSymbol';
       final delegationFee = args.delegateItem.delegationFee;
       final cut =
           estimatedReward * (delegationFee / Decimal.fromInt(100)).toDecimal();
       final totalFee = getTxFeeP() * BigInt.from(10).pow(9) +
           decimalToBn(cut, denomination: 18);
-      feeText =
+      _feeText =
           '${bnToDecimal(totalFee, denomination: 18).toStringAsFixed(2)} $ezcSymbol';
     } catch (e) {
       logger.e(e);
@@ -77,16 +77,16 @@ abstract class _EarnDelegateConfirmStore with Store {
 
       final start = args.startDate.millisecondsSinceEpoch;
       final end = args.endDate.millisecondsSinceEpoch;
-      isLoading = true;
+      _isLoading = true;
 
       final txId =
           await _wallet.delegate(nodeId, numberToBNAvaxP(amount), start, end);
-      submitSuccess = true;
+      _submitSuccess = true;
       logger.i("txId = $txId");
     } catch (e) {
       showSnackBar(Strings.current.sharedCommonError);
       logger.e(e);
     }
-    isLoading = false;
+    _isLoading = false;
   }
 }
