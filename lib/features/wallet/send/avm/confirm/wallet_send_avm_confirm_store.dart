@@ -16,23 +16,23 @@ abstract class _WalletSendAvmConfirmStore with Store {
 
   WalletProvider get _wallet => _walletFactory.activeWallet;
 
-  @observable
-  bool sendSuccess = false;
+  @readonly
+  bool _sendSuccess = false;
 
-  @observable
-  bool isLoading = false;
+  @readonly
+  bool _isLoading = false;
 
   @action
   sendAvm(String address, Decimal amount, {String? memo}) async {
-    isLoading = true;
+    _isLoading = true;
     try {
       await _wallet.updateUtxosX();
       final txId = await _wallet
           .sendAvaxX(address, numberToBNAvaxX(amount.toBigInt()), memo: memo);
-      sendSuccess = true;
+      _sendSuccess = true;
     } catch (e) {
       logger.e(e);
     }
-    isLoading = false;
+    _isLoading = false;
   }
 }

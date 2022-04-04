@@ -24,54 +24,54 @@ abstract class _WalletSendAvmStore with Store {
 
   String get balanceXString => _balanceStore.balanceXString;
 
-  @observable
-  String? addressError;
+  @readonly
+  String? _addressError;
 
-  @observable
-  String? amountError;
+  @readonly
+  String? _amountError;
 
   @observable
   Decimal amount = Decimal.zero;
 
-  @observable
-  Decimal fee = Decimal.zero;
+  @readonly
+  Decimal _fee = Decimal.zero;
 
   @computed
-  Decimal get total => (amount + fee) * avaxPrice;
+  Decimal get total => (amount + _fee) * avaxPrice;
 
-  get maxAmount => balanceX - fee;
+  get maxAmount => balanceX - _fee;
 
   @action
   getBalanceX() async {
     _balanceStore.updateBalanceX();
-    fee = bnToDecimalAvaxX(getTxFeeX());
+    _fee = bnToDecimalAvaxX(getTxFeeX());
   }
 
   @action
   bool validate(String address) {
     final isAddressValid = validateAddressX(address);
     final isAmountValid =
-        _balanceStore.balanceX >= (amount + fee) && amount > Decimal.zero;
+        _balanceStore.balanceX >= (amount + _fee) && amount > Decimal.zero;
     if (!isAddressValid) {
-      addressError = Strings.current.sharedInvalidAddress;
+      _addressError = Strings.current.sharedInvalidAddress;
     }
     if (!isAmountValid) {
-      amountError = Strings.current.sharedInvalidAmount;
+      _amountError = Strings.current.sharedInvalidAmount;
     }
     return isAddressValid && isAmountValid;
   }
 
   @action
   removeAmountError() {
-    if (amountError != null) {
-      amountError = null;
+    if (_amountError != null) {
+      _amountError = null;
     }
   }
 
   @action
   removeAddressError() {
-    if (addressError != null) {
-      addressError = null;
+    if (_addressError != null) {
+      _addressError = null;
     }
   }
 }

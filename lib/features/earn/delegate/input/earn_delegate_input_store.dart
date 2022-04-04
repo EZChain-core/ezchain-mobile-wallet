@@ -23,11 +23,11 @@ abstract class _EarnDelegateInputStore with Store {
   @computed
   Decimal get balanceP => _balanceStore.balanceP;
 
-  @observable
-  String? addressError;
+  @readonly
+  String? _addressError;
 
-  @observable
-  String? amountError;
+  @readonly
+  String? _amountError;
 
   String get balancePString => _balanceStore.balancePString;
 
@@ -40,25 +40,25 @@ abstract class _EarnDelegateInputStore with Store {
         bnToDecimalAvaxP((await _wallet.getMinStake()).minDelegatorStakeBN);
     final isAmountValid = balanceP >= amount && amount > minStake;
     if (!isAddressValid) {
-      addressError = Strings.current.earnDelegateInvalidAddress;
+      _addressError = Strings.current.earnDelegateInvalidAddress;
     }
     if (!isAmountValid) {
-      amountError = Strings.current.sharedInvalidAmount;
+      _amountError = Strings.current.sharedInvalidAmount;
     }
     return isAddressValid && isAmountValid;
   }
 
   @action
   removeAmountError() {
-    if (amountError != null) {
-      amountError = null;
+    if (_amountError != null) {
+      _amountError = null;
     }
   }
 
   @action
   removeAddressError() {
-    if (addressError != null) {
-      addressError = null;
+    if (_addressError != null) {
+      _addressError = null;
     }
   }
 }
