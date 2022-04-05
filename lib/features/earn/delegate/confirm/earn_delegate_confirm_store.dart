@@ -38,9 +38,6 @@ abstract class _EarnDelegateConfirmStore with Store {
   @readonly
   String _feeText = '';
 
-  @computed
-  ObservableList<Validator> get validators => _validatorsStore.validators;
-
   @action
   calculateFee(EarnDelegateConfirmArgs args) async {
     try {
