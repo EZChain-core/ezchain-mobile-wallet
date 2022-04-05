@@ -7,7 +7,6 @@ import 'package:wallet/features/earn/delegate/nodes/earn_delegate_node_item.dart
 import 'package:wallet/features/earn/delegate/nodes/earn_delegate_nodes_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/inputs.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/widgets.dart';
@@ -39,41 +38,32 @@ class EarnDelegateNodesScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Observer(
-                  builder: (_) => FutureBuilder<List<EarnDelegateNodeItem>>(
-                    future: _earnDelegateNodesStore.getNodeIds(),
-                    builder: (_, snapshot) {
-                      if (snapshot.hasData) {
-                        final nodes = snapshot.data!;
-                        return nodes.isNotEmpty
-                            ? ListView.separated(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 12),
-                                itemCount: nodes.length,
-                                itemBuilder: (_, index) =>
-                                    EarnDelegateNodeItemWidget(
-                                        item: nodes[index]),
-                                separatorBuilder: (_, index) =>
-                                    const SizedBox(height: 24),
-                              )
-                            : EZCEmpty(
-                                img: Assets.images.imgSearchEmpty
-                                    .image(width: 181, height: 150),
-                                title: Strings.current.sharedNoResultFound,
-                                des: Strings.current.sharedNoResultFoundDes,
-                              );
-                      } else {
-                        return Align(
-                          alignment: Alignment.center,
-                          child: EZCLoading(
-                              color: provider.themeMode.secondary,
-                              size: 40,
-                              strokeWidth: 4),
-                        );
-                      }
-                    },
-                  ),
-                ),
+                child: Observer(builder: (_) {
+                  if (_earnDelegateNodesStore.nodes.isEmpty) {
+                    return Align(
+                      alignment: Alignment.center,
+                      child: EZCEmpty(
+                        img: Assets.images.imgSearchEmpty.image(
+                          width: 181,
+                          height: 150,
+                        ),
+                        title: Strings.current.sharedNoResultFound,
+                        des: Strings.current.sharedNoResultFoundDes,
+                      ),
+                    );
+                  }
+                  return ListView.separated(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    itemCount: _earnDelegateNodesStore.nodes.length,
+                    itemBuilder: (_, index) => EarnDelegateNodeItemWidget(
+                      item: _earnDelegateNodesStore.nodes[index],
+                    ),
+                    separatorBuilder: (_, index) => const SizedBox(height: 24),
+                  );
+                }),
               ),
             ],
           ),

@@ -30,51 +30,42 @@ class EarnEstimateRewardsScreen extends StatelessWidget {
                 onPressed: context.router.pop,
               ),
               Expanded(
-                child: Observer(
-                  builder: (_) => FutureBuilder<List<EarnEstimateRewardsItem>>(
-                    future: _earnEstimateRewardsStore.getEstimateRewards(),
-                    builder: (_, snapshot) {
-                      if (snapshot.hasData) {
-                        final nodes = snapshot.data!;
-                        return nodes.isNotEmpty
-                            ? ListView.separated(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 12),
-                                itemCount: nodes.length + 1,
-                                itemBuilder: (_, index) {
-                                  if (index == 0) {
-                                    return _EarnEstimateRewardsHeader(
-                                      totalRewards: _earnEstimateRewardsStore
-                                          .totalRewards,
-                                    );
-                                  } else {
-                                    return EarnEstimateRewardsItemWidget(
-                                      item: nodes[index - 1],
-                                    );
-                                  }
-                                },
-                                separatorBuilder: (_, index) =>
-                                    const SizedBox(height: 16),
-                              )
-                            : EZCEmpty(
-                                img: Assets.images.imgDelegationEmpty
-                                    .image(width: 182, height: 182),
-                                title: Strings.current.earnEstimateRewardsEmpty,
-                                des:
-                                    Strings.current.earnEstimateRewardsEmptyDes,
-                              );
+                child: Observer(builder: (_) {
+                  if (_earnEstimateRewardsStore.estimateRewards.isEmpty) {
+                    return Align(
+                      alignment: Alignment.center,
+                      child: EZCEmpty(
+                        img: Assets.images.imgDelegationEmpty.image(
+                          width: 182,
+                          height: 182,
+                        ),
+                        title: Strings.current.earnEstimateRewardsEmpty,
+                        des: Strings.current.earnEstimateRewardsEmptyDes,
+                      ),
+                    );
+                  }
+                  return ListView.separated(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    itemCount:
+                        _earnEstimateRewardsStore.estimateRewards.length + 1,
+                    itemBuilder: (_, index) {
+                      if (index == 0) {
+                        return _EarnEstimateRewardsHeader(
+                          totalRewards: _earnEstimateRewardsStore.totalRewards,
+                        );
                       } else {
-                        return Align(
-                          alignment: Alignment.center,
-                          child: EZCLoading(
-                              color: provider.themeMode.secondary,
-                              size: 40,
-                              strokeWidth: 4),
+                        return EarnEstimateRewardsItemWidget(
+                          item: _earnEstimateRewardsStore
+                              .estimateRewards[index - 1],
                         );
                       }
                     },
-                  ),
-                ),
+                    separatorBuilder: (_, index) => const SizedBox(height: 16),
+                  );
+                }),
               ),
             ],
           ),

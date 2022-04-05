@@ -3,6 +3,7 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
+import 'package:wallet/features/common/store/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/ezc/wallet/helpers/address_helper.dart';
@@ -20,6 +21,8 @@ abstract class _EarnDelegateInputStore with Store {
 
   final _balanceStore = getIt<BalanceStore>();
 
+  final _validatorsStore = getIt<ValidatorsStore>();
+
   @computed
   Decimal get balanceP => _balanceStore.balanceP;
 
@@ -34,10 +37,9 @@ abstract class _EarnDelegateInputStore with Store {
   String get addressP => _wallet.getAddressP();
 
   @action
-  Future<bool> validate(String address, Decimal amount) async {
+  bool validate(String address, Decimal amount) {
     final isAddressValid = validateAddressP(address);
-    final minStake =
-        bnToDecimalAvaxP((await _wallet.getMinStake()).minDelegatorStakeBN);
+    final minStake = bnToDecimalAvaxP(_validatorsStore.minDelegatorStake);
     final isAmountValid = balanceP >= amount && amount > minStake;
     if (!isAddressValid) {
       _addressError = Strings.current.earnDelegateInvalidAddress;

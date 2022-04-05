@@ -1,16 +1,8 @@
-import 'dart:math' as dart_math;
-
-import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
-import 'package:wallet/features/common/ext/extensions.dart';
-import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
-import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/store/validators_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
-import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 
 import 'earn_estimate_rewards_item.dart';
 
@@ -26,113 +18,14 @@ abstract class _EarnEstimateRewardsStore with Store {
 
   final _validatorsStore = getIt<ValidatorsStore>();
 
-  late String totalRewards;
+  @computed
+  String get totalRewards => _validatorsStore.totalRewards;
 
   @computed
-  ObservableList<Validator> get validators => _validatorsStore.validators;
+  ObservableList<EarnEstimateRewardsItem> get estimateRewards =>
+      _validatorsStore.estimateRewards;
 
   _EarnEstimateRewardsStore() {
-    Future.delayed(Duration.zero, () => _validatorsStore.updateValidators);
-  }
-
-  Future<List<EarnEstimateRewardsItem>> getEstimateRewards() async {
-    List<EarnEstimateRewardsItem> items = [];
-    try {
-      final delegators = validators
-          .where((element) =>
-              element.delegators != null && element.delegators!.isNotEmpty)
-          .map((e) => e.delegators!)
-          .expand((element) => element)
-          .toList();
-
-      final userAddresses = await _wallet.getAllAddressesP();
-
-      final resV = _cleanList(userAddresses, validators) as List<Validator>;
-      final resD = _cleanList(userAddresses, delegators) as List<Delegator>;
-
-      final validatorsReward = resV.fold<BigInt>(
-          BigInt.zero,
-          (previousValue, element) =>
-              previousValue + element.potentialRewardBN);
-      final delegatorsReward = resD.fold<BigInt>(
-          BigInt.zero,
-          (previousValue, element) =>
-              previousValue + element.potentialRewardBN);
-
-      final totalReward = bnToAvaxP(validatorsReward + delegatorsReward);
-
-      totalRewards = "$totalReward EZC";
-
-      for (var element in resV) {
-        final startTime = (int.tryParse(element.startTime) ?? 0) * 1000;
-        final endTime = (int.tryParse(element.endTime) ?? 0) * 1000;
-        final now = DateTime.now().millisecondsSinceEpoch;
-        final percent =
-            dart_math.min((now - startTime) / (endTime - startTime), 1);
-        final rewardAmt = bnToAvaxP(element.potentialRewardBN);
-        final stakingAmt = bnToAvaxP(element.stakeAmountBN);
-
-        final startDate = element.startTime.parseDateTimeFromTimestamp();
-        final endDate = element.startTime.parseDateTimeFromTimestamp();
-
-        items.add(EarnEstimateRewardsItem(
-          element.nodeId,
-          '$stakingAmt $ezcSymbol',
-          '$rewardAmt $ezcSymbol',
-          startDate != null ? DateFormat.yMd().format(startDate) : '',
-          endDate != null ? DateFormat.yMd().format(endDate) : '',
-          (percent * 100).toInt(),
-        ));
-      }
-      for (var element in resD) {
-        final startTime = (int.tryParse(element.startTime) ?? 0) * 1000;
-        final endTime = (int.tryParse(element.endTime) ?? 0) * 1000;
-        final now = DateTime.now().millisecondsSinceEpoch;
-        final percent =
-            dart_math.min((now - startTime) / (endTime - startTime), 1);
-        final rewardAmt = bnToAvaxP(element.potentialRewardBN);
-        final stakingAmt = bnToAvaxP(element.stakeAmountBN);
-
-        final startDate = element.startTime.parseDateTimeFromTimestamp();
-        final endDate = element.startTime.parseDateTimeFromTimestamp();
-
-        items.add(EarnEstimateRewardsItem(
-          element.nodeId,
-          '$stakingAmt $ezcSymbol',
-          '$rewardAmt $ezcSymbol',
-          startDate != null ? DateFormat.yMd().format(startDate) : '',
-          endDate != null ? DateFormat.yMd().format(endDate) : '',
-          (percent * 100).toInt(),
-        ));
-      }
-    } catch (e) {
-      logger.e(e);
-    }
-    return items;
-  }
-
-  List<dynamic> _cleanList(List<String> userAddresses, List<dynamic> list) {
-    final res = list.where((element) {
-      final rewardAddresses = element.rewardOwner?.addresses;
-      if (rewardAddresses == null) return false;
-      final filtered =
-          rewardAddresses.where((element) => userAddresses.contains(element));
-      return filtered.isNotEmpty;
-    }).toList();
-
-    res.sort((a, b) {
-      final startA = int.tryParse(a.startTime) ?? 0;
-      final startB = int.tryParse(b.startTime) ?? 0;
-
-      if (startA < startB) {
-        return -1;
-      } else if (startA > startB) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-
-    return res;
+    Future.delayed(Duration.zero, () => _validatorsStore.fetch());
   }
 }

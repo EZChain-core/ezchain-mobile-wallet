@@ -62,7 +62,7 @@ abstract class _WalletEZCStore with Store {
     _balanceStore.init();
     _priceStore.updatePrice();
     _tokenStore.getErc20Tokens();
-    _validatorsStore.updateValidators();
+    _validatorsStore.fetch();
   }
 
   @action

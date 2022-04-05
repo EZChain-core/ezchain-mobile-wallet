@@ -20,9 +20,17 @@ class EarnDelegateNodeItem {
   final int numberOfDelegators;
   final int endTime;
   final Decimal delegationFee;
+  final String? nodeName;
 
-  EarnDelegateNodeItem(this.nodeId, this.validatorStake, this.available,
-      this.numberOfDelegators, this.endTime, this.delegationFee);
+  EarnDelegateNodeItem({
+    required this.nodeId,
+    required this.validatorStake,
+    required this.available,
+    required this.numberOfDelegators,
+    required this.endTime,
+    required this.delegationFee,
+    this.nodeName,
+  });
 
   String get endTimeDuration {
     return DateTime.fromMillisecondsSinceEpoch(endTime).parseDurationTime();
@@ -51,7 +59,7 @@ class EarnDelegateNodeItemWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: Text(
-                Strings.current.sharedNodeId,
+                item.nodeName ?? Strings.current.sharedNodeId,
                 style: EZCTitleLargeTextStyle(color: provider.themeMode.text60),
               ),
             ),
