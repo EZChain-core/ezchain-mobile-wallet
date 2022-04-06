@@ -43,26 +43,31 @@ class EarnEstimateRewardsScreen extends StatelessWidget {
                       ),
                     );
                   }
-                  return ListView.separated(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                  return RefreshIndicator(
+                    onRefresh: _refresh,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      itemCount:
+                          _earnEstimateRewardsStore.estimateRewards.length + 1,
+                      itemBuilder: (_, index) {
+                        if (index == 0) {
+                          return _EarnEstimateRewardsHeader(
+                            totalRewards:
+                                _earnEstimateRewardsStore.totalRewards,
+                          );
+                        } else {
+                          return EarnEstimateRewardsItemWidget(
+                            item: _earnEstimateRewardsStore
+                                .estimateRewards[index - 1],
+                          );
+                        }
+                      },
+                      separatorBuilder: (_, index) =>
+                          const SizedBox(height: 16),
                     ),
-                    itemCount:
-                        _earnEstimateRewardsStore.estimateRewards.length + 1,
-                    itemBuilder: (_, index) {
-                      if (index == 0) {
-                        return _EarnEstimateRewardsHeader(
-                          totalRewards: _earnEstimateRewardsStore.totalRewards,
-                        );
-                      } else {
-                        return EarnEstimateRewardsItemWidget(
-                          item: _earnEstimateRewardsStore
-                              .estimateRewards[index - 1],
-                        );
-                      }
-                    },
-                    separatorBuilder: (_, index) => const SizedBox(height: 16),
                   );
                 }),
               ),
@@ -71,6 +76,11 @@ class EarnEstimateRewardsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _refresh() {
+    _earnEstimateRewardsStore.refresh();
+    return Future.delayed(const Duration(seconds: 1));
   }
 }
 

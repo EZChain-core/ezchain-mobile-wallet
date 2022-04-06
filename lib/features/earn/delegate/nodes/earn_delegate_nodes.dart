@@ -52,16 +52,20 @@ class EarnDelegateNodesScreen extends StatelessWidget {
                       ),
                     );
                   }
-                  return ListView.separated(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                  return RefreshIndicator(
+                    onRefresh: _refresh,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      itemCount: _earnDelegateNodesStore.nodes.length,
+                      itemBuilder: (_, index) => EarnDelegateNodeItemWidget(
+                        item: _earnDelegateNodesStore.nodes[index],
+                      ),
+                      separatorBuilder: (_, index) =>
+                          const SizedBox(height: 24),
                     ),
-                    itemCount: _earnDelegateNodesStore.nodes.length,
-                    itemBuilder: (_, index) => EarnDelegateNodeItemWidget(
-                      item: _earnDelegateNodesStore.nodes[index],
-                    ),
-                    separatorBuilder: (_, index) => const SizedBox(height: 24),
                   );
                 }),
               ),
@@ -70,5 +74,10 @@ class EarnDelegateNodesScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _refresh() {
+    _earnDelegateNodesStore.refresh();
+    return Future.delayed(const Duration(seconds: 1));
   }
 }

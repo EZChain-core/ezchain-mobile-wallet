@@ -34,6 +34,11 @@ abstract class _EarnDelegateNodesStore with Store {
           .toList());
 
   _EarnDelegateNodesStore() {
+    refresh();
+  }
+
+  @action
+  refresh() {
     Future.delayed(Duration.zero, () => _validatorsStore.fetch());
   }
 }
