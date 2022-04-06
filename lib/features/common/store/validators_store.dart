@@ -1,22 +1,24 @@
 import 'dart:math' as dart_math;
+
 import 'package:async/async.dart';
-import 'package:intl/intl.dart';
 import 'package:decimal/decimal.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/ezc/sdk/utils/bigint.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 import 'package:wallet/ezc/wallet/explorer/ezc/requests.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
+import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/features/earn/delegate/nodes/earn_delegate_node_item.dart';
 import 'package:wallet/features/earn/estimate_rewards/earn_estimate_rewards_item.dart';
-import 'package:wallet/features/common/constant/wallet_constant.dart';
 
 part 'validators_store.g.dart';
 
@@ -232,7 +234,8 @@ abstract class _ValidatorsStore with Store {
           (previousValue, element) =>
               previousValue + element.potentialRewardBN);
 
-      final totalReward = bnToAvaxP(validatorsReward + delegatorsReward);
+      final totalReward =
+          bnToDecimalAvaxP(validatorsReward + delegatorsReward).text();
 
       _totalRewards = "$totalReward $ezcSymbol";
 
@@ -242,7 +245,7 @@ abstract class _ValidatorsStore with Store {
         final now = DateTime.now().millisecondsSinceEpoch;
         final percent =
             dart_math.min((now - startTime) / (endTime - startTime), 1);
-        final rewardAmt = bnToAvaxP(element.potentialRewardBN);
+        final rewardAmt = bnToDecimalAvaxP(element.potentialRewardBN).text();
         final stakingAmt = bnToAvaxP(element.stakeAmountBN);
 
         final startDate = element.startTime.parseDateTimeFromTimestamp();
@@ -263,7 +266,8 @@ abstract class _ValidatorsStore with Store {
         final now = DateTime.now().millisecondsSinceEpoch;
         final percent =
             dart_math.min((now - startTime) / (endTime - startTime), 1);
-        final rewardAmt = bnToAvaxP(element.potentialRewardBN);
+        final rewardAmt =
+            bnToDecimalAvaxP(element.potentialRewardBN).text(decimals: 1);
         final stakingAmt = bnToAvaxP(element.stakeAmountBN);
 
         final startDate = element.startTime.parseDateTimeFromTimestamp();
