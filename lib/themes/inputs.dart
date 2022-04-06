@@ -645,7 +645,7 @@ class _EZCDateTimeTextFieldState extends State<EZCDateTimeTextField> {
   }
 }
 
-class EZCSearchTextField extends StatelessWidget {
+class EZCSearchTextField extends StatefulWidget {
   final String? hint;
 
   final TextEditingController? controller;
@@ -660,6 +660,25 @@ class EZCSearchTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<EZCSearchTextField> createState() => _EZCSearchTextFieldState();
+}
+
+class _EZCSearchTextFieldState extends State<EZCSearchTextField> {
+  TextEditingController? _controller;
+
+  @override
+  void initState() {
+    _controller = widget.controller ?? TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
@@ -667,16 +686,27 @@ class EZCSearchTextField extends StatelessWidget {
         child: TextField(
           style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
           cursorColor: provider.themeMode.text,
-          controller: controller,
-          onChanged: onChanged,
+          controller: _controller,
+          onChanged: widget.onChanged,
           maxLines: 1,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(12),
-            hintText: hint,
+            hintText: widget.hint,
             hintStyle: EZCTitleLargeTextStyle(color: provider.themeMode.text40),
             prefixIcon: Padding(
                 padding: const EdgeInsets.all(14),
                 child: Assets.icons.icSearchBlack.svg()),
+            suffixIcon: InkWell(
+              onTap: () {
+                setState(() {
+                  _controller?.text = '';
+                  widget.onChanged?.call('');
+                });
+              },
+              child: Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: Assets.icons.icSearchBlack.svg()),
+            ),
             enabledBorder: OutlineInputBorder(
               borderRadius: ezcBorder,
               borderSide: BorderSide(color: provider.themeMode.border),
