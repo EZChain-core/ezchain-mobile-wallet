@@ -696,7 +696,7 @@ class _EZCSearchTextFieldState extends State<EZCSearchTextField> {
             prefixIcon: Padding(
                 padding: const EdgeInsets.all(14),
                 child: Assets.icons.icSearchBlack.svg()),
-            suffixIcon: InkWell(
+            suffixIcon: GestureDetector(
               onTap: () {
                 setState(() {
                   _controller?.text = '';
@@ -705,7 +705,7 @@ class _EZCSearchTextFieldState extends State<EZCSearchTextField> {
               },
               child: Padding(
                   padding: const EdgeInsets.all(14),
-                  child: Assets.icons.icSearchBlack.svg()),
+                  child: Assets.icons.icClearBlack.svg()),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: ezcBorder,
