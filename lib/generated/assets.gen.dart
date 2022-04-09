@@ -58,6 +58,10 @@ class $AssetsIconsGen {
   SvgGenImage get icChangePin =>
       const SvgGenImage('assets/icons/ic_change_pin.svg');
 
+  /// File path: assets/icons/ic_clear_black.svg
+  SvgGenImage get icClearBlack =>
+      const SvgGenImage('assets/icons/ic_clear_black.svg');
+
   /// File path: assets/icons/ic_copy_orange.svg
   SvgGenImage get icCopyOrange =>
       const SvgGenImage('assets/icons/ic_copy_orange.svg');
