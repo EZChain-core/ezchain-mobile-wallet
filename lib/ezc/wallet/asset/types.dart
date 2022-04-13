@@ -143,12 +143,16 @@ class AvaNFTFamily {
 class AvaNFTCollectible {
   final AssetDescriptionClean asset;
   final List<AvmUTXO> nftUTXOs;
+  final AvmUTXO? nftMintUTXO;
   final Map<int, PayloadBase> groupIdPayloadDict;
   final Map<int, int> groupIdQuantityDict;
+
+  bool get canMint => nftMintUTXO != null;
 
   AvaNFTCollectible({
     required this.asset,
     required this.nftUTXOs,
+    this.nftMintUTXO,
     required this.groupIdPayloadDict,
     required this.groupIdQuantityDict,
   });
