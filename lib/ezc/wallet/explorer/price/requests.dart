@@ -10,8 +10,11 @@ final _ezcPriceRestClient = EzcPriceRestClient(_ezcPriceApi);
 
 Future<Map<String, EzcPrice>> fetchEzcPrices(
   List<String> contractAddresses,
+  String currency,
 ) async {
-  final response =
-      await _ezcPriceRestClient.getEzcPrices(contractAddresses.join(","));
+  final response = await _ezcPriceRestClient.getEzcPrices(
+    contractAddresses.join(","),
+    currency,
+  );
   return {for (var price in response.prices) price.symbol.toLowerCase(): price};
 }
