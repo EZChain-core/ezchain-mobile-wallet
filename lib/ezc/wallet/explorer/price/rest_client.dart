@@ -10,7 +10,8 @@ abstract class EzcPriceRestClient {
 
   @GET("service/tokens")
   Future<GetEzcPricesResponse> getEzcPrices(
-    @Query("contracts") String contractAddresses, {
+    @Query("contracts") String contractAddresses,
+    @Query("currency") String currency, {
     @Query("chain") String chain = "ezchain",
   });
 }

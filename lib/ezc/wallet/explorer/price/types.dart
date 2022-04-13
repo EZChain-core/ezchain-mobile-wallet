@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:collection/collection.dart';
 
 part 'types.g.dart';
 
@@ -74,4 +75,20 @@ class GetEzcPricesResponse {
       _$GetEzcPricesResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$GetEzcPricesResponseToJson(this);
+}
+
+enum EzcCurrency { USD, VND }
+
+extension CurrencyExt on EzcCurrency {
+  static const valueMap = {
+    EzcCurrency.USD: "USD",
+    EzcCurrency.VND: "VND",
+  };
+
+  String get type => valueMap[this] ?? "USD";
+
+  static EzcCurrency getByType(String? type) {
+    return valueMap.keys.firstWhereOrNull((element) => element.type == type) ??
+        EzcCurrency.USD;
+  }
 }
