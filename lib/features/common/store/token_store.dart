@@ -234,6 +234,7 @@ abstract class _TokenStore with Store {
           nftCollectibles.add(AvaNFTCollectible(
             asset: asset,
             nftUTXOs: filteredNftUTXOs,
+            nftMintUTXO: nftMintUTXOs.firstOrNull,
             groupIdPayloadDict: groupIdPayloadDict,
             groupIdQuantityDict: nftUTXOGroupQuantityDict,
           ));
