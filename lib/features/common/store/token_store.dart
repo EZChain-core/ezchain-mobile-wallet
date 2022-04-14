@@ -221,16 +221,16 @@ abstract class _TokenStore with Store {
           }
         }
 
-        if (nftMintUTXOs.isNotEmpty) {
-          nftFamilies.add(AvaNFTFamily(
-            asset: asset,
-            nftMintUTXO: nftMintUTXOs.first,
-            nftUTXOs: filteredNftUTXOs,
-            groupIdPayloadDict: groupIdPayloadDict,
-          ));
-        }
+        if (assetId != avaAssetId) {
+          if (nftMintUTXOs.isNotEmpty) {
+            nftFamilies.add(AvaNFTFamily(
+              asset: asset,
+              nftMintUTXO: nftMintUTXOs.first,
+              nftUTXOs: filteredNftUTXOs,
+              groupIdPayloadDict: groupIdPayloadDict,
+            ));
+          }
 
-        if (filteredNftUTXOs.isNotEmpty) {
           nftCollectibles.add(AvaNFTCollectible(
             asset: asset,
             nftUTXOs: filteredNftUTXOs,
