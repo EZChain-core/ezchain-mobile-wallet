@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(balance) => "Balance: ${balance}";
 
   static String m1(count) =>
-      "${Intl.plural(count, one: 'item', other: 'in ${count} items')}";
+      "${Intl.plural(count, one: '1 item', other: '${count} items')}";
 
   static String m2(name) => "Welcome ${name}";
 
@@ -120,7 +120,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "earnDelegateInvalidEndDate":
             MessageLookupByLibrary.simpleMessage("Invalid end date"),
         "earnDelegateValidMess": MessageLookupByLibrary.simpleMessage(
-            "You must have at least 1 EZC on the P chain to become a validator."),
+            "You must have at least 25 EZC on the P chain to become a delegator."),
         "earnDelegation": MessageLookupByLibrary.simpleMessage("Delegation"),
         "earnDelegationFee":
             MessageLookupByLibrary.simpleMessage("Delegation Fee"),
@@ -189,6 +189,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Payload (MAX 1024 characters)"),
         "nftQuantityValidateError": MessageLookupByLibrary.simpleMessage(
             "Quantity must be at least 1."),
+        "nftSearchHint": MessageLookupByLibrary.simpleMessage("Search Assets"),
         "nftStartDate": MessageLookupByLibrary.simpleMessage("Start Date"),
         "nftStartDateDesc": MessageLookupByLibrary.simpleMessage(
             "Sart at least 5 minutes after you submit this form."),

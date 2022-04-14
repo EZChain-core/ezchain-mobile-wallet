@@ -103,6 +103,66 @@ class EZCMediumPrimaryButton extends StatelessWidget {
   }
 }
 
+class EZCMediumPrimaryOutlineButton extends StatelessWidget {
+  final String text;
+
+  final double? width;
+
+  final double? height;
+
+  final EdgeInsetsGeometry? padding;
+
+  final VoidCallback? onPressed;
+
+  final VoidCallback? onLongPress;
+
+  final bool? isLoading;
+
+  final bool? enabled;
+
+  const EZCMediumPrimaryOutlineButton(
+      {required this.text,
+      this.onPressed,
+      this.onLongPress,
+      this.padding,
+      this.width,
+      this.height,
+      this.isLoading,
+      this.enabled});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDisable = enabled == false;
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => SizedBox(
+        height: height ?? ezcButtonMediumHeight,
+        width: width,
+        child: OutlinedButton(
+          child: isLoading == true
+              ? EZCLoading(
+                  color: provider.themeMode.text90,
+                  size: ezcButtonMediumHeight - 20,
+                  strokeWidth: 2)
+              : Text(text,
+                  textAlign: TextAlign.center,
+                  style: EZCButtonTextStyle(
+                      color: isDisable
+                          ? provider.themeMode.text40
+                          : provider.themeMode.primary)),
+          style: OutlinedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            side: BorderSide(width: 1, color: provider.themeMode.primary),
+          ),
+          onPressed: isDisable ? null : onPressed,
+          onLongPress: isDisable ? null : onLongPress,
+        ),
+      ),
+    );
+  }
+}
+
 class EZCMediumSuccessButton extends StatelessWidget {
   final String text;
 

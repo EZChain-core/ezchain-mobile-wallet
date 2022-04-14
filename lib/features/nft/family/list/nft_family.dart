@@ -50,9 +50,7 @@ class NftFamilyCollectibleScreen extends StatelessWidget {
                       mainAxisExtent: 255,
                     ),
                     itemCount: _nftStore.nftAssets.length,
-                    itemBuilder: (_, index) => NftFamilyItemWidget(
-                      item: _nftStore.nftAssets[index],
-                    ),
+                    itemBuilder: (_, index) => const SizedBox.shrink(),
                   );
                 }),
               ),

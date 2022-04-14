@@ -62,6 +62,14 @@ class $AssetsIconsGen {
   SvgGenImage get icClearBlack =>
       const SvgGenImage('assets/icons/ic_clear_black.svg');
 
+  /// File path: assets/icons/ic_close_circle_primary.svg
+  SvgGenImage get icCloseCirclePrimary =>
+      const SvgGenImage('assets/icons/ic_close_circle_primary.svg');
+
+  /// File path: assets/icons/ic_code_outline_white.svg
+  SvgGenImage get icCodeOutlineWhite =>
+      const SvgGenImage('assets/icons/ic_code_outline_white.svg');
+
   /// File path: assets/icons/ic_copy_orange.svg
   SvgGenImage get icCopyOrange =>
       const SvgGenImage('assets/icons/ic_copy_orange.svg');
@@ -81,6 +89,10 @@ class $AssetsIconsGen {
   SvgGenImage get icDocOutlineBlack =>
       const SvgGenImage('assets/icons/ic_doc_outline_black.svg');
 
+  /// File path: assets/icons/ic_document_outline_white.svg
+  SvgGenImage get icDocumentOutlineWhite =>
+      const SvgGenImage('assets/icons/ic_document_outline_white.svg');
+
   /// File path: assets/icons/ic_dropdown_arrow.svg
   SvgGenImage get icDropdownArrow =>
       const SvgGenImage('assets/icons/ic_dropdown_arrow.svg');
@@ -88,6 +100,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_earn_outline.svg
   SvgGenImage get icEarnOutline =>
       const SvgGenImage('assets/icons/ic_earn_outline.svg');
+
+  /// File path: assets/icons/ic_eye_outline_primary.svg
+  SvgGenImage get icEyeOutlinePrimary =>
+      const SvgGenImage('assets/icons/ic_eye_outline_primary.svg');
 
   /// File path: assets/icons/ic_ezc_64.svg
   SvgGenImage get icEzc64 => const SvgGenImage('assets/icons/ic_ezc_64.svg');
@@ -107,6 +123,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_key_outline_black.svg
   SvgGenImage get icKeyOutlineBlack =>
       const SvgGenImage('assets/icons/ic_key_outline_black.svg');
+
+  /// File path: assets/icons/ic_link_outline_white.svg
+  SvgGenImage get icLinkOutlineWhite =>
+      const SvgGenImage('assets/icons/ic_link_outline_white.svg');
 
   /// File path: assets/icons/ic_plus_circle.svg
   SvgGenImage get icPlusCircle =>

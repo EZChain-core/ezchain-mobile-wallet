@@ -1974,10 +1974,10 @@ class Strings {
     );
   }
 
-  /// `You must have at least 1 EZC on the P chain to become a validator.`
+  /// `You must have at least 25 EZC on the P chain to become a delegator.`
   String get earnDelegateValidMess {
     return Intl.message(
-      'You must have at least 1 EZC on the P chain to become a validator.',
+      'You must have at least 25 EZC on the P chain to become a delegator.',
       name: 'earnDelegateValidMess',
       desc: '',
       args: [],
@@ -2394,12 +2394,12 @@ class Strings {
     );
   }
 
-  /// `{count,plural, =1{item} other{in {count} items}}`
+  /// `{count,plural, =1{1 item} other{{count} items}}`
   String nftItems(num count) {
     return Intl.plural(
       count,
-      one: 'item',
-      other: 'in $count items',
+      one: '1 item',
+      other: '$count items',
       name: 'nftItems',
       desc: '',
       args: [count],
@@ -2541,6 +2541,16 @@ class Strings {
     return Intl.message(
       'JSON Payload (MAX 1024 characters)',
       name: 'nftJsonPayload',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search Assets`
+  String get nftSearchHint {
+    return Intl.message(
+      'Search Assets',
+      name: 'nftSearchHint',
       desc: '',
       args: [],
     );
