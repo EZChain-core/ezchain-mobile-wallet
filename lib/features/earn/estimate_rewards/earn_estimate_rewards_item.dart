@@ -14,6 +14,8 @@ class EarnEstimateRewardsItem {
   final String startTime;
   final String endTime;
   final int percent;
+  final String? nodeName;
+  final String? nodeLogoUrl;
 
   EarnEstimateRewardsItem(
     this.nodeId,
@@ -22,6 +24,8 @@ class EarnEstimateRewardsItem {
     this.startTime,
     this.endTime,
     this.percent,
+    this.nodeName,
+    this.nodeLogoUrl,
   );
 }
 

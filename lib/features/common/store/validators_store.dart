@@ -11,6 +11,7 @@ import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/ezc/sdk/utils/bigint.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 import 'package:wallet/ezc/wallet/explorer/ezc/requests.dart';
+import 'package:wallet/ezc/wallet/explorer/ezc/types.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
@@ -44,7 +45,8 @@ abstract class _ValidatorsStore with Store {
 
   @readonly
   //ignore: prefer_final_fields
-  ObservableMap<String, String> _nodeNameDict = ObservableMap.of({});
+  ObservableMap<String, EzcValidator> _nodeCustomInformationDict =
+      ObservableMap.of({});
 
   @readonly
   //ignore: prefer_final_fields
@@ -87,7 +89,7 @@ abstract class _ValidatorsStore with Store {
   dispose() {
     _completer?.operation.cancel();
     _validators.clear();
-    _nodeNameDict.clear();
+    _nodeCustomInformationDict.clear();
     _pendingValidators.clear();
     _pendingDelegators.clear();
     _delegateNodes.clear();
@@ -106,8 +108,8 @@ abstract class _ValidatorsStore with Store {
       final nodeNameDict = await fetchEzcValidators(nodeIds);
       _validators.clear();
       _validators.addAll(validators);
-      _nodeNameDict.clear();
-      _nodeNameDict.addAll(nodeNameDict);
+      _nodeCustomInformationDict.clear();
+      _nodeCustomInformationDict.addAll(nodeNameDict);
       _pendingValidators.clear();
       _pendingValidators.addAll(pendingValidators.validators);
       _pendingDelegators.clear();
@@ -190,15 +192,20 @@ abstract class _ValidatorsStore with Store {
           decimals: 0,
         );
 
+        final nodeCustomInformation =
+            _nodeCustomInformationDict[validator.nodeId];
+
         nodes.add(
           EarnDelegateNodeItem(
-              nodeId: validator.nodeId,
-              validatorStake: stakeAmount,
-              available: remainingStake,
-              numberOfDelegators: validator.delegators?.length ?? 0,
-              endTime: endTime,
-              delegationFee: fee,
-              nodeName: _nodeNameDict[validator.nodeId]),
+            nodeId: validator.nodeId,
+            validatorStake: stakeAmount,
+            available: remainingStake,
+            numberOfDelegators: validator.delegators?.length ?? 0,
+            endTime: endTime,
+            delegationFee: fee,
+            nodeName: nodeCustomInformation?.name,
+            nodeLogoUrl: nodeCustomInformation?.logoUrl,
+          ),
         );
       }
       _delegateNodes.clear();
@@ -251,6 +258,9 @@ abstract class _ValidatorsStore with Store {
         final startDate = element.startTime.parseDateTimeFromTimestamp();
         final endDate = element.startTime.parseDateTimeFromTimestamp();
 
+        final nodeCustomInformation =
+            _nodeCustomInformationDict[element.nodeId];
+
         items.add(EarnEstimateRewardsItem(
           element.nodeId,
           '$stakingAmt $ezcSymbol',
@@ -258,6 +268,8 @@ abstract class _ValidatorsStore with Store {
           startDate != null ? DateFormat.yMd().format(startDate) : '',
           endDate != null ? DateFormat.yMd().format(endDate) : '',
           (percent * 100).toInt(),
+          nodeCustomInformation?.name,
+          nodeCustomInformation?.logoUrl,
         ));
       }
       for (var element in resD) {
@@ -273,6 +285,9 @@ abstract class _ValidatorsStore with Store {
         final startDate = element.startTime.parseDateTimeFromTimestamp();
         final endDate = element.startTime.parseDateTimeFromTimestamp();
 
+        final nodeCustomInformation =
+            _nodeCustomInformationDict[element.nodeId];
+
         items.add(EarnEstimateRewardsItem(
           element.nodeId,
           '$stakingAmt $ezcSymbol',
@@ -280,6 +295,8 @@ abstract class _ValidatorsStore with Store {
           startDate != null ? DateFormat.yMd().format(startDate) : '',
           endDate != null ? DateFormat.yMd().format(endDate) : '',
           (percent * 100).toInt(),
+          nodeCustomInformation?.name,
+          nodeCustomInformation?.logoUrl,
         ));
       }
       _estimateRewards.clear();
