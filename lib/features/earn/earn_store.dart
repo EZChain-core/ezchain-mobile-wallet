@@ -11,5 +11,5 @@ abstract class _EarnStore with Store {
   final _balanceStore = getIt<BalanceStore>();
 
   @computed
-  bool get permittedAddDelegator => _balanceStore.balanceP > Decimal.one;
+  bool get permittedAddDelegator => _balanceStore.balanceP >= Decimal.fromInt(25);
 }

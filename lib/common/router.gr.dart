@@ -42,7 +42,7 @@ import 'package:wallet/features/nft/family/create/nft_family_create.dart'
 import 'package:wallet/features/nft/family/detail/nft_family_detail.dart'
     as _i35;
 import 'package:wallet/features/nft/family/list/nft_family.dart' as _i36;
-import 'package:wallet/features/nft/family/list/nft_family_item.dart' as _i48;
+import 'package:wallet/features/nft/family/nft_family_item.dart' as _i48;
 import 'package:wallet/features/nft/mint/nft_mint.dart' as _i37;
 import 'package:wallet/features/nft/nft.dart' as _i42;
 import 'package:wallet/features/onboard/on_board.dart' as _i2;

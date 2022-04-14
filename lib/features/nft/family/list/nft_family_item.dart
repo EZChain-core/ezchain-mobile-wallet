@@ -38,7 +38,7 @@ class NftFamilyItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => InkWell(
-        onTap: () => context.pushRoute(NftMintRoute(nftFamily: item)),
+        // onTap: () => context.pushRoute(NftMintRoute(nftFamily: item)),
         child: Container(
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
@@ -127,7 +127,7 @@ class NftFamilyHorizontalItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => InkWell(
-        onTap: () => context.pushRoute(NftMintRoute(nftFamily: item)),
+        // onTap: () => context.pushRoute(NftMintRoute(nftFamily: item)),
         child: Container(
           width: 132,
           height: 205,
@@ -168,13 +168,6 @@ class NftFamilyHorizontalItemWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Assets.icons.icPlusCircle.svg(),
-                    ),
-                  )
                 ],
               ),
               const SizedBox(height: 8),

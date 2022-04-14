@@ -5,7 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
-import 'package:wallet/features/nft/family/list/nft_family_item.dart';
+import 'package:wallet/features/nft/family/nft_family_item.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
