@@ -14,10 +14,14 @@ class EzcValidator {
   @JsonKey(name: "node_id")
   final String nodeId;
 
+  @JsonKey(name: "logo_url")
+  final String? logoUrl;
+
   EzcValidator(
     this.id,
     this.name,
     this.nodeId,
+    this.logoUrl,
   );
 
   factory EzcValidator.fromJson(Map<String, dynamic> json) =>

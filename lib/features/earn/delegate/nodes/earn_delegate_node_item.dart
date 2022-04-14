@@ -21,6 +21,7 @@ class EarnDelegateNodeItem {
   final int endTime;
   final Decimal delegationFee;
   final String? nodeName;
+  final String? nodeLogoUrl;
 
   EarnDelegateNodeItem({
     required this.nodeId,
@@ -30,6 +31,7 @@ class EarnDelegateNodeItem {
     required this.endTime,
     required this.delegationFee,
     this.nodeName,
+    this.nodeLogoUrl,
   });
 
   String get endTimeDuration {
