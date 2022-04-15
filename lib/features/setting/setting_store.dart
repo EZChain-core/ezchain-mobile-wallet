@@ -37,19 +37,20 @@ abstract class _SettingStore with Store {
   @observable
   bool touchIdAvailable = false;
 
-  @observable
-  NetworkConfigType activeNetworkConfig =
+  @readonly
+  NetworkConfigType _activeNetworkConfig =
       getNetworkConfigTypeFromConfig(activeNetwork);
 
   @action
   setNetworkConfig(NetworkConfigType network) async {
+    if(network == _activeNetworkConfig) return;
     _balanceStore.dispose();
     _tokenStore.dispose();
     _priceStore.dispose();
     _validatorsStore.dispose();
     setRpcNetwork(network.config);
     await _walletFactory.initWallet();
-    activeNetworkConfig = network;
+    _activeNetworkConfig = network;
     _walletSetting.saveNetworkConfig(network);
     showSnackBar(Strings.current.settingNetworkConnected);
     _balanceStore.init();

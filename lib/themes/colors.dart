@@ -90,4 +90,6 @@ extension BaseColor on ThemeMode {
       isDark ? ColorName.wispPinkDark : ColorName.wispPinkLight;
 
   Color get blue1 => isDark ? ColorName.blue1Dark : ColorName.blue1Light;
+
+  Color get whiteSmoke => isDark ? ColorName.whiteSmokeDark : ColorName.whiteSmokeLight;
 }

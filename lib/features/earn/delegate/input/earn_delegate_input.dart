@@ -4,7 +4,6 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm.dart';
@@ -18,6 +17,8 @@ import 'package:wallet/themes/inputs.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
+
+import '../../earn_widgets.dart';
 
 const _delegateBufferEndDateMinutes = 15;
 const _delegateBufferEndDateDays = 21;
@@ -62,20 +63,10 @@ class EarnDelegateInputScreen extends StatelessWidget {
                           borderRadius:
                               const BorderRadius.all(Radius.circular(16)),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              Strings.current.sharedNodeId,
-                              style: EZCTitleLargeTextStyle(
-                                  color: provider.themeMode.text60),
-                            ),
-                            Text(
-                              args.delegateItem.nodeId.useCorrectEllipsis(),
-                              style: EZCTitleLargeTextStyle(
-                                  color: provider.themeMode.text),
-                            ),
-                          ],
+                        child: EarnNodeIdWidget(
+                          id: args.delegateItem.nodeId,
+                          name: args.delegateItem.nodeName,
+                          src: args.delegateItem.nodeLogoUrl,
                         ),
                       ),
                       const SizedBox(height: 16),

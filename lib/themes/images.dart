@@ -11,8 +11,10 @@ class EZCCircleImage extends StatelessWidget {
 
   final Widget? placeholder;
 
+  final bool? isBorder;
+
   const EZCCircleImage(
-      {required this.src, required this.size, this.placeholder});
+      {required this.src, required this.size, this.placeholder, this.isBorder});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,9 @@ class EZCCircleImage extends StatelessWidget {
         imageBuilder: (context, imageProvider) => Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
+            border: isBorder == true
+                ? Border.all(width: 2, color: provider.themeMode.whiteSmoke)
+                : null,
             image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
           ),
         ),
@@ -32,6 +37,9 @@ class EZCCircleImage extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
+                border: isBorder == true
+                    ? Border.all(width: 2, color: provider.themeMode.whiteSmoke)
+                    : null,
                 color: provider.themeMode.bg,
               ),
             ),
@@ -40,6 +48,9 @@ class EZCCircleImage extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
+                border: isBorder == true
+                    ? Border.all(width: 2, color: provider.themeMode.whiteSmoke)
+                    : null,
                 color: provider.themeMode.bg,
               ),
             ),

@@ -109,23 +109,33 @@ class NftCollectibleItemWidget extends StatelessWidget {
                 )
               ],
             ),
-            if (item.title != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                item.title!,
-                style: EZCTitleSmallTextStyle(color: provider.themeMode.text),
-              )
-            ],
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-                border: Border.all(color: provider.themeMode.text60),
-              ),
-              child: Text(
-                Strings.current.nftItems(item.count),
-                style: EZCTitleSmallTextStyle(color: provider.themeMode.text70),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (item.title != null) ...[
+                    Text(
+                      item.title!,
+                      style: EZCTitleSmallTextStyle(
+                          color: provider.themeMode.text),
+                    )
+                  ],
+                  const SizedBox(height: 8),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(12)),
+                      border: Border.all(color: provider.themeMode.text60),
+                    ),
+                    child: Text(
+                      Strings.current.nftItems(item.count),
+                      style: EZCTitleSmallTextStyle(
+                          color: provider.themeMode.text70),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                ],
               ),
             ),
           ],
