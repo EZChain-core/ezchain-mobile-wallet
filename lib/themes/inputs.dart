@@ -696,17 +696,19 @@ class _EZCSearchTextFieldState extends State<EZCSearchTextField> {
             prefixIcon: Padding(
                 padding: const EdgeInsets.all(14),
                 child: Assets.icons.icSearchBlack.svg()),
-            suffixIcon: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _controller?.text = '';
-                  widget.onChanged?.call('');
-                });
-              },
-              child: Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Assets.icons.icClearBlack.svg()),
-            ),
+            suffixIcon: _controller?.text.isNotEmpty == true
+                ? GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _controller?.text = '';
+                        widget.onChanged?.call('');
+                      });
+                    },
+                    child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Assets.icons.icClearBlack.svg()),
+                  )
+                : null,
             enabledBorder: OutlineInputBorder(
               borderRadius: ezcBorder,
               borderSide: BorderSide(color: provider.themeMode.border),
