@@ -117,6 +117,17 @@ class EZCTitleSmallTextStyle extends EZCTextStyle {
             fontWeight: FontWeight.w500);
 }
 
+class EZCTitleCustomTextStyle extends EZCTextStyle {
+  final Color color;
+  final double size;
+
+  const EZCTitleCustomTextStyle({required this.color, required this.size})
+      : super(
+      color: color,
+      fontSize: size,
+      fontWeight: FontWeight.w500);
+}
+
 class EZCBodyLargeTextStyle extends EZCTextStyle {
   final Color color;
 
@@ -182,6 +193,13 @@ class EZCSemiBoldSmallTextStyle extends EZCTextStyle {
 
   const EZCSemiBoldSmallTextStyle({required this.color})
       : super(color: color, fontSize: 12, fontWeight: FontWeight.w600);
+}
+
+class EZCSemiBoldLargeTextStyle extends EZCTextStyle {
+  final Color color;
+
+  const EZCSemiBoldLargeTextStyle({required this.color})
+      : super(color: color, fontSize: 24, fontWeight: FontWeight.w600);
 }
 
 class EZCBoldMediumTextStyle extends EZCTextStyle {

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+
 // ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
@@ -323,14 +324,15 @@ class _TransactionDetailIndexWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Container(
-        padding: const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-            shape: BoxShape.circle, color: provider.themeMode.primary),
-        child: Text(
-          '#$index',
-          style: EZCLabelSmallTextStyle(color: provider.themeMode.secondary),
-        ),
-      ),
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(200)),
+            color: provider.themeMode.primary,
+          ),
+          child: Text(
+            '#$index',
+            style: EZCLabelSmallTextStyle(color: provider.themeMode.secondary),
+          )),
     );
   }
 }

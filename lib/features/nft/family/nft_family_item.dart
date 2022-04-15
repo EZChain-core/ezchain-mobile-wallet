@@ -78,7 +78,7 @@ class NftFamilyItemWidget extends StatelessWidget {
               color: provider.themeMode.text10,
             ),
           ),
-          SizedBox(
+          if (item.nftCollectibles.isNotEmpty) SizedBox(
             height: 190,
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 16),

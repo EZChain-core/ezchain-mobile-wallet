@@ -22,9 +22,8 @@ class NftPreviewDialog extends StatelessWidget {
         child: SizedBox(
           width: double.infinity,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               GestureDetector(
                 onTap: () {
@@ -33,24 +32,13 @@ class NftPreviewDialog extends StatelessWidget {
                 child: Assets.icons.icCloseCirclePrimary.svg(),
               ),
               const SizedBox(height: 4),
-              AspectRatio(
-                aspectRatio: 0.7,
+              ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
                 child: CachedNetworkImage(
                   imageUrl: url ?? '',
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      image: DecorationImage(
-                          image: imageProvider, fit: BoxFit.cover),
-                    ),
-                  ),
-                  placeholder: (context, url) => Container(
-                    decoration: BoxDecoration(
-                      color: provider.themeMode.text30,
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    ),
-                  ),
                   errorWidget: (context, url, error) => Container(
+                    width: double.infinity,
+                    height: 400,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: provider.themeMode.bg,
