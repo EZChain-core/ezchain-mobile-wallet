@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
@@ -18,13 +19,14 @@ class EarnNodeIdWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => SizedBox(
+      builder: (context, provider, child) =>
+          SizedBox(
         width: double.infinity,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             EZCCircleImage(
-              src: src ?? '',
+              src: src ?? defaultNodeLogo,
               size: 64,
               placeholder: Container(
                 decoration: BoxDecoration(

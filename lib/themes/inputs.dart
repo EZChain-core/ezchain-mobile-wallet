@@ -687,7 +687,10 @@ class _EZCSearchTextFieldState extends State<EZCSearchTextField> {
           style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
           cursorColor: provider.themeMode.text,
           controller: _controller,
-          onChanged: widget.onChanged,
+          onChanged: (text) {
+            widget.onChanged?.call(text);
+            setState(() {});
+          },
           maxLines: 1,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(12),

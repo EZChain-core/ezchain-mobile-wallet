@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -189,7 +190,7 @@ class _EarnNodeIdWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             EZCCircleImage(
-              src: src ?? '',
+              src: src ?? defaultNodeLogo,
               size: 64,
               placeholder: Container(
                 decoration: BoxDecoration(

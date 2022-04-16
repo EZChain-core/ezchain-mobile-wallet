@@ -764,10 +764,10 @@ class Strings {
     );
   }
 
-  /// `Form`
+  /// `From`
   String get sharedFrom {
     return Intl.message(
-      'Form',
+      'From',
       name: 'sharedFrom',
       desc: '',
       args: [],
