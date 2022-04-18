@@ -3,6 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/router.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 
@@ -42,6 +43,7 @@ class WalletApp extends StatelessWidget {
             _appRouter,
             navigatorObservers: () => [
               AutoRouteObserver(),
+              StatusBarRouterObserver(),
               FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)
             ],
           ),
