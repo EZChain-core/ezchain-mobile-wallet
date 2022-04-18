@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/auth/access/mnemonic/access_mnemonic_key.dart';
@@ -96,3 +98,67 @@ class $AppRouter {}
 
 BuildContext? get walletContext =>
     getIt<AppRouter>().navigatorKey.currentContext;
+
+class StatusBarRouterObserver extends AutoRouterObserver {
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    logger.i('New route pushed: ${route.settings.name}');
+    _routeChanged(route.settings.name);
+  }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    logger.i(
+        'New route popped: ${route.settings.name}, previous = ${previousRoute?.settings.name}');
+    final routeName = route.settings.name;
+    final previousRouteName = previousRoute?.settings.name;
+    switch (previousRouteName) {
+      case DashboardRoute.name:
+        if (routeName == TransactionsRoute.name ||
+            routeName == TransactionsTokenRoute.name ||
+            routeName == WalletTokenAddRoute.name ||
+            routeName == WalletSendEvmRoute.name ||
+            routeName == WalletReceiveRoute.name ||
+            routeName == WalletSendAvmRoute.name) {
+          _routeChanged(WalletRoute.name);
+        }
+        break;
+      case OnBoardRoute.name:
+        if (routeName == CreateWalletRoute.name ||
+            routeName == AccessWalletOptionsRoute.name) {
+          _routeChanged(OnBoardRoute.name);
+        }
+        break;
+    }
+  }
+
+  @override
+  void didInitTabRoute(TabPageRoute route, TabPageRoute? previousRoute) {
+    logger.i('Tab route visited: ${route.name}');
+    _routeChanged(route.name);
+  }
+
+  @override
+  void didChangeTabRoute(TabPageRoute route, TabPageRoute previousRoute) {
+    logger.i('Tab route re-visited: ${route.name}');
+    _routeChanged(route.name);
+  }
+
+  _routeChanged(String? routeName) {
+    if (routeName == SplashRoute.name ||
+        routeName == OnBoardRoute.name ||
+        routeName == WalletRoute.name) {
+      _changeStatusBar(true);
+    } else {
+      _changeStatusBar(false);
+    }
+  }
+
+  _changeStatusBar(bool isLight) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarBrightness: isLight ? Brightness.dark : Brightness.light,
+      statusBarIconBrightness: isLight ? Brightness.light : Brightness.dark,
+    ));
+  }
+}
