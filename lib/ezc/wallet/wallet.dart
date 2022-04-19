@@ -825,8 +825,11 @@ abstract class WalletProvider {
     int offset = 0,
   }) async {
     final address = getAddressC();
-    return await cchain_explorer_request.getCChainTransactions(address,
-        page: page, offset: offset);
+    return await cchain_explorer_request.getCChainTransactions(
+      address,
+      page: page,
+      offset: offset,
+    );
   }
 
   Future<CChainExplorerTxInfo> getCChainTransaction(String txHash) async {
