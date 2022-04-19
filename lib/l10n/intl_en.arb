@@ -148,6 +148,7 @@
   "settingEzcTestnet": "EZChain Testnet",
   "settingNetworkConnected": "Network connected",
   "settingBiometricSystemsNotEnabled": "Biometric systems is not enabled",
+  "settingEZChainAbout": "EZChain is a new generation blockchain platform for creating public blockchains and private blockchains. EZChain has high performance, low cost and simplest oriented system optimization for end users.",
   "walletReceiveSendOnly": "Send only ",
   "walletReceiveBitcoin": "Bitcoin (BTC)",
   "walletReceiveToThis": " to this address\nSending any other coins my result in permanent loss",

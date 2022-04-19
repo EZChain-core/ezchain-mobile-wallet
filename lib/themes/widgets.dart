@@ -23,7 +23,10 @@ class EZCAppBar extends StatelessWidget {
           children: [
             const SizedBox(width: 4),
             IconButton(
-              onPressed: onPressed,
+              onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                onPressed();
+              },
               icon: Assets.icons.icArrowLeftWhite.svg(),
             ),
             Text(
@@ -213,7 +216,7 @@ class EZCEmpty extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

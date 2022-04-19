@@ -35,16 +35,17 @@ class NftScreen extends StatelessWidget {
                   return Column(
                     children: [
                       _NftHeader(),
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 16, right: 16, top: 12),
-                        child: EZCSearchTextField(
-                          hint: Strings.current.nftSearchHint,
-                          onChanged: (text) {
-                            _nftStore.keySearch = text;
-                          },
+                      if (_nftStore.nftAssets.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16, right: 16, top: 12),
+                          child: EZCSearchTextField(
+                            hint: Strings.current.nftSearchHint,
+                            onChanged: (text) {
+                              _nftStore.keySearch = text;
+                            },
+                          ),
                         ),
-                      ),
                       if (_nftStore.nftAssetsResult.isEmpty)
                         Align(
                           alignment: Alignment.center,
