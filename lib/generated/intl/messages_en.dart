@@ -163,6 +163,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Collectibles will appear here"),
         "nftCreateFamily":
             MessageLookupByLibrary.simpleMessage("Create Family"),
+        "nftEmptyCollectibles": MessageLookupByLibrary.simpleMessage(
+            "Issue collectibles for the families you created. You do not own any families you can mint."),
         "nftFamilyName": MessageLookupByLibrary.simpleMessage("Family Name"),
         "nftHttps": MessageLookupByLibrary.simpleMessage("https://"),
         "nftImageUrl": MessageLookupByLibrary.simpleMessage("Image URL"),

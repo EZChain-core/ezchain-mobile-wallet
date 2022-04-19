@@ -2565,6 +2565,16 @@ class Strings {
       args: [],
     );
   }
+
+  /// `Issue collectibles for the families you created. You do not own any families you can mint.`
+  String get nftEmptyCollectibles {
+    return Intl.message(
+      'Issue collectibles for the families you created. You do not own any families you can mint.',
+      name: 'nftEmptyCollectibles',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Strings> {

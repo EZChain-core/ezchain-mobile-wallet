@@ -248,5 +248,6 @@
   "nftQuantityValidateError": "Quantity must be at least 1.",
   "nftPayload": "Payload (MAX 1024 characters)",
   "nftJsonPayload": "JSON Payload (MAX 1024 characters)",
-  "nftSearchHint": "Search Assets"
+  "nftSearchHint": "Search Assets",
+  "nftEmptyCollectibles": "Issue collectibles for the families you created. You do not own any families you can mint."
 }
