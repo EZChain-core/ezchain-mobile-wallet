@@ -21,9 +21,7 @@ class SettingAboutScreen extends StatelessWidget {
             children: [
               EZCAppBar(
                 title: Strings.current.settingAboutEZC,
-                onPressed: () {
-                  context.router.pop();
-                },
+                onPressed: context.router.pop
               ),
               const SizedBox(height: 88),
               Assets.images.imgEzcAbout.image(
@@ -34,7 +32,7 @@ class SettingAboutScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s',
+                  Strings.current.settingEZChainAbout,
                   style:
                       EZCBodyLargeTextStyle(color: provider.themeMode.text70),
                   textAlign: TextAlign.center,

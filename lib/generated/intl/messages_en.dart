@@ -225,6 +225,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please confirm new PIN"),
         "settingConfirmNewPinWrong":
             MessageLookupByLibrary.simpleMessage("PIN Code doesn’t match!"),
+        "settingEZChainAbout": MessageLookupByLibrary.simpleMessage(
+            "EZChain is a new generation blockchain platform for creating public blockchains and private blockchains. EZChain has high performance, low cost and simplest oriented system optimization for end users."),
         "settingEnterNewPin":
             MessageLookupByLibrary.simpleMessage("Please enter new PIN"),
         "settingEnterOldPin":

@@ -1554,6 +1554,16 @@ class Strings {
     );
   }
 
+  /// `EZChain is a new generation blockchain platform for creating public blockchains and private blockchains. EZChain has high performance, low cost and simplest oriented system optimization for end users.`
+  String get settingEZChainAbout {
+    return Intl.message(
+      'EZChain is a new generation blockchain platform for creating public blockchains and private blockchains. EZChain has high performance, low cost and simplest oriented system optimization for end users.',
+      name: 'settingEZChainAbout',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Send only `
   String get walletReceiveSendOnly {
     return Intl.message(
