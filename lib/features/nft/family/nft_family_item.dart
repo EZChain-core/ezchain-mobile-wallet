@@ -78,18 +78,33 @@ class NftFamilyItemWidget extends StatelessWidget {
               color: provider.themeMode.text10,
             ),
           ),
-          if (item.nftCollectibles.isNotEmpty) SizedBox(
-            height: 190,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              scrollDirection: Axis.horizontal,
-              itemCount: item.nftCollectibles.length,
-              itemBuilder: (_, index) => NftCollectibleItemWidget(
-                item: item.nftCollectibles[index],
-              ),
-              separatorBuilder: (_, index) => const SizedBox(width: 12),
-            ),
-          ),
+          item.nftCollectibles.isNotEmpty
+              ? SizedBox(
+                  height: 190,
+                  child: ListView.separated(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: item.nftCollectibles.length,
+                    itemBuilder: (_, index) => NftCollectibleItemWidget(
+                      item: item.nftCollectibles[index],
+                    ),
+                    separatorBuilder: (_, index) => const SizedBox(width: 12),
+                  ),
+                )
+              : Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                      color: provider.themeMode.bg),
+                  child: Text(
+                    Strings.current.nftEmptyCollectibles,
+                    style: EZCBodyLargeTextStyle(
+                      color: provider.themeMode.text60,
+                    ),
+                  ),
+                ),
         ],
       ),
     );
