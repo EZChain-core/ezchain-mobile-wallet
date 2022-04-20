@@ -29,13 +29,15 @@ extension StringExtension on String {
   }
 
   bool isValidUrl() {
-    String pattern = r'(http|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?';
+    String pattern =
+        r'(http|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?';
     RegExp regExp = RegExp(pattern);
     if (length == 0) {
       return false;
     }
     return regExp.hasMatch(this);
   }
+
   bool isValidJson() {
     try {
       json.decode(this) as Map<String, dynamic>;
@@ -95,12 +97,12 @@ extension DateTimeExtension on DateTime {
   String formatYMdDateHoursTime() => DateFormat.yMd().add_jm().format(this);
 }
 
-showSnackBar(String text) {
+showSnackBar(String text, {int milliseconds = 2500}) {
   final context = walletContext;
   if (context == null) return;
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      duration: const Duration(milliseconds: 2000),
+      duration: Duration(milliseconds: milliseconds),
       backgroundColor: Theme.of(context).primaryColor,
       content: Text(
         text,

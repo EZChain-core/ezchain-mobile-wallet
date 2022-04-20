@@ -2575,6 +2575,26 @@ class Strings {
       args: [],
     );
   }
+
+  /// `You are currently offline.`
+  String get internet_connection_disconnected {
+    return Intl.message(
+      'You are currently offline.',
+      name: 'internet_connection_disconnected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your internet connection was restored.`
+  String get internet_connection_connected {
+    return Intl.message(
+      'Your internet connection was restored.',
+      name: 'internet_connection_connected',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<Strings> {
