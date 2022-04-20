@@ -249,5 +249,7 @@
   "nftPayload": "Payload (MAX 1024 characters)",
   "nftJsonPayload": "JSON Payload (MAX 1024 characters)",
   "nftSearchHint": "Search Assets",
-  "nftEmptyCollectibles": "Issue collectibles for the families you created. You do not own any families you can mint."
+  "nftEmptyCollectibles": "Issue collectibles for the families you created. You do not own any families you can mint.",
+  "internet_connection_disconnected": "You are currently offline.",
+  "internet_connection_connected": "Your internet connection was restored."
 }

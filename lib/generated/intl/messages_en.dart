@@ -152,6 +152,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Validator Address "),
         "earnValidatorStake":
             MessageLookupByLibrary.simpleMessage("Validator Stake"),
+        "internet_connection_connected": MessageLookupByLibrary.simpleMessage(
+            "Your internet connection was restored."),
+        "internet_connection_disconnected":
+            MessageLookupByLibrary.simpleMessage("You are currently offline."),
         "nftAboutCollectible":
             MessageLookupByLibrary.simpleMessage("About collectible"),
         "nftBackMyNFT": MessageLookupByLibrary.simpleMessage("Back to My NFT"),
