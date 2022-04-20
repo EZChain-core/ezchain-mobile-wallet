@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/connectivity.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -39,11 +40,27 @@ class EZCButton extends StatelessWidget {
         child: TextButton(
           child: Text(text, style: textStyle),
           style: buttonStyle,
-          onPressed: onPressed,
-          onLongPress: onLongPress,
+          onPressed: _onPressedInternal,
+          onLongPress: _onLongPressedInternal,
         ),
       ),
     );
+  }
+
+  _onPressedInternal() async {
+    if (await hasInternetConnection()) {
+      onPressed;
+    } else {
+      showInternetConnectionDisconnectedSnackBar();
+    }
+  }
+
+  _onLongPressedInternal() async {
+    if (await hasInternetConnection()) {
+      onLongPress;
+    } else {
+      showInternetConnectionDisconnectedSnackBar();
+    }
   }
 }
 
@@ -95,11 +112,27 @@ class EZCMediumPrimaryButton extends StatelessWidget {
                   ? provider.themeMode.text10
                   : provider.themeMode.primary,
               buttonPadding: padding ?? ezcButtonMediumPadding),
-          onPressed: isDisable ? null : onPressed,
-          onLongPress: isDisable ? null : onLongPress,
+          onPressed: isDisable ? null : _onPressedInternal,
+          onLongPress: isDisable ? null : _onLongPressedInternal,
         ),
       ),
     );
+  }
+
+  _onPressedInternal() async {
+    if (await hasInternetConnection()) {
+      onPressed;
+    } else {
+      showInternetConnectionDisconnectedSnackBar();
+    }
+  }
+
+  _onLongPressedInternal() async {
+    if (await hasInternetConnection()) {
+      onLongPress;
+    } else {
+      showInternetConnectionDisconnectedSnackBar();
+    }
   }
 }
 
@@ -155,11 +188,27 @@ class EZCMediumPrimaryOutlineButton extends StatelessWidget {
             ),
             side: BorderSide(width: 1, color: provider.themeMode.primary),
           ),
-          onPressed: isDisable ? null : onPressed,
-          onLongPress: isDisable ? null : onLongPress,
+          onPressed: isDisable ? null : _onPressedInternal,
+          onLongPress: isDisable ? null : _onLongPressedInternal,
         ),
       ),
     );
+  }
+
+  _onPressedInternal() async {
+    if (await hasInternetConnection()) {
+      onPressed;
+    } else {
+      showInternetConnectionDisconnectedSnackBar();
+    }
+  }
+
+  _onLongPressedInternal() async {
+    if (await hasInternetConnection()) {
+      onLongPress;
+    } else {
+      showInternetConnectionDisconnectedSnackBar();
+    }
   }
 }
 
@@ -257,10 +306,26 @@ class EZCMediumNoneButton extends StatelessWidget {
                 style: EZCButtonStyle(
                     bgColor: Colors.transparent,
                     buttonPadding: padding ?? ezcButtonMediumPadding),
-                onPressed: onPressed,
-                onLongPress: onLongPress,
+                onPressed: _onPressedInternal,
+                onLongPress: _onLongPressedInternal,
               ),
             ));
+  }
+
+  _onPressedInternal() async {
+    if (await hasInternetConnection()) {
+      onPressed;
+    } else {
+      showInternetConnectionDisconnectedSnackBar();
+    }
+  }
+
+  _onLongPressedInternal() async {
+    if (await hasInternetConnection()) {
+      onLongPress;
+    } else {
+      showInternetConnectionDisconnectedSnackBar();
+    }
   }
 }
 
@@ -286,10 +351,26 @@ class EZCBodyLargeNoneButton extends StatelessWidget {
                 style: EZCButtonStyle(
                     bgColor: Colors.transparent,
                     buttonPadding: ezcButtonMediumPadding),
-                onPressed: onPressed,
-                onLongPress: onLongPress,
+                onPressed: _onPressedInternal,
+                onLongPress: _onLongPressedInternal,
               ),
             ));
+  }
+
+  _onPressedInternal() async {
+    if (await hasInternetConnection()) {
+      onPressed;
+    } else {
+      showInternetConnectionDisconnectedSnackBar();
+    }
+  }
+
+  _onLongPressedInternal() async {
+    if (await hasInternetConnection()) {
+      onLongPress;
+    } else {
+      showInternetConnectionDisconnectedSnackBar();
+    }
   }
 }
 
