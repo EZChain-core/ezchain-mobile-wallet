@@ -5,9 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -163,7 +162,7 @@ class WalletReceiveScreen extends StatelessWidget {
   }
 
   _onClickShare() {
-    Share.share(args.address);
+    shareText(args.address);
   }
 }
 

@@ -187,7 +187,7 @@ class WalletSendEvmScreen extends StatelessWidget {
   }
 
   void _onClickConfirm() {
-    FocusManager.instance.primaryFocus?.unfocus();
+    // FocusManager.instance.primaryFocus?.unfocus();
     final address = _addressController.text;
     _walletSendEvmStore.confirm(address);
   }
