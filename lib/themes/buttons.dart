@@ -49,7 +49,7 @@ class EZCButton extends StatelessWidget {
 
   _onPressedInternal() async {
     if (await hasInternetConnection()) {
-      onPressed;
+      onPressed?.call();
     } else {
       showInternetConnectionDisconnectedSnackBar();
     }
@@ -57,7 +57,7 @@ class EZCButton extends StatelessWidget {
 
   _onLongPressedInternal() async {
     if (await hasInternetConnection()) {
-      onLongPress;
+      onLongPress?.call();
     } else {
       showInternetConnectionDisconnectedSnackBar();
     }
@@ -121,7 +121,7 @@ class EZCMediumPrimaryButton extends StatelessWidget {
 
   _onPressedInternal() async {
     if (await hasInternetConnection()) {
-      onPressed;
+      onPressed?.call();
     } else {
       showInternetConnectionDisconnectedSnackBar();
     }
@@ -129,7 +129,7 @@ class EZCMediumPrimaryButton extends StatelessWidget {
 
   _onLongPressedInternal() async {
     if (await hasInternetConnection()) {
-      onLongPress;
+      onLongPress?.call();
     } else {
       showInternetConnectionDisconnectedSnackBar();
     }
@@ -197,7 +197,7 @@ class EZCMediumPrimaryOutlineButton extends StatelessWidget {
 
   _onPressedInternal() async {
     if (await hasInternetConnection()) {
-      onPressed;
+      onPressed?.call();
     } else {
       showInternetConnectionDisconnectedSnackBar();
     }
@@ -205,7 +205,7 @@ class EZCMediumPrimaryOutlineButton extends StatelessWidget {
 
   _onLongPressedInternal() async {
     if (await hasInternetConnection()) {
-      onLongPress;
+      onLongPress?.call();
     } else {
       showInternetConnectionDisconnectedSnackBar();
     }
@@ -314,7 +314,7 @@ class EZCMediumNoneButton extends StatelessWidget {
 
   _onPressedInternal() async {
     if (await hasInternetConnection()) {
-      onPressed;
+      onPressed?.call();
     } else {
       showInternetConnectionDisconnectedSnackBar();
     }
@@ -322,7 +322,7 @@ class EZCMediumNoneButton extends StatelessWidget {
 
   _onLongPressedInternal() async {
     if (await hasInternetConnection()) {
-      onLongPress;
+      onLongPress?.call();
     } else {
       showInternetConnectionDisconnectedSnackBar();
     }
@@ -359,7 +359,7 @@ class EZCBodyLargeNoneButton extends StatelessWidget {
 
   _onPressedInternal() async {
     if (await hasInternetConnection()) {
-      onPressed;
+      onPressed?.call();
     } else {
       showInternetConnectionDisconnectedSnackBar();
     }
@@ -367,7 +367,7 @@ class EZCBodyLargeNoneButton extends StatelessWidget {
 
   _onLongPressedInternal() async {
     if (await hasInternetConnection()) {
-      onLongPress;
+      onLongPress?.call();
     } else {
       showInternetConnectionDisconnectedSnackBar();
     }

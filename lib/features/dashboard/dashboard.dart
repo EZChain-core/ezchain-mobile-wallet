@@ -64,8 +64,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   BottomNavigationBarItem(
                     label: Strings.current.dashboardWallet,
                     icon: Assets.icons.icWalletOutline.svg(),
-                    activeIcon: Assets.icons.icWalletOutline
-                        .svg(color: provider.themeMode.primary),
+                    activeIcon: Assets.icons.icWalletPrimary.svg(),
                     backgroundColor: provider.themeMode.white,
                   ),
                   BottomNavigationBarItem(
@@ -79,9 +78,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   BottomNavigationBarItem(
                     label: Strings.current.dashboardEarn,
                     icon: Assets.icons.icEarnOutline.svg(),
-                    activeIcon: Assets.icons.icEarnOutline.svg(
-                      color: provider.themeMode.primary,
-                    ),
+                    activeIcon: Assets.icons.icEarnPrimary.svg(),
                     backgroundColor: provider.themeMode.white,
                   ),
                   BottomNavigationBarItem(
@@ -93,9 +90,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   BottomNavigationBarItem(
                     label: Strings.current.dashboardSetting,
                     icon: Assets.icons.icSettingOutline.svg(),
-                    activeIcon: Assets.icons.icSettingOutline.svg(
-                      color: provider.themeMode.primary,
-                    ),
+                    activeIcon: Assets.icons.icSettingPrimary.svg(),
                     backgroundColor: provider.themeMode.white,
                   ),
                 ],
