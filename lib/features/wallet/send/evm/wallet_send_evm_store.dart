@@ -6,6 +6,7 @@ import 'package:wallet/ezc/wallet/helpers/address_helper.dart';
 import 'package:wallet/ezc/wallet/helpers/gas_helper.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/store/price_store.dart';
 import 'package:wallet/features/common/store/token_store.dart';
@@ -151,6 +152,7 @@ abstract class _WalletSendEvmStore with Store {
       return true;
     } catch (e) {
       logger.e(e);
+      showSnackBar(Strings.current.sharedCommonError);
       _isLoading = false;
       return false;
     }

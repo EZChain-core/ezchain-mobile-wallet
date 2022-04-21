@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/typography.dart';
@@ -110,4 +111,8 @@ showSnackBar(String text, {int milliseconds = 2500}) {
       ),
     ),
   );
+}
+
+shareText(String text) {
+  Share.share('$text \n');
 }

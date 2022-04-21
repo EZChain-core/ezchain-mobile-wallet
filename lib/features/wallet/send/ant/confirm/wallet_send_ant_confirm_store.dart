@@ -4,8 +4,10 @@ import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/wallet/send/ant/confirm/wallet_send_ant_confirm.dart';
+import 'package:wallet/generated/l10n.dart';
 
 part 'wallet_send_ant_confirm_store.g.dart';
 
@@ -34,6 +36,7 @@ abstract class _WalletSendAntConfirmStore with Store {
       _sendSuccess = true;
     } catch (e) {
       logger.e(e);
+      showSnackBar(Strings.current.sharedCommonError);
     }
     _isLoading = false;
   }

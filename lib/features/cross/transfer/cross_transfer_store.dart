@@ -8,6 +8,7 @@ import 'package:wallet/ezc/wallet/types.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/cross/cross_store.dart';
@@ -144,6 +145,7 @@ abstract class _CrossTransferStore with Store {
       _exportState = const CrossTransferringState.error();
       _importState = const CrossTransferringState.error();
       _transferringState = const CrossTransferringState.error();
+      showSnackBar(Strings.current.sharedCommonError);
       logger.e(e);
     }
   }
