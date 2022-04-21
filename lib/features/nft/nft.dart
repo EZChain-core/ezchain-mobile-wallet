@@ -27,43 +27,48 @@ class NftScreen extends StatelessWidget {
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
           child: Observer(
-            builder: (_) => ListView.separated(
-              padding: const EdgeInsets.only(bottom: 20),
-              itemCount: _nftStore.nftAssetsResult.length + 1,
-              itemBuilder: (_, index) {
-                if (index == 0) {
-                  return Column(
-                    children: [
-                      _NftHeader(),
-                      if (_nftStore.nftAssets.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 16, right: 16, top: 12),
-                          child: EZCSearchTextField(
-                            hint: Strings.current.nftSearchHint,
-                            onChanged: (text) {
-                              _nftStore.keySearch = text;
-                            },
-                          ),
-                        ),
-                      if (_nftStore.nftAssetsResult.isEmpty)
-                        Align(
-                          alignment: Alignment.center,
-                          child: EZCEmpty(
-                            img: Assets.images.imgNftFamilyEmpty
-                                .image(width: 109, height: 121),
-                            title: Strings.current.nftCollectiblesEmpty,
-                            des: Strings.current.nftCollectiblesEmptyDesc,
-                          ),
-                        ),
-                    ],
-                  );
-                }
-                return NftFamilyItemWidget(
-                  item: _nftStore.nftAssetsResult[index - 1],
-                );
+            builder: (_) => GestureDetector(
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
               },
-              separatorBuilder: (_, index) => const SizedBox(height: 30),
+              child: ListView.separated(
+                padding: const EdgeInsets.only(bottom: 20),
+                itemCount: _nftStore.nftAssetsResult.length + 1,
+                itemBuilder: (_, index) {
+                  if (index == 0) {
+                    return Column(
+                      children: [
+                        _NftHeader(),
+                        if (_nftStore.nftAssets.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 16, right: 16, top: 12),
+                            child: EZCSearchTextField(
+                              hint: Strings.current.nftSearchHint,
+                              onChanged: (text) {
+                                _nftStore.keySearch = text;
+                              },
+                            ),
+                          ),
+                        if (_nftStore.nftAssetsResult.isEmpty)
+                          Align(
+                            alignment: Alignment.center,
+                            child: EZCEmpty(
+                              img: Assets.images.imgNftFamilyEmpty
+                                  .image(width: 109, height: 121),
+                              title: Strings.current.nftCollectiblesEmpty,
+                              des: Strings.current.nftCollectiblesEmptyDesc,
+                            ),
+                          ),
+                      ],
+                    );
+                  }
+                  return NftFamilyItemWidget(
+                    item: _nftStore.nftAssetsResult[index - 1],
+                  );
+                },
+                separatorBuilder: (_, index) => const SizedBox(height: 30),
+              ),
             ),
           ),
         ),

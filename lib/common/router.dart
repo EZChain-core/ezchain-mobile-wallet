@@ -102,12 +102,15 @@ BuildContext? get walletContext =>
 class StatusBarRouterObserver extends AutoRouterObserver {
   @override
   void didPush(Route route, Route? previousRoute) {
+    FocusManager.instance.primaryFocus?.unfocus();
     logger.i('New route pushed: ${route.settings.name}');
     _routeChanged(route.settings.name);
   }
 
   @override
   void didPop(Route route, Route? previousRoute) {
+    FocusManager.instance.primaryFocus?.unfocus();
+
     logger.i(
         'New route popped: ${route.settings.name}, previous = ${previousRoute?.settings.name}');
     final routeName = route.settings.name;
@@ -134,12 +137,16 @@ class StatusBarRouterObserver extends AutoRouterObserver {
 
   @override
   void didInitTabRoute(TabPageRoute route, TabPageRoute? previousRoute) {
+    FocusManager.instance.primaryFocus?.unfocus();
+
     logger.i('Tab route visited: ${route.name}');
     _routeChanged(route.name);
   }
 
   @override
   void didChangeTabRoute(TabPageRoute route, TabPageRoute previousRoute) {
+    FocusManager.instance.primaryFocus?.unfocus();
+
     logger.i('Tab route re-visited: ${route.name}');
     _routeChanged(route.name);
   }
