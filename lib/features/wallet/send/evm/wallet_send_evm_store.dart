@@ -64,7 +64,10 @@ abstract class _WalletSendEvmStore with Store {
   @readonly
   bool _isLoading = false;
 
-  Decimal get maxAmount => balanceC - _fee;
+  Decimal get maxAmount {
+    final max = balanceC - _fee;
+    return max >= Decimal.zero ? max : Decimal.zero;
+  }
 
   BigInt _gasPrice = BigInt.zero;
 

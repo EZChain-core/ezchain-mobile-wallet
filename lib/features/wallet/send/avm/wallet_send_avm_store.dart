@@ -1,12 +1,12 @@
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
-import 'package:wallet/features/common/store/balance_store.dart';
-import 'package:wallet/features/common/store/price_store.dart';
-import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/ezc/wallet/helpers/address_helper.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/features/common/store/balance_store.dart';
+import 'package:wallet/features/common/store/price_store.dart';
+import 'package:wallet/generated/l10n.dart';
 
 part 'wallet_send_avm_store.g.dart';
 
@@ -39,7 +39,10 @@ abstract class _WalletSendAvmStore with Store {
   @computed
   Decimal get total => (amount + _fee) * avaxPrice;
 
-  get maxAmount => balanceX - _fee;
+  get maxAmount {
+    final max = balanceX - _fee;
+    return max >= Decimal.zero ? max : Decimal.zero;
+  }
 
   @action
   getBalanceX() async {

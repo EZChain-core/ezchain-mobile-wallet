@@ -62,6 +62,11 @@ abstract class _CrossStore with Store {
 
   get _amountDouble => amount.toDouble();
 
+  get maxSourceAmount {
+    final max = sourceBalance - _fee;
+    return max >= Decimal.zero ? max : Decimal.zero;
+  }
+
   @action
   init() async {
     setSourceChain(_sourceChain);

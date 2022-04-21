@@ -104,8 +104,7 @@ class _CrossScreenState extends State<CrossScreen> {
                                     controller: _amountController,
                                     onSuffixPressed: () {
                                       _amountController.text =
-                                          (_crossStore.sourceBalance -
-                                                  _crossStore.fee)
+                                          _crossStore.maxSourceAmount
                                               .toString();
                                     },
                                   ),
