@@ -1,5 +1,4 @@
-import 'package:wallet/ezc/sdk/apis/avm/key_chain.dart';
-import 'package:wallet/ezc/sdk/apis/pvm/key_chain.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/hdnode.dart';
 import 'package:wallet/ezc/sdk/utils/helper_functions.dart';
@@ -12,10 +11,10 @@ class HdScanner {
   final String changePath;
 
   final Map<int, HDNode> addressCache = {};
-  final Map<int, AvmKeyPair> keyCacheX = {};
-  final Map<int, PvmKeyPair> keyCacheP = {};
+  final Map<int, EZCKeyPair> keyCacheX = {};
+  final Map<int, EZCKeyPair> keyCacheP = {};
 
-  late AvmKeyPair _avmAddressFactory;
+  late EZCKeyPair _avmAddressFactory;
 
   int get index => _index;
 
@@ -24,7 +23,7 @@ class HdScanner {
   HdScanner({required this.accountKey, bool isInternal = false})
       : changePath = isInternal ? "1" : "0" {
     final hrp = getPreferredHRP(ezc.getNetworkId());
-    _avmAddressFactory = AvmKeyPair(chainId: "X", hrp: hrp);
+    _avmAddressFactory = EZCKeyPair(chainId: "X", hrp: hrp);
   }
 
   void setIndex(int index) {
@@ -35,8 +34,8 @@ class HdScanner {
     return _index++;
   }
 
-  AvmKeyChain getKeyChainX() {
-    final keyChain = xChain.newKeyChain() as AvmKeyChain;
+  EZCKeyChain getKeyChainX() {
+    final keyChain = xChain.newKeyChain();
     for (int i = 0; i <= index; i++) {
       final key = getKeyForIndexX(i);
       keyChain.addKey(key);
@@ -44,8 +43,8 @@ class HdScanner {
     return keyChain;
   }
 
-  PvmKeyChain getKeyChainP() {
-    final keyChain = pChain.newKeyChain() as PvmKeyChain;
+  EZCKeyChain getKeyChainP() {
+    final keyChain = pChain.newKeyChain();
     for (int i = 0; i <= index; i++) {
       final key = getKeyForIndexP(i);
       keyChain.addKey(key);
@@ -71,22 +70,22 @@ class HdScanner {
     return getAddressesInRangeSync(0, upTo + 1, chainId);
   }
 
-  AvmKeyPair getKeyForIndexX(int index) {
+  EZCKeyPair getKeyForIndexX(int index) {
     final cache = keyCacheX[index];
     if (cache != null) return cache;
     final hdKey = _getHdKeyForIndex(index);
     final keyChain = xChain.newKeyChain();
-    final keyPair = keyChain.importKey(hdKey.privateKey!) as AvmKeyPair;
+    final keyPair = keyChain.importKey(hdKey.privateKey!);
     keyCacheX[index] = keyPair;
     return keyPair;
   }
 
-  PvmKeyPair getKeyForIndexP(int index) {
+  EZCKeyPair getKeyForIndexP(int index) {
     final cache = keyCacheP[index];
     if (cache != null) return cache;
     final hdKey = _getHdKeyForIndex(index);
     final keyChain = pChain.newKeyChain();
-    final keyPair = keyChain.importKey(hdKey.privateKey!) as PvmKeyPair;
+    final keyPair = keyChain.importKey(hdKey.privateKey!);
     keyCacheP[index] = keyPair;
     return keyPair;
   }

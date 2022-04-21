@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:wallet/app.dart';
+import 'package:wallet/common/connectivity.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
@@ -26,6 +27,7 @@ Future<void> main() async {
   await Strings.load(const Locale("en"));
   runZonedGuarded(() {
     runApp(WalletApp());
+    observerConnectivityChanged();
   }, FirebaseCrashlytics.instance.recordError);
 }
 

@@ -1,6 +1,6 @@
 import 'package:hash/hash.dart';
 import 'package:test/test.dart';
-import 'package:wallet/ezc/sdk/apis/pvm/key_chain.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 
 const alias = "";
@@ -10,7 +10,7 @@ void main() {
   test("repeatable 1", () {
     final keyBuff = hexDecode(
         "ef9bf2d4436491c153967c9709dd8e82795bdb9b5ad44ee22c2903005d1cf676");
-    final kp = PvmKeyPair(chainId: alias, hrp: hrp);
+    final kp = EZCKeyPair(chainId: alias, hrp: hrp);
     kp.importKey(keyBuff);
     expect(hexEncode(kp.publicKeyBytes),
         "033fad3644deb20d7a210d12757092312451c112d04773cee2699fbb59dc8bb2ef");
@@ -26,13 +26,13 @@ void main() {
   test("importKey from Buffer", () {
     final keyBuff = hexDecode(
         "d0e17d4b31380f96a42b3e9ffc4c1b2a93589a1e51d86d7edc107f602fbc7475");
-    final kc = PvmKeyChain(chainId: alias, hrp: hrp);
+    final kc = EZCKeyChain(chainId: alias, hrp: hrp);
 
     final address1 = kc.importKey(keyBuff).getAddress();
     final kp1 = kc.getKey(address1)!;
     final address2 = kp1.getAddress();
 
-    final kp2 = PvmKeyPair(chainId: alias, hrp: hrp);
+    final kp2 = EZCKeyPair(chainId: alias, hrp: hrp);
     kp2.importKey(keyBuff);
 
     expect(hexEncode(address1), hexEncode(address2));

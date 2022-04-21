@@ -4,9 +4,9 @@ import 'package:wallet/ezc/sdk/apis/evm/base_tx.dart';
 import 'package:wallet/ezc/sdk/apis/evm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/evm/credentials.dart';
 import 'package:wallet/ezc/sdk/apis/evm/inputs.dart';
-import 'package:wallet/ezc/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/evm/outputs.dart';
 import 'package:wallet/ezc/sdk/common/credentials.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 import 'package:wallet/ezc/sdk/utils/serialization.dart';
@@ -131,7 +131,7 @@ class EvmExportTx extends EvmBaseTx {
   String toString() => bufferToB58(toBuffer());
 
   @override
-  List<Credential> sign(Uint8List msg, EvmKeyChain kc) {
+  List<Credential> sign(Uint8List msg, EZCKeyChain kc) {
     final signs = <Credential>[];
     for (int i = 0; i < inputs.length; i++) {
       final input = inputs[i];
@@ -139,7 +139,8 @@ class EvmExportTx extends EvmBaseTx {
       final signIdxs = input.getSigIdxs();
       for (int j = 0; j < signIdxs.length; j++) {
         final keyPair = kc.getKey(signIdxs[j].getSource());
-        final signVal = keyPair!.sign(msg);
+        if (keyPair == null) continue;
+        final signVal = keyPair.sign(msg);
         final signature = Signature()..fromBuffer(signVal);
         credential.addSignature(signature);
       }

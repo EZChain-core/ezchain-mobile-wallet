@@ -1,10 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:wallet/ezc/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
 import 'package:wallet/ezc/sdk/apis/evm/tx.dart';
-import 'package:wallet/ezc/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/tx.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/utils/hdnode.dart';
 import 'package:wallet/ezc/sdk/utils/mnemonic.dart';
 import 'package:wallet/ezc/wallet/evm_wallet.dart';
@@ -80,13 +79,13 @@ class MnemonicWallet extends HDWalletAbstract implements UnsafeWallet {
     return tx.sign(_getKeyChainX());
   }
 
-  AvmKeyChain _getKeyChainX() {
+  EZCKeyChain _getKeyChainX() {
     final internal = internalScan.getKeyChainX();
-    final external = internalScan.getKeyChainX();
-    return internal.union(external) as AvmKeyChain;
+    final external = externalScan.getKeyChainX();
+    return internal.union(external);
   }
 
-  PvmKeyChain _getKeyChainP() {
+  EZCKeyChain _getKeyChainP() {
     return externalScan.getKeyChainP();
   }
 }

@@ -7,11 +7,11 @@ import 'package:test/test.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/api.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/inputs.dart';
-import 'package:wallet/ezc/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/model/get_staking_asset_id.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/tx.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/utxos.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/common/rpc/rpc_response.dart';
 import 'package:wallet/ezc/sdk/ezc.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
@@ -38,9 +38,9 @@ void main() {
     const amnt = 10000;
 
     late PvmUTXOSet set;
-    late PvmKeyChain keymgr1;
-    late PvmKeyChain keymgr2;
-    late PvmKeyChain keymgr3;
+    late EZCKeyChain keymgr1;
+    late EZCKeyChain keymgr2;
+    late EZCKeyChain keymgr3;
     late List<Uint8List> addrs1;
     late List<Uint8List> addrs2;
     late List<Uint8List> addrs3;
@@ -95,9 +95,9 @@ void main() {
 
     setUp(() {
       set = PvmUTXOSet();
-      keymgr1 = PvmKeyChain(chainId: alias, hrp: ezc.getHRP());
-      keymgr2 = PvmKeyChain(chainId: alias, hrp: ezc.getHRP());
-      keymgr3 = PvmKeyChain(chainId: alias, hrp: ezc.getHRP());
+      keymgr1 = EZCKeyChain(chainId: alias, hrp: ezc.getHRP());
+      keymgr2 = EZCKeyChain(chainId: alias, hrp: ezc.getHRP());
+      keymgr3 = EZCKeyChain(chainId: alias, hrp: ezc.getHRP());
       addrs1 = [];
       addrs2 = [];
       addrs3 = [];

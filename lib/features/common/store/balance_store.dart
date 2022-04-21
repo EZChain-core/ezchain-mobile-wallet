@@ -170,6 +170,12 @@ abstract class _BalanceStore with Store {
     }
   }
 
+  @action
+  updateStake() async {
+    final staked = await _wallet.getStake();
+    _staking = bnToDecimalAvaxP(staked.stakedBN);
+  }
+
   Decimal getBalance(EZCType chain) {
     switch (chain) {
       case EZCType.xChain:
@@ -197,8 +203,7 @@ abstract class _BalanceStore with Store {
     final avaxBalance = _wallet.getAvaxBalance();
     final totalAvaxBalanceDecimal = avaxBalance.totalDecimal;
 
-    final staked = await _wallet.getStake();
-    _staking = bnToDecimalAvaxP(staked.stakedBN);
+    await updateStake();
 
     _totalEzc = totalAvaxBalanceDecimal + _staking;
     _isTotalLoaded = true;

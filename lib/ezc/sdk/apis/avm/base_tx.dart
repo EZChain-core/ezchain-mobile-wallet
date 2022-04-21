@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/credentials.dart';
 import 'package:wallet/ezc/sdk/apis/avm/inputs.dart';
-import 'package:wallet/ezc/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
 import 'package:wallet/ezc/sdk/common/credentials.dart';
@@ -14,7 +13,7 @@ import 'package:wallet/ezc/sdk/common/tx.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 import 'package:wallet/ezc/sdk/utils/serialization.dart';
 
-class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
+class AvmBaseTx extends StandardBaseTx<EZCKeyPair, EZCKeyChain> {
   @override
   String get typeName => "AvmBaseTx";
 
@@ -106,7 +105,7 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
   }
 
   @override
-  List<Credential> sign(Uint8List msg, AvmKeyChain kc) {
+  List<Credential> sign(Uint8List msg, EZCKeyChain kc) {
     final signs = <Credential>[];
     for (int i = 0; i < ins.length; i++) {
       final input = ins[i];
@@ -115,7 +114,8 @@ class AvmBaseTx extends StandardBaseTx<AvmKeyPair, AvmKeyChain> {
       final signIdxs = input.getInput().getSigIdxs();
       for (int j = 0; j < signIdxs.length; j++) {
         final keyPair = kc.getKey(signIdxs[j].getSource());
-        final signVal = keyPair!.sign(msg);
+        if (keyPair == null) continue;
+        final signVal = keyPair.sign(msg);
         final signature = Signature()..fromBuffer(signVal);
         credential.addSignature(signature);
       }

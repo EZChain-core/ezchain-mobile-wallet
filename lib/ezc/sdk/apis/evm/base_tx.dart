@@ -1,13 +1,12 @@
 import 'dart:typed_data';
 
-import 'package:wallet/ezc/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/evm/tx.dart';
 import 'package:wallet/ezc/sdk/common/credentials.dart';
 import 'package:wallet/ezc/sdk/common/evm_tx.dart';
 import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 
-class EvmBaseTx extends EvmStandardBaseTx<EvmKeyPair, EvmKeyChain> {
+class EvmBaseTx extends EvmStandardBaseTx<EZCKeyPair, EZCKeyChain> {
   @override
   String get typeName => "EvmBaseTx";
 
@@ -42,7 +41,7 @@ class EvmBaseTx extends EvmStandardBaseTx<EvmKeyPair, EvmKeyChain> {
     return selectTxClass(id, args: args);
   }
 
-  List<Credential> sign(Uint8List msg, EvmKeyChain kc) {
+  List<Credential> sign(Uint8List msg, EZCKeyChain kc) {
     return <Credential>[];
   }
 

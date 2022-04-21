@@ -5,11 +5,10 @@ import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
-import 'package:wallet/features/common/store/validators_store.dart';
+import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/ezc/wallet/helpers/staking_helper.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
@@ -24,7 +23,7 @@ abstract class _EarnDelegateConfirmStore with Store {
 
   WalletProvider get _wallet => _walletFactory.activeWallet;
 
-  final _validatorsStore = getIt<ValidatorsStore>();
+  final _balanceStore = getIt<BalanceStore>();
 
   @readonly
   bool _isLoading = false;
@@ -76,8 +75,13 @@ abstract class _EarnDelegateConfirmStore with Store {
       final end = args.endDate.millisecondsSinceEpoch;
       _isLoading = true;
 
-      final txId =
-          await _wallet.delegate(nodeId, numberToBNAvaxP(amount), start, end);
+      final txId = await _wallet.delegate(
+        nodeId,
+        numberToBNAvaxP(amount),
+        start,
+        end,
+      );
+      _balanceStore.updateStake();
       _submitSuccess = true;
       logger.i("txId = $txId");
     } catch (e) {

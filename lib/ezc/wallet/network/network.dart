@@ -10,7 +10,7 @@ import 'package:wallet/ezc/wallet/network/helpers/rpc_from_config.dart';
 import 'package:wallet/ezc/wallet/network/types.dart';
 import 'package:web3dart/web3dart.dart';
 
-var _activeNetwork = testnetConfig;
+var _activeNetwork = mainnetConfig;
 
 NetworkConfig get activeNetwork => _activeNetwork;
 

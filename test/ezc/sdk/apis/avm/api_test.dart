@@ -6,10 +6,10 @@ import 'package:mock_web_server/mock_web_server.dart';
 import 'package:test/test.dart';
 import 'package:wallet/ezc/sdk/apis/avm/api.dart';
 import 'package:wallet/ezc/sdk/apis/avm/inputs.dart';
-import 'package:wallet/ezc/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/avm/model/get_asset_description.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/common/rpc/rpc_response.dart';
 import 'package:wallet/ezc/sdk/ezc.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
@@ -86,8 +86,8 @@ void main() {
     });
 
     late AvmUTXOSet set;
-    late AvmKeyChain keymgr2;
-    late AvmKeyChain keymgr3;
+    late EZCKeyChain keymgr2;
+    late EZCKeyChain keymgr3;
     late List<String> addrs1;
     late List<String> addrs2;
     late List<String> addrs3;
@@ -103,8 +103,8 @@ void main() {
     setUp(() async {
       set = AvmUTXOSet();
       avm.newKeyChain();
-      keymgr2 = AvmKeyChain(chainId: alias, hrp: ezc.getHRP());
-      keymgr3 = AvmKeyChain(chainId: alias, hrp: ezc.getHRP());
+      keymgr2 = EZCKeyChain(chainId: alias, hrp: ezc.getHRP());
+      keymgr3 = EZCKeyChain(chainId: alias, hrp: ezc.getHRP());
       addrs1 = [];
       addrs2 = [];
       addrs3 = [];
@@ -190,7 +190,7 @@ void main() {
     test("issueTx Serialized", () async {
       final txu = await avm.buildBaseTx(
           set, BigInt.from(amnt), cb58Encode(assetID), addrs3, addrs1, addrs1);
-      final tx = txu.sign(avm.keyChain as AvmKeyChain);
+      final tx = txu.sign(avm.keyChain);
       final txId = avm.issueTx(tx);
     });
   });

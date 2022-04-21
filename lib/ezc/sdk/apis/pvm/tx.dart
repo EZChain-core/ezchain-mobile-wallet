@@ -6,9 +6,9 @@ import 'package:wallet/ezc/sdk/apis/pvm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/credentials.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/export_tx.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/import_tx.dart';
-import 'package:wallet/ezc/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/validation_tx.dart';
 import 'package:wallet/ezc/sdk/common/credentials.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/common/tx.dart';
 import 'package:wallet/ezc/sdk/utils/serialization.dart';
 
@@ -33,7 +33,7 @@ PvmBaseTx selectTxClass(
 }
 
 class PvmUnsignedTx
-    extends StandardUnsignedTx<PvmKeyPair, PvmKeyChain, PvmBaseTx> {
+    extends StandardUnsignedTx<EZCKeyPair, EZCKeyChain, PvmBaseTx> {
   @override
   String get typeName => "PvmUnsignedTx";
 
@@ -69,7 +69,7 @@ class PvmUnsignedTx
   }
 
   @override
-  PvmTx sign(PvmKeyChain kc) {
+  PvmTx sign(EZCKeyChain kc) {
     final txBuff = toBuffer();
     final msg = SHA256().update(txBuff).digest();
     final signatures = transaction.sign(msg, kc);
@@ -77,7 +77,7 @@ class PvmUnsignedTx
   }
 }
 
-class PvmTx extends StandardTx<PvmKeyPair, PvmKeyChain, PvmUnsignedTx> {
+class PvmTx extends StandardTx<EZCKeyPair, EZCKeyChain, PvmUnsignedTx> {
   @override
   String get typeName => "PvmTx";
 

@@ -99,7 +99,6 @@ Future<String> waitTxEvm(String txHash, {int tryCount = 15}) async {
     if (receipt.status == true) {
       return txHash;
     } else {
-      print("txHash = $txHash, receipt = $receipt");
       throw Exception("Transaction reverted.");
     }
   }

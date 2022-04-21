@@ -1,9 +1,8 @@
 import 'dart:typed_data';
-import 'package:wallet/ezc/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
 import 'package:wallet/ezc/sdk/apis/evm/tx.dart';
-import 'package:wallet/ezc/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/tx.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
@@ -137,14 +136,14 @@ class SingletonWallet extends WalletProvider implements UnsafeWallet {
     return [getAddressX()];
   }
 
-  AvmKeyChain _getKeyChainX() {
-    final avmKeyChain = xChain.newKeyChain() as AvmKeyChain;
+  EZCKeyChain _getKeyChainX() {
+    final avmKeyChain = xChain.newKeyChain() as EZCKeyChain;
     avmKeyChain.importKey(_privateKey);
     return avmKeyChain;
   }
 
-  PvmKeyChain _getKeyChainP() {
-    final pvmKeyChain = pChain.newKeyChain() as PvmKeyChain;
+  EZCKeyChain _getKeyChainP() {
+    final pvmKeyChain = pChain.newKeyChain() as EZCKeyChain;
     pvmKeyChain.importKey(_privateKey);
     return pvmKeyChain;
   }

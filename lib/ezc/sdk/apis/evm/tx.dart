@@ -6,9 +6,9 @@ import 'package:wallet/ezc/sdk/apis/evm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/evm/credentials.dart';
 import 'package:wallet/ezc/sdk/apis/evm/export_tx.dart';
 import 'package:wallet/ezc/sdk/apis/evm/import_tx.dart';
-import 'package:wallet/ezc/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/ezc/sdk/common/credentials.dart';
 import 'package:wallet/ezc/sdk/common/evm_tx.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/utils/serialization.dart';
 
 EvmBaseTx selectTxClass(
@@ -26,7 +26,7 @@ EvmBaseTx selectTxClass(
 }
 
 class EvmUnsignedTx
-    extends EvmStandardUnsignedTx<EvmKeyPair, EvmKeyChain, EvmBaseTx> {
+    extends EvmStandardUnsignedTx<EZCKeyPair, EZCKeyChain, EvmBaseTx> {
   @override
   String get typeName => "EvmUnsignedTx";
 
@@ -60,7 +60,7 @@ class EvmUnsignedTx
   }
 
   @override
-  EvmTx sign(EvmKeyChain kc) {
+  EvmTx sign(EZCKeyChain kc) {
     final txBuff = toBuffer();
     final msg = SHA256().update(txBuff).digest();
     final signatures = transaction.sign(msg, kc);
@@ -68,7 +68,7 @@ class EvmUnsignedTx
   }
 }
 
-class EvmTx extends EvmStandardTx<EvmKeyPair, EvmKeyChain, EvmUnsignedTx> {
+class EvmTx extends EvmStandardTx<EZCKeyPair, EZCKeyChain, EvmUnsignedTx> {
   @override
   String get typeName => "EvmTx";
 

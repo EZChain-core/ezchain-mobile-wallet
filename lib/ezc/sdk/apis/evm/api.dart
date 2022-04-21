@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:wallet/ezc/sdk/apis/evm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/evm/export_tx.dart';
 import 'package:wallet/ezc/sdk/apis/evm/inputs.dart';
-import 'package:wallet/ezc/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/evm/model/get_asset_description.dart';
 import 'package:wallet/ezc/sdk/apis/evm/model/get_atomic_tx_status.dart';
 import 'package:wallet/ezc/sdk/apis/evm/model/get_utxos.dart';
@@ -13,6 +12,7 @@ import 'package:wallet/ezc/sdk/apis/evm/rest_client.dart';
 import 'package:wallet/ezc/sdk/apis/evm/tx.dart';
 import 'package:wallet/ezc/sdk/apis/evm/utxos.dart';
 import 'package:wallet/ezc/sdk/apis/ezc_api.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/common/output.dart';
 import 'package:wallet/ezc/sdk/common/rpc/rpc_request.dart';
 import 'package:wallet/ezc/sdk/ezc.dart';
@@ -79,9 +79,9 @@ class _EvmApiImpl implements EvmApi {
   EZCNetwork ezcNetwork;
 
   @override
-  EvmKeyChain get keyChain => _keyChain;
+  EZCKeyChain get keyChain => _keyChain;
 
-  late EvmKeyChain _keyChain;
+  late EZCKeyChain _keyChain;
 
   String blockChainId;
 
@@ -108,7 +108,7 @@ class _EvmApiImpl implements EvmApi {
     } else {
       alias = blockChainId;
     }
-    _keyChain = EvmKeyChain(chainId: alias, hrp: ezcNetwork.hrp);
+    _keyChain = EZCKeyChain(chainId: alias, hrp: ezcNetwork.hrp);
     final dio = ezcNetwork.dio;
 
     evmAvaxRestClient = EvmAvaxRestClient(
@@ -128,12 +128,12 @@ class _EvmApiImpl implements EvmApi {
   }
 
   @override
-  EvmKeyChain newKeyChain() {
+  EZCKeyChain newKeyChain() {
     final alias = getBlockchainAlias();
     if (alias == null) {
-      _keyChain = EvmKeyChain(chainId: blockChainId, hrp: ezcNetwork.hrp);
+      _keyChain = EZCKeyChain(chainId: blockChainId, hrp: ezcNetwork.hrp);
     } else {
-      _keyChain = EvmKeyChain(chainId: alias, hrp: ezcNetwork.hrp);
+      _keyChain = EZCKeyChain(chainId: alias, hrp: ezcNetwork.hrp);
     }
     return keyChain;
   }

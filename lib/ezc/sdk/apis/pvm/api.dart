@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:wallet/ezc/sdk/apis/pvm/constants.dart';
-import 'package:wallet/ezc/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_supply.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/model/get_min_stake.dart';
@@ -16,6 +15,7 @@ import 'package:wallet/ezc/sdk/apis/pvm/rest_client.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/tx.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/utxos.dart';
 import 'package:wallet/ezc/sdk/apis/ezc_api.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/ezc.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 import 'package:wallet/ezc/sdk/utils/helper_functions.dart';
@@ -117,9 +117,9 @@ class _PvmApiImpl implements PvmApi {
   EZCNetwork ezcNetwork;
 
   @override
-  PvmKeyChain get keyChain => _keyChain;
+  EZCKeyChain get keyChain => _keyChain;
 
-  late PvmKeyChain _keyChain;
+  late EZCKeyChain _keyChain;
 
   String blockChainId;
 
@@ -147,18 +147,18 @@ class _PvmApiImpl implements PvmApi {
     } else {
       alias = blockChainId;
     }
-    _keyChain = PvmKeyChain(chainId: alias, hrp: ezcNetwork.hrp);
+    _keyChain = EZCKeyChain(chainId: alias, hrp: ezcNetwork.hrp);
     final dio = ezcNetwork.dio;
     pvmRestClient = PvmRestClient(dio, baseUrl: dio.options.baseUrl + endPoint);
   }
 
   @override
-  PvmKeyChain newKeyChain() {
+  EZCKeyChain newKeyChain() {
     final alias = getBlockchainAlias();
     if (alias == null) {
-      _keyChain = PvmKeyChain(chainId: blockChainId, hrp: ezcNetwork.hrp);
+      _keyChain = EZCKeyChain(chainId: blockChainId, hrp: ezcNetwork.hrp);
     } else {
-      _keyChain = PvmKeyChain(chainId: alias, hrp: ezcNetwork.hrp);
+      _keyChain = EZCKeyChain(chainId: alias, hrp: ezcNetwork.hrp);
     }
     return keyChain;
   }

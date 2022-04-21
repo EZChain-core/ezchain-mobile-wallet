@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
-import 'package:wallet/ezc/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/avm/minter_set.dart';
 import 'package:wallet/ezc/sdk/apis/avm/model/get_asset_description.dart';
 import 'package:wallet/ezc/sdk/apis/avm/model/get_tx_status.dart';
@@ -11,6 +10,7 @@ import 'package:wallet/ezc/sdk/apis/avm/rest_client.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
 import 'package:wallet/ezc/sdk/apis/ezc_api.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/common/output.dart';
 import 'package:wallet/ezc/sdk/ezc.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart' as bindtools;
@@ -117,9 +117,9 @@ class _AvmApiImpl implements AvmApi {
   EZCNetwork ezcNetwork;
 
   @override
-  AvmKeyChain get keyChain => _keyChain;
+  EZCKeyChain get keyChain => _keyChain;
 
-  late AvmKeyChain _keyChain;
+  late EZCKeyChain _keyChain;
 
   String blockChainId;
 
@@ -144,18 +144,18 @@ class _AvmApiImpl implements AvmApi {
     } else {
       alias = blockChainId;
     }
-    _keyChain = AvmKeyChain(chainId: alias, hrp: ezcNetwork.hrp);
+    _keyChain = EZCKeyChain(chainId: alias, hrp: ezcNetwork.hrp);
     final dio = ezcNetwork.dio;
     avmRestClient = AvmRestClient(dio, baseUrl: dio.options.baseUrl + endPoint);
   }
 
   @override
-  AvmKeyChain newKeyChain() {
+  EZCKeyChain newKeyChain() {
     final alias = getBlockchainAlias();
     if (alias == null) {
-      _keyChain = AvmKeyChain(chainId: blockChainId, hrp: ezcNetwork.hrp);
+      _keyChain = EZCKeyChain(chainId: blockChainId, hrp: ezcNetwork.hrp);
     } else {
-      _keyChain = AvmKeyChain(chainId: alias, hrp: ezcNetwork.hrp);
+      _keyChain = EZCKeyChain(chainId: alias, hrp: ezcNetwork.hrp);
     }
     return keyChain;
   }

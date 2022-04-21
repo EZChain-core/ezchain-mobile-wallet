@@ -1,6 +1,6 @@
 import 'dart:typed_data';
-import 'package:wallet/ezc/sdk/apis/evm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/evm/tx.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 
 import 'package:wallet/ezc/sdk/crypto/secp256k1.dart';
 import 'package:wallet/ezc/sdk/utils/bigint.dart';
@@ -33,7 +33,7 @@ class EvmWallet {
 
   String getAddressBech32() {
     final compressedKey = privateKeyToPublicKey(privateKey, compressed: true);
-    final keyPair = EvmKeyPair(chainId: "C", hrp: ezc.getHRP());
+    final keyPair = EZCKeyPair(chainId: "C", hrp: ezc.getHRP());
     final address = keyPair.addressFromPublicKey(compressedKey);
     return addressToString("C", ezc.getHRP(), address);
   }
@@ -42,14 +42,14 @@ class EvmWallet {
     return hexEncode(privateKey);
   }
 
-  EvmKeyChain getKeyChain() {
-    return EvmKeyChain(chainId: "C", hrp: ezc.getHRP())
+  EZCKeyChain getKeyChain() {
+    return EZCKeyChain(chainId: "C", hrp: ezc.getHRP())
       ..importKey(_getPrivateKeyBech());
   }
 
-  EvmKeyPair getKeyPair() {
-    final keyChain = EvmKeyChain(chainId: "C", hrp: ezc.getHRP());
-    return keyChain.importKey(_getPrivateKeyBech()) as EvmKeyPair;
+  EZCKeyPair getKeyPair() {
+    final keyChain = EZCKeyChain(chainId: "C", hrp: ezc.getHRP());
+    return keyChain.importKey(_getPrivateKeyBech());
   }
 
   Future<BigInt> updateBalance() async {

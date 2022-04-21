@@ -4,17 +4,17 @@ import 'package:hash/hash.dart';
 import 'package:test/test.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/inputs.dart';
-import 'package:wallet/ezc/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
 import 'package:wallet/ezc/sdk/common/input.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 
 void main() {
   group("Inputs", () {
     late AvmUTXOSet set;
-    late AvmKeyChain keymgr1;
-    late AvmKeyChain keymgr2;
+    late EZCKeyChain keymgr1;
+    late EZCKeyChain keymgr2;
     final List<Uint8List> addrs1 = [];
     final List<Uint8List> addrs2 = [];
     final List<AvmUTXO> utxos = [];
@@ -25,8 +25,8 @@ void main() {
 
     setUp(() {
       set = AvmUTXOSet();
-      keymgr1 = AvmKeyChain(chainId: "X", hrp: hrp);
-      keymgr2 = AvmKeyChain(chainId: "X", hrp: hrp);
+      keymgr1 = EZCKeyChain(chainId: "X", hrp: hrp);
+      keymgr2 = EZCKeyChain(chainId: "X", hrp: hrp);
       addrs1.clear();
       addrs2.clear();
       utxos.clear();

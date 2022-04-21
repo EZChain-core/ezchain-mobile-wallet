@@ -8,11 +8,11 @@ import 'package:wallet/ezc/sdk/apis/avm/api.dart';
 import 'package:wallet/ezc/sdk/apis/avm/base_tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/inputs.dart';
-import 'package:wallet/ezc/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/avm/model/get_asset_description.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/common/rpc/rpc_response.dart';
 import 'package:wallet/ezc/sdk/ezc.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
@@ -39,9 +39,9 @@ void main() {
     const amnt = 10000;
 
     late AvmUTXOSet set;
-    late AvmKeyChain keymgr1;
-    late AvmKeyChain keymgr2;
-    late AvmKeyChain keymgr3;
+    late EZCKeyChain keymgr1;
+    late EZCKeyChain keymgr2;
+    late EZCKeyChain keymgr3;
     late List<Uint8List> addrs1;
     late List<Uint8List> addrs2;
     late List<Uint8List> addrs3;
@@ -104,9 +104,9 @@ void main() {
 
     setUp(() {
       set = AvmUTXOSet();
-      keymgr1 = AvmKeyChain(chainId: alias, hrp: ezc.getHRP());
-      keymgr2 = AvmKeyChain(chainId: alias, hrp: ezc.getHRP());
-      keymgr3 = AvmKeyChain(chainId: alias, hrp: ezc.getHRP());
+      keymgr1 = EZCKeyChain(chainId: alias, hrp: ezc.getHRP());
+      keymgr2 = EZCKeyChain(chainId: alias, hrp: ezc.getHRP());
+      keymgr3 = EZCKeyChain(chainId: alias, hrp: ezc.getHRP());
       addrs1 = [];
       addrs2 = [];
       addrs3 = [];

@@ -7,9 +7,9 @@ import 'package:wallet/ezc/sdk/apis/avm/create_asset_tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/credentials.dart';
 import 'package:wallet/ezc/sdk/apis/avm/export_tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/import_tx.dart';
-import 'package:wallet/ezc/sdk/apis/avm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/avm/operation_tx.dart';
 import 'package:wallet/ezc/sdk/common/credentials.dart';
+import 'package:wallet/ezc/sdk/common/keychain/ezc_key_chain.dart';
 import 'package:wallet/ezc/sdk/common/tx.dart';
 import 'package:wallet/ezc/sdk/utils/serialization.dart';
 
@@ -34,7 +34,7 @@ AvmBaseTx selectTxClass(
 }
 
 class AvmUnsignedTx
-    extends StandardUnsignedTx<AvmKeyPair, AvmKeyChain, AvmBaseTx> {
+    extends StandardUnsignedTx<EZCKeyPair, EZCKeyChain, AvmBaseTx> {
   @override
   String get typeName => "AvmUnsignedTx";
 
@@ -68,7 +68,7 @@ class AvmUnsignedTx
   }
 
   @override
-  AvmTx sign(AvmKeyChain kc) {
+  AvmTx sign(EZCKeyChain kc) {
     final txBuff = toBuffer();
     final msg = SHA256().update(txBuff).digest();
     final signatures = transaction.sign(msg, kc);
@@ -76,7 +76,7 @@ class AvmUnsignedTx
   }
 }
 
-class AvmTx extends StandardTx<AvmKeyPair, AvmKeyChain, AvmUnsignedTx> {
+class AvmTx extends StandardTx<EZCKeyPair, EZCKeyChain, AvmUnsignedTx> {
   @override
   String get typeName => "AvmTx";
 

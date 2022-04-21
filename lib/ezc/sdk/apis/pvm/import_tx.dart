@@ -4,7 +4,6 @@ import 'package:wallet/ezc/sdk/apis/pvm/base_tx.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/credentials.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/inputs.dart';
-import 'package:wallet/ezc/sdk/apis/pvm/key_chain.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/outputs.dart';
 import 'package:wallet/ezc/sdk/common/credentials.dart';
 import 'package:wallet/ezc/sdk/common/input.dart';
@@ -98,7 +97,7 @@ class PvmImportTx extends PvmBaseTx {
   Uint8List getSourceChain() => sourceChain;
 
   @override
-  List<Credential> sign(Uint8List msg, PvmKeyChain kc) {
+  List<Credential> sign(Uint8List msg, EZCKeyChain kc) {
     final signs = super.sign(msg, kc);
     for (int i = 0; i < importIns.length; i++) {
       final input = importIns[i].getInput();
@@ -106,7 +105,8 @@ class PvmImportTx extends PvmBaseTx {
       final signIdxs = input.getSigIdxs();
       for (int j = 0; j < signIdxs.length; j++) {
         final keyPair = kc.getKey(signIdxs[j].getSource());
-        final signVal = keyPair!.sign(msg);
+        if (keyPair == null) continue;
+        final signVal = keyPair.sign(msg);
         final sig = Signature();
         sig.fromBuffer(signVal);
         credential.addSignature(sig);
