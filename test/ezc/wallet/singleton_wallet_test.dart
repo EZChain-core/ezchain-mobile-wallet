@@ -23,12 +23,12 @@ void main() {
 
   test("can return initial X address", () {
     String addressX = walletFromAvmKey.getAddressX();
-    expect(addressX, 'X-avax129sdwasyyvdlqqsg8d9pguvzlqvup6cm8lrd3j');
+    expect(addressX, 'X-ezc129sdwasyyvdlqqsg8d9pguvzlqvup6cmegqea5');
   });
 
   test("can return initial P address", () {
     String addressP = walletFromAvmKey.getAddressP();
-    expect(addressP, 'P-avax129sdwasyyvdlqqsg8d9pguvzlqvup6cm8lrd3j');
+    expect(addressP, 'P-ezc129sdwasyyvdlqqsg8d9pguvzlqvup6cmegqea5');
   });
 
   test("can return initial C address", () {
@@ -36,7 +36,7 @@ void main() {
     expect(addressC, '0xd30a9f6645a73f67b7850b9304b6a3172dda75bf');
 
     String evmAddressBech = walletFromAvmKey.getEvmAddressBech();
-    expect(evmAddressBech, 'C-avax129sdwasyyvdlqqsg8d9pguvzlqvup6cm8lrd3j');
+    expect(evmAddressBech, 'C-ezc129sdwasyyvdlqqsg8d9pguvzlqvup6cmegqea5');
   });
 
   const evmPk =
@@ -45,12 +45,12 @@ void main() {
 
   test("can return initial X address", () {
     String addressX = walletFromEvmKey.getAddressX();
-    expect(addressX, 'X-avax1zx8ckk5qfhw365gemu6e76tynwuj6d89pyzqfj');
+    expect(addressX, 'X-ezc1zx8ckk5qfhw365gemu6e76tynwuj6d89lnp595');
   });
 
   test("can return initial P address", () {
     String addressP = walletFromEvmKey.getAddressP();
-    expect(addressP, 'P-avax1zx8ckk5qfhw365gemu6e76tynwuj6d89pyzqfj');
+    expect(addressP, 'P-ezc1zx8ckk5qfhw365gemu6e76tynwuj6d89lnp595');
   });
 
   test("can return initial C address", () {

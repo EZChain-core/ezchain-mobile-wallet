@@ -38,10 +38,8 @@ class SingletonWallet extends WalletProvider implements UnsafeWallet {
     try {
       if (key.startsWith(privateKeyPrefix)) {
         return SingletonWallet(privateKey: key);
-      } else if (key.startsWith(evmPrivateKeyPrefix)) {
-        return SingletonWallet.fromEvmKey(key);
       } else {
-        return null;
+        return SingletonWallet.fromEvmKey(key);
       }
     } catch (e) {
       return null;

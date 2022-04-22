@@ -68,6 +68,6 @@ abstract class _WalletTokenStore with Store {
 
   @action
   refresh() async {
-    _balanceStore.updateTotalBalance();
+    _balanceStore.updateBalance();
   }
 }

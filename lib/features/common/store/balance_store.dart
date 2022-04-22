@@ -27,10 +27,13 @@ abstract class _BalanceStore with Store {
   final _tokenStore = getIt<TokenStore>();
 
   @readonly
-  Decimal _totalEzc = Decimal.zero;
+  Decimal _totalEzcWithoutStaking = Decimal.zero;
 
   @readonly
   Decimal _staking = Decimal.zero;
+
+  @computed
+  Decimal get totalEzc => _totalEzcWithoutStaking + _staking;
 
   @readonly
   Decimal _balanceX = Decimal.zero;
@@ -50,14 +53,6 @@ abstract class _BalanceStore with Store {
   @readonly
   Decimal _balanceLockedStakeableP = Decimal.zero;
 
-  @readonly
-  bool _isTotalLoaded = false;
-
-  bool _isXLoaded = false;
-  bool _isPLoaded = false;
-  bool _isCLoaded = false;
-  bool _needFetchTotal = false;
-
   String get balanceXString => decimalBalance(_balanceX);
 
   String get balanceCString => decimalBalance(_balanceC);
@@ -68,7 +63,7 @@ abstract class _BalanceStore with Store {
     _wallet.on(WalletEventType.balanceChangedX, _handleCallback);
     _wallet.on(WalletEventType.balanceChangedP, _handleCallback);
     _wallet.on(WalletEventType.balanceChangedC, _handleCallback);
-    updateTotalBalance();
+    updateBalance();
   }
 
   @action
@@ -76,7 +71,7 @@ abstract class _BalanceStore with Store {
     _wallet.off(WalletEventType.balanceChangedX, _handleCallback);
     _wallet.off(WalletEventType.balanceChangedP, _handleCallback);
     _wallet.off(WalletEventType.balanceChangedC, _handleCallback);
-    _totalEzc = Decimal.zero;
+    _totalEzcWithoutStaking = Decimal.zero;
     _staking = Decimal.zero;
     _balanceX = Decimal.zero;
     _balanceP = Decimal.zero;
@@ -84,11 +79,6 @@ abstract class _BalanceStore with Store {
     _balanceLockedX = Decimal.zero;
     _balanceLockedP = Decimal.zero;
     _balanceLockedStakeableP = Decimal.zero;
-    _isTotalLoaded = false;
-    _isXLoaded = false;
-    _isPLoaded = false;
-    _isCLoaded = false;
-    _needFetchTotal = false;
   }
 
   @action
@@ -96,12 +86,7 @@ abstract class _BalanceStore with Store {
     updateBalanceX();
     updateBalanceP();
     updateBalanceC();
-  }
-
-  @action
-  updateTotalBalance() {
-    _needFetchTotal = true;
-    updateBalance();
+    updateStake();
   }
 
   @action
@@ -115,9 +100,6 @@ abstract class _BalanceStore with Store {
         _tokenStore.getAvaAssets();
         _balanceX = bnToDecimalAvaxX(x.unlocked);
         _balanceLockedX = bnToDecimalAvaxX(x.locked);
-        if (_needFetchTotal) {
-          _isXLoaded = true;
-        }
       }
     }
     if (eventName == WalletEventType.balanceChangedP.type &&
@@ -125,24 +107,13 @@ abstract class _BalanceStore with Store {
       _balanceP = bnToDecimalAvaxP(eventData.unlocked);
       _balanceLockedP = bnToDecimalAvaxP(eventData.locked);
       _balanceLockedStakeableP = bnToDecimalAvaxP(eventData.lockedStakeable);
-      if (_needFetchTotal) {
-        _isPLoaded = true;
-      }
     }
     if (eventName == WalletEventType.balanceChangedC.type &&
         eventData is WalletBalanceC) {
       _balanceC = bnToDecimalAvaxC(eventData.balance);
-      if (_needFetchTotal) {
-        _isCLoaded = true;
-      }
     }
-    if (_needFetchTotal && _isXLoaded && _isPLoaded && _isCLoaded) {
-      _isXLoaded = false;
-      _isPLoaded = false;
-      _isCLoaded = false;
-      _needFetchTotal = false;
-      _fetchTotal();
-    }
+    final avaxBalance = _wallet.getAvaxBalance();
+    _totalEzcWithoutStaking = avaxBalance.totalDecimal;
   }
 
   updateBalanceX() async {
@@ -166,14 +137,17 @@ abstract class _BalanceStore with Store {
       await _wallet.updateAvaxBalanceC();
     } catch (e) {
       logger.e(e);
-      return;
     }
   }
 
   @action
   updateStake() async {
-    final staked = await _wallet.getStake();
-    _staking = bnToDecimalAvaxP(staked.stakedBN);
+    try {
+      final staked = await _wallet.getStake();
+      _staking = bnToDecimalAvaxP(staked.stakedBN);
+    } catch (e) {
+      logger.e(e);
+    }
   }
 
   Decimal getBalance(EZCType chain) {
@@ -196,17 +170,6 @@ abstract class _BalanceStore with Store {
       case EZCType.cChain:
         return balanceCString;
     }
-  }
-
-  @action
-  _fetchTotal() async {
-    final avaxBalance = _wallet.getAvaxBalance();
-    final totalAvaxBalanceDecimal = avaxBalance.totalDecimal;
-
-    await updateStake();
-
-    _totalEzc = totalAvaxBalanceDecimal + _staking;
-    _isTotalLoaded = true;
   }
 
   String decimalBalance(Decimal balance) {

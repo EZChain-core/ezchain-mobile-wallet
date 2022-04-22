@@ -67,7 +67,7 @@ abstract class _WalletEZCStore with Store {
 
   @action
   refresh() async {
-    _balanceStore.updateTotalBalance();
+    _balanceStore.updateBalance();
   }
 }
 
