@@ -38,7 +38,7 @@ abstract class _WalletSendAntStore with Store {
   bool validate(String address) {
     final isAddressValid = validateAddressX(address);
     final isAmountValid =
-        balanceToken >= (amount + _fee) && amount > Decimal.zero;
+        balanceToken >= (amount + _fee) && numberToBNAvaxX(amount.toBigInt()) > BigInt.zero;
     if (!isAddressValid) {
       _addressError = Strings.current.sharedInvalidAddress;
     }

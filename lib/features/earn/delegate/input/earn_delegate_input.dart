@@ -43,85 +43,88 @@ class EarnDelegateInputScreen extends StatelessWidget {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
-          child: Column(
-            children: [
-              EZCAppBar(
-                title: Strings.current.sharedDelegate,
-                onPressed: () {
-                  context.router.pop();
-                },
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: provider.themeMode.bg,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(16)),
-                        ),
-                        child: EarnNodeIdWidget(
-                          id: args.delegateItem.nodeId,
-                          name: args.delegateItem.nodeName,
-                          src: args.delegateItem.nodeLogoUrl,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      EZCDateTimeTextField(
-                        label: Strings.current.earnStakingEndDate,
-                        prefixText: Strings.current.earnStakingEndDateNote,
-                        initDate: _getIntDate(),
-                        firstDate: _firstDate,
-                        lastDate: args.endDate,
-                        onChanged: (selectedDate) {
-                          _stakingEndDate = selectedDate;
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      Observer(
-                        builder: (_) => EZCAmountTextField(
-                          label: Strings.current.earnStakeAmount,
-                          hint: '0.0',
-                          controller: _amountController,
-                          error: _earnDelegateInputStore.amountError,
-                          prefixText: Strings.current.earnStakeBalance(
-                              _earnDelegateInputStore.balancePString),
-                          onChanged: (amount) {
-                            _earnDelegateInputStore.removeAmountError();
-                          },
-                          onSuffixPressed: () {
-                            _amountController.text =
-                                _earnDelegateInputStore.balanceP.toString();
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Observer(
-                        builder: (_) => _EarnAddressTextField(
-                          label: Strings.current.earnRewardAddress,
-                          myAddress: _earnDelegateInputStore.addressP,
-                          controller: _addressController,
-                          error: _earnDelegateInputStore.addressError,
-                          onChanged: (amount) {
-                            _earnDelegateInputStore.removeAddressError();
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 100),
-                      EZCMediumPrimaryButton(
-                        text: Strings.current.sharedConfirm,
-                        width: 169,
-                        isLoading: false,
-                        onPressed: _onClickConfirm,
-                      )
-                    ],
-                  ),
+          child: GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: Column(
+              children: [
+                EZCAppBar(
+                  title: Strings.current.sharedDelegate,
+                  onPressed: context.router.pop,
                 ),
-              )
-            ],
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: provider.themeMode.bg,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(16)),
+                          ),
+                          child: EarnNodeIdWidget(
+                            id: args.delegateItem.nodeId,
+                            name: args.delegateItem.nodeName,
+                            src: args.delegateItem.nodeLogoUrl,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        EZCDateTimeTextField(
+                          label: Strings.current.earnStakingEndDate,
+                          prefixText: Strings.current.earnStakingEndDateNote,
+                          initDate: _getIntDate(),
+                          firstDate: _firstDate,
+                          lastDate: args.endDate,
+                          onChanged: (selectedDate) {
+                            _stakingEndDate = selectedDate;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        Observer(
+                          builder: (_) => EZCAmountTextField(
+                            label: Strings.current.earnStakeAmount,
+                            hint: '0.0',
+                            controller: _amountController,
+                            error: _earnDelegateInputStore.amountError,
+                            prefixText: Strings.current.earnStakeBalance(
+                                _earnDelegateInputStore.balancePString),
+                            onChanged: (amount) {
+                              _earnDelegateInputStore.removeAmountError();
+                            },
+                            onSuffixPressed: () {
+                              _amountController.text =
+                                  _earnDelegateInputStore.balanceP.toString();
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Observer(
+                          builder: (_) => _EarnAddressTextField(
+                            label: Strings.current.earnRewardAddress,
+                            myAddress: _earnDelegateInputStore.addressP,
+                            controller: _addressController,
+                            error: _earnDelegateInputStore.addressError,
+                            onChanged: (amount) {
+                              _earnDelegateInputStore.removeAddressError();
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 100),
+                        EZCMediumPrimaryButton(
+                          text: Strings.current.sharedConfirm,
+                          width: 169,
+                          isLoading: false,
+                          onPressed: _onClickConfirm,
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

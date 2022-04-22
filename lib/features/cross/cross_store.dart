@@ -95,7 +95,10 @@ abstract class _CrossStore with Store {
 
   @action
   bool validate() {
-    final isAmountValid = sourceBalance > amount && amount > Decimal.zero;
+    final amountBigInt = _sourceChain == CrossChainType.cChain
+        ? numberToBNAvaxC(amount.toBigInt())
+        : numberToBNAvaxX(amount.toBigInt());
+    final isAmountValid = sourceBalance > amount && amountBigInt > BigInt.zero;
     if (!isAmountValid) {
       _amountError = Strings.current.sharedInvalidAmount;
     }

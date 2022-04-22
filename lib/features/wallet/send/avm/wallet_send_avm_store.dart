@@ -54,7 +54,7 @@ abstract class _WalletSendAvmStore with Store {
   bool validate(String address) {
     final isAddressValid = validateAddressX(address);
     final isAmountValid =
-        _balanceStore.balanceX >= (amount + _fee) && amount > Decimal.zero;
+        _balanceStore.balanceX >= (amount + _fee) && numberToBNAvaxX(amount.toBigInt()) > BigInt.zero;
     if (!isAddressValid) {
       _addressError = Strings.current.sharedInvalidAddress;
     }

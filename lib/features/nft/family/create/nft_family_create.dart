@@ -38,55 +38,61 @@ class NftFamilyCreateScreen extends StatelessWidget {
         },
         child: Scaffold(
           body: SafeArea(
-            child: Column(
-              children: [
-                EZCAppBar(
-                  title: Strings.current.nftNewFamily,
-                  onPressed: context.popRoute,
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 16),
-                        EZCTextField(
-                          label: Strings.current.nftName,
-                          controller: _nameController,
-                        ),
-                        const SizedBox(height: 16),
-                        EZCTextField(
-                          label: Strings.current.nftSymbol,
-                          controller: _symbolController,
-                          textCapitalization: TextCapitalization.characters,
-                        ),
-                        const SizedBox(height: 16),
-                        EZCTextField(
-                          label: Strings.current.nftNumberOfGroups,
-                          controller: _numberOfGroupsController,
-                          inputType: TextInputType.number,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          '${Strings.current.sharedFee}: ${_nftFamilyCreateStore.fee} $ezcSymbol',
-                          style: EZCTitleLargeTextStyle(
-                              color: provider.themeMode.text60),
-                        ),
-                        const SizedBox(height: 34),
-                        Observer(
-                          builder: (_) => EZCMediumPrimaryButton(
-                            text: Strings.current.nftCreateFamily,
-                            width: 130,
-                            isLoading: _nftFamilyCreateStore.isLoading,
-                            onPressed: _onClickCreateFamily,
-                          ),
-                        ),
-                      ],
-                    ),
+            child: GestureDetector(
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
+              child: Column(
+                children: [
+                  EZCAppBar(
+                    title: Strings.current.nftNewFamily,
+                    onPressed: context.popRoute,
                   ),
-                )
-              ],
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 16),
+                          EZCTextField(
+                            label: Strings.current.nftName,
+                            controller: _nameController,
+                          ),
+                          const SizedBox(height: 16),
+                          EZCTextField(
+                            label: Strings.current.nftSymbol,
+                            controller: _symbolController,
+                            textCapitalization: TextCapitalization.characters,
+                            maxLength: 4,
+                          ),
+                          const SizedBox(height: 16),
+                          EZCTextField(
+                            label: Strings.current.nftNumberOfGroups,
+                            controller: _numberOfGroupsController,
+                            inputType: TextInputType.number,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            '${Strings.current.sharedFee}: ${_nftFamilyCreateStore.fee} $ezcSymbol',
+                            style: EZCTitleLargeTextStyle(
+                                color: provider.themeMode.text60),
+                          ),
+                          const SizedBox(height: 34),
+                          Observer(
+                            builder: (_) => EZCMediumPrimaryButton(
+                              text: Strings.current.nftCreateFamily,
+                              width: 130,
+                              isLoading: _nftFamilyCreateStore.isLoading,
+                              onPressed: _onClickCreateFamily,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

@@ -21,55 +21,60 @@ class EarnDelegateNodesScreen extends StatelessWidget {
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
-          child: Column(
-            children: [
-              EZCAppBar(
-                title: Strings.current.sharedDelegate,
-                onPressed: context.router.pop,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                child: EZCSearchTextField(
-                  hint: Strings.current.earnValidatorAddress,
-                  onChanged: (text) {
-                    _earnDelegateNodesStore.keySearch = text;
-                  },
+          child: GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: Column(
+              children: [
+                EZCAppBar(
+                  title: Strings.current.sharedDelegate,
+                  onPressed: context.router.pop,
                 ),
-              ),
-              Expanded(
-                child: Observer(builder: (_) {
-                  if (_earnDelegateNodesStore.nodes.isEmpty) {
-                    return Align(
-                      alignment: Alignment.center,
-                      child: EZCEmpty(
-                        img: Assets.images.imgSearchEmpty.image(
-                          width: 181,
-                          height: 150,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                  child: EZCSearchTextField(
+                    hint: Strings.current.earnValidatorAddress,
+                    onChanged: (text) {
+                      _earnDelegateNodesStore.keySearch = text;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: Observer(builder: (_) {
+                    if (_earnDelegateNodesStore.nodes.isEmpty) {
+                      return Align(
+                        alignment: Alignment.center,
+                        child: EZCEmpty(
+                          img: Assets.images.imgSearchEmpty.image(
+                            width: 181,
+                            height: 150,
+                          ),
+                          title: Strings.current.sharedNoResultFound,
+                          des: Strings.current.sharedNoResultFoundDes,
                         ),
-                        title: Strings.current.sharedNoResultFound,
-                        des: Strings.current.sharedNoResultFoundDes,
+                      );
+                    }
+                    return RefreshIndicator(
+                      onRefresh: _refresh,
+                      child: ListView.separated(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        itemCount: _earnDelegateNodesStore.nodes.length,
+                        itemBuilder: (_, index) => EarnDelegateNodeItemWidget(
+                          item: _earnDelegateNodesStore.nodes[index],
+                        ),
+                        separatorBuilder: (_, index) =>
+                            const SizedBox(height: 24),
                       ),
                     );
-                  }
-                  return RefreshIndicator(
-                    onRefresh: _refresh,
-                    child: ListView.separated(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      itemCount: _earnDelegateNodesStore.nodes.length,
-                      itemBuilder: (_, index) => EarnDelegateNodeItemWidget(
-                        item: _earnDelegateNodesStore.nodes[index],
-                      ),
-                      separatorBuilder: (_, index) =>
-                          const SizedBox(height: 24),
-                    ),
-                  );
-                }),
-              ),
-            ],
+                  }),
+                ),
+              ],
+            ),
           ),
         ),
       ),

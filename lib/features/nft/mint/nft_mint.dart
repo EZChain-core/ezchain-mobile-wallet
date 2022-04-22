@@ -41,127 +41,132 @@ class NftMintScreen extends StatelessWidget {
           length: 2,
           child: Scaffold(
             body: SafeArea(
-              child: Column(
-                children: [
-                  EZCAppBar(
-                    title: nftFamily.name,
-                    onPressed: context.popRoute,
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            margin: const EdgeInsets.only(
-                                top: 24, left: 16, right: 16, bottom: 16),
-                            decoration: BoxDecoration(
-                              color: provider.themeMode.bg,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(8)),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            Strings.current.nftFamilyName,
-                                            style: EZCTitleLargeTextStyle(
-                                                color:
-                                                    provider.themeMode.text60),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            nftFamily.name,
-                                            style: EZCTitleLargeTextStyle(
-                                                color: provider.themeMode.text),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            Strings.current.nftSymbol,
-                                            style: EZCTitleLargeTextStyle(
-                                                color:
-                                                    provider.themeMode.text60),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            nftFamily.symbol,
-                                            style: EZCTitleLargeTextStyle(
-                                                color: provider.themeMode.text),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                // const SizedBox(height: 12),
-                                // Text(
-                                //   Strings.current.nftCollectibles,
-                                //   style: EZCTitleLargeTextStyle(
-                                //       color:
-                                //       provider.themeMode.text60),
-                                // ),
-                                // const SizedBox(height: 4),
-                                // ListView(
-                                //   children: [
-                                //
-                                //   ],
-                                // ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            height: 40,
-                            padding: const EdgeInsets.all(4),
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                              color: provider.themeMode.secondary10,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: TabBar(
-                              indicator: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: provider.themeMode.secondary,
+              child: GestureDetector(
+                onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
+                child: Column(
+                  children: [
+                    EZCAppBar(
+                      title: nftFamily.name,
+                      onPressed: context.popRoute,
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              margin: const EdgeInsets.only(
+                                  top: 24, left: 16, right: 16, bottom: 16),
+                              decoration: BoxDecoration(
+                                color: provider.themeMode.bg,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(8)),
                               ),
-                              labelStyle: EZCTitleLargeTextStyle(
-                                  color: provider.themeMode.primary),
-                              labelColor: provider.themeMode.primary,
-                              unselectedLabelStyle: EZCTitleLargeTextStyle(
-                                  color: provider.themeMode.text40),
-                              unselectedLabelColor: provider.themeMode.text40,
-                              tabs: [
-                                Tab(text: Strings.current.sharedGeneric),
-                                Tab(text: Strings.current.sharedCustom),
-                              ],
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              Strings.current.nftFamilyName,
+                                              style: EZCTitleLargeTextStyle(
+                                                  color:
+                                                      provider.themeMode.text60),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              nftFamily.name,
+                                              style: EZCTitleLargeTextStyle(
+                                                  color: provider.themeMode.text),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              Strings.current.nftSymbol,
+                                              style: EZCTitleLargeTextStyle(
+                                                  color:
+                                                      provider.themeMode.text60),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              nftFamily.symbol,
+                                              style: EZCTitleLargeTextStyle(
+                                                  color: provider.themeMode.text),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  // const SizedBox(height: 12),
+                                  // Text(
+                                  //   Strings.current.nftCollectibles,
+                                  //   style: EZCTitleLargeTextStyle(
+                                  //       color:
+                                  //       provider.themeMode.text60),
+                                  // ),
+                                  // const SizedBox(height: 4),
+                                  // ListView(
+                                  //   children: [
+                                  //
+                                  //   ],
+                                  // ),
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 450,
-                            child: TabBarView(
-                              children: [
-                                _NftMintGenericTab(nftMintStore: _nftMintStore),
-                                _NftMintCustomTab(nftMintStore: _nftMintStore),
-                              ],
+                            Container(
+                              height: 40,
+                              padding: const EdgeInsets.all(4),
+                              margin: const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
+                                color: provider.themeMode.secondary10,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: TabBar(
+                                indicator: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  color: provider.themeMode.secondary,
+                                ),
+                                labelStyle: EZCTitleLargeTextStyle(
+                                    color: provider.themeMode.primary),
+                                labelColor: provider.themeMode.primary,
+                                unselectedLabelStyle: EZCTitleLargeTextStyle(
+                                    color: provider.themeMode.text40),
+                                unselectedLabelColor: provider.themeMode.text40,
+                                tabs: [
+                                  Tab(text: Strings.current.sharedGeneric),
+                                  Tab(text: Strings.current.sharedCustom),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              height: 450,
+                              child: TabBarView(
+                                children: [
+                                  _NftMintGenericTab(nftMintStore: _nftMintStore),
+                                  _NftMintCustomTab(nftMintStore: _nftMintStore),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

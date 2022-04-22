@@ -101,7 +101,7 @@ abstract class _WalletSendEvmStore with Store {
   @action
   confirm(String address) async {
     final isAddressValid = validateAddressEvm(address);
-    final isAmountValid = balanceC >= amount && amount > Decimal.zero;
+    final isAmountValid = balanceC >= amount && numberToBNAvaxC(amount.toBigInt()) > BigInt.zero;
     if (!isAddressValid) {
       _addressError = Strings.current.sharedInvalidAddress;
     }
