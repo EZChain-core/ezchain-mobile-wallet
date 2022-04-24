@@ -28,9 +28,11 @@ abstract class _WalletSendAvmConfirmStore with Store {
   sendAvm(String address, Decimal amount, {String? memo}) async {
     _isLoading = true;
     try {
-      await _wallet.updateUtxosX();
-      final txId = await _wallet
-          .sendAvaxX(address, numberToBNAvaxX(amount.toBigInt()), memo: memo);
+      final txId = await _wallet.sendAvaxX(
+        address,
+        amount.toBNAvaxX(),
+        memo: memo,
+      );
       _sendSuccess = true;
     } catch (e) {
       logger.e(e);

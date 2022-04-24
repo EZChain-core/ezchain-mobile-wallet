@@ -25,7 +25,8 @@ abstract class _WalletSendAntStore with Store {
   Decimal amount = Decimal.zero;
 
   @readonly
-  Decimal _fee = bnToDecimalAvaxX(getTxFeeX());
+  //ignore: prefer_final_fields
+  Decimal _fee = getTxFeeX().toDecimalAvaxX();
 
   @computed
   Decimal get total => (amount + _fee) * (token?.price ?? Decimal.zero);
@@ -38,7 +39,7 @@ abstract class _WalletSendAntStore with Store {
   bool validate(String address) {
     final isAddressValid = validateAddressX(address);
     final isAmountValid =
-        balanceToken >= (amount + _fee) && numberToBNAvaxX(amount.toBigInt()) > BigInt.zero;
+        balanceToken >= (amount + _fee) && amount.toBNAvaxX() > BigInt.zero;
     if (!isAddressValid) {
       _addressError = Strings.current.sharedInvalidAddress;
     }

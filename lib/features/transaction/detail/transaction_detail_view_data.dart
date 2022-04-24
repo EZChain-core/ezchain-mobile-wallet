@@ -50,11 +50,10 @@ extension TransactionDetailExtension on OrteliusTx {
               previousValue + (BigInt.tryParse(element) ?? BigInt.zero));
 
       final value = valueBigInt != BigInt.zero
-          ? '${bnToLocaleString(valueBigInt)} $ezcSymbol'
+          ? '${valueBigInt.toLocaleString()} $ezcSymbol'
           : null;
 
-      final burned =
-          '${bnToDecimalAvaxX(BigInt.tryParse(txFee.toString()) ?? BigInt.zero)} $ezcSymbol';
+      final burned = '${txFeeBN.toDecimalAvaxX()} $ezcSymbol';
 
       final ezcType = chainAliasToEZCType(idToChainAlias(chainId));
 
@@ -105,8 +104,7 @@ extension TransactionDetailExtension on OrteliusTx {
         final input = ins[i];
         final signatures = input.credentials?.map((e) => e.signature);
         final output = input.output;
-        final amount =
-            bnToLocaleString(BigInt.tryParse(output.amount) ?? BigInt.zero);
+        final amount = output.amountBN.toLocaleString();
         final address = output.addresses?.firstOrNull;
         final chain = idToChainAlias(output.chainId);
         String? from;
@@ -123,8 +121,7 @@ extension TransactionDetailExtension on OrteliusTx {
           output1.outputIndex.compareTo(output2.outputIndex));
       for (var i = 0; i < outs.length; i++) {
         final output = outs[i];
-        final amount =
-            bnToLocaleString(BigInt.tryParse(output.amount) ?? BigInt.zero);
+        final amount = output.amountBN.toLocaleString();
         final address = output.addresses?.firstOrNull;
         final chain = idToChainAlias(output.chainId);
         String? to;

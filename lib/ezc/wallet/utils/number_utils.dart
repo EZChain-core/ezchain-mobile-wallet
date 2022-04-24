@@ -1,47 +1,118 @@
 import 'package:intl/intl.dart';
 import 'package:decimal/decimal.dart';
 
-Decimal bnToDecimal(BigInt bn, {int denomination = 0}) {
-  final value = bn.toDecimal() / Decimal.fromInt(10).pow(denomination);
-  return value.toDecimal();
+extension BigIntUtils on BigInt {
+  Decimal toAvaxDecimal({int denomination = 0}) {
+    final value = toDecimal() / Decimal.fromInt(10).pow(denomination);
+    return value.toDecimal();
+  }
+
+  BigInt avaxCtoX() {
+    final tens = BigInt.from(10).pow(9);
+    return this ~/ tens;
+  }
+
+  BigInt avaxXtoC() {
+    final tens = BigInt.from(10).pow(9);
+    return this * tens;
+  }
+
+  BigInt avaxPtoC() {
+    return avaxXtoC();
+  }
+
+  Decimal toDecimalAvaxX() {
+    return toAvaxDecimal(denomination: 9);
+  }
+
+  Decimal toDecimalAvaxP() {
+    return toDecimalAvaxX();
+  }
+
+  Decimal toDecimalAvaxC() {
+    return toAvaxDecimal(denomination: 18);
+  }
+
+  String toAvaxC() {
+    return toLocaleString(denomination: 18);
+  }
+
+  String toAvaxX() {
+    return toLocaleString(denomination: 9);
+  }
+
+  String toAvaxP() {
+    return toAvaxX();
+  }
+
+  String toLocaleString({
+    int denomination = 9,
+    int decimals = 9,
+  }) {
+    final decimal = toAvaxDecimal(denomination: denomination);
+    return decimal.toLocaleString(decimals: decimals);
+  }
 }
 
-BigInt avaxCtoX(BigInt amount) {
-  final tens = BigInt.from(10).pow(9);
-  return amount ~/ tens;
+extension DecimalUtils on Decimal {
+  BigInt toBNAvaxX() {
+    return toBN(denomination: 9);
+  }
+
+  BigInt toBNAvaxP() {
+    return toBNAvaxX();
+  }
+
+  BigInt toBNAvaxC() {
+    return toBN(denomination: 18);
+  }
+
+  BigInt toBN({int denomination = 0}) {
+    final bnBig = this * Decimal.fromInt(10).pow(denomination);
+    final bnString = bnBig.toStringAsFixed(0);
+    return BigInt.tryParse(bnString) ?? BigInt.zero;
+  }
+
+  String toLocaleString({int decimals = 9}) {
+    final fixedStr = toStringAsFixed(decimals);
+    final split = fixedStr.split(".");
+    var formatter = NumberFormat.decimalPattern("en_US");
+    var wholeStr = formatter.format(double.tryParse(split[0]) ?? 0);
+    if (this < Decimal.zero && wholeStr == "0") {
+      wholeStr = "-0";
+    }
+    if (split.length == 1) {
+      return wholeStr;
+    } else {
+      try {
+        var remainderStr = split[1];
+        var lastChar = remainderStr[remainderStr.length - 1];
+        while (lastChar == "0") {
+          remainderStr = remainderStr.substring(0, remainderStr.length - 1);
+          lastChar = remainderStr[remainderStr.length - 1];
+        }
+        final String trimmed;
+        if (decimals >= remainderStr.length) {
+          trimmed = remainderStr;
+        } else {
+          trimmed = remainderStr.substring(0, decimals);
+        }
+        return "$wholeStr.$trimmed";
+      } catch (e) {
+        return wholeStr;
+      }
+    }
+  }
 }
 
-BigInt avaxXtoC(BigInt amount) {
-  final tens = BigInt.from(10).pow(9);
-  return amount * tens;
-}
-
-BigInt avaxPtoC(BigInt amount) {
-  return avaxXtoC(amount);
-}
-
-Decimal bnToDecimalAvaxX(BigInt value) {
-  return bnToDecimal(value, denomination: 9);
-}
-
-Decimal bnToDecimalAvaxP(BigInt value) {
-  return bnToDecimalAvaxX(value);
-}
-
-Decimal bnToDecimalAvaxC(BigInt value) {
-  return bnToDecimal(value, denomination: 18);
-}
-
-String bnToAvaxC(BigInt value) {
-  return bnToLocaleString(value, denomination: 18);
-}
-
-String bnToAvaxX(BigInt value) {
-  return bnToLocaleString(value, denomination: 9);
-}
-
-String bnToAvaxP(BigInt value) {
-  return bnToAvaxX(value);
+extension StringUtils on String {
+  BigInt toBN(int decimals) {
+    final big = Decimal.tryParse(this);
+    if (big == null) return BigInt.zero;
+    final tens = Decimal.fromInt(10).pow(decimals);
+    final rawStr = (big * tens).toStringAsFixed(0);
+    return BigInt.tryParse(rawStr) ?? BigInt.zero;
+  }
 }
 
 BigInt numberToBN(dynamic value, int decimals) {
@@ -69,58 +140,4 @@ BigInt numberToBNAvaxP(dynamic value) {
 
 BigInt numberToBNAvaxC(dynamic value) {
   return numberToBN(value, 18);
-}
-
-String bnToLocaleString(
-  BigInt value, {
-  int denomination = 9,
-  int decimals = 9,
-}) {
-  final bigVal = bnToDecimal(value, denomination: denomination);
-  return decimalToLocaleString(bigVal, decimals: decimals);
-}
-
-String decimalToLocaleString(Decimal bigValue, {int decimals = 9}) {
-  final fixedStr = bigValue.toStringAsFixed(decimals);
-  final split = fixedStr.split(".");
-  var formatter = NumberFormat.decimalPattern("en_US");
-  var wholeStr = formatter.format(double.tryParse(split[0]) ?? 0);
-  if (bigValue < Decimal.zero && wholeStr == "0") {
-    wholeStr = "-0";
-  }
-  if (split.length == 1) {
-    return wholeStr;
-  } else {
-    try {
-      var remainderStr = split[1];
-      var lastChar = remainderStr[remainderStr.length - 1];
-      while (lastChar == "0") {
-        remainderStr = remainderStr.substring(0, remainderStr.length - 1);
-        lastChar = remainderStr[remainderStr.length - 1];
-      }
-      final String trimmed;
-      if (decimals >= remainderStr.length) {
-        trimmed = remainderStr;
-      } else {
-        trimmed = remainderStr.substring(0, decimals);
-      }
-      return "$wholeStr.$trimmed";
-    } catch (e) {
-      return wholeStr;
-    }
-  }
-}
-
-BigInt stringToBn(String value, int decimals) {
-  final big = Decimal.tryParse(value);
-  if (big == null) return BigInt.zero;
-  final tens = Decimal.fromInt(10).pow(decimals);
-  final rawStr = (big * tens).toStringAsFixed(0);
-  return BigInt.tryParse(rawStr) ?? BigInt.zero;
-}
-
-BigInt decimalToBn(Decimal value, {int denomination = 0}) {
-  final bnBig = value * Decimal.fromInt(10).pow(denomination);
-  final bnString = bnBig.toStringAsFixed(0);
-  return BigInt.tryParse(bnString) ?? BigInt.zero;
 }

@@ -96,6 +96,8 @@ class OrteliusTx {
 
   final String? txBlockId;
 
+  BigInt get txFeeBN => BigInt.tryParse(txFee.toString()) ?? BigInt.zero;
+
   OrteliusTx(
     this.id,
     this.chainId,
@@ -211,6 +213,8 @@ class OrteliusTxOutput {
   @JsonKey(name: "stakeLocktime")
   final int? stakeLockTime;
 
+  BigInt get amountBN => BigInt.tryParse(amount) ?? BigInt.zero;
+
   OrteliusTxOutput(
     this.id,
     this.transactionId,
@@ -234,8 +238,6 @@ class OrteliusTxOutput {
     this.nonce,
     this.stakeLockTime,
   );
-
-  BigInt get amountBN => BigInt.tryParse(amount) ?? BigInt.zero;
 
   factory OrteliusTxOutput.fromJson(Map<String, dynamic> json) =>
       _$OrteliusTxOutputFromJson(json);

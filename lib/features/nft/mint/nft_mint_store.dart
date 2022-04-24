@@ -36,7 +36,8 @@ abstract class _NftMintStore with Store {
   @readonly
   String _error = '';
 
-  final fee = '${bnToDecimalAvaxX(xChain.getTxFee()).text()} $ezcSymbol';
+  final fee =
+      '${xChain.getTxFee().toDecimalAvaxX().toLocaleString(decimals: 3)} $ezcSymbol';
 
   AvmUTXO? _nftMintUTXO;
 

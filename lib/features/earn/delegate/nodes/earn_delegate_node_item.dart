@@ -40,7 +40,7 @@ class EarnDelegateNodeItem {
     return DateTime.fromMillisecondsSinceEpoch(endTime).parseDurationTime();
   }
 
-  String get fee => '${decimalToLocaleString(delegationFee, decimals: 2)}%';
+  String get fee => '${delegationFee.toLocaleString(decimals: 2)}%';
 }
 
 class EarnDelegateNodeItemWidget extends StatelessWidget {

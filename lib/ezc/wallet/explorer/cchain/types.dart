@@ -44,6 +44,12 @@ class CChainExplorerTx {
 
   final String value;
 
+  BigInt get valueBN => BigInt.tryParse(value) ?? BigInt.zero;
+
+  BigInt get gasPriceBN => BigInt.tryParse(gasPrice) ?? BigInt.zero;
+
+  BigInt get gasUsedBN => BigInt.tryParse(gasUsed) ?? BigInt.zero;
+
   CChainExplorerTx({
     required this.blockHash,
     required this.blockNumber,
@@ -114,6 +120,12 @@ class CChainExplorerTxInfo {
   final String to;
   final String value;
 
+  BigInt get valueBN => BigInt.tryParse(value) ?? BigInt.zero;
+
+  BigInt get gasPriceBN => BigInt.tryParse(gasPrice) ?? BigInt.zero;
+
+  BigInt get gasUsedBN => BigInt.tryParse(gasUsed) ?? BigInt.zero;
+
   CChainExplorerTxInfo({
     required this.revertReason,
     required this.blockNumber,
@@ -158,6 +170,12 @@ class CChainErc20Tx {
   final String input;
   final String confirmations;
   final bool? success;
+
+  BigInt get valueBN => BigInt.tryParse(value) ?? BigInt.zero;
+
+  BigInt get gasPriceBN => BigInt.tryParse(gasPrice) ?? BigInt.zero;
+
+  BigInt get gasUsedBN => BigInt.tryParse(gasUsed) ?? BigInt.zero;
 
   CChainErc20Tx(
     this.blockNumber,

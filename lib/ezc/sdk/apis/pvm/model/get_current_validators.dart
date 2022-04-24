@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wallet/ezc/sdk/common/rpc/rpc_request_wrapper.dart';
 
@@ -75,6 +76,9 @@ class Validator {
 
   BigInt get potentialRewardBN =>
       BigInt.tryParse(potentialReward ?? "0") ?? BigInt.zero;
+
+  Decimal get delegationFeeDecimal =>
+      Decimal.tryParse(delegationFee) ?? Decimal.zero;
 
   Validator({
     required this.txId,

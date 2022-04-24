@@ -134,14 +134,17 @@ class EarnDelegateInputScreen extends StatelessWidget {
   _onClickConfirm() async {
     final address = _addressController.text;
     final amount = Decimal.tryParse(_amountController.text) ?? Decimal.zero;
-    if (await _earnDelegateInputStore.validate(address, amount)) {
-      walletContext?.pushRoute(EarnDelegateConfirmRoute(
+    if (_earnDelegateInputStore.validate(address, amount)) {
+      walletContext?.pushRoute(
+        EarnDelegateConfirmRoute(
           args: EarnDelegateConfirmArgs(
-        args.delegateItem,
-        address,
-        amount,
-        _stakingEndDate,
-      )));
+            args.delegateItem,
+            address,
+            amount,
+            _stakingEndDate,
+          ),
+        ),
+      );
     }
   }
 
@@ -150,8 +153,9 @@ class EarnDelegateInputScreen extends StatelessWidget {
     final diffDays = args.endDate.difference(now).inDays;
     if (diffDays > _delegateBufferEndDateDays) {
       return DateTime.now().add(const Duration(
-          days: _delegateBufferEndDateDays,
-          minutes: _delegateBufferEndDateMinutes));
+        days: _delegateBufferEndDateDays,
+        minutes: _delegateBufferEndDateMinutes,
+      ));
     }
     return _firstDate;
   }

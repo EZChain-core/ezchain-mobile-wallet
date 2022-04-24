@@ -68,14 +68,14 @@ class TransactionCChainViewData {
   factory TransactionCChainViewData.mapFromCChainExplorerTxInfo(
     CChainErc20Tx tx,
   ) {
-    final amountBN = BigInt.tryParse(tx.value) ?? BigInt.zero;
+    final amountBN = tx.valueBN;
     final denomination = int.tryParse(tx.tokenDecimal) ?? 0;
     String amount =
-        "${bnToLocaleString(amountBN, denomination: denomination)} ${tx.tokenSymbol}";
-    final gasPrice = BigInt.tryParse(tx.gasPrice) ?? BigInt.zero;
-    final gasPriceText = '${bnToAvaxX(gasPrice)} wei';
-    final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
-    final fee = '${bnToAvaxC(gasPrice * gasUsed)} $ezcSymbol';
+        "${amountBN.toLocaleString(denomination: denomination)} ${tx.tokenSymbol}";
+    final gasPrice = tx.gasPriceBN;
+    final gasPriceText = '${gasPrice.toAvaxX()} wei';
+    final gasUsed = tx.gasUsedBN;
+    final fee = '${(gasPrice * gasUsed).toAvaxC()} $ezcSymbol';
     final result = tx.success ?? false;
     final status = (int.tryParse(tx.confirmations) ?? 0) > 0;
     final block = '#${tx.blockNumber}';

@@ -77,7 +77,7 @@ HistoryStaking getStakingSummary(
   if (tx.rewarded) {
     final rewardOuts = getRewardOuts(myOuts);
     rewardAmount = getOutputTotals(rewardOuts);
-    rewardAmountClean = bnToAvaxP(rewardAmount);
+    rewardAmountClean = rewardAmount.toAvaxP();
   }
 
   return HistoryStaking(
@@ -86,7 +86,7 @@ HistoryStaking getStakingSummary(
     stakeStart: tx.validatorStart * 1000,
     stakeEnd: tx.validatorEnd * 1000,
     amount: stakeAmount,
-    amountDisplayValue: bnToAvaxP(stakeAmount),
+    amountDisplayValue: stakeAmount.toAvaxP(),
     isRewarded: tx.rewarded,
     rewardAmount: rewardAmount,
     rewardAmountDisplayValue: rewardAmountClean,
@@ -120,7 +120,7 @@ HistoryImportExport getImportSummaryC(
     source: chainAliasFrom,
     destination: chainAliasTo,
     amount: amtOut,
-    amountDisplayValue: bnToAvaxX(amtOut),
+    amountDisplayValue: amtOut.toAvaxX(),
     timestamp: tx.timestamp,
     type: HistoryItemTypeName.import,
     fee: xChain.getTxFee(),

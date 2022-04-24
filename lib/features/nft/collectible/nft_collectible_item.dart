@@ -117,7 +117,12 @@ class NftCollectibleItemWidget extends StatelessWidget {
                     Text(
                       item.title!,
                       style: EZCTitleSmallTextStyle(
-                          color: provider.themeMode.text),
+                        color: provider.themeMode.text,
+                      ),
+                      maxLines: 1,
+                      softWrap: false,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
                     )
                   ],
                   const SizedBox(height: 8),
@@ -131,7 +136,9 @@ class NftCollectibleItemWidget extends StatelessWidget {
                     child: Text(
                       Strings.current.nftItems(item.count),
                       style: EZCTitleSmallTextStyle(
-                          color: provider.themeMode.text70),
+                        color: provider.themeMode.text70,
+                      ),
+                      maxLines: 1,
                     ),
                   ),
                   const SizedBox(height: 4),

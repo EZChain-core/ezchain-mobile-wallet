@@ -16,7 +16,6 @@ import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
-import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/earn/delegate/nodes/earn_delegate_node_item.dart';
 import 'package:wallet/features/earn/estimate_rewards/earn_estimate_rewards_item.dart';
@@ -155,9 +154,8 @@ abstract class _ValidatorsStore with Store {
         }
 
         final validatorStakeAmountBN = validator.stakeAmountBN;
-        final stakeAmountDecimal = bnToDecimalAvaxP(validatorStakeAmountBN);
-        final stakeAmount = decimalToLocaleString(
-          stakeAmountDecimal,
+        final stakeAmountDecimal = validatorStakeAmountBN.toDecimalAvaxP();
+        final stakeAmount = stakeAmountDecimal.toLocaleString(
           decimals: 0,
         );
         final fee = Decimal.tryParse(validator.delegationFee) ?? Decimal.zero;
@@ -186,11 +184,9 @@ abstract class _ValidatorsStore with Store {
 
         if (remainingStakeBN < minStakeDelegation) continue;
 
-        final remainingStakeDecimal = bnToDecimalAvaxP(remainingStakeBN);
-        final remainingStake = decimalToLocaleString(
-          remainingStakeDecimal,
-          decimals: 0,
-        );
+        final remainingStakeDecimal = remainingStakeBN.toDecimalAvaxP();
+        final remainingStake =
+            remainingStakeDecimal.toLocaleString(decimals: 0);
 
         final nodeCustomInformation =
             _nodeCustomInformationDict[validator.nodeId];
@@ -241,8 +237,9 @@ abstract class _ValidatorsStore with Store {
           (previousValue, element) =>
               previousValue + element.potentialRewardBN);
 
-      final totalReward =
-          bnToDecimalAvaxP(validatorsReward + delegatorsReward).text();
+      final totalReward = (validatorsReward + delegatorsReward)
+          .toDecimalAvaxP()
+          .toLocaleString(decimals: 3);
 
       _totalRewards = "$totalReward $ezcSymbol";
 
@@ -252,8 +249,9 @@ abstract class _ValidatorsStore with Store {
         final now = DateTime.now().millisecondsSinceEpoch;
         final percent =
             dart_math.min((now - startTime) / (endTime - startTime), 1);
-        final rewardAmt = bnToDecimalAvaxP(element.potentialRewardBN).text();
-        final stakingAmt = bnToAvaxP(element.stakeAmountBN);
+        final rewardAmt = element.potentialRewardBN.toDecimalAvaxP()
+          ..toLocaleString(decimals: 3);
+        final stakingAmt = element.stakeAmountBN.toAvaxP();
 
         final startDate = element.startTime.parseDateTimeFromTimestamp();
         final endDate = element.startTime.parseDateTimeFromTimestamp();
@@ -278,9 +276,10 @@ abstract class _ValidatorsStore with Store {
         final now = DateTime.now().millisecondsSinceEpoch;
         final percent =
             dart_math.min((now - startTime) / (endTime - startTime), 1);
-        final rewardAmt =
-            bnToDecimalAvaxP(element.potentialRewardBN).text(decimals: 1);
-        final stakingAmt = bnToAvaxP(element.stakeAmountBN);
+        final rewardAmt = element.potentialRewardBN
+            .toDecimalAvaxP()
+            .toLocaleString(decimals: 1);
+        final stakingAmt = element.stakeAmountBN.toAvaxP();
 
         final startDate = element.startTime.parseDateTimeFromTimestamp();
         final endDate = element.startTime.parseDateTimeFromTimestamp();

@@ -53,11 +53,11 @@ class AvaxBalance {
   AvaxBalance({required this.x, required this.p, required this.c});
 
   Decimal get totalDecimal =>
-      bnToDecimalAvaxX(x.unlocked) +
-      bnToDecimalAvaxP(p.unlocked) +
-      bnToDecimalAvaxC(c);
+      x.unlocked.toDecimalAvaxX() +
+      p.unlocked.toDecimalAvaxP() +
+      c.toDecimalAvaxC();
 
-  String get total => decimalToLocaleString(totalDecimal);
+  String get total => totalDecimal.toLocaleString();
 }
 
 class AssetBalanceRawX {
@@ -66,9 +66,9 @@ class AssetBalanceRawX {
 
   AssetBalanceRawX({required this.locked, required this.unlocked});
 
-  String get lockedDecimal => bnToAvaxX(locked);
+  String get lockedDecimal => locked.toAvaxX();
 
-  String get unlockedDecimal => bnToAvaxX(unlocked);
+  String get unlockedDecimal => unlocked.toAvaxX();
 }
 
 class AssetBalanceX extends AssetBalanceRawX {
@@ -91,11 +91,11 @@ class AssetBalanceP {
       required this.unlocked,
       required this.lockedStakeable});
 
-  String get lockedDecimal => bnToAvaxP(locked);
+  String get lockedDecimal => locked.toAvaxP();
 
-  String get unlockedDecimal => bnToAvaxP(unlocked);
+  String get unlockedDecimal => unlocked.toAvaxP();
 
-  String get lockedStakeableDecimal => bnToAvaxP(lockedStakeable);
+  String get lockedStakeableDecimal => lockedStakeable.toAvaxP();
 }
 
 class WalletBalanceC {
@@ -103,7 +103,7 @@ class WalletBalanceC {
 
   WalletBalanceC({required this.balance});
 
-  String get balanceDecimal => bnToAvaxC(balance);
+  String get balanceDecimal => balance.toAvaxC();
 }
 
 enum WalletEventType { balanceChangedX, balanceChangedP, balanceChangedC }

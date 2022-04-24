@@ -28,11 +28,11 @@ Future<BigInt> estimateExportGasFee(
     destinationAddress,
   );
   final baseFee = await getBaseFeeRecommended();
-  return avaxCtoX(baseFee * BigInt.from(exportGas));
+  return (baseFee * BigInt.from(exportGas)).avaxCtoX();
 }
 
 Future<BigInt> estimateImportGasFee({int numIns = 1, int numSigs = 1}) async {
   final importGas = estimateImportGasFeeFromMockTx(numIns, numSigs);
   final baseFee = await getBaseFeeRecommended();
-  return avaxCtoX(baseFee * BigInt.from(importGas));
+  return (baseFee * BigInt.from(importGas)).avaxCtoX();
 }

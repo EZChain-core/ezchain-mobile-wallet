@@ -170,7 +170,7 @@ class WalletExampleScreen extends StatelessWidget {
   getStakeP() async {
     try {
       final response = await wallet.getStake();
-      logger.i("getStakeP = ${bnToAvaxP(response.stakedBN)}");
+      logger.i("getStakeP = ${response.stakedBN.toAvaxP()}");
     } catch (e) {
       logger.e(e);
     }
@@ -196,7 +196,7 @@ class WalletExampleScreen extends StatelessWidget {
         logger.e(e);
       }
       final gasPriceNumber =
-          int.tryParse(bnToDecimalAvaxX(gasPrice).toStringAsFixed(0)) ?? 0;
+          int.tryParse(gasPrice.toDecimalAvaxX().toStringAsFixed(0)) ?? 0;
       logger.i("gasPrice = $gasPriceNumber");
 
       const to = "0xd30a9f6645a73f67b7850b9304b6a3172dda75bf";
@@ -216,7 +216,7 @@ class WalletExampleScreen extends StatelessWidget {
       }
 
       final maxFee = gasPrice * gasLimit;
-      final maxFeeText = bnToAvaxC(maxFee);
+      final maxFeeText = maxFee.toAvaxC();
       logger.i("maxFee = $maxFeeText");
 
       // Xác nhận gửi AvaxC
@@ -482,11 +482,10 @@ class WalletExampleScreen extends StatelessWidget {
               previousValue + (BigInt.tryParse(element) ?? BigInt.zero));
 
       if (value != BigInt.zero) {
-        message += "Value: ${bnToLocaleString(value)}\n";
+        message += "Value: ${value.toLocaleString()}\n";
       }
 
-      message +=
-          "Burned: ${bnToDecimalAvaxX(BigInt.tryParse(transaction.txFee.toString()) ?? BigInt.zero)}\n";
+      message += "Burned: ${transaction.txFeeBN.toDecimalAvaxX()}\n";
 
       message += "Blockchain: ${idToChainAlias(transaction.chainId)}\n";
 
@@ -552,8 +551,7 @@ class WalletExampleScreen extends StatelessWidget {
         final input = ins[i];
         final signatures = input.credentials?.map((e) => e.signature);
         final output = input.output;
-        final amount =
-            bnToLocaleString(BigInt.tryParse(output.amount) ?? BigInt.zero);
+        final amount = output.amountBN.toLocaleString();
         final addresses = output.addresses;
         message +=
             "#$i: amount = $amount, from = $addresses, signature = $signatures\n";
@@ -565,8 +563,7 @@ class WalletExampleScreen extends StatelessWidget {
       message += "\n${prefixOutput}Output: ${outs.length}\n";
       for (var i = 0; i < outs.length; i++) {
         final output = outs[i];
-        final amount =
-            bnToLocaleString(BigInt.tryParse(output.amount) ?? BigInt.zero);
+        final amount = output.amountBN.toLocaleString();
         final addresses = output.addresses;
         message += "#$i: amount = $amount, to = $addresses\n";
         final stakeLockTime = output.stakeLockTime;
@@ -592,10 +589,10 @@ class WalletExampleScreen extends StatelessWidget {
     try {
       final transactions = await wallet.getCChainTransactions();
       for (var tx in transactions) {
-        final value = bnToAvaxC(BigInt.tryParse(tx.value) ?? BigInt.zero);
-        final gasPrice = BigInt.tryParse(tx.gasPrice) ?? BigInt.zero;
-        final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
-        final fee = bnToAvaxC(gasPrice * gasUsed);
+        final value = tx.valueBN.toAvaxC();
+        final gasPrice = tx.gasPriceBN;
+        final gasUsed = tx.gasUsedBN;
+        final fee = (gasPrice * gasUsed).toAvaxC();
 
         final message =
             "txID = ${tx.hash}\nFrom -> To = ${tx.from} -> ${tx.to}\nBlock = #${tx.blockNumber}, Amount = $value EZC, Fee = $fee EZC";
@@ -612,10 +609,10 @@ class WalletExampleScreen extends StatelessWidget {
   ) async {
     try {
       final tx = await wallet.getCChainTransaction(txHash);
-      final value = bnToAvaxC(BigInt.tryParse(tx.value) ?? BigInt.zero);
-      final gasPrice = BigInt.tryParse(tx.gasPrice) ?? BigInt.zero;
-      final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
-      final fee = bnToAvaxC(gasPrice * gasUsed);
+      final value = tx.valueBN.toAvaxC();
+      final gasPrice = tx.gasPriceBN;
+      final gasUsed = tx.gasUsedBN;
+      final fee = (gasPrice * gasUsed).toAvaxC();
       final message = "Transaction Hash = ${tx.hash}\n"
           "Result = ${tx.success ? "Success" : "Fail"}\n"
           "Status = ${(int.tryParse(tx.confirmations) ?? 0) > 0 ? "Confirmed" : "Not Confirmed"}, Confirmed by ${tx.confirmations}\n"
@@ -624,7 +621,7 @@ class WalletExampleScreen extends StatelessWidget {
           "To = ${tx.to}\n"
           "Amount = $value EZC\n"
           "Transaction Fee = $fee EZC\n"
-          "Gas Price = ${bnToAvaxX(gasPrice)} wEZC\n"
+          "Gas Price = ${gasPrice.toAvaxX()} wEZC\n"
           "Gas Limit = ${tx.gasLimit}\n"
           "Gas Used by Transaction = ${tx.gasUsed} | ${(int.parse(tx.gasUsed) ~/ int.parse(tx.gasLimit)) * 100}%\n"
           "Nonce = $nonce";
@@ -681,7 +678,7 @@ class WalletExampleScreen extends StatelessWidget {
                 "Import(${item.destination}) = ${item.amountDisplayValue} EZC";
           } else if (item.type == HistoryItemTypeName.export) {
             final amount =
-                bnToAvaxX((item.amount + item.fee) * BigInt.from(-1));
+                ((item.amount + item.fee) * BigInt.from(-1)).toAvaxX();
             message += "Export(${item.source}) = $amount EZC";
           }
           logger.i(message);
@@ -710,7 +707,7 @@ class WalletExampleScreen extends StatelessWidget {
             }
           }
           if (potentialReward != null) {
-            message += "Reward Pending = ${bnToAvaxP(potentialReward)} EZC";
+            message += "Reward Pending = ${potentialReward.toAvaxP()} EZC";
           } else {
             message += "Reward Pending = ?";
           }
@@ -820,8 +817,7 @@ class WalletExampleScreen extends StatelessWidget {
           if (amountBN != BigInt.zero) {
             final asset = await getAssetDescription(output.assetId);
             final denomination = int.tryParse(asset.denomination) ?? 0;
-            final amount =
-                bnToLocaleString(amountBN, denomination: denomination);
+            final amount = amountBN.toLocaleString(denomination: denomination);
             message += "Amount = $amount ${asset.symbol}\n";
           }
         }
@@ -843,8 +839,7 @@ class WalletExampleScreen extends StatelessWidget {
           if (amountBN != BigInt.zero) {
             final asset = await getAssetDescription(output.assetId);
             final denomination = int.tryParse(asset.denomination) ?? 0;
-            final amount =
-                bnToLocaleString(amountBN, denomination: denomination);
+            final amount = amountBN.toLocaleString(denomination: denomination);
             message += "Amount = $amount ${asset.symbol}\n";
           }
         }
@@ -868,7 +863,7 @@ class WalletExampleScreen extends StatelessWidget {
         final amountBN = BigInt.tryParse(transaction.value) ?? BigInt.zero;
         final denomination = int.tryParse(transaction.tokenDecimal) ?? 0;
         message +=
-            "Amount = ${bnToLocaleString(amountBN, denomination: denomination)} ${transaction.tokenSymbol}\n";
+            "Amount = ${amountBN.toLocaleString(denomination: denomination)} ${transaction.tokenSymbol}\n";
         logger.i(message);
       }
     } catch (e) {
@@ -927,12 +922,9 @@ class WalletExampleScreen extends StatelessWidget {
         }
 
         final validatorStakeAmountBN = validator.stakeAmountBN;
-        final stakeAmountDecimal = bnToDecimalAvaxP(validatorStakeAmountBN);
-        final stakeAmount =
-            decimalToLocaleString(stakeAmountDecimal, decimals: 0);
-        final fee = decimalToLocaleString(
-            Decimal.tryParse(validator.delegationFee) ?? Decimal.zero,
-            decimals: 2);
+        final stakeAmountDecimal = validatorStakeAmountBN.toDecimalAvaxP();
+        final stakeAmount = stakeAmountDecimal.toLocaleString(decimals: 0);
+        final fee = validator.delegationFeeDecimal.toLocaleString(decimals: 2);
 
         // max token validator là 3tr
         final absMaxStake = ONEAVAX * BigInt.parse("3000000");
@@ -958,9 +950,9 @@ class WalletExampleScreen extends StatelessWidget {
 
         if (remainingStakeBN < minStakeDelegation) continue;
 
-        final remainingStakeDecimal = bnToDecimalAvaxP(remainingStakeBN);
+        final remainingStakeDecimal = remainingStakeBN.toDecimalAvaxP();
         final remainingStake =
-            decimalToLocaleString(remainingStakeDecimal, decimals: 0);
+            remainingStakeDecimal.toLocaleString(decimals: 0);
 
         final message = "Node ID = ${validator.nodeId}\n"
             "Validator Stake = $stakeAmount\n"
@@ -993,20 +985,20 @@ class WalletExampleScreen extends StatelessWidget {
       // store lại current supply tránh việc mỗi khi thay đổi amount phải gọi lại
       final currentSupply = await wallet.getCurrentSupply();
       final estimation = await calculateStakingReward(
-        numberToBN(amount, 18),
+        numberToBNAvaxC(amount),
         duration ~/ 1000,
         currentSupply * BigInt.from(10).pow(9),
       );
-      final estimatedReward = bnToDecimal(estimation, denomination: 18);
+      final estimatedReward = estimation.toAvaxDecimal(denomination: 18);
       logger.i("estimatedReward = ${estimatedReward.toStringAsFixed(2)}");
       final delegationFee =
           Decimal.tryParse(selectedNode.delegationFee) ?? Decimal.zero;
       final cut =
           estimatedReward * (delegationFee / Decimal.fromInt(100)).toDecimal();
-      final totalFee = getTxFeeP() * BigInt.from(10).pow(9) +
-          decimalToBn(cut, denomination: 18);
+      final totalFee =
+          getTxFeeP() * BigInt.from(10).pow(9) + cut.toBN(denomination: 18);
       logger.i(
-          "totalFee = ${bnToDecimal(totalFee, denomination: 18).toStringAsFixed(2)}");
+          "totalFee = ${totalFee.toAvaxDecimal(denomination: 18).toStringAsFixed(2)}");
 
       /// Start delegation in 5 minutes
       final txId =
@@ -1037,7 +1029,7 @@ class WalletExampleScreen extends StatelessWidget {
     final delegatorsReward = resD.fold<BigInt>(BigInt.zero,
         (previousValue, element) => previousValue + element.potentialRewardBN);
 
-    final totalReward = bnToAvaxP(validatorsReward + delegatorsReward);
+    final totalReward = (validatorsReward + delegatorsReward).toAvaxP();
 
     logger.i("totalReward = $totalReward EZC");
 
@@ -1047,8 +1039,8 @@ class WalletExampleScreen extends StatelessWidget {
       final now = DateTime.now().millisecondsSinceEpoch;
       final percent =
           dart_math.min((now - startTime) / (endTime - startTime), 1);
-      final rewardAmt = bnToAvaxP(element.potentialRewardBN);
-      final stakingAmt = bnToAvaxP(element.stakeAmountBN);
+      final rewardAmt = element.potentialRewardBN.toAvaxP();
+      final stakingAmt = element.stakeAmountBN.toAvaxP();
       logger.i(
           "Validator: NodeId = ${element.nodeId}, percent = ${percent * 100}%, stakingAmt = $stakingAmt EZC, rewardAmt = $rewardAmt EZC");
     }
@@ -1058,8 +1050,8 @@ class WalletExampleScreen extends StatelessWidget {
       final now = DateTime.now().millisecondsSinceEpoch;
       final percent =
           dart_math.min((now - startTime) / (endTime - startTime), 1);
-      final rewardAmt = bnToAvaxP(element.potentialRewardBN);
-      final stakingAmt = bnToAvaxP(element.stakeAmountBN);
+      final rewardAmt = element.potentialRewardBN.toAvaxP();
+      final stakingAmt = element.stakeAmountBN.toAvaxP();
       logger.i(
           "Delegator: NodeId = ${element.nodeId}, percent = ${percent * 100}%, stakingAmt = $stakingAmt EZC, rewardAmt = $rewardAmt EZC");
     }
@@ -1159,7 +1151,7 @@ class WalletExampleScreen extends StatelessWidget {
       logger.e('Number of groups must be at least 1.');
       return;
     }
-    final fee = bnToDecimalAvaxX(xChain.getCreationTxFee());
+    final fee = xChain.getCreationTxFee().toDecimalAvaxX();
     logger.i("fee = $fee EZC");
     try {
       final txId = await wallet.createNFTFamily(
@@ -1175,7 +1167,7 @@ class WalletExampleScreen extends StatelessWidget {
 
   mintNFT() async {
     try {
-      final fee = bnToDecimalAvaxX(xChain.getTxFee());
+      final fee = xChain.getTxFee().toDecimalAvaxX();
       logger.i("fee = $fee EZC");
 
       final utxos = wallet.utxosX.utxos.values;
@@ -1435,7 +1427,7 @@ class WalletExampleScreen extends StatelessWidget {
         logger.e(e);
       }
       final gasPriceNumber =
-          int.tryParse(bnToDecimalAvaxX(gasPrice).toStringAsFixed(0)) ?? 0;
+          int.tryParse(gasPrice.toDecimalAvaxX().toStringAsFixed(0)) ?? 0;
       logger.i("gasPrice = $gasPriceNumber");
 
       BigInt gasLimit = BigInt.from(31000);

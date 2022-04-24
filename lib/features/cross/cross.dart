@@ -6,6 +6,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
@@ -55,8 +56,8 @@ class _CrossScreenState extends State<CrossScreen> {
                       const SizedBox(width: 8),
                       Text(
                         ezcSymbol,
-                        style:
-                            EZCBodyLargeTextStyle(color: provider.themeMode.text),
+                        style: EZCBodyLargeTextStyle(
+                            color: provider.themeMode.text),
                       ),
                     ],
                   ),
@@ -87,16 +88,17 @@ class _CrossScreenState extends State<CrossScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: Observer(
                                     builder: (_) => EZCAmountTextField(
                                       label: Strings.current.sharedAmount,
                                       backgroundColor: provider.themeMode.white,
                                       hint: '0.0',
                                       suffixText: Strings.current
-                                          .walletSendBalance(
-                                              _crossStore.sourceBalance.text()),
+                                          .walletSendBalance(_crossStore
+                                              .sourceBalance
+                                              .toLocaleString(decimals: 3)),
                                       rateUsd: _crossStore.avaxPrice,
                                       error: _crossStore.amountError,
                                       onChanged: (amount) {
@@ -108,9 +110,9 @@ class _CrossScreenState extends State<CrossScreen> {
                                       },
                                       controller: _amountController,
                                       onSuffixPressed: () {
-                                        _amountController.text =
-                                            _crossStore.maxSourceAmount
-                                                .toString();
+                                        _amountController.text = _crossStore
+                                            .maxSourceAmount
+                                            .toString();
                                       },
                                     ),
                                   ),
@@ -138,9 +140,10 @@ class _CrossScreenState extends State<CrossScreen> {
                                               shape: BoxShape.circle,
                                               border: Border.all(
                                                   width: 1,
-                                                  color:
-                                                      provider.themeMode.text10)),
-                                          child: Assets.icons.icSwitchArrow.svg(),
+                                                  color: provider
+                                                      .themeMode.text10)),
+                                          child:
+                                              Assets.icons.icSwitchArrow.svg(),
                                         ),
                                       ),
                                     )
@@ -148,8 +151,8 @@ class _CrossScreenState extends State<CrossScreen> {
                                 ),
                                 const SizedBox(height: 12),
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: Observer(
                                     builder: (_) => EZCDropdown<CrossChainType>(
                                       label: Strings.current.sharedDestination,
@@ -170,7 +173,8 @@ class _CrossScreenState extends State<CrossScreen> {
                                     padding: const EdgeInsets.only(right: 16),
                                     child: Text(
                                       Strings.current.walletSendBalance(
-                                          _crossStore.destinationBalance.text()),
+                                          _crossStore.destinationBalance
+                                              .toLocaleString(decimals: 3)),
                                       maxLines: 1,
                                       overflow: TextOverflow.fade,
                                       textAlign: TextAlign.end,
@@ -214,8 +218,8 @@ class _CrossScreenState extends State<CrossScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -241,7 +245,8 @@ class _CrossScreenState extends State<CrossScreen> {
                                     padding: const EdgeInsets.only(right: 16),
                                     child: Text(
                                       Strings.current.walletSendBalance(
-                                          _crossStore.sourceBalance.text()),
+                                          _crossStore.sourceBalance
+                                              .toLocaleString(decimals: 3)),
                                       style: EZCLabelMediumTextStyle(
                                           color: provider.themeMode.text60),
                                     ),
@@ -260,7 +265,8 @@ class _CrossScreenState extends State<CrossScreen> {
                                       child: Container(
                                         width: 48,
                                         height: 48,
-                                        margin: const EdgeInsets.only(right: 16),
+                                        margin:
+                                            const EdgeInsets.only(right: 16),
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
                                           color: provider.themeMode.white,
@@ -278,8 +284,8 @@ class _CrossScreenState extends State<CrossScreen> {
                                 ),
                                 const SizedBox(height: 24),
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -305,7 +311,8 @@ class _CrossScreenState extends State<CrossScreen> {
                                     padding: const EdgeInsets.only(right: 16),
                                     child: Text(
                                       Strings.current.walletSendBalance(
-                                          _crossStore.destinationBalance.text()),
+                                          _crossStore.destinationBalance
+                                              .toLocaleString(decimals: 3)),
                                       style: EZCLabelMediumTextStyle(
                                           color: provider.themeMode.text60),
                                     ),
@@ -330,7 +337,7 @@ class _CrossScreenState extends State<CrossScreen> {
                         Expanded(
                           child: Observer(
                             builder: (_) => Text(
-                              '${_crossStore.fee.text(decimals: 5)} $ezcSymbol',
+                              '${_crossStore.fee.toLocaleString(decimals: 5)} $ezcSymbol',
                               textAlign: TextAlign.end,
                               style: EZCTitleLargeTextStyle(
                                   color: provider.themeMode.text60),

@@ -14,7 +14,6 @@ import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
-import 'package:wallet/ezc/wallet/explorer/ortelius/types.dart';
 
 part 'transactions_store.g.dart';
 
@@ -36,11 +35,11 @@ abstract class _TransactionsStore with Store {
   Decimal get balance => _balanceStore.getBalance(ezcType);
 
   @computed
-  String get balanceText => _balanceStore.decimalBalance(balance);
+  String get balanceText => _balanceStore.getBalanceText(ezcType);
 
   @computed
-  String get balanceUsd => decimalToLocaleString(balance * _priceStore.ezcPrice,
-      decimals: decimalNumber);
+  String get balanceUsd =>
+      (balance * _priceStore.ezcPrice).toLocaleString(decimals: 3);
 
   @computed
   List<Validator> get validators => _validatorsStore.validators;
@@ -71,13 +70,16 @@ abstract class _TransactionsStore with Store {
     switch (ezcType) {
       case EZCType.xChain:
         return WalletReceiveRoute(
-            args: WalletReceiveArgs(ezcType.name, _addressX));
+          args: WalletReceiveArgs(ezcType.name, _addressX),
+        );
       case EZCType.pChain:
         return WalletReceiveRoute(
-            args: WalletReceiveArgs(ezcType.name, _addressP));
+          args: WalletReceiveArgs(ezcType.name, _addressP),
+        );
       case EZCType.cChain:
         return WalletReceiveRoute(
-            args: WalletReceiveArgs(ezcType.name, _addressC));
+          args: WalletReceiveArgs(ezcType.name, _addressC),
+        );
     }
   }
 

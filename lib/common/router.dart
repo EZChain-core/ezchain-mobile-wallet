@@ -122,6 +122,7 @@ class StatusBarRouterObserver extends AutoRouterObserver {
             routeName == WalletTokenAddRoute.name ||
             routeName == WalletSendEvmRoute.name ||
             routeName == WalletReceiveRoute.name ||
+            routeName == WalletSendAntRoute.name ||
             routeName == WalletSendAvmRoute.name) {
           _routeChanged(WalletRoute.name);
         }

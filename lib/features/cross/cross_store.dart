@@ -21,6 +21,7 @@ abstract class _CrossStore with Store {
   WalletProvider get _wallet => _walletFactory.activeWallet;
 
   final _balanceStore = getIt<BalanceStore>();
+
   final _priceStore = getIt<PriceStore>();
 
   @computed
@@ -60,8 +61,6 @@ abstract class _CrossStore with Store {
   CrossTransferInfo get crossTransferInfo =>
       CrossTransferInfo(_sourceChain, destinationChain, amount);
 
-  get _amountDouble => amount.toDouble();
-
   get maxSourceAmount {
     final max = sourceBalance - _fee;
     return max >= Decimal.zero ? max : Decimal.zero;
@@ -96,8 +95,8 @@ abstract class _CrossStore with Store {
   @action
   bool validate() {
     final amountBigInt = _sourceChain == CrossChainType.cChain
-        ? numberToBNAvaxC(amount.toBigInt())
-        : numberToBNAvaxX(amount.toBigInt());
+        ? amount.toBNAvaxC()
+        : amount.toBNAvaxX();
     final isAmountValid = sourceBalance > amount && amountBigInt > BigInt.zero;
     if (!isAmountValid) {
       _amountError = Strings.current.sharedInvalidAmount;
@@ -120,9 +119,9 @@ abstract class _CrossStore with Store {
   Future<Decimal> _getFeeExport() async {
     switch (_sourceChain) {
       case CrossChainType.xChain:
-        return bnToDecimalAvaxX(getTxFeeX());
+        return getTxFeeX().toDecimalAvaxX();
       case CrossChainType.pChain:
-        return bnToDecimalAvaxP(getTxFeeP());
+        return getTxFeeP().toDecimalAvaxP();
       case CrossChainType.cChain:
         final hexAddress = _wallet.getAddressC();
         final destination = destinationChain == CrossChainType.xChain
@@ -132,26 +131,26 @@ abstract class _CrossStore with Store {
             ? _wallet.getAddressX()
             : _wallet.getAddressP();
         final amountEzc = destinationChain == CrossChainType.xChain
-            ? numberToBNAvaxX(_amountDouble)
-            : numberToBNAvaxP(_amountDouble);
+            ? amount.toBNAvaxX()
+            : amount.toBNAvaxP();
         final exportFee = await estimateExportGasFee(
           destination,
           amountEzc,
           hexAddress,
           destinationAddress,
         );
-        return bnToDecimalAvaxX(exportFee);
+        return exportFee.toDecimalAvaxX();
     }
   }
 
   Future<Decimal> _getFeeImport() async {
     switch (destinationChain) {
       case CrossChainType.xChain:
-        return bnToDecimalAvaxX(getTxFeeX());
+        return getTxFeeX().toDecimalAvaxX();
       case CrossChainType.pChain:
-        return bnToDecimalAvaxP(getTxFeeP());
+        return getTxFeeP().toDecimalAvaxP();
       case CrossChainType.cChain:
-        return bnToDecimalAvaxC(await estimateImportGasFee());
+        return (await estimateImportGasFee()).toDecimalAvaxC();
     }
   }
 

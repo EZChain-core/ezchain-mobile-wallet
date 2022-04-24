@@ -77,7 +77,7 @@ TransactionsItem mapErc20TransactionToTransactionsItem(CChainErc20Tx tx) {
   final amountBN = BigInt.tryParse(tx.value) ?? BigInt.zero;
   final denomination = int.tryParse(tx.tokenDecimal) ?? 0;
   String amount =
-      "${bnToLocaleString(amountBN, denomination: denomination)} ${tx.tokenSymbol}";
+      "${amountBN.toLocaleString(denomination: denomination)} ${tx.tokenSymbol}";
   final time = tx.timeStamp.parseDateTimeFromTimestamp()?.parseTimeAgo() ?? '';
   const transType = 'Transaction';
   final from = <TransactionsItemAddressInfo>[];

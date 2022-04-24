@@ -281,7 +281,7 @@ class _EZCAmountTextFieldState extends State<EZCAmountTextField> {
                       flex: 1,
                       child: Text(
                         widget.prefixText ??
-                            '\$ ${decimalToLocaleString(_usdValue, decimals: 3)}',
+                            '\$ ${_usdValue.toLocaleString(decimals: 3)}',
                         maxLines: 1,
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.fade,

@@ -271,7 +271,7 @@ Future<List<TransactionsItem>> mapToTransactionsItems(
         if (amountBN != BigInt.zero) {
           final asset = await getAssetDescription(output.assetId);
           final denomination = int.tryParse(asset.denomination) ?? 0;
-          amount = bnToLocaleString(amountBN, denomination: denomination) +
+          amount = amountBN.toLocaleString(denomination: denomination) +
               " " +
               asset.symbol;
         }
@@ -300,7 +300,7 @@ Future<List<TransactionsItem>> mapToTransactionsItems(
         if (amountBN != BigInt.zero) {
           final asset = await getAssetDescription(output.assetId);
           final denomination = int.tryParse(asset.denomination) ?? 0;
-          amount = bnToLocaleString(amountBN, denomination: denomination) +
+          amount = amountBN.toLocaleString(denomination: denomination) +
               " " +
               asset.symbol;
         }
@@ -334,13 +334,13 @@ List<TransactionsItem> mapCChainToTransactionsItem(
       final time =
           tx.timeStamp.parseDateTimeFromTimestamp()?.parseTimeAgo() ?? '';
       final blockNumber = '#${tx.blockNumber}';
-      final amountBN = BigInt.tryParse(tx.value) ?? BigInt.zero;
-      final gasPrice = BigInt.tryParse(tx.gasPrice) ?? BigInt.zero;
-      final gasUsed = BigInt.tryParse(tx.gasUsed) ?? BigInt.zero;
-      final fee = '${bnToAvaxC(gasPrice * gasUsed)} $ezcSymbol';
+      final amountBN = tx.valueBN;
+      final gasPrice = tx.gasPriceBN;
+      final gasUsed = tx.gasUsedBN;
+      final fee = '${(gasPrice * gasUsed).toAvaxC()} $ezcSymbol';
       String? amount;
       if (amountBN != BigInt.zero) {
-        final value = bnToAvaxC(amountBN);
+        final value = amountBN.toAvaxC();
         amount = '$value $ezcSymbol';
       }
       const transType = 'Transaction';

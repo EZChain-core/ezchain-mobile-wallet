@@ -23,7 +23,7 @@ abstract class _WalletTokenStore with Store {
     for (var element in tokens) {
       total += (element.balance * (element.price ?? Decimal.one));
     }
-    return total.text(decimals: 1);
+    return total.toLocaleString(decimals: 1);
   }
 
   @computed
@@ -34,15 +34,16 @@ abstract class _WalletTokenStore with Store {
       ObservableList.of(_tokenStore.erc20Tokens.map((token) {
         final price = _priceStore.prices[token.symbol.toLowerCase()];
         return WalletTokenItem(
-            id: token.contractAddress,
-            name: token.name,
-            symbol: token.symbol,
-            balance: bnToDecimal(token.balanceBN, denomination: token.decimals),
-            balanceText: token.balance,
-            type: EZCTokenType.erc20,
-            decimals: token.decimals,
-            logo: price?.image,
-            price: price?.currentPriceDecimal);
+          id: token.contractAddress,
+          name: token.name,
+          symbol: token.symbol,
+          balance: token.balanceBN.toAvaxDecimal(denomination: token.decimals),
+          balanceText: token.balance,
+          type: EZCTokenType.erc20,
+          decimals: token.decimals,
+          logo: price?.image,
+          price: price?.currentPriceDecimal,
+        );
       }).toList());
 
   @computed

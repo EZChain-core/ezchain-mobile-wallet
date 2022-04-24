@@ -28,7 +28,7 @@ abstract class _NftFamilyCreateStore with Store {
   @observable
   bool isLoading = false;
 
-  String fee = '${bnToDecimalAvaxX(xChain.getCreationTxFee())}';
+  String fee = '${xChain.getCreationTxFee().toDecimalAvaxX()}';
 
   @action
   Future<bool> createFamily(String name, String symbol, int groupNum) async {

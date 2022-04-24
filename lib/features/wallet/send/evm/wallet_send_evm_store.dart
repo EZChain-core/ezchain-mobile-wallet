@@ -74,9 +74,9 @@ abstract class _WalletSendEvmStore with Store {
 
   BigInt get amountBN {
     if (_token != null) {
-      return numberToBN(amount.toBigInt(), _token!.decimals);
+      return amount.toBN(denomination: _token!.decimals);
     } else {
-      return numberToBNAvaxC(amount.toBigInt());
+      return amount.toBNAvaxC();
     }
   }
 
@@ -95,13 +95,13 @@ abstract class _WalletSendEvmStore with Store {
       logger.e(e);
     }
     _gasPriceNumber =
-        int.tryParse(bnToDecimalAvaxX(_gasPrice).toStringAsFixed(0)) ?? 0;
+        int.tryParse(_gasPrice.toDecimalAvaxX().toStringAsFixed(0)) ?? 0;
   }
 
   @action
   confirm(String address) async {
     final isAddressValid = validateAddressEvm(address);
-    final isAmountValid = balanceC >= amount && numberToBNAvaxC(amount.toBigInt()) > BigInt.zero;
+    final isAmountValid = balanceC >= amount && amountBN > BigInt.zero;
     if (!isAddressValid) {
       _addressError = Strings.current.sharedInvalidAddress;
     }
@@ -110,13 +110,19 @@ abstract class _WalletSendEvmStore with Store {
     }
     if (isAddressValid && isAmountValid) {
       if (_token != null) {
-        _gasLimit =
-            await _wallet.estimateErc20Gas(_token!.id, address, amountBN);
+        _gasLimit = await _wallet.estimateErc20Gas(
+          _token!.id,
+          address,
+          amountBN,
+        );
       } else {
-        _gasLimit =
-            await _wallet.estimateAvaxGasLimit(address, amountBN, _gasPrice);
+        _gasLimit = await _wallet.estimateAvaxGasLimit(
+          address,
+          amountBN,
+          _gasPrice,
+        );
       }
-      _fee = bnToDecimalAvaxC(_gasPrice * _gasLimit);
+      _fee = (_gasPrice * _gasLimit).toDecimalAvaxC();
 
       _confirmSuccess = true;
     }
@@ -142,12 +148,21 @@ abstract class _WalletSendEvmStore with Store {
     try {
       if (_token != null) {
         await _wallet.sendErc20(
-            address, amountBN, _gasPrice, _gasLimit.toInt(), _token!.id);
+          address,
+          amountBN,
+          _gasPrice,
+          _gasLimit.toInt(),
+          _token!.id,
+        );
         _tokenStore.updateErc20Balance();
       } else {
-        await _wallet.sendAvaxC(address, amountBN, _gasPrice, _gasLimit.toInt());
+        await _wallet.sendAvaxC(
+          address,
+          amountBN,
+          _gasPrice,
+          _gasLimit.toInt(),
+        );
       }
-
       _isLoading = false;
       return true;
     } catch (e) {

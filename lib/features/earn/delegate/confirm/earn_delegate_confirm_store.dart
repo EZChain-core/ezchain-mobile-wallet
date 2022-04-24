@@ -40,26 +40,26 @@ abstract class _EarnDelegateConfirmStore with Store {
   @action
   calculateFee(EarnDelegateConfirmArgs args) async {
     try {
-      final amount = args.amount.toDouble();
+      final amount = args.amount.toBNAvaxC();
       final start = args.startDate.millisecondsSinceEpoch;
       final end = args.endDate.millisecondsSinceEpoch;
       final duration = end - start;
 
       final currentSupply = await _wallet.getCurrentSupply();
       final estimation = await calculateStakingReward(
-        numberToBN(amount, 18),
+        amount,
         duration ~/ 1000,
         currentSupply * BigInt.from(10).pow(9),
       );
-      final estimatedReward = bnToDecimal(estimation, denomination: 18);
+      final estimatedReward = estimation.toAvaxDecimal(denomination: 18);
       _estimatedRewardText = '${estimatedReward.toStringAsFixed(2)} $ezcSymbol';
       final delegationFee = args.delegateItem.delegationFee;
       final cut =
           estimatedReward * (delegationFee / Decimal.fromInt(100)).toDecimal();
-      final totalFee = getTxFeeP() * BigInt.from(10).pow(9) +
-          decimalToBn(cut, denomination: 18);
+      final totalFee =
+          getTxFeeP() * BigInt.from(10).pow(9) + cut.toBN(denomination: 18);
       _feeText =
-          '${bnToDecimal(totalFee, denomination: 18).toStringAsFixed(2)} $ezcSymbol';
+          '${totalFee.toAvaxDecimal(denomination: 18).toStringAsFixed(2)} $ezcSymbol';
     } catch (e) {
       logger.e(e);
     }
@@ -69,7 +69,7 @@ abstract class _EarnDelegateConfirmStore with Store {
   delegate(EarnDelegateConfirmArgs args) async {
     try {
       final nodeId = args.delegateItem.nodeId;
-      final amount = args.amount.toDouble();
+      final amount = args.amount.toBNAvaxP();
 
       final start = args.startDate.millisecondsSinceEpoch;
       final end = args.endDate.millisecondsSinceEpoch;
@@ -77,7 +77,7 @@ abstract class _EarnDelegateConfirmStore with Store {
 
       final txId = await _wallet.delegate(
         nodeId,
-        numberToBNAvaxP(amount),
+        amount,
         start,
         end,
       );

@@ -24,10 +24,7 @@ class Erc20TokenData {
     required this.decimals,
   });
 
-  String get balance => bnToLocaleString(
-        balanceBN,
-        denomination: decimals,
-      );
+  String get balance => balanceBN.toLocaleString(denomination: decimals);
 
   @override
   String toString() {

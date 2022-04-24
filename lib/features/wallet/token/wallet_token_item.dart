@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/common/router.dart';
 import 'package:wallet/common/router.gr.dart';
-import 'package:wallet/features/common/store/balance_store.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/type/ezc_type.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
@@ -48,8 +48,9 @@ class WalletTokenItem {
     }
   }
 
-  String get totalPrice =>
-      price != null ? '\$${(balance * price!).text(decimals: 9)}' : '';
+  String get totalPrice => price != null
+      ? '\$${(balance * price!).toLocaleString(decimals: 9)}'
+      : '';
 
   String get chain => type.chain;
 }

@@ -1,9 +1,13 @@
+import 'dart:async';
+
+import 'package:async/async.dart';
 import 'package:decimal/decimal.dart';
 import 'package:eventify/eventify.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
+import 'package:wallet/ezc/sdk/apis/pvm/model/get_stake.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/type/ezc_type.dart';
 import 'package:wallet/features/common/store/token_store.dart';
@@ -13,8 +17,6 @@ import 'package:wallet/ezc/wallet/types.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 
 part 'balance_store.g.dart';
-
-const decimalNumber = 3;
 
 @LazySingleton()
 class BalanceStore = _BalanceStore with _$BalanceStore;
@@ -53,21 +55,39 @@ abstract class _BalanceStore with Store {
   @readonly
   Decimal _balanceLockedStakeableP = Decimal.zero;
 
-  String get balanceXString => decimalBalance(_balanceX);
+  String get balanceXString => _decimalBalance(_balanceX);
 
-  String get balanceCString => decimalBalance(_balanceC);
+  String get balanceCString => _decimalBalance(_balanceC);
 
-  String get balancePString => decimalBalance(_balanceP);
+  String get balancePString => _decimalBalance(_balanceP);
+
+  CancelableCompleter? _updateBalanceXCompleter;
+  CancelableCompleter? _updateBalancePCompleter;
+  CancelableCompleter? _updateBalanceCCompleter;
+  CancelableCompleter<GetStakeResponse>? _updateStakeCompleter;
+
+  Timer? _timer;
 
   init() {
     _wallet.on(WalletEventType.balanceChangedX, _handleCallback);
     _wallet.on(WalletEventType.balanceChangedP, _handleCallback);
     _wallet.on(WalletEventType.balanceChangedC, _handleCallback);
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      if (timer.isActive) {
+        updateBalance();
+      }
+    });
     updateBalance();
   }
 
   @action
   dispose() {
+    _timer?.cancel();
+    _updateBalanceXCompleter?.operation.cancel();
+    _updateBalancePCompleter?.operation.cancel();
+    _updateBalanceCCompleter?.operation.cancel();
+    _updateStakeCompleter?.operation.cancel();
     _wallet.off(WalletEventType.balanceChangedX, _handleCallback);
     _wallet.off(WalletEventType.balanceChangedP, _handleCallback);
     _wallet.off(WalletEventType.balanceChangedC, _handleCallback);
@@ -81,7 +101,6 @@ abstract class _BalanceStore with Store {
     _balanceLockedStakeableP = Decimal.zero;
   }
 
-  @action
   updateBalance() {
     updateBalanceX();
     updateBalanceP();
@@ -98,55 +117,68 @@ abstract class _BalanceStore with Store {
       final x = eventData[getAvaxAssetId()];
       if (x != null) {
         _tokenStore.getAvaAssets();
-        _balanceX = bnToDecimalAvaxX(x.unlocked);
-        _balanceLockedX = bnToDecimalAvaxX(x.locked);
+        _balanceX = x.unlocked.toDecimalAvaxX();
+        _balanceLockedX = x.locked.toDecimalAvaxX();
       }
     }
     if (eventName == WalletEventType.balanceChangedP.type &&
         eventData is AssetBalanceP) {
-      _balanceP = bnToDecimalAvaxP(eventData.unlocked);
-      _balanceLockedP = bnToDecimalAvaxP(eventData.locked);
-      _balanceLockedStakeableP = bnToDecimalAvaxP(eventData.lockedStakeable);
+      _balanceP = eventData.unlocked.toDecimalAvaxP();
+      _balanceLockedP = eventData.locked.toDecimalAvaxP();
+      _balanceLockedStakeableP = eventData.lockedStakeable.toDecimalAvaxP();
     }
     if (eventName == WalletEventType.balanceChangedC.type &&
         eventData is WalletBalanceC) {
-      _balanceC = bnToDecimalAvaxC(eventData.balance);
+      _balanceC = eventData.balance.toDecimalAvaxC();
     }
     final avaxBalance = _wallet.getAvaxBalance();
     _totalEzcWithoutStaking = avaxBalance.totalDecimal;
   }
 
-  updateBalanceX() async {
-    try {
-      await _wallet.updateUtxosX();
-    } catch (e) {
-      logger.e(e);
+  updateBalanceX() {
+    if (_updateBalanceXCompleter == null ||
+        _updateBalanceXCompleter?.isCompleted == true) {
+      _updateBalanceXCompleter = CancelableCompleter();
+      _updateBalanceXCompleter?.operation.value.then((value) {}, onError: (e) {
+        logger.e(e);
+      });
+      _updateBalanceXCompleter?.complete(_wallet.updateUtxosX());
     }
   }
 
-  updateBalanceP() async {
-    try {
-      await _wallet.updateUtxosP();
-    } catch (e) {
-      logger.e(e);
+  updateBalanceP() {
+    if (_updateBalancePCompleter == null ||
+        _updateBalancePCompleter?.isCompleted == true) {
+      _updateBalancePCompleter = CancelableCompleter();
+      _updateBalancePCompleter?.operation.value.then((value) {}, onError: (e) {
+        logger.e(e);
+      });
+      _updateBalancePCompleter?.complete(_wallet.updateUtxosP());
     }
   }
 
-  updateBalanceC() async {
-    try {
-      await _wallet.updateAvaxBalanceC();
-    } catch (e) {
-      logger.e(e);
+  updateBalanceC() {
+    if (_updateBalanceCCompleter == null ||
+        _updateBalanceCCompleter?.isCompleted == true) {
+      _updateBalanceCCompleter = CancelableCompleter();
+      _updateBalanceCCompleter?.operation.value.then((value) {}, onError: (e) {
+        logger.e(e);
+      });
+      _updateBalanceCCompleter?.complete(_wallet.updateAvaxBalanceC());
     }
   }
 
   @action
-  updateStake() async {
-    try {
-      final staked = await _wallet.getStake();
-      _staking = bnToDecimalAvaxP(staked.stakedBN);
-    } catch (e) {
-      logger.e(e);
+  updateStake() {
+    if (_updateStakeCompleter == null ||
+        _updateStakeCompleter?.isCompleted == true) {
+      _updateStakeCompleter = CancelableCompleter();
+      _updateStakeCompleter?.operation.value.then((value) {
+        _staking = value.stakedBN.toDecimalAvaxP();
+      }, onError: (e) {
+        logger.e(e);
+      });
+      _updateStakeCompleter?.complete(_wallet.getStake());
     }
   }
 
@@ -172,13 +204,7 @@ abstract class _BalanceStore with Store {
     }
   }
 
-  String decimalBalance(Decimal balance) {
-    return decimalToLocaleString(balance, decimals: decimalNumber);
-  }
-}
-
-extension DecimalExtension on Decimal {
-  String text({int decimals = decimalNumber}) {
-    return decimalToLocaleString(this, decimals: decimals);
+  String _decimalBalance(Decimal balance) {
+    return balance.toLocaleString(decimals: 3);
   }
 }

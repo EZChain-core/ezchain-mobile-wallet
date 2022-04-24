@@ -138,8 +138,7 @@ class HistoryBaseTxToken {
   bool get isProfit => amount >= BigInt.zero;
 
   String get amountDisplayValue =>
-      bnToLocaleString(
-        amount,
+      amount.toLocaleString(
         denomination: int.tryParse(asset.denomination) ?? 0,
       ) +
       " " +

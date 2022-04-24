@@ -38,17 +38,15 @@ abstract class _WalletEZCStore with Store {
       WalletEZCBalanceViewData(_balanceStore.balanceC);
 
   @computed
-  String get totalEzc =>
-      decimalToLocaleString(_balanceStore.totalEzc, decimals: decimalNumber);
+  String get totalEzc => _balanceStore.totalEzc.toLocaleString(decimals: 3);
 
   @computed
-  String get staking =>
-      decimalToLocaleString(_balanceStore.staking, decimals: decimalNumber);
+  String get staking => _balanceStore.staking.toLocaleString(decimals: 3);
 
   @computed
   String get totalUsd {
     final totalUsdNumber = _balanceStore.totalEzc * _priceStore.ezcPrice;
-    return decimalToLocaleString(totalUsdNumber, decimals: decimalNumber);
+    return totalUsdNumber.toLocaleString(decimals: 3);
   }
 
   String get addressX => _wallet.getAddressX();
@@ -76,15 +74,12 @@ class WalletEZCBalanceViewData {
   final Decimal? lock;
   final Decimal? lockStakeable;
 
-  get availableString =>
-      decimalToLocaleString(available, decimals: decimalNumber);
+  get availableString => available.toLocaleString(decimals: 3);
 
-  get lockString =>
-      decimalToLocaleString(lock ?? Decimal.zero, decimals: decimalNumber);
+  get lockString => (lock ?? Decimal.zero).toLocaleString(decimals: 3);
 
   get lockStakeableString =>
-      decimalToLocaleString(lockStakeable ?? Decimal.zero,
-          decimals: decimalNumber);
+      (lockStakeable ?? Decimal.zero).toLocaleString(decimals: 3);
 
   WalletEZCBalanceViewData(this.available, [this.lock, this.lockStakeable]);
 }

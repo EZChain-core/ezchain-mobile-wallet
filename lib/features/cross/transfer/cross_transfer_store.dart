@@ -28,8 +28,6 @@ abstract class _CrossTransferStore with Store {
 
   final _balanceStore = getIt<BalanceStore>();
 
-  double _amountDouble = 0;
-
   @readonly
   String _exportTxId = '';
 
@@ -62,6 +60,8 @@ abstract class _CrossTransferStore with Store {
     return _getBalance(_destinationChain);
   }
 
+  Decimal amount = Decimal.zero;
+
   @action
   transferring() async {
     await _export();
@@ -72,7 +72,7 @@ abstract class _CrossTransferStore with Store {
   setCrossTransferInfo(CrossTransferInfo info) {
     _sourceChain = info.sourceChain;
     _destinationChain = info.destinationChain;
-    _amountDouble = info.amount.toDouble();
+    amount = info.amount;
     transferring();
   }
 
@@ -85,12 +85,12 @@ abstract class _CrossTransferStore with Store {
       if (_sourceChain == CrossChainType.xChain &&
           _destinationChain == CrossChainType.pChain) {
         // x -> p
-        final amountAvax = numberToBNAvaxX(_amountDouble) + feeP;
+        final amountAvax = amount.toBNAvaxX() + feeP;
         _exportTxId = await _wallet.exportXChain(amountAvax, ExportChainsX.P);
       } else if (_sourceChain == CrossChainType.pChain &&
           _destinationChain == CrossChainType.xChain) {
         // p -> x
-        final amountAvax = numberToBNAvaxP(_amountDouble) + feeX;
+        final amountAvax = amount.toBNAvaxP() + feeX;
         _exportTxId = await _wallet.exportPChain(amountAvax, ExportChainsP.X);
       } else if (_sourceChain == CrossChainType.cChain &&
           _destinationChain == CrossChainType.xChain) {
@@ -98,28 +98,29 @@ abstract class _CrossTransferStore with Store {
         final hexAddress = _wallet.getAddressC();
         const destinationChain = ExportChainsC.X;
         final destinationAddress = _wallet.getAddressX();
+        final amountBN = amount.toBNAvaxX();
         final exportFee = await estimateExportGasFee(
           destinationChain,
-          numberToBNAvaxX(_amountDouble),
+          amountBN,
           hexAddress,
           destinationAddress,
         );
-        final amountAvax = numberToBNAvaxX(_amountDouble) + feeX;
         _exportTxId = await _wallet.exportCChain(
-          amountAvax,
+          amountBN + feeX,
           destinationChain,
           exportFee: exportFee,
         );
       } else if (_sourceChain == CrossChainType.xChain &&
           _destinationChain == CrossChainType.cChain) {
         // x -> c
-        final amountAvax = numberToBNAvaxX(_amountDouble) + feeX;
+        final importFee = await estimateImportGasFee();
+        final amountAvax = amount.toBNAvaxX() + importFee;
         _exportTxId = await _wallet.exportXChain(amountAvax, ExportChainsX.C);
       } else if (_sourceChain == CrossChainType.pChain &&
           _destinationChain == CrossChainType.cChain) {
         // p -> c
         final importFee = await estimateImportGasFee();
-        final amountAvax = numberToBNAvaxX(_amountDouble) + importFee;
+        final amountAvax = amount.toBNAvaxP() + importFee;
         _exportTxId = await _wallet.exportPChain(amountAvax, ExportChainsP.C);
       } else if (_sourceChain == CrossChainType.cChain &&
           _destinationChain == CrossChainType.pChain) {
@@ -127,15 +128,15 @@ abstract class _CrossTransferStore with Store {
         final hexAddress = _wallet.getAddressC();
         const destinationChain = ExportChainsC.P;
         final destinationAddress = _wallet.getAddressP();
+        final amountBN = amount.toBNAvaxP();
         final exportFee = await estimateExportGasFee(
           destinationChain,
-          numberToBNAvaxP(_amountDouble),
+          amountBN,
           hexAddress,
           destinationAddress,
         );
-        final amountAvax = numberToBNAvaxP(_amountDouble) + feeP;
         _exportTxId = await _wallet.exportCChain(
-          amountAvax,
+          amountBN + feeP,
           destinationChain,
           exportFee: exportFee,
         );

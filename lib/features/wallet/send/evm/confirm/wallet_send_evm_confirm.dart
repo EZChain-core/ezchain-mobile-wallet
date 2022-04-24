@@ -91,7 +91,8 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
                         child: Text(
                           Strings.current.sharedTransactionSent,
                           style: EZCBodyMediumTextStyle(
-                              color: provider.themeMode.stateSuccess),
+                            color: provider.themeMode.stateSuccess,
+                          ),
                         ),
                       ),
                       EZCMediumSuccessButton(
@@ -126,6 +127,12 @@ class WalletSendEvmTransactionViewData {
   final Decimal fee;
   final String symbol;
 
-  WalletSendEvmTransactionViewData(this.address, this.gwei, this.gasPrice,
-      this.amount, this.fee, this.symbol);
+  WalletSendEvmTransactionViewData(
+    this.address,
+    this.gwei,
+    this.gasPrice,
+    this.amount,
+    this.fee,
+    this.symbol,
+  );
 }

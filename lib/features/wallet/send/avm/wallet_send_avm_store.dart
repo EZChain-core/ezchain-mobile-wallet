@@ -47,14 +47,14 @@ abstract class _WalletSendAvmStore with Store {
   @action
   getBalanceX() async {
     _balanceStore.updateBalanceX();
-    _fee = bnToDecimalAvaxX(getTxFeeX());
+    _fee = getTxFeeX().toDecimalAvaxX();
   }
 
   @action
   bool validate(String address) {
     final isAddressValid = validateAddressX(address);
-    final isAmountValid =
-        _balanceStore.balanceX >= (amount + _fee) && numberToBNAvaxX(amount.toBigInt()) > BigInt.zero;
+    final isAmountValid = _balanceStore.balanceX >= (amount + _fee) &&
+        amount.toBNAvaxX() > BigInt.zero;
     if (!isAddressValid) {
       _addressError = Strings.current.sharedInvalidAddress;
     }

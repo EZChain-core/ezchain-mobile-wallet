@@ -29,10 +29,12 @@ abstract class _WalletSendAntConfirmStore with Store {
   sendAnt(WalletSendAntConfirmArgs args) async {
     _isLoading = true;
     try {
-      await _wallet.updateUtxosX();
       final txId = await _wallet.sendANT(
-          args.assetId, args.address, numberToBNAvaxX(args.amount.toBigInt()),
-          memo: args.memo);
+        args.assetId,
+        args.address,
+        args.amount.toBNAvaxX(),
+        memo: args.memo,
+      );
       _sendSuccess = true;
     } catch (e) {
       logger.e(e);

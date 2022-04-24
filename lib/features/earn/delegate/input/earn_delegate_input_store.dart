@@ -39,7 +39,7 @@ abstract class _EarnDelegateInputStore with Store {
   @action
   bool validate(String address, Decimal amount) {
     final isAddressValid = validateAddressP(address);
-    final minStake = bnToDecimalAvaxP(_validatorsStore.minDelegatorStake);
+    final minStake = _validatorsStore.minDelegatorStake.toDecimalAvaxP();
     final isAmountValid = balanceP >= amount && amount > minStake;
     if (!isAddressValid) {
       _addressError = Strings.current.earnDelegateInvalidAddress;
