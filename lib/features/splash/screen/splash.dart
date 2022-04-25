@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';

@@ -3,7 +3,7 @@ import 'package:wallet/ezc/sdk/apis/avm/api.dart';
 import 'package:wallet/ezc/sdk/apis/evm/api.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/api.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
-import 'package:wallet/ezc/sdk/utils/dio_logger.dart';
+import 'package:wallet/common/dio_logger.dart';
 import 'package:wallet/ezc/sdk/utils/helper_functions.dart';
 
 abstract class EZC {

@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
-import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 
 import 'di.config.dart';
 
@@ -11,7 +11,7 @@ final getIt = GetIt.instance;
   preferRelativeImports: true,
   asExtension: false,
 )
-Future<void> configureDependencies() async => await $initGetIt(getIt);
+Future<void> configureDependencies() async => $initGetIt(getIt);
 
 void resetGetIt<T extends Object>({
   Object? instance,

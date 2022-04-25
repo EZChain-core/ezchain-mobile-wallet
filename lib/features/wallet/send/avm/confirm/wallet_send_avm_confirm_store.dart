@@ -28,7 +28,7 @@ abstract class _WalletSendAvmConfirmStore with Store {
   sendAvm(String address, Decimal amount, {String? memo}) async {
     _isLoading = true;
     try {
-      final txId = await _wallet.sendAvaxX(
+      await _wallet.sendAvaxX(
         address,
         amount.toBNAvaxX(),
         memo: memo,

@@ -53,24 +53,34 @@ const defaultEVMLocalGenesisAddress =
 const mnemonic =
     "output tooth keep tooth bracket fox city sustain blood raise install pond stem reject long scene clap gloom purpose mean music piece unknown light";
 
+//ignore: non_constant_identifier_names
 final ONEAVAX = BigInt.from(1000000000);
 
+//ignore: non_constant_identifier_names
 final DECIAVAX = ONEAVAX ~/ BigInt.from(10);
 
+//ignore: non_constant_identifier_names
 final CENTIAVAX = ONEAVAX ~/ BigInt.from(100);
 
+//ignore: non_constant_identifier_names
 final MILLIAVAX = ONEAVAX ~/ BigInt.from(1000);
 
+//ignore: non_constant_identifier_names
 final MICROAVAX = ONEAVAX ~/ BigInt.from(1000000);
 
+//ignore: non_constant_identifier_names
 final NANOAVAX = ONEAVAX ~/ BigInt.from(1000000000);
 
+//ignore: non_constant_identifier_names
 final WEI = BigInt.from(1);
 
+//ignore: non_constant_identifier_names
 final GWEI = WEI * BigInt.from(1000000000);
 
+//ignore: non_constant_identifier_names
 final AVAXGWEI = NANOAVAX;
 
+//ignore: non_constant_identifier_names
 final AVAXSTAKECAP = ONEAVAX * BigInt.from(3000000);
 
 // Start Manhattan
@@ -550,7 +560,7 @@ enum MergeRule {
   union,
   unionMinusNew,
   unionMinusSelf,
-  ERROR,
+  error,
 }
 
 extension MergeRuleString on MergeRule {
@@ -570,7 +580,7 @@ extension MergeRuleString on MergeRule {
         return "unionMinusNew";
       case MergeRule.unionMinusSelf:
         return "unionMinusSelf";
-      case MergeRule.ERROR:
+      case MergeRule.error:
         return "ERROR";
     }
   }

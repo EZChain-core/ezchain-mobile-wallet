@@ -104,6 +104,7 @@ extension TransactionDetailExtension on OrteliusTx {
         final input = ins[i];
         final signatures = input.credentials?.map((e) => e.signature);
         final output = input.output;
+        //ignore: unused_local_variable
         final amount = output.amountBN.toLocaleString();
         final address = output.addresses?.firstOrNull;
         final chain = idToChainAlias(output.chainId);
@@ -121,6 +122,7 @@ extension TransactionDetailExtension on OrteliusTx {
           output1.outputIndex.compareTo(output2.outputIndex));
       for (var i = 0; i < outs.length; i++) {
         final output = outs[i];
+        //ignore: unused_local_variable
         final amount = output.amountBN.toLocaleString();
         final address = output.addresses?.firstOrNull;
         final chain = idToChainAlias(output.chainId);

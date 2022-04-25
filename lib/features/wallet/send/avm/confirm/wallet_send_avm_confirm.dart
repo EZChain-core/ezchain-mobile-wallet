@@ -4,9 +4,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/common/dialog/dialog_extensions.dart';
-import 'package:wallet/common/router.dart';
-import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm_store.dart';
@@ -149,13 +147,6 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
     );
   }
 
-  void _showWarningDialog() {
-    walletContext?.showWarningDialog(
-      Assets.images.imgSendChainError.svg(width: 130, height: 130),
-      Strings.current.walletSendCChainErrorAddress,
-    );
-  }
-
   void _onClickSendTransaction() async {
     final verified = await verifyPinCode();
     if (verified) {
@@ -165,7 +156,6 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
         memo: transactionInfo.memo,
       );
     }
-    // _showWarningDialog();
   }
 }
 

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 // ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
@@ -131,6 +129,7 @@ class _WalletAddressTab extends StatelessWidget {
   }
 }
 
+//ignore: unused_element
 class _WalletKeyInfoWidget extends StatelessWidget {
   final String title;
   final Color? titleColor;

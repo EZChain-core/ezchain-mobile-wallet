@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/common/setting/wallet_setting.dart';
@@ -48,6 +49,7 @@ abstract class _PinCodeVerifyStore with Store {
       );
       return isAuthenticated;
     } on PlatformException catch (e) {
+      logger.e(e);
       showSnackBar(Strings.current.settingBiometricSystemsNotEnabled);
       return false;
     }

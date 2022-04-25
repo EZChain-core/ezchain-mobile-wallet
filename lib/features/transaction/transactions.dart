@@ -33,7 +33,7 @@ class TransactionsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               EZCAppBar(
-                title: '$ezcSymbol(${ezcType.name})',
+                title: '$ezcSymbol (${ezcType.name})',
                 onPressed: () {
                   context.router.pop();
                 },

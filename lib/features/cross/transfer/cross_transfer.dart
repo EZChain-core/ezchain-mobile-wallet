@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
-import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/cross/cross_store.dart';
 import 'package:wallet/features/cross/transfer/cross_transfer_store.dart';
 import 'package:wallet/generated/assets.gen.dart';

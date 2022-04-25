@@ -6,6 +6,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/nft/family/nft_family_item.dart';
+import 'package:wallet/features/nft/mint/nft_mint_store.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
@@ -14,16 +15,14 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
-import 'nft_mint_store.dart';
-
 class NftMintScreen extends StatelessWidget {
+  final NftMintStore _nftMintStore = NftMintStore();
+
   final NftFamilyItem nftFamily;
 
   NftMintScreen({Key? key, required this.nftFamily}) : super(key: key) {
     _nftMintStore.setNftMintUTXO(nftFamily.nftMintUTXO);
   }
-
-  final NftMintStore _nftMintStore = NftMintStore();
 
   @override
   Widget build(BuildContext context) {
@@ -77,14 +76,15 @@ class NftMintScreen extends StatelessWidget {
                                             Text(
                                               Strings.current.nftFamilyName,
                                               style: EZCTitleLargeTextStyle(
-                                                  color:
-                                                      provider.themeMode.text60),
+                                                  color: provider
+                                                      .themeMode.text60),
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
                                               nftFamily.name,
                                               style: EZCTitleLargeTextStyle(
-                                                  color: provider.themeMode.text),
+                                                  color:
+                                                      provider.themeMode.text),
                                             ),
                                           ],
                                         ),
@@ -97,14 +97,15 @@ class NftMintScreen extends StatelessWidget {
                                             Text(
                                               Strings.current.nftSymbol,
                                               style: EZCTitleLargeTextStyle(
-                                                  color:
-                                                      provider.themeMode.text60),
+                                                  color: provider
+                                                      .themeMode.text60),
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
                                               nftFamily.symbol,
                                               style: EZCTitleLargeTextStyle(
-                                                  color: provider.themeMode.text),
+                                                  color:
+                                                      provider.themeMode.text),
                                             ),
                                           ],
                                         ),
@@ -130,7 +131,8 @@ class NftMintScreen extends StatelessWidget {
                             Container(
                               height: 40,
                               padding: const EdgeInsets.all(4),
-                              margin: const EdgeInsets.symmetric(horizontal: 16),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               decoration: BoxDecoration(
                                 color: provider.themeMode.secondary10,
                                 borderRadius: BorderRadius.circular(8),
@@ -156,8 +158,10 @@ class NftMintScreen extends StatelessWidget {
                               height: 450,
                               child: TabBarView(
                                 children: [
-                                  _NftMintGenericTab(nftMintStore: _nftMintStore),
-                                  _NftMintCustomTab(nftMintStore: _nftMintStore),
+                                  _NftMintGenericTab(
+                                      nftMintStore: _nftMintStore),
+                                  _NftMintCustomTab(
+                                      nftMintStore: _nftMintStore),
                                 ],
                               ),
                             ),

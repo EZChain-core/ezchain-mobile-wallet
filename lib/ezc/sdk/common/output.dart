@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:wallet/ezc/sdk/common/nbytes.dart';
@@ -80,14 +79,14 @@ class OutputOwners extends Serializable {
       "lockTime": Serialization.instance.encoder(
         lockTime,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
         args: [8],
       ),
       "threshold": Serialization.instance.encoder(
         threshold,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
         args: [4],
       ),
@@ -104,14 +103,14 @@ class OutputOwners extends Serializable {
       fields["lockTime"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [8],
     );
     threshold = Serialization.instance.decoder(
       fields["threshold"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [4],
     );
     addresses = (fields["addresses"] as List<dynamic>)
@@ -320,7 +319,7 @@ abstract class StandardTransferableOutput extends StandardParseableOutput {
       "assetId": Serialization.instance.encoder(
         assetId,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.cb58,
       )
     };
@@ -334,7 +333,7 @@ abstract class StandardTransferableOutput extends StandardParseableOutput {
       fields["assetId"],
       encoding,
       SerializedType.cb58,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [32],
     );
   }
@@ -375,7 +374,7 @@ abstract class StandardAmountOutput extends Output {
       "amount": Serialization.instance.encoder(
         amount,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
         args: [8],
       )
@@ -390,7 +389,7 @@ abstract class StandardAmountOutput extends Output {
       fields["amount"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [8],
     );
     amountValue = fromBufferToBN(amount);
@@ -443,7 +442,7 @@ abstract class BaseNFTOutput extends Output {
       "groupId": Serialization.instance.encoder(
         groupId,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
         args: [4],
       )
@@ -458,7 +457,7 @@ abstract class BaseNFTOutput extends Output {
       fields["groupId"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [4],
     );
   }

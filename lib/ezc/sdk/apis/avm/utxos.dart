@@ -134,7 +134,7 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
           fields["addressUTXOs"][address][utxoId],
           encoding,
           SerializedType.decimalString,
-          SerializedType.BN,
+          SerializedType.bn,
         );
       }
       addressUTXOs[addressCleaned] = utxoBalance;

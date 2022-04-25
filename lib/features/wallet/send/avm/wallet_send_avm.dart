@@ -4,9 +4,8 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/logger.dart';
-import 'package:wallet/common/router.dart';
-import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/route/router.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.dart';
 import 'package:wallet/features/wallet/send/avm/wallet_send_avm_store.dart';
@@ -21,7 +20,9 @@ import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
 class WalletSendAvmScreen extends StatelessWidget {
-  WalletSendAvmScreen({Key? key}) : super(key: key);
+  WalletSendAvmScreen({Key? key}) : super(key: key) {
+    _walletSendAvmStore.getBalanceX();
+  }
 
   final _walletSendAvmStore = WalletSendAvmStore();
   final _addressController = TextEditingController(text: receiverAddressXTest);
@@ -30,8 +31,6 @@ class WalletSendAvmScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _walletSendAvmStore.getBalanceX();
-
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(

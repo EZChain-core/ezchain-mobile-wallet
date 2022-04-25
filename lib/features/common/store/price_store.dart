@@ -5,7 +5,7 @@ import 'package:decimal/decimal.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
-import 'package:wallet/common/storage.dart';
+import 'package:wallet/features/common/storage/storage.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/explorer/price/requests.dart';
 import 'package:wallet/ezc/wallet/explorer/price/types.dart';

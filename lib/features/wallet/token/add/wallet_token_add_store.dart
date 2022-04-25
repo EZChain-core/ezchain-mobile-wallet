@@ -2,8 +2,8 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
-import 'package:wallet/common/router.dart';
-import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/route/router.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';

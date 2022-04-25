@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/minter_set.dart';
 import 'package:wallet/ezc/sdk/apis/avm/model/get_asset_description.dart';
@@ -510,7 +511,9 @@ class _AvmApiImpl implements AvmApi {
       try {
         final response = await getAssetDescription(primaryAssetAlias);
         avaxAssetId = bindtools.cb58Decode(response.assetId);
-      } catch (e) {}
+      } catch (e) {
+        logger.e(e);
+      }
     }
     return avaxAssetId;
   }

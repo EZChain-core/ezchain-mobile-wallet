@@ -165,19 +165,19 @@ abstract class StandardTransferableInput extends StandardParseableInput {
       "txId": Serialization.instance.encoder(
         txId,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.cb58,
       ),
       "outputIdx": Serialization.instance.encoder(
         outputIdx,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
       ),
       "assetId": Serialization.instance.encoder(
         assetId,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.cb58,
       )
     };
@@ -191,21 +191,21 @@ abstract class StandardTransferableInput extends StandardParseableInput {
       fields["txId"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [4],
     );
     outputIdx = Serialization.instance.decoder(
       fields["outputIdx"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [4],
     );
     assetId = Serialization.instance.decoder(
       fields["assetId"],
       encoding,
       SerializedType.cb58,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [32],
     );
   }
@@ -255,7 +255,7 @@ abstract class StandardAmountInput extends Input {
       "amount": Serialization.instance.encoder(
         amount,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
         args: [8],
       )
@@ -270,7 +270,7 @@ abstract class StandardAmountInput extends Input {
       fields["amount"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [8],
     );
     amountValue = fromBufferToBN(amount);

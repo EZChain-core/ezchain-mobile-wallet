@@ -77,6 +77,7 @@ class GetEzcPricesResponse {
   Map<String, dynamic> toJson() => _$GetEzcPricesResponseToJson(this);
 }
 
+//ignore: constant_identifier_names
 enum EzcCurrency { USD, VND }
 
 extension CurrencyExt on EzcCurrency {

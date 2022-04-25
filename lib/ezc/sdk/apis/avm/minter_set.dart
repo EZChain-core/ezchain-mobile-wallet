@@ -32,7 +32,7 @@ class MinterSet extends Serializable {
         (m) => Serialization.instance.encoder(
           m,
           encoding,
-          SerializedType.Buffer,
+          SerializedType.buffer,
           SerializedType.cb58,
           args: [20],
         ),
@@ -56,7 +56,7 @@ class MinterSet extends Serializable {
         minter,
         encoding,
         SerializedType.cb58,
-        SerializedType.BN,
+        SerializedType.bn,
         args: [20],
       ),
     );

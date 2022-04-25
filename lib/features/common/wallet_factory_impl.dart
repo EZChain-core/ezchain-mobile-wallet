@@ -1,14 +1,12 @@
 import 'package:injectable/injectable.dart';
 import 'package:wallet/common/logger.dart';
-import 'package:wallet/common/storage.dart';
+import 'package:wallet/features/common/storage/storage.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/ezc/sdk/utils/mnemonic.dart';
 import 'package:wallet/ezc/wallet/mnemonic_wallet.dart';
 import 'package:wallet/ezc/wallet/singleton_wallet.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
-
-import 'type/network_config_type.dart';
 
 @LazySingleton(as: WalletFactory)
 class WalletFactoryImpl extends WalletFactory {
@@ -89,27 +87,5 @@ class WalletFactoryImpl extends WalletFactory {
   @override
   Future<String> getAccessKey() async {
     return await storage.read(key: accessKey) ?? '';
-  }
-
-  @override
-  savePinCode(String pin) {
-    storage.write(key: pinCode, value: pin);
-  }
-
-  @override
-  Future<bool> isPinCodeCorrect(String pin) async {
-    final correctPin = await storage.read(key: pinCode) ?? '';
-    return correctPin == pin;
-  }
-
-  @override
-  saveNetworkConfig(NetworkConfigType network) {
-    storage.write(key: networkConfig, value: network.name);
-  }
-
-  @override
-  Future<NetworkConfigType> getNetworkConfig() async {
-    final networkName = await storage.read(key: networkConfig) ?? '';
-    return getNetworkConfigType(networkName);
   }
 }

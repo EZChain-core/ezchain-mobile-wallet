@@ -3,7 +3,9 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
+import 'package:wallet/features/nft/family/nft_family_item.dart';
+import 'package:wallet/features/nft/nft_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -12,9 +14,6 @@ import 'package:wallet/themes/inputs.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
-
-import 'family/nft_family_item.dart';
-import 'nft_store.dart';
 
 class NftScreen extends StatelessWidget {
   NftScreen({Key? key}) : super(key: key);

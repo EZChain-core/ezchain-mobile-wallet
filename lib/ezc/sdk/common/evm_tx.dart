@@ -40,13 +40,13 @@ abstract class EvmStandardBaseTx<KPClass extends EZCKeyPair,
       "networkId": Serialization.instance.encoder(
         networkId,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
       ),
       "blockchainId": Serialization.instance.encoder(
         blockchainId,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.cb58,
       )
     };
@@ -60,14 +60,14 @@ abstract class EvmStandardBaseTx<KPClass extends EZCKeyPair,
       fields["networkId"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [4],
     );
     blockchainId = Serialization.instance.decoder(
       fields["blockchainId"],
       encoding,
       SerializedType.cb58,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [32],
     );
   }

@@ -52,19 +52,19 @@ abstract class PvmValidatorTx extends PvmBaseTx {
       "nodeId": Serialization.instance.encoder(
         nodeId,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.nodeId,
       ),
       "startTime": Serialization.instance.encoder(
         startTime,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
       ),
       "endTime": Serialization.instance.encoder(
         endTime,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
       ),
     };
@@ -78,21 +78,21 @@ abstract class PvmValidatorTx extends PvmBaseTx {
       fields["nodeId"],
       encoding,
       SerializedType.nodeId,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [20],
     );
     startTime = Serialization.instance.decoder(
       fields["startTime"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [8],
     );
     endTime = Serialization.instance.decoder(
       fields["endTime"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [8],
     );
   }
@@ -167,7 +167,7 @@ abstract class PvmWeightedValidatorTx extends PvmValidatorTx {
       "weight": Serialization.instance.encoder(
         weight,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
       ),
     };
@@ -181,7 +181,7 @@ abstract class PvmWeightedValidatorTx extends PvmValidatorTx {
       fields["weight"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [8],
     );
   }
@@ -422,7 +422,7 @@ class PvmAddValidatorTx extends PvmAddDelegatorTx {
       "delegationFee": Serialization.instance.encoder(
         delegationFee,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
         args: [4],
       ),
@@ -437,7 +437,7 @@ class PvmAddValidatorTx extends PvmAddDelegatorTx {
       fields["delegationFee"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [4],
     ) as Uint8List;
     delegationFee =

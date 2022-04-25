@@ -11,6 +11,7 @@ import 'package:wallet/ezc/wallet/network/utils.dart';
 import 'package:wallet/ezc/wallet/types.dart';
 import 'package:web3dart/web3dart.dart';
 
+//ignore: non_constant_identifier_names
 final MAX_GAS = BigInt.from(1000000000000);
 
 /// Returns the current gas price in WEI from the network
@@ -63,10 +64,15 @@ BigInt calculateMaxFee(BigInt baseFee, BigInt maxPriorityFee) {
 /// @param numIns Number of inputs for the import transaction.
 /// @param numSigs Number of signatures used in the import transactions. This value is the sum of owner addresses in every UTXO.
 int estimateImportGasFeeFromMockTx(int numIns, int numSigs) {
+  //ignore: constant_identifier_names
   const ATOMIC_TX_COST = 10000; // in gas
+  //ignore: constant_identifier_names
   const SIG_COST = 1000; // in gas
+  //ignore: constant_identifier_names
   const BASE_TX_SIZE = 78;
+  //ignore: constant_identifier_names
   const SINGLE_OWNER_INPUT_SIZE = 90; // in bytes
+  //ignore: constant_identifier_names
   const OUTPUT_SIZE = 60; // in bytes
 
   // C chain imports consolidate inputs to one output

@@ -130,7 +130,7 @@ class PvmUTXOSet extends StandardUTXOSet<PvmUTXO> {
           fields["addressUTXOs"][address][utxoId],
           encoding,
           SerializedType.decimalString,
-          SerializedType.BN,
+          SerializedType.bn,
         );
       }
       addressUTXOs[addressCleaned] = utxoBalance;

@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:wallet/ezc/sdk/utils/dio_logger.dart';
+import 'package:wallet/common/dio_logger.dart';
 import 'package:wallet/ezc/wallet/explorer/price/rest_client.dart';
 import 'package:wallet/ezc/wallet/explorer/price/types.dart';
 

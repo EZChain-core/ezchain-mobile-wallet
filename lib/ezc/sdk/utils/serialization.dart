@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/helper_functions.dart';
 
+//ignore: constant_identifier_names
 const SERIALIZATIONVERSION = 0;
 
 abstract class Serializable {
@@ -70,9 +71,9 @@ class Serialization {
     switch (type) {
       case SerializedType.hex:
         return hexEncode(vb);
-      case SerializedType.BN:
+      case SerializedType.bn:
         return bufferToBigInt16(vb);
-      case SerializedType.Buffer:
+      case SerializedType.buffer:
         if (args.length == 1 && args.first is int) {
           vb = Uint8List.fromList(
               hexDecode(hexEncode(vb).padLeft(args.first * 2, "0")));
@@ -111,14 +112,14 @@ class Serialization {
           value = value.substring(2);
         }
         return Uint8List.fromList(hexDecode(value));
-      case SerializedType.BN:
+      case SerializedType.bn:
         final str = (v as BigInt).toRadixString(16);
         if (args.length == 1 && args.first is int) {
           return Uint8List.fromList(
               hexDecode(str.padLeft(args.first * 2, "0")));
         }
         return Uint8List.fromList(hexDecode(str));
-      case SerializedType.Buffer:
+      case SerializedType.buffer:
         return v;
       case SerializedType.bech32:
         final hrp = args.getOrNull(0);
@@ -227,8 +228,8 @@ class Serialized {
 
 enum SerializedType {
   hex,
-  BN,
-  Buffer,
+  bn,
+  buffer,
   bech32,
   nodeId,
   privateKey,
@@ -245,9 +246,9 @@ extension SerializedTypeString on SerializedType {
     switch (this) {
       case SerializedType.hex:
         return "hex";
-      case SerializedType.BN:
+      case SerializedType.bn:
         return "BN";
-      case SerializedType.Buffer:
+      case SerializedType.buffer:
         return "Buffer";
       case SerializedType.bech32:
         return "bech32";

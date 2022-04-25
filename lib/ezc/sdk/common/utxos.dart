@@ -58,25 +58,25 @@ abstract class StandardUTXO extends Serializable {
       "codecIdBuff": Serialization.instance.encoder(
         codecIdBuff,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
       ),
       "txId": Serialization.instance.encoder(
         txId,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.cb58,
       ),
       "outputIdx": Serialization.instance.encoder(
         outputIdx,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
       ),
       "assetId": Serialization.instance.encoder(
         assetId,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.cb58,
       ),
       "output": output.serialize(
@@ -93,28 +93,28 @@ abstract class StandardUTXO extends Serializable {
       fields["codecIdBuff"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [2],
     );
     txId = Serialization.instance.decoder(
       fields["txId"],
       encoding,
       SerializedType.cb58,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [32],
     );
     outputIdx = Serialization.instance.decoder(
       fields["outputIdx"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [4],
     );
     assetId = Serialization.instance.decoder(
       fields["assetId"],
       encoding,
       SerializedType.cb58,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [32],
     );
   }
@@ -188,7 +188,7 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
         utxoBalance[utxoIdCleaned] = Serialization.instance.encoder(
             this.addressUTXOs[address]![utxoId]!,
             encoding,
-            SerializedType.BN,
+            SerializedType.bn,
             SerializedType.decimalString);
       }
       addressUTXOs[addressCleaned] = utxoBalance;
@@ -449,7 +449,7 @@ abstract class StandardUTXOSet<UTXOClass extends StandardUTXO>
           final uSet = union(utxoSet);
           return uSet.difference(this);
         }
-      case MergeRule.ERROR:
+      case MergeRule.error:
         throw Exception("Error - StandardUTXOSet.mergeByRule: bad MergeRule");
     }
   }

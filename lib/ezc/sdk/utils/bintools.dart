@@ -3,6 +3,7 @@ import 'package:hex/hex.dart';
 import 'package:dart_bech32/dart_bech32.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:hash/hash.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:web3dart/credentials.dart';
 
 String addressToString(String chainId, String hrp, Uint8List address) {
@@ -55,7 +56,9 @@ bool isEthAddress(String address) {
   try {
     EthereumAddress.fromHex(address);
     return true;
-  } catch (e) {}
+  } catch (e) {
+    logger.e(e);
+  }
   return false;
 }
 

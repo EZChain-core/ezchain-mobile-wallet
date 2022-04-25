@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/features/transaction/detail_c/transaction_c_detail_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';

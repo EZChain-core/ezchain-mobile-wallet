@@ -66,13 +66,13 @@ abstract class StandardBaseTx<KPClass extends EZCKeyPair,
       "networkId": Serialization.instance.encoder(
         networkId,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
       ),
       "blockchainId": Serialization.instance.encoder(
         blockchainId,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.cb58,
       ),
       "outs": outs.map((e) => e.serialize(encoding: encoding)),
@@ -80,7 +80,7 @@ abstract class StandardBaseTx<KPClass extends EZCKeyPair,
       "memo": Serialization.instance.encoder(
         memo,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.hex,
       )
     };
@@ -94,21 +94,21 @@ abstract class StandardBaseTx<KPClass extends EZCKeyPair,
       fields["networkId"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [4],
     );
     blockchainId = Serialization.instance.decoder(
       fields["blockchainId"],
       encoding,
       SerializedType.cb58,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [32],
     );
     memo = Serialization.instance.decoder(
       fields["memo"],
       encoding,
       SerializedType.hex,
-      SerializedType.Buffer,
+      SerializedType.buffer,
     );
   }
 

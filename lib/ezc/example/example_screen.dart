@@ -9,7 +9,7 @@ import 'package:eventify/eventify.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wallet/common/logger.dart';
-import 'package:wallet/common/storage.dart';
+import 'package:wallet/features/common/storage/storage.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
@@ -137,7 +137,7 @@ class WalletExampleScreen extends StatelessWidget {
       assert(validateAddressX(to));
       final fee = getTxFeeX();
       logger.i("fee = $fee");
-      final txId = await wallet.sendAvaxX(to, numberToBNAvaxX(1));
+      final txId = await wallet.sendAvaxX(to, Decimal.parse("1.1").toBNAvaxX());
       logger.i("txId = $txId");
     } catch (e) {
       logger.e(e);
@@ -150,9 +150,9 @@ class WalletExampleScreen extends StatelessWidget {
       assert(validateAddressX(to));
       final fee = getTxFeeX();
       logger.i("fee = $fee");
-      // từ list asset tokens chọn 1 asset có asset id
       const assetId = "2iMEUfDkiVPPHfQYQxPgT6eV7gqa6pbn6G1K1QTDLBtmS6fjuL";
-      final txId = await wallet.sendANT(assetId, to, numberToBNAvaxX(69));
+      final txId =
+          await wallet.sendANT(assetId, to, Decimal.parse("1.1").toBNAvaxX());
       logger.i("txId = $txId");
     } catch (e) {
       logger.e(e);
@@ -187,8 +187,6 @@ class WalletExampleScreen extends StatelessWidget {
 
   sendC() async {
     try {
-      // Gửi AvaxC
-      // Bước 1 lấy Gas Price
       BigInt gasPrice = BigInt.from(225000000000);
       try {
         gasPrice = await getAdjustedGasPrice();
@@ -203,11 +201,8 @@ class WalletExampleScreen extends StatelessWidget {
 
       assert(validateAddressEvm(to));
 
-      // phải dùng numberToBNAvaxC để convert
-      final amount = numberToBNAvaxC(1);
+      final amount = Decimal.parse("1.1").toBNAvaxC();
 
-      // Ở web wallet sau khi fill amount và address sẽ chuyển sang confirm
-      // Confirm sẽ get Gas Limit
       BigInt gasLimit = BigInt.from(21000);
       try {
         gasLimit = await wallet.estimateAvaxGasLimit(to, amount, gasPrice);
@@ -219,7 +214,6 @@ class WalletExampleScreen extends StatelessWidget {
       final maxFeeText = maxFee.toAvaxC();
       logger.i("maxFee = $maxFeeText");
 
-      // Xác nhận gửi AvaxC
       final txId = await wallet.sendAvaxC(
         to,
         amount,
@@ -237,9 +231,8 @@ class WalletExampleScreen extends StatelessWidget {
     logger.i("exportFee = $exportFee");
     final importFee = getTxFeeP();
     logger.i("importFee = $importFee");
-    // amount phải thêm import fee
-    // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
-    final amount = numberToBNAvaxX(1) + importFee;
+
+    final amount = Decimal.parse("1.1").toBNAvaxX() + importFee;
     String exportTxId = "";
     try {
       exportTxId = await wallet.exportXChain(amount, ExportChainsX.P);
@@ -263,9 +256,8 @@ class WalletExampleScreen extends StatelessWidget {
     logger.i("exportFee = $exportFee");
     final importFee = await estimateImportGasFee();
     logger.i("importFee = $importFee");
-    // amount phải thêm import fee
-    // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
-    final amount = numberToBNAvaxX(1) + importFee;
+
+    final amount = Decimal.parse("1.1").toBNAvaxX() + importFee;
 
     String exportTxId = "";
     try {
@@ -289,9 +281,8 @@ class WalletExampleScreen extends StatelessWidget {
     logger.i("exportFee = $exportFee");
     final importFee = getTxFeeX();
     logger.i("importFee = $importFee");
-    // amount phải thêm import fee
-    // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
-    final amount = numberToBNAvaxP(1) + importFee;
+
+    final amount = Decimal.parse("1.1").toBNAvaxP() + importFee;
 
     String exportTxId = "";
     try {
@@ -315,9 +306,8 @@ class WalletExampleScreen extends StatelessWidget {
     logger.i("exportFee = $exportFee");
     final importFee = await estimateImportGasFee();
     logger.i("importFee = $importFee");
-    // amount phải thêm import fee
-    // export fee ở đây chỉ để hiển thị vì đã được tự động thêm vào transaction
-    final amount = numberToBNAvaxP(1) + importFee;
+
+    final amount = Decimal.parse("1.1").toBNAvaxP() + importFee;
 
     String exportTxId = "";
     try {
@@ -342,8 +332,7 @@ class WalletExampleScreen extends StatelessWidget {
       final hexAddress = wallet.getAddressC();
       const destinationChain = ExportChainsC.X;
       final destinationAddress = wallet.getAddressX();
-      // estimate ban đầu amount = 0
-      // khi ấn confirm cần estimate lại với amount được nhập
+
       final exportFee = await estimateExportGasFee(
         destinationChain,
         BigInt.zero,
@@ -351,8 +340,8 @@ class WalletExampleScreen extends StatelessWidget {
         destinationAddress,
       );
       final importFee = getTxFeeX();
-      // amount phải thêm import fee
-      final amount = numberToBNAvaxX(1) + importFee;
+
+      final amount = Decimal.parse("1.1").toBNAvaxC() + importFee;
       exportTxId = await wallet.exportCChain(
         amount,
         destinationChain,
@@ -378,8 +367,7 @@ class WalletExampleScreen extends StatelessWidget {
       final hexAddress = wallet.getAddressC();
       const destinationChain = ExportChainsC.P;
       final destinationAddress = wallet.getAddressP();
-      // estimate ban đầu amount = 0
-      // khi ấn confirm cần estimate lại với amount được nhập
+
       final exportFee = await estimateExportGasFee(
         destinationChain,
         BigInt.zero,
@@ -387,8 +375,8 @@ class WalletExampleScreen extends StatelessWidget {
         destinationAddress,
       );
       final importFee = getTxFeeP();
-      // amount phải thêm import fee
-      final amount = numberToBNAvaxP(1) + importFee;
+
+      final amount = Decimal.parse("1.1").toBNAvaxC() + importFee;
       exportTxId = await wallet.exportCChain(
         amount,
         destinationChain,
@@ -435,7 +423,6 @@ class WalletExampleScreen extends StatelessWidget {
 
   getPTransactions() async {
     try {
-      // chỉ P Chain mới cần get validators.
       final validators = await wallet.getPlatformValidators();
       final transactions = await wallet.getPTransactions(limit: 20);
       final addresses = [
@@ -873,7 +860,6 @@ class WalletExampleScreen extends StatelessWidget {
 
   getHistoryANT() async {
     try {
-      // từ list asset tokens chọn 1 asset có asset id
       const assetId = "2iMEUfDkiVPPHfQYQxPgT6eV7gqa6pbn6G1K1QTDLBtmS6fjuL";
       final transactions = await wallet.getXTransactions(limit: 20);
       final filteredTransactions = transactions
@@ -889,7 +875,6 @@ class WalletExampleScreen extends StatelessWidget {
 
   getNodeIds() async {
     try {
-      // tạo ra 1 shared store để share validators với case getPTransactions
       final validators = await wallet.getPlatformValidators();
       validators.sort((a, b) {
         final amtA = a.stakeAmountBN;
@@ -912,8 +897,11 @@ class WalletExampleScreen extends StatelessWidget {
         final endTime = (int.tryParse(validator.endTime) ?? 0) * 1000;
         final diff = endTime - now;
 
+        //ignore: constant_identifier_names
         const MINUTE_MS = 60000;
+        //ignore: constant_identifier_names
         const HOUR_MS = MINUTE_MS * 60;
+        //ignore: constant_identifier_names
         const DAY_MS = HOUR_MS * 24;
 
         /// If End time is less than 2 weeks + 1 hour, remove from list they are no use
@@ -926,7 +914,7 @@ class WalletExampleScreen extends StatelessWidget {
         final stakeAmount = stakeAmountDecimal.toLocaleString(decimals: 0);
         final fee = validator.delegationFeeDecimal.toLocaleString(decimals: 2);
 
-        // max token validator là 3tr
+        // max token validator = 3tr
         final absMaxStake = ONEAVAX * BigInt.parse("3000000");
         final relativeMaxStake = validatorStakeAmountBN * BigInt.from(4);
 
@@ -970,9 +958,8 @@ class WalletExampleScreen extends StatelessWidget {
   delegate() async {
     try {
       const nodeId = "NodeID-FRouddSdqsz9SqFddmcpX3kMcTUuczYWW";
-      const amount = 100;
+      final amount = Decimal.parse("100.69");
 
-      // ONLY FOR EXAMPLE: fetch to get selected node
       final validators = await wallet.getPlatformValidators();
       final selectedNode =
           validators.where((element) => element.nodeId == nodeId).first;
@@ -982,10 +969,9 @@ class WalletExampleScreen extends StatelessWidget {
 
       final duration = end - start;
 
-      // store lại current supply tránh việc mỗi khi thay đổi amount phải gọi lại
       final currentSupply = await wallet.getCurrentSupply();
       final estimation = await calculateStakingReward(
-        numberToBNAvaxC(amount),
+        amount.toBNAvaxC(),
         duration ~/ 1000,
         currentSupply * BigInt.from(10).pow(9),
       );
@@ -1002,7 +988,7 @@ class WalletExampleScreen extends StatelessWidget {
 
       /// Start delegation in 5 minutes
       final txId =
-          await wallet.delegate(nodeId, numberToBNAvaxP(amount), start, end);
+          await wallet.delegate(nodeId, amount.toBNAvaxP(), start, end);
       logger.i("txId = $txId");
     } catch (e) {
       logger.e(e);
@@ -1010,7 +996,6 @@ class WalletExampleScreen extends StatelessWidget {
   }
 
   estimateRewards() async {
-    // tạo ra 1 shared store để share validators với case estimateRewards
     final validators = await wallet.getPlatformValidators();
     final delegators = validators
         .where((element) =>
@@ -1084,16 +1069,15 @@ class WalletExampleScreen extends StatelessWidget {
 
   fetchAssets() async {
     final avaAssetId = getAvaxAssetId();
-    final stake = await wallet
-        .getStake(); // <-- cho mục đích ví dụ, impl có thể phải cần thiết kế để shared
-    // cần thiết kế để lắng nghe khi update đc utxosX thì mới map data
+    final stake = await wallet.getStake();
+
     final balanceDict = wallet.getBalanceX();
-    // cần xử lý lại để shared với hàm mintNFT và mỗi khi update lại utxosX
+
     final assetUtxoMap = <String, AvmUTXO>{};
     for (final utxo in wallet.utxosX.utxos.values) {
       assetUtxoMap[cb58Encode(utxo.assetId)] = utxo;
     }
-    // cần xử lý lại để shared với hàm mintNFT và mỗi khi update lại utxosX
+
     final assets = wallet.getUnknownAssets().where((element) {
       final output = assetUtxoMap[element.assetId]?.getOutput();
       return output?.getOutputId() == SECPXFEROUTPUTID;
@@ -1298,14 +1282,14 @@ class WalletExampleScreen extends StatelessWidget {
             try {
               final json = payload.getContentType();
               genericNft = GenericFormType.fromJson(json).avalanche;
-            } catch (e) {}
+            } catch (e) {
+              logger.e(e);
+            }
           }
           final title = genericNft?.type;
           final desc = genericNft?.desc;
           final payloadTypeName = payload.getTypeName() ?? "Unknown Type";
-          final payloadContent = payload
-              .getContentType()
-              .toString(); // type BIN ko hiển thị ở log?
+          final payloadContent = payload.getContentType().toString();
           message +=
               "group = $groupId, type = $payloadTypeName, count = ${nftCollectible.groupIdQuantityDict[groupId]}, payload = $payloadContent, title = $title, desc = $desc\n";
         });
@@ -1326,8 +1310,11 @@ class WalletExampleScreen extends StatelessWidget {
         ),
       );
 
+      //ignore: unused_local_variable
       final genericPayload = JSONPayload(generic.toJson());
+      //ignore: unused_local_variable
       final jsonPayload = JSONPayload("{\"test\": \"1\"}");
+      //ignore: unused_local_variable
       final utf8Payload = UTF8Payload(payload: "KIEN MIN NFT");
       final urlPayload = URLPayload("https://wallet.ezchain.com/");
       final txId = await wallet.mintNFT(
@@ -1418,8 +1405,7 @@ class WalletExampleScreen extends StatelessWidget {
       const to = "0xd30a9f6645a73f67b7850b9304b6a3172dda75bf";
 
       assert(validateAddressEvm(to));
-      const amount = 10;
-      final amountBN = numberToBN(amount, token.decimals);
+      final amountBN = Decimal.parse("1.1").toBN(denomination: token.decimals);
       BigInt gasPrice = BigInt.from(225000000000);
       try {
         gasPrice = await getAdjustedGasPrice();

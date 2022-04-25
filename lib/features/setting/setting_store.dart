@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
@@ -43,7 +44,7 @@ abstract class _SettingStore with Store {
 
   @action
   setNetworkConfig(NetworkConfigType network) async {
-    if(network == _activeNetworkConfig) return;
+    if (network == _activeNetworkConfig) return;
     _balanceStore.dispose();
     _tokenStore.dispose();
     _priceStore.dispose();
@@ -69,6 +70,7 @@ abstract class _SettingStore with Store {
           biometricOnly: true,
         );
       } on PlatformException catch (e) {
+        logger.e(e);
         showSnackBar(Strings.current.settingBiometricSystemsNotEnabled);
         useTouchId = false;
       }

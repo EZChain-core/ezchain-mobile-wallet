@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wallet/common/logger.dart';
-import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/auth/access/mnemonic/access_mnemonic_key.dart';
 import 'package:wallet/features/auth/access/options/access_wallet_options.dart';
@@ -123,7 +123,8 @@ class StatusBarRouterObserver extends AutoRouterObserver {
             routeName == WalletSendEvmRoute.name ||
             routeName == WalletReceiveRoute.name ||
             routeName == WalletSendAntRoute.name ||
-            routeName == WalletSendAvmRoute.name) {
+            routeName == WalletSendAvmRoute.name ||
+            routeName == WalletTokenAddConfirmRoute.name) {
           _routeChanged(WalletRoute.name);
         }
         break;

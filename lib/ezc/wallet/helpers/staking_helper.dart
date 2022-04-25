@@ -2,15 +2,23 @@ import 'package:decimal/decimal.dart';
 import 'package:wallet/ezc/sdk/utils/constants.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 
-const SECONDS_PER_YEAR = 31536000; //31556952
+//ignore: constant_identifier_names
+const SECONDS_PER_YEAR = 31536000;
 
+//ignore: non_constant_identifier_names
 final RAT_1 = Decimal.one;
+//ignore: non_constant_identifier_names
 final RAT_0 = Decimal.one;
+//ignore: non_constant_identifier_names
 final BIG_2 = Decimal.fromInt(2);
+//ignore: non_constant_identifier_names
 final BASE_TS = Decimal.parse("1000000000000000000000000");
 
+//ignore: non_constant_identifier_names
 final PC_BASE = Decimal.fromInt(50) / Decimal.fromInt(100);
+//ignore: non_constant_identifier_names
 final PC_STEP = Decimal.fromInt(4) / Decimal.fromInt(100);
+//ignore: non_constant_identifier_names
 final REWARD_POOL = Decimal.fromInt(15) / Decimal.fromInt(100);
 
 /// amount, currentSupply in wei format

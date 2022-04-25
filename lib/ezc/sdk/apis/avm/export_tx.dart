@@ -59,7 +59,7 @@ class AvmExportTx extends AvmBaseTx {
     return {
       ...fields,
       "destinationChain": Serialization.instance.encoder(destinationChain,
-          encoding, SerializedType.Buffer, SerializedType.cb58),
+          encoding, SerializedType.buffer, SerializedType.cb58),
       "exportOuts": exportOuts.map((e) => e.serialize(encoding: encoding))
     };
   }
@@ -72,7 +72,7 @@ class AvmExportTx extends AvmBaseTx {
         fields["destinationChain"],
         encoding,
         SerializedType.cb58,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         args: [32]);
     exportOuts = (fields["exportOuts"] as List<dynamic>)
         .map((e) => AvmTransferableOutput()..deserialize(e, encoding: encoding))

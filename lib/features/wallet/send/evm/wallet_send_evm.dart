@@ -4,11 +4,10 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/router.dart';
-import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/route/router.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
-import 'package:wallet/features/common/dialog/dialog_extensions.dart';
 import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.dart';
 import 'package:wallet/features/wallet/send/evm/wallet_send_evm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
@@ -27,6 +26,7 @@ class WalletSendEvmScreen extends StatelessWidget {
 
   WalletSendEvmScreen({Key? key, this.fromToken}) : super(key: key) {
     _walletSendEvmStore.setWalletToken(fromToken);
+    _walletSendEvmStore.getBalanceC();
   }
 
   final _walletSendEvmStore = WalletSendEvmStore();
@@ -35,8 +35,6 @@ class WalletSendEvmScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _walletSendEvmStore.getBalanceC();
-
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -194,16 +192,8 @@ class WalletSendEvmScreen extends StatelessWidget {
   }
 
   void _onClickConfirm() {
-    // FocusManager.instance.primaryFocus?.unfocus();
     final address = _addressController.text;
     _walletSendEvmStore.confirm(address);
-  }
-
-  void _showWarningDialog() {
-    walletContext?.showWarningDialog(
-      Assets.images.imgSendChainError.svg(width: 130, height: 130),
-      Strings.current.walletSendCChainErrorAddress,
-    );
   }
 
   Future<void> _onClickSendTransaction() async {

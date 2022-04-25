@@ -51,10 +51,12 @@ class SingletonWallet extends WalletProvider implements UnsafeWallet {
     return evmWallet.getPrivateKeyHex();
   }
 
+  @override
   String getAddressX() {
     return _getKeyChainX().getAddressStrings().first;
   }
 
+  @override
   String getAddressP() {
     return _getKeyChainP().getAddressStrings().first;
   }
@@ -135,13 +137,13 @@ class SingletonWallet extends WalletProvider implements UnsafeWallet {
   }
 
   EZCKeyChain _getKeyChainX() {
-    final avmKeyChain = xChain.newKeyChain() as EZCKeyChain;
+    final avmKeyChain = xChain.newKeyChain();
     avmKeyChain.importKey(_privateKey);
     return avmKeyChain;
   }
 
   EZCKeyChain _getKeyChainP() {
-    final pvmKeyChain = pChain.newKeyChain() as EZCKeyChain;
+    final pvmKeyChain = pChain.newKeyChain();
     pvmKeyChain.importKey(_privateKey);
     return pvmKeyChain;
   }

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:wallet/common/router.dart';
+import 'package:wallet/features/common/route/router.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/typography.dart';
 

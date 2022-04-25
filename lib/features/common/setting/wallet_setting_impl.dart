@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:wallet/common/storage.dart';
+import 'package:wallet/features/common/storage/storage.dart';
 import 'package:wallet/features/common/type/network_config_type.dart';
 import 'package:wallet/features/common/setting/wallet_setting.dart';
 

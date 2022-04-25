@@ -203,7 +203,7 @@ class PvmStakeableLockOut extends PvmAmountOutput {
       "stakeableLockTime": Serialization.instance.encoder(
         stakeableLockTime,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
         args: [8],
       ),
@@ -228,7 +228,7 @@ class PvmStakeableLockOut extends PvmAmountOutput {
       fields["stakeableLockTime"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [8],
     );
     transferableOutput = PvmParseableOutput();

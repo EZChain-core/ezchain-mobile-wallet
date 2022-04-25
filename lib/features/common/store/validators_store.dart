@@ -144,8 +144,11 @@ abstract class _ValidatorsStore with Store {
         final endTime = (int.tryParse(validator.endTime) ?? 0) * 1000;
         final diff = endTime - now;
 
+        //ignore: constant_identifier_names
         const MINUTE_MS = 60000;
+        //ignore: constant_identifier_names
         const HOUR_MS = MINUTE_MS * 60;
+        //ignore: constant_identifier_names
         const DAY_MS = HOUR_MS * 24;
 
         /// If End time is less than 2 weeks + 1 hour, remove from list they are no use

@@ -24,7 +24,6 @@ class EZCAppBar extends StatelessWidget {
             const SizedBox(width: 4),
             IconButton(
               onPressed: () {
-                // FocusManager.instance.primaryFocus?.unfocus();
                 onPressed();
               },
               icon: Assets.icons.icArrowLeftWhite.svg(),

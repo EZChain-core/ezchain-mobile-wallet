@@ -7,8 +7,8 @@
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import '../common/router.gr.dart' as _i3;
 import '../features/auth/pin/verify/pin_code_verify_store.dart' as _i5;
+import '../features/common/route/router.gr.dart' as _i3;
 import '../features/common/setting/wallet_setting.dart' as _i11;
 import '../features/common/setting/wallet_setting_impl.dart' as _i12;
 import '../features/common/store/balance_store.dart' as _i4;

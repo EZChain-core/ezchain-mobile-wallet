@@ -1,4 +1,3 @@
-import 'package:decimal/decimal.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'types.g.dart';

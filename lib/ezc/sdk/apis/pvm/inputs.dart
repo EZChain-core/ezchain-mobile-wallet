@@ -166,7 +166,7 @@ class PvmStakeableLockIn extends PvmAmountInput {
     final object = {
       ...fields,
       "stakeableLockTime": Serialization.instance.encoder(stakeableLockTime,
-          encoding, SerializedType.Buffer, SerializedType.decimalString,
+          encoding, SerializedType.buffer, SerializedType.decimalString,
           args: [8]),
       "transferableInput": transferableInput.serialize(encoding: encoding)
     };
@@ -188,7 +188,7 @@ class PvmStakeableLockIn extends PvmAmountInput {
         fields["stakeableLockTime"],
         encoding,
         SerializedType.decimalString,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         args: [8]);
     transferableInput = PvmParseableInput();
     transferableInput.deserialize(

@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mobx/mobx.dart';
-import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/setting/wallet_setting.dart';
 import 'package:wallet/generated/l10n.dart';

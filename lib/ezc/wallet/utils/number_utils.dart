@@ -114,30 +114,3 @@ extension StringUtils on String {
     return BigInt.tryParse(rawStr) ?? BigInt.zero;
   }
 }
-
-BigInt numberToBN(dynamic value, int decimals) {
-  final BigInt valBigInt;
-  if (value is String) {
-    valBigInt = BigInt.tryParse(value) ?? BigInt.zero;
-  } else if (value is num) {
-    valBigInt = BigInt.from(value);
-  } else {
-    valBigInt = value;
-  }
-  final Decimal valBig = Decimal.fromBigInt(valBigInt);
-  final tens = Decimal.fromInt(10).pow(decimals);
-  final rawStr = (valBig * tens).toStringAsFixed(0);
-  return BigInt.tryParse(rawStr) ?? BigInt.zero;
-}
-
-BigInt numberToBNAvaxX(dynamic value) {
-  return numberToBN(value, 9);
-}
-
-BigInt numberToBNAvaxP(dynamic value) {
-  return numberToBN(value, 9);
-}
-
-BigInt numberToBNAvaxC(dynamic value) {
-  return numberToBN(value, 18);
-}

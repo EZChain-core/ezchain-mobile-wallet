@@ -56,14 +56,14 @@ class AvmBaseTx extends StandardBaseTx<EZCKeyPair, EZCKeyChain> {
       outs.length.toString(),
       SerializedEncoding.display,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [4],
     );
     numIns = Serialization.instance.decoder(
       ins.length.toString(),
       SerializedEncoding.display,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [4],
     );
   }

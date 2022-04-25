@@ -71,7 +71,7 @@ class EvmImportTx extends EvmBaseTx {
       "sourceChain": Serialization.instance.encoder(
         sourceChain,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.cb58,
       ),
       "importIns": importIns.map((e) => e.serialize(encoding: encoding))
@@ -86,7 +86,7 @@ class EvmImportTx extends EvmBaseTx {
       fields["sourceChain"],
       encoding,
       SerializedType.cb58,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [32],
     );
     importIns = (fields["importIns"] as List<dynamic>)

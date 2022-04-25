@@ -4,11 +4,12 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/router.dart';
-import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/route/router.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/earn/delegate/confirm/earn_delegate_confirm.dart';
 import 'package:wallet/features/earn/delegate/input/earn_delegate_input_store.dart';
 import 'package:wallet/features/earn/delegate/nodes/earn_delegate_node_item.dart';
+import 'package:wallet/features/earn/earn_widgets.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -17,8 +18,6 @@ import 'package:wallet/themes/inputs.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
-
-import '../../earn_widgets.dart';
 
 const _delegateBufferEndDateMinutes = 15;
 const _delegateBufferEndDateDays = 21;
@@ -35,11 +34,8 @@ class EarnDelegateInputScreen extends StatelessWidget {
   final _firstDate = DateTime.now()
       .add(const Duration(days: 14, minutes: _delegateBufferEndDateMinutes));
 
-  late DateTime _stakingEndDate;
-
   @override
   Widget build(BuildContext context) {
-    _stakingEndDate = _getIntDate();
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(
@@ -79,7 +75,8 @@ class EarnDelegateInputScreen extends StatelessWidget {
                           firstDate: _firstDate,
                           lastDate: args.endDate,
                           onChanged: (selectedDate) {
-                            _stakingEndDate = selectedDate;
+                            _earnDelegateInputStore.stakingEndDate =
+                                selectedDate;
                           },
                         ),
                         const SizedBox(height: 16),
@@ -141,7 +138,7 @@ class EarnDelegateInputScreen extends StatelessWidget {
             args.delegateItem,
             address,
             amount,
-            _stakingEndDate,
+            _earnDelegateInputStore.stakingEndDate,
           ),
         ),
       );

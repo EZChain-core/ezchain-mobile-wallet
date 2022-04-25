@@ -1,8 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
-import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/store/validators_store.dart';
-import 'package:wallet/features/common/wallet_factory.dart';
 
 import 'earn_delegate_node_item.dart';
 
@@ -12,10 +10,6 @@ class EarnDelegateNodesStore = _EarnDelegateNodesStore
     with _$EarnDelegateNodesStore;
 
 abstract class _EarnDelegateNodesStore with Store {
-  final _walletFactory = getIt<WalletFactory>();
-
-  WalletProvider get _wallet => _walletFactory.activeWallet;
-
   final _validatorsStore = getIt<ValidatorsStore>();
 
   @observable

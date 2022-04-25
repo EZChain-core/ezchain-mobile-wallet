@@ -21,12 +21,12 @@ class EarnDelegateConfirmScreen extends StatelessWidget {
 
   final _earnDelegateConfirmStore = EarnDelegateConfirmStore();
 
-  EarnDelegateConfirmScreen({Key? key, required this.args}) : super(key: key);
+  EarnDelegateConfirmScreen({Key? key, required this.args}) : super(key: key) {
+    _earnDelegateConfirmStore.calculateFee(args);
+  }
 
   @override
   Widget build(BuildContext context) {
-    _earnDelegateConfirmStore.calculateFee(args);
-
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => Scaffold(
         body: SafeArea(

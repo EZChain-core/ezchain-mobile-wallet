@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/connectivity.dart';
+import 'package:wallet/features/common/connectivity/connectivity.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
@@ -30,7 +30,9 @@ class EZCButton extends StatelessWidget {
       required this.textStyle,
       required this.buttonStyle,
       this.onPressed,
-      this.onLongPress});
+      this.onLongPress,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +88,9 @@ class EZCMediumPrimaryButton extends StatelessWidget {
       this.padding,
       this.width,
       this.isLoading,
-      this.enabled});
+      this.enabled,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +165,9 @@ class EZCMediumPrimaryOutlineButton extends StatelessWidget {
       this.width,
       this.height,
       this.isLoading,
-      this.enabled});
+      this.enabled,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +237,9 @@ class EZCMediumSuccessButton extends StatelessWidget {
       this.onLongPress,
       this.padding,
       this.width,
-      this.isLoading});
+      this.isLoading,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -281,7 +289,9 @@ class EZCMediumNoneButton extends StatelessWidget {
       this.onLongPress,
       this.padding,
       this.textColor,
-      this.width});
+      this.width,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -337,7 +347,8 @@ class EZCBodyLargeNoneButton extends StatelessWidget {
   final VoidCallback? onLongPress;
 
   const EZCBodyLargeNoneButton(
-      {required this.text, this.onPressed, this.onLongPress});
+      {required this.text, this.onPressed, this.onLongPress, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

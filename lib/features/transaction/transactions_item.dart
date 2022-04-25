@@ -1,17 +1,14 @@
 // ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
-import 'package:collection/src/iterable_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/common/logger.dart';
-import 'package:wallet/common/router.dart';
-import 'package:wallet/common/router.gr.dart';
-import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
+import 'package:wallet/features/common/route/router.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/ezc/wallet/asset/assets.dart';
 import 'package:wallet/ezc/wallet/explorer/cchain/types.dart';
 import 'package:wallet/ezc/wallet/explorer/ortelius/types.dart';
-import 'package:wallet/ezc/wallet/history/types.dart';
 import 'package:wallet/ezc/wallet/network/helpers/alias_from_network_id.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/type/ezc_type.dart';
@@ -333,10 +330,12 @@ List<TransactionsItem> mapCChainToTransactionsItem(
     for (var tx in cTransactions) {
       final time =
           tx.timeStamp.parseDateTimeFromTimestamp()?.parseTimeAgo() ?? '';
+      //ignore: unused_local_variable
       final blockNumber = '#${tx.blockNumber}';
       final amountBN = tx.valueBN;
       final gasPrice = tx.gasPriceBN;
       final gasUsed = tx.gasUsedBN;
+      //ignore: unused_local_variable
       final fee = '${(gasPrice * gasUsed).toAvaxC()} $ezcSymbol';
       String? amount;
       if (amountBN != BigInt.zero) {

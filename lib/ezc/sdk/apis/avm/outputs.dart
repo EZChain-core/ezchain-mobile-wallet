@@ -396,7 +396,7 @@ class AvmNFTTransferOutput extends AvmNFTOutput {
       "payload": Serialization.instance.encoder(
         payload,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.hex,
         args: [payload.length],
       )
@@ -411,7 +411,7 @@ class AvmNFTTransferOutput extends AvmNFTOutput {
       fields["payload"],
       encoding,
       SerializedType.hex,
-      SerializedType.Buffer,
+      SerializedType.buffer,
     );
     sizePayload = Uint8List(4);
     sizePayload.buffer.asByteData().setUint32(0, payload.length);

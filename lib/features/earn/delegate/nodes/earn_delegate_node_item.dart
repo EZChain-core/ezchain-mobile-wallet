@@ -3,17 +3,16 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/earn/delegate/input/earn_delegate_input.dart';
+import 'package:wallet/features/earn/earn_widgets.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
-
-import '../../earn_widgets.dart';
 
 class EarnDelegateNodeItem {
   final String nodeId;

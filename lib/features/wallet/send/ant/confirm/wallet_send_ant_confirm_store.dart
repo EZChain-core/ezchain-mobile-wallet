@@ -1,4 +1,3 @@
-import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
@@ -29,7 +28,7 @@ abstract class _WalletSendAntConfirmStore with Store {
   sendAnt(WalletSendAntConfirmArgs args) async {
     _isLoading = true;
     try {
-      final txId = await _wallet.sendANT(
+      await _wallet.sendANT(
         args.assetId,
         args.address,
         args.amount.toBNAvaxX(),

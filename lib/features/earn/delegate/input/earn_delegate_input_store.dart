@@ -36,6 +36,8 @@ abstract class _EarnDelegateInputStore with Store {
 
   String get addressP => _wallet.getAddressP();
 
+  DateTime stakingEndDate = DateTime.now();
+
   @action
   bool validate(String address, Decimal amount) {
     final isAddressValid = validateAddressP(address);

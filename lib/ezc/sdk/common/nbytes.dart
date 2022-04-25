@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/serialization.dart';
 
@@ -32,7 +33,7 @@ abstract class NBytes extends Serializable {
       "bytes": Serialization.instance.encoder(
         _bytes,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.hex,
         args: [_bSize],
       )
@@ -54,7 +55,7 @@ abstract class NBytes extends Serializable {
       fields["bytes"],
       encoding,
       SerializedType.hex,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [_bSize],
     );
   }
@@ -65,7 +66,9 @@ abstract class NBytes extends Serializable {
   int fromString(String b58Str) {
     try {
       fromBuffer(b58ToBuffer(b58Str));
-    } catch (e) {}
+    } catch (e) {
+      logger.e(e);
+    }
     return _bSize;
   }
 
@@ -76,7 +79,9 @@ abstract class NBytes extends Serializable {
             "Error - NBytes.fromBuffer: not enough space available in buffer.");
       }
       _bytes = buff.sublist(offset, offset + _bSize);
-    } catch (e) {}
+    } catch (e) {
+      logger.e(e);
+    }
     return offset + _bSize;
   }
 

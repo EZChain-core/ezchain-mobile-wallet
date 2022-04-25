@@ -14,7 +14,12 @@ class EZCCircleImage extends StatelessWidget {
   final bool? isBorder;
 
   const EZCCircleImage(
-      {required this.src, required this.size, this.placeholder, this.isBorder});
+      {required this.src,
+      required this.size,
+      this.placeholder,
+      this.isBorder,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

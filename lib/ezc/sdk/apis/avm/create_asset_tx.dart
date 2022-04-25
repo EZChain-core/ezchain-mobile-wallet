@@ -82,7 +82,7 @@ class AvmCreateAssetTx extends AvmBaseTx {
       "denomination": Serialization.instance.encoder(
         denomination,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.decimalString,
         args: [1],
       ),
@@ -110,7 +110,7 @@ class AvmCreateAssetTx extends AvmBaseTx {
       fields["denomination"],
       encoding,
       SerializedType.decimalString,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [1],
     );
     initialState = InitialStates()

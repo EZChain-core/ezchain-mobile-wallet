@@ -19,7 +19,7 @@ class SigIdx extends NBytes {
       "source": Serialization.instance.encoder(
         source,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.hex,
       )
     };
@@ -32,7 +32,7 @@ class SigIdx extends NBytes {
     source = Serialization.instance.decoder(
       fields["source"],
       encoding,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       SerializedType.hex,
     );
   }

@@ -3,13 +3,11 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/nft/nft_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/widgets.dart';
-
-import '../../nft_store.dart';
-import 'nft_family_item.dart';
 
 class NftFamilyCollectibleScreen extends StatelessWidget {
   NftFamilyCollectibleScreen({Key? key}) : super(key: key);

@@ -27,7 +27,7 @@ void main() {
     var buff = Uint8List.fromList([]);
 
     test("BN", () {
-      type = SerializedType.BN;
+      type = SerializedType.bn;
       buff = serialization.typeToBuffer(bn, type);
       final b = serialization.bufferToType(buff, type);
       expect(bn.toString(), b.toString());
@@ -110,9 +110,9 @@ void main() {
 
     test("BN", () {
       final str = serialization.encoder(
-          bn, encoding, SerializedType.BN, SerializedType.BN);
+          bn, encoding, SerializedType.bn, SerializedType.bn);
       final decoded = serialization.decoder(
-          str, encoding, SerializedType.BN, SerializedType.BN);
+          str, encoding, SerializedType.bn, SerializedType.bn);
       expect(decoded.toString(), bn.toString());
     });
 
@@ -199,10 +199,10 @@ void main() {
 
     test("Buffer", () {
       final str = serialization.encoder(denomination, encoding,
-          SerializedType.Buffer, SerializedType.decimalString,
+          SerializedType.buffer, SerializedType.decimalString,
           args: [1]);
       final decoded = serialization.decoder(
-          str, encoding, SerializedType.decimalString, SerializedType.Buffer,
+          str, encoding, SerializedType.decimalString, SerializedType.buffer,
           args: [1]);
       expect(hexEncode(decoded), hexEncode(denomination));
     });

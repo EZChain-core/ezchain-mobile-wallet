@@ -51,160 +51,89 @@ class EZCChainLabelText extends StatelessWidget {
 }
 
 class EZCTextStyle extends TextStyle {
-  final Color color;
-
-  final double fontSize;
-
-  final String fontFamily;
-
-  final FontWeight fontWeight;
-
   const EZCTextStyle({
-    required this.color,
-    required this.fontSize,
-    required this.fontWeight,
-    this.fontFamily = FontFamily.beVietnamPro,
-  }) : super(fontFamily: fontFamily);
+    required Color color,
+    required double fontSize,
+    required FontWeight fontWeight,
+    String fontFamily = FontFamily.beVietnamPro,
+  }) : super(
+            color: color,
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            fontFamily: fontFamily);
 }
 
 class EZCHeadlineMediumTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCHeadlineMediumTextStyle({required this.color})
-      : super(
-            color: color,
-            fontSize: 28,
-            fontWeight: FontWeight.w400);
+  const EZCHeadlineMediumTextStyle({required Color color})
+      : super(color: color, fontSize: 28, fontWeight: FontWeight.w400);
 }
 
 class EZCHeadlineSmallTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCHeadlineSmallTextStyle({required this.color})
-      : super(
-            color: color,
-            fontSize: 24,
-            fontWeight: FontWeight.w400);
+  const EZCHeadlineSmallTextStyle({required Color color})
+      : super(color: color, fontSize: 24, fontWeight: FontWeight.w400);
 }
 
 class EZCTitleLargeTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCTitleLargeTextStyle({required this.color})
-      : super(
-            color: color,
-            fontSize: 16,
-            fontWeight: FontWeight.w500);
+  const EZCTitleLargeTextStyle({required Color color})
+      : super(color: color, fontSize: 16, fontWeight: FontWeight.w500);
 }
 
 class EZCTitleMediumTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCTitleMediumTextStyle({required this.color})
-      : super(
-            color: color,
-            fontSize: 14,
-            fontWeight: FontWeight.w500);
+  const EZCTitleMediumTextStyle({required Color color})
+      : super(color: color, fontSize: 14, fontWeight: FontWeight.w500);
 }
 
 class EZCTitleSmallTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCTitleSmallTextStyle({required this.color})
-      : super(
-            color: color,
-            fontSize: 12,
-            fontWeight: FontWeight.w500);
+  const EZCTitleSmallTextStyle({required Color color})
+      : super(color: color, fontSize: 12, fontWeight: FontWeight.w500);
 }
 
 class EZCTitleCustomTextStyle extends EZCTextStyle {
-  final Color color;
-  final double size;
-
-  const EZCTitleCustomTextStyle({required this.color, required this.size})
-      : super(
-      color: color,
-      fontSize: size,
-      fontWeight: FontWeight.w500);
+  const EZCTitleCustomTextStyle({required Color color, required double size})
+      : super(color: color, fontSize: size, fontWeight: FontWeight.w500);
 }
 
 class EZCBodyLargeTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCBodyLargeTextStyle({required this.color})
-      : super(
-            color: color,
-            fontSize: 16,
-            fontWeight: FontWeight.w400);
+  const EZCBodyLargeTextStyle({required Color color})
+      : super(color: color, fontSize: 16, fontWeight: FontWeight.w400);
 }
 
 class EZCBodyMediumTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCBodyMediumTextStyle({required this.color})
-      : super(
-            color: color,
-            fontSize: 14,
-            fontWeight: FontWeight.w400);
+  const EZCBodyMediumTextStyle({required Color color})
+      : super(color: color, fontSize: 14, fontWeight: FontWeight.w400);
 }
 
 class EZCBodySmallTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCBodySmallTextStyle({required this.color})
-      : super(
-            color: color,
-            fontSize: 12,
-            fontWeight: FontWeight.w400);
+  const EZCBodySmallTextStyle({required Color color})
+      : super(color: color, fontSize: 12, fontWeight: FontWeight.w400);
 }
 
 class EZCLabelMediumTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCLabelMediumTextStyle({required this.color})
-      : super(
-            color: color,
-            fontSize: 12,
-            fontWeight: FontWeight.w500);
+  const EZCLabelMediumTextStyle({required Color color})
+      : super(color: color, fontSize: 12, fontWeight: FontWeight.w500);
 }
 
 class EZCLabelSmallTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCLabelSmallTextStyle({required this.color})
-      : super(
-            color: color,
-            fontSize: 10,
-            fontWeight: FontWeight.w500);
+  const EZCLabelSmallTextStyle({required Color color})
+      : super(color: color, fontSize: 10, fontWeight: FontWeight.w500);
 }
 
 class EZCButtonTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCButtonTextStyle({required this.color})
-      : super(
-            color: color,
-            fontSize: 14,
-            fontWeight: FontWeight.w500);
+  const EZCButtonTextStyle({required Color color})
+      : super(color: color, fontSize: 14, fontWeight: FontWeight.w500);
 }
 
 class EZCSemiBoldSmallTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCSemiBoldSmallTextStyle({required this.color})
+  const EZCSemiBoldSmallTextStyle({required Color color})
       : super(color: color, fontSize: 12, fontWeight: FontWeight.w600);
 }
 
 class EZCSemiBoldLargeTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCSemiBoldLargeTextStyle({required this.color})
+  const EZCSemiBoldLargeTextStyle({required Color color})
       : super(color: color, fontSize: 24, fontWeight: FontWeight.w600);
 }
 
 class EZCBoldMediumTextStyle extends EZCTextStyle {
-  final Color color;
-
-  const EZCBoldMediumTextStyle({required this.color})
+  const EZCBoldMediumTextStyle({required Color color})
       : super(color: color, fontSize: 16, fontWeight: FontWeight.w700);
 }

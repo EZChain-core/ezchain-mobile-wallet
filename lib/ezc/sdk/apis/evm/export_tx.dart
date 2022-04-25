@@ -61,7 +61,7 @@ class EvmExportTx extends EvmBaseTx {
       "destinationChain": Serialization.instance.encoder(
         destinationChain,
         encoding,
-        SerializedType.Buffer,
+        SerializedType.buffer,
         SerializedType.cb58,
       ),
       "exportedOutputs": exportedOutputs.map(
@@ -78,7 +78,7 @@ class EvmExportTx extends EvmBaseTx {
       fields["destinationChain"],
       encoding,
       SerializedType.cb58,
-      SerializedType.Buffer,
+      SerializedType.buffer,
       args: [32],
     );
     exportedOutputs = (fields["exportedOutputs"] as List<dynamic>)

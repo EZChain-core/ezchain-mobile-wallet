@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:http/http.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/ezc/sdk/apis/avm/api.dart';
 import 'package:wallet/ezc/sdk/apis/evm/api.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/api.dart';
 import 'package:wallet/ezc/sdk/ezc.dart';
-import 'package:wallet/ezc/sdk/utils/dio_logger.dart';
+import 'package:wallet/common/dio_logger.dart';
 import 'package:wallet/ezc/wallet/network/constants.dart';
 import 'package:wallet/ezc/wallet/network/helpers/rpc_from_config.dart';
 import 'package:wallet/ezc/wallet/network/types.dart';
@@ -60,7 +61,9 @@ void setRpcNetwork(NetworkConfig config) {
   }
   try {
     web3Client.dispose();
-  } catch (e) {}
+  } catch (e) {
+    logger.e(e);
+  }
   _web3Client = Web3Client(getRpcC(config), Client());
 }
 

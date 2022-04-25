@@ -3,11 +3,11 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/common/router.dart';
+import 'package:wallet/features/common/route/router.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 
-import 'common/router.gr.dart';
+import 'features/common/route/router.gr.dart';
 import 'di/di.dart';
 import 'generated/l10n.dart';
 

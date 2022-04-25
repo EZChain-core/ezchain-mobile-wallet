@@ -6,6 +6,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
+import 'package:wallet/features/nft/family/create/nft_family_create_store.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
@@ -13,8 +14,6 @@ import 'package:wallet/themes/inputs.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
-
-import 'nft_family_create_store.dart';
 
 class NftFamilyCreateScreen extends StatelessWidget {
   NftFamilyCreateScreen({Key? key}) : super(key: key);

@@ -2,7 +2,6 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/ezc/wallet/mnemonic_wallet.dart';
-import 'package:wallet/ezc/wallet/singleton_wallet.dart';
 
 part 'access_mnemonic_key_store.g.dart';
 

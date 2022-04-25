@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
-import 'package:wallet/common/router.gr.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 
 enum EZCType { xChain, pChain, cChain }
 

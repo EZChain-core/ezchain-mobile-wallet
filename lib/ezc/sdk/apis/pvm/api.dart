@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_supply.dart';
 import 'package:wallet/ezc/sdk/apis/pvm/model/get_current_validators.dart';
@@ -209,7 +210,9 @@ class _PvmApiImpl implements PvmApi {
       try {
         final response = await getStakingAssetId();
         avaxAssetId = bintools.cb58Decode(response.assetId);
-      } catch (e) {}
+      } catch (e) {
+        logger.e(e);
+      }
     }
     return avaxAssetId;
   }
