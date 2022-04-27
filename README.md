@@ -2,7 +2,7 @@
 
 <img src="docs/media/ezchain-cover.png" align="center" title="EZChain Wallet Banner">
 
-<a href="https://ezchain.com" style="display: inline-block; overflow: hidden; width: 250px;"><img src="docs/media/store-android.webp" alt="Get it on the Google Play" style="width: 250px;"></a>
+<a href="https://play.google.com/store/apps/details?id=com.ezchain.wallet" style="display: inline-block; overflow: hidden; width: 250px;"><img src="docs/media/store-android.webp" alt="Get it on the Google Play" style="width: 250px;"></a>
 
 <a href="https://ezchain.com" style="display: inline-block; overflow: hidden; width: 250px;"><img src="docs/media/store-ios.webp" alt="Download on the App Store" style="width: 250px;"></a>
 
