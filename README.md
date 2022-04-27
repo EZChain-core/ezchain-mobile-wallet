@@ -1,16 +1,11 @@
-# wallet
+# EZChain Wallet for EZChain
 
-EZC Wallet
+<img src="docs/media/ezchain-cover.png" align="center" title="EZChain Wallet Banner">
 
-## Getting Started
+<a href="" style="display: inline-block; overflow: hidden; width: 250px;"><img src="docs/media/store-android.webp" alt="Get it on the Google Play" style="width: 250px;"></a>
 
-This project is a starting point for a Flutter application.
+<a href="" style="display: inline-block; overflow: hidden; width: 250px;"><img src="docs/media/store-ios.webp" alt="Download on the App Store" style="width: 250px;"></a>
 
-A few resources to get you started if this is your first Flutter project:
+EZChain Wallet for Mobile makes storing your cryptocurrency simple, secure and more.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Website: https://ezchain.com
