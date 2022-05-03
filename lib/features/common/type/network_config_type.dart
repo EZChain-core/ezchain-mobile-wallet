@@ -15,11 +15,11 @@ extension NetworkConfigTypeExtension on NetworkConfigType {
 
 NetworkConfigType getNetworkConfigType(String name) {
   return NetworkConfigType.values.firstWhere((element) => element.name == name,
-      orElse: () => NetworkConfigType.testnet);
+      orElse: () => NetworkConfigType.mainnet);
 }
 
 NetworkConfigType getNetworkConfigTypeFromConfig(NetworkConfig config) {
   return NetworkConfigType.values.firstWhere(
       (element) => element.config == config,
-      orElse: () => NetworkConfigType.testnet);
+      orElse: () => NetworkConfigType.mainnet);
 }

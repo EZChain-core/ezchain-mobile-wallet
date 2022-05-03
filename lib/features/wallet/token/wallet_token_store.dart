@@ -21,7 +21,7 @@ abstract class _WalletTokenStore with Store {
   String get tokenBalance {
     Decimal total = Decimal.zero;
     for (var element in tokens) {
-      total += (element.balance * (element.price ?? Decimal.one));
+      total += (element.balance * (element.price ?? Decimal.zero));
     }
     return total.toLocaleString(decimals: 1);
   }
