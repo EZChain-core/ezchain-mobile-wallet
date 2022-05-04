@@ -1,4 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="textPrimary_dark">#ffffff</color>
+
+    <color name="text_dark">#0C1527</color>
+    <color name="text90_dark">#242C3D</color>
+    <color name="text80_dark">#3D4452</color>
+    <color name="text70_dark">#555B68</color>
+    <color name="text60_dark">#6D737D</color>
+    <color name="text50_dark">#868A93</color>
+    <color name="text40_dark">#9EA1A9</color>
+    <color name="text30_dark">#B6B9BE</color>
+    <color name="text20_dark">#CED0D4</color>
+    <color name="text10_dark">#E7E8E9</color>
+
+
+    <color name="primary_dark">#F39E22</color>
+    <color name="primary110_dark">#DB8E1F</color>
+    <color name="primary80_dark">#F5B14E</color>
+    <color name="primary60_dark">#F8C57A</color>
+    <color name="primary40_dark">#FAD8A7</color>
+    <color name="primary20_dark">#FDECD3</color>
+    <color name="primary10_dark">#FEF5E9</color>
+
+    <color name="secondary_dark">#1C315C</color>
+    <color name="secondary80_dark">#495A7D</color>
+    <color name="secondary60_dark">#77839D</color>
+    <color name="secondary40_dark">#A4ADBE</color>
+    <color name="secondary20_dark">#D2D6DE</color>
+    <color name="secondary10_dark">#E8EAEF</color>
+
+    <color name="state_success_dark">#6FCF97</color>
+    <color name="state_danger_dark">#EB5757</color>
+
+    <color name="bg_dark">#F8F8FB</color>
+    <color name="border_dark">#E7E8E9</color>
+    <color name="border_active_dark">#F39E22</color>
+
+    <color name="red_dark">#EB5757</color>
+    <color name="white_dark">#FFFFFF</color>
+    <color name="midnight_blue_dark">#1A2849</color>
+    <color name="aqua_green_dark">#EBF4F1</color>
+    <color name="wisp_pink_dark">#FDEFEF</color>
+    <color name="blue_1_dark">#2F80ED</color>
+    <color name="white_smoke_dark">#F2F2F2</color>
+
 </resources>

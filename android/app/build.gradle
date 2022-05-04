@@ -21,12 +21,27 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def walletRoot = rootDir.getAbsolutePath().replace("android", "")
+
+def useReleaseKeystore = rootProject.file("$walletRoot/release/ezc_dev.jks").exists()
+
+def keyStorePropertiesFile = new File("$walletRoot/release/key_store.properties")
+def keyStoreProperties = new Properties()
+if (keyStorePropertiesFile.exists()) {
+    keyStoreProperties.load(new FileInputStream(keyStorePropertiesFile))
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+if (file("google-services.json").exists()) {
+    apply plugin: 'com.google.gms.google-services'
+    apply plugin: 'com.google.firebase.crashlytics'
+}
+
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -42,20 +57,50 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "net.roichain.wallet"
-        minSdkVersion 16
+        applicationId "com.ezchain.wallet"
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
+    }
+
+    signingConfigs {
+        debug {
+            if (useReleaseKeystore) {
+                storeFile file("$walletRoot/release/ezc_dev.jks")
+                storePassword keyStoreProperties['STORE_PASSWORD']
+                keyAlias keyStoreProperties['KEY_ALIAS']
+                keyPassword keyStoreProperties['KEY_PASSWORD']
+            }
+        }
+        release {
+            if (useReleaseKeystore) {
+                storeFile file("$walletRoot/release/ezc_dev.jks")
+                storePassword keyStoreProperties['STORE_PASSWORD']
+                keyAlias keyStoreProperties['KEY_ALIAS']
+                keyPassword keyStoreProperties['KEY_PASSWORD']
+            }
+        }
     }
 
     buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+        debug {
+            debuggable true
             signingConfig signingConfigs.debug
         }
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+        checkReleaseBuilds false
     }
 }
 
@@ -65,4 +110,8 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation platform('com.google.firebase:firebase-bom:29.0.3')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'androidx.multidex:multidex:2.0.1'
 }

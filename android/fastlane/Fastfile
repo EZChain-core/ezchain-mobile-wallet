@@ -1,0 +1,56 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "EZChain-Android"
+
+  before_all do |lane, options|
+  end
+
+  lane :android_internal_alpha do |options|
+    latest_release = firebase_app_distribution_get_latest_release(
+        app: ENV["FIREBASE_ANDROID_APP_ID"],
+        firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"]
+    )
+    if latest_release.nil?
+        build_number = 1
+    else
+        build_number = latest_release[:buildVersion].to_i + 1
+    end
+    gradle(task: 'assemble', build_type: 'Release', properties: { "android.injected.version.code" => build_number })
+    firebase_app_distribution(
+        app: ENV["FIREBASE_ANDROID_APP_ID"],
+        firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"],
+        groups: "android_testers",
+        release_notes: change_log_from_git(),
+        apk_path: "../build/app/outputs/apk/release/app-release.apk"
+    )
+  end
+
+  private_lane :change_log_from_git do |options|
+      count = (options[:count] ? options[:count] : 10)
+      changelog_from_git_commits(
+          commits_count: count,
+          pretty: "- (%ae) %s",
+          date_format: "short",
+          merge_commit_filtering: "exclude_merges"
+      )
+  end
+
+  after_all do |lane, options|
+  end
+end
