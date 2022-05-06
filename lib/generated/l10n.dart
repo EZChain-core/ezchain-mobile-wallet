@@ -1404,6 +1404,16 @@ class Strings {
     );
   }
 
+  /// `Version`
+  String get settingVersion {
+    return Intl.message(
+      'Version',
+      name: 'settingVersion',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Please enter old PIN`
   String get settingEnterOldPin {
     return Intl.message(

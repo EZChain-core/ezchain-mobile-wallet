@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:mobx/mobx.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/di/di.dart';
@@ -37,6 +38,9 @@ abstract class _SettingStore with Store {
 
   @observable
   bool touchIdAvailable = false;
+
+  @observable
+  String appVersion = '';
 
   @readonly
   NetworkConfigType _activeNetworkConfig =
@@ -83,5 +87,8 @@ abstract class _SettingStore with Store {
   _init() async {
     touchIdEnabled = await _walletSetting.touchIdEnabled();
     touchIdAvailable = await _localAuthentication.canCheckBiometrics;
+
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    appVersion = packageInfo.version;
   }
 }

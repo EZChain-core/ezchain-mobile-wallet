@@ -187,6 +187,10 @@ class $AssetsIconsGen {
   SvgGenImage get icTwoArrow =>
       const SvgGenImage('assets/icons/ic_two_arrow.svg');
 
+  /// File path: assets/icons/ic_version_outline_black.svg
+  SvgGenImage get icVersionOutlineBlack =>
+      const SvgGenImage('assets/icons/ic_version_outline_black.svg');
+
   /// File path: assets/icons/ic_wallet_outline.svg
   SvgGenImage get icWalletOutline =>
       const SvgGenImage('assets/icons/ic_wallet_outline.svg');

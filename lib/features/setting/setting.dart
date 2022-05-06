@@ -3,8 +3,8 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/ezc/wallet/network/constants.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/common/type/network_config_type.dart';
 import 'package:wallet/features/setting/setting_store.dart';
 import 'package:wallet/features/setting/widgets/setting_item.dart';
@@ -59,6 +59,13 @@ class SettingScreen extends StatelessWidget {
                         onSwitch: (value) => _settingStore.enableTouchId(value),
                       )
                     : const SizedBox.shrink(),
+              ),
+              Observer(
+                builder: (_) => SettingItem(
+                  text: Strings.current.settingVersion,
+                  icon: Assets.icons.icVersionOutlineBlack.svg(),
+                  rightText: _settingStore.appVersion,
+                ),
               ),
               const Spacer(),
               Padding(

@@ -133,6 +133,7 @@
   "settingGeneral": "General Setting",
   "settingAboutEZC": "About EZChain",
   "settingTouchId": "Touch ID",
+  "settingVersion": "Version",
   "settingEnterOldPin": "Please enter old PIN",
   "settingEnterNewPin": "Please enter new PIN",
   "settingConfirmNewPin": "Please confirm new PIN",

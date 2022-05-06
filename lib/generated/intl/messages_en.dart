@@ -260,6 +260,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "settingSwitchNetworks":
             MessageLookupByLibrary.simpleMessage("Switch Networks"),
         "settingTouchId": MessageLookupByLibrary.simpleMessage("Touch ID"),
+        "settingVersion": MessageLookupByLibrary.simpleMessage("Version"),
         "settingWalletSecurity":
             MessageLookupByLibrary.simpleMessage("Wallet Security"),
         "sharedAccepted": MessageLookupByLibrary.simpleMessage("Accepted"),
