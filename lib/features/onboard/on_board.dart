@@ -1,31 +1,21 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/common/route/router.gr.dart';
+import 'package:wallet/features/onboard/on_board_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 
-class OnBoardScreen extends StatefulWidget {
-  const OnBoardScreen({Key? key}) : super(key: key);
+class OnBoardScreen extends StatelessWidget {
+  OnBoardScreen({Key? key}) : super(key: key);
 
-  @override
-  State<StatefulWidget> createState() => _OnBoardScreenState();
-}
-
-class _OnBoardScreenState extends State<OnBoardScreen> {
+  final _onBoardStore = OnBoardStore();
   final _controller = PageController();
-  int _pageSelectedIndex = 0;
-
   final _pageSize = 3;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +38,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                   child: PageView(
                     scrollDirection: Axis.horizontal,
                     controller: _controller,
-                    onPageChanged: (value) {
-                      setState(() {
-                        _pageSelectedIndex = value;
-                      });
-                    },
+                    onPageChanged: _onBoardStore.selectPage,
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 21),
@@ -75,8 +61,10 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
                       _pageSize,
-                      (index) => _DotIndicator(
-                        isSelected: index == _pageSelectedIndex,
+                      (index) => Observer(
+                        builder: (_) => _DotIndicator(
+                          isSelected: index == _onBoardStore.pageSelectedIndex,
+                        ),
                       ),
                     ),
                   ),
