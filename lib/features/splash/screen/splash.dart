@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:wallet/features/common/route/router.gr.dart';
-
 import 'package:wallet/di/di.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/assets.gen.dart';
 
@@ -50,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
         context.router.replaceAll([const DashboardRoute()]);
       }
     } else {
-      context.router.replaceAll([const OnBoardRoute()]);
+      context.router.replaceAll([OnBoardRoute()]);
     }
   }
 }

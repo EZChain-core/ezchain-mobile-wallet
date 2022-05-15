@@ -66,6 +66,6 @@ class SettingGeneralScreen extends StatelessWidget {
     _priceStore.dispose();
     _validatorsStore.dispose();
     walletFactory.clear();
-    walletContext?.router.replaceAll([const OnBoardRoute()]);
+    walletContext?.router.replaceAll([OnBoardRoute()]);
   }
 }

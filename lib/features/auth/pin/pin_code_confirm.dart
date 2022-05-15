@@ -1,27 +1,21 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/common/route/router.gr.dart';
-import 'package:wallet/di/di.dart';
+import 'package:wallet/features/auth/pin/pin_code_confirm_store.dart';
 import 'package:wallet/features/auth/pin/widgets/pin_code_input.dart';
-import 'package:wallet/features/common/setting/wallet_setting.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
-class PinCodeConfirmScreen extends StatefulWidget {
+class PinCodeConfirmScreen extends StatelessWidget {
   final String pin;
 
-  const PinCodeConfirmScreen({Key? key, required this.pin}) : super(key: key);
+  PinCodeConfirmScreen({Key? key, required this.pin}) : super(key: key);
 
-  @override
-  State<PinCodeConfirmScreen> createState() => _PinCodeConfirmScreenState();
-}
-
-class _PinCodeConfirmScreenState extends State<PinCodeConfirmScreen> {
-  bool isPinCorrect = true;
-  final _walletSetting = getIt<WalletSetting>();
+  final _pinCodeConfirmStore = PinCodeConfirmStore();
 
   @override
   Widget build(BuildContext context) {
@@ -42,39 +36,42 @@ class _PinCodeConfirmScreenState extends State<PinCodeConfirmScreen> {
               ),
               Expanded(
                 flex: 1,
-                child: isPinCorrect
-                    ? const SizedBox.shrink()
-                    : SizedBox(
-                        width: double.infinity,
-                        height: double.infinity,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              Strings.current.pinCodeWrong,
-                              style: EZCBodyMediumTextStyle(
-                                color: provider.themeMode.red,
-                              ),
-                            ),
-                            TextButton(
-                              child: Text(
-                                Strings.current.pinCodeSetNewPin,
+                child: Observer(
+                  builder: (_) => _pinCodeConfirmStore.isPinCorrect
+                      ? const SizedBox.shrink()
+                      : SizedBox(
+                          width: double.infinity,
+                          height: double.infinity,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                Strings.current.pinCodeWrong,
                                 style: EZCBodyMediumTextStyle(
-                                        color: provider.themeMode.primary)
-                                    .copyWith(
-                                        decoration: TextDecoration.underline),
+                                  color: provider.themeMode.red,
+                                ),
                               ),
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                alignment: Alignment.topCenter,
+                              TextButton(
+                                child: Text(
+                                  Strings.current.pinCodeSetNewPin,
+                                  style: EZCBodyMediumTextStyle(
+                                          color: provider.themeMode.primary)
+                                      .copyWith(
+                                          decoration: TextDecoration.underline),
+                                ),
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  alignment: Alignment.topCenter,
+                                ),
+                                onPressed: () {
+                                  context.router
+                                      .push(const PinCodeSetupRoute());
+                                },
                               ),
-                              onPressed: () {
-                                context.router.push(const PinCodeSetupRoute());
-                              },
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
+                ),
               ),
               Expanded(
                 flex: 3,
@@ -82,18 +79,14 @@ class _PinCodeConfirmScreenState extends State<PinCodeConfirmScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 80),
                   child: PinCodeInput(
                     onChanged: () {
-                      setState(() {
-                        isPinCorrect = true;
-                      });
+                      _pinCodeConfirmStore.setPinCorrect(true);
                     },
                     onSuccess: (String confirmPin) {
-                      if (confirmPin == widget.pin) {
-                        _walletSetting.savePinCode(confirmPin);
+                      if (confirmPin == pin) {
+                        _pinCodeConfirmStore.savePinCode(confirmPin);
                         context.router.replaceAll([const DashboardRoute()]);
                       } else {
-                        setState(() {
-                          isPinCorrect = false;
-                        });
+                        _pinCodeConfirmStore.setPinCorrect(false);
                       }
                     },
                   ),
