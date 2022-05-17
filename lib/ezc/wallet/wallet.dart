@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:eventify/eventify.dart';
+import 'package:wallet/ezc/sdk/apis/avm/base_tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart' as avm_constants;
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
@@ -139,7 +140,13 @@ abstract class WalletProvider {
   /// @param to - the address funds are being send to.
   /// @param amount - amount of EZC to send in EZC
   /// @param memo - A MEMO for the transaction
-  Future<String> sendAvaxX(String to, BigInt amount, {String? memo}) async {
+  /// @param [nftUtxos] - nft list to transfer
+  Future<String> sendAvaxX(
+    String to,
+    BigInt amount, {
+    String? memo,
+    List<AvmUTXO>? nftUtxos,
+  }) async {
     final Uint8List? memoBuff;
     if (memo != null) {
       memoBuff = Uint8List.fromList(utf8.encode(memo));
@@ -149,7 +156,7 @@ abstract class WalletProvider {
     final from = await getAllAddressesX();
     final changeAddress = getChangeAddressX();
     final utxoSet = utxosX;
-    final tx = await xChain.buildBaseTx(
+    final unsignedBaseTx = await xChain.buildBaseTx(
       utxoSet,
       amount,
       getAvaxAssetId(),
@@ -158,6 +165,40 @@ abstract class WalletProvider {
       [changeAddress],
       memo: memoBuff,
     );
+
+    AvmUnsignedTx tx;
+
+    if (nftUtxos != null && nftUtxos.isNotEmpty) {
+      final nftUtxoSet = AvmUTXOSet()..addArray(nftUtxos);
+
+      final utxoIds = nftUtxoSet.getUTXOIds();
+
+      utxoIds.sort((a, b) => a.compareTo(b));
+
+      final unsignedNFTTransferTx = await xChain.buildNFTTransferTx(
+        nftUtxoSet,
+        [to],
+        from,
+        from,
+        utxoIds,
+        memo: memoBuff,
+      );
+
+      unsignedNFTTransferTx.getTransaction().ins = [
+        ...unsignedNFTTransferTx.getTransaction().getIns(),
+        ...unsignedBaseTx.getTransaction().getIns()
+      ];
+
+      unsignedNFTTransferTx.getTransaction().outs = [
+        ...unsignedNFTTransferTx.getTransaction().getOuts(),
+        ...unsignedBaseTx.getTransaction().getOuts()
+      ];
+
+      tx = unsignedNFTTransferTx;
+    } else {
+      tx = unsignedBaseTx;
+    }
+
     final signedTx = await signX(tx);
     final String txId = await xChain.issueTx(signedTx);
     await waitTxX(txId);
