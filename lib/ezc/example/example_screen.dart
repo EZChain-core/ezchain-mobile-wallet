@@ -214,11 +214,14 @@ class WalletExampleScreen extends StatelessWidget {
       final maxFeeText = maxFee.toAvaxC();
       logger.i("maxFee = $maxFeeText");
 
+      final nonce = await wallet.getEvmTransactionCount(wallet.getAddressC());
+
       final txId = await wallet.sendAvaxC(
         to,
         amount,
         gasPrice,
         gasLimit.toInt(),
+        nonce: nonce,
       );
       logger.i("txId = $txId");
     } catch (e) {
@@ -1424,12 +1427,15 @@ class WalletExampleScreen extends StatelessWidget {
       }
       logger.i("gasLimit = $gasLimit");
 
+      final nonce = await wallet.getEvmTransactionCount(wallet.getAddressC());
+
       final txHash = await wallet.sendErc20(
         to,
         amountBN,
         gasPrice,
         gasLimit.toInt(),
         contractAddress,
+        nonce: nonce,
       );
       logger.i("txHash = $txHash");
     } catch (e) {
