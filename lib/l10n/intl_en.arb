@@ -156,6 +156,8 @@
   "walletReceiveSetAmount": "Set Amount",
   "walletSendMemo": "Memo (optional)",
   "walletSendBalance": "Balance: {balance}",
+  "walletSendDefaultFee": "Default Fee",
+  "walletSendCustomFee": "Custom Fee",
   "walletSendGasPrice": "Gas Price",
   "walletSendGasPriceGWEI": "Gas Price (GWEI)",
   "walletSendGasGWEI": "GWEI",

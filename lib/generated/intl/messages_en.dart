@@ -410,6 +410,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "walletSendBalance": m11,
         "walletSendCChainErrorAddress": MessageLookupByLibrary.simpleMessage(
             "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\""),
+        "walletSendCustomFee":
+            MessageLookupByLibrary.simpleMessage("Custom Fee"),
+        "walletSendDefaultFee":
+            MessageLookupByLibrary.simpleMessage("Default Fee"),
         "walletSendGasGWEI": MessageLookupByLibrary.simpleMessage("GWEI"),
         "walletSendGasLimit": MessageLookupByLibrary.simpleMessage("Gas Limit"),
         "walletSendGasLimitNote": MessageLookupByLibrary.simpleMessage(

@@ -1634,6 +1634,26 @@ class Strings {
     );
   }
 
+  /// `Default Fee`
+  String get walletSendDefaultFee {
+    return Intl.message(
+      'Default Fee',
+      name: 'walletSendDefaultFee',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Custom Fee`
+  String get walletSendCustomFee {
+    return Intl.message(
+      'Custom Fee',
+      name: 'walletSendCustomFee',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Gas Price`
   String get walletSendGasPrice {
     return Intl.message(

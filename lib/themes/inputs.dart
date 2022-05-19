@@ -3,10 +3,10 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/common/route/router.dart';
-import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
+import 'package:wallet/features/common/route/router.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
@@ -107,6 +107,8 @@ class EZCTextField extends StatelessWidget {
                     EZCBodyLargeTextStyle(color: provider.themeMode.text40),
                 prefixIcon: prefixIcon,
                 suffixIcon: suffixIcon,
+                filled: enabled == false,
+                fillColor: provider.themeMode.text10,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: ezcBorder,
                   borderSide: BorderSide(
