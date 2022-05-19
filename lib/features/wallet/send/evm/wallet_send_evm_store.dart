@@ -1,3 +1,5 @@
+// ignore: implementation_imports
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
@@ -6,13 +8,19 @@ import 'package:wallet/ezc/wallet/helpers/address_helper.dart';
 import 'package:wallet/ezc/wallet/helpers/gas_helper.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
+import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
+import 'package:wallet/features/common/route/router.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/store/price_store.dart';
 import 'package:wallet/features/common/store/token_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/generated/l10n.dart';
+
+import 'confirm/wallet_send_evm_confirm.dart';
 
 part 'wallet_send_evm_store.g.dart';
 
@@ -41,7 +49,19 @@ abstract class _WalletSendEvmStore with Store {
       _token != null ? _token!.price : _priceStore.ezcPrice;
 
   @observable
+  String address = '';
+
+  @observable
   Decimal amount = Decimal.zero;
+
+  @observable
+  int customGasLimit = 0;
+
+  @observable
+  BigInt customGasPrice = BigInt.zero;
+
+  @observable
+  int nonce = 0;
 
   @computed
   Decimal get balanceC =>
@@ -60,10 +80,19 @@ abstract class _WalletSendEvmStore with Store {
   bool _confirmSuccess = false;
 
   @readonly
+  bool _customFeeConfirmSuccess = false;
+
+  @readonly
   Decimal _fee = Decimal.zero;
 
   @readonly
+  Decimal _customFee = Decimal.zero;
+
+  @readonly
   bool _isLoading = false;
+
+  @readonly
+  bool _customFeeIsLoading = false;
 
   Decimal get maxAmount {
     final max = balanceC - _fee;
@@ -99,7 +128,7 @@ abstract class _WalletSendEvmStore with Store {
   }
 
   @action
-  confirm(String address) async {
+  confirm(bool isCustomFee) async {
     final isAddressValid = validateAddressEvm(address);
     final isAmountValid = balanceC >= amount && amountBN > BigInt.zero;
     if (!isAddressValid) {
@@ -108,24 +137,28 @@ abstract class _WalletSendEvmStore with Store {
     if (!isAmountValid) {
       _amountError = Strings.current.sharedInvalidAmount;
     }
-    if (isAddressValid && isAmountValid) {
-      if (_token != null) {
-        _gasLimit = await _wallet.estimateErc20Gas(
-          _token!.id,
-          address,
-          amountBN,
-        );
-      } else {
-        _gasLimit = await _wallet.estimateAvaxGasLimit(
-          address,
-          amountBN,
-          _gasPrice,
-        );
-      }
-      _fee = (_gasPrice * _gasLimit).toDecimalAvaxC();
+    if (!isAddressValid || !isAmountValid) return;
+    if (isCustomFee) {
+      _customFee =
+          (customGasPrice * BigInt.from(customGasLimit)).toDecimalAvaxC();
 
-      _confirmSuccess = true;
+      _customFeeConfirmSuccess = true;
+    } else if (_token != null) {
+      _gasLimit = await _wallet.estimateErc20Gas(
+        _token!.id,
+        address,
+        amountBN,
+      );
+    } else {
+      _gasLimit = await _wallet.estimateAvaxGasLimit(
+        address,
+        amountBN,
+        _gasPrice,
+      );
     }
+    _fee = (_gasPrice * _gasLimit).toDecimalAvaxC();
+
+    _confirmSuccess = true;
   }
 
   @action
@@ -143,32 +176,67 @@ abstract class _WalletSendEvmStore with Store {
   }
 
   @action
-  Future<bool> sendEvm(String address) async {
-    _isLoading = true;
+  Future sendEvm(bool isCustomFee) async {
+    final verified = await verifyPinCode();
+    if (!verified) return;
+
+    final gasPrice = isCustomFee ? customGasPrice : _gasPrice;
+    final gasLimit = isCustomFee ? BigInt.from(customGasLimit) : _gasLimit;
+    final nonceValue = isCustomFee ? nonce : null;
+    if (isCustomFee) {
+      _customFeeIsLoading = true;
+    } else {
+      _isLoading = true;
+    }
     try {
       if (_token != null) {
         await _wallet.sendErc20(
           address,
           amountBN,
-          _gasPrice,
-          _gasLimit.toInt(),
+          gasPrice,
+          gasLimit.toInt(),
           _token!.id,
+          nonce: nonceValue,
         );
         _tokenStore.updateErc20Balance();
       } else {
         await _wallet.sendAvaxC(
           address,
           amountBN,
-          _gasPrice,
-          _gasLimit.toInt(),
+          gasPrice,
+          gasLimit.toInt(),
+          nonce: nonceValue,
         );
       }
-      _isLoading = false;
-      return true;
+      if (isCustomFee) {
+        _customFeeIsLoading = false;
+      } else {
+        _isLoading = false;
+      }
+
+      final symbol = _token != null ? _token!.symbol : ezcSymbol;
+      final gasPriceNumber =
+          int.tryParse(gasPrice.toDecimalAvaxX().toStringAsFixed(0)) ?? 0;
+      walletContext?.router.push(
+        WalletSendEvmConfirmRoute(
+          transactionInfo: WalletSendEvmTransactionViewData(
+            address,
+            gasPriceNumber,
+            gasLimit,
+            amount,
+            _fee,
+            symbol,
+          ),
+        ),
+      );
     } catch (e) {
-      logger.e(e);
-      showSnackBar(Strings.current.sharedCommonError);
-      _isLoading = false;
+      logger.e(e.toString());
+      showSnackBar(e.toString());
+      if (isCustomFee) {
+        _customFeeIsLoading = false;
+      } else {
+        _isLoading = false;
+      }
       return false;
     }
   }

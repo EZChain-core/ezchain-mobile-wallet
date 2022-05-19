@@ -4,11 +4,8 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
-import 'package:wallet/features/common/route/router.dart';
-import 'package:wallet/features/common/route/router.gr.dart';
-import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.dart';
 import 'package:wallet/features/wallet/send/evm/wallet_send_evm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
@@ -81,13 +78,14 @@ class WalletSendEvmScreen extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 16),
                                 child: EZCAddressTextField(
-                                  label: Strings.current.sharedSendTo,
-                                  hint: Strings.current.sharedPasteAddress,
-                                  controller: _addressController,
-                                  error: _walletSendEvmStore.addressError,
-                                  onChanged: (_) =>
-                                      _walletSendEvmStore.removeAddressError(),
-                                ),
+                                    label: Strings.current.sharedSendTo,
+                                    hint: Strings.current.sharedPasteAddress,
+                                    controller: _addressController,
+                                    error: _walletSendEvmStore.addressError,
+                                    onChanged: (text) {
+                                      _walletSendEvmStore.address = text;
+                                      _walletSendEvmStore.removeAddressError();
+                                    }),
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -139,8 +137,10 @@ class WalletSendEvmScreen extends StatelessWidget {
                                     color: provider.themeMode.text40),
                                 unselectedLabelColor: provider.themeMode.text40,
                                 tabs: [
-                                  Tab(text: Strings.current.walletSendDefaultFee),
-                                  Tab(text: Strings.current.walletSendCustomFee),
+                                  Tab(
+                                      text:
+                                          Strings.current.walletSendDefaultFee),
+                                  Tab(text: Strings.current.walletSendCustomFee)
                                 ],
                               ),
                             ),
@@ -150,15 +150,9 @@ class WalletSendEvmScreen extends StatelessWidget {
                                 children: [
                                   _WalletSendEvmDefaultFeeTab(
                                     walletSendEvmStore: _walletSendEvmStore,
-                                    onClickConfirm: _onClickConfirm,
-                                    onClickSendTransaction:
-                                        _onClickSendTransaction,
                                   ),
                                   _WalletSendEvmCustomFeeTab(
                                     walletSendEvmStore: _walletSendEvmStore,
-                                    onClickConfirm: _onClickConfirm,
-                                    onClickSendTransaction:
-                                        _onClickSendTransaction,
                                   ),
                                 ],
                               ),
@@ -176,45 +170,13 @@ class WalletSendEvmScreen extends StatelessWidget {
       ),
     );
   }
-
-  void _onClickConfirm() {
-    final address = _addressController.text;
-    _walletSendEvmStore.confirm(address);
-  }
-
-  Future<void> _onClickSendTransaction() async {
-    final verified = await verifyPinCode();
-    if (!verified) return;
-
-    final address = _addressController.text;
-    final sendSuccess = await _walletSendEvmStore.sendEvm(address);
-    final symbol = fromToken != null ? fromToken!.symbol : ezcSymbol;
-    if (sendSuccess) {
-      walletContext?.router.push(
-        WalletSendEvmConfirmRoute(
-          transactionInfo: WalletSendEvmTransactionViewData(
-              _addressController.text,
-              _walletSendEvmStore.gasPriceNumber,
-              _walletSendEvmStore.gasLimit,
-              _walletSendEvmStore.amount,
-              _walletSendEvmStore.fee,
-              symbol),
-        ),
-      );
-    }
-  }
 }
 
 class _WalletSendEvmDefaultFeeTab extends StatelessWidget {
   final WalletSendEvmStore walletSendEvmStore;
-  final VoidCallback onClickConfirm;
-  final VoidCallback onClickSendTransaction;
 
   const _WalletSendEvmDefaultFeeTab(
-      {Key? key,
-      required this.walletSendEvmStore,
-      required this.onClickConfirm,
-      required this.onClickSendTransaction})
+      {Key? key, required this.walletSendEvmStore})
       : super(key: key);
 
   @override
@@ -247,7 +209,8 @@ class _WalletSendEvmDefaultFeeTab extends StatelessWidget {
             Observer(
               builder: (_) => WalletSendHorizontalText(
                 title: Strings.current.sharedTransactionFee,
-                content: '${walletSendEvmStore.fee} $ezcSymbol',
+                content:
+                    '${walletSendEvmStore.fee.toLocaleString(decimals: 9)} $ezcSymbol',
                 rightColor: provider.themeMode.text60,
               ),
             ),
@@ -257,14 +220,14 @@ class _WalletSendEvmDefaultFeeTab extends StatelessWidget {
                   ? EZCMediumSuccessButton(
                       text: Strings.current.sharedSendTransaction,
                       width: 251,
-                      onPressed: onClickSendTransaction,
+                      onPressed: () => walletSendEvmStore.sendEvm(false),
                       isLoading: walletSendEvmStore.isLoading,
                     )
                   : EZCMediumPrimaryButton(
                       text: Strings.current.sharedConfirm,
                       width: 185,
                       padding: const EdgeInsets.symmetric(),
-                      onPressed: onClickConfirm,
+                      onPressed: () => walletSendEvmStore.confirm(false),
                     ),
             ),
           ],
@@ -274,17 +237,10 @@ class _WalletSendEvmDefaultFeeTab extends StatelessWidget {
   }
 }
 
-
 class _WalletSendEvmCustomFeeTab extends StatelessWidget {
   final WalletSendEvmStore walletSendEvmStore;
-  final VoidCallback onClickConfirm;
-  final VoidCallback onClickSendTransaction;
 
-  const _WalletSendEvmCustomFeeTab(
-      {Key? key,
-        required this.walletSendEvmStore,
-        required this.onClickConfirm,
-        required this.onClickSendTransaction})
+  const _WalletSendEvmCustomFeeTab({Key? key, required this.walletSendEvmStore})
       : super(key: key);
 
   @override
@@ -299,8 +255,11 @@ class _WalletSendEvmCustomFeeTab extends StatelessWidget {
                 label: Strings.current.walletSendGasPriceGWEI,
                 inputType: TextInputType.number,
                 hint: '0',
-                controller: TextEditingController(
-                    text: walletSendEvmStore.gasPriceNumber.toString()),
+                onChanged: (text) {
+                  walletSendEvmStore.customGasPrice =
+                      (Decimal.tryParse(text) ?? Decimal.zero)
+                          .toBN(denomination: 9);
+                },
               ),
             ),
             const SizedBox(height: 16),
@@ -309,8 +268,9 @@ class _WalletSendEvmCustomFeeTab extends StatelessWidget {
                 label: Strings.current.walletSendGasLimit,
                 inputType: TextInputType.number,
                 hint: '0',
-                controller: TextEditingController(
-                    text: walletSendEvmStore.gasLimit.toString()),
+                onChanged: (text) {
+                  walletSendEvmStore.customGasLimit = int.tryParse(text) ?? 0;
+                },
               ),
             ),
             const SizedBox(height: 16),
@@ -319,33 +279,35 @@ class _WalletSendEvmCustomFeeTab extends StatelessWidget {
                 label: Strings.current.sharedNonce,
                 inputType: TextInputType.number,
                 hint: '0',
-                controller: TextEditingController(
-                    text: walletSendEvmStore.gasLimit.toString()),
+                onChanged: (text) {
+                  walletSendEvmStore.nonce = int.tryParse(text) ?? 0;
+                },
               ),
             ),
             const SizedBox(height: 16),
             Observer(
               builder: (_) => WalletSendHorizontalText(
                 title: Strings.current.sharedTransactionFee,
-                content: '${walletSendEvmStore.fee} $ezcSymbol',
+                content:
+                    '${walletSendEvmStore.customFee.toLocaleString(decimals: 9)} $ezcSymbol',
                 rightColor: provider.themeMode.text60,
               ),
             ),
             const SizedBox(height: 44),
             Observer(
-              builder: (_) => walletSendEvmStore.confirmSuccess
+              builder: (_) => walletSendEvmStore.customFeeConfirmSuccess
                   ? EZCMediumSuccessButton(
-                text: Strings.current.sharedSendTransaction,
-                width: 251,
-                onPressed: onClickSendTransaction,
-                isLoading: walletSendEvmStore.isLoading,
-              )
+                      text: Strings.current.sharedSendTransaction,
+                      width: 251,
+                      onPressed: () => walletSendEvmStore.sendEvm(true),
+                      isLoading: walletSendEvmStore.isLoading,
+                    )
                   : EZCMediumPrimaryButton(
-                text: Strings.current.sharedConfirm,
-                width: 185,
-                padding: const EdgeInsets.symmetric(),
-                onPressed: onClickConfirm,
-              ),
+                      text: Strings.current.sharedConfirm,
+                      width: 185,
+                      padding: const EdgeInsets.symmetric(),
+                      onPressed: () => walletSendEvmStore.confirm(true),
+                    ),
             ),
           ],
         ),
@@ -353,4 +315,3 @@ class _WalletSendEvmCustomFeeTab extends StatelessWidget {
     );
   }
 }
-
