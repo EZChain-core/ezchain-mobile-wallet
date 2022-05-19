@@ -529,7 +529,11 @@ abstract class WalletProvider {
       throw Exception("Invalid contract address.");
     }
     final evmPrivateKey = evmWallet.getPrivateKeyHex();
-    final balOld = await token.getBalance(from, web3Client);
+    final balOld = await token.getBalance(
+      from,
+      web3Client,
+      getEvmChainId(),
+    );
     final tx = await tx_hepler.buildEvmTransferErc20Tx(
       evmPrivateKey,
       from,
@@ -541,7 +545,11 @@ abstract class WalletProvider {
     );
     final txHash = await issueEvmTx(tx);
 
-    final balNew = await token.getBalance(from, web3Client);
+    final balNew = await token.getBalance(
+      from,
+      web3Client,
+      getEvmChainId(),
+    );
     if (balOld != balNew) {
       emitBalanceChangeC();
     }

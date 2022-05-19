@@ -34,11 +34,13 @@ class Erc20TokenData {
   Future<BigInt> getBalance(
     String address,
     Web3Client client,
+    int evmChainId,
   ) async {
     try {
       final erc20 = ERC20(
         address: EthereumAddress.fromHex(contractAddress),
         client: client,
+        chainId: evmChainId,
       );
       balanceBN = await erc20.balanceOf(EthereumAddress.fromHex(address));
     } catch (e) {
@@ -56,6 +58,7 @@ class Erc20TokenData {
       final erc20 = ERC20(
         address: EthereumAddress.fromHex(contractAddress),
         client: client,
+        chainId: evmChainId,
       );
       final name = await erc20.name();
       final symbol = await erc20.symbol();

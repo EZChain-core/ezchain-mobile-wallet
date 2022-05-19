@@ -47,6 +47,7 @@ abstract class _WalletTokenAddStore with Store {
       await erc20TokenData.getBalance(
         _wallet.getAddressC(),
         web3Client,
+        getEvmChainId(),
       );
 
       walletContext?.pushRoute(WalletTokenAddConfirmRoute(

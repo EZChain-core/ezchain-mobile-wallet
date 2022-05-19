@@ -76,8 +76,11 @@ abstract class _TokenStore with Store {
       final cachedErc20Tokens =
           List<Erc20TokenData>.from(map.map((i) => Erc20TokenData.fromJson(i)));
       final evmAddress = _wallet.getAddressC();
-      await Future.wait(cachedErc20Tokens
-          .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
+      await Future.wait(cachedErc20Tokens.map((erc20) => erc20.getBalance(
+            evmAddress,
+            web3Client,
+            getEvmChainId(),
+          )));
       cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
       _erc20Tokens.clear();
       _erc20Tokens.insertAll(0, cachedErc20Tokens);
@@ -91,8 +94,11 @@ abstract class _TokenStore with Store {
     try {
       final cachedErc20Tokens = _erc20Tokens.toList();
       final evmAddress = _wallet.getAddressC();
-      await Future.wait(cachedErc20Tokens
-          .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
+      await Future.wait(cachedErc20Tokens.map((erc20) => erc20.getBalance(
+            evmAddress,
+            web3Client,
+            getEvmChainId(),
+          )));
       cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
       _erc20Tokens.clear();
       _erc20Tokens.addAll(cachedErc20Tokens);

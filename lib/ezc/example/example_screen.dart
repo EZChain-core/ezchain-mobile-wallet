@@ -9,6 +9,7 @@ import 'package:eventify/eventify.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wallet/common/logger.dart';
+import 'package:wallet/ezc/wallet/asset/erc721/erc721.dart';
 import 'package:wallet/features/common/storage/storage.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
@@ -36,6 +37,7 @@ import 'package:wallet/ezc/wallet/types.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/ezc/wallet/utils/utils.dart';
+import 'package:web3dart/credentials.dart';
 
 class WalletExampleScreen extends StatelessWidget {
   final SingletonWallet wallet;
@@ -58,7 +60,7 @@ class WalletExampleScreen extends StatelessWidget {
             child: ElevatedButton(
               child: const Text("Test"),
               onPressed: () {
-                mintNFT();
+                addErc721();
               },
             ),
           ),
@@ -107,6 +109,7 @@ class WalletExampleScreen extends StatelessWidget {
   }
 
   initWallet() {
+    setRpcNetwork(testnetConfig);
     wallet.on(WalletEventType.balanceChangedX, _handleCallback);
     wallet.on(WalletEventType.balanceChangedP, _handleCallback);
     wallet.on(WalletEventType.balanceChangedC, _handleCallback);
@@ -1344,6 +1347,7 @@ class WalletExampleScreen extends StatelessWidget {
     await erc20TokenData.getBalance(
       wallet.getAddressC(),
       web3Client,
+      getEvmChainId(),
     );
     logger.i(
         "name = ${erc20TokenData.name}, symbol = ${erc20TokenData.symbol}, decimals = ${erc20TokenData.decimals}, balance = ${erc20TokenData.balance}");
@@ -1382,8 +1386,11 @@ class WalletExampleScreen extends StatelessWidget {
       final cachedErc20Tokens =
           List<Erc20TokenData>.from(map.map((i) => Erc20TokenData.fromJson(i)));
       final evmAddress = wallet.getAddressC();
-      await Future.wait(cachedErc20Tokens
-          .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
+      await Future.wait(cachedErc20Tokens.map((erc20) => erc20.getBalance(
+            evmAddress,
+            web3Client,
+            getEvmChainId(),
+          )));
       logger.i(cachedErc20Tokens);
     } catch (e) {
       logger.e(e);
@@ -1432,6 +1439,30 @@ class WalletExampleScreen extends StatelessWidget {
         contractAddress,
       );
       logger.i("txHash = $txHash");
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  addErc721() async {
+    try {
+      const contractAddress = "0xf1F111F3E0c5439BA2648ab433ee458b3E5F4268";
+      final erc721 = ERC721(
+        address: EthereumAddress.fromHex(contractAddress),
+        client: web3Client,
+        chainId: getEvmChainId(),
+      );
+      final name = await erc721.name();
+      final symbol = await erc721.symbol();
+
+      final ids =
+          await erc721.balanceOf(EthereumAddress.fromHex(wallet.getAddressC()));
+
+      final uriZero = await erc721.tokenURI(BigInt.zero);
+      final uriOne = await erc721.tokenURI(BigInt.one);
+      final uriTwo = await erc721.tokenURI(BigInt.two);
+      logger.i(
+          "name = $name, symbol = $symbol\n\nids = $ids\nzero = $uriZero\none=$uriOne\ntwo=$uriTwo");
     } catch (e) {
       logger.e(e);
     }

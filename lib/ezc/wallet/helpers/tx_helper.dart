@@ -98,6 +98,7 @@ Future<Transaction> buildEvmTransferErc20Tx(
   final erc20 = ERC20(
     address: EthereumAddress.fromHex(contractAddress),
     client: web3Client,
+    chainId: getEvmChainId(),
   );
   final credentials = EthPrivateKey.fromHex(evmPrivateKey);
   final tokenTx = await erc20.transfer(
@@ -125,6 +126,7 @@ Future<BigInt> estimateErc20Gas(
     final erc20 = ERC20(
       address: EthereumAddress.fromHex(contractAddress),
       client: web3Client,
+      chainId: getEvmChainId(),
     );
     final method = erc20.self.function('transfer');
 
