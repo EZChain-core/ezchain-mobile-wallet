@@ -143,7 +143,9 @@ abstract class _WalletSendEvmStore with Store {
           (customGasPrice * BigInt.from(customGasLimit)).toDecimalAvaxC();
 
       _customFeeConfirmSuccess = true;
-    } else if (_token != null) {
+      return;
+    }
+    if (_token != null) {
       _gasLimit = await _wallet.estimateErc20Gas(
         _token!.id,
         address,

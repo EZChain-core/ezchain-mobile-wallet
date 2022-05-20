@@ -46,9 +46,7 @@ class WalletSendEvmScreen extends StatelessWidget {
                 children: [
                   EZCAppBar(
                     title: Strings.current.sharedSend,
-                    onPressed: () {
-                      context.router.pop();
-                    },
+                    onPressed: context.router.pop,
                   ),
                   Expanded(
                     child: SingleChildScrollView(
