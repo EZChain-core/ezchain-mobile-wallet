@@ -101,4 +101,22 @@ abstract class _TransactionsStore with Store {
       return [];
     }
   }
+  Future<List<TransactionsItem>> getPagingTransactions(EZCType type, int page, int offset) async {
+    try {
+      switch (ezcType) {
+        case EZCType.xChain:
+          final transactions = await _wallet.getXTransactions();
+          return await mapToTransactionsItems(transactions);
+        case EZCType.pChain:
+          final transactions = await _wallet.getPTransactions();
+          return await mapToTransactionsItems(transactions);
+        case EZCType.cChain:
+          final transactions = await _wallet.getCChainTransactions(page: page, offset: offset);
+          return mapCChainToTransactionsItem(transactions, type);
+      }
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
+  }
 }

@@ -2,10 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/common/type/ezc_type.dart';
-import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/transaction/transactions_item.dart';
 import 'package:wallet/features/transaction/transactions_store.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
@@ -19,9 +20,32 @@ import 'package:wallet/themes/widgets.dart';
 class TransactionsScreen extends StatelessWidget {
   final EZCType ezcType;
   final _transactionsStore = TransactionsStore();
+  static const _pageSize = 20;
+  final PagingController<int, TransactionsItem> _pagingController =
+      PagingController(firstPageKey: 0);
 
   TransactionsScreen({Key? key, required this.ezcType}) : super(key: key) {
     _transactionsStore.setEzcType(ezcType);
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+  }
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      final newItems = await _transactionsStore.getPagingTransactions(
+          ezcType, pageKey, _pageSize);
+
+      final isLastPage = newItems.length < _pageSize;
+      if (isLastPage) {
+        _pagingController.appendLastPage(newItems);
+      } else {
+        final nextPageKey = pageKey + newItems.length;
+        _pagingController.appendPage(newItems, nextPageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
+    }
   }
 
   @override
@@ -141,35 +165,45 @@ class TransactionsScreen extends StatelessWidget {
                       EZCHeadlineSmallTextStyle(color: provider.themeMode.text),
                 ),
               ),
-              Expanded(
-                child: FutureBuilder<List<TransactionsItem>>(
-                  future: _transactionsStore.getTransactions(ezcType),
-                  builder: (_, snapshot) {
-                    if (snapshot.hasData) {
-                      final transactions = snapshot.data!;
-                      return transactions.isNotEmpty
-                          ? ListView.separated(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 12),
-                              itemCount: transactions.length,
-                              itemBuilder: (_, index) =>
-                                  buildTransactionWidget(transactions[index]),
-                              separatorBuilder: (_, index) => Divider(
-                                color: provider.themeMode.text20,
-                                height: 1,
-                              ),
-                            )
-                          : _TransactionsNoData();
-                    } else {
-                      return Align(
-                        alignment: Alignment.topCenter,
-                        child: EZCLoading(
-                            color: provider.themeMode.secondary,
-                            size: 40,
-                            strokeWidth: 4),
-                      );
-                    }
-                  },
+              // Expanded(
+              //   child: FutureBuilder<List<TransactionsItem>>(
+              //     future: _transactionsStore.getTransactions(ezcType),
+              //     builder: (_, snapshot) {
+              //       if (snapshot.hasData) {
+              //         final transactions = snapshot.data!;
+              //         return transactions.isNotEmpty
+              //             ? ListView.separated(
+              //                 padding: const EdgeInsets.symmetric(
+              //                     horizontal: 16, vertical: 12),
+              //                 itemCount: transactions.length,
+              //                 itemBuilder: (_, index) =>
+              //                     buildTransactionWidget(transactions[index]),
+              //                 separatorBuilder: (_, index) => Divider(
+              //                   color: provider.themeMode.text20,
+              //                   height: 1,
+              //                 ),
+              //               )
+              //             : _TransactionsNoData();
+              //       } else {
+              //         return Align(
+              //           alignment: Alignment.topCenter,
+              //           child: EZCLoading(
+              //               color: provider.themeMode.secondary,
+              //               size: 40,
+              //               strokeWidth: 4),
+              //         );
+              //       }
+              //     },
+              //   ),
+              // ),
+            Expanded(
+                child: PagedListView<int, TransactionsItem>.separated(
+                  pagingController: _pagingController,
+                  builderDelegate: PagedChildBuilderDelegate<TransactionsItem>(
+                    animateTransitions: true,
+                    itemBuilder: (context, item, index) => buildTransactionWidget(item),
+                  ),
+                  separatorBuilder: (context, index) => const Divider(),
                 ),
               ),
             ],
