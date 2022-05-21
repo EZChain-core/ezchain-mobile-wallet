@@ -290,6 +290,7 @@ abstract class _WalletSendEvmStore with Store {
             amount,
             _defaultFee,
             symbol,
+            _token
           ),
         ),
       );
