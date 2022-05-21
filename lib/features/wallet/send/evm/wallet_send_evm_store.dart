@@ -281,6 +281,7 @@ abstract class _WalletSendEvmStore with Store {
       final symbol = _token != null ? _token!.symbol : ezcSymbol;
       final gasPriceNumber =
           int.tryParse(gasPrice.toDecimalAvaxX().toStringAsFixed(0)) ?? 0;
+      final fee = isCustomFee ? _customFee : _defaultFee;
       walletContext?.router.push(
         WalletSendEvmConfirmRoute(
           transactionInfo: WalletSendEvmTransactionViewData(
@@ -288,9 +289,9 @@ abstract class _WalletSendEvmStore with Store {
             gasPriceNumber,
             gasLimit,
             amount,
-            _defaultFee,
+            fee,
             symbol,
-            _token
+            _token,
           ),
         ),
       );

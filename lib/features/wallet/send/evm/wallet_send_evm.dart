@@ -327,10 +327,12 @@ class _WalletSendEvmCustomFeeTabState
 
   @override
   void initState() {
+    final gasLimit = widget.walletSendEvmStore.customGasLimit;
+    final nonce = widget.walletSendEvmStore.nonce;
+
     _gasPriceController.text = widget.walletSendEvmStore.customGasPriceString;
-    _gasLimitController.text =
-        widget.walletSendEvmStore.customGasLimit.toString();
-    _nonceController.text = widget.walletSendEvmStore.nonce.toString();
+    _gasLimitController.text = gasLimit > 0 ? gasLimit.toString() : '';
+    _nonceController.text = nonce > 0 ? nonce.toString() : '';
 
     super.initState();
   }
