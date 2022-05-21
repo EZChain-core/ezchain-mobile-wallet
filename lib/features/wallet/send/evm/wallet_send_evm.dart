@@ -28,8 +28,7 @@ class WalletSendEvmScreen extends StatelessWidget {
 
   final _walletSendEvmStore = WalletSendEvmStore();
   final _amountController = TextEditingController();
-  final _addressController =
-      TextEditingController(text: receiverAddressCTest);
+  final _addressController = TextEditingController(text: receiverAddressCTest);
 
   @override
   Widget build(BuildContext context) {
@@ -268,12 +267,13 @@ class _WalletSendEvmDefaultFeeTab extends StatelessWidget {
                           onPressed: () => walletSendEvmStore.sendEvm(false),
                           isLoading: walletSendEvmStore.isDefaultFeeLoading,
                         ),
-                        EZCMediumNoneButton(
-                          width: 82,
-                          text: Strings.current.sharedCancel,
-                          textColor: provider.themeMode.text90,
-                          onPressed: walletSendEvmStore.cancelDefaultFee,
-                        ),
+                        if (!walletSendEvmStore.isDefaultFeeLoading)
+                          EZCMediumNoneButton(
+                            width: 82,
+                            text: Strings.current.sharedCancel,
+                            textColor: provider.themeMode.text90,
+                            onPressed: walletSendEvmStore.cancelDefaultFee,
+                          ),
                       ],
                     )
                   : EZCMediumPrimaryButton(
@@ -367,12 +367,13 @@ class _WalletSendEvmCustomFeeTab extends StatelessWidget {
                           onPressed: () => walletSendEvmStore.sendEvm(true),
                           isLoading: walletSendEvmStore.isCustomFeeLoading,
                         ),
-                        EZCMediumNoneButton(
-                          width: 82,
-                          text: Strings.current.sharedCancel,
-                          textColor: provider.themeMode.text90,
-                          onPressed: walletSendEvmStore.cancelCustomFee,
-                        ),
+                        if (!walletSendEvmStore.isCustomFeeLoading)
+                          EZCMediumNoneButton(
+                            width: 82,
+                            text: Strings.current.sharedCancel,
+                            textColor: provider.themeMode.text90,
+                            onPressed: walletSendEvmStore.cancelCustomFee,
+                          ),
                       ],
                     )
                   : EZCMediumPrimaryButton(
