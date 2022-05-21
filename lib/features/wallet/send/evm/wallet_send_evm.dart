@@ -389,19 +389,17 @@ class _WalletSendEvmCustomFeeTabState
             ),
             const SizedBox(height: 16),
             Observer(
-              builder: (_) => WalletSendHorizontalText(
-                title: Strings.current.sharedTransactionFee,
-                content:
-                    '${widget.walletSendEvmStore.customFee.toLocaleString(decimals: 9)} $ezcSymbol',
-                rightColor: provider.themeMode.text60,
-              ),
-            ),
-            const SizedBox(height: 44),
-            Observer(
               builder: (_) => widget.walletSendEvmStore.confirmCustomFeeSuccess
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        WalletSendHorizontalText(
+                          title: Strings.current.sharedTransactionFee,
+                          content:
+                          '${widget.walletSendEvmStore.customFee.toLocaleString(decimals: 9)} $ezcSymbol',
+                          rightColor: provider.themeMode.text60,
+                        ),
+                        const SizedBox(height: 44),
                         EZCMediumSuccessButton(
                           text: Strings.current.sharedSendTransaction,
                           width: 251,
