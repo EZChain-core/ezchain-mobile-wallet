@@ -60,6 +60,10 @@ class EZCTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (controller?.text.isNotEmpty == true) {
+      onChanged?.call(controller!.text);
+    }
+
     final _hasError = error != null;
 
     return Consumer<WalletThemeProvider>(
@@ -360,6 +364,10 @@ class EZCAddressTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (controller?.text.isNotEmpty == true) {
+      onChanged?.call(controller!.text);
+    }
+
     final _hasError = error != null;
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(

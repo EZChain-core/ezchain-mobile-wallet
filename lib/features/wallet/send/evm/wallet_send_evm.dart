@@ -267,18 +267,16 @@ class _WalletSendEvmDefaultFeeTab extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Observer(
-              builder: (_) => WalletSendHorizontalText(
-                title: Strings.current.sharedTransactionFee,
-                content:
-                    '${walletSendEvmStore.defaultFee.toLocaleString(decimals: 9)} $ezcSymbol',
-                rightColor: provider.themeMode.text60,
-              ),
-            ),
-            const SizedBox(height: 44),
-            Observer(
               builder: (_) => walletSendEvmStore.confirmDefaultFeeSuccess
                   ? Column(
                       children: [
+                        WalletSendHorizontalText(
+                          title: Strings.current.sharedTransactionFee,
+                          content:
+                              '${walletSendEvmStore.defaultFee.toLocaleString(decimals: 9)} $ezcSymbol',
+                          rightColor: provider.themeMode.text60,
+                        ),
+                        const SizedBox(height: 44),
                         EZCMediumSuccessButton(
                           text: Strings.current.sharedSendTransaction,
                           width: 251,
@@ -308,11 +306,34 @@ class _WalletSendEvmDefaultFeeTab extends StatelessWidget {
   }
 }
 
-class _WalletSendEvmCustomFeeTab extends StatelessWidget {
+class _WalletSendEvmCustomFeeTab extends StatefulWidget {
   final WalletSendEvmStore walletSendEvmStore;
 
   const _WalletSendEvmCustomFeeTab({Key? key, required this.walletSendEvmStore})
       : super(key: key);
+
+  @override
+  State<_WalletSendEvmCustomFeeTab> createState() =>
+      _WalletSendEvmCustomFeeTabState();
+}
+
+class _WalletSendEvmCustomFeeTabState
+    extends State<_WalletSendEvmCustomFeeTab> {
+  final _gasPriceController = TextEditingController();
+
+  final _gasLimitController = TextEditingController();
+
+  final _nonceController = TextEditingController();
+
+  @override
+  void initState() {
+    _gasPriceController.text = widget.walletSendEvmStore.customGasPriceString;
+    _gasLimitController.text =
+        widget.walletSendEvmStore.customGasLimit.toString();
+    _nonceController.text = widget.walletSendEvmStore.nonce.toString();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -325,14 +346,13 @@ class _WalletSendEvmCustomFeeTab extends StatelessWidget {
               builder: (_) => EZCTextField(
                 label: Strings.current.walletSendGasPriceGWEI,
                 inputType: TextInputType.number,
-                enabled: !walletSendEvmStore.confirmCustomFeeSuccess,
-                error: walletSendEvmStore.gasPriceError,
+                enabled: !widget.walletSendEvmStore.confirmCustomFeeSuccess,
+                error: widget.walletSendEvmStore.gasPriceError,
                 hint: '0',
+                controller: _gasPriceController,
                 onChanged: (text) {
-                  walletSendEvmStore.customGasPrice =
-                      (Decimal.tryParse(text) ?? Decimal.zero)
-                          .toBN(denomination: 9);
-                  walletSendEvmStore.removeGasPriceError();
+                  widget.walletSendEvmStore.customGasPriceString = text;
+                  widget.walletSendEvmStore.removeGasPriceError();
                 },
               ),
             ),
@@ -341,12 +361,14 @@ class _WalletSendEvmCustomFeeTab extends StatelessWidget {
               builder: (_) => EZCTextField(
                 label: Strings.current.walletSendGasLimit,
                 inputType: TextInputType.number,
-                error: walletSendEvmStore.gasLimitError,
-                enabled: !walletSendEvmStore.confirmCustomFeeSuccess,
+                error: widget.walletSendEvmStore.gasLimitError,
+                enabled: !widget.walletSendEvmStore.confirmCustomFeeSuccess,
                 hint: '0',
+                controller: _gasLimitController,
                 onChanged: (text) {
-                  walletSendEvmStore.customGasLimit = int.tryParse(text) ?? 0;
-                  walletSendEvmStore.removeGasLimitError();
+                  widget.walletSendEvmStore.customGasLimit =
+                      int.tryParse(text) ?? 0;
+                  widget.walletSendEvmStore.removeGasLimitError();
                 },
               ),
             ),
@@ -355,12 +377,13 @@ class _WalletSendEvmCustomFeeTab extends StatelessWidget {
               builder: (_) => EZCTextField(
                 label: Strings.current.sharedNonce,
                 inputType: TextInputType.number,
-                enabled: !walletSendEvmStore.confirmCustomFeeSuccess,
-                error: walletSendEvmStore.nonceError,
+                enabled: !widget.walletSendEvmStore.confirmCustomFeeSuccess,
+                error: widget.walletSendEvmStore.nonceError,
                 hint: '0',
+                controller: _nonceController,
                 onChanged: (text) {
-                  walletSendEvmStore.nonce = int.tryParse(text) ?? 0;
-                  walletSendEvmStore.removeNonceError();
+                  widget.walletSendEvmStore.nonce = int.tryParse(text) ?? 0;
+                  widget.walletSendEvmStore.removeNonceError();
                 },
               ),
             ),
@@ -369,28 +392,31 @@ class _WalletSendEvmCustomFeeTab extends StatelessWidget {
               builder: (_) => WalletSendHorizontalText(
                 title: Strings.current.sharedTransactionFee,
                 content:
-                    '${walletSendEvmStore.customFee.toLocaleString(decimals: 9)} $ezcSymbol',
+                    '${widget.walletSendEvmStore.customFee.toLocaleString(decimals: 9)} $ezcSymbol',
                 rightColor: provider.themeMode.text60,
               ),
             ),
             const SizedBox(height: 44),
             Observer(
-              builder: (_) => walletSendEvmStore.confirmCustomFeeSuccess
+              builder: (_) => widget.walletSendEvmStore.confirmCustomFeeSuccess
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         EZCMediumSuccessButton(
                           text: Strings.current.sharedSendTransaction,
                           width: 251,
-                          onPressed: () => walletSendEvmStore.sendEvm(true),
-                          isLoading: walletSendEvmStore.isCustomFeeLoading,
+                          onPressed: () =>
+                              widget.walletSendEvmStore.sendEvm(true),
+                          isLoading:
+                              widget.walletSendEvmStore.isCustomFeeLoading,
                         ),
-                        if (!walletSendEvmStore.isCustomFeeLoading)
+                        if (!widget.walletSendEvmStore.isCustomFeeLoading)
                           EZCMediumNoneButton(
                             width: 82,
                             text: Strings.current.sharedCancel,
                             textColor: provider.themeMode.text90,
-                            onPressed: walletSendEvmStore.cancelCustomFee,
+                            onPressed:
+                                widget.walletSendEvmStore.cancelCustomFee,
                           ),
                       ],
                     )
@@ -398,12 +424,20 @@ class _WalletSendEvmCustomFeeTab extends StatelessWidget {
                       text: Strings.current.sharedConfirm,
                       width: 185,
                       padding: const EdgeInsets.symmetric(),
-                      onPressed: () => walletSendEvmStore.confirm(true),
+                      onPressed: () => widget.walletSendEvmStore.confirm(true),
                     ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _gasPriceController.dispose();
+    _gasLimitController.dispose();
+    _nonceController.dispose();
+    super.dispose();
   }
 }

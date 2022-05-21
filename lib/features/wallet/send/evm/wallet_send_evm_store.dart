@@ -58,7 +58,12 @@ abstract class _WalletSendEvmStore with Store {
   int customGasLimit = 0;
 
   @observable
-  BigInt customGasPrice = BigInt.zero;
+  String customGasPriceString = '';
+
+  @computed
+  BigInt get customGasPrice =>
+      (Decimal.tryParse(customGasPriceString) ?? Decimal.zero)
+          .toBN(denomination: 9);
 
   @observable
   int nonce = 0;
