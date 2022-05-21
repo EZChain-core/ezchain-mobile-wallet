@@ -4,9 +4,9 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/route/router.dart';
 import 'package:wallet/features/common/route/router.gr.dart';
-import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.dart';
 import 'package:wallet/features/wallet/send/avm/wallet_send_avm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
@@ -19,15 +19,27 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
-class WalletSendAvmScreen extends StatelessWidget {
-  WalletSendAvmScreen({Key? key}) : super(key: key) {
-    _walletSendAvmStore.getBalanceX();
-  }
+class WalletSendAvmScreen extends StatefulWidget {
+  const WalletSendAvmScreen({Key? key}) : super(key: key);
 
+  @override
+  State<WalletSendAvmScreen> createState() => _WalletSendAvmScreenState();
+}
+
+class _WalletSendAvmScreenState extends State<WalletSendAvmScreen> {
   final _walletSendAvmStore = WalletSendAvmStore();
+
   final _addressController = TextEditingController(text: receiverAddressXTest);
+
   final _amountController = TextEditingController();
+
   final _memoController = TextEditingController();
+
+  @override
+  void initState() {
+    _walletSendAvmStore.getBalanceX();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +148,15 @@ class WalletSendAvmScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    _amountController.dispose();
+    _memoController.dispose();
+
+    super.dispose();
   }
 
   void _onClickConfirm() {

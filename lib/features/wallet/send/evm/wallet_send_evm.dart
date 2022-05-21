@@ -18,17 +18,28 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
-class WalletSendEvmScreen extends StatelessWidget {
+class WalletSendEvmScreen extends StatefulWidget {
   final WalletTokenItem? fromToken;
 
-  WalletSendEvmScreen({Key? key, this.fromToken}) : super(key: key) {
-    _walletSendEvmStore.setWalletToken(fromToken);
-    _walletSendEvmStore.getBalanceC();
-  }
+  WalletSendEvmScreen({Key? key, this.fromToken}) : super(key: key) {}
 
+  @override
+  State<WalletSendEvmScreen> createState() => _WalletSendEvmScreenState();
+}
+
+class _WalletSendEvmScreenState extends State<WalletSendEvmScreen> {
   final _walletSendEvmStore = WalletSendEvmStore();
+
   final _amountController = TextEditingController();
+
   final _addressController = TextEditingController(text: receiverAddressCTest);
+
+  @override
+  void initState() {
+    _walletSendEvmStore.setWalletToken(widget.fromToken);
+    _walletSendEvmStore.getBalanceC();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +71,8 @@ class WalletSendEvmScreen extends StatelessWidget {
                                 Assets.icons.icEzc64.svg(width: 32, height: 32),
                                 const SizedBox(width: 8),
                                 Text(
-                                  fromToken != null
-                                      ? fromToken!.symbol
+                                  widget.fromToken != null
+                                      ? widget.fromToken!.symbol
                                       : ezcSymbol,
                                   style: EZCBodyLargeTextStyle(
                                       color: provider.themeMode.text),
@@ -183,6 +194,13 @@ class WalletSendEvmScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    _addressController.dispose();
+    super.dispose();
   }
 }
 
