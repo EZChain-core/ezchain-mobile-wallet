@@ -423,6 +423,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Gas Price (GWEI)"),
         "walletSendGasPriceNote": MessageLookupByLibrary.simpleMessage(
             "Adjusted automatically according to network load."),
+        "walletSendInvalidGasLimit":
+            MessageLookupByLibrary.simpleMessage("Invalid Gas Limit"),
+        "walletSendInvalidGasPrice":
+            MessageLookupByLibrary.simpleMessage("Invalid Gas Price"),
+        "walletSendInvalidNonce":
+            MessageLookupByLibrary.simpleMessage("Invalid Nonce"),
         "walletSendMemo":
             MessageLookupByLibrary.simpleMessage("Memo (optional)"),
         "walletTokenAddressExists": MessageLookupByLibrary.simpleMessage(

@@ -234,8 +234,11 @@ class _EZCAmountTextFieldState extends State<EZCAmountTextField> {
                 cursorColor: provider.themeMode.text,
                 controller: widget.controller,
                 decoration: InputDecoration(
-                  filled: widget.backgroundColor != null,
-                  fillColor: widget.backgroundColor,
+                  filled:
+                      widget.backgroundColor != null || widget.enabled == false,
+                  fillColor: widget.enabled == false
+                      ? provider.themeMode.text10
+                      : widget.backgroundColor,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                   hintText: widget.hint,
                   hintStyle:

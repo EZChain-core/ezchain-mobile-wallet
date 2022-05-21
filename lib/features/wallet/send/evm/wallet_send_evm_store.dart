@@ -77,25 +77,37 @@ abstract class _WalletSendEvmStore with Store {
   String? _amountError;
 
   @readonly
-  bool _confirmSuccess = false;
+  String? _gasPriceError;
 
   @readonly
-  bool _customFeeConfirmSuccess = false;
+  String? _gasLimitError;
 
   @readonly
-  Decimal _fee = Decimal.zero;
+  String? _nonceError;
+
+  @readonly
+  bool _confirmDefaultFeeSuccess = false;
+
+  @readonly
+  bool _confirmCustomFeeSuccess = false;
+
+  @computed
+  bool get isConfirm => (_confirmDefaultFeeSuccess || _confirmCustomFeeSuccess);
+
+  @readonly
+  Decimal _defaultFee = Decimal.zero;
 
   @readonly
   Decimal _customFee = Decimal.zero;
 
   @readonly
-  bool _isLoading = false;
+  bool _isDefaultFeeLoading = false;
 
   @readonly
-  bool _customFeeIsLoading = false;
+  bool _isCustomFeeLoading = false;
 
   Decimal get maxAmount {
-    final max = balanceC - _fee;
+    final max = balanceC - _defaultFee;
     return max >= Decimal.zero ? max : Decimal.zero;
   }
 
@@ -139,10 +151,24 @@ abstract class _WalletSendEvmStore with Store {
     }
     if (!isAddressValid || !isAmountValid) return;
     if (isCustomFee) {
+      final isGasLimitInvalid = customGasLimit <= 0;
+      final isGasPriceInvalid = customGasPrice <= BigInt.zero;
+      final isNonceInvalid = nonce <= 0;
+      if (isGasLimitInvalid) {
+        _gasLimitError = Strings.current.walletSendInvalidGasLimit;
+      }
+      if (isGasPriceInvalid) {
+        _gasPriceError = Strings.current.walletSendInvalidGasPrice;
+      }
+      if (isNonceInvalid) {
+        _nonceError = Strings.current.walletSendInvalidNonce;
+      }
+      if (isGasLimitInvalid || isGasPriceInvalid || isNonceInvalid) return;
+
       _customFee =
           (customGasPrice * BigInt.from(customGasLimit)).toDecimalAvaxC();
 
-      _customFeeConfirmSuccess = true;
+      _confirmCustomFeeSuccess = true;
       return;
     }
     if (_token != null) {
@@ -158,9 +184,9 @@ abstract class _WalletSendEvmStore with Store {
         _gasPrice,
       );
     }
-    _fee = (_gasPrice * _gasLimit).toDecimalAvaxC();
+    _defaultFee = (_gasPrice * _gasLimit).toDecimalAvaxC();
 
-    _confirmSuccess = true;
+    _confirmDefaultFeeSuccess = true;
   }
 
   @action
@@ -178,6 +204,37 @@ abstract class _WalletSendEvmStore with Store {
   }
 
   @action
+  removeGasPriceError() {
+    if (_gasPriceError != null) {
+      _gasPriceError = null;
+    }
+  }
+
+  @action
+  removeGasLimitError() {
+    if (_gasLimitError != null) {
+      _gasLimitError = null;
+    }
+  }
+
+  @action
+  removeNonceError() {
+    if (_nonceError != null) {
+      _nonceError = null;
+    }
+  }
+
+  @action
+  cancelDefaultFee() {
+    _confirmDefaultFeeSuccess = false;
+  }
+
+  @action
+  cancelCustomFee() {
+    _confirmCustomFeeSuccess = false;
+  }
+
+  @action
   Future sendEvm(bool isCustomFee) async {
     final verified = await verifyPinCode();
     if (!verified) return;
@@ -186,9 +243,9 @@ abstract class _WalletSendEvmStore with Store {
     final gasLimit = isCustomFee ? BigInt.from(customGasLimit) : _gasLimit;
     final nonceValue = isCustomFee ? nonce : null;
     if (isCustomFee) {
-      _customFeeIsLoading = true;
+      _isCustomFeeLoading = true;
     } else {
-      _isLoading = true;
+      _isDefaultFeeLoading = true;
     }
     try {
       if (_token != null) {
@@ -211,9 +268,9 @@ abstract class _WalletSendEvmStore with Store {
         );
       }
       if (isCustomFee) {
-        _customFeeIsLoading = false;
+        _isCustomFeeLoading = false;
       } else {
-        _isLoading = false;
+        _isDefaultFeeLoading = false;
       }
 
       final symbol = _token != null ? _token!.symbol : ezcSymbol;
@@ -226,18 +283,18 @@ abstract class _WalletSendEvmStore with Store {
             gasPriceNumber,
             gasLimit,
             amount,
-            _fee,
+            _defaultFee,
             symbol,
           ),
         ),
       );
     } catch (e) {
-      logger.e(e.toString());
+      logger.e(e);
       showSnackBar(e.toString());
       if (isCustomFee) {
-        _customFeeIsLoading = false;
+        _isCustomFeeLoading = false;
       } else {
-        _isLoading = false;
+        _isDefaultFeeLoading = false;
       }
       return false;
     }

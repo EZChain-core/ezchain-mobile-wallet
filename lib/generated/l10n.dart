@@ -1664,6 +1664,36 @@ class Strings {
     );
   }
 
+  /// `Invalid Gas Price`
+  String get walletSendInvalidGasPrice {
+    return Intl.message(
+      'Invalid Gas Price',
+      name: 'walletSendInvalidGasPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid Gas Limit`
+  String get walletSendInvalidGasLimit {
+    return Intl.message(
+      'Invalid Gas Limit',
+      name: 'walletSendInvalidGasLimit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid Nonce`
+  String get walletSendInvalidNonce {
+    return Intl.message(
+      'Invalid Nonce',
+      name: 'walletSendInvalidNonce',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Gas Price (GWEI)`
   String get walletSendGasPriceGWEI {
     return Intl.message(
