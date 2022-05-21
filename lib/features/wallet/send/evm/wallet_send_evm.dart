@@ -396,7 +396,7 @@ class _WalletSendEvmCustomFeeTabState
                         WalletSendHorizontalText(
                           title: Strings.current.sharedTransactionFee,
                           content:
-                          '${widget.walletSendEvmStore.customFee.toLocaleString(decimals: 9)} $ezcSymbol',
+                              '${widget.walletSendEvmStore.customFee.toLocaleString(decimals: 9)} $ezcSymbol',
                           rightColor: provider.themeMode.text60,
                         ),
                         const SizedBox(height: 44),
