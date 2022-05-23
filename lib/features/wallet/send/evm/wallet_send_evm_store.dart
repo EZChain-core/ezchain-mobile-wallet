@@ -144,7 +144,7 @@ abstract class _WalletSendEvmStore with Store {
     _gasPriceNumber =
         int.tryParse(_gasPrice.toDecimalAvaxX().toStringAsFixed(0)) ?? 0;
     nonce = await getEvmTransactionCount(_wallet.getAddressC());
-    customGasPriceString = getAdjustedGasPrice().toString();
+    customGasPriceString = _gasPriceNumber.toString();
   }
 
   @action
