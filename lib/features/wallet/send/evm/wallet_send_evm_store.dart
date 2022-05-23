@@ -6,6 +6,7 @@ import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/helpers/address_helper.dart';
 import 'package:wallet/ezc/wallet/helpers/gas_helper.dart';
+import 'package:wallet/ezc/wallet/helpers/tx_helper.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
@@ -142,6 +143,8 @@ abstract class _WalletSendEvmStore with Store {
     }
     _gasPriceNumber =
         int.tryParse(_gasPrice.toDecimalAvaxX().toStringAsFixed(0)) ?? 0;
+    nonce = await getEvmTransactionCount(_wallet.getAddressC());
+    customGasPriceString = getAdjustedGasPrice().toString();
   }
 
   @action

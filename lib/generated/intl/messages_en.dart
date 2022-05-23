@@ -79,7 +79,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "createWalletConfirmDes": MessageLookupByLibrary.simpleMessage(
             "Confirm your passphrase backup"),
         "createWalletDes": MessageLookupByLibrary.simpleMessage(
-            "Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. there is no way to recover lost key phrase"),
+            "Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. There is no way to recover lost key phrase"),
         "createWalletKeptKey":
             MessageLookupByLibrary.simpleMessage("Yes, I kept them safe"),
         "createWalletPassphraseToRestore":

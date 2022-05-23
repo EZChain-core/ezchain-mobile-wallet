@@ -115,7 +115,7 @@
   "accessMnemonicKeyWarning": "Invalid mnemonic phrase. Make sure your mnemonic is all lowercase.",
   "createWalletPassphraseToRestore": "Passphrase to restore",
   "createWalletKeptKey": "Yes, I kept them safe",
-  "createWalletDes": "Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. there is no way to recover lost key phrase",
+  "createWalletDes": "Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. There is no way to recover lost key phrase",
   "createWalletConfirmDes": "Confirm your passphrase backup",
   "pinCodeTitle": "PIN code",
   "pinCodeConfirm": "Confirm your PIN",
