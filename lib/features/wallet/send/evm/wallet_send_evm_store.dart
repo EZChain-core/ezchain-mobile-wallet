@@ -112,6 +112,17 @@ abstract class _WalletSendEvmStore with Store {
   @readonly
   bool _isCustomFeeLoading = false;
 
+  @computed
+  bool get isAddressFilled => validateAddressEvm(address);
+
+  Future<BigInt> get customGasLimitDefault async {
+    return await _wallet.estimateAvaxGasLimit(
+      address,
+      BigInt.zero,
+      customGasPrice,
+    );
+  }
+
   Decimal get maxAmount {
     final max = balanceC - _defaultFee;
     return max >= Decimal.zero ? max : Decimal.zero;

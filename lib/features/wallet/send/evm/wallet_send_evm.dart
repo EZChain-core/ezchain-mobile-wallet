@@ -3,7 +3,9 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/wallet/send/evm/wallet_send_evm_store.dart';
@@ -340,94 +342,110 @@ class _WalletSendEvmCustomFeeTabState
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Observer(
-              builder: (_) => EZCTextField(
-                label: Strings.current.walletSendGasPriceGWEI,
-                inputType: TextInputType.number,
-                enabled: !widget.walletSendEvmStore.confirmCustomFeeSuccess,
-                error: widget.walletSendEvmStore.gasPriceError,
-                hint: '0',
-                controller: _gasPriceController,
-                onChanged: (text) {
-                  widget.walletSendEvmStore.customGasPriceString = text;
-                  widget.walletSendEvmStore.removeGasPriceError();
-                },
+      builder: (context, provider, child) => ReactionBuilder(
+        builder: (context) {
+          return autorun((_) async => {
+                if (widget.walletSendEvmStore.isAddressFilled &&
+                    _gasLimitController.text.isEmpty)
+                  {
+                    _gasLimitController.text =
+                        (await widget.walletSendEvmStore.customGasLimitDefault)
+                            .toString()
+                  }
+              });
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Observer(
+                builder: (_) => EZCTextField(
+                  label: Strings.current.walletSendGasPriceGWEI,
+                  inputType: TextInputType.number,
+                  enabled: !widget.walletSendEvmStore.confirmCustomFeeSuccess,
+                  error: widget.walletSendEvmStore.gasPriceError,
+                  hint: '0',
+                  controller: _gasPriceController,
+                  onChanged: (text) {
+                    widget.walletSendEvmStore.customGasPriceString = text;
+                    widget.walletSendEvmStore.removeGasPriceError();
+                  },
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Observer(
-              builder: (_) => EZCTextField(
-                label: Strings.current.walletSendGasLimit,
-                inputType: TextInputType.number,
-                error: widget.walletSendEvmStore.gasLimitError,
-                enabled: !widget.walletSendEvmStore.confirmCustomFeeSuccess,
-                hint: '0',
-                controller: _gasLimitController,
-                onChanged: (text) {
-                  widget.walletSendEvmStore.customGasLimit =
-                      int.tryParse(text) ?? 0;
-                  widget.walletSendEvmStore.removeGasLimitError();
-                },
+              const SizedBox(height: 16),
+              Observer(
+                builder: (_) => EZCTextField(
+                  label: Strings.current.walletSendGasLimit,
+                  inputType: TextInputType.number,
+                  error: widget.walletSendEvmStore.gasLimitError,
+                  enabled: !widget.walletSendEvmStore.confirmCustomFeeSuccess &&
+                      widget.walletSendEvmStore.isAddressFilled,
+                  hint: '0',
+                  controller: _gasLimitController,
+                  onChanged: (text) {
+                    widget.walletSendEvmStore.customGasLimit =
+                        int.tryParse(text) ?? 0;
+                    widget.walletSendEvmStore.removeGasLimitError();
+                  },
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Observer(
-              builder: (_) => EZCTextField(
-                label: Strings.current.sharedNonce,
-                inputType: TextInputType.number,
-                enabled: !widget.walletSendEvmStore.confirmCustomFeeSuccess,
-                error: widget.walletSendEvmStore.nonceError,
-                hint: '0',
-                controller: _nonceController,
-                onChanged: (text) {
-                  widget.walletSendEvmStore.nonce = int.tryParse(text) ?? 0;
-                  widget.walletSendEvmStore.removeNonceError();
-                },
+              const SizedBox(height: 16),
+              Observer(
+                builder: (_) => EZCTextField(
+                  label: Strings.current.sharedNonce,
+                  inputType: TextInputType.number,
+                  enabled: !widget.walletSendEvmStore.confirmCustomFeeSuccess,
+                  error: widget.walletSendEvmStore.nonceError,
+                  hint: '0',
+                  controller: _nonceController,
+                  onChanged: (text) {
+                    widget.walletSendEvmStore.nonce = int.tryParse(text) ?? 0;
+                    widget.walletSendEvmStore.removeNonceError();
+                  },
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Observer(
-              builder: (_) => widget.walletSendEvmStore.confirmCustomFeeSuccess
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        WalletSendHorizontalText(
-                          title: Strings.current.sharedTransactionFee,
-                          content:
-                              '${widget.walletSendEvmStore.customFee.toLocaleString(decimals: 9)} $ezcSymbol',
-                          rightColor: provider.themeMode.text60,
-                        ),
-                        const SizedBox(height: 44),
-                        EZCMediumSuccessButton(
-                          text: Strings.current.sharedSendTransaction,
-                          width: 251,
-                          onPressed: () =>
-                              widget.walletSendEvmStore.sendEvm(true),
-                          isLoading:
-                              widget.walletSendEvmStore.isCustomFeeLoading,
-                        ),
-                        if (!widget.walletSendEvmStore.isCustomFeeLoading)
-                          EZCMediumNoneButton(
-                            width: 82,
-                            text: Strings.current.sharedCancel,
-                            textColor: provider.themeMode.text90,
-                            onPressed:
-                                widget.walletSendEvmStore.cancelCustomFee,
+              const SizedBox(height: 16),
+              Observer(
+                builder: (_) =>
+                    widget.walletSendEvmStore.confirmCustomFeeSuccess
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              WalletSendHorizontalText(
+                                title: Strings.current.sharedTransactionFee,
+                                content:
+                                    '${widget.walletSendEvmStore.customFee.toLocaleString(decimals: 9)} $ezcSymbol',
+                                rightColor: provider.themeMode.text60,
+                              ),
+                              const SizedBox(height: 44),
+                              EZCMediumSuccessButton(
+                                text: Strings.current.sharedSendTransaction,
+                                width: 251,
+                                onPressed: () =>
+                                    widget.walletSendEvmStore.sendEvm(true),
+                                isLoading: widget
+                                    .walletSendEvmStore.isCustomFeeLoading,
+                              ),
+                              if (!widget.walletSendEvmStore.isCustomFeeLoading)
+                                EZCMediumNoneButton(
+                                  width: 82,
+                                  text: Strings.current.sharedCancel,
+                                  textColor: provider.themeMode.text90,
+                                  onPressed:
+                                      widget.walletSendEvmStore.cancelCustomFee,
+                                ),
+                            ],
+                          )
+                        : EZCMediumPrimaryButton(
+                            text: Strings.current.sharedConfirm,
+                            width: 185,
+                            padding: const EdgeInsets.symmetric(),
+                            onPressed: () =>
+                                widget.walletSendEvmStore.confirm(true),
                           ),
-                      ],
-                    )
-                  : EZCMediumPrimaryButton(
-                      text: Strings.current.sharedConfirm,
-                      width: 185,
-                      padding: const EdgeInsets.symmetric(),
-                      onPressed: () => widget.walletSendEvmStore.confirm(true),
-                    ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

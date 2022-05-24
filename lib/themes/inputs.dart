@@ -14,7 +14,7 @@ import 'package:wallet/themes/typography.dart';
 
 const ezcBorder = BorderRadius.all(Radius.circular(8));
 
-class EZCTextField extends StatelessWidget {
+class EZCTextField extends StatefulWidget {
   final String? hint;
 
   final TextInputType? inputType;
@@ -59,12 +59,26 @@ class EZCTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<EZCTextField> createState() => _EZCTextFieldState();
+}
+
+class _EZCTextFieldState extends State<EZCTextField> {
+
+  @override
+  void initState() {
+    widget.controller?.addListener(() {
+      widget.onChanged?.call(widget.controller!.text);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (controller?.text.isNotEmpty == true) {
-      onChanged?.call(controller!.text);
+    if (widget.controller?.text.isNotEmpty == true) {
+      widget.onChanged?.call(widget.controller!.text);
     }
 
-    final _hasError = error != null;
+    final _hasError = widget.error != null;
 
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
@@ -74,11 +88,11 @@ class EZCTextField extends StatelessWidget {
           children: [
             Stack(
               children: [
-                if (label != null)
+                if (widget.label != null)
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      label!,
+                      widget.label!,
                       style: EZCTitleLargeTextStyle(
                           color: provider.themeMode.text60),
                     ),
@@ -87,7 +101,7 @@ class EZCTextField extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Text(
-                      error!,
+                      widget.error!,
                       style: EZCLabelMediumTextStyle(
                           color: provider.themeMode.stateDanger),
                     ),
@@ -97,21 +111,21 @@ class EZCTextField extends StatelessWidget {
             const SizedBox(height: 4),
             TextField(
               style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
-              enabled: enabled,
+              enabled: widget.enabled,
               cursorColor: provider.themeMode.text,
-              controller: controller,
-              onChanged: onChanged,
-              maxLines: maxLines,
-              maxLength: maxLength,
-              textCapitalization: textCapitalization ?? TextCapitalization.none,
+              controller: widget.controller,
+              onChanged: widget.onChanged,
+              maxLines: widget.maxLines,
+              maxLength: widget.maxLength,
+              textCapitalization: widget.textCapitalization ?? TextCapitalization.none,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(12),
-                hintText: hint,
+                hintText: widget.hint,
                 hintStyle:
                     EZCBodyLargeTextStyle(color: provider.themeMode.text40),
-                prefixIcon: prefixIcon,
-                suffixIcon: suffixIcon,
-                filled: enabled == false,
+                prefixIcon: widget.prefixIcon,
+                suffixIcon: widget.suffixIcon,
+                filled: widget.enabled == false,
                 fillColor: provider.themeMode.text10,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: ezcBorder,
@@ -132,8 +146,8 @@ class EZCTextField extends StatelessWidget {
                   borderSide: BorderSide(color: provider.themeMode.border),
                 ),
               ),
-              keyboardType: inputType,
-              textInputAction: textInputAction ?? TextInputAction.next,
+              keyboardType: widget.inputType,
+              textInputAction: widget.textInputAction ?? TextInputAction.next,
             )
           ],
         ),
