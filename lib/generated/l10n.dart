@@ -1244,6 +1244,16 @@ class Strings {
     );
   }
 
+  /// `Copy Passphrase`
+  String get createWalletCopyPassphrase {
+    return Intl.message(
+      'Copy Passphrase',
+      name: 'createWalletCopyPassphrase',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `PIN code`
   String get pinCodeTitle {
     return Intl.message(

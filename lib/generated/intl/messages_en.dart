@@ -78,6 +78,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "appName": MessageLookupByLibrary.simpleMessage("EZC Wallet"),
         "createWalletConfirmDes": MessageLookupByLibrary.simpleMessage(
             "Confirm your passphrase backup"),
+        "createWalletCopyPassphrase":
+            MessageLookupByLibrary.simpleMessage("Copy Passphrase"),
         "createWalletDes": MessageLookupByLibrary.simpleMessage(
             "Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. There is no way to recover lost key phrase"),
         "createWalletKeptKey":
