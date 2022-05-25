@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wallet/ezc/wallet/asset/erc20/erc20.dart';
+import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -14,6 +15,9 @@ class Erc20TokenData {
   int decimals;
 
   @JsonKey(ignore: true)
+  ERC20 erc20;
+
+  @JsonKey(ignore: true)
   BigInt balanceBN = BigInt.zero;
 
   Erc20TokenData({
@@ -22,7 +26,13 @@ class Erc20TokenData {
     required this.name,
     required this.symbol,
     required this.decimals,
-  });
+    ERC20? erc20,
+  }) : erc20 = erc20 ??
+            ERC20(
+              address: EthereumAddress.fromHex(contractAddress),
+              client: web3Client,
+              chainId: evmChainId,
+            );
 
   String get balance => balanceBN.toLocaleString(denomination: decimals);
 
@@ -31,17 +41,8 @@ class Erc20TokenData {
     return "contractAddress = $contractAddress, name = $name, symbol = $symbol, decimals = $decimals, balance = $balance";
   }
 
-  Future<BigInt> getBalance(
-    String address,
-    Web3Client client,
-    int evmChainId,
-  ) async {
+  Future<BigInt> getBalance(String address) async {
     try {
-      final erc20 = ERC20(
-        address: EthereumAddress.fromHex(contractAddress),
-        client: client,
-        chainId: evmChainId,
-      );
       balanceBN = await erc20.balanceOf(EthereumAddress.fromHex(address));
     } catch (e) {
       balanceBN = BigInt.zero;
@@ -69,6 +70,7 @@ class Erc20TokenData {
         name: name,
         symbol: symbol,
         decimals: decimals.toInt(),
+        erc20: erc20,
       );
     } catch (e) {
       return null;

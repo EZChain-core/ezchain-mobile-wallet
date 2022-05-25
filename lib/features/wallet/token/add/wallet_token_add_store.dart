@@ -44,11 +44,7 @@ abstract class _WalletTokenAddStore with Store {
         _error = Strings.current.walletTokenAddressInvalid;
         return;
       }
-      await erc20TokenData.getBalance(
-        _wallet.getAddressC(),
-        web3Client,
-        getEvmChainId(),
-      );
+      await erc20TokenData.getBalance(_wallet.getAddressC());
 
       walletContext?.pushRoute(WalletTokenAddConfirmRoute(
           args: WalletTokenAddConfirmArgs(erc20TokenData)));
