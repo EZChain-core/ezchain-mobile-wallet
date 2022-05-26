@@ -37,6 +37,7 @@ import 'package:wallet/ezc/wallet/types.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/ezc/wallet/utils/utils.dart';
+import 'package:web3dart/web3dart.dart';
 
 class WalletExampleScreen extends StatelessWidget {
   final SingletonWallet wallet;
@@ -59,7 +60,7 @@ class WalletExampleScreen extends StatelessWidget {
             child: ElevatedButton(
               child: const Text("Test"),
               onPressed: () {
-                addErc721();
+                getErc721Tokens();
               },
             ),
           ),
@@ -1363,7 +1364,7 @@ class WalletExampleScreen extends StatelessWidget {
 
     final erc20Tokens = <Erc20TokenData>[token1!, token2!];
 
-    final key = "${wallet.getAddressX()}_${getEvmChainId()}";
+    final key = "${wallet.getAddressC()}_${getEvmChainId()}_ERC20_TOKENS";
 
     try {
       String json = jsonEncode(erc20Tokens);
@@ -1391,7 +1392,7 @@ class WalletExampleScreen extends StatelessWidget {
 
   sendErc20() async {
     try {
-      const contractAddress = "0x719191e8849EBFe2821525EBAc669c118ed08C1b";
+      const contractAddress = "0xE9cD92d3De1FB47a76f00e1E404ec6a577428938";
       final token = await Erc20TokenData.getData(
         contractAddress,
         web3Client,
@@ -1417,18 +1418,18 @@ class WalletExampleScreen extends StatelessWidget {
 
       BigInt gasLimit = BigInt.from(31000);
       try {
-        gasLimit = await wallet.estimateErc20Gas(contractAddress, to, amountBN);
+        gasLimit = await wallet.estimateErc20Gas(token, to, amountBN);
       } catch (e) {
         logger.e(e);
       }
       logger.i("gasLimit = $gasLimit");
 
       final txHash = await wallet.sendErc20(
+        token,
         to,
         amountBN,
         gasPrice,
         gasLimit.toInt(),
-        contractAddress,
       );
       logger.i("txHash = $txHash");
     } catch (e) {
@@ -1438,8 +1439,7 @@ class WalletExampleScreen extends StatelessWidget {
 
   addErc721() async {
     try {
-      final address = wallet.getAddressC();
-      const contractAddress = "0xf1F111F3E0c5439BA2648ab433ee458b3E5F4268";
+      const contractAddress = "0x87FcF17c2537Fda88FeA7E7971237Cf5af8f1FFc";
 
       final erc721Data = await Erc721TokenData.getData(
         contractAddress,
@@ -1459,10 +1459,96 @@ class WalletExampleScreen extends StatelessWidget {
         logger.i(
             "This ERC721 Contract does not support the required interfaces.");
       }
+      final address = wallet.getAddressC();
+      final tokenIds = await erc721Data.getAllTokensIds(address);
+      for (final tokenId in tokenIds) {
+        final res = await erc721Data.getTokenURIData(tokenId);
+        logger.i("res = $res");
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+  }
 
-      final balance = await erc721Data.getBalance(address);
+  getErc721Tokens() async {
+    const contractAddress = "0x87FcF17c2537Fda88FeA7E7971237Cf5af8f1FFc";
 
-      logger.i("balance = $balance");
+    final token1 = await Erc721TokenData.getData(
+      contractAddress,
+      web3Client,
+      getEvmChainId(),
+    );
+
+    final erc721Tokens = <Erc721TokenData>[token1!];
+
+    final key = "${wallet.getAddressC()}_${getEvmChainId()}_ERC721_TOKENS";
+
+    try {
+      String json = jsonEncode(erc721Tokens);
+      await storage.write(key: key, value: json);
+    } catch (e) {
+      logger.e(e);
+      return;
+    }
+
+    try {
+      final json = await storage.read(key: key);
+      logger.i("read = $json");
+      if (json == null || json.isEmpty) return;
+      final map = jsonDecode(json) as List<dynamic>;
+      final cachedErc721Tokens = List<Erc721TokenData>.from(
+          map.map((i) => Erc721TokenData.fromJson(i)));
+      final evmAddress = wallet.getAddressC();
+      final futures =  await Future.wait(cachedErc721Tokens.map((erc721) => erc721.getAllTokensIds(evmAddress)));
+      logger.i(futures);
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  sendErc721() async {
+    try {
+      // https://testnet-cchain-explorer.ezchain.com/address/0x87FcF17c2537Fda88FeA7E7971237Cf5af8f1FFc/write-contract
+      // 0xa72a690fe37ddaf9a10c5bd83db772a25b35e7b6
+      // 0xa54e5baeb3d3b2ef1c7748a5511482bfe6291132
+
+      const to = "0xA54e5baeb3d3B2eF1C7748A5511482BfE6291132";
+
+      const contractAddress = "0x87FcF17c2537Fda88FeA7E7971237Cf5af8f1FFc";
+
+      final erc721Data = await Erc721TokenData.getData(
+        contractAddress,
+        web3Client,
+        getEvmChainId(),
+      );
+
+      if (erc721Data == null) return;
+
+      final tokenId = BigInt.from(233);
+
+      BigInt gasPrice = await getAdjustedGasPrice();
+
+      final gasPriceNumber =
+          int.tryParse(gasPrice.toDecimalAvaxX().toStringAsFixed(0)) ?? 0;
+      logger.i("gasPrice = $gasPriceNumber");
+
+      BigInt gasLimit = await wallet.estimateErc721TransferGas(
+        erc721Data,
+        to,
+        tokenId,
+      );
+
+      logger.i("gasLimit = $gasLimit");
+
+      final txHash = await wallet.sendErc721(
+        erc721Data,
+        to,
+        gasPrice,
+        gasLimit.toInt(),
+        tokenId,
+      );
+
+      logger.i("txHash = $txHash");
     } catch (e) {
       logger.e(e);
     }

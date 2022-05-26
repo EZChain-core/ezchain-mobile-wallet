@@ -15,7 +15,7 @@ class Erc20TokenData {
   int decimals;
 
   @JsonKey(ignore: true)
-  ERC20 erc20;
+  final ERC20 erc20;
 
   @JsonKey(ignore: true)
   BigInt balanceBN = BigInt.zero;

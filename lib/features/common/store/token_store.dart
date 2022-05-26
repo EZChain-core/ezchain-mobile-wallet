@@ -28,7 +28,9 @@ abstract class _TokenStore with Store {
 
   WalletProvider get _wallet => _walletFactory.activeWallet;
 
-  String get _key => "${_wallet.getAddressX()}_${getEvmChainId()}";
+  String get _erc20Key => "${_wallet.getAddressC()}_${getEvmChainId()}_ERC20_TOKENS";
+
+  String get _erc721Key => "${_wallet.getAddressC()}_${getEvmChainId()}_ERC721_TOKENS";
 
   @readonly
   //ignore: prefer_final_fields
@@ -58,7 +60,7 @@ abstract class _TokenStore with Store {
     try {
       _erc20Tokens.add(token);
       String json = jsonEncode(_erc20Tokens);
-      await storage.write(key: _key, value: json);
+      await storage.write(key: _erc20Key, value: json);
       getErc20Tokens();
       return true;
     } catch (e) {
@@ -70,7 +72,7 @@ abstract class _TokenStore with Store {
   @action
   getErc20Tokens() async {
     try {
-      final json = await storage.read(key: _key);
+      final json = await storage.read(key: _erc20Key);
       if (json == null || json.isEmpty) return;
       final map = jsonDecode(json) as List<dynamic>;
       final cachedErc20Tokens =

@@ -13,6 +13,7 @@ import 'package:wallet/features/common/store/token_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/generated/l10n.dart';
+import 'package:collection/collection.dart';
 
 part 'wallet_send_evm_store.g.dart';
 
@@ -109,9 +110,11 @@ abstract class _WalletSendEvmStore with Store {
       _amountError = Strings.current.sharedInvalidAmount;
     }
     if (isAddressValid && isAmountValid) {
-      if (_token != null) {
+      final erc20Token = _tokenStore.erc20Tokens.toList().singleWhereOrNull(
+          (element) => element.contractAddress == _token?.id);
+      if (erc20Token != null) {
         _gasLimit = await _wallet.estimateErc20Gas(
-          _token!.id,
+          erc20Token,
           address,
           amountBN,
         );
@@ -146,13 +149,15 @@ abstract class _WalletSendEvmStore with Store {
   Future<bool> sendEvm(String address) async {
     _isLoading = true;
     try {
-      if (_token != null) {
+      final erc20Token = _tokenStore.erc20Tokens.toList().singleWhereOrNull(
+          (element) => element.contractAddress == _token?.id);
+      if (erc20Token != null) {
         await _wallet.sendErc20(
+          erc20Token,
           address,
           amountBN,
           _gasPrice,
           _gasLimit.toInt(),
-          _token!.id,
         );
         _tokenStore.updateErc20Balance();
       } else {

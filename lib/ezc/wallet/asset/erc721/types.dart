@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/ezc/wallet/asset/erc721/erc721.dart';
@@ -18,10 +19,16 @@ class Erc721TokenData {
   String symbol;
 
   @JsonKey(ignore: true)
-  ERC721 erc721;
+  final ERC721 erc721;
 
   @JsonKey(ignore: true)
   bool? _canSupport;
+
+  @JsonKey(ignore: true)
+  final cachedURIs = <BigInt, String>{};
+
+  @JsonKey(ignore: true)
+  final cachedMetadata = <BigInt, String>{};
 
   Erc721TokenData({
     required this.evmChainId,
@@ -38,7 +45,7 @@ class Erc721TokenData {
 
   @override
   String toString() {
-    return "contractAddress = $contractAddress, name = $name, symbol = $symbol";
+    return "contractAddress = $contractAddress, name = $name, symbol = $symbol, cachedMetadata = ${cachedMetadata.values.toString()}";
   }
 
   canSupport() async {
@@ -71,8 +78,11 @@ class Erc721TokenData {
     final balance = await getBalance(address);
     final tokenIds = <BigInt>[];
     for (var i = 0; i < balance.toInt(); i++) {
-      // final tokenId = await erc721.tokenOfOwnerByIndex(address, i);
-      // tokenIds.add(tokenId);
+      final tokenId = await erc721.tokenOfOwnerByIndex(
+        EthereumAddress.fromHex(address),
+        BigInt.from(i),
+      );
+      tokenIds.add(tokenId);
     }
     return tokenIds;
   }
@@ -85,6 +95,33 @@ class Erc721TokenData {
       uris.add(data);
     }
     return uris;
+  }
+
+  Future<String> getTokenURI(BigInt tokenId) async {
+    final cachedURI = cachedURIs[tokenId];
+    if (cachedURI != null) return cachedURI;
+    final remoteURI = await erc721.tokenURI(tokenId);
+    cachedURIs[tokenId] = remoteURI;
+    return remoteURI;
+  }
+
+  Future<String> getTokenURIData(BigInt tokenId) async {
+    final cachedData = cachedMetadata[tokenId];
+    if (cachedData != null) return cachedData;
+    final uri = await getTokenURI(tokenId);
+    dynamic image;
+    try {
+      final response = (await Dio().get(uri)).data;
+      if (response is Map<String, dynamic>) {
+        image = response["image"] ?? response["img"];
+      } else {
+        image = uri;
+      }
+    } catch (e) {
+      image = uri;
+    }
+    cachedMetadata[tokenId] = image;
+    return image;
   }
 
   static Future<Erc721TokenData?> getData(
