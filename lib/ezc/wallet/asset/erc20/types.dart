@@ -38,7 +38,7 @@ class Erc20TokenData {
 
   @override
   String toString() {
-    return "contractAddress = $contractAddress, name = $name, symbol = $symbol, decimals = $decimals, balance = $balance";
+    return "evmChainId = $evmChainId, contractAddress = $contractAddress, name = $name, symbol = $symbol, decimals = $decimals, balance = $balance";
   }
 
   Future<BigInt> getBalance(String address) async {

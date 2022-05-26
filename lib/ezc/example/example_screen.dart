@@ -1499,8 +1499,15 @@ class WalletExampleScreen extends StatelessWidget {
       final cachedErc721Tokens = List<Erc721TokenData>.from(
           map.map((i) => Erc721TokenData.fromJson(i)));
       final evmAddress = wallet.getAddressC();
-      final futures =  await Future.wait(cachedErc721Tokens.map((erc721) => erc721.getAllTokensIds(evmAddress)));
-      logger.i(futures);
+
+      for (final token in cachedErc721Tokens) {
+        final tokenIds = await token.getAllTokensIds(evmAddress);
+        for (final tokenId in tokenIds) {
+          await token.getTokenURIData(tokenId);
+        }
+      }
+
+      logger.i(cachedErc721Tokens);
     } catch (e) {
       logger.e(e);
     }
@@ -1548,6 +1555,7 @@ class WalletExampleScreen extends StatelessWidget {
         tokenId,
       );
 
+      erc721Data.removeTokenId(tokenId);
       logger.i("txHash = $txHash");
     } catch (e) {
       logger.e(e);

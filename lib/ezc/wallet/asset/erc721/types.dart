@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:wallet/common/dio_logger.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/ezc/wallet/asset/erc721/erc721.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
@@ -45,7 +46,7 @@ class Erc721TokenData {
 
   @override
   String toString() {
-    return "contractAddress = $contractAddress, name = $name, symbol = $symbol, cachedMetadata = ${cachedMetadata.values.toString()}";
+    return "evmChainId = $evmChainId, contractAddress = $contractAddress, name = $name, symbol = $symbol, cachedMetadata = ${cachedMetadata.values.toString()}";
   }
 
   canSupport() async {
@@ -108,20 +109,32 @@ class Erc721TokenData {
   Future<String> getTokenURIData(BigInt tokenId) async {
     final cachedData = cachedMetadata[tokenId];
     if (cachedData != null) return cachedData;
-    final uri = await getTokenURI(tokenId);
-    dynamic image;
+    final uriString = await getTokenURI(tokenId);
+    dynamic data;
     try {
-      final response = (await Dio().get(uri)).data;
-      if (response is Map<String, dynamic>) {
-        image = response["image"] ?? response["img"];
+      final uri = Uri.tryParse(uriString);
+      if (uri != null && uri.hasAbsolutePath) {
+        final dio = Dio()..interceptors.add(prettyDioLogger);
+        final response = (await dio.get(uriString)).data;
+        if (response is Map<String, dynamic>) {
+          data = response["image"] ?? response["img"] ?? uriString;
+        } else {
+          data = uriString;
+        }
       } else {
-        image = uri;
+        data = uriString;
       }
     } catch (e) {
-      image = uri;
+      logger.e(e, uriString);
+      data = uriString;
     }
-    cachedMetadata[tokenId] = image;
-    return image;
+    cachedMetadata[tokenId] = data;
+    return data;
+  }
+
+  removeTokenId(BigInt tokenId) {
+    cachedURIs.remove(tokenId);
+    cachedMetadata.remove(tokenId);
   }
 
   static Future<Erc721TokenData?> getData(
