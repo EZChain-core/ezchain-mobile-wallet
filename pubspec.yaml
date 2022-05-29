@@ -47,6 +47,7 @@ dependencies:
   firebase_crashlytics: ^2.4.4
   async: ^2.8.2
   package_info_plus: ^1.4.2
+  dotted_border: ^2.0.0+1
 
   ## crypto dependencies
   fast_base58: ^0.2.1

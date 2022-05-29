@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/common/route/router.dart';
-import 'package:wallet/features/nft/preview/nft_preview.dart';
+import 'package:wallet/features/nft/select/nft_select.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
@@ -158,5 +158,49 @@ class NftCollectibleItemWidget extends StatelessWidget {
         builder: (_) => NftPreviewDialog(url: item.url, payload: item.payload),
       );
     }
+  }
+}
+
+class NftSelectCollectibleItemWidget extends StatelessWidget {
+  final NftCollectibleItem item;
+
+  const NftSelectCollectibleItemWidget({Key? key, required this.item})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => CachedNetworkImage(
+        width: 93,
+        height: 93,
+        imageUrl: item.url ?? '',
+        imageBuilder: (context, imageProvider) => Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+          ),
+        ),
+        placeholder: (context, url) => Container(
+          decoration: BoxDecoration(
+            color: provider.themeMode.text30,
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+          ),
+        ),
+        errorWidget: (context, url, error) => Container(
+          decoration: BoxDecoration(
+            color: provider.themeMode.secondary,
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+          ),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: item.type.icon,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

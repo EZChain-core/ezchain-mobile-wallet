@@ -62,6 +62,10 @@ class $AssetsIconsGen {
   SvgGenImage get icClearBlack =>
       const SvgGenImage('assets/icons/ic_clear_black.svg');
 
+  /// File path: assets/icons/ic_close_circle_outline_primary.svg
+  SvgGenImage get icCloseCircleOutlinePrimary =>
+      const SvgGenImage('assets/icons/ic_close_circle_outline_primary.svg');
+
   /// File path: assets/icons/ic_close_circle_primary.svg
   SvgGenImage get icCloseCirclePrimary =>
       const SvgGenImage('assets/icons/ic_close_circle_primary.svg');
@@ -135,6 +139,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_plus_circle.svg
   SvgGenImage get icPlusCircle =>
       const SvgGenImage('assets/icons/ic_plus_circle.svg');
+
+  /// File path: assets/icons/ic_plus_gray.svg
+  SvgGenImage get icPlusGray =>
+      const SvgGenImage('assets/icons/ic_plus_gray.svg');
 
   /// File path: assets/icons/ic_question.svg
   SvgGenImage get icQuestion =>
