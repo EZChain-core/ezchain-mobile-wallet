@@ -3,13 +3,12 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/di/di.dart';
 import 'package:wallet/features/common/route/router.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
+import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
-
-import 'features/common/route/router.gr.dart';
-import 'di/di.dart';
-import 'generated/l10n.dart';
 
 class WalletApp extends StatelessWidget {
   final _appRouter = getIt<AppRouter>();
