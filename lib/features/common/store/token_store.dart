@@ -127,10 +127,8 @@ abstract class _TokenStore with Store {
     try {
       if (isErc721Exists(erc721.contractAddress)) return false;
       await erc721.canSupport();
-      final address = _wallet.getAddressC();
-      final tokenIds = await erc721.getTokensIds(address);
-      await Future.wait(
-          tokenIds.map((tokenId) => erc721.getTokenURIMetadata(tokenId)));
+      final evmAddress = _wallet.getAddressC();
+      await erc721.getAllTokenURIMetadata(evmAddress);
       _erc721Tokens.add(erc721);
       String json = jsonEncode(_erc721Tokens);
       await storage.write(key: _erc721Key, value: json);
