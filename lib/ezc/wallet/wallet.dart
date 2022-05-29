@@ -169,32 +169,13 @@ abstract class WalletProvider {
     AvmUnsignedTx tx;
 
     if (nftUtxos != null && nftUtxos.isNotEmpty) {
-      final nftUtxoSet = AvmUTXOSet()..addArray(nftUtxos);
-
-      final utxoIds = nftUtxoSet.getUTXOIds();
-
-      utxoIds.sort((a, b) => a.compareTo(b));
-
-      final unsignedNFTTransferTx = await xChain.buildNFTTransferTx(
-        nftUtxoSet,
-        [to],
+      tx = await _attachNFTonXChain(
         from,
-        from,
-        utxoIds,
-        memo: memoBuff,
+        to,
+        nftUtxos,
+        unsignedBaseTx,
+        memoBuff: memoBuff,
       );
-
-      unsignedNFTTransferTx.getTransaction().ins = [
-        ...unsignedNFTTransferTx.getTransaction().getIns(),
-        ...unsignedBaseTx.getTransaction().getIns()
-      ];
-
-      unsignedNFTTransferTx.getTransaction().outs = [
-        ...unsignedNFTTransferTx.getTransaction().getOuts(),
-        ...unsignedBaseTx.getTransaction().getOuts()
-      ];
-
-      tx = unsignedNFTTransferTx;
     } else {
       tx = unsignedBaseTx;
     }
@@ -215,30 +196,82 @@ abstract class WalletProvider {
     String to,
     BigInt amount, {
     String? memo,
+    List<AvmUTXO>? nftUtxos,
   }) async {
-    final utxoSet = utxosX;
-    final fromAddresses = await getAllAddressesX();
-    final changeAddress = getChangeAddressX();
     final Uint8List? memoBuff;
     if (memo != null) {
       memoBuff = Uint8List.fromList(utf8.encode(memo));
     } else {
       memoBuff = null;
     }
-    final tx = await xChain.buildBaseTx(
+    final from = await getAllAddressesX();
+    final changeAddress = getChangeAddressX();
+    final utxoSet = utxosX;
+
+    final unsignedBaseTx = await xChain.buildBaseTx(
       utxoSet,
       amount,
       assetId,
       [to],
-      fromAddresses,
+      from,
       [changeAddress],
       memo: memoBuff,
     );
+
+    AvmUnsignedTx tx;
+
+    if (nftUtxos != null && nftUtxos.isNotEmpty) {
+      tx = await _attachNFTonXChain(
+        from,
+        to,
+        nftUtxos,
+        unsignedBaseTx,
+        memoBuff: memoBuff,
+      );
+    } else {
+      tx = unsignedBaseTx;
+    }
+
     final signedTx = await signX(tx);
     final txId = await xChain.issueTx(signedTx);
     await waitTxX(txId);
     await updateUtxosX();
     return txId;
+  }
+
+  Future<AvmUnsignedTx> _attachNFTonXChain(
+    List<String> from,
+    String to,
+    List<AvmUTXO> nftUtxos,
+    AvmUnsignedTx unsignedBaseTx, {
+    Uint8List? memoBuff,
+  }) async {
+    final nftUtxoSet = AvmUTXOSet()..addArray(nftUtxos);
+
+    final utxoIds = nftUtxoSet.getUTXOIds();
+
+    utxoIds.sort((a, b) => a.compareTo(b));
+
+    final unsignedNFTTransferTx = await xChain.buildNFTTransferTx(
+      nftUtxoSet,
+      [to],
+      from,
+      from,
+      utxoIds,
+      memo: memoBuff,
+    );
+
+    unsignedNFTTransferTx.getTransaction().ins = [
+      ...unsignedNFTTransferTx.getTransaction().getIns(),
+      ...unsignedBaseTx.getTransaction().getIns()
+    ];
+
+    unsignedNFTTransferTx.getTransaction().outs = [
+      ...unsignedNFTTransferTx.getTransaction().getOuts(),
+      ...unsignedBaseTx.getTransaction().getOuts()
+    ];
+
+    return unsignedNFTTransferTx;
   }
 
   ///  Returns UTXOs on the X chain that belong to this wallet.
