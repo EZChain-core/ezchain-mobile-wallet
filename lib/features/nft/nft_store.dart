@@ -56,7 +56,7 @@ abstract class _NftStore with Store {
               }
               collectibles.add(
                 NftCollectibleItem(
-                    nftCollectible.groupIdQuantityDict[groupId] ?? 0,
+                    nftCollectible.groupIdNFTUTXOsDict[groupId]?.length ?? 0,
                     getNftPayloadType(payloadTypeName),
                     title,
                     url,

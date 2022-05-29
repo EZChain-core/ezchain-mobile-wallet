@@ -1218,18 +1218,18 @@ class WalletExampleScreen extends StatelessWidget {
         final nftUTXOs = nftUTXOsDict[assetId] ?? [];
 
         final filteredNftUTXOs = <AvmUTXO>[];
-        final nftUTXOGroupQuantityDict = <int, int>{};
+        final groupIdNFTUTXOsDict = <int, List<AvmUTXO>>{};
         final nftUTXOGroupIds = <int>{};
 
         for (final nftUTXO in nftUTXOs) {
           final groupId =
               (nftUTXO.getOutput() as AvmNFTTransferOutput).getGroupId();
+
+          groupIdNFTUTXOsDict[groupId] = (groupIdNFTUTXOsDict[groupId] ?? [])
+            ..add(nftUTXO);
+
           if (nftUTXOGroupIds.add(groupId)) {
             filteredNftUTXOs.add(nftUTXO);
-            nftUTXOGroupQuantityDict[groupId] = 1;
-          } else {
-            nftUTXOGroupQuantityDict[groupId] =
-                nftUTXOGroupQuantityDict[groupId]! + 1;
           }
         }
 
@@ -1262,7 +1262,7 @@ class WalletExampleScreen extends StatelessWidget {
             asset: asset,
             nftUTXOs: filteredNftUTXOs,
             groupIdPayloadDict: groupIdPayloadDict,
-            groupIdQuantityDict: nftUTXOGroupQuantityDict,
+            groupIdNFTUTXOsDict: groupIdNFTUTXOsDict,
           ));
         }
       }
@@ -1291,7 +1291,7 @@ class WalletExampleScreen extends StatelessWidget {
           final payloadTypeName = payload.getTypeName() ?? "Unknown Type";
           final payloadContent = payload.getContentType().toString();
           message +=
-              "group = $groupId, type = $payloadTypeName, count = ${nftCollectible.groupIdQuantityDict[groupId]}, payload = $payloadContent, title = $title, desc = $desc\n";
+              "group = $groupId, type = $payloadTypeName, count = ${nftCollectible.groupIdNFTUTXOsDict[groupId]?.length}, payload = $payloadContent, title = $title, desc = $desc\n";
         });
         logger.i(message);
       }
