@@ -7,7 +7,7 @@ import 'package:web3dart/web3dart.dart';
 part 'types.g.dart';
 
 @JsonSerializable()
-class Erc20TokenData {
+class Erc20Token {
   int evmChainId;
   String contractAddress;
   String name;
@@ -20,7 +20,7 @@ class Erc20TokenData {
   @JsonKey(ignore: true)
   BigInt balanceBN = BigInt.zero;
 
-  Erc20TokenData({
+  Erc20Token({
     required this.evmChainId,
     required this.contractAddress,
     required this.name,
@@ -50,7 +50,7 @@ class Erc20TokenData {
     return balanceBN;
   }
 
-  static Future<Erc20TokenData?> getData(
+  static Future<Erc20Token?> getData(
     String contractAddress,
     Web3Client client,
     int evmChainId,
@@ -64,7 +64,7 @@ class Erc20TokenData {
       final name = await erc20.name();
       final symbol = await erc20.symbol();
       final decimals = await erc20.decimals();
-      return Erc20TokenData(
+      return Erc20Token(
         evmChainId: evmChainId,
         contractAddress: contractAddress,
         name: name,
@@ -77,8 +77,8 @@ class Erc20TokenData {
     }
   }
 
-  factory Erc20TokenData.fromJson(Map<String, dynamic> json) =>
-      _$Erc20TokenDataFromJson(json);
+  factory Erc20Token.fromJson(Map<String, dynamic> json) =>
+      _$Erc20TokenFromJson(json);
 
-  Map<String, dynamic> toJson() => _$Erc20TokenDataToJson(this);
+  Map<String, dynamic> toJson() => _$Erc20TokenToJson(this);
 }

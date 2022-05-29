@@ -1333,7 +1333,7 @@ class WalletExampleScreen extends StatelessWidget {
 
   addErc20() async {
     const contractAddress = "0xE9cD92d3De1FB47a76f00e1E404ec6a577428938";
-    final erc20TokenData = await Erc20TokenData.getData(
+    final erc20TokenData = await Erc20Token.getData(
       contractAddress,
       web3Client,
       getEvmChainId(),
@@ -1350,19 +1350,19 @@ class WalletExampleScreen extends StatelessWidget {
   }
 
   getErc20Tokens() async {
-    final token1 = await Erc20TokenData.getData(
+    final token1 = await Erc20Token.getData(
       "0x719191e8849EBFe2821525EBAc669c118ed08C1b",
       web3Client,
       getEvmChainId(),
     );
 
-    final token2 = await Erc20TokenData.getData(
+    final token2 = await Erc20Token.getData(
       "0x2f5b4CC31b736456dd331e40B202ED70100508F7",
       web3Client,
       getEvmChainId(),
     );
 
-    final erc20Tokens = <Erc20TokenData>[token1!, token2!];
+    final erc20Tokens = <Erc20Token>[token1!, token2!];
 
     final key = "${wallet.getAddressC()}_${getEvmChainId()}_ERC20_TOKENS";
 
@@ -1380,7 +1380,7 @@ class WalletExampleScreen extends StatelessWidget {
       if (json == null || json.isEmpty) return;
       final map = jsonDecode(json) as List<dynamic>;
       final cachedErc20Tokens =
-          List<Erc20TokenData>.from(map.map((i) => Erc20TokenData.fromJson(i)));
+          List<Erc20Token>.from(map.map((i) => Erc20Token.fromJson(i)));
       final evmAddress = wallet.getAddressC();
       await Future.wait(
           cachedErc20Tokens.map((erc20) => erc20.getBalance(evmAddress)));
@@ -1393,7 +1393,7 @@ class WalletExampleScreen extends StatelessWidget {
   sendErc20() async {
     try {
       const contractAddress = "0xE9cD92d3De1FB47a76f00e1E404ec6a577428938";
-      final token = await Erc20TokenData.getData(
+      final token = await Erc20Token.getData(
         contractAddress,
         web3Client,
         getEvmChainId(),
@@ -1441,7 +1441,7 @@ class WalletExampleScreen extends StatelessWidget {
     try {
       const contractAddress = "0x87FcF17c2537Fda88FeA7E7971237Cf5af8f1FFc";
 
-      final erc721Data = await Erc721TokenData.getData(
+      final erc721Data = await Erc721Token.getData(
         contractAddress,
         web3Client,
         getEvmChainId(),
@@ -1460,9 +1460,9 @@ class WalletExampleScreen extends StatelessWidget {
             "This ERC721 Contract does not support the required interfaces.");
       }
       final address = wallet.getAddressC();
-      final tokenIds = await erc721Data.getAllTokensIds(address);
+      final tokenIds = await erc721Data.getTokensIds(address);
       for (final tokenId in tokenIds) {
-        final res = await erc721Data.getTokenURIData(tokenId);
+        final res = await erc721Data.getTokenURIMetadata(tokenId);
         logger.i("res = $res");
       }
     } catch (e) {
@@ -1473,13 +1473,13 @@ class WalletExampleScreen extends StatelessWidget {
   getErc721Tokens() async {
     const contractAddress = "0x87FcF17c2537Fda88FeA7E7971237Cf5af8f1FFc";
 
-    final token1 = await Erc721TokenData.getData(
+    final token1 = await Erc721Token.getData(
       contractAddress,
       web3Client,
       getEvmChainId(),
     );
 
-    final erc721Tokens = <Erc721TokenData>[token1!];
+    final erc721Tokens = <Erc721Token>[token1!, token1, token1];
 
     final key = "${wallet.getAddressC()}_${getEvmChainId()}_ERC721_TOKENS";
 
@@ -1496,16 +1496,13 @@ class WalletExampleScreen extends StatelessWidget {
       logger.i("read = $json");
       if (json == null || json.isEmpty) return;
       final map = jsonDecode(json) as List<dynamic>;
-      final cachedErc721Tokens = List<Erc721TokenData>.from(
-          map.map((i) => Erc721TokenData.fromJson(i)));
+      final cachedErc721Tokens =
+          List<Erc721Token>.from(map.map((i) => Erc721Token.fromJson(i)));
       final evmAddress = wallet.getAddressC();
 
-      for (final token in cachedErc721Tokens) {
-        final tokenIds = await token.getAllTokensIds(evmAddress);
-        for (final tokenId in tokenIds) {
-          await token.getTokenURIData(tokenId);
-        }
-      }
+      await Future.wait(cachedErc721Tokens.map((token) => token.canSupport()));
+      await Future.wait(cachedErc721Tokens
+          .map((token) => token.getAllTokenURIMetadata(evmAddress)));
 
       logger.i(cachedErc721Tokens);
     } catch (e) {
@@ -1523,7 +1520,7 @@ class WalletExampleScreen extends StatelessWidget {
 
       const contractAddress = "0x87FcF17c2537Fda88FeA7E7971237Cf5af8f1FFc";
 
-      final erc721Data = await Erc721TokenData.getData(
+      final erc721Data = await Erc721Token.getData(
         contractAddress,
         web3Client,
         getEvmChainId(),

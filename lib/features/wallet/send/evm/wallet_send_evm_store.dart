@@ -110,8 +110,7 @@ abstract class _WalletSendEvmStore with Store {
       _amountError = Strings.current.sharedInvalidAmount;
     }
     if (isAddressValid && isAmountValid) {
-      final erc20Token = _tokenStore.erc20Tokens.toList().singleWhereOrNull(
-          (element) => element.contractAddress == _token?.id);
+      final erc20Token = _tokenStore.findErc20(_token!.id);
       if (erc20Token != null) {
         _gasLimit = await _wallet.estimateErc20Gas(
           erc20Token,
@@ -149,8 +148,7 @@ abstract class _WalletSendEvmStore with Store {
   Future<bool> sendEvm(String address) async {
     _isLoading = true;
     try {
-      final erc20Token = _tokenStore.erc20Tokens.toList().singleWhereOrNull(
-          (element) => element.contractAddress == _token?.id);
+      final erc20Token = _tokenStore.findErc20(_token!.id);
       if (erc20Token != null) {
         await _wallet.sendErc20(
           erc20Token,

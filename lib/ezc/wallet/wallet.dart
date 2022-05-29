@@ -514,7 +514,7 @@ abstract class WalletProvider {
   /// @param gasLimit Gas limit
   /// @param contractAddress Contract address of the ERC20 token
   Future<String> sendErc20(
-    Erc20TokenData erc20TokenData,
+    Erc20Token erc20TokenData,
     String to,
     BigInt amount,
     BigInt gasPrice,
@@ -543,7 +543,7 @@ abstract class WalletProvider {
   }
 
   Future<BigInt> estimateErc20Gas(
-    Erc20TokenData erc20TokenData,
+    Erc20Token erc20TokenData,
     String to,
     BigInt amount,
   ) async {
@@ -563,7 +563,7 @@ abstract class WalletProvider {
   /// @param gasLimit Gas limit
   /// @param contractAddress Contract address of the ERC721 token
   Future<String> sendErc721(
-    Erc721TokenData erc721tokenData,
+    Erc721Token erc721tokenData,
     String to,
     BigInt gasPrice,
     int gasLimit,
@@ -581,7 +581,7 @@ abstract class WalletProvider {
   }
 
   Future<BigInt> estimateErc721TransferGas(
-    Erc721TokenData erc721tokenData,
+    Erc721Token erc721tokenData,
     String to,
     BigInt tokenId,
   ) async {

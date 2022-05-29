@@ -10,7 +10,7 @@ import 'package:web3dart/web3dart.dart';
 part 'types.g.dart';
 
 @JsonSerializable()
-class Erc721TokenData {
+class Erc721Token {
   static const erc721MetadataId = '0x5b5e139f';
   static const erc721EnumerableId = '0x780e9d63';
 
@@ -29,9 +29,9 @@ class Erc721TokenData {
   final cachedURIs = <BigInt, String>{};
 
   @JsonKey(ignore: true)
-  final cachedMetadata = <BigInt, String>{};
+  final cachedMetadata = <BigInt, Erc721TokenMetadata>{};
 
-  Erc721TokenData({
+  Erc721Token({
     required this.evmChainId,
     required this.contractAddress,
     required this.name,
@@ -74,7 +74,7 @@ class Erc721TokenData {
     }
   }
 
-  Future<List<BigInt>> getAllTokensIds(String address) async {
+  Future<List<BigInt>> getTokensIds(String address) async {
     if (!(await canSupport())) return [];
     final balance = await getBalance(address);
     final tokenIds = <BigInt>[];
@@ -88,16 +88,6 @@ class Erc721TokenData {
     return tokenIds;
   }
 
-  Future<List<String>> getAllTokenData(String address) async {
-    final tokenIds = await getAllTokensIds(address);
-    final uris = <String>[];
-    for (final tokenId in tokenIds) {
-      final data = await erc721.tokenURI(tokenId);
-      uris.add(data);
-    }
-    return uris;
-  }
-
   Future<String> getTokenURI(BigInt tokenId) async {
     final cachedURI = cachedURIs[tokenId];
     if (cachedURI != null) return cachedURI;
@@ -106,30 +96,48 @@ class Erc721TokenData {
     return remoteURI;
   }
 
-  Future<String> getTokenURIData(BigInt tokenId) async {
+  Future<List<String>> getTokenURIs(String address) async {
+    final tokenIds = await getTokensIds(address);
+    return await Future.wait(tokenIds.map((tokenId) => getTokenURI(tokenId)));
+  }
+
+  Future<Erc721TokenMetadata> getTokenURIMetadata(BigInt tokenId) async {
     final cachedData = cachedMetadata[tokenId];
     if (cachedData != null) return cachedData;
     final uriString = await getTokenURI(tokenId);
-    dynamic data;
+    Erc721TokenMetadata data;
     try {
       final uri = Uri.tryParse(uriString);
       if (uri != null && uri.hasAbsolutePath) {
         final dio = Dio()..interceptors.add(prettyDioLogger);
         final response = (await dio.get(uriString)).data;
         if (response is Map<String, dynamic>) {
-          data = response["image"] ?? response["img"] ?? uriString;
+          final url = response["image"] ?? response["img"] ?? uriString;
+          data = Erc721TokenMetadata(
+            uri: url,
+            name: response["name"],
+            description: response["description"],
+          );
         } else {
-          data = uriString;
+          data = Erc721TokenMetadata(uri: uriString);
         }
       } else {
-        data = uriString;
+        data = Erc721TokenMetadata(uri: uriString);
       }
     } catch (e) {
       logger.e(e, uriString);
-      data = uriString;
+      data = Erc721TokenMetadata(uri: uriString);
     }
     cachedMetadata[tokenId] = data;
     return data;
+  }
+
+  Future<List<Erc721TokenMetadata>> getAllTokenURIMetadata(
+    String address,
+  ) async {
+    final tokenIds = await getTokensIds(address);
+    return await Future.wait(
+        tokenIds.map((tokenId) => getTokenURIMetadata(tokenId)));
   }
 
   removeTokenId(BigInt tokenId) {
@@ -137,7 +145,7 @@ class Erc721TokenData {
     cachedMetadata.remove(tokenId);
   }
 
-  static Future<Erc721TokenData?> getData(
+  static Future<Erc721Token?> getData(
     String contractAddress,
     Web3Client client,
     int evmChainId,
@@ -150,7 +158,7 @@ class Erc721TokenData {
       );
       final name = await erc721.name();
       final symbol = await erc721.symbol();
-      return Erc721TokenData(
+      return Erc721Token(
         evmChainId: evmChainId,
         contractAddress: contractAddress,
         name: name,
@@ -162,8 +170,21 @@ class Erc721TokenData {
     }
   }
 
-  factory Erc721TokenData.fromJson(Map<String, dynamic> json) =>
-      _$Erc721TokenDataFromJson(json);
+  factory Erc721Token.fromJson(Map<String, dynamic> json) =>
+      _$Erc721TokenFromJson(json);
 
-  Map<String, dynamic> toJson() => _$Erc721TokenDataToJson(this);
+  Map<String, dynamic> toJson() => _$Erc721TokenToJson(this);
+}
+
+class Erc721TokenMetadata {
+  String uri;
+  String? name;
+  String? description;
+
+  Erc721TokenMetadata({required this.uri, this.name, this.description});
+
+  @override
+  String toString() {
+    return "uri = $uri, name = $name, description = $description";
+  }
 }
