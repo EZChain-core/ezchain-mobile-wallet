@@ -3,10 +3,10 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/common/route/router.dart';
-import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
+import 'package:wallet/features/common/route/router.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
@@ -30,6 +30,12 @@ class EZCTextField extends StatelessWidget {
   final int? maxLines;
 
   final int? maxLength;
+
+  final double? height;
+
+  final double? width;
+
+  final BorderRadius? borderRadius;
 
   final TextEditingController? controller;
 
@@ -56,21 +62,23 @@ class EZCTextField extends StatelessWidget {
     this.enabled,
     this.textCapitalization,
     this.textInputAction,
+    this.height, this.width, this.borderRadius,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _hasError = error != null;
+    final hasError = error != null;
+    final hasLabel = label != null;
 
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
-        width: double.infinity,
+        width: width ?? double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                if (label != null)
+            if (hasLabel)
+              Stack(
+                children: [
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
@@ -79,55 +87,59 @@ class EZCTextField extends StatelessWidget {
                           color: provider.themeMode.text60),
                     ),
                   ),
-                if (_hasError)
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Text(
-                      error!,
-                      style: EZCLabelMediumTextStyle(
-                          color: provider.themeMode.stateDanger),
+                  if (hasError)
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Text(
+                        error!,
+                        style: EZCLabelMediumTextStyle(
+                            color: provider.themeMode.stateDanger),
+                      ),
                     ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            TextField(
-              style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
-              enabled: enabled,
-              cursorColor: provider.themeMode.text,
-              controller: controller,
-              onChanged: onChanged,
-              maxLines: maxLines,
-              maxLength: maxLength,
-              textCapitalization: textCapitalization ?? TextCapitalization.none,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(12),
-                hintText: hint,
-                hintStyle:
-                    EZCBodyLargeTextStyle(color: provider.themeMode.text40),
-                prefixIcon: prefixIcon,
-                suffixIcon: suffixIcon,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: ezcBorder,
-                  borderSide: BorderSide(
-                      color: _hasError
-                          ? provider.themeMode.red
-                          : provider.themeMode.border),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: ezcBorder,
-                  borderSide: BorderSide(
-                      color: _hasError
-                          ? provider.themeMode.red
-                          : provider.themeMode.borderActive),
-                ),
-                disabledBorder: OutlineInputBorder(
-                  borderRadius: ezcBorder,
-                  borderSide: BorderSide(color: provider.themeMode.border),
-                ),
+                ],
               ),
-              keyboardType: inputType,
-              textInputAction: textInputAction ?? TextInputAction.next,
+            if (hasLabel) const SizedBox(height: 4),
+            SizedBox(
+              height: height ?? 48,
+              child: TextField(
+                style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
+                enabled: enabled,
+                cursorColor: provider.themeMode.text,
+                controller: controller,
+                onChanged: onChanged,
+                maxLines: maxLines,
+                maxLength: maxLength,
+                textCapitalization:
+                    textCapitalization ?? TextCapitalization.none,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.all(12),
+                  hintText: hint,
+                  hintStyle:
+                      EZCBodyLargeTextStyle(color: provider.themeMode.text40),
+                  prefixIcon: prefixIcon,
+                  suffixIcon: suffixIcon,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: borderRadius ?? ezcBorder,
+                    borderSide: BorderSide(
+                        color: hasError
+                            ? provider.themeMode.red
+                            : provider.themeMode.border),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: borderRadius ?? ezcBorder,
+                    borderSide: BorderSide(
+                        color: hasError
+                            ? provider.themeMode.red
+                            : provider.themeMode.borderActive),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: borderRadius ?? ezcBorder,
+                    borderSide: BorderSide(color: provider.themeMode.border),
+                  ),
+                ),
+                keyboardType: inputType,
+                textInputAction: textInputAction ?? TextInputAction.next,
+              ),
             )
           ],
         ),

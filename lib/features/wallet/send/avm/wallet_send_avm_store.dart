@@ -6,6 +6,7 @@ import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/store/price_store.dart';
+import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/generated/l10n.dart';
 
 part 'wallet_send_avm_store.g.dart';
@@ -16,13 +17,19 @@ abstract class _WalletSendAvmStore with Store {
   final _balanceStore = getIt<BalanceStore>();
   final _priceStore = getIt<PriceStore>();
 
-  @computed
-  Decimal get avaxPrice => _priceStore.ezcPrice;
+  @observable
+  WalletTokenItem? _token;
 
   @computed
-  Decimal get balanceX => _balanceStore.balanceX;
+  bool get fromToken => _token != null;
 
-  String get balanceXString => _balanceStore.balanceXString;
+  @computed
+  Decimal? get avaxPrice => fromToken ? _token!.price : _priceStore.ezcPrice;
+
+  @computed
+  Decimal get balanceX => fromToken ? _token!.balance : _balanceStore.balanceX;
+
+  String get balanceXString => fromToken ? _token!.balanceText : _balanceStore.balanceXString;
 
   @readonly
   String? _addressError;
@@ -37,11 +44,16 @@ abstract class _WalletSendAvmStore with Store {
   Decimal _fee = Decimal.zero;
 
   @computed
-  Decimal get total => (amount + _fee) * avaxPrice;
+  Decimal get total => (amount + _fee) * (avaxPrice ?? Decimal.zero);
 
   get maxAmount {
     final max = balanceX - _fee;
     return max >= Decimal.zero ? max : Decimal.zero;
+  }
+
+  @action
+  setWalletToken(WalletTokenItem? tokenItem) {
+    _token = tokenItem;
   }
 
   @action
@@ -53,7 +65,7 @@ abstract class _WalletSendAvmStore with Store {
   @action
   bool validate(String address) {
     final isAddressValid = validateAddressX(address);
-    final isAmountValid = _balanceStore.balanceX >= (amount + _fee) &&
+    final isAmountValid = balanceX >= (amount + _fee) &&
         amount.toBNAvaxX() > BigInt.zero;
     if (!isAddressValid) {
       _addressError = Strings.current.sharedInvalidAddress;
