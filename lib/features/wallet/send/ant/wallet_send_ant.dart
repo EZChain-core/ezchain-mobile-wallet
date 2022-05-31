@@ -4,9 +4,9 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/route/router.dart';
 import 'package:wallet/features/common/route/router.gr.dart';
-import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/wallet/send/ant/confirm/wallet_send_ant_confirm.dart';
 import 'package:wallet/features/wallet/send/ant/wallet_send_ant_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
@@ -20,17 +20,29 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
-class WalletSendAntScreen extends StatelessWidget {
+class WalletSendAntScreen extends StatefulWidget {
   final WalletTokenItem token;
 
-  WalletSendAntScreen({Key? key, required this.token}) : super(key: key) {
-    _walletSendAntStore.setToken(token);
-  }
+  WalletSendAntScreen({Key? key, required this.token}) : super(key: key);
 
+  @override
+  State<WalletSendAntScreen> createState() => _WalletSendAntScreenState();
+}
+
+class _WalletSendAntScreenState extends State<WalletSendAntScreen> {
   final _walletSendAntStore = WalletSendAntStore();
+
   final _addressController = TextEditingController(text: receiverAddressXTest);
+
   final _amountController = TextEditingController();
+
   final _memoController = TextEditingController();
+
+  @override
+  void initState() {
+    _walletSendAntStore.setToken(widget.token);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +69,12 @@ class WalletSendAntScreen extends StatelessWidget {
                             Assets.icons.icEzc64.svg(width: 32, height: 32),
                             const SizedBox(width: 8),
                             Text(
-                              token.symbol,
+                              widget.token.symbol,
                               style: EZCBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
                             const SizedBox(width: 16),
-                            EZCChainLabelText(text: token.chain),
+                            EZCChainLabelText(text: widget.token.chain),
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -82,8 +94,8 @@ class WalletSendAntScreen extends StatelessWidget {
                             label: Strings.current.sharedSetAmount,
                             hint: '0.0',
                             suffixText: Strings.current
-                                .walletSendBalance(token.balanceText),
-                            rateUsd: token.price,
+                                .walletSendBalance(widget.token.balanceText),
+                            rateUsd: widget.token.price,
                             error: _walletSendAntStore.amountError,
                             onChanged: (amount) {
                               _walletSendAntStore.amount =
@@ -92,9 +104,9 @@ class WalletSendAntScreen extends StatelessWidget {
                             },
                             controller: _amountController,
                             onSuffixPressed: () {
-                              _amountController.text =
-                                  (token.balance - _walletSendAntStore.fee)
-                                      .toString();
+                              _amountController.text = (widget.token.balance -
+                                      _walletSendAntStore.fee)
+                                  .toString();
                             },
                           ),
                         ),
@@ -140,13 +152,21 @@ class WalletSendAntScreen extends StatelessWidget {
     );
   }
 
+  @override
+  void dispose() {
+    _amountController.dispose();
+    _addressController.dispose();
+    _memoController.dispose();
+    super.dispose();
+  }
+
   void _onClickConfirm() {
     final address = _addressController.text;
     if (_walletSendAntStore.validate(address)) {
       walletContext?.router.push(
         WalletSendAntConfirmRoute(
           args: WalletSendAntConfirmArgs(
-            token,
+            widget.token,
             address,
             _memoController.text,
             _walletSendAntStore.amount,

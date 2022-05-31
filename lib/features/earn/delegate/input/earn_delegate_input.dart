@@ -22,13 +22,20 @@ import 'package:wallet/themes/widgets.dart';
 const _delegateBufferEndDateMinutes = 15;
 const _delegateBufferEndDateDays = 21;
 
-class EarnDelegateInputScreen extends StatelessWidget {
+class EarnDelegateInputScreen extends StatefulWidget {
   final EarnDelegateInputArgs args;
 
-  EarnDelegateInputScreen({Key? key, required this.args}) : super(key: key);
+  const EarnDelegateInputScreen({Key? key, required this.args}) : super(key: key);
 
+  @override
+  State<EarnDelegateInputScreen> createState() => _EarnDelegateInputScreenState();
+}
+
+class _EarnDelegateInputScreenState extends State<EarnDelegateInputScreen> {
   final _earnDelegateInputStore = EarnDelegateInputStore();
+
   final _addressController = TextEditingController();
+
   final _amountController = TextEditingController();
 
   final _firstDate = DateTime.now()
@@ -62,9 +69,9 @@ class EarnDelegateInputScreen extends StatelessWidget {
                                 const BorderRadius.all(Radius.circular(16)),
                           ),
                           child: EarnNodeIdWidget(
-                            id: args.delegateItem.nodeId,
-                            name: args.delegateItem.nodeName,
-                            src: args.delegateItem.nodeLogoUrl,
+                            id: widget.args.delegateItem.nodeId,
+                            name: widget.args.delegateItem.nodeName,
+                            src: widget.args.delegateItem.nodeLogoUrl,
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -73,7 +80,7 @@ class EarnDelegateInputScreen extends StatelessWidget {
                           prefixText: Strings.current.earnStakingEndDateNote,
                           initDate: _getIntDate(),
                           firstDate: _firstDate,
-                          lastDate: args.endDate,
+                          lastDate: widget.args.endDate,
                           onChanged: (selectedDate) {
                             _earnDelegateInputStore.stakingEndDate =
                                 selectedDate;
@@ -128,6 +135,14 @@ class EarnDelegateInputScreen extends StatelessWidget {
     );
   }
 
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    _addressController.dispose();
+    super.dispose();
+  }
+
   _onClickConfirm() async {
     final address = _addressController.text;
     final amount = Decimal.tryParse(_amountController.text) ?? Decimal.zero;
@@ -135,7 +150,7 @@ class EarnDelegateInputScreen extends StatelessWidget {
       walletContext?.pushRoute(
         EarnDelegateConfirmRoute(
           args: EarnDelegateConfirmArgs(
-            args.delegateItem,
+            widget.args.delegateItem,
             address,
             amount,
             _earnDelegateInputStore.stakingEndDate,
@@ -147,7 +162,7 @@ class EarnDelegateInputScreen extends StatelessWidget {
 
   DateTime _getIntDate() {
     final now = DateTime.now();
-    final diffDays = args.endDate.difference(now).inDays;
+    final diffDays = widget.args.endDate.difference(now).inDays;
     if (diffDays > _delegateBufferEndDateDays) {
       return DateTime.now().add(const Duration(
         days: _delegateBufferEndDateDays,

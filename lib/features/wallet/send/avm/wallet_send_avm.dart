@@ -22,7 +22,7 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
-class WalletSendAvmScreen extends StatelessWidget {
+class WalletSendAvmScreen extends StatefulWidget {
   final WalletTokenItem? fromToken;
 
   WalletSendAvmScreen({Key? key, this.fromToken}) : super(key: key) {
@@ -30,10 +30,24 @@ class WalletSendAvmScreen extends StatelessWidget {
     _walletSendAvmStore.getBalanceX();
   }
 
+  @override
+  State<WalletSendAvmScreen> createState() => _WalletSendAvmScreenState();
+}
+
+class _WalletSendAvmScreenState extends State<WalletSendAvmScreen> {
   final _walletSendAvmStore = WalletSendAvmStore();
+
   final _addressController = TextEditingController(text: receiverAddressXTest);
+
   final _amountController = TextEditingController();
+
   final _memoController = TextEditingController();
+
+  @override
+  void initState() {
+    _walletSendAvmStore.getBalanceX();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,6 +177,15 @@ class WalletSendAvmScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    _amountController.dispose();
+    _memoController.dispose();
+
+    super.dispose();
   }
 
   void _onClickConfirm() {

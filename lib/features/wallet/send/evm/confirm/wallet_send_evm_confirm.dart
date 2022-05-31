@@ -3,9 +3,10 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
+import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -103,7 +104,8 @@ class WalletSendEvmConfirmScreen extends StatelessWidget {
                         ),
                         onPressed: () {
                           context.router.popUntilRoot();
-                          context.pushRoute(WalletSendEvmRoute());
+                          context.pushRoute(WalletSendEvmRoute(
+                              fromToken: transactionInfo.token));
                         },
                       ),
                       const SizedBox(height: 45),
@@ -126,6 +128,7 @@ class WalletSendEvmTransactionViewData {
   final Decimal amount;
   final Decimal fee;
   final String symbol;
+  final WalletTokenItem? token;
 
   WalletSendEvmTransactionViewData(
     this.address,
@@ -134,5 +137,6 @@ class WalletSendEvmTransactionViewData {
     this.amount,
     this.fee,
     this.symbol,
+    this.token,
   );
 }

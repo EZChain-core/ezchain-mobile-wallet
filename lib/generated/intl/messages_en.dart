@@ -78,8 +78,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "appName": MessageLookupByLibrary.simpleMessage("EZC Wallet"),
         "createWalletConfirmDes": MessageLookupByLibrary.simpleMessage(
             "Confirm your passphrase backup"),
+        "createWalletCopyPassphrase":
+            MessageLookupByLibrary.simpleMessage("Copy Passphrase"),
         "createWalletDes": MessageLookupByLibrary.simpleMessage(
-            "Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. there is no way to recover lost key phrase"),
+            "Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. There is no way to recover lost key phrase"),
         "createWalletKeptKey":
             MessageLookupByLibrary.simpleMessage("Yes, I kept them safe"),
         "createWalletPassphraseToRestore":
@@ -414,6 +416,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "walletSendBalance": m11,
         "walletSendCChainErrorAddress": MessageLookupByLibrary.simpleMessage(
             "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\""),
+        "walletSendCustomFee":
+            MessageLookupByLibrary.simpleMessage("Custom Fee"),
+        "walletSendDefaultFee":
+            MessageLookupByLibrary.simpleMessage("Default Fee"),
         "walletSendGasGWEI": MessageLookupByLibrary.simpleMessage("GWEI"),
         "walletSendGasLimit": MessageLookupByLibrary.simpleMessage("Gas Limit"),
         "walletSendGasLimitNote": MessageLookupByLibrary.simpleMessage(
@@ -423,6 +429,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Gas Price (GWEI)"),
         "walletSendGasPriceNote": MessageLookupByLibrary.simpleMessage(
             "Adjusted automatically according to network load."),
+        "walletSendInvalidGasLimit":
+            MessageLookupByLibrary.simpleMessage("Invalid Gas Limit"),
+        "walletSendInvalidGasPrice":
+            MessageLookupByLibrary.simpleMessage("Invalid Gas Price"),
+        "walletSendInvalidNonce":
+            MessageLookupByLibrary.simpleMessage("Invalid Nonce"),
         "walletSendMemo":
             MessageLookupByLibrary.simpleMessage("Memo (optional)"),
         "walletSendQuantityInvalidMess":
