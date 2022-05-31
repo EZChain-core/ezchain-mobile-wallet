@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,11 +8,13 @@ import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/inputs.dart';
 import 'package:wallet/themes/theme.dart';
+import 'package:wallet/themes/typography.dart';
 
 class WalletSendAvmNftItemWidget extends StatefulWidget {
   final NftCollectibleItem item;
+  final Function(NftCollectibleItem) onDeleteNft;
 
-  const WalletSendAvmNftItemWidget({Key? key, required this.item})
+  const WalletSendAvmNftItemWidget({Key? key, required this.item, required this.onDeleteNft})
       : super(key: key);
 
   @override
@@ -68,11 +72,14 @@ class _WalletSendAvmNftItemWidgetState
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: Assets.icons.icCloseCirclePrimary.svg()),
+                InkWell(
+                  onTap: widget.onDeleteNft(widget.item),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: Assets.icons.icCloseCirclePrimary.svg()),
+                  ),
                 ),
               ],
             ),
@@ -80,9 +87,12 @@ class _WalletSendAvmNftItemWidgetState
             EZCTextField(
               width: 80,
               height: 24,
+              maxLines: 1,
               borderRadius: const BorderRadius.all(Radius.circular(4)),
-              contentPadding: const EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
               controller: _quantityController,
+              textAlign: TextAlign.end,
+              style: EZCBodyMediumTextStyle(color: provider.themeMode.text),
               onChanged: (text) {
                 widget.item.quantity = int.tryParse(text) ?? 1;
               },

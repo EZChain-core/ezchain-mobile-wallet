@@ -53,8 +53,8 @@ abstract class _WalletSendAvmStore with Store {
   @computed
   Decimal get total => (amount + _fee) * (avaxPrice ?? Decimal.zero);
 
-  @observable
-  ObservableList<NftCollectibleItem> nft = ObservableList.of([]);
+  @readonly
+  ObservableList<NftCollectibleItem> _nft = ObservableList.of([]);
 
   get maxAmount {
     final max = balanceX - _fee;
@@ -83,7 +83,7 @@ abstract class _WalletSendAvmStore with Store {
     if (!isAmountValid) {
       _amountError = Strings.current.sharedInvalidAmount;
     }
-    final isQuantityValid = nft.any((element) => element.quantity < 1);
+    final isQuantityValid = !_nft.any((element) => !element.isQuantityValid);
     if (!isQuantityValid) {
       showSnackBar(Strings.current.walletSendQuantityInvalidMess);
     }
@@ -104,13 +104,21 @@ abstract class _WalletSendAvmStore with Store {
     }
   }
 
+  @action
   onPickNft() async {
     if (walletContext != null) {
       NftCollectibleItem nftPicked = await showDialog(
         context: walletContext!,
         builder: (_) => NftSelectDialog(),
       );
-      nft.add(nftPicked);
+      if(!_nft.contains(nftPicked)) {
+        _nft.add(nftPicked);
+      }
     }
+  }
+
+  @action
+  deleteNft(NftCollectibleItem item) {
+    _nft.remove(item);
   }
 }

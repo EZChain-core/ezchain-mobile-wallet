@@ -1784,10 +1784,10 @@ class Strings {
     );
   }
 
-  /// `Quantity must be at least 1`
+  /// `Quantity must be at least 1 and less than number of items`
   String get walletSendQuantityInvalidMess {
     return Intl.message(
-      'Quantity must be at least 1',
+      'Quantity must be at least 1 and less than number of items',
       name: 'walletSendQuantityInvalidMess',
       desc: '',
       args: [],

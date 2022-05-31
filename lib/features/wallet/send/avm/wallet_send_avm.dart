@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/route/router.dart';
 import 'package:wallet/features/common/route/router.gr.dart';
+import 'package:wallet/features/nft/collectible/nft_collectible_item.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.dart';
 import 'package:wallet/features/wallet/send/avm/nft/wallet_send_avm_nft_item.dart';
 import 'package:wallet/features/wallet/send/avm/wallet_send_avm_store.dart';
@@ -25,7 +26,7 @@ import 'package:wallet/themes/widgets.dart';
 class WalletSendAvmScreen extends StatefulWidget {
   final WalletTokenItem? fromToken;
 
-  WalletSendAvmScreen({Key? key, this.fromToken}) : super(key: key);
+  const WalletSendAvmScreen({Key? key, this.fromToken}) : super(key: key);
 
   @override
   State<WalletSendAvmScreen> createState() => _WalletSendAvmScreenState();
@@ -34,7 +35,7 @@ class WalletSendAvmScreen extends StatefulWidget {
 class _WalletSendAvmScreenState extends State<WalletSendAvmScreen> {
   final _walletSendAvmStore = WalletSendAvmStore();
 
-  final _addressController = TextEditingController(text: receiverAddressXTest);
+  final _addressController = TextEditingController(text: 'X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad');
 
   final _amountController = TextEditingController();
 
@@ -119,7 +120,7 @@ class _WalletSendAvmScreenState extends State<WalletSendAvmScreen> {
                         const SizedBox(height: 16),
                         Observer(
                           builder: (_) => SizedBox(
-                            height: 140,
+                            height: 130,
                             child: ListView.separated(
                               padding: const EdgeInsets.all(0),
                               itemCount: _walletSendAvmStore.nft.length + 1,
@@ -131,7 +132,9 @@ class _WalletSendAvmScreenState extends State<WalletSendAvmScreen> {
                                   );
                                 }
                                 return WalletSendAvmNftItemWidget(
-                                    item: _walletSendAvmStore.nft[index]);
+                                    item: _walletSendAvmStore.nft[index],
+                                    onDeleteNft: _onDeleteNft,
+                                );
                               },
                               separatorBuilder: (_, index) =>
                                   const SizedBox(width: 12),
@@ -160,7 +163,7 @@ class _WalletSendAvmScreenState extends State<WalletSendAvmScreen> {
                             rightColor: provider.themeMode.text60,
                           ),
                         ),
-                        const SizedBox(height: 157),
+                        const SizedBox(height: 70),
                         EZCMediumPrimaryButton(
                           text: Strings.current.sharedConfirm,
                           width: 185,
@@ -205,6 +208,10 @@ class _WalletSendAvmScreenState extends State<WalletSendAvmScreen> {
         ),
       );
     }
+  }
+
+  _onDeleteNft(NftCollectibleItem item) {
+    _walletSendAvmStore.deleteNft(item);
   }
 }
 

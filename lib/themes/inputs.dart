@@ -1,4 +1,6 @@
 //ignore: implementation_imports
+import 'dart:ui';
+
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +51,10 @@ class EZCTextField extends StatefulWidget {
 
   final EdgeInsetsGeometry? contentPadding;
 
+  final TextStyle? style;
+
+  final TextAlign? textAlign;
+
   const EZCTextField({
     Key? key,
     this.hint,
@@ -68,6 +74,7 @@ class EZCTextField extends StatefulWidget {
     this.width,
     this.borderRadius,
     this.contentPadding,
+    this.style, this.textAlign,
   }) : super(key: key);
 
   @override
@@ -124,8 +131,10 @@ class _EZCTextFieldState extends State<EZCTextField> {
             SizedBox(
               height: widget.height ?? 48,
               child: TextField(
-                style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
+                style: widget.style ??
+                    EZCBodyLargeTextStyle(color: provider.themeMode.text),
                 enabled: widget.enabled,
+
                 cursorColor: provider.themeMode.text,
                 controller: widget.controller,
                 onChanged: widget.onChanged,
@@ -137,7 +146,7 @@ class _EZCTextFieldState extends State<EZCTextField> {
                   contentPadding:
                       widget.contentPadding ?? const EdgeInsets.all(12),
                   hintText: widget.hint,
-                  hintStyle:
+                  hintStyle: widget.style ??
                       EZCBodyLargeTextStyle(color: provider.themeMode.text40),
                   prefixIcon: widget.prefixIcon,
                   suffixIcon: widget.suffixIcon,
@@ -164,6 +173,7 @@ class _EZCTextFieldState extends State<EZCTextField> {
                 ),
                 keyboardType: widget.inputType,
                 textInputAction: widget.textInputAction ?? TextInputAction.next,
+                textAlign: widget.textAlign ?? TextAlign.start,
               ),
             ),
           ],

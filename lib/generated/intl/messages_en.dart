@@ -437,8 +437,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invalid Nonce"),
         "walletSendMemo":
             MessageLookupByLibrary.simpleMessage("Memo (optional)"),
-        "walletSendQuantityInvalidMess":
-            MessageLookupByLibrary.simpleMessage("Quantity must be at least 1"),
+        "walletSendQuantityInvalidMess": MessageLookupByLibrary.simpleMessage(
+            "Quantity must be at least 1 and less than number of items"),
         "walletTokenAddressExists": MessageLookupByLibrary.simpleMessage(
             "Contract address is already existed"),
         "walletTokenAddressInvalid":
