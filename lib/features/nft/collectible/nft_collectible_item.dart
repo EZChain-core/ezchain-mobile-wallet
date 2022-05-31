@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/common/route/router.dart';
+import 'package:wallet/features/nft/preview/nft_preview.dart';
 import 'package:wallet/features/nft/select/nft_select.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
