@@ -25,10 +25,7 @@ import 'package:wallet/themes/widgets.dart';
 class WalletSendAvmScreen extends StatefulWidget {
   final WalletTokenItem? fromToken;
 
-  WalletSendAvmScreen({Key? key, this.fromToken}) : super(key: key) {
-    _walletSendAvmStore.setWalletToken(fromToken);
-    _walletSendAvmStore.getBalanceX();
-  }
+  WalletSendAvmScreen({Key? key, this.fromToken}) : super(key: key);
 
   @override
   State<WalletSendAvmScreen> createState() => _WalletSendAvmScreenState();
@@ -45,6 +42,7 @@ class _WalletSendAvmScreenState extends State<WalletSendAvmScreen> {
 
   @override
   void initState() {
+    _walletSendAvmStore.setWalletToken(widget.fromToken);
     _walletSendAvmStore.getBalanceX();
     super.initState();
   }
@@ -76,7 +74,9 @@ class _WalletSendAvmScreenState extends State<WalletSendAvmScreen> {
                             Assets.icons.icEzc64.svg(width: 32, height: 32),
                             const SizedBox(width: 8),
                             Text(
-                              fromToken != null ? fromToken!.symbol : ezcSymbol,
+                              widget.fromToken != null
+                                  ? widget.fromToken!.symbol
+                                  : ezcSymbol,
                               style: EZCBodyLargeTextStyle(
                                   color: provider.themeMode.text),
                             ),
@@ -199,7 +199,7 @@ class _WalletSendAvmScreenState extends State<WalletSendAvmScreen> {
             _walletSendAvmStore.amount,
             _walletSendAvmStore.fee,
             _walletSendAvmStore.total,
-            token: fromToken,
+            token: widget.fromToken,
             nft: _walletSendAvmStore.nft.toList(),
           ),
         ),
