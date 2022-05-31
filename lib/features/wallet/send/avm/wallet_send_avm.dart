@@ -1,6 +1,5 @@
 // ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:decimal/decimal.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/route/router.dart';
 import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.dart';
+import 'package:wallet/features/wallet/send/avm/nft/wallet_send_avm_nft_item.dart';
 import 'package:wallet/features/wallet/send/avm/wallet_send_avm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
@@ -103,32 +103,25 @@ class WalletSendAvmScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        // Observer(
-                        //   builder: (_) => ListView.separated(
-                        //     padding: const EdgeInsets.all(0),
-                        //     itemCount: 1,
-                        //     itemBuilder: (BuildContext context, int index) {
-                        //       return _AddNftWidget();
-                        //     },
-                        //     separatorBuilder:
-                        //         (BuildContext context, int index) =>
-                        //             Divider(color: provider.themeMode.text10),
-                        //   ),
-                        // ),
-                        SizedBox(
-                          height: 200,
-                          child: ListView.separated(
-                            padding: const EdgeInsets.all(0),
-                            itemCount: 2,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (_, index) {
-                              if (index == 1)
-                                return _AddNftWidget();
-                              else
-                                return _NftItemWidget();
-                            },
-                            separatorBuilder: (_, index) =>
-                                const SizedBox(width: 12),
+                        Observer(
+                          builder: (_) => SizedBox(
+                            height: 140,
+                            child: ListView.separated(
+                              padding: const EdgeInsets.all(0),
+                              itemCount: _walletSendAvmStore.nft.length + 1,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (_, index) {
+                                if (index == _walletSendAvmStore.nft.length) {
+                                  return _AddNftWidget(
+                                    onPickNft: _walletSendAvmStore.onPickNft,
+                                  );
+                                }
+                                return WalletSendAvmNftItemWidget(
+                                    item: _walletSendAvmStore.nft[index]);
+                              },
+                              separatorBuilder: (_, index) =>
+                                  const SizedBox(width: 12),
+                            ),
                           ),
                         ),
                         EZCTextField(
@@ -178,12 +171,14 @@ class WalletSendAvmScreen extends StatelessWidget {
       walletContext?.router.push(
         WalletSendAvmConfirmRoute(
           args: WalletSendAvmConfirmArgs(
-              address,
-              _memoController.text,
-              _walletSendAvmStore.amount,
-              _walletSendAvmStore.fee,
-              _walletSendAvmStore.total,
-              fromToken),
+            address,
+            _memoController.text,
+            _walletSendAvmStore.amount,
+            _walletSendAvmStore.fee,
+            _walletSendAvmStore.total,
+            token: fromToken,
+            nft: _walletSendAvmStore.nft.toList(),
+          ),
         ),
       );
     }
@@ -191,109 +186,44 @@ class WalletSendAvmScreen extends StatelessWidget {
 }
 
 class _AddNftWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => SizedBox(
-        width: 80,
-        height: 80,
-        child: Column(
-          children: [
-            DottedBorder(
-              color: provider.themeMode.text10,
-              strokeWidth: 1,
-              radius: const Radius.circular(8),
-              borderType: BorderType.RRect,
-              child: SizedBox(
-                width: 80,
-                height: 80,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Assets.icons.icPlusGray.svg(),
-                    const SizedBox(height: 4),
-                    Text(
-                      Strings.current.walletSendAddNFT,
-                      style: EZCLabelMediumTextStyle(
-                          color: provider.themeMode.text60),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+  final VoidCallback onPickNft;
 
-class _NftItemWidget extends StatelessWidget {
-  // final NftCollectibleItem item;
-
-  const _NftItemWidget({Key? key}) : super(key: key);
+  const _AddNftWidget({Key? key, required this.onPickNft}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => SizedBox(
-        width: 80,
-        height: 150,
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: CachedNetworkImage(
-                    imageUrl: '',
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8)),
-                        image: DecorationImage(
-                            image: imageProvider, fit: BoxFit.cover),
-                      ),
-                    ),
-                    placeholder: (context, url) => Container(
-                      decoration: BoxDecoration(
-                        color: provider.themeMode.text30,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8)),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      decoration: BoxDecoration(
-                        color: provider.themeMode.secondary,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8)),
-                      ),
-                      child: Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment.center,
-                            // child: item.type.icon,
-                          )
-                        ],
-                      ),
-                    ),
+      builder: (context, provider, child) => InkWell(
+        onTap: onPickNft,
+        child: SizedBox(
+          width: 80,
+          height: 80,
+          child: Column(
+            children: [
+              DottedBorder(
+                color: provider.themeMode.text10,
+                strokeWidth: 1,
+                radius: const Radius.circular(8),
+                borderType: BorderType.RRect,
+                child: SizedBox(
+                  width: 80,
+                  height: 80,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Assets.icons.icPlusGray.svg(),
+                      const SizedBox(height: 4),
+                      Text(
+                        Strings.current.walletSendAddNFT,
+                        style: EZCLabelMediumTextStyle(
+                            color: provider.themeMode.text60),
+                      )
+                    ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: Assets.icons.icCloseCirclePrimary.svg()),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            EZCTextField(
-              width: 80,
-              height: 24,
-              borderRadius: const BorderRadius.all(Radius.circular(4)),
-            )
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

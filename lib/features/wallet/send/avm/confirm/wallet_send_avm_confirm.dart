@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/route/router.gr.dart';
+import 'package:wallet/features/nft/collectible/nft_collectible_item.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
@@ -93,7 +94,19 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                             color: provider.themeMode.text60),
                       ),
                       const SizedBox(height: 4),
-                      _NftWidget(),
+                      if (args.nft.isNotEmpty)
+                        SizedBox(
+                          height: 55,
+                          child: ListView.separated(
+                            padding: const EdgeInsets.all(0),
+                            itemCount: args.nft.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (_, index) =>
+                                _NftWidget(item: args.nft[index]),
+                            separatorBuilder: (_, index) =>
+                                const SizedBox(width: 12),
+                          ),
+                        ),
                       const SizedBox(height: 20),
                       EZCDashedLine(color: provider.themeMode.text10),
                       const SizedBox(height: 8),
@@ -133,7 +146,8 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                                       },
                                     )
                                   : EZCMediumSuccessButton(
-                                      text: Strings.current.sharedSendTransaction,
+                                      text:
+                                          Strings.current.sharedSendTransaction,
                                       width: 251,
                                       onPressed: _onClickSendTransaction,
                                       isLoading: _walletSendAvmStore.isLoading,
@@ -150,7 +164,7 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height:20),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
@@ -168,11 +182,7 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
     if (args.withToken) {
       _walletSendAvmStore.sendAnt(args);
     } else {
-      _walletSendAvmStore.sendAvm(
-        args.address,
-        args.amount,
-        memo: args.memo,
-      );
+      _walletSendAvmStore.sendAvm(args);
     }
   }
 }
@@ -184,10 +194,11 @@ class WalletSendAvmConfirmArgs {
   final Decimal fee;
   final Decimal total;
   final WalletTokenItem? token;
+  final List<NftCollectibleItem> nft;
 
   WalletSendAvmConfirmArgs(
       this.address, this.memo, this.amount, this.fee, this.total,
-      [this.token]);
+      {this.token, this.nft = const []});
 
   String? get assetId => token?.id;
 
@@ -197,6 +208,10 @@ class WalletSendAvmConfirmArgs {
 }
 
 class _NftWidget extends StatelessWidget {
+  final NftCollectibleItem item;
+
+  const _NftWidget({Key? key, required this.item}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
@@ -204,14 +219,15 @@ class _NftWidget extends StatelessWidget {
         width: 48,
         height: 48,
         child: Stack(
+          alignment: AlignmentDirectional.topStart,
           children: [
-            Align(
-              alignment: Alignment.bottomLeft,
+            Positioned(
+              top: 10,
               child: SizedBox(
                 width: 40,
                 height: 40,
                 child: CachedNetworkImage(
-                  imageUrl: '',
+                  imageUrl: item.url ?? '',
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -234,7 +250,7 @@ class _NftWidget extends StatelessWidget {
                       children: [
                         Align(
                           alignment: Alignment.center,
-                          // child: item.type.icon,
+                          child: item.type.icon,
                         )
                       ],
                     ),
@@ -252,7 +268,7 @@ class _NftWidget extends StatelessWidget {
                   color: provider.themeMode.primary,
                 ),
                 child: Text(
-                  '2',
+                  '${item.quantity}',
                   style: EZCTitleCustomTextStyle(
                       size: 8, color: provider.themeMode.secondary),
                 ),

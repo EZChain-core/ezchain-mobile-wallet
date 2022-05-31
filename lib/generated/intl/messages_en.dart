@@ -425,6 +425,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Adjusted automatically according to network load."),
         "walletSendMemo":
             MessageLookupByLibrary.simpleMessage("Memo (optional)"),
+        "walletSendQuantityInvalidMess":
+            MessageLookupByLibrary.simpleMessage("Quantity must be at least 1"),
         "walletTokenAddressExists": MessageLookupByLibrary.simpleMessage(
             "Contract address is already existed"),
         "walletTokenAddressInvalid":

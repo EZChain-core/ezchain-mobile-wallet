@@ -3,11 +3,11 @@ import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
+import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/common/store/token_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.dart';
 import 'package:wallet/generated/l10n.dart';
 
@@ -18,7 +18,6 @@ class WalletSendAvmConfirmStore = _WalletSendAvmConfirmStore
 
 abstract class _WalletSendAvmConfirmStore with Store {
   final _walletFactory = getIt<WalletFactory>();
-  final _tokenStore = getIt<TokenStore>();
 
   WalletProvider get _wallet => _walletFactory.activeWallet;
 
@@ -36,11 +35,17 @@ abstract class _WalletSendAvmConfirmStore with Store {
       if (assetId == null) {
         throw Exception();
       }
+      List<AvmUTXO> nftUtxos = [];
+      for (var element in args.nft) {
+        nftUtxos.addAll(element.avmUtxosWithQuantity);
+      }
+
       await _wallet.sendANT(
         assetId,
         args.address,
         args.amount.toBNAvaxX(),
         memo: args.memo,
+        nftUtxos: nftUtxos,
       );
       _sendSuccess = true;
     } catch (e) {
@@ -51,13 +56,19 @@ abstract class _WalletSendAvmConfirmStore with Store {
   }
 
   @action
-  sendAvm(String address, Decimal amount, {String? memo}) async {
+  sendAvm(WalletSendAvmConfirmArgs args) async {
     _isLoading = true;
     try {
+      List<AvmUTXO> nftUtxos = [];
+      for (var element in args.nft) {
+        nftUtxos.addAll(element.avmUtxosWithQuantity);
+      }
+
       await _wallet.sendAvaxX(
-        address,
-        amount.toBNAvaxX(),
-        memo: memo,
+        args.address,
+        args.amount.toBNAvaxX(),
+        memo: args.memo,
+        nftUtxos: nftUtxos,
       );
       _sendSuccess = true;
     } catch (e) {

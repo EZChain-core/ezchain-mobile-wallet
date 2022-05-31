@@ -1,7 +1,9 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/nft/collectible/nft_collectible_item.dart';
 import 'package:wallet/features/nft/family/nft_family_item.dart';
 import 'package:wallet/features/nft/nft_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -12,6 +14,8 @@ import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
 class NftSelectDialog extends StatelessWidget {
+  // final ObservableList<NftCollectibleItem> pickedNft;
+
   NftSelectDialog({Key? key}) : super(key: key);
 
   final _nftStore = NftStore();
@@ -26,7 +30,7 @@ class NftSelectDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             GestureDetector(
-              onTap:  context.popRoute,
+              onTap: context.popRoute,
               child: Assets.icons.icCloseCircleOutlinePrimary.svg(),
             ),
             const SizedBox(height: 8),
@@ -34,8 +38,7 @@ class NftSelectDialog extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   color: provider.themeMode.white,
-                  borderRadius:
-                  const BorderRadius.all(Radius.circular(8)),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,8 +48,8 @@ class NftSelectDialog extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 16),
                       child: Text(
                         Strings.current.nftSelectCollectible,
-                        style:
-                        EZCHeadlineSmallTextStyle(color: provider.themeMode.text),
+                        style: EZCHeadlineSmallTextStyle(
+                            color: provider.themeMode.text),
                       ),
                     ),
                     const SizedBox(height: 25),
@@ -54,23 +57,24 @@ class NftSelectDialog extends StatelessWidget {
                       child: Observer(
                         builder: (_) => _nftStore.nftAssets.isEmpty
                             ? Align(
-                          alignment: Alignment.center,
-                          child: EZCEmpty(
-                            img: Assets.images.imgNftFamilyEmpty
-                                .image(width: 109, height: 121),
-                            title: Strings.current.nftCollectiblesEmpty,
-                            des: Strings.current.nftCollectiblesEmptyDesc,
-                          ),
-                        )
+                                alignment: Alignment.center,
+                                child: EZCEmpty(
+                                  img: Assets.images.imgNftFamilyEmpty
+                                      .image(width: 109, height: 121),
+                                  title: Strings.current.nftCollectiblesEmpty,
+                                  des: Strings.current.nftCollectiblesEmptyDesc,
+                                ),
+                              )
                             : ListView.separated(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          itemCount: _nftStore.nftAssetsResult.length,
-                          itemBuilder: (_, index) => NftSelectFamilyItemWidget(
-                            item: _nftStore.nftAssetsResult[index],
-                          ),
-                          separatorBuilder: (_, index) =>
-                          const SizedBox(height: 30),
-                        ),
+                                padding: const EdgeInsets.only(bottom: 20),
+                                itemCount: _nftStore.nftAssets.length,
+                                itemBuilder: (_, index) =>
+                                    NftSelectFamilyItemWidget(
+                                  item: _nftStore.nftAssets[index],
+                                ),
+                                separatorBuilder: (_, index) =>
+                                    const SizedBox(height: 30),
+                              ),
                       ),
                     ),
                   ],

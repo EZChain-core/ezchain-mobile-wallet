@@ -1724,6 +1724,16 @@ class Strings {
     );
   }
 
+  /// `Quantity must be at least 1`
+  String get walletSendQuantityInvalidMess {
+    return Intl.message(
+      'Quantity must be at least 1',
+      name: 'walletSendQuantityInvalidMess',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Add Token`
   String get walletAddToken {
     return Intl.message(

@@ -165,6 +165,7 @@
   "walletSendGasLimitNote": "Gas Limit will be automatically calculated after you click Confirm.",
   "walletSendCChainErrorAddress": "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\"",
   "walletSendAddNFT": "Add  NFT",
+  "walletSendQuantityInvalidMess": "Quantity must be at least 1",
   "walletAddToken": "Add Token",
   "walletTokenName": "Token Name",
   "walletTokenContractAddress": "Token Contract Address",

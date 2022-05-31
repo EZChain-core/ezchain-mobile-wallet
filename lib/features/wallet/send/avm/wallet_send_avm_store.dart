@@ -1,11 +1,17 @@
 import 'package:decimal/decimal.dart';
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/helpers/address_helper.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
+import 'package:wallet/features/common/route/router.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/store/price_store.dart';
+import 'package:wallet/features/nft/collectible/nft_collectible_item.dart';
+import 'package:wallet/features/nft/select/nft_select.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/generated/l10n.dart';
 
@@ -29,7 +35,8 @@ abstract class _WalletSendAvmStore with Store {
   @computed
   Decimal get balanceX => fromToken ? _token!.balance : _balanceStore.balanceX;
 
-  String get balanceXString => fromToken ? _token!.balanceText : _balanceStore.balanceXString;
+  String get balanceXString =>
+      fromToken ? _token!.balanceText : _balanceStore.balanceXString;
 
   @readonly
   String? _addressError;
@@ -45,6 +52,9 @@ abstract class _WalletSendAvmStore with Store {
 
   @computed
   Decimal get total => (amount + _fee) * (avaxPrice ?? Decimal.zero);
+
+  @observable
+  ObservableList<NftCollectibleItem> nft = ObservableList.of([]);
 
   get maxAmount {
     final max = balanceX - _fee;
@@ -65,15 +75,19 @@ abstract class _WalletSendAvmStore with Store {
   @action
   bool validate(String address) {
     final isAddressValid = validateAddressX(address);
-    final isAmountValid = balanceX >= (amount + _fee) &&
-        amount.toBNAvaxX() > BigInt.zero;
+    final isAmountValid =
+        balanceX >= (amount + _fee) && amount.toBNAvaxX() > BigInt.zero;
     if (!isAddressValid) {
       _addressError = Strings.current.sharedInvalidAddress;
     }
     if (!isAmountValid) {
       _amountError = Strings.current.sharedInvalidAmount;
     }
-    return isAddressValid && isAmountValid;
+    final isQuantityValid = nft.any((element) => element.quantity < 1);
+    if (!isQuantityValid) {
+      showSnackBar(Strings.current.walletSendQuantityInvalidMess);
+    }
+    return isAddressValid && isAmountValid && isQuantityValid;
   }
 
   @action
@@ -87,6 +101,16 @@ abstract class _WalletSendAvmStore with Store {
   removeAddressError() {
     if (_addressError != null) {
       _addressError = null;
+    }
+  }
+
+  onPickNft() async {
+    if (walletContext != null) {
+      NftCollectibleItem nftPicked = await showDialog(
+        context: walletContext!,
+        builder: (_) => NftSelectDialog(),
+      );
+      nft.add(nftPicked);
     }
   }
 }

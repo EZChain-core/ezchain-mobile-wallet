@@ -47,6 +47,8 @@ class EZCTextField extends StatelessWidget {
 
   final TextInputAction? textInputAction;
 
+  final EdgeInsetsGeometry? contentPadding;
+
   const EZCTextField({
     Key? key,
     this.hint,
@@ -62,7 +64,10 @@ class EZCTextField extends StatelessWidget {
     this.enabled,
     this.textCapitalization,
     this.textInputAction,
-    this.height, this.width, this.borderRadius,
+    this.height,
+    this.width,
+    this.borderRadius,
+    this.contentPadding,
   }) : super(key: key);
 
   @override
@@ -112,7 +117,7 @@ class EZCTextField extends StatelessWidget {
                 textCapitalization:
                     textCapitalization ?? TextCapitalization.none,
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.all(12),
+                  contentPadding: contentPadding ?? const EdgeInsets.all(12),
                   hintText: hint,
                   hintStyle:
                       EZCBodyLargeTextStyle(color: provider.themeMode.text40),
