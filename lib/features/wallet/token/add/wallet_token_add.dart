@@ -15,10 +15,16 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
-class WalletTokenAddScreen extends StatelessWidget {
-  WalletTokenAddScreen({Key? key}) : super(key: key);
+class WalletTokenAddScreen extends StatefulWidget {
+  const WalletTokenAddScreen({Key? key}) : super(key: key);
 
+  @override
+  State<WalletTokenAddScreen> createState() => _WalletTokenAddScreenState();
+}
+
+class _WalletTokenAddScreenState extends State<WalletTokenAddScreen> {
   final _walletTokenAddStore = WalletTokenAddStore();
+
   final _addressController = TextEditingController(text: erc20AddressTest);
 
   @override
@@ -78,6 +84,12 @@ class WalletTokenAddScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    super.dispose();
   }
 
   _onClickNext() async {

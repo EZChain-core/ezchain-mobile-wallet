@@ -3,10 +3,10 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/common/route/router.dart';
-import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
+import 'package:wallet/features/common/route/router.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
@@ -14,7 +14,7 @@ import 'package:wallet/themes/typography.dart';
 
 const ezcBorder = BorderRadius.all(Radius.circular(8));
 
-class EZCTextField extends StatelessWidget {
+class EZCTextField extends StatefulWidget {
   final String? hint;
 
   final TextInputType? inputType;
@@ -59,8 +59,25 @@ class EZCTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<EZCTextField> createState() => _EZCTextFieldState();
+}
+
+class _EZCTextFieldState extends State<EZCTextField> {
+  @override
+  void initState() {
+    widget.controller?.addListener(() {
+      widget.onChanged?.call(widget.controller!.text);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final _hasError = error != null;
+    if (widget.controller?.text.isNotEmpty == true) {
+      widget.onChanged?.call(widget.controller!.text);
+    }
+
+    final _hasError = widget.error != null;
 
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
@@ -70,11 +87,11 @@ class EZCTextField extends StatelessWidget {
           children: [
             Stack(
               children: [
-                if (label != null)
+                if (widget.label != null)
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      label!,
+                      widget.label!,
                       style: EZCTitleLargeTextStyle(
                           color: provider.themeMode.text60),
                     ),
@@ -83,7 +100,7 @@ class EZCTextField extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Text(
-                      error!,
+                      widget.error!,
                       style: EZCLabelMediumTextStyle(
                           color: provider.themeMode.stateDanger),
                     ),
@@ -93,20 +110,23 @@ class EZCTextField extends StatelessWidget {
             const SizedBox(height: 4),
             TextField(
               style: EZCBodyLargeTextStyle(color: provider.themeMode.text),
-              enabled: enabled,
+              enabled: widget.enabled,
               cursorColor: provider.themeMode.text,
-              controller: controller,
-              onChanged: onChanged,
-              maxLines: maxLines,
-              maxLength: maxLength,
-              textCapitalization: textCapitalization ?? TextCapitalization.none,
+              controller: widget.controller,
+              onChanged: widget.onChanged,
+              maxLines: widget.maxLines,
+              maxLength: widget.maxLength,
+              textCapitalization:
+                  widget.textCapitalization ?? TextCapitalization.none,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(12),
-                hintText: hint,
+                hintText: widget.hint,
                 hintStyle:
                     EZCBodyLargeTextStyle(color: provider.themeMode.text40),
-                prefixIcon: prefixIcon,
-                suffixIcon: suffixIcon,
+                prefixIcon: widget.prefixIcon,
+                suffixIcon: widget.suffixIcon,
+                filled: widget.enabled == false,
+                fillColor: provider.themeMode.text10,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: ezcBorder,
                   borderSide: BorderSide(
@@ -126,8 +146,8 @@ class EZCTextField extends StatelessWidget {
                   borderSide: BorderSide(color: provider.themeMode.border),
                 ),
               ),
-              keyboardType: inputType,
-              textInputAction: textInputAction ?? TextInputAction.next,
+              keyboardType: widget.inputType,
+              textInputAction: widget.textInputAction ?? TextInputAction.next,
             )
           ],
         ),
@@ -232,8 +252,11 @@ class _EZCAmountTextFieldState extends State<EZCAmountTextField> {
                 cursorColor: provider.themeMode.text,
                 controller: widget.controller,
                 decoration: InputDecoration(
-                  filled: widget.backgroundColor != null,
-                  fillColor: widget.backgroundColor,
+                  filled:
+                      widget.backgroundColor != null || widget.enabled == false,
+                  fillColor: widget.enabled == false
+                      ? provider.themeMode.text10
+                      : widget.backgroundColor,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                   hintText: widget.hint,
                   hintStyle:
@@ -324,7 +347,7 @@ class _EZCAmountTextFieldState extends State<EZCAmountTextField> {
   }
 }
 
-class EZCAddressTextField extends StatelessWidget {
+class EZCAddressTextField extends StatefulWidget {
   final String? hint;
 
   final TextInputType? inputType;
@@ -354,8 +377,24 @@ class EZCAddressTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<EZCAddressTextField> createState() => _EZCAddressTextFieldState();
+}
+
+class _EZCAddressTextFieldState extends State<EZCAddressTextField> {
+  @override
+  void initState() {
+    if (widget.controller?.text.isNotEmpty == true) {
+      widget.onChanged?.call(widget.controller!.text);
+    }
+    widget.controller?.addListener(() {
+      widget.onChanged?.call(widget.controller!.text);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final _hasError = error != null;
+    final _hasError = widget.error != null;
     return Consumer<WalletThemeProvider>(
       builder: (context, provider, child) => SizedBox(
         width: double.infinity,
@@ -365,35 +404,35 @@ class EZCAddressTextField extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (label != null)
+                if (widget.label != null)
                   Text(
-                    label!,
+                    widget.label!,
                     style: EZCTitleLargeTextStyle(
                         color: provider.themeMode.text60),
                   ),
                 const Spacer(),
                 if (_hasError)
                   Text(
-                    error!,
+                    widget.error!,
                     style: EZCLabelMediumTextStyle(
                         color: provider.themeMode.stateDanger),
                   ),
               ],
             ),
-            if (label != null) const SizedBox(height: 4),
+            if (widget.label != null) const SizedBox(height: 4),
             SizedBox(
               height: 48,
               child: TextField(
-                enabled: enabled,
+                enabled: widget.enabled,
                 style: EZCTitleLargeTextStyle(color: provider.themeMode.text),
                 cursorColor: provider.themeMode.text,
-                controller: controller,
-                onChanged: onChanged,
+                controller: widget.controller,
+                onChanged: widget.onChanged,
                 decoration: InputDecoration(
-                  filled: enabled == false,
+                  filled: widget.enabled == false,
                   fillColor: provider.themeMode.text10,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                  hintText: hint,
+                  hintText: widget.hint,
                   hintStyle:
                       EZCTitleLargeTextStyle(color: provider.themeMode.text40),
                   suffixIcon: IconButton(
@@ -429,7 +468,7 @@ class EZCAddressTextField extends StatelessWidget {
                     borderSide: BorderSide(color: provider.themeMode.border),
                   ),
                 ),
-                keyboardType: inputType ?? TextInputType.text,
+                keyboardType: widget.inputType ?? TextInputType.text,
                 textInputAction: TextInputAction.next,
               ),
             ),
@@ -441,8 +480,8 @@ class EZCAddressTextField extends StatelessWidget {
 
   _onClickQrScanner() async {
     final address = await walletContext?.pushRoute<String>(const QrCodeRoute());
-    if (address != null && controller != null) {
-      controller!.text = address;
+    if (address != null && widget.controller != null) {
+      widget.controller!.text = address;
     }
   }
 }

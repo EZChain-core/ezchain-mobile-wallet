@@ -1224,10 +1224,10 @@ class Strings {
     );
   }
 
-  /// `Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. there is no way to recover lost key phrase`
+  /// `Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. There is no way to recover lost key phrase`
   String get createWalletDes {
     return Intl.message(
-      'Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. there is no way to recover lost key phrase',
+      'Store this key phrase in a secure location. Anyone with this key phrase can access your EZChain wallet. There is no way to recover lost key phrase',
       name: 'createWalletDes',
       desc: '',
       args: [],
@@ -1239,6 +1239,16 @@ class Strings {
     return Intl.message(
       'Confirm your passphrase backup',
       name: 'createWalletConfirmDes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy Passphrase`
+  String get createWalletCopyPassphrase {
+    return Intl.message(
+      'Copy Passphrase',
+      name: 'createWalletCopyPassphrase',
       desc: '',
       args: [],
     );
@@ -1634,11 +1644,61 @@ class Strings {
     );
   }
 
+  /// `Default Fee`
+  String get walletSendDefaultFee {
+    return Intl.message(
+      'Default Fee',
+      name: 'walletSendDefaultFee',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Custom Fee`
+  String get walletSendCustomFee {
+    return Intl.message(
+      'Custom Fee',
+      name: 'walletSendCustomFee',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Gas Price`
   String get walletSendGasPrice {
     return Intl.message(
       'Gas Price',
       name: 'walletSendGasPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid Gas Price`
+  String get walletSendInvalidGasPrice {
+    return Intl.message(
+      'Invalid Gas Price',
+      name: 'walletSendInvalidGasPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid Gas Limit`
+  String get walletSendInvalidGasLimit {
+    return Intl.message(
+      'Invalid Gas Limit',
+      name: 'walletSendInvalidGasLimit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid Nonce`
+  String get walletSendInvalidNonce {
+    return Intl.message(
+      'Invalid Nonce',
+      name: 'walletSendInvalidNonce',
       desc: '',
       args: [],
     );

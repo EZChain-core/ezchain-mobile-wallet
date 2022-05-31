@@ -38,6 +38,7 @@ import 'package:wallet/ezc/wallet/types.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/wait_tx_utils.dart';
 import 'package:web3dart/web3dart.dart' as web3_dart;
+import 'package:web3dart/web3dart.dart';
 
 import 'explorer/ortelius/requests.dart';
 
@@ -136,9 +137,9 @@ abstract class WalletProvider {
     return evmWallet.getAddressBech32();
   }
 
-  /// @param to - the address funds are being send to.
-  /// @param amount - amount of EZC to send in EZC
-  /// @param memo - A MEMO for the transaction
+  /// @param [to] - the address funds are being send to.
+  /// @param [amount] - amount of EZC to send in EZC
+  /// @param [memo] - A MEMO for the transaction
   Future<String> sendAvaxX(String to, BigInt amount, {String? memo}) async {
     final Uint8List? memoBuff;
     if (memo != null) {
@@ -166,9 +167,10 @@ abstract class WalletProvider {
   }
 
   /// Send Avalanche Native Tokens on X chain
-  /// @param assetID ID of the token to send
-  /// @param amount How many units of the token to send. Based on smallest divisible unit.
-  /// @param to X chain address to send tokens to
+  /// @param [assetId] ID of the token to send
+  /// @param [amount] How many units of the token to send. Based on smallest divisible unit.
+  /// @param [to] X chain address to send tokens to
+  /// @param [memo]
   Future<String> sendANT(
     String assetId,
     String to,
@@ -295,8 +297,8 @@ abstract class WalletProvider {
   /// @remarks
   /// The export fee will be added to the amount automatically. Make sure the exported amount has the import fee for the destination chain.
   ///
-  /// @param amt amount of EZC to transfer
-  /// @param destinationChain Which chain to export to.
+  /// @param [amount] amount of EZC to transfer
+  /// @param [destinationChain] Which chain to export to.
   /// @return returns the transaction id.
   Future<String> exportXChain(
     BigInt amount,
@@ -324,7 +326,7 @@ abstract class WalletProvider {
   }
 
   /// Imports atomic X chain UTXOs to the current active X chain address
-  /// @param sourceChain The chain to import from, either `P` or `C`
+  /// @param [sourceChain] The chain to import from, either `P` or `C`
   Future<String> importXChain(ExportChainsX sourceChain) async {
     final utxoSet = await getAtomicUTXOsX(sourceChain);
     if (utxoSet.getAllUTXOs().isEmpty) {
@@ -360,18 +362,20 @@ abstract class WalletProvider {
   }
 
   /// Sends EZC to another address on the C chain using legacy transaction format.
-  /// @param to Hex address to send EZC to.
-  /// @param amount Amount of EZC to send, represented in WEI format.
-  /// @param gasPrice Gas price in WEI format
-  /// @param gasLimit Gas limit
+  /// @param [to] Hex address to send EZC to.
+  /// @param [amount] Amount of EZC to send, represented in WEI format.
+  /// @param [gasPrice] Gas price in WEI format
+  /// @param [gasLimit] Gas limit
+  /// @param [nonce] is Transaction count
   ///
   /// @return Returns the transaction hash
   Future<String> sendAvaxC(
     String to,
     BigInt amount,
     BigInt gasPrice,
-    int gasLimit,
-  ) async {
+    int gasLimit, {
+    int? nonce,
+  }) async {
     assert(amount > BigInt.zero);
     final fromAddress = getAddressC();
     final tx = await tx_hepler.buildEvmTransferNativeTx(
@@ -380,6 +384,7 @@ abstract class WalletProvider {
       amount,
       gasPrice,
       gasLimit,
+      nonce: nonce,
     );
     final txId = await issueEvmTx(tx);
     await updateAvaxBalanceC();
@@ -387,8 +392,8 @@ abstract class WalletProvider {
   }
 
   /// Estimate gas limit for the given inputs.
-  /// @param to
-  /// @param data
+  /// @param [to]
+  /// @param [data]
   Future<BigInt> estimateGas(String to, String data) async {
     final from = web3_dart.EthereumAddress.fromHex(getAddressC());
     return await web3Client.estimateGas(
@@ -399,8 +404,8 @@ abstract class WalletProvider {
   }
 
   /// Estimate the gas needed for a EZC send transaction on the C chain.
-  /// @param to Destination address.
-  /// @param amount Amount of EZC to send, in WEI.
+  /// @param [to] Destination address.
+  /// @param [amount] Amount of EZC to send, in WEI.
   Future<BigInt> estimateAvaxGasLimit(
     String to,
     BigInt amount,
@@ -410,8 +415,19 @@ abstract class WalletProvider {
     return await tx_hepler.estimateAvaxGas(from, to, amount, gasPrice);
   }
 
+  /// Gets the amount of transactions issued by the specified [address].
+  ///
+  /// This function allows specifying a custom block mined in the past to get
+  /// historical data. By default, [BlockNum.current] will be used.
+  Future<int> getEvmTransactionCount(
+    String address, {
+    BlockNum atBlock = const BlockNum.pending(),
+  }) async {
+    return tx_hepler.getEvmTransactionCount(address, atBlock: atBlock);
+  }
+
   /// Given a `Transaction`, it will sign and issue it to the network.
-  /// @param tx The unsigned transaction to issue.
+  /// @param [tx] The unsigned transaction to issue.
   Future<String> issueEvmTx(web3_dart.Transaction tx) async {
     final signedTx = await signEvm(tx);
     final txHash = await web3Client.sendRawTransaction(signedTx);
@@ -429,9 +445,9 @@ abstract class WalletProvider {
   /// @remarks
   /// Make sure the exported `amt` includes the import fee for the destination chain.
   ///
-  /// @param amt amount of EZC to transfer
-  /// @param destinationChain either `X` or `P`
-  /// @param exportFee Export fee in nEZC
+  /// @param [amount] amount of EZC to transfer
+  /// @param [destinationChain] either `X` or `P`
+  /// @param [exportFee] Export fee in nEZC
   /// @return returns the transaction id.
   Future<String> exportCChain(
     BigInt amount,
@@ -467,7 +483,7 @@ abstract class WalletProvider {
     return txId;
   }
 
-  /// @param sourceChain Which chain to import from. `X` or `P`
+  /// @param [sourceChain] Which chain to import from. `X` or `P`
   /// @param [fee] The import fee to use in the transactions. If omitted the SDK will try to calculate the fee. For deterministic transactions you should always pre calculate and provide this value.
   /// @param [utxoSet] If omitted imports all atomic UTXOs.
   Future<String> importCChain(
@@ -507,18 +523,20 @@ abstract class WalletProvider {
   }
 
   /// Makes a transfer call on a ERC20 contract.
-  /// @param to Hex address to transfer tokens to.
-  /// @param amount Amount of the ERC20 token to send, donated in the token's correct denomination.
-  /// @param gasPrice Gas price in WEI format
-  /// @param gasLimit Gas limit
-  /// @param contractAddress Contract address of the ERC20 token
+  /// @param [to] Hex address to transfer tokens to.
+  /// @param [amount] Amount of the ERC20 token to send, donated in the token's correct denomination.
+  /// @param [gasPrice] Gas price in WEI format
+  /// @param [gasLimit] Gas limit
+  /// @param [contractAddress] Contract address of the ERC20 token
+  /// @param [nonce] is Transaction count
   Future<String> sendErc20(
     String to,
     BigInt amount,
     BigInt gasPrice,
     int gasLimit,
-    String contractAddress,
-  ) async {
+    String contractAddress, {
+    int? nonce,
+  }) async {
     final from = getAddressC();
     final token = await Erc20TokenData.getData(
       contractAddress,
@@ -538,6 +556,7 @@ abstract class WalletProvider {
       gasPrice,
       gasLimit,
       contractAddress,
+      nonce: nonce,
     );
     final txHash = await issueEvmTx(tx);
 
@@ -631,7 +650,7 @@ abstract class WalletProvider {
   }
 
   /// Import utxos in atomic memory to the P chain.
-  /// @param sourceChain Either `X` or `C`
+  /// @param [sourceChain] Either `X` or `C`
   /// @param [toAddress] The destination P chain address assets will get imported to. Defaults to the P chain address of the wallet.
   Future<String> importPChain(
     ExportChainsP sourceChain, {
@@ -669,8 +688,8 @@ abstract class WalletProvider {
   /// @remarks
   /// The export fee is added automatically to the amount. Make sure the exported amount includes the import fee for the destination chain.
   ///
-  /// @param amt amount of nEZC to transfer. Fees excluded.
-  /// @param destinationChain Either `X` or `C`
+  /// @param [amount] amount of nEZC to transfer. Fees excluded.
+  /// @param [destinationChain] Either `X` or `C`
   /// @return returns the transaction id.
   Future<String> exportPChain(
     BigInt amount,
@@ -791,7 +810,7 @@ abstract class WalletProvider {
 
   /// Returns atomic history for this wallet on the C chain.
   /// @remarks Excludes EVM transactions.
-  /// @param limit
+  /// @param [limit]
   Future<List<OrteliusTx>> getCTransactions({int limit = 0}) async {
     final addresses = [getEvmAddressBech(), ...(await getAllAddressesX())];
     return await getAddressHistory(
@@ -802,7 +821,7 @@ abstract class WalletProvider {
   }
 
   /// Fetches information about the given txId and parses it from the wallet's perspective
-  /// @param txId
+  /// @param [txId]
   Future<OrteliusTx> getTransaction(String txId) async {
     return await getTx(txId);
   }
@@ -815,7 +834,7 @@ abstract class WalletProvider {
   }
 
   /// Fetches information about the given txId and parses it from the wallet's perspective
-  /// @param txId
+  /// @param [txId]
   Future<OrteliusEvmTx> getEvmTransaction(String txId) async {
     return await getEvmTx(txId);
   }
@@ -837,7 +856,7 @@ abstract class WalletProvider {
   }
 
   /// Fetches information about the given txId and parses it from the wallet's perspective
-  /// @param txId
+  /// @param [txId]
   Future<HistoryItem> getHistoryItemTx(String txId) async {
     final addressesX = await getAllAddressesX();
     final addressesC = getAddressC();

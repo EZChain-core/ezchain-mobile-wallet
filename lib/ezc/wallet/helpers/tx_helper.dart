@@ -17,20 +17,27 @@ import 'package:wallet/ezc/wallet/types.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
+Future<int> getEvmTransactionCount(
+  String address, {
+  BlockNum atBlock = const BlockNum.pending(),
+}) async {
+  final etherAddress = EthereumAddress.fromHex(address);
+  return await web3Client.getTransactionCount(
+    etherAddress,
+    atBlock: atBlock,
+  );
+}
+
 Future<Transaction> buildEvmTransferNativeTx(
   String from,
   String to,
   BigInt amount,
   BigInt gasPrice,
-  int gasLimit,
-) async {
-  final etherFromAddress = EthereumAddress.fromHex(from);
-  final nonce = await web3Client.getTransactionCount(
-    etherFromAddress,
-    atBlock: const BlockNum.pending(),
-  );
+  int gasLimit, {
+  int? nonce,
+}) async {
   return Transaction(
-    from: etherFromAddress,
+    from: EthereumAddress.fromHex(from),
     to: EthereumAddress.fromHex(to),
     maxGas: gasLimit,
     gasPrice: EtherAmount.fromUnitAndValue(EtherUnit.wei, gasPrice),
@@ -93,8 +100,9 @@ Future<Transaction> buildEvmTransferErc20Tx(
   BigInt amount,
   BigInt gasPrice,
   int gasLimit,
-  String contractAddress,
-) async {
+  String contractAddress, {
+  int? nonce,
+}) async {
   final erc20 = ERC20(
     address: EthereumAddress.fromHex(contractAddress),
     client: web3Client,
@@ -112,6 +120,7 @@ Future<Transaction> buildEvmTransferErc20Tx(
     gasPrice,
     gasLimit,
     data: tokenTx,
+    nonce: nonce,
   );
 }
 
