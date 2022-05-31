@@ -158,8 +158,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("You are currently offline."),
         "nftAboutCollectible":
             MessageLookupByLibrary.simpleMessage("About collectible"),
+        "nftAddCollectible":
+            MessageLookupByLibrary.simpleMessage("Add Collectible"),
+        "nftAddCollectibles":
+            MessageLookupByLibrary.simpleMessage("Add Collectibles"),
         "nftBackMyNFT": MessageLookupByLibrary.simpleMessage("Back to My NFT"),
         "nftChooseTitle": MessageLookupByLibrary.simpleMessage("Choose tittle"),
+        "nftCollectibleName":
+            MessageLookupByLibrary.simpleMessage("Collectible Name"),
+        "nftCollectibleSymbol":
+            MessageLookupByLibrary.simpleMessage("Collectible Symbol"),
         "nftCollectibles": MessageLookupByLibrary.simpleMessage("Collectibles"),
         "nftCollectiblesEmpty":
             MessageLookupByLibrary.simpleMessage("Empty Collectibles"),
@@ -169,6 +177,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Create Family"),
         "nftEmptyCollectibles": MessageLookupByLibrary.simpleMessage(
             "Issue collectibles for the families you created. You do not own any families you can mint."),
+        "nftErc721ContractAddress":
+            MessageLookupByLibrary.simpleMessage("ERC721 Contract Address"),
         "nftFamilyName": MessageLookupByLibrary.simpleMessage("Family Name"),
         "nftHttps": MessageLookupByLibrary.simpleMessage("https://"),
         "nftImageUrl": MessageLookupByLibrary.simpleMessage("Image URL"),
