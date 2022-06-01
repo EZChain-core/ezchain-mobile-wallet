@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:wallet/common/logger.dart';
 import 'package:wallet/ezc/sdk/apis/avm/minter_set.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
@@ -12,12 +11,10 @@ import 'package:wallet/ezc/sdk/common/output.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/wallet/asset/erc20/erc20.dart';
-import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
 import 'package:wallet/ezc/wallet/asset/erc721/erc721.dart';
 import 'package:wallet/ezc/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/types.dart';
-import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 Future<int> getEvmTransactionCount(
@@ -77,10 +74,6 @@ Future<Transaction> buildCustomEvmTx(
   int? nonce,
 }) async {
   final etherFromAddress = EthereumAddress.fromHex(from);
-  nonce ??= await web3Client.getTransactionCount(
-    etherFromAddress,
-    atBlock: const BlockNum.pending(),
-  );
   return Transaction(
     from: etherFromAddress,
     to: EthereumAddress.fromHex(to),
@@ -103,20 +96,6 @@ Future<Transaction> buildEvmTransferErc20Tx(
   int? nonce,
 }) async {
   final method = erc20.self.function('transfer');
-  int gasLimit,
-  String contractAddress, {
-  int? nonce,
-}) async {
-  final erc20 = ERC20(
-    address: EthereumAddress.fromHex(contractAddress),
-    client: web3Client,
-  );
-  final credentials = EthPrivateKey.fromHex(evmPrivateKey);
-  final tokenTx = await erc20.transfer(
-    EthereumAddress.fromHex(to),
-    amount,
-    credentials: credentials,
-  );
   return await buildCustomEvmTx(
     from,
     to,
@@ -124,8 +103,6 @@ Future<Transaction> buildEvmTransferErc20Tx(
     gasPrice,
     gasLimit,
     method.encodeCall([EthereumAddress.fromHex(to), amount]),
-    nonce: nonce,
-    data: tokenTx,
     nonce: nonce,
   );
 }
@@ -164,10 +141,6 @@ Future<Transaction> buildEvmTransferErc721Tx(
   final toEther = EthereumAddress.fromHex(to);
   final method = erc721.self.functions.singleWhere((function) =>
       function.encodeName() == 'safeTransferFrom(address,address,uint256)');
-  nonce ??= await web3Client.getTransactionCount(
-    fromEther,
-    atBlock: const BlockNum.pending(),
-  );
   return Transaction(
     from: fromEther,
     to: contractAddress,

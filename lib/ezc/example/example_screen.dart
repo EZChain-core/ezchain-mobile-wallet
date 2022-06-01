@@ -1435,6 +1435,7 @@ class WalletExampleScreen extends StatelessWidget {
         amountBN,
         gasPrice,
         gasLimit.toInt(),
+        nonce: nonce,
       );
       logger.i("txHash = $txHash");
     } catch (e) {
@@ -1448,7 +1449,6 @@ class WalletExampleScreen extends StatelessWidget {
 
       final erc721Data = await Erc721Token.getData(
         contractAddress,
-        nonce: nonce,
         web3Client,
         getEvmChainId(),
       );
@@ -1523,6 +1523,7 @@ class WalletExampleScreen extends StatelessWidget {
       // 0xa54e5baeb3d3b2ef1c7748a5511482bfe6291132
 
       const to = "0xA54e5baeb3d3B2eF1C7748A5511482BfE6291132";
+      assert(validateAddressEvm(to));
 
       const contractAddress = "0x87FcF17c2537Fda88FeA7E7971237Cf5af8f1FFc";
 

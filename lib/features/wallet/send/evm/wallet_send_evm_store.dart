@@ -169,22 +169,6 @@ abstract class _WalletSendEvmStore with Store {
     if (!isAmountValid) {
       _amountError = Strings.current.sharedInvalidAmount;
     }
-    if (isAddressValid && isAmountValid) {
-      final erc20Token = _tokenStore.findErc20(_token!.id);
-      if (erc20Token != null) {
-        _gasLimit = await _wallet.estimateErc20Gas(
-          erc20Token,
-          address,
-          amountBN,
-        );
-      } else {
-        _gasLimit = await _wallet.estimateAvaxGasLimit(
-          address,
-          amountBN,
-          _gasPrice,
-        );
-      }
-      _fee = (_gasPrice * _gasLimit).toDecimalAvaxC();
     if (!isAddressValid || !isAmountValid) return;
     if (isCustomFee) {
       final isGasLimitInvalid = customGasLimit <= 0;
@@ -207,9 +191,10 @@ abstract class _WalletSendEvmStore with Store {
       _confirmCustomFeeSuccess = true;
       return;
     }
-    if (_token != null) {
+    final erc20Token = _tokenStore.findErc20(_token!.id);
+    if (erc20Token != null) {
       _gasLimit = await _wallet.estimateErc20Gas(
-        _token!.id,
+        erc20Token,
         address,
         amountBN,
       );
@@ -285,16 +270,14 @@ abstract class _WalletSendEvmStore with Store {
     }
     try {
       final erc20Token = _tokenStore.findErc20(_token!.id);
+
       if (erc20Token != null) {
         await _wallet.sendErc20(
           erc20Token,
           address,
           amountBN,
-          _gasPrice,
-          _gasLimit.toInt(),
           gasPrice,
           gasLimit.toInt(),
-          _token!.id,
           nonce: nonceValue,
         );
         _tokenStore.updateErc20Balance();

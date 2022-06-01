@@ -41,7 +41,7 @@ class Erc721Token {
             ERC721(
               address: EthereumAddress.fromHex(contractAddress),
               client: web3Client,
-              chainId: getEvmChainId(),
+              chainId: evmChainId,
             );
 
   @override
