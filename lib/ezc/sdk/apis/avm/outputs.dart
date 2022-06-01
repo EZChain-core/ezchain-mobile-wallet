@@ -462,6 +462,8 @@ class AvmNFTTransferOutput extends AvmNFTOutput {
     return AvmNFTTransferOutput.fromArgs(args);
   }
 
+  Uint8List getPayload() => payload;
+
   Uint8List getPayloadBuffer() {
     return Uint8List.fromList([...sizePayload, ...payload]);
   }

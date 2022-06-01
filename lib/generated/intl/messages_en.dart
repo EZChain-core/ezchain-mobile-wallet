@@ -198,6 +198,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "nftQuantityValidateError": MessageLookupByLibrary.simpleMessage(
             "Quantity must be at least 1."),
         "nftSearchHint": MessageLookupByLibrary.simpleMessage("Search Assets"),
+        "nftSelectCollectible":
+            MessageLookupByLibrary.simpleMessage("Select Collectible"),
         "nftStartDate": MessageLookupByLibrary.simpleMessage("Start Date"),
         "nftStartDateDesc": MessageLookupByLibrary.simpleMessage(
             "Sart at least 5 minutes after you submit this form."),
@@ -329,6 +331,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sharedMinuteAgo": m9,
         "sharedMinutes": m10,
         "sharedNext": MessageLookupByLibrary.simpleMessage("Next"),
+        "sharedNft": MessageLookupByLibrary.simpleMessage("NFT"),
         "sharedNoResultFound":
             MessageLookupByLibrary.simpleMessage("No result found"),
         "sharedNoResultFoundDes": MessageLookupByLibrary.simpleMessage(
@@ -409,6 +412,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Set Amount"),
         "walletReceiveToThis": MessageLookupByLibrary.simpleMessage(
             " to this address\nSending any other coins my result in permanent loss"),
+        "walletSendAddNFT": MessageLookupByLibrary.simpleMessage("Add  NFT"),
         "walletSendBalance": m11,
         "walletSendCChainErrorAddress": MessageLookupByLibrary.simpleMessage(
             "Invalid C Chain address. Make sure your address begins with \"0x\" or \"C-0x\""),
@@ -433,6 +437,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invalid Nonce"),
         "walletSendMemo":
             MessageLookupByLibrary.simpleMessage("Memo (optional)"),
+        "walletSendQuantityInvalidMess": MessageLookupByLibrary.simpleMessage(
+            "Quantity must be at least 1 and less than number of items"),
         "walletTokenAddressExists": MessageLookupByLibrary.simpleMessage(
             "Contract address is already existed"),
         "walletTokenAddressInvalid":

@@ -1094,6 +1094,16 @@ class Strings {
     );
   }
 
+  /// `NFT`
+  String get sharedNft {
+    return Intl.message(
+      'NFT',
+      name: 'sharedNft',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Create Wallet`
   String get onBoardCreateWallet {
     return Intl.message(
@@ -1764,6 +1774,26 @@ class Strings {
     );
   }
 
+  /// `Add  NFT`
+  String get walletSendAddNFT {
+    return Intl.message(
+      'Add  NFT',
+      name: 'walletSendAddNFT',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quantity must be at least 1 and less than number of items`
+  String get walletSendQuantityInvalidMess {
+    return Intl.message(
+      'Quantity must be at least 1 and less than number of items',
+      name: 'walletSendQuantityInvalidMess',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Add Token`
   String get walletAddToken {
     return Intl.message(
@@ -2309,6 +2339,16 @@ class Strings {
     return Intl.message(
       'Mint',
       name: 'nftMint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Collectible`
+  String get nftSelectCollectible {
+    return Intl.message(
+      'Select Collectible',
+      name: 'nftSelectCollectible',
       desc: '',
       args: [],
     );

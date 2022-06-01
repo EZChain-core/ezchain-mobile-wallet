@@ -201,7 +201,7 @@ class TransactionsTokenScreen extends StatelessWidget {
 
   _onClickSend() {
     if (token.type == EZCTokenType.ant) {
-      walletContext?.pushRoute(WalletSendAntRoute(token: token));
+      walletContext?.pushRoute(WalletSendAvmRoute(fromToken: token));
     } else {
       walletContext?.pushRoute(WalletSendEvmRoute(fromToken: token));
     }

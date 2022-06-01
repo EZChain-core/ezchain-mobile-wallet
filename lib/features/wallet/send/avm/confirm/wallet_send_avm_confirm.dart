@@ -1,14 +1,17 @@
 // ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
+import 'package:wallet/features/nft/collectible/nft_collectible_item.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
+import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
@@ -18,12 +21,11 @@ import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
 class WalletSendAvmConfirmScreen extends StatelessWidget {
-  final WalletSendAvmTransactionViewData transactionInfo;
+  final WalletSendAvmConfirmArgs args;
 
   final _walletSendAvmStore = WalletSendAvmConfirmStore();
 
-  WalletSendAvmConfirmScreen({Key? key, required this.transactionInfo})
-      : super(key: key);
+  WalletSendAvmConfirmScreen({Key? key, required this.args}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +45,14 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
                           Assets.icons.icEzc64.svg(width: 32, height: 32),
                           const SizedBox(width: 8),
                           Text(
-                            ezcSymbol,
+                            args.symbol,
                             style: EZCBodyLargeTextStyle(
                                 color: provider.themeMode.text),
                           ),
@@ -65,77 +68,104 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       WalletSendVerticalText(
                         title: Strings.current.sharedSendTo,
-                        content: transactionInfo.address,
+                        content: args.address,
                         hasDivider: true,
                       ),
                       const SizedBox(height: 8),
                       WalletSendVerticalText(
                         title: Strings.current.sharedMemo,
-                        content: transactionInfo.memo,
+                        content: args.memo,
                         hasDivider: true,
                       ),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedAmount,
-                        content: '${transactionInfo.amount} $ezcSymbol',
+                        content: '${args.amount} ${args.symbol}',
                       ),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedTransactionFee,
-                        content: '${transactionInfo.fee} $ezcSymbol',
+                        content: '${args.fee} $ezcSymbol',
                       ),
-                      const SizedBox(height: 8),
+                      if (args.nft.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          Strings.current.sharedNft,
+                          style: EZCTitleLargeTextStyle(
+                              color: provider.themeMode.text60),
+                        ),
+                        const SizedBox(height: 4),
+                        SizedBox(
+                          height: 55,
+                          child: ListView.separated(
+                            padding: const EdgeInsets.all(0),
+                            itemCount: args.nft.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (_, index) =>
+                                _NftWidget(item: args.nft[index]),
+                            separatorBuilder: (_, index) =>
+                            const SizedBox(width: 12),
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 20),
                       EZCDashedLine(color: provider.themeMode.text10),
                       const SizedBox(height: 8),
                       WalletSendHorizontalText(
                         title: Strings.current.sharedTotal,
-                        content: '${transactionInfo.total} USD',
+                        content: '${args.total} USD',
                         leftColor: provider.themeMode.text,
                         rightColor: provider.themeMode.stateSuccess,
                       ),
                       const Spacer(),
                       Observer(
-                        builder: (_) => Column(
-                          children: [
-                            if (_walletSendAvmStore.sendSuccess)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: Text(
-                                  Strings.current.sharedTransactionSent,
-                                  style: EZCBodyMediumTextStyle(
-                                      color: provider.themeMode.stateSuccess),
-                                ),
-                              ),
-                            _walletSendAvmStore.sendSuccess
-                                ? EZCMediumSuccessButton(
-                                    text: Strings.current.sharedStartAgain,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 64,
-                                      vertical: 8,
-                                    ),
-                                    onPressed: () {
-                                      context.router.popUntilRoot();
-                                      context.pushRoute(WalletSendAvmRoute());
-                                    },
-                                  )
-                                : EZCMediumSuccessButton(
-                                    text: Strings.current.sharedSendTransaction,
-                                    width: 251,
-                                    onPressed: _onClickSendTransaction,
-                                    isLoading: _walletSendAvmStore.isLoading,
+                        builder: (_) => SizedBox(
+                          width: double.infinity,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              if (_walletSendAvmStore.sendSuccess)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: Text(
+                                    Strings.current.sharedTransactionSent,
+                                    style: EZCBodyMediumTextStyle(
+                                        color: provider.themeMode.stateSuccess),
                                   ),
-                            const SizedBox(height: 4),
-                            if (!_walletSendAvmStore.sendSuccess)
-                              EZCMediumNoneButton(
-                                width: 82,
-                                text: Strings.current.sharedCancel,
-                                textColor: provider.themeMode.text90,
-                                onPressed: context.router.pop,
-                              ),
-                          ],
+                                ),
+                              _walletSendAvmStore.sendSuccess
+                                  ? EZCMediumSuccessButton(
+                                      text: Strings.current.sharedStartAgain,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 64,
+                                        vertical: 8,
+                                      ),
+                                      onPressed: () {
+                                        context.router.popUntilRoot();
+                                        context.pushRoute(WalletSendAvmRoute(
+                                            fromToken: args.token));
+                                      },
+                                    )
+                                  : EZCMediumSuccessButton(
+                                      text:
+                                          Strings.current.sharedSendTransaction,
+                                      width: 251,
+                                      onPressed: _onClickSendTransaction,
+                                      isLoading: _walletSendAvmStore.isLoading,
+                                    ),
+                              const SizedBox(height: 4),
+                              if (!_walletSendAvmStore.sendSuccess)
+                                EZCMediumNoneButton(
+                                  width: 82,
+                                  text: Strings.current.sharedCancel,
+                                  textColor: provider.themeMode.text90,
+                                  onPressed: context.router.pop,
+                                ),
+                            ],
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 45),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
@@ -149,23 +179,105 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
 
   void _onClickSendTransaction() async {
     final verified = await verifyPinCode();
-    if (verified) {
-      _walletSendAvmStore.sendAvm(
-        transactionInfo.address,
-        transactionInfo.amount,
-        memo: transactionInfo.memo,
-      );
+    if (!verified) return;
+    if (args.withToken) {
+      _walletSendAvmStore.sendAnt(args);
+    } else {
+      _walletSendAvmStore.sendAvm(args);
     }
   }
 }
 
-class WalletSendAvmTransactionViewData {
+class WalletSendAvmConfirmArgs {
   final String address;
   final String memo;
   final Decimal amount;
   final Decimal fee;
   final Decimal total;
+  final WalletTokenItem? token;
+  final List<NftCollectibleItem> nft;
 
-  WalletSendAvmTransactionViewData(
-      this.address, this.memo, this.amount, this.fee, this.total);
+  WalletSendAvmConfirmArgs(
+      this.address, this.memo, this.amount, this.fee, this.total,
+      {this.token, this.nft = const []});
+
+  String? get assetId => token?.id;
+
+  bool get withToken => token != null;
+
+  String get symbol => token != null ? token!.symbol : ezcSymbol;
+}
+
+class _NftWidget extends StatelessWidget {
+  final NftCollectibleItem item;
+
+  const _NftWidget({Key? key, required this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WalletThemeProvider>(
+      builder: (context, provider, child) => SizedBox(
+        width: 48,
+        height: 48,
+        child: Stack(
+          alignment: AlignmentDirectional.topStart,
+          children: [
+            Positioned(
+              top: 10,
+              child: SizedBox(
+                width: 40,
+                height: 40,
+                child: CachedNetworkImage(
+                  imageUrl: item.url ?? '',
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover),
+                    ),
+                  ),
+                  placeholder: (context, url) => Container(
+                    decoration: BoxDecoration(
+                      color: provider.themeMode.text30,
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    decoration: BoxDecoration(
+                      color: provider.themeMode.secondary,
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    ),
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: item.type.icon,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(200)),
+                  border: Border.all(color: provider.themeMode.white),
+                  color: provider.themeMode.primary,
+                ),
+                child: Text(
+                  '${item.quantity}',
+                  style: EZCTitleCustomTextStyle(
+                      size: 8, color: provider.themeMode.secondary),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
