@@ -82,6 +82,18 @@ abstract class AvmApi implements EZCApi {
     BigInt? asOf,
   });
 
+  Future<AvmUnsignedTx> buildNFTTransferTx(
+    AvmUTXOSet utxoSet,
+    List<String> toAddresses,
+    List<String> fromAddresses,
+    List<String> changeAddresses,
+    List<String> utxoIds, {
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+  });
+
   Future<GetUTXOsResponse> getUTXOs(
     List<String> addresses, {
     String? sourceChain,
@@ -458,6 +470,44 @@ class _AvmApiImpl implements AvmApi {
     if (!(await _checkGooseEgg(builtUnsignedTx))) {
       throw Exception(
           "Error - AVMAPI.buildCreateNFTMintTx:Failed Goose Egg Check");
+    }
+    return builtUnsignedTx;
+  }
+
+  @override
+  Future<AvmUnsignedTx> buildNFTTransferTx(
+    AvmUTXOSet utxoSet,
+    List<String> toAddresses,
+    List<String> fromAddresses,
+    List<String> changeAddresses,
+    List<String> utxoIds, {
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+  }) async {
+    final to = toAddresses.map((e) => bindtools.stringToAddress(e)).toList();
+    final from =
+        fromAddresses.map((e) => bindtools.stringToAddress(e)).toList();
+    final change =
+        changeAddresses.map((e) => bindtools.stringToAddress(e)).toList();
+    final builtUnsignedTx = utxoSet.buildNFTTransferTx(
+      ezcNetwork.networkId,
+      bindtools.cb58Decode(blockChainId),
+      to,
+      from,
+      change,
+      utxoIds,
+      fee: getTxFee(),
+      feeAssetId: avaxAssetId,
+      memo: memo,
+      asOf: asOf,
+      lockTime: lockTime,
+      threshold: threshold,
+    );
+    if (!(await _checkGooseEgg(builtUnsignedTx))) {
+      throw Exception(
+          "Error - AVMAPI.buildNFTTransferTx:Failed Goose Egg Check");
     }
     return builtUnsignedTx;
   }

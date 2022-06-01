@@ -180,14 +180,23 @@ class NftMintScreen extends StatelessWidget {
   }
 }
 
-class _NftMintGenericTab extends StatelessWidget {
+class _NftMintGenericTab extends StatefulWidget {
   final NftMintStore nftMintStore;
 
-  _NftMintGenericTab({Key? key, required this.nftMintStore}) : super(key: key);
+  const _NftMintGenericTab({Key? key, required this.nftMintStore})
+      : super(key: key);
 
+  @override
+  State<_NftMintGenericTab> createState() => _NftMintGenericTabState();
+}
+
+class _NftMintGenericTabState extends State<_NftMintGenericTab> {
   final _titleController = TextEditingController();
+
   final _imgUrlController = TextEditingController();
+
   final _desController = TextEditingController();
+
   final _quantityController = TextEditingController(text: '1');
 
   @override
@@ -241,7 +250,7 @@ class _NftMintGenericTab extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      nftMintStore.fee,
+                      widget.nftMintStore.fee,
                       style: EZCTitleLargeTextStyle(
                           color: provider.themeMode.text),
                     ),
@@ -254,7 +263,7 @@ class _NftMintGenericTab extends StatelessWidget {
               builder: (_) => EZCMediumPrimaryButton(
                 text: Strings.current.nftMint,
                 width: 95,
-                isLoading: nftMintStore.isLoading,
+                isLoading: widget.nftMintStore.isLoading,
                 onPressed: _onClickMint,
               ),
             ),
@@ -264,9 +273,18 @@ class _NftMintGenericTab extends StatelessWidget {
     );
   }
 
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _imgUrlController.dispose();
+    _desController.dispose();
+    _quantityController.dispose();
+    super.dispose();
+  }
+
   _onClickMint() {
     final quantity = int.tryParse(_quantityController.text) ?? 1;
-    nftMintStore.mintGeneric(
+    widget.nftMintStore.mintGeneric(
       _titleController.text,
       _imgUrlController.text,
       _desController.text,
@@ -419,6 +437,13 @@ class _NftMintCustomTabState extends State<_NftMintCustomTab> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _quantityController.dispose();
+    _payloadController.dispose();
+    super.dispose();
   }
 
   _onClickMint() {

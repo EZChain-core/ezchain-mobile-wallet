@@ -145,7 +145,7 @@ class AvaNFTCollectible {
   final List<AvmUTXO> nftUTXOs;
   final AvmUTXO? nftMintUTXO;
   final Map<int, PayloadBase> groupIdPayloadDict;
-  final Map<int, int> groupIdQuantityDict;
+  final Map<int, List<AvmUTXO>> groupIdNFTUTXOsDict;
 
   bool get canMint => nftMintUTXO != null;
 
@@ -154,7 +154,7 @@ class AvaNFTCollectible {
     required this.nftUTXOs,
     this.nftMintUTXO,
     required this.groupIdPayloadDict,
-    required this.groupIdQuantityDict,
+    required this.groupIdNFTUTXOsDict,
   });
 }
 

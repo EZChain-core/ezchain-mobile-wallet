@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/auth/create/create_wallet_store.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/generated/l10n.dart';
 import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
@@ -42,7 +44,7 @@ class CreateWalletScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: 4,
+                flex: 5,
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -53,29 +55,46 @@ class CreateWalletScreen extends StatelessWidget {
                     left: 16,
                     right: 16,
                     top: 32,
-                    bottom: 64,
+                    bottom: 30,
                   ),
-                  child: FutureBuilder<String>(
-                    future: _createWalletStore.generateMnemonicPhrase(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final mnemonic = snapshot.data!;
-                        return SingleChildScrollView(
-                          padding: const EdgeInsets.all(16),
-                          child: Wrap(
-                            spacing: 10,
-                            runSpacing: 10,
-                            children: mnemonic
-                                .split(' ')
-                                .mapIndexed((index, text) => EZCMnemonicText(
-                                    text: '${index + 1}. $text'))
-                                .toList(),
-                          ),
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: FutureBuilder<String>(
+                          future: _createWalletStore.generateMnemonicPhrase(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final mnemonic = snapshot.data!;
+                              return SingleChildScrollView(
+                                padding: const EdgeInsets.all(16),
+                                child: Wrap(
+                                  spacing: 10,
+                                  runSpacing: 10,
+                                  children: mnemonic
+                                      .split(' ')
+                                      .mapIndexed((index, text) =>
+                                          EZCMnemonicText(
+                                              text: '${index + 1}. $text'))
+                                      .toList(),
+                                ),
+                              );
+                            } else {
+                              return const SizedBox.shrink();
+                            }
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: EZCBodyLargeNoneButton(
+                          text: Strings.current.createWalletCopyPassphrase,
+                          onPressed: () {
+                            _onClickCopy(_createWalletStore.mnemonicPhrase);
+                          },
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -103,5 +122,10 @@ class CreateWalletScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _onClickCopy(String mnemonic) {
+    Clipboard.setData(ClipboardData(text: mnemonic));
+    showSnackBar(Strings.current.sharedCopied);
   }
 }

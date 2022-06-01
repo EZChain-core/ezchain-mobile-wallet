@@ -15,12 +15,20 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
-class NftFamilyCreateScreen extends StatelessWidget {
-  NftFamilyCreateScreen({Key? key}) : super(key: key);
+class NftFamilyCreateScreen extends StatefulWidget {
+  const NftFamilyCreateScreen({Key? key}) : super(key: key);
 
+  @override
+  State<NftFamilyCreateScreen> createState() => _NftFamilyCreateScreenState();
+}
+
+class _NftFamilyCreateScreenState extends State<NftFamilyCreateScreen> {
   final _nftFamilyCreateStore = NftFamilyCreateStore();
+
   final _nameController = TextEditingController();
+
   final _symbolController = TextEditingController();
+
   final _numberOfGroupsController = TextEditingController();
 
   @override
@@ -97,6 +105,14 @@ class NftFamilyCreateScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _symbolController.dispose();
+    _numberOfGroupsController.dispose();
+    super.dispose();
   }
 
   _onClickCreateFamily() async {

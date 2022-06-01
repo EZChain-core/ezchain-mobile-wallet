@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:wallet/common/logger.dart';
 import 'package:wallet/ezc/sdk/apis/avm/base_tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/create_asset_tx.dart';
@@ -171,19 +172,20 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
   }
 
   AvmUnsignedTx buildBaseTx(
-      int networkId,
-      Uint8List blockchainId,
-      BigInt amount,
-      Uint8List assetId,
-      List<Uint8List> toAddresses,
-      List<Uint8List> fromAddresses,
-      {List<Uint8List>? changeAddresses,
-      BigInt? fee,
-      Uint8List? feeAssetId,
-      Uint8List? memo,
-      BigInt? asOf,
-      BigInt? lockTime,
-      int threshold = 1}) {
+    int networkId,
+    Uint8List blockchainId,
+    BigInt amount,
+    Uint8List assetId,
+    List<Uint8List> toAddresses,
+    List<Uint8List> fromAddresses, {
+    List<Uint8List>? changeAddresses,
+    BigInt? fee,
+    Uint8List? feeAssetId,
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+  }) {
     asOf ??= unixNow();
     lockTime ??= BigInt.zero;
     if (threshold > toAddresses.length) {
@@ -225,19 +227,20 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
   }
 
   AvmUnsignedTx buildImportTx(
-      int networkId,
-      Uint8List blockchainId,
-      List<AvmUTXO> atomics,
-      List<Uint8List> toAddresses,
-      List<Uint8List> fromAddresses,
-      {List<Uint8List>? changeAddresses,
-      Uint8List? sourceChain,
-      BigInt? fee,
-      Uint8List? feeAssetId,
-      Uint8List? memo,
-      BigInt? asOf,
-      BigInt? lockTime,
-      int threshold = 1}) {
+    int networkId,
+    Uint8List blockchainId,
+    List<AvmUTXO> atomics,
+    List<Uint8List> toAddresses,
+    List<Uint8List> fromAddresses, {
+    List<Uint8List>? changeAddresses,
+    Uint8List? sourceChain,
+    BigInt? fee,
+    Uint8List? feeAssetId,
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+  }) {
     var ins = <AvmTransferableInput>[];
     var outs = <AvmTransferableOutput>[];
     fee ??= BigInt.zero;
@@ -337,20 +340,21 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
   }
 
   AvmUnsignedTx buildExportTx(
-      int networkId,
-      Uint8List blockchainId,
-      BigInt amount,
-      Uint8List assetId,
-      Uint8List destinationChain,
-      List<Uint8List> toAddresses,
-      List<Uint8List> fromAddresses,
-      {List<Uint8List>? changeAddresses,
-      BigInt? fee,
-      Uint8List? feeAssetId,
-      Uint8List? memo,
-      BigInt? asOf,
-      BigInt? lockTime,
-      int threshold = 1}) {
+    int networkId,
+    Uint8List blockchainId,
+    BigInt amount,
+    Uint8List assetId,
+    Uint8List destinationChain,
+    List<Uint8List> toAddresses,
+    List<Uint8List> fromAddresses, {
+    List<Uint8List>? changeAddresses,
+    BigInt? fee,
+    Uint8List? feeAssetId,
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+  }) {
     asOf ??= unixNow();
     lockTime ??= BigInt.zero;
 
@@ -514,6 +518,82 @@ class AvmUTXOSet extends StandardUTXOSet<AvmUTXO> {
       ops: ops,
     );
     return AvmUnsignedTx(transaction: operationTx);
+  }
+
+  AvmUnsignedTx buildNFTTransferTx(
+    int networkId,
+    Uint8List blockchainId,
+    List<Uint8List> toAddresses,
+    List<Uint8List> fromAddresses,
+    List<Uint8List> changeAddresses,
+    List<String> utxoIds, {
+    BigInt? fee,
+    Uint8List? feeAssetId,
+    Uint8List? memo,
+    BigInt? asOf,
+    BigInt? lockTime,
+    int threshold = 1,
+  }) {
+    asOf ??= unixNow();
+    lockTime ??= BigInt.zero;
+    final ins = <AvmTransferableInput>[];
+    final outs = <AvmTransferableOutput>[];
+    if (feeAssetId != null && _feeCheck(fee, feeAssetId)) {
+      final aad = AvmAssetAmountDestination(
+        destinations: fromAddresses,
+        senders: fromAddresses,
+        changeAddresses: changeAddresses,
+      );
+      aad.addAssetAmount(feeAssetId, BigInt.zero, fee ?? BigInt.zero);
+      try {
+        _getMinimumSpendable(aad, asOf: asOf);
+        ins.addAll(aad.getInputs());
+        outs.addAll(aad.getAllOutputs());
+      } catch (e) {
+        logger.e(e);
+      }
+    }
+    final ops = <AvmTransferableOperation>[];
+    for (int i = 0; i < utxoIds.length; i++) {
+      final utxo = getUTXO(utxoIds[i]);
+      if (utxo == null) continue;
+      final out = utxo.getOutput() as AvmNFTTransferOutput;
+      final spenders = out.getSpenders(fromAddresses, asOf: asOf);
+
+      final outbound = AvmNFTTransferOutput(
+        addresses: toAddresses,
+        lockTime: lockTime,
+        threshold: threshold,
+        groupId: out.getGroupId(),
+        payload: out.getPayload(),
+      );
+
+      final op = AvmNFTTransferOperation(output: outbound);
+
+      for (int j = 0; j < spenders.length; j++) {
+        final idx = out.getAddressIdx(spenders[j]);
+        if (idx == -1) {
+          throw Exception(
+              "Error - UTXOSet.buildNFTTransferTx: no such address in output: ${spenders[j]}");
+        }
+        op.addSignatureIdx(idx, spenders[j]);
+      }
+      final xFerOp = AvmTransferableOperation(
+        assetId: utxo.getAssetId(),
+        utxoIds: [utxoIds[i]],
+        operation: op,
+      );
+      ops.add(xFerOp);
+    }
+    final opTx = AvmOperationTx(
+      networkId: networkId,
+      blockchainId: blockchainId,
+      outs: outs,
+      ins: ins,
+      memo: memo,
+      ops: ops,
+    );
+    return AvmUnsignedTx(transaction: opTx);
   }
 
   void _getMinimumSpendable(

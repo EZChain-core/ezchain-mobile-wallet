@@ -31,7 +31,7 @@ class NftPreviewDialog extends StatelessWidget {
                 onTap: () {
                   context.popRoute();
                 },
-                child: Assets.icons.icCloseCirclePrimary.svg(),
+                child: Assets.icons.icCloseCircleOutlinePrimary.svg(),
               ),
               const SizedBox(height: 4),
               ClipRRect(

@@ -256,18 +256,18 @@ abstract class _TokenStore with Store {
         final nftUTXOs = nftUTXOsDict[assetId] ?? [];
 
         final filteredNftUTXOs = <AvmUTXO>[];
-        final nftUTXOGroupQuantityDict = <int, int>{};
+        final groupIdNFTUTXOsDict = <int, List<AvmUTXO>>{};
         final nftUTXOGroupIds = <int>{};
 
         for (final nftUTXO in nftUTXOs) {
           final groupId =
               (nftUTXO.getOutput() as AvmNFTTransferOutput).getGroupId();
+
+          groupIdNFTUTXOsDict[groupId] = (groupIdNFTUTXOsDict[groupId] ?? [])
+            ..add(nftUTXO);
+
           if (nftUTXOGroupIds.add(groupId)) {
             filteredNftUTXOs.add(nftUTXO);
-            nftUTXOGroupQuantityDict[groupId] = 1;
-          } else {
-            nftUTXOGroupQuantityDict[groupId] =
-                nftUTXOGroupQuantityDict[groupId]! + 1;
           }
         }
 
@@ -301,7 +301,7 @@ abstract class _TokenStore with Store {
             nftUTXOs: filteredNftUTXOs,
             nftMintUTXO: nftMintUTXOs.firstOrNull,
             groupIdPayloadDict: groupIdPayloadDict,
-            groupIdQuantityDict: nftUTXOGroupQuantityDict,
+            groupIdNFTUTXOsDict: groupIdNFTUTXOsDict,
           ));
         }
       }

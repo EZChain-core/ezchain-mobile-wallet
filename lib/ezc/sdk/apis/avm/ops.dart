@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
+import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/common/credentials.dart';
 import 'package:wallet/ezc/sdk/common/nbytes.dart';
 import 'package:wallet/ezc/sdk/common/output.dart';
@@ -16,6 +17,9 @@ AvmOperation selectOperationClass(
     case NFTMINTOPID:
     case NFTMINTOPID_CODECONE:
       return AvmNFTMintOperation.fromArgs(args);
+    case NFTXFEROPID:
+    case NFTXFEROPID_CODECONE:
+      return AvmNFTTransferOperation.fromArgs(args);
     default:
       throw Exception("Error - SelectOperationClass: unknown opId $opId");
   }
@@ -277,6 +281,88 @@ class AvmNFTMintOperation extends AvmOperation {
     }
 
     return Uint8List.fromList(barr.expand((element) => element).toList());
+  }
+
+  @override
+  String toString() {
+    return bufferToB58(toBuffer());
+  }
+}
+
+class AvmNFTTransferOperation extends AvmOperation {
+  @override
+  String get typeName => "AvmNFTTransferOperation";
+
+  late AvmNFTTransferOutput output;
+
+  AvmNFTTransferOperation({AvmNFTTransferOutput? output}) {
+    setCodecId(LATESTCODEC);
+    if (output != null) {
+      this.output = output;
+    }
+  }
+
+  factory AvmNFTTransferOperation.fromArgs(Map<String, dynamic> args) {
+    return AvmNFTTransferOperation(output: args["output"]);
+  }
+
+  @override
+  serialize({SerializedEncoding encoding = SerializedEncoding.hex}) {
+    final fields = super.serialize(encoding: encoding);
+    return {...fields, "output": output.serialize(encoding: encoding)};
+  }
+
+  @override
+  void deserialize(
+    fields, {
+    SerializedEncoding encoding = SerializedEncoding.hex,
+  }) {
+    super.deserialize(fields, encoding: encoding);
+    output = AvmNFTTransferOutput();
+    output.deserialize(fields["output"], encoding: encoding);
+  }
+
+  @override
+  void setCodecId(int codecId) {
+    if (codecId != 0 && codecId != 1) {
+      throw Exception(
+          "Error - AvmNFTTransferOperation.setCodecID: invalid codecID. Valid codecIDs are 0 and 1.");
+    }
+    super.setCodecId(codecId);
+    setTypeId(codecId == 0 ? NFTXFEROPID : NFTXFEROPID_CODECONE);
+  }
+
+  @override
+  int getOperationId() {
+    return super.getTypeId();
+  }
+
+  @override
+  int getCredentialId() {
+    if (getCodecId() == 0) {
+      return NFTCREDENTIAL;
+    } else if (getCodecId() == 1) {
+      return NFTCREDENTIAL_CODECONE;
+    } else {
+      throw Exception(
+          "Error - AvmNFTTransferOperation.getCredentialId: invalid codecID. Valid codecIDs are 0 and 1.");
+    }
+  }
+
+  AvmNFTTransferOutput getOutput() => output;
+
+  @override
+  int fromBuffer(Uint8List bytes, {int offset = 0}) {
+    offset = super.fromBuffer(bytes, offset: offset);
+    output = AvmNFTTransferOutput();
+    return output.fromBuffer(bytes, offset: offset);
+  }
+
+  @override
+  Uint8List toBuffer() {
+    final superBuff = super.toBuffer();
+    final outBuff = output.toBuffer();
+    return Uint8List.fromList([...superBuff, ...outBuff]);
   }
 
   @override

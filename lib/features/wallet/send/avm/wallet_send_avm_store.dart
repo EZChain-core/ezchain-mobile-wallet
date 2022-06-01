@@ -1,11 +1,17 @@
 import 'package:decimal/decimal.dart';
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/helpers/address_helper.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
+import 'package:wallet/features/common/ext/extensions.dart';
+import 'package:wallet/features/common/route/router.dart';
 import 'package:wallet/features/common/store/balance_store.dart';
 import 'package:wallet/features/common/store/price_store.dart';
+import 'package:wallet/features/nft/collectible/nft_collectible_item.dart';
+import 'package:wallet/features/nft/select/nft_select.dart';
+import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/generated/l10n.dart';
 
 part 'wallet_send_avm_store.g.dart';
@@ -16,13 +22,20 @@ abstract class _WalletSendAvmStore with Store {
   final _balanceStore = getIt<BalanceStore>();
   final _priceStore = getIt<PriceStore>();
 
-  @computed
-  Decimal get avaxPrice => _priceStore.ezcPrice;
+  @observable
+  WalletTokenItem? _token;
 
   @computed
-  Decimal get balanceX => _balanceStore.balanceX;
+  bool get fromToken => _token != null;
 
-  String get balanceXString => _balanceStore.balanceXString;
+  @computed
+  Decimal? get avaxPrice => fromToken ? _token!.price : _priceStore.ezcPrice;
+
+  @computed
+  Decimal get balanceX => fromToken ? _token!.balance : _balanceStore.balanceX;
+
+  String get balanceXString =>
+      fromToken ? _token!.balanceText : _balanceStore.balanceXString;
 
   @readonly
   String? _addressError;
@@ -37,11 +50,19 @@ abstract class _WalletSendAvmStore with Store {
   Decimal _fee = Decimal.zero;
 
   @computed
-  Decimal get total => (amount + _fee) * avaxPrice;
+  Decimal get total => (amount + _fee) * (avaxPrice ?? Decimal.zero);
+
+  @readonly
+  ObservableList<NftCollectibleItem> _nft = ObservableList.of([]);
 
   get maxAmount {
     final max = balanceX - _fee;
     return max >= Decimal.zero ? max : Decimal.zero;
+  }
+
+  @action
+  setWalletToken(WalletTokenItem? tokenItem) {
+    _token = tokenItem;
   }
 
   @action
@@ -53,15 +74,19 @@ abstract class _WalletSendAvmStore with Store {
   @action
   bool validate(String address) {
     final isAddressValid = validateAddressX(address);
-    final isAmountValid = _balanceStore.balanceX >= (amount + _fee) &&
-        amount.toBNAvaxX() > BigInt.zero;
+    final isAmountValid =
+        balanceX >= (amount + _fee) && amount.toBNAvaxX() > BigInt.zero;
     if (!isAddressValid) {
       _addressError = Strings.current.sharedInvalidAddress;
     }
     if (!isAmountValid) {
       _amountError = Strings.current.sharedInvalidAmount;
     }
-    return isAddressValid && isAmountValid;
+    final isQuantityValid = !_nft.any((element) => !element.isQuantityValid);
+    if (!isQuantityValid) {
+      showSnackBar(Strings.current.walletSendQuantityInvalidMess);
+    }
+    return isAddressValid && isAmountValid && isQuantityValid;
   }
 
   @action
@@ -76,5 +101,25 @@ abstract class _WalletSendAvmStore with Store {
     if (_addressError != null) {
       _addressError = null;
     }
+  }
+
+  @action
+  onPickNft() async {
+    if (walletContext != null) {
+      NftCollectibleItem nftPicked = await showDialog(
+        context: walletContext!,
+        builder: (_) => NftSelectDialog(),
+      );
+      if (!_nft.any((element) => (element.groupId == nftPicked.groupId &&
+          element.title == nftPicked.title &&
+          element.count == nftPicked.count))) {
+        _nft.add(nftPicked);
+      }
+    }
+  }
+
+  @action
+  deleteNft(NftCollectibleItem item) {
+    _nft.remove(item);
   }
 }
