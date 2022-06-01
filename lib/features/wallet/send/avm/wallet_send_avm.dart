@@ -35,7 +35,7 @@ class WalletSendAvmScreen extends StatefulWidget {
 class _WalletSendAvmScreenState extends State<WalletSendAvmScreen> {
   final _walletSendAvmStore = WalletSendAvmStore();
 
-  final _addressController = TextEditingController(text: 'X-fuji129sdwasyyvdlqqsg8d9pguvzlqvup6cmtd8jad');
+  final _addressController = TextEditingController(text: receiverAddressXTest);
 
   final _amountController = TextEditingController();
 
