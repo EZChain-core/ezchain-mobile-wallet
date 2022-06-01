@@ -94,7 +94,12 @@ class _WalletSendAvmNftItemWidgetState
               textAlign: TextAlign.end,
               style: EZCBodyMediumTextStyle(color: provider.themeMode.text),
               onChanged: (text) {
-                widget.item.quantity = int.tryParse(text) ?? 1;
+                final quantity = int.tryParse(text) ?? 1;
+                if(quantity > widget.item.count) {
+                  _quantityController.text = widget.item.count.toString();
+                } else {
+                  widget.item.quantity = quantity;
+                }
               },
             )
           ],
