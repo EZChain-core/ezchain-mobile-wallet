@@ -133,7 +133,7 @@ class _WalletSendAvmScreenState extends State<WalletSendAvmScreen> {
                                 }
                                 return WalletSendAvmNftItemWidget(
                                     item: _walletSendAvmStore.nft[index],
-                                    onDeleteNft: _onDeleteNft,
+                                    onDeleteNft: _walletSendAvmStore.deleteNft,
                                 );
                               },
                               separatorBuilder: (_, index) =>
@@ -209,10 +209,6 @@ class _WalletSendAvmScreenState extends State<WalletSendAvmScreen> {
       );
     }
   }
-
-  _onDeleteNft(NftCollectibleItem item) {
-    _walletSendAvmStore.deleteNft(item);
-  }
 }
 
 class _AddNftWidget extends StatelessWidget {
@@ -223,14 +219,14 @@ class _AddNftWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<WalletThemeProvider>(
-      builder: (context, provider, child) => InkWell(
-        onTap: onPickNft,
-        child: SizedBox(
-          width: 80,
-          height: 80,
-          child: Column(
-            children: [
-              DottedBorder(
+      builder: (context, provider, child) => SizedBox(
+        width: 80,
+        height: 80,
+        child: Column(
+          children: [
+            InkWell(
+              onTap: onPickNft,
+              child: DottedBorder(
                 color: provider.themeMode.text10,
                 strokeWidth: 1,
                 radius: const Radius.circular(8),
@@ -252,8 +248,8 @@ class _AddNftWidget extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

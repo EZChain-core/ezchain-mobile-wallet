@@ -72,10 +72,10 @@ class _WalletSendAvmNftItemWidgetState
                     ),
                   ),
                 ),
-                InkWell(
-                  onTap: widget.onDeleteNft(widget.item),
-                  child: Align(
-                    alignment: Alignment.topRight,
+                Align(
+                  alignment: Alignment.topRight,
+                  child: InkWell(
+                    onTap: () => widget.onDeleteNft(widget.item),
                     child: Padding(
                         padding: const EdgeInsets.all(4),
                         child: Assets.icons.icCloseCirclePrimary.svg()),

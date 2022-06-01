@@ -36,6 +36,7 @@ class NftCollectibleItem {
   }
 
   get isQuantityValid  => quantity > 0 && quantity <= count;
+
 }
 
 enum NftPayloadType { json, utf8, url }

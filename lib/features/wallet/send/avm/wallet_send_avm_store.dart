@@ -1,7 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/helpers/address_helper.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
@@ -111,7 +110,9 @@ abstract class _WalletSendAvmStore with Store {
         context: walletContext!,
         builder: (_) => NftSelectDialog(),
       );
-      if(!_nft.contains(nftPicked)) {
+      if (!_nft.any((element) => (element.groupId == nftPicked.groupId &&
+          element.title == nftPicked.title &&
+          element.count == nftPicked.count))) {
         _nft.add(nftPicked);
       }
     }

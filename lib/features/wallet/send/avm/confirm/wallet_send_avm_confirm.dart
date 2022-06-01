@@ -87,14 +87,14 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                         title: Strings.current.sharedTransactionFee,
                         content: '${args.fee} $ezcSymbol',
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        Strings.current.sharedNft,
-                        style: EZCTitleLargeTextStyle(
-                            color: provider.themeMode.text60),
-                      ),
-                      const SizedBox(height: 4),
-                      if (args.nft.isNotEmpty)
+                      if (args.nft.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          Strings.current.sharedNft,
+                          style: EZCTitleLargeTextStyle(
+                              color: provider.themeMode.text60),
+                        ),
+                        const SizedBox(height: 4),
                         SizedBox(
                           height: 55,
                           child: ListView.separated(
@@ -104,9 +104,10 @@ class WalletSendAvmConfirmScreen extends StatelessWidget {
                             itemBuilder: (_, index) =>
                                 _NftWidget(item: args.nft[index]),
                             separatorBuilder: (_, index) =>
-                                const SizedBox(width: 12),
+                            const SizedBox(width: 12),
                           ),
                         ),
+                      ],
                       const SizedBox(height: 20),
                       EZCDashedLine(color: provider.themeMode.text10),
                       const SizedBox(height: 8),
