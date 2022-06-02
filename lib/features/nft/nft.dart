@@ -130,10 +130,7 @@ class _NftHeader extends StatelessWidget {
                       EZCHeadlineSmallTextStyle(color: provider.themeMode.text),
                 ),
                 EZCMediumPrimaryOutlineButton(
-                  width: 128,
                   height: 28,
-                  textStyle: EZCSemiBoldSmallTextStyle(
-                      color: provider.themeMode.primary),
                   text: Strings.current.nftAddCollectible,
                   onPressed: _onClickAddCollectible,
                 ),

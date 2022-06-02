@@ -129,12 +129,15 @@ class NftAddCollectibleDialog extends StatelessWidget {
                                   const SizedBox(height: 48),
                                   Align(
                                     alignment: Alignment.bottomCenter,
-                                    child: EZCMediumPrimaryButton(
-                                      width: 181,
-                                      text: Strings.current.nftAddCollectible,
-                                      enabled: true,
-                                      onPressed: _nftAddCollectibleStore
-                                          .addCollectible,
+                                    child: Observer(
+                                      builder: (_) => EZCMediumPrimaryButton(
+                                        width: 181,
+                                        isLoading:
+                                            _nftAddCollectibleStore.isLoading,
+                                        text: Strings.current.nftAddCollectible,
+                                        onPressed: _nftAddCollectibleStore
+                                            .addCollectible,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(height: 24),

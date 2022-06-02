@@ -19,13 +19,17 @@ abstract class _NftStore with Store {
 
   @computed
   ObservableList<NftFamilyItem> get nftAssetsResult => keySearch.isEmpty
-      ? nftAssets
-      : ObservableList.of(nftAssets
+      ? nftAssetsTotal
+      : ObservableList.of(nftAssetsTotal
           .where((element) =>
               element.name.toLowerCase().contains(keySearch.toLowerCase()) ||
               element.symbol.toLowerCase().contains(keySearch.toLowerCase()) ||
               element.id.contains(keySearch))
           .toList());
+
+  @computed
+  ObservableList<NftFamilyItem> get nftAssetsTotal =>
+      ObservableList.of(erc721NftAssets)..addAll(nftAssets);
 
   @computed
   ObservableList<NftFamilyItem> get nftAssets => ObservableList.of(
@@ -71,6 +75,30 @@ abstract class _NftStore with Store {
               symbol: nftCollectible.asset.symbol,
               isMintable: nftCollectible.canMint,
               nftMintUTXO: nftCollectible.nftMintUTXO,
+              nftCollectibles: collectibles,
+            );
+          },
+        ),
+      );
+
+  @computed
+  ObservableList<NftFamilyItem> get erc721NftAssets => ObservableList.of(
+        _tokenStore.erc721Tokens.map(
+          (nftCollectible) {
+            List<NftCollectibleItem> collectibles = [];
+            nftCollectible.cachedMetadata.forEach((key, value) {
+              collectibles.add(
+                NftCollectibleItem(0, {}, 1, NftPayloadType.json, value.name,
+                    value.uri, value.description),
+              );
+            });
+
+            return NftFamilyItem(
+              id: nftCollectible.contractAddress,
+              name: nftCollectible.name,
+              symbol: nftCollectible.symbol,
+              isMintable: false,
+              nftMintUTXO: null,
               nftCollectibles: collectibles,
             );
           },
