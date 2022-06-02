@@ -157,6 +157,8 @@ class EZCMediumPrimaryOutlineButton extends StatelessWidget {
 
   final bool? enabled;
 
+  final TextStyle? textStyle;
+
   const EZCMediumPrimaryOutlineButton(
       {required this.text,
       this.onPressed,
@@ -166,7 +168,8 @@ class EZCMediumPrimaryOutlineButton extends StatelessWidget {
       this.height,
       this.isLoading,
       this.enabled,
-      Key? key})
+      Key? key,
+      this.textStyle})
       : super(key: key);
 
   @override
@@ -184,10 +187,11 @@ class EZCMediumPrimaryOutlineButton extends StatelessWidget {
                   strokeWidth: 2)
               : Text(text,
                   textAlign: TextAlign.center,
-                  style: EZCButtonTextStyle(
-                      color: isDisable
-                          ? provider.themeMode.text40
-                          : provider.themeMode.primary)),
+                  style: textStyle ??
+                      EZCButtonTextStyle(
+                          color: isDisable
+                              ? provider.themeMode.text40
+                              : provider.themeMode.primary)),
           style: OutlinedButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),

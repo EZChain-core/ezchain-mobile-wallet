@@ -14,7 +14,8 @@ class WalletSendAvmNftItemWidget extends StatefulWidget {
   final NftCollectibleItem item;
   final Function(NftCollectibleItem) onDeleteNft;
 
-  const WalletSendAvmNftItemWidget({Key? key, required this.item, required this.onDeleteNft})
+  const WalletSendAvmNftItemWidget(
+      {Key? key, required this.item, required this.onDeleteNft})
       : super(key: key);
 
   @override
@@ -89,13 +90,15 @@ class _WalletSendAvmNftItemWidgetState
               height: 24,
               maxLines: 1,
               borderRadius: const BorderRadius.all(Radius.circular(4)),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
               controller: _quantityController,
               textAlign: TextAlign.end,
+              inputType: TextInputType.number,
               style: EZCBodyMediumTextStyle(color: provider.themeMode.text),
               onChanged: (text) {
                 final quantity = int.tryParse(text) ?? 1;
-                if(quantity > widget.item.count) {
+                if (quantity > widget.item.count) {
                   _quantityController.text = widget.item.count.toString();
                 } else {
                   widget.item.quantity = quantity;

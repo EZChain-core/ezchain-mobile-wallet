@@ -2726,6 +2726,16 @@ class Strings {
     );
   }
 
+  /// `This ERC721 Contract does not support the required interfaces.`
+  String get nftErc721NotSupport {
+    return Intl.message(
+      'This ERC721 Contract does not support the required interfaces.',
+      name: 'nftErc721NotSupport',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Issue collectibles for the families you created. You do not own any families you can mint.`
   String get nftEmptyCollectibles {
     return Intl.message(

@@ -1,9 +1,12 @@
+// ignore: implementation_imports
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/wallet/asset/erc721/types.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
+import 'package:wallet/features/common/route/router.dart';
 import 'package:wallet/features/common/store/token_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/generated/l10n.dart';
@@ -23,23 +26,50 @@ abstract class _NftAddCollectibleStore with Store {
   @readonly
   String _error = '';
 
+  @readonly
+  Erc721Token? _token;
+
+  @computed
+  String get name => _token?.name ?? '--';
+
+  @computed
+  String get symbol => _token?.symbol ?? '--';
+
+  String _address = '';
+
   @action
   validate(String address) async {
     try {
-      if (_tokenStore.isErc20Exists(address)) {
-        _error = Strings.current.walletTokenAddressExists;
-        return;
-      }
-      final erc721Data = await Erc721Token.getData(
+      _address = address;
+      _token = await Erc721Token.getData(
         address,
         web3Client,
         getEvmChainId(),
       );
+    } catch (e) {
+      logger.e(e);
+    }
+  }
 
-      if (erc721Data == null) {
+  @action
+  addCollectible() async {
+    try {
+      final erc721 = _token;
+      if (erc721 == null) {
         _error = Strings.current.walletTokenAddressInvalid;
         return;
       }
+      if (_tokenStore.isErc721Exists(_address)) {
+        _error = Strings.current.walletTokenAddressExists;
+        return;
+      }
+      if (!(await erc721.canSupport())) {
+        _error = Strings.current.nftErc721NotSupport;
+        return;
+      }
+
+      _tokenStore.addErc721Token(erc721);
+      walletContext?.router.pop();
     } catch (e) {
       _error = Strings.current.walletTokenAddressInvalid;
       logger.e(e);

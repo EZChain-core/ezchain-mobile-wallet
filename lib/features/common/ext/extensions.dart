@@ -98,13 +98,13 @@ extension DateTimeExtension on DateTime {
   String formatYMdDateHoursTime() => DateFormat.yMd().add_jm().format(this);
 }
 
-showSnackBar(String text, {int milliseconds = 2500}) {
-  final context = walletContext;
-  if (context == null) return;
-  ScaffoldMessenger.of(context).showSnackBar(
+showSnackBar(String text, {int milliseconds = 2500, BuildContext? context}) {
+  final showContext = context ?? walletContext;
+  if (showContext == null) return;
+  ScaffoldMessenger.of(showContext).showSnackBar(
     SnackBar(
       duration: Duration(milliseconds: milliseconds),
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(showContext).primaryColor,
       content: Text(
         text,
         style: const EZCTitleMediumTextStyle(color: Colors.white),

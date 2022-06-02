@@ -181,6 +181,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Issue collectibles for the families you created. You do not own any families you can mint."),
         "nftErc721ContractAddress":
             MessageLookupByLibrary.simpleMessage("ERC721 Contract Address"),
+        "nftErc721NotSupport": MessageLookupByLibrary.simpleMessage(
+            "This ERC721 Contract does not support the required interfaces."),
         "nftFamilyName": MessageLookupByLibrary.simpleMessage("Family Name"),
         "nftHttps": MessageLookupByLibrary.simpleMessage("https://"),
         "nftImageUrl": MessageLookupByLibrary.simpleMessage("Image URL"),
