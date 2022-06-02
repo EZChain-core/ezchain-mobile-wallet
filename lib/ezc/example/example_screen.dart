@@ -1461,15 +1461,15 @@ class WalletExampleScreen extends StatelessWidget {
 
       logger.i("name = $name, symbol = $symbol");
 
-      if (!(await erc721Data.canSupport())) {
-        logger.i(
-            "This ERC721 Contract does not support the required interfaces.");
-      }
       final address = wallet.getAddressC();
       final tokenIds = await erc721Data.getTokensIds(address);
       for (final tokenId in tokenIds) {
         final res = await erc721Data.getTokenURIMetadata(tokenId);
         logger.i("res = $res");
+      }
+      if (erc721Data.canSupport == false) {
+        logger.i(
+            "This ERC721 Contract does not support the required interfaces.");
       }
     } catch (e) {
       logger.e(e);
@@ -1506,7 +1506,6 @@ class WalletExampleScreen extends StatelessWidget {
           List<Erc721Token>.from(map.map((i) => Erc721Token.fromJson(i)));
       final evmAddress = wallet.getAddressC();
 
-      await Future.wait(cachedErc721Tokens.map((token) => token.canSupport()));
       await Future.wait(cachedErc721Tokens
           .map((token) => token.getAllTokenURIMetadata(evmAddress)));
 

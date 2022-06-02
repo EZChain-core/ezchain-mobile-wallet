@@ -23,13 +23,33 @@ class Erc721Token {
   final ERC721 erc721;
 
   @JsonKey(ignore: true)
-  bool? _canSupport;
+  bool? canSupport;
 
   @JsonKey(ignore: true)
   final cachedURIs = <BigInt, String>{};
 
   @JsonKey(ignore: true)
   final cachedMetadata = <BigInt, Erc721TokenMetadata>{};
+
+  @override
+  bool operator ==(Object other) {
+    if (other is! Erc721Token) return false;
+    return evmChainId == other.evmChainId &&
+        contractAddress == other.contractAddress &&
+        name == other.name &&
+        symbol == other.symbol &&
+        canSupport == other.canSupport &&
+        cachedMetadata == other.cachedMetadata;
+  }
+
+  @override
+  int get hashCode =>
+      evmChainId.hashCode +
+      contractAddress.hashCode +
+      name.hashCode +
+      symbol.hashCode +
+      (canSupport?.hashCode ?? 0) +
+      cachedMetadata.hashCode;
 
   Erc721Token({
     required this.evmChainId,
@@ -49,21 +69,6 @@ class Erc721Token {
     return "evmChainId = $evmChainId, contractAddress = $contractAddress, name = $name, symbol = $symbol, cachedMetadata = ${cachedMetadata.values.toString()}";
   }
 
-  canSupport() async {
-    if (_canSupport != null) return _canSupport;
-    try {
-      final metadata =
-          await erc721.supportsInterface(hexToBytes(erc721MetadataId));
-      final enumerable =
-          await erc721.supportsInterface(hexToBytes(erc721EnumerableId));
-      _canSupport = metadata && enumerable;
-    } catch (e) {
-      _canSupport = false;
-      logger.e(e);
-    }
-    return _canSupport;
-  }
-
   Future<int> getBalance(String address) async {
     try {
       final balance = await erc721.balanceOf(EthereumAddress.fromHex(address));
@@ -75,7 +80,7 @@ class Erc721Token {
   }
 
   Future<List<BigInt>> getTokensIds(String address) async {
-    if (!(await canSupport())) return [];
+    if (!(await _canSupport())) return [];
     final balance = await getBalance(address);
     final tokenIds = <BigInt>[];
     for (var i = 0; i < balance.toInt(); i++) {
@@ -98,7 +103,7 @@ class Erc721Token {
 
   Future<List<String>> getTokenURIs(String address) async {
     final tokenIds = await getTokensIds(address);
-    return await Future.wait(tokenIds.map((tokenId) => getTokenURI(tokenId)));
+    return Future.wait(tokenIds.map((tokenId) => getTokenURI(tokenId)));
   }
 
   Future<Erc721TokenMetadata> getTokenURIMetadata(BigInt tokenId) async {
@@ -109,7 +114,12 @@ class Erc721Token {
     try {
       final uri = Uri.tryParse(uriString);
       if (uri != null && uri.hasAbsolutePath) {
-        final dio = Dio()..interceptors.add(prettyDioLogger);
+        final dio = Dio(BaseOptions(
+          connectTimeout: 3000,
+          receiveTimeout: 3000,
+          sendTimeout: 3000,
+        ))
+          ..interceptors.add(prettyDioLogger);
         final response = (await dio.get(uriString)).data;
         if (response is Map<String, dynamic>) {
           final url = response["image"] ?? response["img"] ?? uriString;
@@ -136,13 +146,27 @@ class Erc721Token {
     String address,
   ) async {
     final tokenIds = await getTokensIds(address);
-    return await Future.wait(
-        tokenIds.map((tokenId) => getTokenURIMetadata(tokenId)));
+    return Future.wait(tokenIds.map((tokenId) => getTokenURIMetadata(tokenId)));
   }
 
   removeTokenId(BigInt tokenId) {
     cachedURIs.remove(tokenId);
     cachedMetadata.remove(tokenId);
+  }
+
+  _canSupport() async {
+    if (canSupport != null) return canSupport;
+    try {
+      final metadata =
+          await erc721.supportsInterface(hexToBytes(erc721MetadataId));
+      final enumerable =
+          await erc721.supportsInterface(hexToBytes(erc721EnumerableId));
+      canSupport = metadata && enumerable;
+    } catch (e) {
+      canSupport = false;
+      logger.e(e);
+    }
+    return canSupport;
   }
 
   static Future<Erc721Token?> getData(
@@ -182,6 +206,18 @@ class Erc721TokenMetadata {
   String? description;
 
   Erc721TokenMetadata({required this.uri, this.name, this.description});
+
+  @override
+  bool operator ==(Object other) {
+    if (other is! Erc721TokenMetadata) return false;
+    return uri == other.uri &&
+        name == other.name &&
+        description == other.description;
+  }
+
+  @override
+  int get hashCode =>
+      uri.hashCode + (name?.hashCode ?? 0) + (description?.hashCode ?? 0);
 
   @override
   String toString() {

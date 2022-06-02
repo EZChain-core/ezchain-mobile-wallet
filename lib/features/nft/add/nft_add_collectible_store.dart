@@ -60,11 +60,6 @@ abstract class _NftAddCollectibleStore with Store {
         _error = Strings.current.walletTokenAddressExists;
         return;
       }
-      if (!(await erc721.canSupport())) {
-        _error = Strings.current.nftErc721NotSupport;
-        return;
-      }
-
       _isLoading = true;
       final added = await _tokenStore.addErc721Token(erc721);
       _isLoading = false;

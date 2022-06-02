@@ -126,10 +126,8 @@ abstract class _TokenStore with Store {
   Future<bool> addErc721Token(Erc721Token erc721) async {
     try {
       if (isErc721Exists(erc721.contractAddress)) return false;
-      await erc721.canSupport();
-      final evmAddress = _wallet.getAddressC();
-      await erc721.getAllTokenURIMetadata(evmAddress);
       _erc721Tokens.add(erc721);
+      _fetchErc721Metadata();
       String json = jsonEncode(_erc721Tokens);
       await storage.write(key: _erc721Key, value: json);
       return true;
@@ -147,19 +145,19 @@ abstract class _TokenStore with Store {
       final map = jsonDecode(json) as List<dynamic>;
       final cachedErc721Tokens =
           List<Erc721Token>.from(map.map((i) => Erc721Token.fromJson(i)));
-
-      await Future.wait(cachedErc721Tokens.map((token) => token.canSupport()));
-
-      final evmAddress = _wallet.getAddressC();
-
-      await Future.wait(cachedErc721Tokens
-          .map((token) => token.getAllTokenURIMetadata(evmAddress)));
-
-      _erc721Tokens.clear();
-      _erc721Tokens.insertAll(0, cachedErc721Tokens);
+      _erc721Tokens = ObservableList.of(cachedErc721Tokens);
+      _fetchErc721Metadata();
     } catch (e) {
       logger.e(e);
     }
+  }
+
+  @action
+  _fetchErc721Metadata() async {
+    final tokens = _erc721Tokens.toList();
+    final evmAddress = _wallet.getAddressC();
+    await Future.wait(tokens.map((e) => e.getAllTokenURIMetadata(evmAddress)));
+    _erc721Tokens = ObservableList.of(tokens);
   }
 
   @action
