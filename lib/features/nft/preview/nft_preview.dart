@@ -77,7 +77,8 @@ class NftPreviewDialog extends StatelessWidget {
                   child: EZCMediumPrimaryButton(
                     width: 100,
                     text: Strings.current.sharedSend,
-                    onPressed: () {
+                    onPressed: () async {
+                      await context.popRoute();
                       context.pushRoute(
                         WalletSendErc721Route(
                           args: WalletSendErc721Args(

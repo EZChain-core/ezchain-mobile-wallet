@@ -163,10 +163,13 @@ abstract class _TokenStore with Store {
   @action
   removeErc721Token(String contractAddress, BigInt tokenId) {
     final erc721 = findErc721(contractAddress);
-    erc721?.removeTokenId(tokenId);
-    final tokens = _erc20Tokens.toList();
-    _erc721Tokens.clear();
-    _erc20Tokens = ObservableList.of(tokens);
+    if (erc721 == null) return;
+    erc721.removeTokenId(tokenId);
+    final index = _erc721Tokens.indexOf(erc721);
+    if (index != -1 ) {
+      _erc721Tokens.remove(erc721);
+      _erc721Tokens.insert(index, erc721);
+    }
   }
 
   @action
