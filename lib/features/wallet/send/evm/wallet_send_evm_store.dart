@@ -20,7 +20,6 @@ import 'package:wallet/features/common/store/token_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
 import 'package:wallet/generated/l10n.dart';
-import 'package:collection/collection.dart';
 
 import 'confirm/wallet_send_evm_confirm.dart';
 
@@ -302,14 +301,14 @@ abstract class _WalletSendEvmStore with Store {
       final fee = isCustomFee ? _customFee : _defaultFee;
       walletContext?.router.push(
         WalletSendEvmConfirmRoute(
-          transactionInfo: WalletSendEvmTransactionViewData(
-            address,
-            gasPriceNumber,
-            gasLimit,
-            amount,
-            fee,
-            symbol,
-            _token,
+          args: WalletSendEvmConfirmArgs(
+            address: address,
+            gwei: gasPriceNumber,
+            gasPrice: gasLimit,
+            amount: amount,
+            fee: fee,
+            symbol: symbol,
+            token: _token,
           ),
         ),
       );

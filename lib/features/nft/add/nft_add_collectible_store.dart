@@ -64,11 +64,9 @@ abstract class _NftAddCollectibleStore with Store {
       final canSupport = erc721.canSupport;
       if (canSupport == null) {
         _error = Strings.current.nftEmptyCollectibles;
-        return;
       }
       if (canSupport == false) {
         _error = Strings.current.nftErc721NotSupport;
-        return;
       }
 
       _isLoading = true;

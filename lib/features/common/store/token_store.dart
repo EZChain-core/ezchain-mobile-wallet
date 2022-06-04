@@ -1,10 +1,9 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
-import 'package:wallet/ezc/wallet/asset/erc721/types.dart';
-import 'package:wallet/features/common/storage/storage.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
@@ -12,12 +11,13 @@ import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
+import 'package:wallet/ezc/wallet/asset/erc721/types.dart';
 import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/network/utils.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
+import 'package:wallet/features/common/storage/storage.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:collection/collection.dart';
 
 part 'token_store.g.dart';
 
@@ -164,6 +164,9 @@ abstract class _TokenStore with Store {
   removeErc721Token(String contractAddress, BigInt tokenId) {
     final erc721 = findErc721(contractAddress);
     erc721?.removeTokenId(tokenId);
+    final tokens = _erc20Tokens.toList();
+    _erc721Tokens.clear();
+    _erc20Tokens = ObservableList.of(tokens);
   }
 
   @action

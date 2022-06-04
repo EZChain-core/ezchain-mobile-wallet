@@ -12,6 +12,7 @@ import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/common/ext/extensions.dart';
 import 'package:wallet/features/common/route/router.dart';
 import 'package:wallet/features/common/route/router.gr.dart';
+import 'package:wallet/features/common/store/token_store.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
 import 'package:wallet/features/wallet/send/erc721/wallet_send_erc721.dart';
 import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.dart';
@@ -24,6 +25,7 @@ class WalletSendErc721Store = _WalletSendErc721Store
 
 abstract class _WalletSendErc721Store with Store {
   final _walletFactory = getIt<WalletFactory>();
+  final _tokenStore = getIt<TokenStore>();
 
   WalletProvider get _wallet => _walletFactory.activeWallet;
 
@@ -114,18 +116,20 @@ abstract class _WalletSendErc721Store with Store {
         _args.tokenId,
       );
 
-      _args.erc721.removeTokenId(_args.tokenId); //todo work?
+      _tokenStore.removeErc721Token(
+          _args.erc721.contractAddress, _args.tokenId);
       _isLoading = false;
 
       walletContext?.router.push(
         WalletSendEvmConfirmRoute(
-          transactionInfo: WalletSendEvmTransactionViewData(
-            address,
-            _gasPriceNumber,
-            _gasLimit,
-            Decimal.zero,
-            _fee,
-            _args.title,
+          args: WalletSendEvmConfirmArgs(
+            address: address,
+            gwei: _gasPriceNumber,
+            gasPrice: _gasLimit,
+            amount: Decimal.one,
+            fee: _fee,
+            symbol: _args.title,
+            erc721: _args,
           ),
         ),
       );
