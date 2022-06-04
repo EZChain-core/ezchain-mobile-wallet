@@ -1,9 +1,8 @@
+// ignore: implementation_imports
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:wallet/features/nft/collectible/nft_collectible_item.dart';
 import 'package:wallet/features/nft/family/nft_family_item.dart';
 import 'package:wallet/features/nft/nft_store.dart';
 import 'package:wallet/generated/assets.gen.dart';
@@ -14,8 +13,6 @@ import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
 class NftSelectDialog extends StatelessWidget {
-  // final ObservableList<NftCollectibleItem> pickedNft;
-
   NftSelectDialog({Key? key}) : super(key: key);
 
   final _nftStore = NftStore();

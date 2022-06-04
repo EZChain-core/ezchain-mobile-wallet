@@ -53,7 +53,7 @@ abstract class _WalletSendAvmStore with Store {
   Decimal get total => (amount + _fee) * (avaxPrice ?? Decimal.zero);
 
   @readonly
-  ObservableList<NftCollectibleItem> _nft = ObservableList.of([]);
+  ObservableList<NftAvmCollectibleItem> _nft = ObservableList.of([]);
 
   get maxAmount {
     final max = balanceX - _fee;
@@ -106,7 +106,7 @@ abstract class _WalletSendAvmStore with Store {
   @action
   onPickNft() async {
     if (walletContext != null) {
-      NftCollectibleItem nftPicked = await showDialog(
+      NftAvmCollectibleItem nftPicked = await showDialog(
         context: walletContext!,
         builder: (_) => NftSelectDialog(),
       );

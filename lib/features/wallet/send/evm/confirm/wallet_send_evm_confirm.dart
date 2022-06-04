@@ -137,6 +137,6 @@ class WalletSendEvmTransactionViewData {
     this.amount,
     this.fee,
     this.symbol,
-    this.token,
+    [this.token]
   );
 }

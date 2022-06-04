@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/nft/collectible/nft_collectible_item.dart';
+import 'package:wallet/features/nft/collectible/nft_payload_type.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/inputs.dart';
@@ -11,7 +12,7 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
 class WalletSendAvmNftItemWidget extends StatefulWidget {
-  final NftCollectibleItem item;
+  final NftAvmCollectibleItem item;
   final Function(NftCollectibleItem) onDeleteNft;
 
   const WalletSendAvmNftItemWidget(

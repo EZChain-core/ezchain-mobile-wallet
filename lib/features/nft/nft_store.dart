@@ -7,6 +7,8 @@ import 'package:wallet/features/common/store/token_store.dart';
 import 'package:wallet/features/nft/collectible/nft_collectible_item.dart';
 import 'package:wallet/features/nft/family/nft_family_item.dart';
 
+import 'collectible/nft_payload_type.dart';
+
 part 'nft_store.g.dart';
 
 class NftStore = _NftStore with _$NftStore;
@@ -59,14 +61,15 @@ abstract class _NftStore with Store {
                 url = genericNft?.img;
               }
               collectibles.add(
-                NftCollectibleItem(
-                    groupId,
-                    nftCollectible.groupIdNFTUTXOsDict,
-                    nftCollectible.groupIdNFTUTXOsDict[groupId]?.length ?? 0,
-                    getNftPayloadType(payloadTypeName),
-                    title,
-                    url,
-                    payloadContent),
+                NftAvmCollectibleItem(
+                  getNftPayloadType(payloadTypeName),
+                  title,
+                  url,
+                  payloadContent,
+                  groupId,
+                  nftCollectible.groupIdNFTUTXOsDict,
+                  nftCollectible.groupIdNFTUTXOsDict[groupId]?.length ?? 0,
+                ),
               );
             });
             return NftFamilyItem(
@@ -88,8 +91,14 @@ abstract class _NftStore with Store {
             List<NftCollectibleItem> collectibles = [];
             nftCollectible.cachedMetadata.forEach((key, value) {
               collectibles.add(
-                NftCollectibleItem(0, {}, 1, NftPayloadType.json, value.name,
-                    value.uri, value.description),
+                NftErc721CollectibleItem(
+                  NftPayloadType.json,
+                  value.name,
+                  value.uri,
+                  value.description,
+                  key,
+                  nftCollectible
+                ),
               );
             });
 

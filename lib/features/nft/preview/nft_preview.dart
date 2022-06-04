@@ -3,17 +3,21 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/common/route/router.gr.dart';
+import 'package:wallet/features/nft/collectible/nft_collectible_item.dart';
+import 'package:wallet/features/wallet/send/erc721/wallet_send_erc721.dart';
 import 'package:wallet/generated/assets.gen.dart';
+import 'package:wallet/generated/l10n.dart';
+import 'package:wallet/themes/buttons.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
 
 class NftPreviewDialog extends StatelessWidget {
-  final String? url;
-  final String? payload;
+  final NftPreviewArgs args;
 
-  const NftPreviewDialog({Key? key, this.url, this.payload}) : super(key: key);
+  const NftPreviewDialog({Key? key, required this.args}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +37,11 @@ class NftPreviewDialog extends StatelessWidget {
                 },
                 child: Assets.icons.icCloseCircleOutlinePrimary.svg(),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 8),
               ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 child: CachedNetworkImage(
-                  imageUrl: url ?? '',
+                  imageUrl: args.nft.url ?? '',
                   placeholder: (context, url) => Align(
                     alignment: Alignment.center,
                     child: Padding(
@@ -59,17 +63,47 @@ class NftPreviewDialog extends StatelessWidget {
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
                     ),
                     child: Text(
-                      payload ?? '',
+                      args.nft.payload ?? '',
                       style: EZCBodyMediumTextStyle(
                           color: provider.themeMode.text70),
                     ),
                   ),
                 ),
               ),
+              if (args.isErc721Nft) ...[
+                const SizedBox(height: 32),
+                Align(
+                  alignment: Alignment.center,
+                  child: EZCMediumPrimaryButton(
+                    width: 100,
+                    text: Strings.current.sharedSend,
+                    onPressed: () {
+                      context.pushRoute(
+                        WalletSendErc721Route(
+                          args: WalletSendErc721Args(
+                            args.erc721.erc721,
+                            args.erc721.tokenId,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ],
           ),
         ),
       ),
     );
   }
+}
+
+class NftPreviewArgs {
+  final NftCollectibleItem nft;
+
+  NftPreviewArgs(this.nft);
+
+  bool get isErc721Nft => nft is NftErc721CollectibleItem;
+
+  NftErc721CollectibleItem get erc721 => nft as NftErc721CollectibleItem;
 }
