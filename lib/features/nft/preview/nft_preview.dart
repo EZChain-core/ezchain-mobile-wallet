@@ -41,7 +41,7 @@ class NftPreviewDialog extends StatelessWidget {
               ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 child: CachedNetworkImage(
-                  imageUrl: args.nft.url ?? '',
+                  imageUrl: args.textWhenUrlLoadedError,
                   placeholder: (context, url) => Align(
                     alignment: Alignment.center,
                     child: Padding(
@@ -105,6 +105,14 @@ class NftPreviewArgs {
   NftPreviewArgs(this.nft);
 
   bool get isErc721Nft => nft is NftErc721CollectibleItem;
+
+  String get textWhenUrlLoadedError {
+    if (isErc721Nft) {
+      return nft.url ?? '';
+    } else {
+      return nft.payload ?? '';
+    }
+  }
 
   NftErc721CollectibleItem get erc721 => nft as NftErc721CollectibleItem;
 }
