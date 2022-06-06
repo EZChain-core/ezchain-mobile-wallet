@@ -34,10 +34,9 @@ import 'package:wallet/features/transaction/detail_c/transaction_c_detail.dart';
 import 'package:wallet/features/transaction/token/transactions_token.dart';
 import 'package:wallet/features/transaction/transactions.dart';
 import 'package:wallet/features/wallet/receive/wallet_receive.dart';
-import 'package:wallet/features/wallet/send/ant/confirm/wallet_send_ant_confirm.dart';
-import 'package:wallet/features/wallet/send/ant/wallet_send_ant.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm.dart';
 import 'package:wallet/features/wallet/send/avm/wallet_send_avm.dart';
+import 'package:wallet/features/wallet/send/erc721/wallet_send_erc721.dart';
 import 'package:wallet/features/wallet/send/evm/confirm/wallet_send_evm_confirm.dart';
 import 'package:wallet/features/wallet/send/evm/wallet_send_evm.dart';
 import 'package:wallet/features/wallet/token/add/wallet_token_add.dart';
@@ -66,10 +65,8 @@ import 'package:wallet/features/wallet/token/add_confirm/wallet_token_add_confir
     AutoRoute(page: WalletReceiveScreen),
     AutoRoute(page: WalletSendAvmScreen),
     AutoRoute(page: WalletSendAvmConfirmScreen),
-    AutoRoute(page: WalletSendAntScreen),
-    AutoRoute(page: WalletSendAntConfirmScreen),
     AutoRoute(page: WalletSendEvmScreen),
-    AutoRoute(page: WalletSendEvmScreen),
+    AutoRoute(page: WalletSendErc721Screen),
     AutoRoute(page: WalletSendEvmConfirmScreen),
     AutoRoute(page: WalletTokenAddScreen),
     AutoRoute(page: WalletTokenAddConfirmScreen),
@@ -122,7 +119,6 @@ class StatusBarRouterObserver extends AutoRouterObserver {
             routeName == WalletTokenAddRoute.name ||
             routeName == WalletSendEvmRoute.name ||
             routeName == WalletReceiveRoute.name ||
-            routeName == WalletSendAntRoute.name ||
             routeName == WalletSendAvmRoute.name ||
             routeName == WalletTokenAddConfirmRoute.name) {
           _routeChanged(WalletRoute.name);

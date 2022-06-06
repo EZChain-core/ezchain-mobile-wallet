@@ -260,6 +260,12 @@
   "nftPayload": "Payload (MAX 1024 characters)",
   "nftJsonPayload": "JSON Payload (MAX 1024 characters)",
   "nftSearchHint": "Search Assets",
+  "nftAddCollectible": "Add Collectible",
+  "nftAddCollectibles": "Add Collectibles",
+  "nftCollectibleName": "Collectible Name",
+  "nftCollectibleSymbol": "Collectible Symbol",
+  "nftErc721ContractAddress": "ERC721 Contract Address",
+  "nftErc721NotSupport": "This ERC721 Contract does not support the required interfaces.",
   "nftEmptyCollectibles": "Issue collectibles for the families you created. You do not own any families you can mint.",
   "internet_connection_disconnected": "You are currently offline.",
   "internet_connection_connected": "Your internet connection was restored."

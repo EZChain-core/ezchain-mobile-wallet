@@ -190,9 +190,10 @@ abstract class _WalletSendEvmStore with Store {
       _confirmCustomFeeSuccess = true;
       return;
     }
-    if (_token != null) {
+    final erc20Token = _tokenStore.findErc20(_token!.id);
+    if (erc20Token != null) {
       _gasLimit = await _wallet.estimateErc20Gas(
-        _token!.id,
+        erc20Token,
         address,
         amountBN,
       );
@@ -267,13 +268,15 @@ abstract class _WalletSendEvmStore with Store {
       _isDefaultFeeLoading = true;
     }
     try {
-      if (_token != null) {
+      final erc20Token = _tokenStore.findErc20(_token!.id);
+
+      if (erc20Token != null) {
         await _wallet.sendErc20(
+          erc20Token,
           address,
           amountBN,
           gasPrice,
           gasLimit.toInt(),
-          _token!.id,
           nonce: nonceValue,
         );
         _tokenStore.updateErc20Balance();
@@ -298,14 +301,14 @@ abstract class _WalletSendEvmStore with Store {
       final fee = isCustomFee ? _customFee : _defaultFee;
       walletContext?.router.push(
         WalletSendEvmConfirmRoute(
-          transactionInfo: WalletSendEvmTransactionViewData(
-            address,
-            gasPriceNumber,
-            gasLimit,
-            amount,
-            fee,
-            symbol,
-            _token,
+          args: WalletSendEvmConfirmArgs(
+            address: address,
+            gwei: gasPriceNumber,
+            gasPrice: gasLimit,
+            amount: amount,
+            fee: fee,
+            symbol: symbol,
+            token: _token,
           ),
         ),
       );

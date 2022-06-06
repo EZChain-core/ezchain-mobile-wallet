@@ -11,10 +11,10 @@ import 'package:wallet/ezc/sdk/common/output.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/wallet/asset/erc20/erc20.dart';
+import 'package:wallet/ezc/wallet/asset/erc721/erc721.dart';
 import 'package:wallet/ezc/wallet/network/helpers/id_from_alias.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/types.dart';
-import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 Future<int> getEvmTransactionCount(
@@ -69,81 +69,105 @@ Future<Transaction> buildCustomEvmTx(
   String to,
   BigInt amount,
   BigInt gasPrice,
-  int gasLimit, {
-  String? data,
+  int gasLimit,
+  Uint8List data, {
   int? nonce,
 }) async {
   final etherFromAddress = EthereumAddress.fromHex(from);
-  nonce ??= await web3Client.getTransactionCount(
-    etherFromAddress,
-    atBlock: const BlockNum.pending(),
-  );
-  Uint8List? dataBytes;
-  if (data != null) {
-    hexToBytes(data);
-  }
   return Transaction(
     from: etherFromAddress,
     to: EthereumAddress.fromHex(to),
     maxGas: gasLimit,
     gasPrice: EtherAmount.fromUnitAndValue(EtherUnit.wei, gasPrice),
     nonce: nonce,
-    data: dataBytes,
+    data: data,
     value: EtherAmount.fromUnitAndValue(EtherUnit.wei, amount),
   );
 }
 
 Future<Transaction> buildEvmTransferErc20Tx(
+  ERC20 erc20,
   String evmPrivateKey,
   String from,
   String to,
   BigInt amount,
   BigInt gasPrice,
-  int gasLimit,
-  String contractAddress, {
+  int gasLimit, {
   int? nonce,
 }) async {
-  final erc20 = ERC20(
-    address: EthereumAddress.fromHex(contractAddress),
-    client: web3Client,
-  );
-  final credentials = EthPrivateKey.fromHex(evmPrivateKey);
-  final tokenTx = await erc20.transfer(
-    EthereumAddress.fromHex(to),
-    amount,
-    credentials: credentials,
-  );
+  final method = erc20.self.function('transfer');
   return await buildCustomEvmTx(
     from,
     to,
     amount,
     gasPrice,
     gasLimit,
-    data: tokenTx,
+    method.encodeCall([EthereumAddress.fromHex(to), amount]),
     nonce: nonce,
   );
 }
 
 Future<BigInt> estimateErc20Gas(
-  String contractAddress,
+  ERC20 erc20,
   String from,
   String to,
   BigInt amount,
 ) async {
   try {
-    final erc20 = ERC20(
-      address: EthereumAddress.fromHex(contractAddress),
-      client: web3Client,
-    );
+    final contractAddress = erc20.self.address;
     final method = erc20.self.function('transfer');
 
-    final gas = await web3Client.estimateGas(
+    return await web3Client.estimateGas(
       sender: EthereumAddress.fromHex(from),
-      to: EthereumAddress.fromHex(contractAddress),
+      to: contractAddress,
       data: method.encodeCall([EthereumAddress.fromHex(to), amount]),
     );
+  } catch (e) {
+    return BigInt.from(31000);
+  }
+}
 
-    return BigInt.from(gas.toDouble() * 1.1);
+Future<Transaction> buildEvmTransferErc721Tx(
+  ERC721 erc721,
+  String from,
+  String to,
+  BigInt gasPrice,
+  int gasLimit,
+  BigInt tokenId, {
+  int? nonce,
+}) async {
+  final contractAddress = erc721.self.address;
+  final fromEther = EthereumAddress.fromHex(from);
+  final toEther = EthereumAddress.fromHex(to);
+  final method = erc721.self.functions.singleWhere((function) =>
+      function.encodeName() == 'safeTransferFrom(address,address,uint256)');
+  return Transaction(
+    from: fromEther,
+    to: contractAddress,
+    maxGas: gasLimit,
+    gasPrice: EtherAmount.fromUnitAndValue(EtherUnit.wei, gasPrice),
+    nonce: nonce,
+    data: method.encodeCall([fromEther, toEther, tokenId]),
+  );
+}
+
+Future<BigInt> estimateErc721TransferGas(
+  ERC721 erc721,
+  String from,
+  String to,
+  BigInt tokenId,
+) async {
+  try {
+    final contractAddress = erc721.self.address;
+    final method = erc721.self.functions.singleWhere((function) =>
+        function.encodeName() == 'safeTransferFrom(address,address,uint256)');
+    final fromEther = EthereumAddress.fromHex(from);
+    final toEther = EthereumAddress.fromHex(to);
+    return await web3Client.estimateGas(
+      sender: fromEther,
+      to: contractAddress,
+      data: method.encodeCall([fromEther, toEther, tokenId]),
+    );
   } catch (e) {
     return BigInt.from(31000);
   }

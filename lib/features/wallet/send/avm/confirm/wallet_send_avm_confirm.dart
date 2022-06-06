@@ -9,6 +9,7 @@ import 'package:wallet/features/auth/pin/verify/pin_code_verify.dart';
 import 'package:wallet/features/common/constant/wallet_constant.dart';
 import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/nft/collectible/nft_collectible_item.dart';
+import 'package:wallet/features/nft/collectible/nft_payload_type.dart';
 import 'package:wallet/features/wallet/send/avm/confirm/wallet_send_avm_confirm_store.dart';
 import 'package:wallet/features/wallet/send/widgets/wallet_send_widgets.dart';
 import 'package:wallet/features/wallet/token/wallet_token_item.dart';
@@ -195,7 +196,7 @@ class WalletSendAvmConfirmArgs {
   final Decimal fee;
   final Decimal total;
   final WalletTokenItem? token;
-  final List<NftCollectibleItem> nft;
+  final List<NftAvmCollectibleItem> nft;
 
   WalletSendAvmConfirmArgs(
       this.address, this.memo, this.amount, this.fee, this.total,
@@ -209,7 +210,7 @@ class WalletSendAvmConfirmArgs {
 }
 
 class _NftWidget extends StatelessWidget {
-  final NftCollectibleItem item;
+  final NftAvmCollectibleItem item;
 
   const _NftWidget({Key? key, required this.item}) : super(key: key);
 

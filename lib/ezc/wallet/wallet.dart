@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:eventify/eventify.dart';
-import 'package:wallet/ezc/sdk/apis/avm/base_tx.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart' as avm_constants;
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
 import 'package:wallet/ezc/sdk/apis/avm/tx.dart';
@@ -22,6 +21,7 @@ import 'package:wallet/ezc/sdk/utils/helper_functions.dart';
 import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/wallet/asset/assets.dart';
 import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
+import 'package:wallet/ezc/wallet/asset/erc721/types.dart';
 import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/ezc/wallet/evm_wallet.dart';
 import 'package:wallet/ezc/wallet/explorer/cchain/requests.dart'
@@ -601,40 +601,31 @@ abstract class WalletProvider {
   /// @param [amount] Amount of the ERC20 token to send, donated in the token's correct denomination.
   /// @param [gasPrice] Gas price in WEI format
   /// @param [gasLimit] Gas limit
-  /// @param [contractAddress] Contract address of the ERC20 token
   /// @param [nonce] is Transaction count
   Future<String> sendErc20(
+    Erc20Token erc20Token,
     String to,
     BigInt amount,
     BigInt gasPrice,
-    int gasLimit,
-    String contractAddress, {
+    int gasLimit, {
     int? nonce,
   }) async {
     final from = getAddressC();
-    final token = await Erc20TokenData.getData(
-      contractAddress,
-      web3Client,
-      getEvmChainId(),
-    );
-    if (token == null) {
-      throw Exception("Invalid contract address.");
-    }
     final evmPrivateKey = evmWallet.getPrivateKeyHex();
-    final balOld = await token.getBalance(from, web3Client);
+    final balOld = await erc20Token.getBalance(from);
     final tx = await tx_hepler.buildEvmTransferErc20Tx(
+      erc20Token.erc20,
       evmPrivateKey,
       from,
       to,
       amount,
       gasPrice,
       gasLimit,
-      contractAddress,
       nonce: nonce,
     );
     final txHash = await issueEvmTx(tx);
 
-    final balNew = await token.getBalance(from, web3Client);
+    final balNew = await erc20Token.getBalance(from);
     if (balOld != balNew) {
       emitBalanceChangeC();
     }
@@ -643,16 +634,54 @@ abstract class WalletProvider {
   }
 
   Future<BigInt> estimateErc20Gas(
-    String contractAddress,
+    Erc20Token erc20Token,
     String to,
     BigInt amount,
   ) async {
     final from = getAddressC();
     return await tx_hepler.estimateErc20Gas(
-      contractAddress,
+      erc20Token.erc20,
       from,
       to,
       amount,
+    );
+  }
+
+  /// Makes a `safeTransferFrom` call on a ERC721 contract.
+  /// @param to Hex address to transfer the NFT to.
+  /// @param tokenID ID of the token to transfer inside the ERC71 family.
+  /// @param gasPrice Gas price in WEI format
+  /// @param gasLimit Gas limit
+  /// @param contractAddress Contract address of the ERC721 token
+  Future<String> sendErc721(
+    Erc721Token erc721token,
+    String to,
+    BigInt gasPrice,
+    int gasLimit,
+    BigInt tokenId,
+  ) async {
+    final tx = await tx_hepler.buildEvmTransferErc721Tx(
+      erc721token.erc721,
+      getAddressC(),
+      to,
+      gasPrice,
+      gasLimit,
+      tokenId,
+    );
+    return await issueEvmTx(tx);
+  }
+
+  Future<BigInt> estimateErc721TransferGas(
+    Erc721Token erc721token,
+    String to,
+    BigInt tokenId,
+  ) async {
+    final from = getAddressC();
+    return await tx_hepler.estimateErc721TransferGas(
+      erc721token.erc721,
+      from,
+      to,
+      tokenId,
     );
   }
 

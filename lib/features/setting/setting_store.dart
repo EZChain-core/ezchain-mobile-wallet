@@ -61,6 +61,7 @@ abstract class _SettingStore with Store {
     _balanceStore.init();
     _priceStore.updatePrice();
     _tokenStore.getErc20Tokens();
+    _tokenStore.getErc721Tokens();
     _validatorsStore.fetch();
   }
 

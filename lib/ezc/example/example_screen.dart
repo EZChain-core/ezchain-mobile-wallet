@@ -9,6 +9,7 @@ import 'package:eventify/eventify.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wallet/common/logger.dart';
+import 'package:wallet/ezc/wallet/asset/erc721/types.dart';
 import 'package:wallet/features/common/storage/storage.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
@@ -36,6 +37,7 @@ import 'package:wallet/ezc/wallet/types.dart';
 import 'package:wallet/ezc/wallet/utils/fee_utils.dart';
 import 'package:wallet/ezc/wallet/utils/number_utils.dart';
 import 'package:wallet/ezc/wallet/utils/utils.dart';
+import 'package:web3dart/web3dart.dart';
 
 class WalletExampleScreen extends StatelessWidget {
   final SingletonWallet wallet;
@@ -58,7 +60,7 @@ class WalletExampleScreen extends StatelessWidget {
             child: ElevatedButton(
               child: const Text("Test"),
               onPressed: () {
-                mintNFT();
+                getErc721Tokens();
               },
             ),
           ),
@@ -107,6 +109,7 @@ class WalletExampleScreen extends StatelessWidget {
   }
 
   initWallet() {
+    setRpcNetwork(testnetConfig);
     wallet.on(WalletEventType.balanceChangedX, _handleCallback);
     wallet.on(WalletEventType.balanceChangedP, _handleCallback);
     wallet.on(WalletEventType.balanceChangedC, _handleCallback);
@@ -1332,8 +1335,8 @@ class WalletExampleScreen extends StatelessWidget {
   }
 
   addErc20() async {
-    const contractAddress = "0x2f5b4CC31b736456dd331e40B202ED70100508F7";
-    final erc20TokenData = await Erc20TokenData.getData(
+    const contractAddress = "0xE9cD92d3De1FB47a76f00e1E404ec6a577428938";
+    final erc20TokenData = await Erc20Token.getData(
       contractAddress,
       web3Client,
       getEvmChainId(),
@@ -1344,30 +1347,27 @@ class WalletExampleScreen extends StatelessWidget {
       return;
     }
 
-    await erc20TokenData.getBalance(
-      wallet.getAddressC(),
-      web3Client,
-    );
+    await erc20TokenData.getBalance(wallet.getAddressC());
     logger.i(
         "name = ${erc20TokenData.name}, symbol = ${erc20TokenData.symbol}, decimals = ${erc20TokenData.decimals}, balance = ${erc20TokenData.balance}");
   }
 
   getErc20Tokens() async {
-    final token1 = await Erc20TokenData.getData(
+    final token1 = await Erc20Token.getData(
       "0x719191e8849EBFe2821525EBAc669c118ed08C1b",
       web3Client,
       getEvmChainId(),
     );
 
-    final token2 = await Erc20TokenData.getData(
+    final token2 = await Erc20Token.getData(
       "0x2f5b4CC31b736456dd331e40B202ED70100508F7",
       web3Client,
       getEvmChainId(),
     );
 
-    final erc20Tokens = <Erc20TokenData>[token1!, token2!];
+    final erc20Tokens = <Erc20Token>[token1!, token2!];
 
-    final key = "${wallet.getAddressX()}_${getEvmChainId()}";
+    final key = "${wallet.getAddressC()}_${getEvmChainId()}_ERC20_TOKENS";
 
     try {
       String json = jsonEncode(erc20Tokens);
@@ -1383,10 +1383,10 @@ class WalletExampleScreen extends StatelessWidget {
       if (json == null || json.isEmpty) return;
       final map = jsonDecode(json) as List<dynamic>;
       final cachedErc20Tokens =
-          List<Erc20TokenData>.from(map.map((i) => Erc20TokenData.fromJson(i)));
+          List<Erc20Token>.from(map.map((i) => Erc20Token.fromJson(i)));
       final evmAddress = wallet.getAddressC();
-      await Future.wait(cachedErc20Tokens
-          .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
+      await Future.wait(
+          cachedErc20Tokens.map((erc20) => erc20.getBalance(evmAddress)));
       logger.i(cachedErc20Tokens);
     } catch (e) {
       logger.e(e);
@@ -1395,8 +1395,8 @@ class WalletExampleScreen extends StatelessWidget {
 
   sendErc20() async {
     try {
-      const contractAddress = "0x719191e8849EBFe2821525EBAc669c118ed08C1b";
-      final token = await Erc20TokenData.getData(
+      const contractAddress = "0xE9cD92d3De1FB47a76f00e1E404ec6a577428938";
+      final token = await Erc20Token.getData(
         contractAddress,
         web3Client,
         getEvmChainId(),
@@ -1421,7 +1421,7 @@ class WalletExampleScreen extends StatelessWidget {
 
       BigInt gasLimit = BigInt.from(31000);
       try {
-        gasLimit = await wallet.estimateErc20Gas(contractAddress, to, amountBN);
+        gasLimit = await wallet.estimateErc20Gas(token, to, amountBN);
       } catch (e) {
         logger.e(e);
       }
@@ -1430,13 +1430,135 @@ class WalletExampleScreen extends StatelessWidget {
       final nonce = await wallet.getEvmTransactionCount(wallet.getAddressC());
 
       final txHash = await wallet.sendErc20(
+        token,
         to,
         amountBN,
         gasPrice,
         gasLimit.toInt(),
-        contractAddress,
         nonce: nonce,
       );
+      logger.i("txHash = $txHash");
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  addErc721() async {
+    try {
+      const contractAddress = "0x87FcF17c2537Fda88FeA7E7971237Cf5af8f1FFc";
+
+      final erc721Data = await Erc721Token.getData(
+        contractAddress,
+        web3Client,
+        getEvmChainId(),
+      );
+      if (erc721Data == null) {
+        logger.e("Invalid contract address.");
+        return;
+      }
+      final name = erc721Data.name;
+      final symbol = erc721Data.symbol;
+
+      logger.i("name = $name, symbol = $symbol");
+
+      final address = wallet.getAddressC();
+      final tokenIds = await erc721Data.getTokensIds(address);
+      for (final tokenId in tokenIds) {
+        final res = await erc721Data.getTokenURIMetadata(tokenId);
+        logger.i("res = $res");
+      }
+      if (erc721Data.canSupport == false) {
+        logger.i(
+            "This ERC721 Contract does not support the required interfaces.");
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  getErc721Tokens() async {
+    const contractAddress = "0x87FcF17c2537Fda88FeA7E7971237Cf5af8f1FFc";
+
+    final token1 = await Erc721Token.getData(
+      contractAddress,
+      web3Client,
+      getEvmChainId(),
+    );
+
+    final erc721Tokens = <Erc721Token>[token1!, token1, token1];
+
+    final key = "${wallet.getAddressC()}_${getEvmChainId()}_ERC721_TOKENS";
+
+    try {
+      String json = jsonEncode(erc721Tokens);
+      await storage.write(key: key, value: json);
+    } catch (e) {
+      logger.e(e);
+      return;
+    }
+
+    try {
+      final json = await storage.read(key: key);
+      logger.i("read = $json");
+      if (json == null || json.isEmpty) return;
+      final map = jsonDecode(json) as List<dynamic>;
+      final cachedErc721Tokens =
+          List<Erc721Token>.from(map.map((i) => Erc721Token.fromJson(i)));
+      final evmAddress = wallet.getAddressC();
+
+      await Future.wait(cachedErc721Tokens
+          .map((token) => token.getAllTokenURIMetadata(evmAddress)));
+
+      logger.i(cachedErc721Tokens);
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  sendErc721() async {
+    try {
+      // https://testnet-cchain-explorer.ezchain.com/address/0x87FcF17c2537Fda88FeA7E7971237Cf5af8f1FFc/write-contract
+      // 0xa72a690fe37ddaf9a10c5bd83db772a25b35e7b6
+      // 0xa54e5baeb3d3b2ef1c7748a5511482bfe6291132
+
+      const to = "0xA54e5baeb3d3B2eF1C7748A5511482BfE6291132";
+      assert(validateAddressEvm(to));
+
+      const contractAddress = "0x87FcF17c2537Fda88FeA7E7971237Cf5af8f1FFc";
+
+      final erc721Data = await Erc721Token.getData(
+        contractAddress,
+        web3Client,
+        getEvmChainId(),
+      );
+
+      if (erc721Data == null) return;
+
+      final tokenId = BigInt.from(233);
+
+      BigInt gasPrice = await getAdjustedGasPrice();
+
+      final gasPriceNumber =
+          int.tryParse(gasPrice.toDecimalAvaxX().toStringAsFixed(0)) ?? 0;
+      logger.i("gasPrice = $gasPriceNumber");
+
+      BigInt gasLimit = await wallet.estimateErc721TransferGas(
+        erc721Data,
+        to,
+        tokenId,
+      );
+
+      logger.i("gasLimit = $gasLimit");
+
+      final txHash = await wallet.sendErc721(
+        erc721Data,
+        to,
+        gasPrice,
+        gasLimit.toInt(),
+        tokenId,
+      );
+
+      erc721Data.removeTokenId(tokenId);
       logger.i("txHash = $txHash");
     } catch (e) {
       logger.e(e);

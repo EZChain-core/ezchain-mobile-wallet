@@ -124,7 +124,7 @@ class WalletTokenAddConfirmScreen extends StatelessWidget {
 }
 
 class WalletTokenAddConfirmArgs {
-  final Erc20TokenData token;
+  final Erc20Token token;
 
   WalletTokenAddConfirmArgs(this.token);
 

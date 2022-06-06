@@ -2676,6 +2676,66 @@ class Strings {
     );
   }
 
+  /// `Add Collectible`
+  String get nftAddCollectible {
+    return Intl.message(
+      'Add Collectible',
+      name: 'nftAddCollectible',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Collectibles`
+  String get nftAddCollectibles {
+    return Intl.message(
+      'Add Collectibles',
+      name: 'nftAddCollectibles',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Collectible Name`
+  String get nftCollectibleName {
+    return Intl.message(
+      'Collectible Name',
+      name: 'nftCollectibleName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Collectible Symbol`
+  String get nftCollectibleSymbol {
+    return Intl.message(
+      'Collectible Symbol',
+      name: 'nftCollectibleSymbol',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ERC721 Contract Address`
+  String get nftErc721ContractAddress {
+    return Intl.message(
+      'ERC721 Contract Address',
+      name: 'nftErc721ContractAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This ERC721 Contract does not support the required interfaces.`
+  String get nftErc721NotSupport {
+    return Intl.message(
+      'This ERC721 Contract does not support the required interfaces.',
+      name: 'nftErc721NotSupport',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Issue collectibles for the families you created. You do not own any families you can mint.`
   String get nftEmptyCollectibles {
     return Intl.message(

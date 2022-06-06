@@ -3,6 +3,7 @@ import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:wallet/features/common/route/router.dart';
 import 'package:wallet/features/common/route/router.gr.dart';
 import 'package:wallet/features/nft/family/nft_family_item.dart';
 import 'package:wallet/features/nft/nft_store.dart';
@@ -14,6 +15,8 @@ import 'package:wallet/themes/inputs.dart';
 import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 import 'package:wallet/themes/widgets.dart';
+
+import 'add/nft_add_collectible.dart';
 
 class NftScreen extends StatelessWidget {
   NftScreen({Key? key}) : super(key: key);
@@ -111,20 +114,40 @@ class _NftHeader extends StatelessWidget {
                     text: Strings.current.nftNewFamily,
                     enabled: true,
                     onPressed: () {
-                      context.pushRoute(NftFamilyCreateRoute());
+                      context.pushRoute(const NftFamilyCreateRoute());
                     },
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 16),
-            Text(
-              Strings.current.nftCollectibles,
-              style: EZCHeadlineSmallTextStyle(color: provider.themeMode.text),
-            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  Strings.current.nftCollectibles,
+                  style:
+                      EZCHeadlineSmallTextStyle(color: provider.themeMode.text),
+                ),
+                EZCMediumPrimaryOutlineButton(
+                  height: 28,
+                  text: Strings.current.nftAddCollectible,
+                  onPressed: _onClickAddCollectible,
+                ),
+              ],
+            )
           ],
         ),
       ),
+    );
+  }
+
+  _onClickAddCollectible() {
+    final context = walletContext;
+    if (context == null) return;
+    showDialog(
+      context: context,
+      builder: (_) => NftAddCollectibleDialog(),
     );
   }
 }

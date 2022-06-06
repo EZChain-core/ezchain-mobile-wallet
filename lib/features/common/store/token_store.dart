@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mobx/mobx.dart';
 import 'package:wallet/common/logger.dart';
-import 'package:wallet/features/common/storage/storage.dart';
 import 'package:wallet/di/di.dart';
 import 'package:wallet/ezc/sdk/apis/avm/constants.dart';
 import 'package:wallet/ezc/sdk/apis/avm/outputs.dart';
@@ -11,12 +11,13 @@ import 'package:wallet/ezc/sdk/apis/avm/utxos.dart';
 import 'package:wallet/ezc/sdk/utils/bintools.dart';
 import 'package:wallet/ezc/sdk/utils/payload.dart';
 import 'package:wallet/ezc/wallet/asset/erc20/types.dart';
+import 'package:wallet/ezc/wallet/asset/erc721/types.dart';
 import 'package:wallet/ezc/wallet/asset/types.dart';
 import 'package:wallet/ezc/wallet/network/network.dart';
 import 'package:wallet/ezc/wallet/network/utils.dart';
 import 'package:wallet/ezc/wallet/wallet.dart';
+import 'package:wallet/features/common/storage/storage.dart';
 import 'package:wallet/features/common/wallet_factory.dart';
-import 'package:collection/collection.dart';
 
 part 'token_store.g.dart';
 
@@ -28,11 +29,19 @@ abstract class _TokenStore with Store {
 
   WalletProvider get _wallet => _walletFactory.activeWallet;
 
-  String get _key => "${_wallet.getAddressX()}_${getEvmChainId()}";
+  String get _erc20Key =>
+      "${_wallet.getAddressC()}_${getEvmChainId()}_ERC20_TOKENS";
+
+  String get _erc721Key =>
+      "${_wallet.getAddressC()}_${getEvmChainId()}_ERC721_TOKENS";
 
   @readonly
   //ignore: prefer_final_fields
-  ObservableList<Erc20TokenData> _erc20Tokens = ObservableList.of([]);
+  ObservableList<Erc20Token> _erc20Tokens = ObservableList.of([]);
+
+  @readonly
+  //ignore: prefer_final_fields
+  ObservableList<Erc721Token> _erc721Tokens = ObservableList.of([]);
 
   @readonly
   //ignore: prefer_final_fields
@@ -47,19 +56,23 @@ abstract class _TokenStore with Store {
   ObservableList<AvaNFTCollectible> _nftCollectibles =
       ObservableList<AvaNFTCollectible>();
 
+  Erc20Token? findErc20(String contractAddress) =>
+      _erc20Tokens.firstWhereOrNull(
+          (element) => element.contractAddress == contractAddress);
+
   bool isErc20Exists(String contractAddress) {
-    return _erc20Tokens.firstWhereOrNull(
-            (element) => element.contractAddress == contractAddress) !=
-        null;
+    return findErc20(contractAddress) != null;
   }
 
   @action
-  Future<bool> addErc20Token(Erc20TokenData token) async {
+  Future<bool> addErc20Token(Erc20Token erc20) async {
     try {
-      _erc20Tokens.add(token);
+      if (isErc20Exists(erc20.contractAddress)) return false;
+      final evmAddress = _wallet.getAddressC();
+      await erc20.getBalance(evmAddress);
+      _erc20Tokens.add(erc20);
       String json = jsonEncode(_erc20Tokens);
-      await storage.write(key: _key, value: json);
-      getErc20Tokens();
+      await storage.write(key: _erc20Key, value: json);
       return true;
     } catch (e) {
       logger.e(e);
@@ -70,14 +83,14 @@ abstract class _TokenStore with Store {
   @action
   getErc20Tokens() async {
     try {
-      final json = await storage.read(key: _key);
+      final json = await storage.read(key: _erc20Key);
       if (json == null || json.isEmpty) return;
       final map = jsonDecode(json) as List<dynamic>;
       final cachedErc20Tokens =
-          List<Erc20TokenData>.from(map.map((i) => Erc20TokenData.fromJson(i)));
+          List<Erc20Token>.from(map.map((i) => Erc20Token.fromJson(i)));
       final evmAddress = _wallet.getAddressC();
-      await Future.wait(cachedErc20Tokens
-          .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
+      await Future.wait(
+          cachedErc20Tokens.map((erc20) => erc20.getBalance(evmAddress)));
       cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
       _erc20Tokens.clear();
       _erc20Tokens.insertAll(0, cachedErc20Tokens);
@@ -91,8 +104,8 @@ abstract class _TokenStore with Store {
     try {
       final cachedErc20Tokens = _erc20Tokens.toList();
       final evmAddress = _wallet.getAddressC();
-      await Future.wait(cachedErc20Tokens
-          .map((erc20) => erc20.getBalance(evmAddress, web3Client)));
+      await Future.wait(
+          cachedErc20Tokens.map((erc20) => erc20.getBalance(evmAddress)));
       cachedErc20Tokens.sort((a, b) => b.balanceBN.compareTo(a.balanceBN));
       _erc20Tokens.clear();
       _erc20Tokens.addAll(cachedErc20Tokens);
@@ -101,12 +114,68 @@ abstract class _TokenStore with Store {
     }
   }
 
-  Erc20TokenData? findErc20(String id) =>
-      _erc20Tokens.firstWhereOrNull((element) => element.contractAddress == id);
+  Erc721Token? findErc721(String contractAddress) =>
+      _erc721Tokens.firstWhereOrNull(
+          (element) => element.contractAddress == contractAddress);
+
+  bool isErc721Exists(String contractAddress) {
+    return findErc721(contractAddress) != null;
+  }
+
+  @action
+  Future<bool> addErc721Token(Erc721Token erc721) async {
+    try {
+      if (isErc721Exists(erc721.contractAddress)) return false;
+      _erc721Tokens.add(erc721);
+      _fetchErc721Metadata();
+      String json = jsonEncode(_erc721Tokens);
+      await storage.write(key: _erc721Key, value: json);
+      return true;
+    } catch (e) {
+      logger.e(e);
+      return false;
+    }
+  }
+
+  @action
+  getErc721Tokens() async {
+    try {
+      final json = await storage.read(key: _erc721Key);
+      if (json == null || json.isEmpty) return;
+      final map = jsonDecode(json) as List<dynamic>;
+      final cachedErc721Tokens =
+          List<Erc721Token>.from(map.map((i) => Erc721Token.fromJson(i)));
+      _erc721Tokens = ObservableList.of(cachedErc721Tokens);
+      _fetchErc721Metadata();
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
+  @action
+  _fetchErc721Metadata() async {
+    final tokens = _erc721Tokens.toList();
+    final evmAddress = _wallet.getAddressC();
+    await Future.wait(tokens.map((e) => e.getAllTokenURIMetadata(evmAddress)));
+    _erc721Tokens = ObservableList.of(tokens);
+  }
+
+  @action
+  removeErc721Token(String contractAddress, BigInt tokenId) {
+    final erc721 = findErc721(contractAddress);
+    if (erc721 == null) return;
+    erc721.removeTokenId(tokenId);
+    final index = _erc721Tokens.indexOf(erc721);
+    if (index != -1 ) {
+      _erc721Tokens.remove(erc721);
+      _erc721Tokens.insert(index, erc721);
+    }
+  }
 
   @action
   dispose() {
     _erc20Tokens.clear();
+    _erc721Tokens.clear();
     _antAssets.clear();
     _nftFamilies.clear();
   }

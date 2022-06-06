@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallet/features/nft/collectible/nft_collectible_item.dart';
+import 'package:wallet/features/nft/collectible/nft_payload_type.dart';
 import 'package:wallet/generated/assets.gen.dart';
 import 'package:wallet/themes/colors.dart';
 import 'package:wallet/themes/inputs.dart';
@@ -11,10 +12,11 @@ import 'package:wallet/themes/theme.dart';
 import 'package:wallet/themes/typography.dart';
 
 class WalletSendAvmNftItemWidget extends StatefulWidget {
-  final NftCollectibleItem item;
+  final NftAvmCollectibleItem item;
   final Function(NftCollectibleItem) onDeleteNft;
 
-  const WalletSendAvmNftItemWidget({Key? key, required this.item, required this.onDeleteNft})
+  const WalletSendAvmNftItemWidget(
+      {Key? key, required this.item, required this.onDeleteNft})
       : super(key: key);
 
   @override
@@ -89,13 +91,15 @@ class _WalletSendAvmNftItemWidgetState
               height: 24,
               maxLines: 1,
               borderRadius: const BorderRadius.all(Radius.circular(4)),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
               controller: _quantityController,
               textAlign: TextAlign.end,
+              inputType: TextInputType.number,
               style: EZCBodyMediumTextStyle(color: provider.themeMode.text),
               onChanged: (text) {
                 final quantity = int.tryParse(text) ?? 1;
-                if(quantity > widget.item.count) {
+                if (quantity > widget.item.count) {
                   _quantityController.text = widget.item.count.toString();
                 } else {
                   widget.item.quantity = quantity;

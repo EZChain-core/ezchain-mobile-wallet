@@ -27,6 +27,9 @@ class NftFamilyItem {
     required this.nftMintUTXO,
     required this.nftCollectibles,
   });
+
+  List<NftAvmCollectibleItem> get nftAvmCollectibles =>
+      nftCollectibles.whereType<NftAvmCollectibleItem>().toList();
 }
 
 class NftFamilyItemWidget extends StatelessWidget {
@@ -155,15 +158,15 @@ class NftSelectFamilyItemWidget extends StatelessWidget {
               color: provider.themeMode.text10,
             ),
           ),
-          item.nftCollectibles.isNotEmpty
+          item.nftAvmCollectibles.isNotEmpty
               ? SizedBox(
                   height: 100,
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     scrollDirection: Axis.horizontal,
-                    itemCount: item.nftCollectibles.length,
+                    itemCount: item.nftAvmCollectibles.length,
                     itemBuilder: (_, index) => NftSelectCollectibleItemWidget(
-                      item: item.nftCollectibles[index],
+                      item: item.nftAvmCollectibles[index],
                     ),
                     separatorBuilder: (_, index) => const SizedBox(width: 12),
                   ),
