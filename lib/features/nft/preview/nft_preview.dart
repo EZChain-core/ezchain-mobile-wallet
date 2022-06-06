@@ -41,7 +41,7 @@ class NftPreviewDialog extends StatelessWidget {
               ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 child: CachedNetworkImage(
-                  imageUrl: args.textWhenUrlLoadedError,
+                  imageUrl: args.nft.url ?? '',
                   placeholder: (context, url) => Align(
                     alignment: Alignment.center,
                     child: Padding(
@@ -63,7 +63,7 @@ class NftPreviewDialog extends StatelessWidget {
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
                     ),
                     child: Text(
-                      args.nft.payload ?? '',
+                      args.textWhenUrlLoadedError,
                       style: EZCBodyMediumTextStyle(
                           color: provider.themeMode.text70),
                     ),
